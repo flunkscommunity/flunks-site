@@ -1,0 +1,780 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/collection/activities": {
+      "get": {
+        "operationId": "CollectionController_getAllCollectionActivities",
+        "parameters": [
+          {
+            "name": "activities",
+            "required": false,
+            "in": "query",
+            "example": [
+              "TRANSFER",
+              "SALE"
+            ],
+            "schema": {
+              "enum": [
+                "MINT",
+                "BURN",
+                "TRANSFER",
+                "LIST",
+                "DELIST",
+                "SALE",
+                "PATCH_ADDED",
+                "PATCH_REMOVED"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "example": "DATE_DESC",
+            "schema": {
+              "enum": [
+                "DATE_ASC",
+                "DATE_DESC"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "searchByCollectionNames",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "example": 1,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "example": 50,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "collectionNames",
+            "required": false,
+            "in": "query",
+            "example": "flunks,backpack,inception-animals",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get most recent activities",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetActivityDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collection"
+        ]
+      }
+    },
+    "/collection/{collectionName}/status": {
+      "get": {
+        "operationId": "CollectionController_getCollectionByName",
+        "parameters": [
+          {
+            "name": "collectionName",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get collection with status by collectionName",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CreateCollectionDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collection"
+        ]
+      }
+    },
+    "/collection/{collectionName}": {
+      "get": {
+        "operationId": "CollectionController_getallNftsInACollection",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "example": 1,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "example": 50,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "example": "PRICE_ASC",
+            "schema": {
+              "enum": [
+                "PRICE_ASC",
+                "PRICE_DESC",
+                "DATE_ASC",
+                "DATE_DESC",
+                "RANK_ASC",
+                "RANK_DESC"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "include",
+            "required": false,
+            "in": "query",
+            "example": "LISTED",
+            "schema": {
+              "enum": [
+                "LISTED",
+                "NOT_LISTED",
+                "ALL"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "traits",
+            "required": false,
+            "in": "query",
+            "description": "Strategy: 'AND' when trait names are the same; 'OR' when trait names are different",
+            "example": "{\"Head\": [\"Pink Bandana\", \"Blue  Headphones\"], \"Pigment\": [\"Purple\"]}",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "collectionName",
+            "required": true,
+            "in": "path",
+            "example": "flunks",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all NFTs by collectionName",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MarketplaceIndividualNftDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collection"
+        ]
+      }
+    },
+    "/collection/{collectionName}/{tokenId}": {
+      "get": {
+        "operationId": "CollectionController_getNftByCollectionNameAndTokenId",
+        "parameters": [
+          {
+            "name": "tokenId",
+            "required": true,
+            "in": "path",
+            "example": 0,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "collectionName",
+            "required": true,
+            "in": "path",
+            "example": "flunks",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get an individual NFT by collectionName & tokenId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketplaceIndividualNftDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collection"
+        ]
+      }
+    },
+    "/users/{walletAddress}": {
+      "get": {
+        "operationId": "UsersController_getUserNftsByWalletAddress",
+        "parameters": [
+          {
+            "name": "walletAddress",
+            "required": true,
+            "in": "path",
+            "example": "0x807c3d470888cc48",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all NFTs owned by a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserWalletNftsDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/users/{walletAddress}/activities": {
+      "get": {
+        "operationId": "UsersController_getActivitiesByWalletAddress",
+        "parameters": [
+          {
+            "name": "walletAddress",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "activities",
+            "required": false,
+            "in": "query",
+            "example": [
+              "MINT",
+              "TRANSFER"
+            ],
+            "schema": {
+              "enum": [
+                "MINT",
+                "BURN",
+                "TRANSFER",
+                "LIST",
+                "DELIST",
+                "SALE",
+                "PATCH_ADDED",
+                "PATCH_REMOVED"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "example": "DATE_DESC",
+            "schema": {
+              "enum": [
+                "DATE_ASC",
+                "DATE_DESC"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "example": 1,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "example": 50,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get activities for a given user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetActivityDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Flunks API",
+    "description": "Flunks Marketplace API",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "cats",
+      "description": ""
+    }
+  ],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "Decimal": {
+        "type": "object",
+        "properties": {}
+      },
+      "GetListingDto": {
+        "type": "object",
+        "properties": {
+          "listingResourceId": {
+            "type": "string"
+          },
+          "listingId": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "collectionName": {
+            "type": "string"
+          },
+          "tokenId": {
+            "type": "number"
+          },
+          "price": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "sellerAddress": {
+            "type": "string"
+          },
+          "expiry": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "expiryDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "transactionId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "listingResourceId",
+          "listingId",
+          "collectionName",
+          "tokenId",
+          "price",
+          "currency",
+          "status",
+          "sellerAddress",
+          "expiry",
+          "expiryDate",
+          "transactionId"
+        ]
+      },
+      "NftDto": {
+        "type": "object",
+        "properties": {
+          "collectionName": {
+            "type": "string"
+          },
+          "tokenId": {
+            "type": "number"
+          },
+          "templateId": {
+            "type": "number"
+          },
+          "ownerAddress": {
+            "type": "string"
+          },
+          "floorPrice": {
+            "type": "number"
+          },
+          "floorPriceCurrency": {
+            "type": "string"
+          },
+          "listingDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "expiryDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "rank": {
+            "type": "number"
+          },
+          "metadata": {
+            "type": "object"
+          },
+          "Listing": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetListingDto"
+            }
+          },
+          "ExternalListing": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetListingDto"
+            }
+          }
+        },
+        "required": [
+          "collectionName",
+          "tokenId",
+          "templateId",
+          "ownerAddress",
+          "floorPrice",
+          "floorPriceCurrency",
+          "listingDate",
+          "expiryDate",
+          "rank",
+          "metadata",
+          "Listing",
+          "ExternalListing"
+        ]
+      },
+      "GetActivityDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "collectionName": {
+            "type": "string"
+          },
+          "tokenId": {
+            "type": "number"
+          },
+          "activity": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "eventDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "price": {
+            "$ref": "#/components/schemas/Decimal"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "transactionId": {
+            "type": "string"
+          },
+          "listingResourceId": {
+            "type": "string"
+          },
+          "NFT": {
+            "$ref": "#/components/schemas/NftDto"
+          }
+        },
+        "required": [
+          "id",
+          "collectionName",
+          "tokenId",
+          "activity",
+          "from",
+          "to",
+          "eventDate",
+          "price",
+          "currency",
+          "transactionId",
+          "listingResourceId",
+          "NFT"
+        ]
+      },
+      "CreateCollectionDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "nftType": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object"
+          },
+          "totalSupply": {
+            "type": "number"
+          },
+          "floorPrice": {
+            "type": "number"
+          },
+          "activeListings": {
+            "type": "number"
+          },
+          "tradingVolume": {
+            "type": "number"
+          },
+          "uniqueHolders": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "nftType",
+          "metadata",
+          "totalSupply",
+          "floorPrice",
+          "activeListings",
+          "tradingVolume",
+          "uniqueHolders"
+        ]
+      },
+      "NftActivityDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "collectionName": {
+            "type": "string"
+          },
+          "tokenId": {
+            "type": "number"
+          },
+          "activity": {
+            "type": "string",
+            "example": "MINT"
+          },
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "eventDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "example": "10.00"
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "transactionId": {
+            "type": "string",
+            "example": "96f9f705cd69b3310776f9211aa9434e2e13764baca1387eaa49a57f2b87c555"
+          },
+          "listingResourceId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "collectionName",
+          "tokenId",
+          "activity",
+          "from",
+          "to",
+          "eventDate",
+          "price",
+          "currency",
+          "transactionId",
+          "listingResourceId"
+        ]
+      },
+      "MarketplaceIndividualNftDto": {
+        "type": "object",
+        "properties": {
+          "collectionName": {
+            "type": "string"
+          },
+          "tokenId": {
+            "type": "number"
+          },
+          "templateId": {
+            "type": "number"
+          },
+          "metadata": {
+            "type": "object"
+          },
+          "Listing": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetListingDto"
+            }
+          },
+          "ExternalListing": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetListingDto"
+            }
+          },
+          "NftActivity": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NftActivityDto"
+            }
+          },
+          "floorPrice": {
+            "type": "number"
+          },
+          "floorPriceCurrency": {
+            "type": "string"
+          },
+          "listingDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "expiryDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "rank": {
+            "type": "number"
+          },
+          "ownerAddress": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "collectionName",
+          "tokenId",
+          "templateId",
+          "metadata",
+          "Listing",
+          "ExternalListing",
+          "NftActivity",
+          "floorPrice",
+          "floorPriceCurrency",
+          "listingDate",
+          "expiryDate",
+          "rank",
+          "ownerAddress"
+        ]
+      },
+      "GetUserWalletNftsDto": {
+        "type": "object",
+        "properties": {
+          "Flunks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "Backpack": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "Patch": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "InceptionAvatar": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "Flunks",
+          "Backpack",
+          "Patch",
+          "InceptionAvatar"
+        ]
+      }
+    }
+  }
+}
