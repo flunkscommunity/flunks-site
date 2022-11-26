@@ -28,7 +28,6 @@ export const StyledScrollView = styled.div<Pick<ScrollViewProps, "shadow">>`
     border-right-color: ${({ theme }) => theme.borderLight};
     border-bottom-color: ${({ theme }) => theme.borderLight};
     pointer-events: none;
-    ${(props) => props.shadow && `box-shadow:${insetShadow};`}
   }
 `;
 
