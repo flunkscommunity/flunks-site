@@ -12,16 +12,16 @@ import React from "react";
 
 const Home: NextPage = () => {
   const { windows, openWindow } = useWindowsContext();
-  
+
   return (
     <>
       <Head>
         <title>Flunks</title>
         <meta
           name="description"
-          content="Welcome to the Flunks Graduation Software."
+          content="Welcome to the Flunks Highschool computer."
         />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/images/os-logo.png" />
       </Head>
       <CustomMonitor
         backgroundStyles={{
