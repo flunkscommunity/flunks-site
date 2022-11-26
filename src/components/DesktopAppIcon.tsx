@@ -39,7 +39,7 @@ const DesktopAppIcon: React.FC<Props> = (props) => {
   const { title, icon, onDoubleClick } = props;
 
   return (
-    <div onDoubleClick={onDoubleClick}>
+    <div onDoubleClick={onDoubleClick} onClick={onDoubleClick}>
       <Container>
         <AppIcon icon={icon} />
         <AppTitle>
