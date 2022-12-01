@@ -8,7 +8,6 @@ let openApiUrl = "https://flunks-backend-prod-dot-bionic-hallway-338400.uc.r.app
 
 (async () => {
   const response = await axios.get(openApiUrl);
-  console.log(response);
   // writeFileSync(
   //   `${process.cwd()}/src/api/input/swagger.json`,
   //   JSON.stringify(response.data)
