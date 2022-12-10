@@ -103,19 +103,19 @@ const H6 = styled.h6`
 `;
 
 const P = styled.p`
-  font-size: 1rem;
+  font-size: 19px;
   font-weight: 400;
   margin: 0;
   padding: 0;
   color: ${({ theme }) => theme.text};
   @media (max-width: 768px) {
-    font-size: 1rem;
+    font-size: 19px;
   }
   @media (max-width: 480px) {
-    font-size: 1rem;
+    font-size: 19px;
   }
   @media (max-width: 320px) {
-    font-size: 0.75rem;
+    font-size: 16px;
   }
 `;
 

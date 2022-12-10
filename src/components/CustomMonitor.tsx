@@ -1,3 +1,4 @@
+import { useWindowsContext } from "contexts/WindowsContext";
 import React, { forwardRef } from "react";
 import { AppBar, Button, ScrollViewProps, TextInput, Toolbar } from "react95";
 import styled from "styled-components";
@@ -34,6 +35,7 @@ export const StyledScrollView = styled.div<Pick<ScrollViewProps, "shadow">>`
 type MonitorProps = {
   backgroundStyles?: React.CSSProperties;
   children?: React.ReactNode;
+  showBottomBar?: boolean;
 };
 
 const Wrapper = styled.div`
@@ -118,7 +120,9 @@ const MonitorScreenContainer = styled.div`
 `;
 
 const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
-  ({ backgroundStyles, children, ...otherProps }, ref) => {
+  ({ backgroundStyles, children, showBottomBar, ...otherProps }, ref) => {
+    const { windows } = useWindowsContext();
+
     return (
       <Wrapper ref={ref} {...otherProps}>
         <Inner>
@@ -126,31 +130,62 @@ const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
             <Background className="crt" style={backgroundStyles}>
               <MonitorScreenContainer>{children}</MonitorScreenContainer>
 
-              <AppBar
-                fixed={false}
-                style={{
-                  zIndex: 1000,
-                  top: "100%",
-                  transform: "translateY(-100%)",
-                }}
-              >
-                <Toolbar style={{ justifyContent: "space-between" }}>
-                  <div
-                    style={{ position: "relative", display: "inline-block" }}
-                  >
-                    <Button
-                      // onClick={() => setOpen(!open)}
-                      // active={open}
-                      style={{ fontWeight: "bold" }}
+              {showBottomBar && (
+                <AppBar
+                  fixed={false}
+                  style={{
+                    zIndex: 1000,
+                    top: "100%",
+                    transform: "translateY(-100%)",
+                  }}
+                >
+                  <Toolbar style={{ justifyContent: "space-between" }}>
+                    <div
+                      style={{
+                        position: "relative",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
                     >
-                      <img
-                        src={"/images/os-logo.png"}
-                        alt="react95 logo"
-                        style={{ height: "20px", marginRight: 4 }}
-                      />
-                      Start
-                    </Button>
-                    {/* {open && (
+                      <Button
+                        // onClick={() => setOpen(!open)}
+                        // active={open}
+                        style={{ fontWeight: "bold" }}
+                      >
+                        <img
+                          src={"/images/os-logo.png"}
+                          alt="react95 logo"
+                          style={{ height: "20px", marginRight: 4 }}
+                        />
+                        Start
+                      </Button>
+
+                      {/* <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns:
+                          "repeat(auto-fit, minmax(30px, 1fr))",
+                        width: "100%",
+                      }}
+                    >
+                      {Object.entries(windows).map(
+                        ([key, value]) =>
+                          key === "student-explorer" && (
+                            <Button
+                              key={key}
+                              style={{
+                                height: "36px",
+                                marginLeft: 4,
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {key}
+                            </Button>
+                          )
+                      )}
+                    </div> */}
+
+                      {/* {open && (
                       <MenuList
                         style={{
                           position: "absolute",
@@ -180,11 +215,12 @@ const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
                         </MenuListItem>
                       </MenuList>
                     )} */}
-                  </div>
+                    </div>
 
-                  <TextInput placeholder="Search..." width={150} />
-                </Toolbar>
-              </AppBar>
+                    <TextInput placeholder="Search..." width={150} />
+                  </Toolbar>
+                </AppBar>
+              )}
             </Background>
           </MonitorBody>
         </Inner>

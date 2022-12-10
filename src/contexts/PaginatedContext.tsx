@@ -1,4 +1,4 @@
-import { useContext, useEffect, createContext } from "react";
+import { useContext, useEffect, createContext, useState } from "react";
 import { AxiosPromise, AxiosRequestConfig } from "axios";
 import { useRouter } from "next/router";
 import {
@@ -12,6 +12,9 @@ interface ContextState<T> {
   setPage: React.Dispatch<React.SetStateAction<number>>;
   hasMore: boolean;
   nfts: T[];
+  requestParameters: unknown;
+  setRequestParameters: React.Dispatch<React.SetStateAction<unknown>>;
+  isValidating: boolean;
 }
 
 export const PaginatedContext = createContext<ContextState<unknown>>({
@@ -19,6 +22,9 @@ export const PaginatedContext = createContext<ContextState<unknown>>({
   setPage: () => {},
   hasMore: false,
   nfts: [],
+  requestParameters: {},
+  setRequestParameters: () => {},
+  isValidating: false,
 });
 
 interface ProviderProps<T = unknown> {
@@ -40,17 +46,20 @@ const PaginatedProdiver: React.FC<ProviderProps> = (props) => {
     requestParameters = {},
     swrConfig = {},
   } = props;
-
+  const [_requestParameters, setRequestParameters] =
+    useState<typeof requestParameters>(requestParameters);
   const router = useRouter();
   const {
+    mutate,
     data: paginatedNfts = [],
     size: page,
     setSize: setPage,
+    isValidating,
   } = useSwrInfiniteWrapper({
     fetcher,
     requestParameters: {
       limit: 3,
-      ...(requestParameters as object),
+      ...(_requestParameters as object),
     },
     swrConfig: {
       shouldFetch: true,
@@ -59,7 +68,9 @@ const PaginatedProdiver: React.FC<ProviderProps> = (props) => {
       onError: (error) => console.error(error),
       ...(swrConfig as object),
     },
-    cacheKey,
+    cacheKey: _requestParameters.traits
+      ? `${cacheKey}-${_requestParameters.traits}`
+      : cacheKey,
   });
 
   useEffect(() => {
@@ -69,6 +80,10 @@ const PaginatedProdiver: React.FC<ProviderProps> = (props) => {
 
     setPage(parseInt(router.query.page as string));
   }, [router.isReady]);
+
+  useEffect(() => {
+    mutate();
+  }, [_requestParameters]);
 
   const totalPages = paginatedNfts[0]?.totalPages || 0;
   const hasMore = page < totalPages;
@@ -81,6 +96,9 @@ const PaginatedProdiver: React.FC<ProviderProps> = (props) => {
         page,
         setPage,
         hasMore,
+        requestParameters: _requestParameters,
+        setRequestParameters,
+        isValidating,
       }}
     >
       {children}
@@ -89,13 +107,24 @@ const PaginatedProdiver: React.FC<ProviderProps> = (props) => {
 };
 
 export function usePaginatedContext<T>(): ContextState<T> {
-  const { page, setPage, hasMore, nfts } = useContext(PaginatedContext);
+  const {
+    page,
+    setPage,
+    hasMore,
+    nfts,
+    requestParameters,
+    setRequestParameters,
+    isValidating,
+  } = useContext(PaginatedContext);
 
   return {
     page,
     setPage,
     hasMore,
     nfts: nfts as T[],
+    requestParameters,
+    setRequestParameters,
+    isValidating,
   };
 }
 

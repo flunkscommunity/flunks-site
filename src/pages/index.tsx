@@ -7,12 +7,17 @@ import StudentExplorer from "windows/StudentExplorer";
 import { useWindowsContext } from "contexts/WindowsContext";
 import DesktopAppIcon from "components/DesktopAppIcon";
 import Draggable from "react-draggable";
-import { WINDOW_IDS } from "constants";
+import { WINDOW_IDS } from "fixed";
 import React from "react";
+import { useUser } from "contexts/WalletContext";
+import { Button, TextInput, Window, WindowHeader } from "react95";
+import DraggableResizeableWindow from "components/DraggableResizeableWindow";
+import { H2, P } from "components/Typography";
 
 const Home: NextPage = () => {
   const { windows, openWindow } = useWindowsContext();
-
+  const { walletAddress, authenticate } = useUser();
+  console.log(walletAddress);
   return (
     <>
       <Head>
@@ -23,151 +28,147 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/images/os-logo.png" />
       </Head>
-      <CustomMonitor
-        backgroundStyles={{
-          backgroundImage: "url('/images/bg.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          overflow: "hidden",
-          width: "100%",
-          height: "100%",
-          position: "relative",
-        }}
-      >
-        {/* <Draggable bounds="parent">
-          <div
-            style={{
-              width: 80,
-            }}
-          >
-            <DesktopAppIcon
-              title="Lost and Found"
-              icon="/images/lost-found.ico"
-            />
-          </div>
-        </Draggable> */}
 
-        <Draggable bounds="parent">
-          <div
-            style={{
-              width: 80,
-            }}
+      {!walletAddress && (
+        <CustomMonitor
+          backgroundStyles={{
+            backgroundImage: "url('/images/loginbg.png')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            overflow: "hidden",
+            width: "100%",
+            height: "100%",
+            position: "relative",
+          }}
+        >
+          <DraggableResizeableWindow
+            headerTitle="Welcome to Flunks"
+            showHeaderActions={false}
+            initialHeight="auto"
+            initialWidth="auto"
           >
-            <DesktopAppIcon
-              title="Student Explorer"
-              icon="/images/student-directory.ico"
-              onDoubleClick={() => {
-                openWindow({
-                  key: WINDOW_IDS.STUDENT_EXPLORER,
-                  window: <StudentExplorer />,
-                });
-              }}
-            />
-          </div>
-        </Draggable>
-
-        {/* <Draggable bounds="parent">
-          <div
-            style={{
-              width: 80,
-            }}
-          >
-            <DesktopAppIcon title="Twitter" icon="/images/twitter.png" />
-          </div>
-        </Draggable>
-
-        <Draggable bounds="parent">
-          <div
-            style={{
-              width: 80,
-            }}
-          >
-            <DesktopAppIcon title="Discord" icon="/images/discord.png" />
-          </div>
-        </Draggable> */}
-
-        {/* <Draggable handle="strong" bounds="parent">
-          <Window
-            className="window"
-            style={{
-              position: "absolute",
-              resize: "both",
-              overflow: "hidden",
-            }}
-          >
-            <strong className="cursor">
-              <WindowHeader
-                className="window-title"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  userSelect: "none",
-                  padding: "20px 8px",
-                }}
-              >
-                <span>Flunk #{flunks[0]?.templateId}</span>
-                <Button>
-                  <span className="close-icon" />
-                </Button>
-              </WindowHeader>
-            </strong>
-
-            <WindowContent
+            <div
               style={{
-                width: "100%",
-                height: "calc(100% - 80px)",
+                display: "grid",
+                gridTemplateColumns: "2fr 8fr 2fr",
+                gap: 16,
               }}
             >
-              <ScrollView
+              <img
+                src="/images/os-logo-large.png"
                 style={{
-                  width: "100%",
-                  height: "calc(100% - 44px)",
+                  maxWidth: "100px",
+                  height: "100%",
+                }}
+                alt="Flunks Logo"
+              />
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "start",
+                  gap: 16,
                 }}
               >
-                {flunks.length > 0 && (
-                  <Frame
-                    variant="field"
-                    style={{
-                      padding: "1rem",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: ".5rem",
-                    }}
-                  >
-                    <FlunkImage src={flunks[0].metadata.uri} width="300px" />
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Flunk #{flunks[0].templateId}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: "1rem",
-                      }}
-                    >
-                      {flunks[0].metadata.Superlative}
-                    </span>
-                  </Frame>
-                )}
-                <span
-                  ref={resizeRef}
-                  onResize={console.log}
-                  onResizeCapture={console.log}
-                />
-              </ScrollView>
-            </WindowContent>
-          </Window>
-        </Draggable> */}
-        <React.Fragment>
-          {Object.keys(windows).length > 0 &&
-            Object.entries(windows).map(([key, window]) => (
-              <React.Fragment key={key}>{window}</React.Fragment>
-            ))}
-        </React.Fragment>
-      </CustomMonitor>
+                <P>Type a user name and password to log on to Flunks High </P>
+
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "100px 1fr",
+                    gridTemplateRows: "1fr 1fr",
+                    gap: 16,
+                  }}
+                >
+                  <P>
+                    <u>U</u>sername
+                  </P>
+
+                  <TextInput placeholder="Doesn't really matter what you put in here" />
+
+                  <P>
+                    <u>P</u>assword
+                  </P>
+
+                  <TextInput
+                    placeholder="Nor here, just press Log On lol"
+                    type="password"
+                  />
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 16,
+                }}
+              >
+                <Button onClick={authenticate}>Log On</Button>
+              </div>
+            </div>
+          </DraggableResizeableWindow>
+        </CustomMonitor>
+      )}
+
+      {walletAddress && (
+        <CustomMonitor
+          backgroundStyles={{
+            backgroundColor: "#008080",
+            overflow: "hidden",
+            width: "100%",
+            height: "100%",
+            position: "relative",
+          }}
+          showBottomBar
+        >
+          <Draggable bounds="parent">
+            <div
+              style={{
+                width: 80,
+                margin: 8,
+              }}
+            >
+              <DesktopAppIcon
+                title="Student Directory"
+                icon="/images/student-directory.ico"
+                onDoubleClick={() => {
+                  openWindow({
+                    key: WINDOW_IDS.STUDENT_EXPLORER,
+                    window: <StudentExplorer />,
+                  });
+                }}
+              />
+            </div>
+          </Draggable>
+
+          <Draggable bounds="parent">
+            <div
+              style={{
+                width: 80,
+                margin: 8,
+              }}
+            >
+              <DesktopAppIcon
+                title="Your Students"
+                icon="/images/your-students.ico"
+                onDoubleClick={() => {
+                  openWindow({
+                    key: WINDOW_IDS.STUDENT_EXPLORER,
+                    window: <StudentExplorer />,
+                  });
+                }}
+              />
+            </div>
+          </Draggable>
+
+          <React.Fragment>
+            {Object.keys(windows).length > 0 &&
+              Object.entries(windows).map(([key, window]) => (
+                <React.Fragment key={key}>{window}</React.Fragment>
+              ))}
+          </React.Fragment>
+        </CustomMonitor>
+      )}
     </>
   );
 };

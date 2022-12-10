@@ -1,14 +1,14 @@
 import { MarketplaceIndividualNftDto } from "api/generated";
+import { usePaginatedContext } from "contexts/PaginatedContext";
 import { useWindowsContext } from "contexts/WindowsContext";
-import { Button, Frame, ScrollView } from "react95";
+import { WINDOW_IDS } from "fixed";
+import { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
+import { Button, Frame, Hourglass, ScrollView } from "react95";
 import styled from "styled-components";
 import { Metadata } from "types/NFT";
 import FlunkDetails from "windows/FlunkDetails";
 import { H3, H4, P } from "./Typography";
-
-interface Props {
-  nfts: MarketplaceIndividualNftDto[];
-}
 
 const Grid = styled.div`
   display: grid;
@@ -37,11 +37,76 @@ const NftImage = styled.img`
   border-left: 4px solid ${({ theme }) => theme.borderDark};
 `;
 
-const NftFrameGrid: React.FC<Props> = (props) => {
-  const { nfts = [] } = props;
+const LoadMore = styled.div`
+  background-color: transparent;
+  width: 100%;
+  height: 2px;
+  border: none;
+  user-select: none;
+`;
+
+const NftFrameGrid: React.FC = () => {
+  const {
+    nfts,
+    page,
+    setPage,
+    isValidating,
+    requestParameters,
+    setRequestParameters,
+  } = usePaginatedContext<MarketplaceIndividualNftDto>();
+  const [cursor, setCursor] = useState(0);
+  const { closeWindow } = useWindowsContext();
+  const { ref: loadMoreRef } = useInView({
+    onChange(inView) {
+      if (inView && cursor < nfts?.length) {
+        setCursor(cursor + 1);
+        console.log(cursor);
+      }
+    },
+  });
+
+  useEffect(() => {
+    setPage(page + 1);
+  }, [cursor]);
+
+  if (nfts.length === 0 && isValidating) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <Hourglass size={32} style={{ margin: 20 }} />
+      </div>
+    );
+  }
 
   if (nfts.length === 0) {
-    return null;
+    return (
+      <Frame
+        variant="field"
+        style={{
+          padding: "1rem",
+        }}
+      >
+        <H3>No Students Found</H3>
+        <br />
+        <Button
+          onClick={() => {
+            setRequestParameters({
+              ...(requestParameters as Record<string, unknown>),
+              traits: "",
+            });
+            closeWindow(WINDOW_IDS.FILTERS_WINDOW);
+          }}
+        >
+          Clear Filters
+        </Button>
+      </Frame>
+    );
   }
 
   return (
@@ -54,6 +119,7 @@ const NftFrameGrid: React.FC<Props> = (props) => {
         {nfts.map((nft) => (
           <NftFrame key={`${nft.collectionName}-${nft.tokenId}`} nft={nft} />
         ))}
+        {!isValidating ? <LoadMore ref={loadMoreRef} /> : <LoadMore />}
       </Grid>
     </ScrollView>
   );

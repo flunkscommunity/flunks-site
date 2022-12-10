@@ -1,32 +1,12 @@
 import { MarketplaceIndividualNftDto } from "api/generated";
-import {
-  differenceInSeconds,
-  format,
-  formatDistance,
-  isAfter,
-  isBefore,
-  subSeconds,
-} from "date-fns";
-import {
-  Anchor,
-  Avatar,
-  Frame,
-  GroupBox,
-  ScrollView,
-  Table,
-  TableBody,
-  TableDataCell,
-  TableHead,
-  TableHeadCell,
-  TableRow,
-} from "react95";
+import { Frame, ScrollView } from "react95";
 import styled from "styled-components";
 import { Metadata } from "types/NFT";
 import { FlunkImage } from "./CustomMonitor";
 import GraduationBox from "./NftDetailsBoxes/GraduationBox";
 import GuardianBox from "./NftDetailsBoxes/GuardianBox";
 import TraitsBox from "./NftDetailsBoxes/TraitsBox";
-import { H1, H2, H3, H4, H5, P } from "./Typography";
+import { H1, H3 } from "./Typography";
 
 interface Props {
   nft: MarketplaceIndividualNftDto;

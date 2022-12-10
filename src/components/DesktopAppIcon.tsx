@@ -20,14 +20,15 @@ const Container = styled.div`
 
 // Styled component that takes an image url as a prop
 const AppIcon = styled.div<{ icon: string }>`
-  width: 52px;
-  height: 52px;
+  width: 64px;
+  height: 64px;
   background-image: url(${(props) => props.icon});
   background-size: contain;
   background-position: center;
 `;
 
 const AppTitle = styled(H4)`
+  color: white;
   &:hover {
     span {
       background-color: rgba(48, 197, 255, 0.5);
@@ -39,7 +40,7 @@ const DesktopAppIcon: React.FC<Props> = (props) => {
   const { title, icon, onDoubleClick } = props;
 
   return (
-    <div onDoubleClick={onDoubleClick} onClick={onDoubleClick}>
+    <div onDoubleClick={onDoubleClick}>
       <Container>
         <AppIcon icon={icon} />
         <AppTitle>

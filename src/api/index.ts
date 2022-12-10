@@ -1,4 +1,4 @@
-import { CollectionApi, Configuration } from "./generated";
+import { CollectionApi, Configuration, UsersApi } from "./generated";
 
 const commonHeaders = {
   "Content-Type": "application/json",
@@ -16,3 +16,4 @@ const config = new Configuration({
 });
 
 export const CollectionApiInstance = new CollectionApi(config);
+export const UsersApiInstance = new UsersApi(config);

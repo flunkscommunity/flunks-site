@@ -11,6 +11,7 @@ interface Props {
   offSetHeight?: number;
   initialHeight?: string;
   initialWidth?: string;
+  showHeaderActions?: boolean;
 }
 
 const WindowButtons = styled.div`
@@ -27,6 +28,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     onClose,
     initialHeight = "90%",
     initialWidth = "90%",
+    showHeaderActions = true,
     children,
   } = props;
   const windowRef = useRef<HTMLDivElement>(null);
@@ -129,17 +131,19 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
             }}
           >
             <span>{headerTitle}</span>
-            <WindowButtons>
-              {/* <Button disabled>
+            {showHeaderActions && (
+              <WindowButtons>
+                {/* <Button disabled>
                 <img src="/images/minimize.png" width="60%" height="60%" />
               </Button> */}
-              <Button onClick={handleMaximize}>
-                <img src="/images/maximize.png" width="60%" height="60%" />
-              </Button>
-              <Button onClick={onClose}>
-                <span className="close-icon" />
-              </Button>
-            </WindowButtons>
+                <Button onClick={handleMaximize}>
+                  <img src="/images/maximize.png" width="60%" height="60%" />
+                </Button>
+                <Button onClick={onClose}>
+                  <span className="close-icon" />
+                </Button>
+              </WindowButtons>
+            )}
           </WindowHeader>
         </strong>
 

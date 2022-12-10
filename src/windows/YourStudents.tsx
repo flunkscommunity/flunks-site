@@ -1,4 +1,4 @@
-import { CollectionApiInstance } from "api";
+import { CollectionApiInstance, UsersApiInstance } from "api";
 import { MarketplaceIndividualNftDto } from "api/generated";
 import PaginatedProdiver, {
   usePaginatedContext,
@@ -16,23 +16,20 @@ import TraitFilters from "./TraitFilters";
 const StudentExplorer: React.FC = () => {
   return (
     <PaginatedProdiver
-      fetcher={CollectionApiInstance.collectionControllerGetallNftsInACollection.bind(
-        CollectionApiInstance
+      fetcher={UsersApiInstance.usersControllerGetUserNftsByWalletAddress.bind(
+        UsersApiInstance
       )}
-      cacheKey="flunks-explorer"
+      cacheKey="users-wallet-explorer"
       requestParameters={{
-        collectionName: "flunks",
-        include: "ALL",
-        limit: 20,
-        sort: "RANK_ASC",
+        walletAddress: "0x0",
       }}
     >
-      <StudentExplorerWindow />
+      <UsersStudentExplorerWindow />
     </PaginatedProdiver>
   );
 };
 
-const StudentExplorerWindow = () => {
+const UsersStudentExplorerWindow = () => {
   const { closeWindow } = useWindowsContext();
   const [showFilters, setShowFilters] = useState(false);
   const { openWindow } = useWindowsContext();
