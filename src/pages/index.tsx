@@ -8,16 +8,32 @@ import { useWindowsContext } from "contexts/WindowsContext";
 import DesktopAppIcon from "components/DesktopAppIcon";
 import Draggable from "react-draggable";
 import { WINDOW_IDS } from "fixed";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "contexts/WalletContext";
 import { Button, TextInput, Window, WindowHeader } from "react95";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { H2, P } from "components/Typography";
+import styled from "styled-components";
+import YourStudents from "windows/YourStudents";
+
+const LoginScreenContainer = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 8fr 2fr;
+  gap: 16px;
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
 
 const Home: NextPage = () => {
   const { windows, openWindow } = useWindowsContext();
   const { walletAddress, authenticate } = useUser();
-  console.log(walletAddress);
+  const [showLogin, setShowLogin] = useState(false);
+
+  useEffect(() => {
+    setShowLogin(!walletAddress);
+  }, []);
+
   return (
     <>
       <Head>
@@ -29,7 +45,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/images/os-logo.png" />
       </Head>
 
-      {!walletAddress && (
+      {showLogin && (
         <CustomMonitor
           backgroundStyles={{
             backgroundImage: "url('/images/loginbg.png')",
@@ -41,76 +57,85 @@ const Home: NextPage = () => {
             position: "relative",
           }}
         >
-          <DraggableResizeableWindow
-            headerTitle="Welcome to Flunks"
-            showHeaderActions={false}
-            initialHeight="auto"
-            initialWidth="auto"
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+              width: "100%",
+            }}
           >
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "2fr 8fr 2fr",
-                gap: 16,
-              }}
+            <DraggableResizeableWindow
+              headerTitle="Welcome to Flunks"
+              showHeaderActions={false}
+              initialHeight="400px"
+              initialWidth="auto"
             >
-              <img
-                src="/images/os-logo-large.png"
-                style={{
-                  maxWidth: "100px",
-                  height: "100%",
-                }}
-                alt="Flunks Logo"
-              />
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "start",
-                  gap: 16,
-                }}
-              >
-                <P>Type a user name and password to log on to Flunks High </P>
-
+              <LoginScreenContainer>
+                <img
+                  src="/images/os-logo-large.png"
+                  style={{
+                    maxWidth: "100px",
+                    height: "100%",
+                  }}
+                  alt="Flunks Logo"
+                />
                 <div
                   style={{
-                    display: "grid",
-                    gridTemplateColumns: "100px 1fr",
-                    gridTemplateRows: "1fr 1fr",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "start",
                     gap: 16,
                   }}
                 >
-                  <P>
-                    <u>U</u>sername
-                  </P>
+                  <P>Type a user name and password to log on to Flunks High </P>
 
-                  <TextInput placeholder="Doesn't really matter what you put in here" />
+                  <form
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "100px 1fr",
+                      gridTemplateRows: "1fr 1fr",
+                      gap: 16,
+                    }}
+                  >
+                    <P>
+                      <u>U</u>sername
+                    </P>
 
-                  <P>
-                    <u>P</u>assword
-                  </P>
+                    <TextInput
+                      autoComplete={"off"}
+                      placeholder="Doesn't really matter what you put in here"
+                    />
 
-                  <TextInput
-                    placeholder="Nor here, just press Log On lol"
-                    type="password"
-                  />
+                    <P>
+                      <u>P</u>assword
+                    </P>
+
+                    <TextInput
+                      autoComplete={"off"}
+                      placeholder="Nor here, just press Log On lol"
+                      type="password"
+                    />
+                  </form>
                 </div>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 16,
-                }}
-              >
-                <Button onClick={authenticate}>Log On</Button>
-              </div>
-            </div>
-          </DraggableResizeableWindow>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 16,
+                  }}
+                >
+                  <Button onClick={authenticate}>Log On</Button>
+                </div>
+              </LoginScreenContainer>
+            </DraggableResizeableWindow>
+          </div>
         </CustomMonitor>
       )}
 
-      {walletAddress && (
+      {!showLogin && (
         <CustomMonitor
           backgroundStyles={{
             backgroundColor: "#008080",
@@ -153,8 +178,8 @@ const Home: NextPage = () => {
                 icon="/images/your-students.ico"
                 onDoubleClick={() => {
                   openWindow({
-                    key: WINDOW_IDS.STUDENT_EXPLORER,
-                    window: <StudentExplorer />,
+                    key: WINDOW_IDS.YOUR_STUDENTS,
+                    window: <YourStudents />,
                   });
                 }}
               />

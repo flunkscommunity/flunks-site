@@ -12,8 +12,10 @@ import SlowProgressBar from "components/SlowProgressBar";
 import { useState } from "react";
 import Filters from "components/Filters";
 import TraitFilters from "./TraitFilters";
+import { useUser } from "contexts/WalletContext";
 
-const StudentExplorer: React.FC = () => {
+const YourStudents: React.FC = () => {
+  const { walletAddress } = useUser();
   return (
     <PaginatedProdiver
       fetcher={UsersApiInstance.usersControllerGetUserNftsByWalletAddress.bind(
@@ -21,7 +23,7 @@ const StudentExplorer: React.FC = () => {
       )}
       cacheKey="users-wallet-explorer"
       requestParameters={{
-        walletAddress: "0x0",
+        walletAddress,
       }}
     >
       <UsersStudentExplorerWindow />
@@ -31,15 +33,14 @@ const StudentExplorer: React.FC = () => {
 
 const UsersStudentExplorerWindow = () => {
   const { closeWindow } = useWindowsContext();
-  const [showFilters, setShowFilters] = useState(false);
   const { openWindow } = useWindowsContext();
-  const { setRequestParameters, requestParameters } =
+  const { nfts, setRequestParameters, requestParameters } =
     usePaginatedContext<MarketplaceIndividualNftDto>();
-
+  console.log(nfts);
   return (
     <DraggableResizeableWindow
       offSetHeight={44}
-      headerTitle="Student Directory v0.2"
+      headerTitle="Your Students v0.6"
       onClose={() => {
         closeWindow(WINDOW_IDS.FILTERS_WINDOW);
         closeWindow(WINDOW_IDS.STUDENT_EXPLORER);
@@ -74,10 +75,10 @@ const UsersStudentExplorerWindow = () => {
           </Button>
           <Handle size={35} />
         </Toolbar>
-        <NftFrameGrid />
+        {/* <NftFrameGrid /> */}
       </SlowProgressBar>
     </DraggableResizeableWindow>
   );
 };
 
-export default StudentExplorer;
+export default YourStudents;
