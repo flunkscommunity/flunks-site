@@ -2,7 +2,7 @@ import { MarketplaceIndividualNftDto, NftActivityDto } from "api/generated";
 import { FlunkImage } from "components/CustomMonitor";
 import { useUser } from "contexts/WalletContext";
 import { useWindowsContext } from "contexts/WindowsContext";
-import { format, isAfter } from "date-fns";
+import { format, isAfter, parse } from "date-fns";
 import useWindowSize from "hooks/useWindowSize";
 import { Button, GroupBox } from "react95";
 import Graduation from "windows/Graduation";
@@ -13,10 +13,10 @@ interface Props {
 }
 
 const GRADUATION_DATES = {
-  "A+": "2022-12-19:13:00:00",
-  B: "2023-01-21:13:00:00",
-  C: "2023-02-21:13:00:00",
-  D: "2023-04-21:13:00:00",
+  "A+": "2022-12-21T21:00:00Z",
+  B: "2023-01-21T21:00:00Z",
+  C: "2023-02-21T21:00:00Z",
+  D: "2023-04-21T21:00:00Z",
 };
 
 const GraduationBox: React.FC<Props> = (props) => {
@@ -95,9 +95,9 @@ const GraduationBoxContent: React.FC<Props> = (props) => {
       return "D";
     }
 
-    const A = new Date("2022-05-01:13:00:00");
-    const B = new Date("2022-06-01:13:00:00");
-    const C = new Date("2022-07-01:13:00:00");
+    const A = new Date("2022-05-01T21:00:00Z");
+    const B = new Date("2022-06-01T21:00:00Z");
+    const C = new Date("2022-07-01T21:00:00Z");
 
     if (isAfter(new Date(lastDelistOrSale.eventDate), C)) {
       return "D";
@@ -155,9 +155,9 @@ const GraduationBoxContent: React.FC<Props> = (props) => {
           <H3>
             Graduating on{" "}
             {format(
-              new Date(
-                GRADUATION_DATES[getGraduationDate()] || "2023-04-21:13:00:00"
-              ),
+              parse('', '', new Date(
+                GRADUATION_DATES[getGraduationDate()] || "2023-04-21T13:00:00"
+              )),
               "MMMM do yyyy"
             )}
           </H3>
@@ -175,7 +175,7 @@ const GraduationBoxContent: React.FC<Props> = (props) => {
           {!neverListed &&
             !isCurrentlyListed &&
             `This Student was last put up for exchange on ${format(
-              new Date(lastDelistOrSale.eventDate),
+              parse('', '', new Date(lastDelistOrSale.eventDate)),
               "MMMM do yyyy"
             )}.`}
         </P>

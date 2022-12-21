@@ -133,6 +133,24 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
               maxHeight: "360px",
             }}
           />
+          {percentage >= 100 && (
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <a
+                target="_blank"
+                rel="noreferrer noopener"
+                href={`https://storage.googleapis.com/flunk-graduation/graduation/${flunk.templateId}.png`}
+                download={`#${flunk.templateId}.png`}
+              >
+                <Button onClick={handleLoadFaster}>Save Graduated Image</Button>
+              </a>
+            </div>
+          )}
 
           <div
             ref={divOverlayRef}
@@ -168,9 +186,11 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
           <ProgressBar value={Math.floor(percentage)} />
         </div>
 
-        <div>
-          <Button onClick={handleLoadFaster}>Load FASTER!!!!!</Button>
-        </div>
+        {percentage < 100 && (
+          <div>
+            <Button onMouseDown={handleLoadFaster} onClick={handleLoadFaster}>Load FASTER!!!!!</Button>
+          </div>
+        )}
       </Frame>
     );
   }
