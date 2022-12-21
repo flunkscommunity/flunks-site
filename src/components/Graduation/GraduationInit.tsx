@@ -284,10 +284,8 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
   return (
     <Frame
       onClick={() => {
-        if (true) {
-          if (state.txState === TX_STATUS.SUCCESS) {
-            setEndHacking(true);
-          }
+        if (state.txState === TX_STATUS.SUCCESS) {
+          setEndHacking(true);
         }
       }}
       variant="well"
