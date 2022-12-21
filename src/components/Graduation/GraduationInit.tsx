@@ -302,50 +302,50 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
         position: "relative",
       }}
     >
-      {(state.txStatus !== TX_STATUS.PENDING ||
-        state.txStatus !== TX_STATUS.SUCCESS) && (
-        <div
-          style={{
-            alignSelf: "center",
-            marginLeft: "auto",
-            marginRight: "auto",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "1rem",
-            textAlign: "center",
-          }}
-        >
-          {!canGraduate && (
-            <P>
-              {" "}
-              You cannot hack your grades <br /> come back on your graduation
-              day.
-              <br />
-            </P>
-          )}
-          {state.txStatus === TX_STATUS.ERROR && (
-            <P>Couldn't break into the system..</P>
-          )}
-          <Button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleGraduate();
+      {state.txStatus !== TX_STATUS.PENDING &&
+        state.txStatus !== TX_STATUS.SUCCESS && (
+          <div
+            style={{
+              alignSelf: "center",
+              marginLeft: "auto",
+              marginRight: "auto",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "1rem",
+              textAlign: "center",
             }}
-            id="typewriter"
-            disabled={state.txStatus === TX_STATUS.STARTED || !canGraduate}
           >
-            Hack Grades
-          </Button>
-          {state.txStatus === TX_STATUS.ERROR && (
-            <P>
-              If the problem persists, <br />
-              please open a ticket on discord
-            </P>
-          )}
-        </div>
-      )}
+            {!canGraduate && (
+              <P>
+                {" "}
+                You cannot hack your grades <br /> come back on your graduation
+                day.
+                <br />
+              </P>
+            )}
+            {state.txStatus === TX_STATUS.ERROR && (
+              <P>Couldn't break into the system..</P>
+            )}
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleGraduate();
+              }}
+              id="typewriter"
+              disabled={state.txStatus === TX_STATUS.STARTED || !canGraduate}
+            >
+              Hack Grades
+            </Button>
+            {state.txStatus === TX_STATUS.ERROR && (
+              <P>
+                If the problem persists, <br />
+                please open a ticket on discord
+              </P>
+            )}
+          </div>
+        )}
 
       {state.txState === TX_STATUS.SUCCESS && (
         <div

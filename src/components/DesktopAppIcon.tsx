@@ -52,7 +52,7 @@ const DesktopAppIcon: React.FC<Props> = (props) => {
   };
 
   return (
-    <Draggable disabled={width < 768} bounds="parent">
+    <Draggable disabled={true} bounds="parent">
       <div
         style={{
           width: 80,

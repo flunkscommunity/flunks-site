@@ -79,21 +79,39 @@ const Home: NextPage = () => {
             }}
           />
 
-          <DesktopAppIcon
-            title="Twitter"
-            icon="/images/twitter.png"
-            onDoubleClick={() => {
-              return null;
+          <a
+            href="https://twitter.com/Flunks_NFT"
+            target="_blank"
+            rel="noreferrer noopener"
+            style={{
+              textDecoration: "none",
             }}
-          />
+          >
+            <DesktopAppIcon
+              title="Twitter"
+              icon="/images/twitter.png"
+              onDoubleClick={() => {
+                return null;
+              }}
+            />
+          </a>
 
-          <DesktopAppIcon
-            title="Discord"
-            icon="/images/discord.png"
-            onDoubleClick={() => {
-              return null;
+          <a
+            href="https://discord.gg/flunks"
+            target="_blank"
+            rel="noreferrer noopener"
+            style={{
+              textDecoration: "none",
             }}
-          />
+          >
+            <DesktopAppIcon
+              title="Discord"
+              icon="/images/discord.png"
+              onDoubleClick={() => {
+                return null;
+              }}
+            />
+          </a>
 
           <React.Fragment>
             {Object.keys(windows).length > 0 &&
