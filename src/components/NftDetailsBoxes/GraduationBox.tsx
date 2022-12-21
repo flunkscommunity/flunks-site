@@ -16,7 +16,7 @@ const GRADUATION_DATES = {
   "A+": "2022-12-21T21:00:00Z",
   B: "2023-01-21T21:00:00Z",
   C: "2023-02-21T21:00:00Z",
-  D: "2023-04-21T21:00:00Z",
+  D: "2023-03-21T21:00:00Z",
 };
 
 const GraduationBox: React.FC<Props> = (props) => {
@@ -156,7 +156,7 @@ const GraduationBoxContent: React.FC<Props> = (props) => {
             Graduating on{" "}
             {format(
               parse('', '', new Date(
-                GRADUATION_DATES[getGraduationDate()] || "2023-04-21T13:00:00"
+                GRADUATION_DATES[getGraduationDate()] || "2023-03-21T13:00:00"
               )),
               "MMMM do yyyy"
             )}

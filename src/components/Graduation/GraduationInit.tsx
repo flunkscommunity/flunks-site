@@ -2,7 +2,7 @@ import { MarketplaceIndividualNftDto } from "api/generated";
 import { FlunkImage } from "components/CustomMonitor";
 import { H3, P } from "components/Typography";
 import { useFclTransactionContext } from "contexts/FclTransactionContext";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, Frame, ProgressBar, Toolbar } from "react95";
 import { TX_STATUS } from "reducers/TxStatusReducer";
 import Typewriter from "typewriter-effect";
@@ -18,8 +18,30 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
   const [endHacking, setEndHacking] = useState(false);
   const [percentage, setPercentage] = useState(0);
   const divOverlayRef = useRef<HTMLDivElement>(null);
-  const lowGrade = () => Math.floor(Math.random() * 50) + 1;
-  const highGrade = () => Math.floor(Math.random() * 20) + 80;
+  const [graduatedUrl, setGraduatedUrl] = useState("");
+
+  const sha256 = async (str: string) => {
+    const buf = new TextEncoder().encode(str);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", buf);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+    return hashHex;
+  };
+
+  useEffect(() => {
+    if (!flunk) return;
+
+    sha256(flunk.templateId.toString()).then((hash) => {
+      setGraduatedUrl(
+        `https://storage.googleapis.com/flunk-graduation/${hash}.png`
+      );
+    });
+  }, [flunk]);
+
+  console.log("graduatedUrl", graduatedUrl);
+
   const hackTexts = [
     "$ ssh student@schoolserver.edu",
     "student@schoolserver.edu's password:",
@@ -125,7 +147,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
           }}
         >
           <FlunkImage
-            src={`https://storage.googleapis.com/flunk-graduation/graduation/${flunk.templateId}.png`}
+            src={graduatedUrl}
             style={{
               width: "100%",
               height: "100%",
@@ -144,7 +166,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
               <a
                 target="_blank"
                 rel="noreferrer noopener"
-                href={`https://storage.googleapis.com/flunk-graduation/graduation/${flunk.templateId}.png`}
+                href={graduatedUrl}
                 download={`#${flunk.templateId}.png`}
               >
                 <Button onClick={handleLoadFaster}>Save Graduated Image</Button>
@@ -188,7 +210,9 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
 
         {percentage < 100 && (
           <div>
-            <Button onMouseDown={handleLoadFaster} onClick={handleLoadFaster}>Load FASTER!!!!!</Button>
+            <Button onMouseDown={handleLoadFaster} onClick={handleLoadFaster}>
+              Load FASTER!!!!!
+            </Button>
           </div>
         )}
       </Frame>
