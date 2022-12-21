@@ -30,7 +30,7 @@ const H2 = styled.h2`
     font-size: 1rem;
   }
   @media (max-width: 320px) {
-    font-size: 0.75rem;
+    font-size: 1rem;
   }
 `;
 
@@ -44,10 +44,10 @@ const H3 = styled.h3`
     font-size: 1rem;
   }
   @media (max-width: 480px) {
-    font-size: 0.75rem;
+    font-size: 1rem;
   }
   @media (max-width: 320px) {
-    font-size: 0.5rem;
+    font-size: 1rem;
   }
 `;
 
@@ -58,13 +58,13 @@ const H4 = styled.h4`
   padding: 0;
   color: ${({ theme }) => theme.text};
   @media (max-width: 768px) {
-    font-size: 0.75rem;
+    font-size: 1rem;
   }
   @media (max-width: 480px) {
-    font-size: 0.5rem;
+    font-size: 1rem;
   }
   @media (max-width: 320px) {
-    font-size: 0.25rem;
+    font-size: 1rem;
   }
 `;
 

@@ -64,9 +64,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
     "+--------+-------+-------+-------+-------+-------+",
     "| name   | math  | science  | history  | english  | average  |",
     "+--------+-------+-------+-------+-------+-------+",
-    `| Flunk #${
-      flunk.templateId
-    }  | 50    | 45    | 40    | 35    | 42.5  |`,
+    `| Flunk #${flunk.templateId}  | 50    | 45    | 40    | 35    | 42.5  |`,
     "+--------+-------+-------+-------+-------+-------+",
     "1 row in set (0.00 sec)",
     "",
@@ -78,9 +76,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
     "+--------+-------+-------+-------+-------+-------+",
     "| name   | math  | science  | history  | english  | average  |",
     "+--------+-------+-------+-------+-------+-------+",
-    `| Flunk #${
-      flunk.templateId
-    }  | 95    | 90    | 85    | 80    | 88.75  |`,
+    `| Flunk #${flunk.templateId}  | 95    | 90    | 85    | 80    | 88.75  |`,
     "+--------+-------+-------+-------+-------+-------+",
     "1 row in set (0.00 sec)",
     "",
@@ -211,11 +207,11 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
             marginRight: "auto",
           }}
         >
-          Hack grades
+          Hack Grades
         </Button>
       )}
 
-      {true && (
+      {state.txState === TX_STATUS.SUCCESS && (
         <div
           style={{
             position: "fixed",

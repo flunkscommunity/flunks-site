@@ -47,7 +47,7 @@ const StudentExplorerWindow = () => {
         closeWindow(WINDOW_IDS.STUDENT_EXPLORER);
       }}
     >
-      <SlowProgressBar>
+      <SlowProgressBar bgImage="/images/student-directory-bg.png">
         <Toolbar
           style={{
             justifyContent: "end",

@@ -223,8 +223,8 @@ export const NftFrame: React.FC<{ nft: MarketplaceIndividualNftDto }> = (
         }}
       >
         {isLoading && <Hourglass size={16} />}
-        {isClaimed && !isLoading && "View signed claim form"}
-        {!isClaimed && !isLoading && "Sign claim form"}
+        {isClaimed && !isLoading && "View Signed Claim form"}
+        {!isClaimed && !isLoading && "Sign Claim Form"}
       </Button>
     </FlexFrame>
   );

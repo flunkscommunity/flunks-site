@@ -1,4 +1,6 @@
 import { useWindowsContext } from "contexts/WindowsContext";
+import useWindowSize from "hooks/useWindowSize";
+import Draggable from "react-draggable";
 import styled from "styled-components";
 import StudentExplorer from "windows/StudentExplorer";
 import { H1, H4 } from "./Typography";
@@ -34,20 +36,39 @@ const AppTitle = styled(H4)`
       background-color: rgba(48, 197, 255, 0.5);
     }
   }
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 const DesktopAppIcon: React.FC<Props> = (props) => {
   const { title, icon, onDoubleClick } = props;
+  const { width } = useWindowSize();
+
+  const handleMobileOpen = () => {
+    if (width < 768) {
+      onDoubleClick();
+    }
+  };
 
   return (
-    <div onDoubleClick={onDoubleClick}>
-      <Container>
-        <AppIcon icon={icon} />
-        <AppTitle>
-          <span>{title}</span>
-        </AppTitle>
-      </Container>
-    </div>
+    <Draggable disabled={width < 768} bounds="parent">
+      <div
+        style={{
+          width: 80,
+          margin: 8,
+        }}
+      >
+        <div onDoubleClick={onDoubleClick} onClick={handleMobileOpen}>
+          <Container>
+            <AppIcon icon={icon} />
+            <AppTitle>
+              <span>{title}</span>
+            </AppTitle>
+          </Container>
+        </div>
+      </div>
+    </Draggable>
   );
 };
 

@@ -1,12 +1,23 @@
 import { useEffect, useState } from "react";
-import { ProgressBar } from "react95";
+import { Frame, ProgressBar } from "react95";
+import styled from "styled-components";
+import { H3, P } from "./Typography";
 
 interface Props {
   children: React.ReactNode;
+  bgImage: string;
 }
 
+const WelcomeContainer = styled.div`
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: 1fr;
+  grid-template-rows: 11fr 1fr;
+`;
+
 const SlowProgressBar: React.FC<Props> = (props) => {
-  const { children } = props;
+  const { children, bgImage } = props;
   const [percent, setPercent] = useState(0);
   const [complete, setComplete] = useState(false);
 
@@ -26,22 +37,32 @@ const SlowProgressBar: React.FC<Props> = (props) => {
       clearInterval(timer);
     };
   }, []);
-  
+
   return complete ? (
     <>{children}</>
   ) : (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100%",
-        width: "100%",
-      }}
-    >
-      <ProgressBar variant="tile" hideValue value={Math.floor(percent)} />
-    </div>
+    <WelcomeContainer>
+      <Frame variant="well">
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            backgroundImage: `url(${bgImage})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            opacity: 0.6,
+          }}
+        />
+      </Frame>
+      <ProgressBar
+        style={{
+          gridRow: "2",
+        }}
+        variant="tile"
+        hideValue
+        value={Math.floor(percent)}
+      />
+    </WelcomeContainer>
   );
 };
 

@@ -1,4 +1,5 @@
 import { useWindowsContext } from "contexts/WindowsContext";
+import useWindowSize from "hooks/useWindowSize";
 import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { Button, Window, WindowContent, WindowHeader } from "react95";
@@ -21,6 +22,15 @@ const WindowButtons = styled.div`
   gap: 4px;
 `;
 
+const CustomWindowBody = styled(WindowContent)`
+  @media (max-width: 768px) {
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-top: 4px;
+  }
+`;
+
 const DraggableResizeableWindow: React.FC<Props> = (props) => {
   const {
     headerTitle,
@@ -33,6 +43,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
   } = props;
   const windowRef = useRef<HTMLDivElement>(null);
   const draggableRef = useRef<Draggable>(null);
+  const { width, height } = useWindowSize();
 
   const handleMaximize = () => {
     if (windowRef.current) {
@@ -83,14 +94,23 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
+    if (width < 768 && draggableRef.current) {
+      draggableRef.current.setState({
+        x: 0,
+        y: 0,
+      });
+    }
+  }, [width, height]);
+
+  useEffect(() => {
     if (windowRef.current) {
       const numOfChildren = windowRef.current.parentElement?.children.length;
       console.log(numOfChildren);
       bringWindowToFront();
       if (draggableRef.current) {
         draggableRef.current.setState({
-          x: numOfChildren * 10,
-          y: numOfChildren * 10,
+          x: width < 768 ? 0 : numOfChildren * 10,
+          y: width < 768 ? 0 : numOfChildren * 10,
         });
       }
     }
@@ -104,6 +124,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
       handle="strong"
       bounds="parent"
       onStart={onStart}
+      disabled={width < 768}
     >
       <Window
         ref={windowRef}
@@ -112,9 +133,9 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           position: "absolute",
           resize: "both",
           overflow: "hidden",
-          width: initialWidth,
+          width: width < 768 ? "100%" : initialWidth,
           maxWidth: "100%",
-          height: initialHeight,
+          height: width < 768 ? "100%" : initialHeight,
           maxHeight: "calc(100% - 48px)",
         }}
         onClick={bringWindowToFront}
@@ -147,7 +168,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           </WindowHeader>
         </strong>
 
-        <WindowContent
+        <CustomWindowBody
           style={{
             height: `calc(100% - 44px - ${offSetHeight}px)`,
             width: "100%",
@@ -156,7 +177,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           }}
         >
           {children}
-        </WindowContent>
+        </CustomWindowBody>
       </Window>
     </Draggable>
   );

@@ -47,7 +47,7 @@ const LostAndFound: React.FC = () => {
         closeWindow(WINDOW_IDS.LOST_AND_FOUND);
       }}
     >
-      <SlowProgressBar>
+      <SlowProgressBar bgImage="/images/lost-and-found-bg.png">
         <Tabs
           value={activeTab}
           onChange={() => {

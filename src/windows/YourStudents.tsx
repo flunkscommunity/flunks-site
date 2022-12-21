@@ -41,7 +41,7 @@ const YourStudents: React.FC = () => {
         closeWindow(WINDOW_IDS.YOUR_STUDENTS);
       }}
     >
-      <SlowProgressBar>
+      <SlowProgressBar bgImage="/images/your-students-bg.png">
         <Tabs
           value={activeTab}
           onChange={() => {
@@ -53,16 +53,10 @@ const YourStudents: React.FC = () => {
         </Tabs>
         <TabBody>
           {activeTab === 0 && (
-            <NftFrameGrid
-              nfts={flunks}
-              isValidating={isValidating}
-            />
+            <NftFrameGrid nfts={flunks} isValidating={isValidating} />
           )}
           {activeTab === 1 && (
-            <BackpackFrameGrid
-              nfts={backpacks}
-              isValidating={isValidating}
-            />
+            <BackpackFrameGrid nfts={backpacks} isValidating={isValidating} />
           )}
         </TabBody>
       </SlowProgressBar>

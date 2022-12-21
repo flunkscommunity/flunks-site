@@ -2,6 +2,7 @@ import { useWindowsContext } from "contexts/WindowsContext";
 import React, { forwardRef } from "react";
 import { AppBar, Button, ScrollViewProps, TextInput, Toolbar } from "react95";
 import styled from "styled-components";
+import Appbar from "./Appbar/Appbar";
 
 export const StyledScrollView = styled.div<Pick<ScrollViewProps, "shadow">>`
   position: relative;
@@ -130,97 +131,7 @@ const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
             <Background className="crt" style={backgroundStyles}>
               <MonitorScreenContainer>{children}</MonitorScreenContainer>
 
-              {showBottomBar && (
-                <AppBar
-                  fixed={false}
-                  style={{
-                    zIndex: 1000,
-                    top: "100%",
-                    transform: "translateY(-100%)",
-                  }}
-                >
-                  <Toolbar style={{ justifyContent: "space-between" }}>
-                    <div
-                      style={{
-                        position: "relative",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Button
-                        // onClick={() => setOpen(!open)}
-                        // active={open}
-                        style={{ fontWeight: "bold" }}
-                      >
-                        <img
-                          src={"/images/os-logo.png"}
-                          alt="react95 logo"
-                          style={{ height: "20px", marginRight: 4 }}
-                        />
-                        Start
-                      </Button>
-
-                      {/* <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns:
-                          "repeat(auto-fit, minmax(30px, 1fr))",
-                        width: "100%",
-                      }}
-                    >
-                      {Object.entries(windows).map(
-                        ([key, value]) =>
-                          key === "student-explorer" && (
-                            <Button
-                              key={key}
-                              style={{
-                                height: "36px",
-                                marginLeft: 4,
-                                fontWeight: "bold",
-                              }}
-                            >
-                              {key}
-                            </Button>
-                          )
-                      )}
-                    </div> */}
-
-                      {/* {open && (
-                      <MenuList
-                        style={{
-                          position: "absolute",
-                          left: "0",
-                          top: "100%",
-                        }}
-                        onClick={() => setOpen(false)}
-                      >
-                        <MenuListItem>
-                          <span role="img" aria-label="👨‍💻">
-                            👨‍💻
-                          </span>
-                          Profile
-                        </MenuListItem>
-                        <MenuListItem>
-                          <span role="img" aria-label="📁">
-                            📁
-                          </span>
-                          My account
-                        </MenuListItem>
-                        <Separator />
-                        <MenuListItem disabled>
-                          <span role="img" aria-label="🔙">
-                            🔙
-                          </span>
-                          Logout
-                        </MenuListItem>
-                      </MenuList>
-                    )} */}
-                    </div>
-
-                    <TextInput placeholder="Search..." width={150} />
-                  </Toolbar>
-                </AppBar>
-              )}
+              {showBottomBar && <Appbar />}
             </Background>
           </MonitorBody>
         </Inner>

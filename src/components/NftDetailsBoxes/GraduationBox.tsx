@@ -3,6 +3,7 @@ import { FlunkImage } from "components/CustomMonitor";
 import { useUser } from "contexts/WalletContext";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { format, isAfter } from "date-fns";
+import useWindowSize from "hooks/useWindowSize";
 import { Button, GroupBox } from "react95";
 import Graduation from "windows/Graduation";
 import { H1, H3, P } from "../Typography";
@@ -67,6 +68,8 @@ const GraduationBoxContent: React.FC<Props> = (props) => {
   const { NftActivity } = nft;
   const { walletAddress } = useUser();
   const { openWindow } = useWindowsContext();
+  const { width } = useWindowSize();
+
   const isOwner = walletAddress === nft.ownerAddress;
   const listingEvents = NftActivity.filter(({ activity }) => {
     return activity === "LIST" || activity === "DELIST" || activity === "SALE";
@@ -116,95 +119,179 @@ const GraduationBoxContent: React.FC<Props> = (props) => {
     new Date(GRADUATION_DATES[getGraduationDate()])
   );
 
-  return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 11fr",
-        gridTemplateRows: "1fr 1fr",
-        columnGap: "1rem",
-        alignItems: "center",
-        justifyItems: "start",
-      }}
-    >
+  if (true) {
+    return (
       <div
         style={{
-          gridColumn: "1",
-          gridRow: "span 2",
-          display: "flex",
+          display: "grid",
+          gridTemplateColumns: "1fr",
+          columnGap: "1rem",
           alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-          height: "100%",
+          justifyItems: "start",
         }}
       >
-        <H1
-          style={{
-            textShadow: "2px 2px 0rem white",
-          }}
-        >
-          {getGraduationDate()}
-        </H1>
-      </div>
-      <H3
-        style={{
-          gridColumn: "2",
-          gridRow: "1",
-        }}
-      >
-        <H3>
-          Graduating on{" "}
-          {format(
-            new Date(
-              GRADUATION_DATES[getGraduationDate()] || "2023-04-21:13:00:00"
-            ),
-            "MMMM do yyyy"
-          )}
-        </H3>
-      </H3>
-
-      <P
-        style={{
-          gridColumn: "2",
-          gridRow: "2",
-          fontSize: "1.25rem",
-        }}
-      >
-        {neverListed && "This Student has never been put up for exchange."}
-        {!neverListed &&
-          isCurrentlyListed &&
-          "This Student is currently up for exchange."}
-        {!neverListed &&
-          !isCurrentlyListed &&
-          `This Student was last put up for exchange on ${format(
-            new Date(lastDelistOrSale.eventDate),
-            "MMMM do yyyy"
-          )}.`}
-      </P>
-      {true && isOwner && (
         <div
           style={{
-            gridColumn: "span 2",
-            gridRow: "3",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             width: "100%",
-            marginTop: "1rem",
+            height: "100%",
           }}
         >
-          <Button
-            onClick={() => {
-              openWindow({
-                key: `graduation-${nft.templateId}`,
-                window: <Graduation flunk={nft} />,
-              });
+          <H1
+            style={{
+              textShadow: "2px 2px 0rem white",
+              fontSize: "4rem",
             }}
-            fullWidth
           >
-            Initiate Graduation
-          </Button>
+            {getGraduationDate()}
+          </H1>
         </div>
-      )}
-    </div>
-  );
+        <H3
+          style={{
+          }}
+        >
+          <H3>
+            Graduating on{" "}
+            {format(
+              new Date(
+                GRADUATION_DATES[getGraduationDate()] || "2023-04-21:13:00:00"
+              ),
+              "MMMM do yyyy"
+            )}
+          </H3>
+        </H3>
+
+        <P
+          style={{
+            fontSize: "1.25rem",
+          }}
+        >
+          {neverListed && "This Student has never been put up for exchange."}
+          {!neverListed &&
+            isCurrentlyListed &&
+            "This Student is currently up for exchange."}
+          {!neverListed &&
+            !isCurrentlyListed &&
+            `This Student was last put up for exchange on ${format(
+              new Date(lastDelistOrSale.eventDate),
+              "MMMM do yyyy"
+            )}.`}
+        </P>
+        {true && isOwner && (
+          <div
+            style={{
+              width: "100%",
+              marginTop: "1rem",
+            }}
+          >
+            <Button
+              onClick={() => {
+                openWindow({
+                  key: `graduation-${nft.templateId}`,
+                  window: <Graduation flunk={nft} />,
+                });
+              }}
+              fullWidth
+            >
+              Initiate Graduation
+            </Button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // return (
+  //   <div
+  //     style={{
+  //       display: "grid",
+  //       gridTemplateColumns: "1fr 11fr",
+  //       gridTemplateRows: "1fr 1fr",
+  //       columnGap: "1rem",
+  //       alignItems: "center",
+  //       justifyItems: "start",
+  //     }}
+  //   >
+  //     <div
+  //       style={{
+  //         gridColumn: "1",
+  //         gridRow: "span 2",
+  //         display: "flex",
+  //         alignItems: "center",
+  //         justifyContent: "center",
+  //         width: "100%",
+  //         height: "100%",
+  //       }}
+  //     >
+  //       <H1
+  //         style={{
+  //           textShadow: "2px 2px 0rem white",
+  //         }}
+  //       >
+  //         {getGraduationDate()}
+  //       </H1>
+  //     </div>
+  //     <H3
+  //       style={{
+  //         gridColumn: "2",
+  //         gridRow: "1",
+  //       }}
+  //     >
+  //       <H3>
+  //         Graduating on{" "}
+  //         {format(
+  //           new Date(
+  //             GRADUATION_DATES[getGraduationDate()] || "2023-04-21:13:00:00"
+  //           ),
+  //           "MMMM do yyyy"
+  //         )}
+  //       </H3>
+  //     </H3>
+
+  //     <P
+  //       style={{
+  //         gridColumn: "2",
+  //         gridRow: "2",
+  //         fontSize: "1.25rem",
+  //       }}
+  //     >
+  //       {neverListed && "This Student has never been put up for exchange."}
+  //       {!neverListed &&
+  //         isCurrentlyListed &&
+  //         "This Student is currently up for exchange."}
+  //       {!neverListed &&
+  //         !isCurrentlyListed &&
+  //         `This Student was last put up for exchange on ${format(
+  //           new Date(lastDelistOrSale.eventDate),
+  //           "MMMM do yyyy"
+  //         )}.`}
+  //     </P>
+  //     {true && isOwner && (
+  //       <div
+  //         style={{
+  //           gridColumn: "span 2",
+  //           gridRow: "3",
+  //           width: "100%",
+  //           marginTop: "1rem",
+  //         }}
+  //       >
+  //         <Button
+  //           onClick={() => {
+  //             openWindow({
+  //               key: `graduation-${nft.templateId}`,
+  //               window: <Graduation flunk={nft} />,
+  //             });
+  //           }}
+  //           fullWidth
+  //         >
+  //           Initiate Graduation
+  //         </Button>
+  //       </div>
+  //     )}
+  //   </div>
+  // );
 };
 
 export default GraduationBox;

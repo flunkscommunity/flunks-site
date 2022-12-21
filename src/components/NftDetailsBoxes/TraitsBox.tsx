@@ -20,7 +20,7 @@ const TraitsBox: React.FC<Props> = (props) => {
         flexWrap: "wrap",
         gap: "1rem",
         marginTop: "2rem",
-        padding: "2rem",
+        // padding: "2rem",
       }}
     >
       {Object.entries(usefulMetadata).map(([key, value]) => (
