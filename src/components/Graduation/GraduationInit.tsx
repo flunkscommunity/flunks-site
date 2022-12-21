@@ -284,7 +284,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
   return (
     <Frame
       onClick={() => {
-        if (state.txState === TX_STATUS.SUCCESS) {
+        if (state.txStatus === TX_STATUS.SUCCESS) {
           setEndHacking(true);
         }
       }}
@@ -345,7 +345,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
           </div>
         )}
 
-      {state.txState === TX_STATUS.SUCCESS && (
+      {state.txStatus === TX_STATUS.SUCCESS && (
         <div
           style={{
             position: "fixed",
