@@ -1,8 +1,10 @@
 import { MarketplaceIndividualNftDto } from "api/generated";
+import { usePaginatedContext } from "contexts/PaginatedContext";
 import { useWindowsContext } from "contexts/WindowsContext";
+import { WINDOW_IDS } from "fixed";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { Anchor, Button, Frame, Hourglass, ScrollView } from "react95";
+import { Button, Frame, Hourglass, ScrollView } from "react95";
 import styled from "styled-components";
 import { Metadata } from "types/NFT";
 import FlunkDetails from "windows/FlunkDetails";
@@ -43,32 +45,20 @@ const LoadMore = styled.div`
   user-select: none;
 `;
 
-interface Props {
-  nfts: MarketplaceIndividualNftDto[];
-  isValidating: boolean;
-}
-
-const paginate = (
-  arr: Props["nfts"],
-  size: number
-): MarketplaceIndividualNftDto[][] => {
-  return arr.reduce((acc, val, i) => {
-    let idx = Math.floor(i / size);
-    let page = acc[idx] || (acc[idx] = []);
-    page.push(val);
-
-    return acc;
-  }, []);
-};
-
-const NftFrameGrid: React.FC<Props> = (props) => {
-  const { nfts, isValidating } = props;
-  const [page, setPage] = useState(0);
-  const paginatedNfts = paginate(nfts, 10);
+const PaginatedNftFrameGrid: React.FC = () => {
+  const {
+    nfts,
+    page,
+    setPage,
+    isValidating,
+    requestParameters,
+    setRequestParameters,
+  } = usePaginatedContext<MarketplaceIndividualNftDto>();
   const [cursor, setCursor] = useState(0);
+  const { closeWindow } = useWindowsContext();
   const { ref: loadMoreRef } = useInView({
     onChange(inView) {
-      if (inView && cursor < paginatedNfts?.length) {
+      if (inView && cursor < nfts?.length) {
         setCursor(cursor + 1);
         console.log(cursor);
       }
@@ -76,7 +66,6 @@ const NftFrameGrid: React.FC<Props> = (props) => {
   });
 
   useEffect(() => {
-    if (cursor === paginatedNfts?.length) return;
     setPage(page + 1);
   }, [cursor]);
 
@@ -100,31 +89,22 @@ const NftFrameGrid: React.FC<Props> = (props) => {
       <Frame
         variant="field"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
           padding: "1rem",
-          width: "100%",
-          height: "100%",
         }}
       >
-        <span
-          style={{
-            fontSize: "64px",
-            fontWeight: "bold",
+        <H3>No Students Found</H3>
+        <br />
+        <Button
+          onClick={() => {
+            setRequestParameters({
+              ...(requestParameters as Record<string, unknown>),
+              traits: "",
+            });
+            closeWindow(WINDOW_IDS.FILTERS_WINDOW);
           }}
         >
-          ?
-        </span>
-        <H3>No Students Found</H3>
-        <Anchor
-          href={`https://zeero.art/collection/flunks?include=LISTED`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <P>Browse students that are up for exchange on zeero.art</P>
-        </Anchor>
+          Clear Filters
+        </Button>
       </Frame>
     );
   }
@@ -136,13 +116,9 @@ const NftFrameGrid: React.FC<Props> = (props) => {
       }}
     >
       <Grid>
-        {/* Map over paginatedNfts excluding anything after cursor */}
-        {paginatedNfts
-          ?.slice(0, cursor)
-          .flat()
-          .map((nft) => (
-            <NftFrame key={`${nft.collectionName}-${nft.tokenId}`} nft={nft} />
-          ))}
+        {nfts.map((nft) => (
+          <NftFrame key={`${nft.collectionName}-${nft.tokenId}`} nft={nft} />
+        ))}
         {!isValidating ? <LoadMore ref={loadMoreRef} /> : <LoadMore />}
       </Grid>
     </ScrollView>
@@ -153,13 +129,9 @@ export const NftFrame: React.FC<{ nft: MarketplaceIndividualNftDto }> = (
   props
 ) => {
   const { nft } = props;
-  const { metadata, templateId, rank, collectionName } = nft;
+  const { metadata, templateId, rank } = nft;
   const { uri, Superlative } = metadata as Metadata;
   const { openWindow } = useWindowsContext();
-  const labels = {
-    flunks: "Flunk",
-    backpack: "Backpack",
-  };
 
   return (
     <FlexFrame variant="field">
@@ -174,9 +146,7 @@ export const NftFrame: React.FC<{ nft: MarketplaceIndividualNftDto }> = (
           width: "100%",
         }}
       >
-        <H3>
-          {labels[collectionName.toLowerCase()]} #{templateId}
-        </H3>
+        <H3>Flunk #{templateId}</H3>
         <Frame
           variant="status"
           style={{
@@ -186,13 +156,13 @@ export const NftFrame: React.FC<{ nft: MarketplaceIndividualNftDto }> = (
           <H4>Rank #{rank}</H4>
         </Frame>
       </div>
-      {collectionName === "flunks" && <P
+      <P
         style={{
           fontSize: "1.25rem",
         }}
       >
         {Superlative}
-      </P>}
+      </P>
       <Button
         variant="flat"
         style={{
@@ -211,4 +181,4 @@ export const NftFrame: React.FC<{ nft: MarketplaceIndividualNftDto }> = (
   );
 };
 
-export default NftFrameGrid;
+export default PaginatedNftFrameGrid;

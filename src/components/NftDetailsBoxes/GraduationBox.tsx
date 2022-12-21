@@ -1,6 +1,10 @@
 import { MarketplaceIndividualNftDto, NftActivityDto } from "api/generated";
+import { FlunkImage } from "components/CustomMonitor";
+import { useUser } from "contexts/WalletContext";
+import { useWindowsContext } from "contexts/WindowsContext";
 import { format, isAfter } from "date-fns";
-import { GroupBox } from "react95";
+import { Button, GroupBox } from "react95";
+import Graduation from "windows/Graduation";
 import { H1, H3, P } from "../Typography";
 
 interface Props {
@@ -8,7 +12,7 @@ interface Props {
 }
 
 const GRADUATION_DATES = {
-  "A+": "2022-12-21:13:00:00",
+  "A+": "2022-12-19:13:00:00",
   B: "2023-01-21:13:00:00",
   C: "2023-02-21:13:00:00",
   D: "2023-04-21:13:00:00",
@@ -16,6 +20,34 @@ const GRADUATION_DATES = {
 
 const GraduationBox: React.FC<Props> = (props) => {
   const { nft } = props;
+  const { metadata } = nft;
+  const { pixelUri, Type } = metadata;
+  console.log("here", pixelUri, Type);
+
+  if (Type && Type === "Graduated")
+    return (
+      <GroupBox
+        label="GRADUATION"
+        style={{
+          alignSelf: "center",
+          width: "100%",
+          textAlign: "center",
+        }}
+      >
+        <br />
+        <br />
+        <FlunkImage src={pixelUri} width="250px" height="250px" />
+
+        <br />
+        <br />
+        <H3>GRADUATED</H3>
+
+        <P>
+          Congratulations on finally escaping high school! Now go out and make
+          the real world your own personal detention.
+        </P>
+      </GroupBox>
+    );
 
   return (
     <GroupBox
@@ -33,7 +65,9 @@ const GraduationBox: React.FC<Props> = (props) => {
 const GraduationBoxContent: React.FC<Props> = (props) => {
   const { nft } = props;
   const { NftActivity } = nft;
-
+  const { walletAddress } = useUser();
+  const { openWindow } = useWindowsContext();
+  const isOwner = walletAddress === nft.ownerAddress;
   const listingEvents = NftActivity.filter(({ activity }) => {
     return activity === "LIST" || activity === "DELIST" || activity === "SALE";
   });
@@ -76,6 +110,11 @@ const GraduationBoxContent: React.FC<Props> = (props) => {
 
     return "A+";
   };
+
+  const isTodayPastGraduationDate = isAfter(
+    new Date(),
+    new Date(GRADUATION_DATES[getGraduationDate()])
+  );
 
   return (
     <div
@@ -123,6 +162,7 @@ const GraduationBoxContent: React.FC<Props> = (props) => {
           )}
         </H3>
       </H3>
+
       <P
         style={{
           gridColumn: "2",
@@ -141,6 +181,28 @@ const GraduationBoxContent: React.FC<Props> = (props) => {
             "MMMM do yyyy"
           )}.`}
       </P>
+      {true && isOwner && (
+        <div
+          style={{
+            gridColumn: "span 2",
+            gridRow: "3",
+            width: "100%",
+            marginTop: "1rem",
+          }}
+        >
+          <Button
+            onClick={() => {
+              openWindow({
+                key: `graduation-${nft.templateId}`,
+                window: <Graduation flunk={nft} />,
+              });
+            }}
+            fullWidth
+          >
+            Initiate Graduation
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

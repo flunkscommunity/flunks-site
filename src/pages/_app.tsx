@@ -7,6 +7,7 @@ import "config/fcl";
 import "../styles/globals.css";
 import WindowsProvider from "contexts/WindowsContext";
 import { UserProvider } from "contexts/WalletContext";
+import ClaimBackpackProvider from "contexts/BackpackClaimContext";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
@@ -15,7 +16,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       <ThemeProvider theme={original}>
         <UserProvider>
           <WindowsProvider>
-            <Component {...pageProps} />
+            <ClaimBackpackProvider>
+              <Component {...pageProps} />
+            </ClaimBackpackProvider>
           </WindowsProvider>
         </UserProvider>
       </ThemeProvider>

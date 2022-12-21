@@ -6,7 +6,11 @@ import { Anchor, Button, Frame, Hourglass, ScrollView } from "react95";
 import styled from "styled-components";
 import { Metadata } from "types/NFT";
 import FlunkDetails from "windows/FlunkDetails";
-import { H3, H4, P } from "./Typography";
+import { H3, H4, P } from "components/Typography";
+import BackpackDetails from "windows/BackpackDetails";
+import { checkBackpackClaimed } from "web3/tx-check-claimed";
+import ClaimForm from "windows/ClaimForm";
+import { FlunkImage } from "components/CustomMonitor";
 
 const Grid = styled.div`
   display: grid;
@@ -18,7 +22,7 @@ const FlexFrame = styled(Frame)`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 1rem;
+  /* padding: 1rem; */
   @media (max-width: 480px) {
     padding: 0.5rem;
   }
@@ -61,11 +65,12 @@ const paginate = (
   }, []);
 };
 
-const NftFrameGrid: React.FC<Props> = (props) => {
+const ClaimFormFrameGrid: React.FC<Props> = (props) => {
   const { nfts, isValidating } = props;
   const [page, setPage] = useState(0);
   const paginatedNfts = paginate(nfts, 10);
   const [cursor, setCursor] = useState(0);
+
   const { ref: loadMoreRef } = useInView({
     onChange(inView) {
       if (inView && cursor < paginatedNfts?.length) {
@@ -117,7 +122,7 @@ const NftFrameGrid: React.FC<Props> = (props) => {
         >
           ?
         </span>
-        <H3>No Students Found</H3>
+        <H3>No Claim Forms found</H3>
         <Anchor
           href={`https://zeero.art/collection/flunks?include=LISTED`}
           target="_blank"
@@ -160,10 +165,34 @@ export const NftFrame: React.FC<{ nft: MarketplaceIndividualNftDto }> = (
     flunks: "Flunk",
     backpack: "Backpack",
   };
+  const [isClaimed, setIsClaimed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleIsClaimed = async () => {
+    setIsLoading(true);
+    const isClaimed = await checkBackpackClaimed(nft);
+    setIsClaimed(isClaimed);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    handleIsClaimed();
+  }, [nft]);
 
   return (
     <FlexFrame variant="field">
-      <NftImage src={uri} width="100%" />
+      {/* <NftImage
+        src={uri}
+        width="100%"
+        style={{
+          backgroundColor: "#cccccc",
+        }}
+      /> */}
+      <FlunkImage
+        src={uri}
+        width="100%"
+        height="100%"
+      />
       <div
         style={{
           display: "flex",
@@ -177,38 +206,28 @@ export const NftFrame: React.FC<{ nft: MarketplaceIndividualNftDto }> = (
         <H3>
           {labels[collectionName.toLowerCase()]} #{templateId}
         </H3>
-        <Frame
-          variant="status"
-          style={{
-            padding: "0 0.25rem",
-          }}
-        >
-          <H4>Rank #{rank}</H4>
-        </Frame>
       </div>
-      {collectionName === "flunks" && <P
-        style={{
-          fontSize: "1.25rem",
-        }}
-      >
-        {Superlative}
-      </P>}
       <Button
         variant="flat"
         style={{
           marginTop: "auto",
+          marginLeft: "1rem",
+          marginRight: "1rem",
+          marginBottom: "1rem",
         }}
         onClick={() => {
           openWindow({
-            key: `flunk-${templateId}`,
-            window: <FlunkDetails flunk={nft} />,
+            key: `claim-form-${templateId}`,
+            window: <ClaimForm flunk={nft} shouldFetch={isClaimed} />,
           });
         }}
       >
-        Details
+        {isLoading && <Hourglass size={16} />}
+        {isClaimed && !isLoading && "View signed claim form"}
+        {!isClaimed && !isLoading && "Sign claim form"}
       </Button>
     </FlexFrame>
   );
 };
 
-export default NftFrameGrid;
+export default ClaimFormFrameGrid;

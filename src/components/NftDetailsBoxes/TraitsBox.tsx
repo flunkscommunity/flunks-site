@@ -10,7 +10,7 @@ interface Props {
 const TraitsBox: React.FC<Props> = (props) => {
   const { nft } = props;
   const { metadata } = nft;
-  const { uri, cid, path, mimetype, ...usefulMetadata } = metadata as Metadata;
+  const { uri, cid, path, mimetype, pixelUri, ...usefulMetadata } = metadata as Metadata;
 
   return (
     <GroupBox

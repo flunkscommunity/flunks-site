@@ -48,7 +48,7 @@ const GuardianBox: React.FC<Props> = (props) => {
             height: "100%",
           }}
         >
-          <Avatar size={60} src={getBoringAvatarUrl(ownerAddress)} />
+          <Avatar size={60} src={nft?.metadata?.uri} />
         </div>
         <H3
           style={{

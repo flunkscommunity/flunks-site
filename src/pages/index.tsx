@@ -15,6 +15,7 @@ import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { H2, P } from "components/Typography";
 import styled from "styled-components";
 import YourStudents from "windows/YourStudents";
+import LostAndFound from "windows/LostAndFound";
 
 const LoginScreenContainer = styled.div`
   display: grid;
@@ -32,7 +33,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     setShowLogin(!walletAddress);
-  }, []);
+  }, [walletAddress]);
 
   return (
     <>
@@ -78,7 +79,6 @@ const Home: NextPage = () => {
                   src="/images/os-logo-large.png"
                   style={{
                     maxWidth: "100px",
-                    height: "100%",
                   }}
                   alt="Flunks Logo"
                 />
@@ -155,7 +155,7 @@ const Home: NextPage = () => {
             >
               <DesktopAppIcon
                 title="Student Directory"
-                icon="/images/student-directory.ico"
+                icon="/images/student-directory.png"
                 onDoubleClick={() => {
                   openWindow({
                     key: WINDOW_IDS.STUDENT_EXPLORER,
@@ -175,11 +175,31 @@ const Home: NextPage = () => {
             >
               <DesktopAppIcon
                 title="Your Students"
-                icon="/images/your-students.ico"
+                icon="/images/your-students.png"
                 onDoubleClick={() => {
                   openWindow({
                     key: WINDOW_IDS.YOUR_STUDENTS,
                     window: <YourStudents />,
+                  });
+                }}
+              />
+            </div>
+          </Draggable>
+
+          <Draggable bounds="parent">
+            <div
+              style={{
+                width: 80,
+                margin: 8,
+              }}
+            >
+              <DesktopAppIcon
+                title="Lost and Found"
+                icon="/images/lost-and-found.png"
+                onDoubleClick={() => {
+                  openWindow({
+                    key: WINDOW_IDS.LOST_AND_FOUND,
+                    window: <LostAndFound />,
                   });
                 }}
               />

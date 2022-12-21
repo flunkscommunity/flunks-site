@@ -1,22 +1,28 @@
-import { CollectionApiInstance, UsersApiInstance } from "api";
-import { MarketplaceIndividualNftDto } from "api/generated";
-import PaginatedProdiver, {
-  usePaginatedContext,
-} from "contexts/PaginatedContext";
+import { UsersApiInstance } from "api";
 import NftFrameGrid from "components/NftFrameGrid";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
-import { Anchor, Button, Handle, Tab, TabBody, Tabs, Toolbar } from "react95";
+import {
+  Button,
+  Frame,
+  Handle,
+  Tab,
+  TabBody,
+  Tabs,
+  TextInput,
+  Toolbar,
+} from "react95";
 import { useWindowsContext } from "contexts/WindowsContext";
-import { WINDOW_IDS, FLUNK_TRAITS } from "fixed";
+import { WINDOW_IDS } from "fixed";
 import SlowProgressBar from "components/SlowProgressBar";
 import { useState } from "react";
-import Filters from "components/Filters";
-import TraitFilters from "./TraitFilters";
 import { useUser } from "contexts/WalletContext";
 import { useSwrWrapper } from "api/useSwrWrapper";
 import BackpackFrameGrid from "components/Backpacks/BackpackFrameGrid";
+import { H3 } from "components/Typography";
+import ClaimChecker from "components/ClaimForm/ClaimChecker";
+import ClaimFormFrameGrid from "components/ClaimForm/ClaimFormFrameGrid";
 
-const YourStudents: React.FC = () => {
+const LostAndFound: React.FC = () => {
   const { walletAddress } = useUser();
   const { closeWindow, openWindow } = useWindowsContext();
   const [activeTab, setActiveTab] = useState(0);
@@ -36,9 +42,9 @@ const YourStudents: React.FC = () => {
   return (
     <DraggableResizeableWindow
       offSetHeight={44}
-      headerTitle="Your Students v0.6"
+      headerTitle="Lost and Found v2.0"
       onClose={() => {
-        closeWindow(WINDOW_IDS.YOUR_STUDENTS);
+        closeWindow(WINDOW_IDS.LOST_AND_FOUND);
       }}
     >
       <SlowProgressBar>
@@ -48,26 +54,18 @@ const YourStudents: React.FC = () => {
             setActiveTab(activeTab === 0 ? 1 : 0);
           }}
         >
-          <Tab value={0}>Students</Tab>
-          <Tab value={1}>Accesories</Tab>
+          <Tab value={0}>Claim Checker</Tab>
+          <Tab value={1}>Claim Forms</Tab>
         </Tabs>
         <TabBody>
-          {activeTab === 0 && (
-            <NftFrameGrid
-              nfts={flunks}
-              isValidating={isValidating}
-            />
-          )}
           {activeTab === 1 && (
-            <BackpackFrameGrid
-              nfts={backpacks}
-              isValidating={isValidating}
-            />
+            <ClaimFormFrameGrid nfts={flunks} isValidating={isValidating} />
           )}
+          {activeTab === 0 && <ClaimChecker />}
         </TabBody>
       </SlowProgressBar>
     </DraggableResizeableWindow>
   );
 };
 
-export default YourStudents;
+export default LostAndFound;

@@ -3,15 +3,14 @@ import { MarketplaceIndividualNftDto } from "api/generated";
 import PaginatedProdiver, {
   usePaginatedContext,
 } from "contexts/PaginatedContext";
-import NftFrameGrid from "components/NftFrameGrid";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { Button, Handle, Toolbar } from "react95";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS, FLUNK_TRAITS } from "fixed";
 import SlowProgressBar from "components/SlowProgressBar";
 import { useState } from "react";
-import Filters from "components/Filters";
 import TraitFilters from "./TraitFilters";
+import PaginatedNftFrameGrid from "components/PaginatedNftFrameGrid";
 
 const StudentExplorer: React.FC = () => {
   return (
@@ -77,7 +76,7 @@ const StudentExplorerWindow = () => {
           </Button>
           <Handle size={35} />
         </Toolbar>
-        <NftFrameGrid />
+        <PaginatedNftFrameGrid />
       </SlowProgressBar>
     </DraggableResizeableWindow>
   );

@@ -6,7 +6,8 @@ import { Anchor, Button, Frame, Hourglass, ScrollView } from "react95";
 import styled from "styled-components";
 import { Metadata } from "types/NFT";
 import FlunkDetails from "windows/FlunkDetails";
-import { H3, H4, P } from "./Typography";
+import { H3, H4, P } from "components/Typography";
+import BackpackDetails from "windows/BackpackDetails";
 
 const Grid = styled.div`
   display: grid;
@@ -61,7 +62,7 @@ const paginate = (
   }, []);
 };
 
-const NftFrameGrid: React.FC<Props> = (props) => {
+const BackpackFrameGrid: React.FC<Props> = (props) => {
   const { nfts, isValidating } = props;
   const [page, setPage] = useState(0);
   const paginatedNfts = paginate(nfts, 10);
@@ -117,13 +118,13 @@ const NftFrameGrid: React.FC<Props> = (props) => {
         >
           ?
         </span>
-        <H3>No Students Found</H3>
+        <H3>No Accessories Found</H3>
         <Anchor
-          href={`https://zeero.art/collection/flunks?include=LISTED`}
+          href={`https://zeero.art/collection/backpack?include=LISTED`}
           target="_blank"
           rel="noopener noreferrer"
         >
-          <P>Browse students that are up for exchange on zeero.art</P>
+          <P>Browse backpacks that are up for exchange on zeero.art</P>
         </Anchor>
       </Frame>
     );
@@ -163,7 +164,13 @@ export const NftFrame: React.FC<{ nft: MarketplaceIndividualNftDto }> = (
 
   return (
     <FlexFrame variant="field">
-      <NftImage src={uri} width="100%" />
+      <NftImage
+        src={uri}
+        width="100%"
+        style={{
+          backgroundColor: "#cccccc",
+        }}
+      />
       <div
         style={{
           display: "flex",
@@ -186,13 +193,6 @@ export const NftFrame: React.FC<{ nft: MarketplaceIndividualNftDto }> = (
           <H4>Rank #{rank}</H4>
         </Frame>
       </div>
-      {collectionName === "flunks" && <P
-        style={{
-          fontSize: "1.25rem",
-        }}
-      >
-        {Superlative}
-      </P>}
       <Button
         variant="flat"
         style={{
@@ -200,8 +200,8 @@ export const NftFrame: React.FC<{ nft: MarketplaceIndividualNftDto }> = (
         }}
         onClick={() => {
           openWindow({
-            key: `flunk-${templateId}`,
-            window: <FlunkDetails flunk={nft} />,
+            key: `backpack-${templateId}`,
+            window: <BackpackDetails backpack={nft} />,
           });
         }}
       >
@@ -211,4 +211,4 @@ export const NftFrame: React.FC<{ nft: MarketplaceIndividualNftDto }> = (
   );
 };
 
-export default NftFrameGrid;
+export default BackpackFrameGrid;

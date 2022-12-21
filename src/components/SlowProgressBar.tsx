@@ -26,7 +26,7 @@ const SlowProgressBar: React.FC<Props> = (props) => {
       clearInterval(timer);
     };
   }, []);
-
+  
   return complete ? (
     <>{children}</>
   ) : (
