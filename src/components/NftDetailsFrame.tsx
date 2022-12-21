@@ -1,4 +1,5 @@
 import { MarketplaceIndividualNftDto } from "api/generated";
+import { useEffect, useState } from "react";
 import { Frame, ScrollView } from "react95";
 import styled from "styled-components";
 import { Metadata } from "types/NFT";
@@ -21,7 +22,30 @@ const GuardianInfo = styled.div`
 const NftDetailsFrame: React.FC<Props> = (props) => {
   const { nft } = props;
   const { metadata, templateId, rank, ownerAddress } = nft;
-  const { uri, cid, path, mimetype, ...usefulMetadata } = metadata as Metadata;
+  const { uri, cid, path, mimetype, Type: type, ...usefulMetadata } =
+    metadata as Metadata;
+  const [graduatedUrl, setGraduatedUrl] = useState<string | null>(null);
+
+  const sha256 = async (str: string) => {
+    const buf = new TextEncoder().encode(str);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", buf);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+    return hashHex;
+  };
+
+  useEffect(() => {
+    if (!nft) return;
+
+    sha256(nft.templateId.toString()).then((hash) => {
+      setGraduatedUrl(
+        `https://storage.googleapis.com/flunk-graduation/${hash}.png`
+      );
+      console.log("here");
+    });
+  }, [nft]);
 
   return (
     <div
@@ -54,7 +78,11 @@ const NftDetailsFrame: React.FC<Props> = (props) => {
             alignItems: "center",
           }}
         >
-          <FlunkImage src={uri} width="250px" height="250px" />
+          <FlunkImage
+            src={type === "Graduated" ? graduatedUrl : uri}
+            width="250px"
+            height="250px"
+          />
           <H1>Flunk #{templateId}</H1>
 
           <Frame
@@ -67,7 +95,7 @@ const NftDetailsFrame: React.FC<Props> = (props) => {
           </Frame>
 
           <TraitsBox nft={nft} />
-          <GuardianBox nft={nft} />
+          <GuardianBox nft={nft} graduatedUrl={graduatedUrl} />
           <GraduationBox nft={nft} />
         </Frame>
       </ScrollView>

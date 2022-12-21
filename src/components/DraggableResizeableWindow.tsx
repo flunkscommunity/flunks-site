@@ -105,7 +105,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
   useEffect(() => {
     if (windowRef.current) {
       const numOfChildren = windowRef.current.parentElement?.children.length;
-      console.log(numOfChildren);
+      // console.log(numOfChildren);
       bringWindowToFront();
       if (draggableRef.current) {
         draggableRef.current.setState({

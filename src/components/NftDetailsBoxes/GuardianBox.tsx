@@ -7,10 +7,11 @@ import { getBoringAvatarUrl } from "utils";
 
 interface Props {
   nft: MarketplaceIndividualNftDto;
+  graduatedUrl?: string;
 }
 
 const GuardianBox: React.FC<Props> = (props) => {
-  const { nft } = props;
+  const { nft, graduatedUrl = null } = props;
   const { NftActivity, ownerAddress } = nft;
   const { width } = useWindowSize();
 
@@ -48,7 +49,10 @@ const GuardianBox: React.FC<Props> = (props) => {
               height: "100%",
             }}
           >
-            <Avatar size={60} src={nft?.metadata?.uri} />
+            <Avatar
+              size={60}
+              src={graduatedUrl ? graduatedUrl : nft?.metadata?.uri}
+            />
           </div>
           <H3 style={{}}>
             <Anchor

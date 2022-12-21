@@ -4,7 +4,9 @@ import { useUser } from "contexts/WalletContext";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { format, isAfter, parse } from "date-fns";
 import useWindowSize from "hooks/useWindowSize";
+import { useEffect, useState } from "react";
 import { Button, GroupBox } from "react95";
+import { checkCanGraduate } from "web3/script-check-can-graduate";
 import Graduation from "windows/Graduation";
 import { H1, H3, P } from "../Typography";
 
@@ -13,7 +15,7 @@ interface Props {
 }
 
 const GRADUATION_DATES = {
-  "A+": "2022-12-21T21:00:00Z",
+  "A+": "2022-12-21T18:00:00Z",
   B: "2023-01-21T21:00:00Z",
   C: "2023-02-21T21:00:00Z",
   D: "2023-03-21T21:00:00Z",
@@ -23,7 +25,7 @@ const GraduationBox: React.FC<Props> = (props) => {
   const { nft } = props;
   const { metadata } = nft;
   const { pixelUri, Type } = metadata;
-  console.log("here", pixelUri, Type);
+  // console.log("here", pixelUri, Type);
 
   if (Type && Type === "Graduated")
     return (
@@ -69,6 +71,7 @@ const GraduationBoxContent: React.FC<Props> = (props) => {
   const { walletAddress } = useUser();
   const { openWindow } = useWindowsContext();
   const { width } = useWindowSize();
+  const [canGrauate, setCanGraduate] = useState(false);
 
   const isOwner = walletAddress === nft.ownerAddress;
   const listingEvents = NftActivity.filter(({ activity }) => {
@@ -114,184 +117,98 @@ const GraduationBoxContent: React.FC<Props> = (props) => {
     return "A+";
   };
 
-  const isTodayPastGraduationDate = isAfter(
-    new Date(),
-    new Date(GRADUATION_DATES[getGraduationDate()])
-  );
+  useEffect(() => {
+    if (!nft) return;
 
-  if (true) {
-    return (
+    checkCanGraduate({ tokenId: nft.tokenId }).then(setCanGraduate);
+  }, [nft]);
+
+  const isTodayPastGraduationDate =
+    isAfter(new Date(), new Date("2022-12-21T20:00:00Z")) &&
+    isAfter(new Date(), new Date(GRADUATION_DATES[getGraduationDate()]));
+
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "1fr",
+        columnGap: "1rem",
+        alignItems: "center",
+        justifyItems: "start",
+      }}
+    >
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "1fr",
-          columnGap: "1rem",
+          display: "flex",
           alignItems: "center",
-          justifyItems: "start",
+          justifyContent: "center",
+          width: "100%",
+          height: "100%",
         }}
       >
+        <H1
+          style={{
+            textShadow: "2px 2px 0rem white",
+            fontSize: "4rem",
+          }}
+        >
+          {getGraduationDate()}
+        </H1>
+      </div>
+      <H3 style={{}}>
+        <H3>
+          Graduating on{" "}
+          {format(
+            parse(
+              "",
+              "",
+              new Date(
+                GRADUATION_DATES[getGraduationDate()] || "2023-03-21T13:00:00"
+              )
+            ),
+            "MMMM do yyyy"
+          )}
+        </H3>
+      </H3>
+
+      <P
+        style={{
+          fontSize: "1.25rem",
+        }}
+      >
+        {neverListed && "This Student has never been put up for exchange."}
+        {!neverListed &&
+          isCurrentlyListed &&
+          "This Student is currently up for exchange."}
+        {!neverListed &&
+          !isCurrentlyListed &&
+          `This Student was last put up for exchange on ${format(
+            parse("", "", new Date(lastDelistOrSale.eventDate)),
+            "MMMM do yyyy"
+          )}.`}
+      </P>
+      {true && isOwner && (
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
             width: "100%",
-            height: "100%",
+            marginTop: "1rem",
           }}
         >
-          <H1
-            style={{
-              textShadow: "2px 2px 0rem white",
-              fontSize: "4rem",
+          <Button
+            onClick={() => {
+              openWindow({
+                key: `graduation-${nft.templateId}`,
+                window: <Graduation flunk={nft} />,
+              });
             }}
+            fullWidth
           >
-            {getGraduationDate()}
-          </H1>
+            Initiate Graduation
+          </Button>
         </div>
-        <H3
-          style={{
-          }}
-        >
-          <H3>
-            Graduating on{" "}
-            {format(
-              parse('', '', new Date(
-                GRADUATION_DATES[getGraduationDate()] || "2023-03-21T13:00:00"
-              )),
-              "MMMM do yyyy"
-            )}
-          </H3>
-        </H3>
-
-        <P
-          style={{
-            fontSize: "1.25rem",
-          }}
-        >
-          {neverListed && "This Student has never been put up for exchange."}
-          {!neverListed &&
-            isCurrentlyListed &&
-            "This Student is currently up for exchange."}
-          {!neverListed &&
-            !isCurrentlyListed &&
-            `This Student was last put up for exchange on ${format(
-              parse('', '', new Date(lastDelistOrSale.eventDate)),
-              "MMMM do yyyy"
-            )}.`}
-        </P>
-        {true && isOwner && (
-          <div
-            style={{
-              width: "100%",
-              marginTop: "1rem",
-            }}
-          >
-            <Button
-              onClick={() => {
-                openWindow({
-                  key: `graduation-${nft.templateId}`,
-                  window: <Graduation flunk={nft} />,
-                });
-              }}
-              fullWidth
-            >
-              Initiate Graduation
-            </Button>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  // return (
-  //   <div
-  //     style={{
-  //       display: "grid",
-  //       gridTemplateColumns: "1fr 11fr",
-  //       gridTemplateRows: "1fr 1fr",
-  //       columnGap: "1rem",
-  //       alignItems: "center",
-  //       justifyItems: "start",
-  //     }}
-  //   >
-  //     <div
-  //       style={{
-  //         gridColumn: "1",
-  //         gridRow: "span 2",
-  //         display: "flex",
-  //         alignItems: "center",
-  //         justifyContent: "center",
-  //         width: "100%",
-  //         height: "100%",
-  //       }}
-  //     >
-  //       <H1
-  //         style={{
-  //           textShadow: "2px 2px 0rem white",
-  //         }}
-  //       >
-  //         {getGraduationDate()}
-  //       </H1>
-  //     </div>
-  //     <H3
-  //       style={{
-  //         gridColumn: "2",
-  //         gridRow: "1",
-  //       }}
-  //     >
-  //       <H3>
-  //         Graduating on{" "}
-  //         {format(
-  //           new Date(
-  //             GRADUATION_DATES[getGraduationDate()] || "2023-04-21:13:00:00"
-  //           ),
-  //           "MMMM do yyyy"
-  //         )}
-  //       </H3>
-  //     </H3>
-
-  //     <P
-  //       style={{
-  //         gridColumn: "2",
-  //         gridRow: "2",
-  //         fontSize: "1.25rem",
-  //       }}
-  //     >
-  //       {neverListed && "This Student has never been put up for exchange."}
-  //       {!neverListed &&
-  //         isCurrentlyListed &&
-  //         "This Student is currently up for exchange."}
-  //       {!neverListed &&
-  //         !isCurrentlyListed &&
-  //         `This Student was last put up for exchange on ${format(
-  //           new Date(lastDelistOrSale.eventDate),
-  //           "MMMM do yyyy"
-  //         )}.`}
-  //     </P>
-  //     {true && isOwner && (
-  //       <div
-  //         style={{
-  //           gridColumn: "span 2",
-  //           gridRow: "3",
-  //           width: "100%",
-  //           marginTop: "1rem",
-  //         }}
-  //       >
-  //         <Button
-  //           onClick={() => {
-  //             openWindow({
-  //               key: `graduation-${nft.templateId}`,
-  //               window: <Graduation flunk={nft} />,
-  //             });
-  //           }}
-  //           fullWidth
-  //         >
-  //           Initiate Graduation
-  //         </Button>
-  //       </div>
-  //     )}
-  //   </div>
-  // );
+      )}
+    </div>
+  );
 };
 
 export default GraduationBox;

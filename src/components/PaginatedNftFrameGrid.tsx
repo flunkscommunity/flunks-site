@@ -60,7 +60,7 @@ const PaginatedNftFrameGrid: React.FC = () => {
     onChange(inView) {
       if (inView && cursor < nfts?.length) {
         setCursor(cursor + 1);
-        console.log(cursor);
+        // console.log(cursor);
       }
     },
   });
@@ -130,12 +130,35 @@ export const NftFrame: React.FC<{ nft: MarketplaceIndividualNftDto }> = (
 ) => {
   const { nft } = props;
   const { metadata, templateId, rank } = nft;
-  const { uri, Superlative } = metadata as Metadata;
+  const { uri, Superlative, Type: type } = metadata as Metadata;
   const { openWindow } = useWindowsContext();
+
+  const [graduatedUrl, setGraduatedUrl] = useState<string | null>(null);
+
+  const sha256 = async (str: string) => {
+    const buf = new TextEncoder().encode(str);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", buf);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+    return hashHex;
+  };
+
+  useEffect(() => {
+    if (!nft) return;
+
+    sha256(nft.templateId.toString()).then((hash) => {
+      setGraduatedUrl(
+        `https://storage.googleapis.com/flunk-graduation/${hash}.png`
+      );
+      console.log("here");
+    });
+  }, [nft]);
 
   return (
     <FlexFrame variant="field">
-      <NftImage src={uri} width="100%" />
+      <NftImage src={type === "Graduated" ? graduatedUrl : uri} width="100%" />
       <div
         style={{
           display: "flex",

@@ -1,4 +1,6 @@
 import { useUser } from "contexts/WalletContext";
+import { useWindowsContext } from "contexts/WindowsContext";
+import { WINDOW_IDS } from "fixed";
 import { useEffect, useState } from "react";
 import {
   AppBar,
@@ -9,6 +11,9 @@ import {
   Toolbar,
 } from "react95";
 import styled from "styled-components";
+import LostAndFound from "windows/LostAndFound";
+import StudentExplorer from "windows/StudentExplorer";
+import YourStudents from "windows/YourStudents";
 
 const CustomMenuListItem = styled(MenuListItem)`
   display: flex;
@@ -21,21 +26,7 @@ const CustomMenuListItem = styled(MenuListItem)`
 const Appbar = () => {
   const [open, setOpen] = useState(false);
   const { unauthenticate } = useUser();
-  // const [submenus, setSubmenus] = useState({
-  //   programs: false,
-  //   documents: false,
-  //   socials: false,
-  // });
-
-  // useEffect(() => {
-  //   if (!open) {
-  //     setSubmenus({
-  //       programs: false,
-  //       documents: false,
-  //       socials: false,
-  //     });
-  //   }
-  // }, [open]);
+  const { openWindow } = useWindowsContext();
 
   return (
     <AppBar
@@ -149,7 +140,14 @@ const Appbar = () => {
                   </MenuList>
                 )}
               </CustomMenuListItem> */}
-              <CustomMenuListItem>
+              <CustomMenuListItem
+                onClick={() => {
+                  openWindow({
+                    key: WINDOW_IDS.STUDENT_EXPLORER,
+                    window: <StudentExplorer />,
+                  });
+                }}
+              >
                 <img
                   src="/images/student-directory.png"
                   width="32px"
@@ -157,7 +155,14 @@ const Appbar = () => {
                 />
                 Student Directory
               </CustomMenuListItem>
-              <CustomMenuListItem>
+              <CustomMenuListItem
+                onClick={() => {
+                  openWindow({
+                    key: WINDOW_IDS.YOUR_STUDENTS,
+                    window: <YourStudents />,
+                  });
+                }}
+              >
                 <img
                   src="/images/your-students.png"
                   width="32px"
@@ -165,7 +170,14 @@ const Appbar = () => {
                 />
                 Your Students
               </CustomMenuListItem>
-              <CustomMenuListItem>
+              <CustomMenuListItem
+                onClick={() => {
+                  openWindow({
+                    key: WINDOW_IDS.LOST_AND_FOUND,
+                    window: <LostAndFound />,
+                  });
+                }}
+              >
                 <img
                   src="/images/lost-and-found.png"
                   width="32px"

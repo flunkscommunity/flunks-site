@@ -42,6 +42,7 @@ const Home: NextPage = () => {
             width: "100%",
             height: "100%",
             position: "relative",
+            display: "flex",
           }}
           showBottomBar
         >
@@ -75,6 +76,22 @@ const Home: NextPage = () => {
                 key: WINDOW_IDS.LOST_AND_FOUND,
                 window: <LostAndFound />,
               });
+            }}
+          />
+
+          <DesktopAppIcon
+            title="Twitter"
+            icon="/images/twitter.png"
+            onDoubleClick={() => {
+              return null;
+            }}
+          />
+
+          <DesktopAppIcon
+            title="Discord"
+            icon="/images/discord.png"
+            onDoubleClick={() => {
+              return null;
             }}
           />
 

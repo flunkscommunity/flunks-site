@@ -36,7 +36,7 @@ const WindowsProvider: React.FC<ProviderProps> = (props) => {
   };
 
   useEffect(() => {
-    console.log("windows", windows);
+    // console.log("windows", windows);
   });
 
   return (

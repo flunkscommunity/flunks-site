@@ -1,15 +1,27 @@
 import { MarketplaceIndividualNftDto } from "api/generated";
 import { FlunkImage } from "components/CustomMonitor";
-import { H3, P } from "components/Typography";
+import { H1, H3, P } from "components/Typography";
 import { useFclTransactionContext } from "contexts/FclTransactionContext";
 import { useEffect, useRef, useState } from "react";
 import { Button, Frame, ProgressBar, Toolbar } from "react95";
 import { TX_STATUS } from "reducers/TxStatusReducer";
 import Typewriter from "typewriter-effect";
+import { graduate } from "web3/tx-grauate";
+import Confetti from "react-confetti";
+import { checkGraduationDates } from "web3/script-get-graduation-date";
+import { isAfter } from "date-fns";
 
 interface GraduationInitProps {
   flunk: MarketplaceIndividualNftDto;
 }
+
+export const uInt64StrToDate = (uInt64Str: string): Date => {
+  // Note: 2147483647 is the "End of Unit Time" in seconds
+  // Ref: https://en.wikipedia.org/wiki/Year_2038_problem
+  if (Number(uInt64Str) >= 2147483647000) return new Date(2147483647000);
+
+  return new Date(parseInt(uInt64Str.toString()) * 1000);
+};
 
 const GraduationInit: React.FC<GraduationInitProps> = (props) => {
   const { flunk } = props;
@@ -19,6 +31,29 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
   const [percentage, setPercentage] = useState(0);
   const divOverlayRef = useRef<HTMLDivElement>(null);
   const [graduatedUrl, setGraduatedUrl] = useState("");
+  const [canGraduate, setCanGraduate] = useState(false);
+  const [graduationDate, setGraduationDate] = useState();
+
+  useEffect(() => {
+    if (!flunk) return;
+
+    checkGraduationDates().then((data) => {
+      const graduationDate = uInt64StrToDate(data[flunk.tokenId].toString());
+      console.log(graduationDate);
+      if (graduationDate) {
+        setCanGraduate(isAfter(new Date(), graduationDate));
+      }
+    });
+  }, [flunk]);
+
+  // useEffect(() => {
+  //   if (!flunk) return;
+
+  //   checkCanGraduate({ tokenId: flunk.tokenId }).then((data) => {
+  //     console.log(data);
+  //     setCanGraduate(data);
+  //   });
+  // }, [flunk]);
 
   const sha256 = async (str: string) => {
     const buf = new TextEncoder().encode(str);
@@ -40,7 +75,15 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
     });
   }, [flunk]);
 
-  console.log("graduatedUrl", graduatedUrl);
+  const handleGraduate = () => {
+    executeTx(
+      graduate({
+        tokenID: flunk.tokenId,
+      })
+    );
+  };
+
+  // console.log("graduatedUrl", graduatedUrl);
 
   const hackTexts = [
     "$ ssh student@schoolserver.edu",
@@ -134,13 +177,32 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
+          // justifyContent: "center",
           overflow: "auto",
           position: "relative",
           gap: ".5rem",
           padding: "1rem",
+          textAlign: "center",
         }}
       >
+        <Confetti />
+        <H1
+          style={{
+            paddingTop: "1rem",
+          }}
+        >
+          GRADUATED!!
+        </H1>
+        <P>
+          Congratulations on your graduation! You have worked hard and achieved
+          an important milestone. I wish you all the best as you move on to the
+          next phase of your life and pursue your dreams. Well done!
+        </P>
+        <br />
+        <P>
+          It's amazing to think about how much you have grown and changed over
+          the past year. Here is your graduation photo:
+        </P>
         <div
           style={{
             position: "relative",
@@ -223,7 +285,9 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
     <Frame
       onClick={() => {
         if (true) {
-          setEndHacking(true);
+          if (state.txState === TX_STATUS.SUCCESS) {
+            setEndHacking(true);
+          }
         }
       }}
       variant="well"
@@ -238,21 +302,49 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
         position: "relative",
       }}
     >
-      {!startHack && (
-        <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            setStartHack(true);
-          }}
-          id="typewriter"
+      {(state.txStatus !== TX_STATUS.PENDING ||
+        state.txStatus !== TX_STATUS.SUCCESS) && (
+        <div
           style={{
             alignSelf: "center",
             marginLeft: "auto",
             marginRight: "auto",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "1rem",
+            textAlign: "center",
           }}
         >
-          Hack Grades
-        </Button>
+          {!canGraduate && (
+            <P>
+              {" "}
+              You cannot hack your grades <br /> come back on your graduation
+              day.
+              <br />
+            </P>
+          )}
+          {state.txStatus === TX_STATUS.ERROR && (
+            <P>Couldn't break into the system..</P>
+          )}
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleGraduate();
+            }}
+            id="typewriter"
+            disabled={state.txStatus === TX_STATUS.STARTED || !canGraduate}
+          >
+            Hack Grades
+          </Button>
+          {state.txStatus === TX_STATUS.ERROR && (
+            <P>
+              If the problem persists, <br />
+              please open a ticket on discord
+            </P>
+          )}
+        </div>
       )}
 
       {state.txState === TX_STATUS.SUCCESS && (
@@ -272,7 +364,8 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
         </div>
       )}
 
-      {startHack && (
+      {(state.txStatus === TX_STATUS.PENDING ||
+        state.txStatus === TX_STATUS.SUCCESS) && (
         <Typewriter
           onInit={(typewriter) => {
             typewriter
