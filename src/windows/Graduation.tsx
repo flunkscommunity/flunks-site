@@ -20,8 +20,8 @@ const Graduation: React.FC<Props> = (props) => {
         closeWindow(`graduation-${flunk.templateId}`);
       }}
       headerTitle={`Terminal`}
-      initialHeight="50%"
-      initialWidth="50%"
+      initialHeight="80%"
+      initialWidth="80%"
     >
       <FclTransactionProvider>
         <GraduationInit flunk={flunk} />
