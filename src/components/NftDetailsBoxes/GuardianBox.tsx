@@ -51,7 +51,7 @@ const GuardianBox: React.FC<Props> = (props) => {
           >
             <Avatar
               size={60}
-              src={graduatedUrl ? graduatedUrl : nft?.metadata?.uri}
+              src={nft?.metadata?.uri}
             />
           </div>
           <H3 style={{}}>
