@@ -1,6 +1,7 @@
 import { useUser } from "contexts/WalletContext";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
+import useInitCollection from "hooks/useInitCollection";
 import { useEffect, useState } from "react";
 import {
   AppBar,
@@ -27,6 +28,7 @@ const Appbar = () => {
   const [open, setOpen] = useState(false);
   const { unauthenticate } = useUser();
   const { openWindow } = useWindowsContext();
+  const { isInitialized, initializeCollection } = useInitCollection();
 
   return (
     <AppBar
@@ -185,6 +187,20 @@ const Appbar = () => {
                 />
                 Lost and Found
               </CustomMenuListItem>
+              {!isInitialized && (
+                <CustomMenuListItem
+                  onClick={() => {
+                    initializeCollection();
+                  }}
+                >
+                  <img
+                    src="/images/init-collection.png"
+                    width="32px"
+                    height="32px"
+                  />
+                  Initialize Collection
+                </CustomMenuListItem>
+              )}
               <Separator />
               <CustomMenuListItem onClick={unauthenticate}>
                 <img src="/images/logout.png" width="32px" height="32px" />
