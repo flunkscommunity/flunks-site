@@ -49,7 +49,7 @@ const YourStudents: React.FC = () => {
           }}
         >
           <Tab value={0}>Students</Tab>
-          <Tab value={1}>Accesories</Tab>
+          <Tab value={1}>Accessories</Tab>
         </Tabs>
         <TabBody>
           {activeTab === 0 && (
