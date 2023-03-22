@@ -8,6 +8,7 @@ import GuardianBox from "components/NftDetailsBoxes/GuardianBox";
 import TraitsBox from "components/NftDetailsBoxes/TraitsBox";
 import { H1, H3 } from "components/Typography";
 import { useEffect, useState } from "react";
+import { incrementRankByOne } from "utils";
 
 interface Props {
   nft: MarketplaceIndividualNftDto;
@@ -94,7 +95,7 @@ const BackpackDetailsFrame: React.FC<Props> = (props) => {
               padding: ".5rem 1rem",
             }}
           >
-            <H3>Ranked #{rank}</H3>
+            <H3>Ranked #{incrementRankByOne(rank)}</H3>
           </Frame>
 
           <TraitsBox nft={nft} />

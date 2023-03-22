@@ -8,6 +8,7 @@ import { Metadata } from "types/NFT";
 import FlunkDetails from "windows/FlunkDetails";
 import { H3, H4, P } from "components/Typography";
 import BackpackDetails from "windows/BackpackDetails";
+import { incrementRankByOne } from "utils";
 
 const Grid = styled.div`
   display: grid;
@@ -190,7 +191,7 @@ export const NftFrame: React.FC<{ nft: MarketplaceIndividualNftDto }> = (
             padding: "0 0.25rem",
           }}
         >
-          <H4>Rank #{rank}</H4>
+          <H4>Rank #{incrementRankByOne(rank)}</H4>
         </Frame>
       </div>
       <Button

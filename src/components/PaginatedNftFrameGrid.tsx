@@ -7,6 +7,7 @@ import { useInView } from "react-intersection-observer";
 import { Button, Frame, Hourglass, ScrollView } from "react95";
 import styled from "styled-components";
 import { Metadata } from "types/NFT";
+import { incrementRankByOne } from "utils";
 import FlunkDetails from "windows/FlunkDetails";
 import { H3, H4, P } from "./Typography";
 
@@ -176,7 +177,7 @@ export const NftFrame: React.FC<{ nft: MarketplaceIndividualNftDto }> = (
             padding: "0 0.25rem",
           }}
         >
-          <H4>Rank #{rank}</H4>
+          <H4>Rank #{incrementRankByOne(rank)}</H4>
         </Frame>
       </div>
       <P

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Frame, ScrollView } from "react95";
 import styled from "styled-components";
 import { Metadata } from "types/NFT";
+import { incrementRankByOne } from "utils";
 import { FlunkImage } from "./CustomMonitor";
 import GraduationBox from "./NftDetailsBoxes/GraduationBox";
 import GuardianBox from "./NftDetailsBoxes/GuardianBox";
@@ -91,7 +92,7 @@ const NftDetailsFrame: React.FC<Props> = (props) => {
               padding: ".5rem 1rem",
             }}
           >
-            <H3>Ranked #{rank} of 9999 Students</H3>
+            <H3>Ranked #{incrementRankByOne(rank)} of 9999 Students</H3>
           </Frame>
 
           <TraitsBox nft={nft} />
