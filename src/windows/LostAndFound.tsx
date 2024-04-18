@@ -23,7 +23,8 @@ import ClaimChecker from "components/ClaimForm/ClaimChecker";
 import ClaimFormFrameGrid from "components/ClaimForm/ClaimFormFrameGrid";
 
 const LostAndFound: React.FC = () => {
-  const { walletAddress } = useUser();
+  // const { walletAddress } = useUser();
+  const walletAddress = "123";
   const { closeWindow, openWindow } = useWindowsContext();
   const [activeTab, setActiveTab] = useState(0);
   const { data, isValidating } = useSwrWrapper({

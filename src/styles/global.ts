@@ -36,12 +36,6 @@ export const GlobalStyles = React.memo(createGlobalStyle`
     flex-direction: column;
     flex-grow: 1;
   }
-  #__next > div:first-of-type {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-  }
 
   a {
     color: inherit;

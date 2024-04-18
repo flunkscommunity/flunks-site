@@ -6,21 +6,31 @@ import "config/fcl";
 
 import "../styles/globals.css";
 import WindowsProvider from "contexts/WindowsContext";
-import { UserProvider } from "contexts/WalletContext";
 import ClaimBackpackProvider from "contexts/BackpackClaimContext";
+import { DynamicContextProvider, DynamicUserProfile } from "@dynamic-labs/sdk-react-core";
+// @ts-ignore
+import { FlowWalletConnectors } from "@dynamic-labs/flow";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <>
       <GlobalStyles />
+
       <ThemeProvider theme={original}>
-        <UserProvider>
-          <WindowsProvider>
-            <ClaimBackpackProvider>
+        <WindowsProvider>
+          <ClaimBackpackProvider>
+            <DynamicContextProvider
+              settings={{
+                environmentId: "f14ca865-c434-4bb6-92dd-7e260a491773",
+                walletConnectors: [FlowWalletConnectors],
+              }}
+            >
               <Component {...pageProps} />
-            </ClaimBackpackProvider>
-          </WindowsProvider>
-        </UserProvider>
+
+              <DynamicUserProfile />
+            </DynamicContextProvider>
+          </ClaimBackpackProvider>
+        </WindowsProvider>
       </ThemeProvider>
     </>
   );

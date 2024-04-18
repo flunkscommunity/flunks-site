@@ -21,8 +21,8 @@ export const StyledScrollView = styled.div<Pick<ScrollViewProps, "shadow">>`
     left: 0;
     top: 0;
     content: "";
-    width: calc(100% - 4px);
-    height: calc(100% - 4px);
+    width: calc(100%);
+    height: calc(100%);
     border-style: solid;
     border-width: 2px;
     border-left-color: ${({ theme }) => theme.borderDarkest};

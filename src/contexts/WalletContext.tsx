@@ -1,45 +1,46 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { authenticate, unauthenticate, currentUser } from "@onflow/fcl";
+// import { authenticate, unauthenticate, currentUser } from "@onflow/fcl";
 import useUserStore from "store/useUserStore";
 
 const UserContext = React.createContext(null);
 
 export const UserProvider = ({ children }) => {
-  const { user, setUser } = useUserStore();
+  // const { user, setUser } = useUserStore();
+  const user = {};
   const [shouldSubscribe, setShouldSubscrible] = useState<boolean>(false);
 
   const walletAddress = user.addr || null;
 
-  const subscbribleToAuthenticate = useCallback(() => {
-    currentUser().subscribe((user) => {
-      setUser(user);
-    });
-  }, []);
+  // const subscbribleToAuthenticate = useCallback(() => {
+  //   currentUser().subscribe((user) => {
+  //     setUser(user);
+  //   });
+  // }, []);
 
-  const shouldSubscribleAllower = () => {
-    if (!shouldSubscribe) return setShouldSubscrible(true);
-  };
+  // const shouldSubscribleAllower = () => {
+  //   if (!shouldSubscribe) return setShouldSubscrible(true);
+  // };
 
-  useEffect(() => {
-    if (shouldSubscribe) {
-      subscbribleToAuthenticate();
-    }
-  }, [shouldSubscribe]);
+  // useEffect(() => {
+  //   if (shouldSubscribe) {
+  //     subscbribleToAuthenticate();
+  //   }
+  // }, [shouldSubscribe]);
 
   const _authenticate = () => {
-    authenticate();
-    shouldSubscribleAllower();
+    // authenticate();
+    // shouldSubscribleAllower();
   };
 
   const _unauthenticate = () => {
-    unauthenticate();
-    shouldSubscribleAllower();
+    // unauthenticate();
+    // shouldSubscribleAllower();
   };
 
   return (
     <UserContext.Provider
       value={{
-        user,
+        user: user || {},
         walletAddress,
         authenticate: _authenticate,
         unauthenticate: _unauthenticate,

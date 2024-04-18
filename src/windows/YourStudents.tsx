@@ -17,7 +17,8 @@ import { useSwrWrapper } from "api/useSwrWrapper";
 import BackpackFrameGrid from "components/Backpacks/BackpackFrameGrid";
 
 const YourStudents: React.FC = () => {
-  const { walletAddress } = useUser();
+  // const { walletAddress } = useUser();
+  const walletAddress = "123";
   const { closeWindow, openWindow } = useWindowsContext();
   const [activeTab, setActiveTab] = useState(0);
   const { data, isValidating } = useSwrWrapper({

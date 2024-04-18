@@ -1,4 +1,3 @@
-import { useUser } from "contexts/WalletContext";
 import { Button, Frame, TextInput } from "react95";
 import styled from "styled-components";
 import CustomMonitor from "./CustomMonitor";
@@ -30,8 +29,6 @@ const Flunks95Logo = styled.img`
 `;
 
 const LoginScreen = () => {
-  const { authenticate } = useUser();
-
   return (
     <CustomMonitor
       backgroundStyles={{
@@ -111,7 +108,7 @@ const LoginScreen = () => {
                 gap: 16,
               }}
             >
-              <Button onClick={authenticate}>Log On</Button>
+              {/* <Button onClick={authenticate}>Log On</Button> */}
             </div>
           </LoginScreenContainer>
         </DraggableResizeableWindow>

@@ -68,7 +68,8 @@ const GraduationBox: React.FC<Props> = (props) => {
 const GraduationBoxContent: React.FC<Props> = (props) => {
   const { nft } = props;
   const { NftActivity } = nft;
-  const { walletAddress } = useUser();
+  // const { walletAddress } = useUser();
+  const walletAddress = "123";
   const { openWindow } = useWindowsContext();
   const { width } = useWindowSize();
   const [canGrauate, setCanGraduate] = useState(false);
