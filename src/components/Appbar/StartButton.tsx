@@ -8,6 +8,7 @@ import React from "react";
 import { Button, MenuList, MenuListItem, Separator } from "react95";
 import styled from "styled-components";
 import LostAndFound from "windows/LostAndFound";
+import Settings from "windows/Settings";
 import StudentExplorer from "windows/StudentExplorer";
 import YourStudents from "windows/YourStudents";
 
@@ -46,10 +47,10 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
 
   return (
     <MenuList className="!absolute bottom-[calc(100%+6px)] -left-1 min-w-[300px] !flex !flex-row">
-      <div className="w-12 bg-[#888888] relative">
-        <div className="absolute bottom-1/4 -translate-y-1/2 text-xl -left-1/2 text-white font-bold origin-bottom -rotate-90 text-nowrap">
-          <span className="text-white font-black">FLUNKS</span>{" "}
-          <span className="font-medium">95</span>
+      <div className="w-10 bg-[#888888] relative">
+        <div className="absolute -bottom-5 left-1 text-xl text-white origin-[0_0] -rotate-90 text-nowrap">
+          <span className="text-white font-black leading-[1]">FLUNKS</span>{" "}
+          <span className="font-medium leading-[1]">95</span>
         </div>
       </div>
       <div className="flex flex-col w-full">
@@ -88,6 +89,18 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
         >
           <img src="/images/lost-and-found.png" width="32px" height="32px" />
           Lost and Found
+        </CustomMenuListItem>
+        <CustomMenuListItem
+          onClick={() => {
+            openWindow({
+              key: WINDOW_IDS.SETTINGS,
+              window: <Settings />,
+            });
+            props.closeStartMenu();
+          }}
+        >
+          <img src="/images/icons/settings.png" width="32px" height="32px" />
+          Settings
         </CustomMenuListItem>
         {/* {!isInitialized && (
         <CustomMenuListItem

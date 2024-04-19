@@ -13,6 +13,8 @@ interface Props {
   initialHeight?: string;
   initialWidth?: string;
   showHeaderActions?: boolean;
+  showMaximizeButton?: boolean;
+  windowClassName?: string;
 }
 
 const WindowButtons = styled.div`
@@ -39,7 +41,9 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     initialHeight = "90%",
     initialWidth = "90%",
     showHeaderActions = true,
+    showMaximizeButton = true,
     children,
+    windowClassName = "",
   } = props;
   const windowRef = useRef<HTMLDivElement>(null);
   const draggableRef = useRef<Draggable>(null);
@@ -128,7 +132,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     >
       <Window
         ref={windowRef}
-        className="window"
+        className={windowClassName}
         style={{
           position: "absolute",
           resize: "both",
@@ -142,24 +146,26 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
       >
         <strong className="cursor" onDoubleClick={handleMaximize}>
           <WindowHeader
-            className="window-title"
+            className="flex !items-center !justify-between !py-1 !px-2 !h-auto"
             style={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               userSelect: "none",
-              padding: "20px 8px",
+              // padding: "20px 8px",
             }}
           >
-            <span>{headerTitle}</span>
+            <span className="!text-xl mb-1.5">{headerTitle}</span>
             {showHeaderActions && (
               <WindowButtons>
                 {/* <Button disabled>
                 <img src="/images/minimize.png" width="60%" height="60%" />
               </Button> */}
-                <Button onClick={handleMaximize}>
-                  <img src="/images/maximize.png" width="60%" height="60%" />
-                </Button>
+                {showMaximizeButton && (
+                  <Button onClick={handleMaximize}>
+                    <img src="/images/maximize.png" width="60%" height="60%" />
+                  </Button>
+                )}
                 <Button onClick={onClose}>
                   <span className="close-icon" />
                 </Button>
@@ -170,11 +176,12 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
 
         <CustomWindowBody
           style={{
-            height: `calc(100% - 44px - ${offSetHeight}px)`,
+            height: `calc(100% - 28px - ${offSetHeight}px)`,
             width: "100%",
             maxWidth: "100%",
             position: "relative",
           }}
+          className="!px-2 !pt-4"
         >
           {children}
         </CustomWindowBody>

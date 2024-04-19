@@ -4,4 +4,5 @@ export const WINDOW_IDS = {
   FILTERS_WINDOW: "filters-window",
   YOUR_STUDENTS: "your-students",
   LOST_AND_FOUND: "lost-and-found",
+  SETTINGS: "settings",
 };
