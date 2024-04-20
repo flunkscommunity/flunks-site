@@ -21,13 +21,13 @@ const CustomMenuListItem = styled(MenuListItem)`
 `;
 
 const AuthButton = () => {
-  const { user, setShowDynamicUserProfile } = useDynamicContext();
+const { user, handleLogOut } = useDynamicContext();
 
   if (user) {
     return (
-      <CustomMenuListItem onClick={() => setShowDynamicUserProfile(true)}>
+      <CustomMenuListItem onClick={handleLogOut}>
         <img src="/images/logout.png" width="32px" height="32px" />
-        View Profile
+        Sign Out
       </CustomMenuListItem>
     );
   }
@@ -111,7 +111,6 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
 
 const StartButton = () => {
   const [open, setOpen] = React.useState(false);
-  const buttonRef = React.useRef<HTMLButtonElement>(null);
 
   return (
     <div className="relative">

@@ -15,10 +15,12 @@ import TraitFilters from "./TraitFilters";
 import { useUser } from "contexts/WalletContext";
 import { useSwrWrapper } from "api/useSwrWrapper";
 import BackpackFrameGrid from "components/Backpacks/BackpackFrameGrid";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 const YourStudents: React.FC = () => {
   // const { walletAddress } = useUser();
-  const walletAddress = "123";
+  const { user, primaryWallet } = useDynamicContext();
+  const walletAddress = primaryWallet?.address;
   const { closeWindow, openWindow } = useWindowsContext();
   const [activeTab, setActiveTab] = useState(0);
   const { data, isValidating } = useSwrWrapper({

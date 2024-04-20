@@ -84,6 +84,7 @@ const Home: NextPage = () => {
           style={{
             textDecoration: "none",
           }}
+          className="mr-auto"
         >
           <DesktopAppIcon
             title="Twitter"
@@ -101,6 +102,7 @@ const Home: NextPage = () => {
           style={{
             textDecoration: "none",
           }}
+          className="mr-auto"
         >
           <DesktopAppIcon
             title="Discord"

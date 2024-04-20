@@ -83,7 +83,7 @@ const UserInformation = () => {
           />
           <div className="flex flex-row items-center flex-wrap gap-y-1.5 gap-x-4">
             <label className="min-w-[150px] text-pretty opacity-50">
-              Collection Initialized:
+              Contracts Initialized:
             </label>
             <span className="max-w-fit w-full min-w-[150px] text-pretty">
               {isInitialized && "Yes"}

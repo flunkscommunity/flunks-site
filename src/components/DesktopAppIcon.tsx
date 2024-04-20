@@ -31,11 +31,6 @@ const AppIcon = styled.div<{ icon: string }>`
 
 const AppTitle = styled(H4)`
   color: white;
-  &:hover {
-    span {
-      background-color: rgba(48, 197, 255, 0.5);
-    }
-  }
   @media (max-width: 768px) {
     font-size: 1rem;
   }
@@ -60,9 +55,9 @@ const DesktopAppIcon: React.FC<Props> = (props) => {
         }}
       >
         <div onDoubleClick={onDoubleClick} onClick={handleMobileOpen}>
-          <Container>
+          <Container className="group">
             <AppIcon icon={icon} />
-            <AppTitle>
+            <AppTitle className="group-hover:!bg-[#30c5ff80]">
               <span>{title}</span>
             </AppTitle>
           </Container>
