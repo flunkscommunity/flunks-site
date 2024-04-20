@@ -5,4 +5,5 @@ export const WINDOW_IDS = {
   YOUR_STUDENTS: "your-students",
   LOST_AND_FOUND: "lost-and-found",
   SETTINGS: "settings",
+  ERROR: "error",
 };

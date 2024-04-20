@@ -49,8 +49,8 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
     <MenuList className="!absolute bottom-[calc(100%+6px)] -left-1 min-w-[300px] !flex !flex-row">
       <div className="w-10 bg-[#888888] relative">
         <div className="absolute -bottom-5 left-1 text-xl text-white origin-[0_0] -rotate-90 text-nowrap">
-          <span className="text-white font-black leading-[1]">FLUNKS</span>{" "}
-          <span className="font-medium leading-[1]">95</span>
+          <span className="text-[#C4C2C4] font-black leading-[1]">FLUNKS</span>
+          <span className="font-medium text-white leading-[1]">95</span>
         </div>
       </div>
       <div className="flex flex-col w-full">
@@ -99,19 +99,9 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
             props.closeStartMenu();
           }}
         >
-          <img src="/images/icons/settings.png" width="32px" height="32px" />
-          Settings
+          <img src="/images/icons/user.png" width="32px" height="32px" />
+          User Information
         </CustomMenuListItem>
-        {/* {!isInitialized && (
-        <CustomMenuListItem
-          onClick={() => {
-            initializeCollection();
-          }}
-        >
-          <img src="/images/init-collection.png" width="32px" height="32px" />
-          Initialize Collection
-        </CustomMenuListItem>
-      )} */}
         <Separator />
         <AuthButton />
       </div>

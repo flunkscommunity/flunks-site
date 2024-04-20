@@ -15,6 +15,8 @@ interface Props {
   showHeaderActions?: boolean;
   showMaximizeButton?: boolean;
   windowClassName?: string;
+  resizable?: boolean;
+  openCentered?: boolean;
 }
 
 const WindowButtons = styled.div`
@@ -22,15 +24,6 @@ const WindowButtons = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 4px;
-`;
-
-const CustomWindowBody = styled(WindowContent)`
-  @media (max-width: 768px) {
-    padding-left: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-    padding-top: 4px;
-  }
 `;
 
 const DraggableResizeableWindow: React.FC<Props> = (props) => {
@@ -44,12 +37,15 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     showMaximizeButton = true,
     children,
     windowClassName = "",
+    resizable = true,
   } = props;
   const windowRef = useRef<HTMLDivElement>(null);
   const draggableRef = useRef<Draggable>(null);
   const { width, height } = useWindowSize();
 
   const handleMaximize = () => {
+    if (!resizable) return;
+
     if (windowRef.current) {
       if (windowRef.current.style.width === "100%") {
         windowRef.current.style.width = initialWidth;
@@ -109,7 +105,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
   useEffect(() => {
     if (windowRef.current) {
       const numOfChildren = windowRef.current.parentElement?.children.length;
-      // console.log(numOfChildren);
+
       bringWindowToFront();
       if (draggableRef.current) {
         draggableRef.current.setState({
@@ -122,6 +118,8 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
 
   const onStart = () => bringWindowToFront();
 
+  const isMobile = width < 768;
+
   return (
     <Draggable
       ref={draggableRef}
@@ -129,22 +127,29 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
       bounds="parent"
       onStart={onStart}
       disabled={width < 768}
+      position={
+        props.openCentered && !isMobile
+          ? { x: width / 2 - 200, y: height / 2 - 200 }
+          : undefined
+      }
     >
       <Window
         ref={windowRef}
-        className={windowClassName}
+        className={`${windowClassName} !flex !flex-col`}
         style={{
           position: "absolute",
-          resize: "both",
+          resize: resizable ? "both" : "none",
           overflow: "hidden",
           width: width < 768 ? "100%" : initialWidth,
           maxWidth: "100%",
+          minWidth: width < 768 ? "100%" : "375px",
+          minHeight: width < 768 ? "calc(100% - 48px)" : "",
           height: width < 768 ? "100%" : initialHeight,
           maxHeight: "calc(100% - 48px)",
         }}
         onClick={bringWindowToFront}
       >
-        <strong className="cursor" onDoubleClick={handleMaximize}>
+        <strong>
           <WindowHeader
             className="flex !items-center !justify-between !py-1 !px-2 !h-auto"
             style={{
@@ -152,15 +157,12 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
               justifyContent: "space-between",
               alignItems: "center",
               userSelect: "none",
-              // padding: "20px 8px",
             }}
+            onDoubleClick={handleMaximize}
           >
             <span className="!text-xl mb-1.5">{headerTitle}</span>
             {showHeaderActions && (
               <WindowButtons>
-                {/* <Button disabled>
-                <img src="/images/minimize.png" width="60%" height="60%" />
-              </Button> */}
                 {showMaximizeButton && (
                   <Button onClick={handleMaximize}>
                     <img src="/images/maximize.png" width="60%" height="60%" />
@@ -174,17 +176,9 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           </WindowHeader>
         </strong>
 
-        <CustomWindowBody
-          style={{
-            height: `calc(100% - 28px - ${offSetHeight}px)`,
-            width: "100%",
-            maxWidth: "100%",
-            position: "relative",
-          }}
-          className="!px-2 !pt-4"
-        >
+        <WindowContent className="!px-2 !pt-4 flex flex-col w-full flex-grow max-h-[calc(100%-44px)]">
           {children}
-        </CustomWindowBody>
+        </WindowContent>
       </Window>
     </Draggable>
   );

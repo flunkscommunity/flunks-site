@@ -1,19 +1,5 @@
-import { useWindowsContext } from "contexts/WindowsContext";
-import { WINDOW_IDS } from "fixed";
-import useInitCollection from "hooks/useInitCollection";
-import { useEffect, useState } from "react";
-import {
-  AppBar,
-  Button,
-  MenuList,
-  MenuListItem,
-  Separator,
-  Toolbar,
-} from "react95";
+import { AppBar, MenuListItem, Toolbar } from "react95";
 import styled from "styled-components";
-import LostAndFound from "windows/LostAndFound";
-import StudentExplorer from "windows/StudentExplorer";
-import YourStudents from "windows/YourStudents";
 import StartButton from "./StartButton";
 
 const CustomMenuListItem = styled(MenuListItem)`
@@ -25,10 +11,6 @@ const CustomMenuListItem = styled(MenuListItem)`
 `;
 
 const Appbar = () => {
-  const [open, setOpen] = useState(false);
-  const { openWindow } = useWindowsContext();
-  const { isInitialized, initializeCollection } = useInitCollection();
-
   return (
     <AppBar
       fixed={false}
