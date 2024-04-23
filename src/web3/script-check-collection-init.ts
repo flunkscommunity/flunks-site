@@ -7,9 +7,13 @@ import Backpack from 0x807c3d470888cc48
 import Patch from 0x807c3d470888cc48
 
 pub fun main(address: Address): Bool {
-  return getAccount(address).getCapability<&Flunks.Collection{Flunks.FlunksCollectionPublic}>(Flunks.CollectionPublicPath).borrow() != nil
-&& getAccount(address).getCapability<&Backpack.Collection{Backpack.BackpackCollectionPublic}>(Backpack.CollectionPublicPath).borrow() != nil
-&& getAccount(address).getCapability<&Patch.Collection{Patch.PatchCollectionPublic}>(Patch.CollectionPublicPath).borrow() != nil
+  let flunksCollection: &Flunks.Collection{NonFungibleToken.CollectionPublic}? = getAccount(address)
+      .getCapability<&Flunks.Collection{NonFungibleToken.CollectionPublic}>(Flunks.CollectionPublicPath).borrow()
+
+  let backpackCollection: &Backpack.Collection{NonFungibleToken.CollectionPublic}? = getAccount(address)
+      .getCapability<&Backpack.Collection{NonFungibleToken.CollectionPublic}>(Backpack.CollectionPublicPath).borrow()
+  
+  return flunksCollection != nil && backpackCollection != nil
 }
 `;
 
