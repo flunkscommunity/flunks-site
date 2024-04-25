@@ -6,5 +6,5 @@ export const WINDOW_IDS = {
   LOST_AND_FOUND: "lost-and-found",
   SETTINGS: "settings",
   ERROR: "error",
-  STUDY_ROOM: "study-room",
+  GUMBALL_MACHINE: "gumball-machine",
 };

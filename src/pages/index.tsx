@@ -11,6 +11,7 @@ import { useUser } from "contexts/WalletContext";
 import YourStudents from "windows/YourStudents";
 import LostAndFound from "windows/LostAndFound";
 import LoginScreen from "components/LoginScreen";
+import GumballMachine from "windows/GumballMachine";
 
 const Home: NextPage = () => {
   const { windows, openWindow } = useWindowsContext();
@@ -62,6 +63,17 @@ const Home: NextPage = () => {
             openWindow({
               key: WINDOW_IDS.YOUR_STUDENTS,
               window: <YourStudents />,
+            });
+          }}
+        />
+
+        <DesktopAppIcon
+          title="Gumball Machine"
+          icon="/images/icons/gum-machine.png"
+          onDoubleClick={() => {
+            openWindow({
+              key: WINDOW_IDS.GUMBALL_MACHINE,
+              window: <GumballMachine />,
             });
           }}
         />

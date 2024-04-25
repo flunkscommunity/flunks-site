@@ -11,6 +11,8 @@ import { DynamicContextProvider, DynamicUserProfile } from "@dynamic-labs/sdk-re
 // @ts-ignore
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
 
+
+
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <>
