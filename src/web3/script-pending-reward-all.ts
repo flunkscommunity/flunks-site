@@ -1,7 +1,7 @@
 import * as fcl from "@onflow/fcl";
 import * as t from "@onflow/types";
 
-const CODE = `import Staking from "../../contracts/Staking.cdc"
+const CODE = `import Staking from 0x807c3d470888cc48
 
 pub fun main(address: Address): UFix64 {
   return Staking.pendingRewardsPerWallet(address: address)

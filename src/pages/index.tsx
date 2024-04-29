@@ -100,7 +100,7 @@ const Home: NextPage = () => {
         >
           <DesktopAppIcon
             title="Twitter"
-            icon="/images/twitter.png"
+            icon="/images/icons/x-nav.png"
             onDoubleClick={() => {
               return null;
             }}
@@ -118,7 +118,7 @@ const Home: NextPage = () => {
         >
           <DesktopAppIcon
             title="Discord"
-            icon="/images/discord.png"
+            icon="/images/icons/discord-nav.png"
             onDoubleClick={() => {
               return null;
             }}
