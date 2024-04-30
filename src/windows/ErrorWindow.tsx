@@ -3,7 +3,6 @@ import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
 import useSounds from "hooks/useSounds";
 import React, { useEffect } from "react";
-import { Button } from "react95";
 
 interface Props {
   title: string;
@@ -25,6 +24,7 @@ const ErrorWindow: React.FC<Props> = (props) => {
   return (
     <div className="bg-black/80 fixed inset-0 z-[999]">
       <DraggableResizeableWindow
+        windowsId={windowId}
         offSetHeight={44}
         headerTitle={title}
         onClose={() => {

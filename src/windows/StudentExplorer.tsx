@@ -42,6 +42,8 @@ const StudentExplorerWindow = () => {
     <DraggableResizeableWindow
       offSetHeight={44}
       headerTitle="Student Directory v0.2"
+      authGuard={false}
+      windowsId={WINDOW_IDS.STUDENT_EXPLORER}
       onClose={() => {
         closeWindow(WINDOW_IDS.FILTERS_WINDOW);
         closeWindow(WINDOW_IDS.STUDENT_EXPLORER);

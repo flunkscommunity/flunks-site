@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { Button, Window, WindowContent, WindowHeader } from "react95";
 import styled from "styled-components";
+import ErrorWindow from "windows/ErrorWindow";
+import { DynamicConnectButton } from "@dynamic-labs/sdk-react-core";
 
 interface Props {
   headerTitle: string;
@@ -17,6 +19,8 @@ interface Props {
   windowClassName?: string;
   resizable?: boolean;
   openCentered?: boolean;
+  authGuard?: boolean;
+  windowsId: string;
 }
 
 const WindowButtons = styled.div`
@@ -38,10 +42,12 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     children,
     windowClassName = "",
     resizable = true,
+    authGuard = props.authGuard || false,
   } = props;
   const windowRef = useRef<HTMLDivElement>(null);
   const draggableRef = useRef<Draggable>(null);
   const { width, height } = useWindowSize();
+  const { closeWindow } = useWindowsContext();
 
   const handleMaximize = () => {
     if (!resizable) return;
@@ -117,8 +123,27 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
   }, []);
 
   const onStart = () => bringWindowToFront();
-
   const isMobile = width < 768;
+
+  if (authGuard) {
+    return (
+      <ErrorWindow
+        title="Error Starting Program"
+        message="You're not signed in. Please sign in to continue..."
+        actions={
+          <>
+            <Button onClick={() => closeWindow(props.windowsId)}>Close</Button>
+            <DynamicConnectButton>
+              <Button as={"a"} primary className="ml-auto">
+                Sign In
+              </Button>
+            </DynamicConnectButton>
+          </>
+        }
+        windowId={props.windowsId || ""}
+      />
+    );
+  }
 
   return (
     <Draggable

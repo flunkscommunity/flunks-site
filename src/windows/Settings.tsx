@@ -7,36 +7,40 @@ import {
   DynamicConnectButton,
   useDynamicContext,
 } from "@dynamic-labs/sdk-react-core";
-import ErrorWindow from "./ErrorWindow";
 
 const Settings: React.FC = () => {
   const { closeWindow } = useWindowsContext();
   const { user, setShowDynamicUserProfile } = useDynamicContext();
-  if (!user)
-    return (
-      <ErrorWindow
-        title="Error Starting Program"
-        message="You're not signed in. Please sign in to continue.."
-        actions={
-          <>
-            <Button onClick={() => closeWindow(WINDOW_IDS.SETTINGS)}>
-              Close
-            </Button>
-            <DynamicConnectButton>
-              <Button as={"a"} primary className="ml-auto">
-                Sign In
-              </Button>
-            </DynamicConnectButton>
-          </>
-        }
-        windowId={WINDOW_IDS.SETTINGS}
-      />
-    );
+
+  // Not sure if this is needed anymore.
+  // =========================================
+  // if (!user)
+  //   return (
+  //     <ErrorWindow
+  //       title="Error Starting Program"
+  //       message="You're not signed in. Please sign in to continue.."
+  //       actions={
+  //         <>
+  //           <Button onClick={() => closeWindow(WINDOW_IDS.SETTINGS)}>
+  //             Close
+  //           </Button>
+  //           <DynamicConnectButton>
+  //             <Button as={"a"} primary className="ml-auto">
+  //               Sign In
+  //             </Button>
+  //           </DynamicConnectButton>
+  //         </>
+  //       }
+  //       windowId={WINDOW_IDS.SETTINGS}
+  //     />
+  //   );
 
   return (
     <DraggableResizeableWindow
       offSetHeight={44}
       headerTitle="User Settings"
+      windowsId={WINDOW_IDS.SETTINGS}
+      authGuard={true}
       onClose={() => {
         closeWindow(WINDOW_IDS.SETTINGS);
       }}

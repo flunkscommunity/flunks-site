@@ -44,6 +44,8 @@ const LostAndFound: React.FC = () => {
     <DraggableResizeableWindow
       offSetHeight={44}
       headerTitle="Lost and Found v2.0"
+      authGuard={false}
+      windowsId={WINDOW_IDS.LOST_AND_FOUND}
       onClose={() => {
         closeWindow(WINDOW_IDS.LOST_AND_FOUND);
       }}
