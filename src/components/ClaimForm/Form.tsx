@@ -262,7 +262,7 @@ const ClaimFormForm: React.FC<Props> = (props) => {
                   onClick={() => {
                     executeTx(claimBackpack({ tokenID: tokenId }));
                   }}
-                  fullWidth
+                  fullWidth={"true"}
                 >
                   Sign
                 </Button>

@@ -3,6 +3,7 @@ import {
   Button,
   Counter,
   Frame,
+  Handle,
   MenuList,
   MenuListItem,
   Separator,
@@ -35,6 +36,8 @@ import {
 import { getPendingRewardsAll } from "web3/script-pending-reward-all";
 import GumDashboard from "components/Staking/GumDashboard";
 import RowItem from "components/Staking/Table/RowItem";
+import StakingProvider from "contexts/StakingContext";
+import { FclTransactionProvider } from "contexts/FclTransactionContext";
 
 const CustomTableHeadCell = styled(TableHeadCell)`
   flex: 1 0 0%;
@@ -100,8 +103,7 @@ const NftTable = () => {
 
 const GumballMachine: React.FC = () => {
   const { closeWindow } = useWindowsContext();
-  const { user } =
-    useDynamicContext();
+  const { user } = useDynamicContext();
 
   if (!user) {
     return (
@@ -114,7 +116,7 @@ const GumballMachine: React.FC = () => {
               Close
             </Button>
             <DynamicConnectButton>
-              <Button as={"a"} primary className="ml-auto">
+              <Button as={"a"} primary={"true"} className="ml-auto">
                 Sign In
               </Button>
             </DynamicConnectButton>
@@ -133,14 +135,24 @@ const GumballMachine: React.FC = () => {
         onClose={() => {
           closeWindow(WINDOW_IDS.GUMBALL_MACHINE);
         }}
+        windowsId={WINDOW_IDS.GUMBALL_MACHINE}
+        style={{
+          backgroundImage: "url('/images/gum-pattern.png')",
+          backgroundPosition: "center top",
+          backgroundBlendMode: "color-burn",
+        }}
       >
-        <GumDashboard />
-        <Frame
-          variant="inside"
-          className="!flex !h-full !w-full overflow-hidden"
-        >
-          <NftTable />
-        </Frame>
+        <FclTransactionProvider>
+          <StakingProvider>
+            <GumDashboard />
+            <Frame
+              variant="inside"
+              className="!flex !h-full !w-full overflow-hidden"
+            >
+              <NftTable />
+            </Frame>
+          </StakingProvider>
+        </FclTransactionProvider>
       </DraggableResizeableWindow>
     </AppLoader>
   );

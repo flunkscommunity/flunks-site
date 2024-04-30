@@ -25,10 +25,21 @@ const RowItem: React.FC<RowItemProps> = (props) => {
   const [stakedInfo, setStakedInfo] = React.useState(0);
   const { primaryWallet } = useDynamicContext();
 
+  const getPendingReward = () => {
+    getPendingRewardsOne(
+      props.collectionName as "Flunks" | "Backpack",
+      props.tokenId
+    ).then(setPendingRewards);
+  };
+
   React.useEffect(() => {
     if (!props.collectionName) return;
     if (!props.tokenId) return;
     if (!primaryWallet) return;
+
+    const interval = setInterval(() => {
+      getPendingReward();
+    }, 30000);
 
     getPendingRewardsOne(
       props.collectionName as "Flunks" | "Backpack",
@@ -39,6 +50,8 @@ const RowItem: React.FC<RowItemProps> = (props) => {
       props.collectionName as "Flunks" | "Backpack",
       props.tokenId
     ).then(setStakedInfo);
+
+    return () => clearInterval(interval);
   }, [primaryWallet.address, props.collectionName, props.tokenId]);
 
   const handleStakeItem = async () => {

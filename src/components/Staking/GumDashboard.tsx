@@ -1,62 +1,84 @@
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { useStakingContext } from "contexts/StakingContext";
 import { useEffect, useState } from "react";
-import { Button, Frame, Separator } from "react95";
+import {
+  Button,
+  Frame,
+  Handle,
+  MenuList,
+  MenuListItem,
+  Separator,
+} from "react95";
 import { getGumBalance } from "web3/script-get-gum-balance";
 import { getPendingRewardsAll } from "web3/script-pending-reward-all";
 
 const GumDashboard = () => {
   const { user, primaryWallet, setShowDynamicUserProfile } =
     useDynamicContext();
+  const { gumBalance, pendingRewards, stakeAll, claimAll } =
+    useStakingContext();
 
-  const [gumBalance, setGumBalance] = useState(0);
-  const [pendingRewards, setPendingRewards] = useState(0);
+  // const [gumBalance, setGumBalance] = useState(0);
+  // const [pendingRewards, setPendingRewards] = useState(0);
 
   const walletAddress = primaryWallet?.address || null;
 
-  useEffect(() => {
-    if (!walletAddress) return;
+  // const getPendingRewards = async () => {
+  //   getPendingRewardsAll(walletAddress).then(setPendingRewards);
+  // };
 
-    getPendingRewardsAll(walletAddress).then(setPendingRewards);
-    getGumBalance(walletAddress).then(setGumBalance);
-  }, [walletAddress]);
+  // useEffect(() => {
+  //   if (!walletAddress) return;
+
+  //   // poll every 30 seconds
+  //   const interval = setInterval(() => {
+  //     getPendingRewards();
+  //   }, 30000);
+
+  //   getPendingRewardsAll(walletAddress).then(setPendingRewards);
+  //   getGumBalance(walletAddress).then(setGumBalance);
+
+  //   return () => clearInterval(interval);
+  // }, [walletAddress]);
 
   return (
-    <div className="flex-shrink-0 grid grid-cols-1">
-      <Frame variant="outside" className="w-full h-full">
-        <div className="flex flex-col items-start px-4 py-2">
-          <div className="flex flex-row items-center w-full justify-between">
-            <Frame
-              variant="field"
-              className="!flex-grow-0 py-1.5 px-2 !flex gap-2 items-center"
-            >
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="mt-0.5">{walletAddress}</span>
-            </Frame>
-            <Button
-              variant="menu"
-              size="sm"
-              className="!flex-grow-0 py-1.5 px-2"
-            >
-              X
-            </Button>
-          </div>
-          {true && (
-            <>
-              <div className="flex pt-4 w-full">
-                <Frame
-                  variant="well"
-                  className="col-span-9 flex-grow items-center px-2 py-1"
-                >
-                  <span>GUM Balance</span>
-                </Frame>
-                <Frame
-                  variant="well"
-                  className="col-span-3 !flex items-end justify-end px-2 py-1"
-                >
-                  {gumBalance}
-                </Frame>
+    <>
+      <div className="flex-shrink-0 grid grid-cols-1">
+        <Frame variant="outside" className="w-full h-full">
+          <div className="flex flex-col items-start px-4 py-2">
+            <div className="relative flex flex-row items-center w-full justify-between">
+              <div className="flex flex-row items-center">
+                {/* <img
+                  src="/images/icons/gum-inactive.png"
+                  className="!scale-125"
+                /> */}
+                <span className="text-xl font-bold">v96.0</span>
               </div>
-              <div className="flex w-full">
+              <Frame
+                variant="field"
+                className="!flex-grow-0 py-1.5 px-2 !flex gap-2 items-center ml-auto"
+              >
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <span className="mt-0.5">{walletAddress}</span>
+              </Frame>
+            </div>
+            {true && (
+              <>
+                <div className="flex pt-4 w-full">
+                  <Frame
+                    variant="well"
+                    className="col-span-9 flex-grow items-center px-2 py-1"
+                  >
+                    <span>GUM Balance</span>
+                  </Frame>
+                  <Frame
+                    variant="well"
+                    className="col-span-3 !flex items-end justify-end px-2 py-1"
+                  >
+                    {gumBalance}
+                  </Frame>
+                </div>
+                {/* <div className="flex w-full">
                 <Frame
                   variant="well"
                   className="col-span-9 flex-grow items-center px-2 py-1"
@@ -69,30 +91,49 @@ const GumDashboard = () => {
                 >
                   0
                 </Frame>
-              </div>
-              <Separator orientation="horizontal" className="!my-2" />
-              <div className="flex flex-col w-full items-start gap-2">
-                <div className="flex w-full">
-                  <Frame
-                    variant="well"
-                    className="col-span-9 flex-grow items-center px-2 py-1"
-                  >
-                    <span>Pending Gum</span>
-                  </Frame>
-                  <Frame
-                    variant="well"
-                    className="col-span-3 !flex items-end justify-end px-2 py-1"
-                  >
-                    {pendingRewards}
-                  </Frame>
+              </div> */}
+                {/* <Separator orientation="horizontal" className="!my-2" /> */}
+                <div className="flex flex-col w-full items-start gap-2">
+                  <div className="flex w-full">
+                    <Frame
+                      variant="well"
+                      className="col-span-9 flex-grow items-center px-2 py-1"
+                    >
+                      <span>Pending Gum</span>
+                    </Frame>
+                    <Frame
+                      variant="well"
+                      className="col-span-3 !flex items-end justify-end px-2 py-1"
+                    >
+                      {pendingRewards}
+                    </Frame>
+                  </div>
+                  {/* <Button className="ml-auto min-w-[100px]">Claim</Button> */}
                 </div>
-                <Button className="ml-auto min-w-[100px]">Claim</Button>
-              </div>
-            </>
-          )}
-        </div>
-      </Frame>
-    </div>
+              </>
+            )}
+          </div>
+        </Frame>
+      </div>
+      <MenuList inline>
+        <MenuListItem square={true} disabled className="!relative">
+          <img
+            src="/images/icons/gum-inactive.png"
+            className="absolute inset-0 -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 !scale-125 mix-blend-color-burn"
+          />
+        </MenuListItem>
+        <Handle size={38} />
+        <MenuListItem onClick={stakeAll} className="mr-auto !cursor-pointer">
+          Stake All
+        </MenuListItem>
+        <MenuListItem className="!cursor-pointer" disabled>
+          Reload
+        </MenuListItem>
+        <MenuListItem onClick={claimAll} className="!cursor-pointer">
+          Claim
+        </MenuListItem>
+      </MenuList>
+    </>
   );
 };
 

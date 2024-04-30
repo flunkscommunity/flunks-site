@@ -22,6 +22,7 @@ interface Props {
   openCentered?: boolean;
   authGuard?: boolean;
   windowsId: string;
+  style?: React.CSSProperties;
 }
 
 const WindowButtons = styled.div`
@@ -136,7 +137,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           <>
             <Button onClick={() => closeWindow(props.windowsId)}>Close</Button>
             <DynamicConnectButton>
-              <Button as={"a"} primary className="ml-auto">
+              <Button as={"a"} primary={true} className="ml-auto">
                 Sign In
               </Button>
             </DynamicConnectButton>
@@ -173,6 +174,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           minHeight: width < 768 ? "calc(100% - 48px)" : "",
           height: width < 768 ? "100%" : initialHeight,
           maxHeight: "calc(100% - 48px)",
+          ...props.style,
         }}
         onClick={bringWindowToFront}
       >

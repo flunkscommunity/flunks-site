@@ -13,7 +13,7 @@ export const stakeAll = async () => {
   return await fcl.mutate({
     cadence: TRANSACTION as string,
     // @ts-ignore
-    authorizations: [authz],
+    authorizations: [fcl.authz],
     limit: 1000,
   });
 };

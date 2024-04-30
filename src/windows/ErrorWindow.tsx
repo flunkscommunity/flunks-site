@@ -36,13 +36,16 @@ const ErrorWindow: React.FC<Props> = (props) => {
         initialHeight="auto"
         initialWidth="auto"
         openCentered
+        style={{maxWidth: "400px"}}
         resizable={false}
       >
         <div className="flex flex-col h-full gap-2 justify-center">
           <div className="flex flex-col items-start gap-10">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 overflow-hidden w-full">
               <img src="/images/icons/error.png" />
-              <span className="text-xl mt-1">{message}</span>
+              <span className="text-xl mt-1">
+                {message.length > 100 ? message.slice(0, 100) + "..." : message}
+              </span>
             </div>
           </div>
           <div className="flex flex-row justify-end items-center px-4 pt-2 gap-2">

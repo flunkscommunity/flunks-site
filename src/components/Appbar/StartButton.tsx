@@ -4,6 +4,7 @@ import {
 } from "@dynamic-labs/sdk-react-core";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
+import useIsMounted from "hooks/useIsMounted";
 import React from "react";
 import { Button, MenuList, MenuListItem, Separator } from "react95";
 import styled from "styled-components";
@@ -21,7 +22,7 @@ const CustomMenuListItem = styled(MenuListItem)`
 `;
 
 const AuthButton = () => {
-const { user, handleLogOut } = useDynamicContext();
+  const { user, handleLogOut } = useDynamicContext();
 
   if (user) {
     return (
@@ -42,17 +43,31 @@ const { user, handleLogOut } = useDynamicContext();
   );
 };
 
+const SideLogoContainer = styled.div`
+  background-color: ${({ theme }) => theme.borderDark};
+`;
+const FlunksLogoText = styled.span`
+  color: ${({ theme }) => theme.borderLight};
+`;
+const NintyFiveLogoText = styled.span`
+  color: ${({ theme }) => theme.borderLightest};
+`;
+
 const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
   const { openWindow } = useWindowsContext();
 
   return (
     <MenuList className="!absolute bottom-[calc(100%+6px)] -left-1 min-w-[300px] !flex !flex-row">
-      <div className="w-10 bg-[#888888] relative">
-        <div className="absolute -bottom-5 left-1 text-xl text-white origin-[0_0] -rotate-90 text-nowrap">
-          <span className="text-[#C4C2C4] font-black leading-[1]">FLUNKS</span>
-          <span className="font-medium text-white leading-[1]">95</span>
+      <SideLogoContainer className="w-10 relative">
+        <div className="absolute -bottom-5 left-1 text-xl origin-[0_0] -rotate-90 text-nowrap">
+          <FlunksLogoText className="font-black leading-[1] mr-2">
+            FLUNKS
+          </FlunksLogoText>
+          <NintyFiveLogoText className="font-medium leading-[1]">
+            95
+          </NintyFiveLogoText>
         </div>
-      </div>
+      </SideLogoContainer>
       <div className="flex flex-col w-full">
         <CustomMenuListItem
           onClick={() => {
@@ -112,12 +127,18 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
 const StartButton = () => {
   const [open, setOpen] = React.useState(false);
 
+  const { isMounted } = useIsMounted();
+
+  if (!isMounted) {
+    return null;
+  }
+
   return (
     <div className="relative">
       {open && <StartMenu closeStartMenu={() => setOpen(false)} />}
       <Button
         onClick={() => setOpen(!open)}
-        active={open}
+        active={open ? open : undefined}
         className="font-black !flex !items-center gap-1"
       >
         <img

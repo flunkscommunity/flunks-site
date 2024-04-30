@@ -13,7 +13,7 @@ const CustomMenuListItem = styled(MenuListItem)`
 const Appbar = () => {
   return (
     <AppBar
-      fixed={false}
+      position={"absolute"}
       style={{
         zIndex: 1000,
         top: "100%",

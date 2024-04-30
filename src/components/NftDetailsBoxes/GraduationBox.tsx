@@ -202,7 +202,7 @@ const GraduationBoxContent: React.FC<Props> = (props) => {
                 window: <Graduation flunk={nft} />,
               });
             }}
-            fullWidth
+            fullWidth={"true"}
           >
             Initiate Graduation
           </Button>

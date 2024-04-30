@@ -69,7 +69,7 @@ const ClaimChecker: React.FC = () => {
               value={templateId}
               placeholder="Student's serial number.."
               onChange={(e) => setTemplateId(e.target.value)}
-              fullWidth
+              fullWidth={true}
             />
             <Button
               style={{
@@ -164,7 +164,7 @@ const ClaimChecker: React.FC = () => {
             value={templateId}
             placeholder="Student's serial number.."
             onChange={(e) => setTemplateId(e.target.value)}
-            fullWidth
+            fullWidth={"true"}
           />
           <Button
             style={{
