@@ -15,14 +15,11 @@ import TraitFilters from "./TraitFilters";
 import { useUser } from "contexts/WalletContext";
 import { useSwrWrapper } from "api/useSwrWrapper";
 import BackpackFrameGrid from "components/Backpacks/BackpackFrameGrid";
-import {
-  useDynamicContext,
-  DynamicConnectButton,
-} from "@dynamic-labs/sdk-react-core";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 const YourStudents: React.FC = () => {
   // const { walletAddress } = useUser();
-  const { user, primaryWallet } = useDynamicContext();
+  const { primaryWallet } = useDynamicContext();
   const walletAddress = primaryWallet?.address;
   const { closeWindow, openWindow } = useWindowsContext();
   const [activeTab, setActiveTab] = useState(0);
@@ -38,29 +35,6 @@ const YourStudents: React.FC = () => {
   });
   const flunks = data?.Flunks || [];
   const backpacks = data?.Backpack || [];
-
-  // Not sure if this is needed anymore.
-  // =========================================
-  // if (!user)
-  //   return (
-  //     <ErrorWindow
-  //       title="Error Starting Program"
-  //       message="You're not signed in. Please sign in to continue.."
-  //       actions={
-  //         <>
-  //           <Button onClick={() => closeWindow(WINDOW_IDS.YOUR_STUDENTS)}>
-  //             Close
-  //           </Button>
-  //           <DynamicConnectButton>
-  //             <Button as={"a"} primary className="ml-auto">
-  //               Sign In
-  //             </Button>
-  //           </DynamicConnectButton>
-  //         </>
-  //       }
-  //       windowId={WINDOW_IDS.SETTINGS}
-  //     />
-  //   );
 
   return (
     <DraggableResizeableWindow

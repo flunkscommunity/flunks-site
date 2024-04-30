@@ -6,6 +6,7 @@ import { Button, Window, WindowContent, WindowHeader } from "react95";
 import styled from "styled-components";
 import ErrorWindow from "windows/ErrorWindow";
 import { DynamicConnectButton } from "@dynamic-labs/sdk-react-core";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 interface Props {
   headerTitle: string;
@@ -48,6 +49,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
   const draggableRef = useRef<Draggable>(null);
   const { width, height } = useWindowSize();
   const { closeWindow } = useWindowsContext();
+  const { user } = useDynamicContext();
 
   const handleMaximize = () => {
     if (!resizable) return;
@@ -125,7 +127,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
   const onStart = () => bringWindowToFront();
   const isMobile = width < 768;
 
-  if (authGuard) {
+  if (authGuard && !user) {
     return (
       <ErrorWindow
         title="Error Starting Program"
