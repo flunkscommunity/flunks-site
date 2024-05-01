@@ -12,19 +12,79 @@ import { TX_STATUS } from "reducers/TxStatusReducer";
 import { useWindowsContext } from "./WindowsContext";
 import ErrorWindow from "windows/ErrorWindow";
 import { WINDOW_IDS } from "fixed";
+import { getWalletStakeInfo } from "web3/script-get-wallet-stake-info";
+import { stakeOne } from "web3/tx-stake-one";
+import { unstakeOne } from "web3/tx-unstake-one";
+import { claimAll } from "web3/tx-claim-all-gum";
+
+interface MetadataViewsDisplayThumbnail {
+  url: string;
+}
+
+interface MetadataViewsDisplay {
+  name: string;
+  description: string;
+  thumbnail: MetadataViewsDisplayThumbnail;
+}
+
+interface Trait {
+  name: string;
+  value: string;
+  displayType: null; // Use `any` or specific type if it can be non-null
+  rarity: null; // Use `any` or specific type if it can be non-null
+}
+
+interface Traits {
+  traits: Trait[];
+}
+
+export interface StakingInfo {
+  staker: string;
+  tokenID: string;
+  stakedAtInSeconds: string;
+  pool: string;
+}
+
+interface ObjectDetails {
+  owner: string;
+  tokenID: string;
+  MetadataViewsDisplay: MetadataViewsDisplay;
+  traits: Traits;
+  serialNumber: string;
+  stakingInfo: StakingInfo;
+  collection: string;
+  rewards: number;
+}
 
 interface ContextState {
   gumBalance: number;
   pendingRewards: number;
+  isDapper: boolean;
+  walletStakeInfo: ObjectDetails[];
+  refreshStakeInfo: () => void;
+  sortStakeInfo: (
+    sortBy: "name" | "rewards" | "staked",
+    orderBy: "asc" | "dsc"
+  ) => void;
   stakeAll: () => void;
+  stakeSingle: (pool: "Flunks" | "Backpack", tokenID: number) => void;
+  unstakeSingle: (pool: "Flunks" | "Backpack", tokenID: number) => void;
   claimAll: () => void;
+  claimSingle: (pool: "Flunks" | "Backpack", tokenID: number) => void;
 }
 
 export const StakingContext = createContext<ContextState>({
   gumBalance: 0,
   pendingRewards: 0,
+  isDapper: false,
+  walletStakeInfo: [],
+  sortStakeInfo: () => {},
+  refreshStakeInfo: () => {},
   stakeAll: () => {},
+  stakeSingle: () => {},
+  unstakeSingle: () => {},
   claimAll: () => {},
+  claimSingle: () => {},
 });
 
 interface ProviderProps {
@@ -35,44 +95,75 @@ const StakingProvider: React.FC<ProviderProps> = (props) => {
   const { children } = props;
   const { primaryWallet } = useDynamicContext();
   const walletAddress = primaryWallet?.address || null;
+  const walletProvider = primaryWallet?.connector?.name || null;
   const [gumBalance, setGumBalance] = useState(0);
   const [pendingRewards, setPendingRewards] = useState(0);
+  const [walletStakeInfo, setWalletStakeInfo] = useState<ObjectDetails[]>([]);
   const { openWindow, closeWindow } = useWindowsContext();
 
   const { executeTx, state, resetState } = useFclTransactionContext();
-
-  // const { data } = useUsersControllerGetUserNftsByWalletAddress(walletAddress);
-  // const flunks = data?.data?.Flunks || [];
-  // const backpacks = data?.data?.Backpack || [];
-  // const items = flunks?.concat(backpacks);
-
-  // const getPendingReward = (pool: "Flunks" | "Backpack", tokenId: number) => {
-  //   getPendingRewardsOne(pool, tokenId).then(setPendingRewards);
-  // };
 
   const getPendingRewards = () => {
     getPendingRewardsAll(walletAddress).then(setPendingRewards);
   };
 
+  const getStakeInfo = () => {
+    getWalletStakeInfo(walletAddress).then(setWalletStakeInfo);
+  };
+
+  const sortStakeInfo = (
+    sortBy: "name" | "rewards" | "staked",
+    orderBy: "asc" | "dsc"
+  ) => {
+    const sorted = walletStakeInfo.sort((a, b) => {
+      if (sortBy === "name") {
+        return orderBy === "asc"
+          ? a.MetadataViewsDisplay.name.localeCompare(
+              b.MetadataViewsDisplay.name
+            )
+          : b.MetadataViewsDisplay.name.localeCompare(
+              a.MetadataViewsDisplay.name
+            );
+      } else if (sortBy === "rewards") {
+        return orderBy === "asc"
+          ? a.rewards - b.rewards
+          : b.rewards - a.rewards;
+      } else if (sortBy === "staked") {
+        // Order items by staked !== null or staked === null asc or dsc
+
+        return orderBy === "asc"
+          ? a.stakingInfo
+            ? 1
+            : -1
+          : a.stakingInfo
+          ? -1
+          : 1;
+      }
+    });
+
+    setWalletStakeInfo([...sorted]);
+  };
+
   useEffect(() => {
     if (!walletAddress) return;
 
-    // poll every 30 seconds
-    const interval = setInterval(() => {
-      getPendingRewards();
-    }, 30000);
-
     getPendingRewardsAll(walletAddress).then(setPendingRewards);
     getGumBalance(walletAddress).then(setGumBalance);
-
-    return () => clearInterval(interval);
+    getWalletStakeInfo(walletAddress).then(setWalletStakeInfo);
   }, [walletAddress]);
 
   const _stakeAll = () => {
+    resetState();
     executeTx(stakeAll);
   };
 
   useEffect(() => {
+    if (state.txStatus === TX_STATUS.SUCCESS) {
+      getPendingRewards();
+      getStakeInfo();
+      getGumBalance(walletAddress).then(setGumBalance);
+    }
+
     if (state.txStatus !== TX_STATUS.ERROR)
       return closeWindow(WINDOW_IDS.ERROR);
 
@@ -101,13 +192,39 @@ const StakingProvider: React.FC<ProviderProps> = (props) => {
     });
   }, [state.txStatus]);
 
+  const _stakeSingle = (pool: "Flunks" | "Backpack", tokenID: number) => {
+    resetState();
+    executeTx(() => stakeOne(pool, tokenID));
+  };
+
+  const _unstakesingle = (pool: "Flunks" | "Backpack", tokenID: number) => {
+    resetState();
+    executeTx(() => unstakeOne(pool, tokenID));
+  };
+
+  const _claimAll = () => {
+    resetState();
+    executeTx(claimAll);
+  };
+
   return (
     <StakingContext.Provider
       value={{
         gumBalance,
         pendingRewards,
+        isDapper: walletProvider === "Dapper",
+        walletStakeInfo: walletStakeInfo,
+        refreshStakeInfo: () => {
+          getPendingRewards();
+          getStakeInfo();
+          getGumBalance(walletAddress).then(setGumBalance);
+        },
+        sortStakeInfo: sortStakeInfo,
         stakeAll: _stakeAll,
-        claimAll: () => {},
+        stakeSingle: _stakeSingle,
+        unstakeSingle: _unstakesingle,
+        claimAll: _claimAll,
+        claimSingle: () => {},
       }}
     >
       <div className="relative h-full w-full flex flex-col">

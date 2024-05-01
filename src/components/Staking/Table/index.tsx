@@ -1,7 +1,20 @@
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { useUsersControllerGetUserNftsByWalletAddress } from "generated/api/users/users";
-import { Table, TableBody, TableHead, TableRow } from "react95";
+import {
+  Anchor,
+  Frame,
+  Table,
+  TableBody,
+  TableDataCell,
+  TableHead,
+  TableHeadCell,
+  TableRow,
+} from "react95";
 import RowItem from "./RowItem";
+import styled from "styled-components";
+import { useStakingContext } from "contexts/StakingContext";
+import DapperIncompatibility from "./DapperIncompatibility";
+import { useRef } from "react";
 
 const CustomTableHeadCell = styled(TableHeadCell)`
   flex: 1 0 0%;
@@ -13,8 +26,12 @@ const CustomTableDataCell = styled(TableDataCell)`
   justify-content: center;
 `;
 
-const NftTable = () => {
+const StakeableItemsTable = () => {
+  const { isDapper, walletStakeInfo, sortStakeInfo } = useStakingContext();
   const { primaryWallet } = useDynamicContext();
+  const nameOrderByRef = useRef<"asc" | "dsc">("asc");
+  const earnedOrderByRef = useRef<"asc" | "dsc">("asc");
+  const earningOrderByRef = useRef<"asc" | "dsc">("asc");
 
   const { data } = useUsersControllerGetUserNftsByWalletAddress(
     primaryWallet.address
@@ -28,39 +45,71 @@ const NftTable = () => {
       <Table className="!h-full !flex !flex-col !w-full !flex-1">
         <TableHead className="!h-auto !w-full !flex-1">
           <TableRow className="!flex !items-center !w-full">
-            <CustomTableHeadCell disabled className="flex-grow">
+            <CustomTableHeadCell
+              onClick={() => {
+                sortStakeInfo("name", nameOrderByRef.current);
+                nameOrderByRef.current =
+                  nameOrderByRef.current === "asc" ? "dsc" : "asc";
+              }}
+              disabled={isDapper}
+              className="flex-grow"
+            >
               Item
             </CustomTableHeadCell>
-            {/* <CustomTableHeadCell className="flex-grow">Collection</CustomTableHeadCell> */}
-            <CustomTableHeadCell disabled className="flex-grow">
-              Earned
+            <CustomTableHeadCell
+              onClick={() => {
+                sortStakeInfo("rewards", earnedOrderByRef.current);
+                earnedOrderByRef.current =
+                  earnedOrderByRef.current === "asc" ? "dsc" : "asc";
+              }}
+              disabled={isDapper}
+              className="flex-grow"
+            >
+              Rewards
             </CustomTableHeadCell>
-            <CustomTableHeadCell disabled className="flex-grow">
-              Earning?
+            <CustomTableHeadCell
+              onClick={() => {
+                sortStakeInfo("staked", earningOrderByRef.current);
+                earningOrderByRef.current =
+                  earningOrderByRef.current === "asc" ? "dsc" : "asc";
+              }}
+              disabled={isDapper}
+              className="flex-grow"
+            >
+              Stake Status
             </CustomTableHeadCell>
           </TableRow>
         </TableHead>
-        <TableBody className="!h-full !flex !flex-col !w-full">
-          {flunks?.map((flunk) => (
-            <RowItem
-              prettyCollection="Flunks"
-              collectionName={flunk.collectionName}
-              image={flunk.metadata.uri ?? flunk.metadata.pixelUri}
-              tokenId={flunk.tokenId}
-              key={`${flunk.collectionName}-${flunk.tokenId}`}
-            />
-          ))}
-          {backpacks?.map((backpack) => (
-            <RowItem
-              prettyCollection="Backpack"
-              collectionName={backpack.collectionName}
-              image={backpack.metadata.uri ?? backpack.metadata.pixelUri}
-              tokenId={backpack.tokenId}
-              key={`${backpack.collectionName}-${backpack.tokenId}`}
-            />
-          ))}
-        </TableBody>
+        {isDapper && <DapperIncompatibility />}
+
+        {!isDapper && (
+          <TableBody className="!h-full !flex !flex-col !w-full no-scrollbar">
+            {walletStakeInfo.length < 1 && (
+              <TableRow className="!flex !items-center !w-full">
+                <CustomTableDataCell className="!flex-grow">
+                  <p className="text-center text-lg">NO ITEMS</p>
+                </CustomTableDataCell>
+              </TableRow>
+            )}
+            {walletStakeInfo.length > 0 &&
+              walletStakeInfo.map((item) => (
+                <RowItem
+                  prettyCollection={
+                    item.collection === "Flunks" ? "Flunk" : "Backpack"
+                  }
+                  collectionName={item.collection}
+                  image={item.MetadataViewsDisplay.thumbnail.url}
+                  tokenId={Number(item.tokenID)}
+                  key={`${item.collection}-${item.tokenID}`}
+                  stakingInfo={item.stakingInfo}
+                  rewards={item.rewards}
+                />
+              ))}
+          </TableBody>
+        )}
       </Table>
     </div>
   );
 };
+
+export default StakeableItemsTable;

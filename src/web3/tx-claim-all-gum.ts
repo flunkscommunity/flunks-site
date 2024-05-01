@@ -1,0 +1,19 @@
+import * as fcl from "@onflow/fcl";
+
+const TRANSACTION: string = `
+import Staking from 0x807c3d470888cc48
+
+transaction() {
+  prepare(signer: AuthAccount) {
+      Staking.claimAll(signerAuth: signer)
+  }
+}`;
+
+export const claimAll = async () => {
+  return await fcl.mutate({
+    cadence: TRANSACTION as string,
+    // @ts-ignore
+    authorizations: [fcl.authz],
+    limit: 1000,
+  });
+};

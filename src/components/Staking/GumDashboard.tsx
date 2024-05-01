@@ -5,6 +5,7 @@ import {
   Button,
   Frame,
   Handle,
+  Hourglass,
   MenuList,
   MenuListItem,
   Separator,
@@ -15,8 +16,32 @@ import { getPendingRewardsAll } from "web3/script-pending-reward-all";
 const GumDashboard = () => {
   const { user, primaryWallet, setShowDynamicUserProfile } =
     useDynamicContext();
-  const { gumBalance, pendingRewards, stakeAll, claimAll } =
-    useStakingContext();
+  const {
+    gumBalance,
+    pendingRewards,
+    stakeAll,
+    claimAll,
+    isDapper,
+    refreshStakeInfo,
+    walletStakeInfo,
+  } = useStakingContext();
+  const [refreshTimer, setRefreshTimer] = useState(0);
+
+  const handleRefreshInfo = () => {
+    // Can only refresh every 30 seconds
+    if (refreshTimer === 0) {
+      refreshStakeInfo();
+      setRefreshTimer(30);
+      const interval = setInterval(() => {
+        setRefreshTimer((prev) => prev - 1);
+      }, 1000);
+      setTimeout(() => {
+        clearInterval(interval);
+      }, 30000);
+    }
+
+    return;
+  };
 
   // const [gumBalance, setGumBalance] = useState(0);
   // const [pendingRewards, setPendingRewards] = useState(0);
@@ -118,18 +143,40 @@ const GumDashboard = () => {
       <MenuList inline>
         <MenuListItem square={true} disabled className="!relative">
           <img
-            src="/images/icons/gum-inactive.png"
-            className="absolute inset-0 -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 !scale-125 mix-blend-color-burn"
+            src={
+              isDapper
+                ? "/images/icons/gum-inactive.png"
+                : "/images/icons/gum-active.png"
+            }
+            className="absolute inset-0 -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 !scale-125"
           />
         </MenuListItem>
         <Handle size={38} />
-        <MenuListItem onClick={stakeAll} className="mr-auto !cursor-pointer">
+        <MenuListItem
+          onClick={stakeAll}
+          disabled={
+            isDapper ||
+            walletStakeInfo.every((info) => info.stakingInfo !== null)
+          }
+          className="mr-auto !cursor-pointer"
+        >
           Stake All
         </MenuListItem>
-        <MenuListItem className="!cursor-pointer" disabled>
-          Reload
+        <MenuListItem
+          className="!cursor-pointer flex items-center gap-2"
+          onClick={handleRefreshInfo}
+          disabled={isDapper || refreshTimer > 0}
+        >
+          {refreshTimer > 0 && (
+            <Hourglass size={16} className="opacity-50 mb-0.5" />
+          )}
+          {refreshTimer === 0 ? "Reload" : `${refreshTimer}s`}
         </MenuListItem>
-        <MenuListItem onClick={claimAll} className="!cursor-pointer">
+        <MenuListItem
+          onClick={claimAll}
+          disabled={isDapper}
+          className="!cursor-pointer"
+        >
           Claim
         </MenuListItem>
       </MenuList>
