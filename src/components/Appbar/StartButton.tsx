@@ -8,6 +8,7 @@ import useIsMounted from "hooks/useIsMounted";
 import React from "react";
 import { Button, MenuList, MenuListItem, Separator } from "react95";
 import styled from "styled-components";
+import GumballMachine from "windows/GumballMachine";
 import LostAndFound from "windows/LostAndFound";
 import Settings from "windows/Settings";
 import StudentExplorer from "windows/StudentExplorer";
@@ -26,7 +27,7 @@ const AuthButton = () => {
 
   if (user) {
     return (
-      <CustomMenuListItem onClick={handleLogOut}>
+      <CustomMenuListItem onClick={handleLogOut} className="!text-xl">
         <img src="/images/logout.png" width="32px" height="32px" />
         Sign Out
       </CustomMenuListItem>
@@ -35,7 +36,7 @@ const AuthButton = () => {
 
   return (
     <DynamicConnectButton buttonClassName="w-full">
-      <CustomMenuListItem className="!w-full">
+      <CustomMenuListItem className="!w-full !text-xl">
         <img src="/images/logout.png" width="32px" height="32px" />
         Sign In
       </CustomMenuListItem>
@@ -60,15 +61,24 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
     <MenuList className="!absolute bottom-[calc(100%+6px)] -left-1 min-w-[300px] !flex !flex-row">
       <SideLogoContainer className="w-10 relative">
         <div className="absolute -bottom-5 left-1 text-xl origin-[0_0] -rotate-90 text-nowrap">
-          <FlunksLogoText className="font-black leading-[1] mr-2">
-            FLUNKS
-          </FlunksLogoText>
-          <NintyFiveLogoText className="font-medium leading-[1]">
-            95
-          </NintyFiveLogoText>
+          <FlunksLogoText className="font-black mr-2">FLUNKS</FlunksLogoText>
+          <NintyFiveLogoText className="font-medium">95</NintyFiveLogoText>
         </div>
       </SideLogoContainer>
       <div className="flex flex-col w-full">
+        <CustomMenuListItem
+          onClick={() => {
+            openWindow({
+              key: WINDOW_IDS.GUMBALL_MACHINE,
+              window: <GumballMachine />,
+            });
+            props.closeStartMenu();
+          }}
+          className="!text-xl"
+        >
+          <img src="/images/icons/gum-machine.png" width="32px" height="32px" />
+          Gumball Machine
+        </CustomMenuListItem>
         <CustomMenuListItem
           onClick={() => {
             openWindow({
@@ -77,6 +87,7 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
             });
             props.closeStartMenu();
           }}
+          className="!text-xl"
         >
           <img src="/images/student-directory.png" width="32px" height="32px" />
           Student Directory
@@ -89,6 +100,7 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
             });
             props.closeStartMenu();
           }}
+          className="!text-xl"
         >
           <img src="/images/your-students.png" width="32px" height="32px" />
           Your Students
@@ -101,6 +113,7 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
             });
             props.closeStartMenu();
           }}
+          className="!text-xl"
         >
           <img src="/images/lost-and-found.png" width="32px" height="32px" />
           Lost and Found
@@ -113,9 +126,10 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
             });
             props.closeStartMenu();
           }}
+          className="!text-xl"
         >
-          <img src="/images/icons/user.png" width="32px" height="32px" />
-          User Information
+          <img src="/images/icons/settings.png" width="32px" height="32px" />
+          Settings
         </CustomMenuListItem>
         <Separator />
         <AuthButton />
@@ -146,7 +160,7 @@ const StartButton = () => {
           alt="flunks-95 logo"
           className="object-contain max-h-5 mr-1"
         />
-        <span className="mb-1.5">Start</span>
+        <span className="text-xl">Start</span>
       </Button>
     </div>
   );

@@ -52,7 +52,6 @@ const AppLoader: React.FC<Props> = (props) => {
         <ProgressBar
           variant="default"
           value={Math.floor(percent)}
-          className="[&>*:first-child]:before:!border-none"
         />
       </Frame>
     </div>

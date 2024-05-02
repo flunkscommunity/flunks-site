@@ -56,7 +56,7 @@ const Settings: React.FC = () => {
   return (
     <DraggableResizeableWindow
       offSetHeight={44}
-      headerTitle="User Settings"
+      headerTitle="Settings"
       windowsId={WINDOW_IDS.SETTINGS}
       authGuard={true}
       onClose={() => {
@@ -69,6 +69,7 @@ const Settings: React.FC = () => {
       <Tabs value={activeTab} onChange={setActiveTab}>
         <Tab value={0}>Background</Tab>
         <Tab value={1}>System</Tab>
+        <Tab value={2}>User</Tab>
       </Tabs>
       <TabBody className="!h-full overflow-auto">
         {activeTab === 0 && (
@@ -157,10 +158,20 @@ const Settings: React.FC = () => {
                     theme: selectedTheme,
                   });
                 }}
-                className="[&>div&>select]:!bg-red-500"
+                className="[&>div]:[&>select]:!bg-red-500"
               />
             </GroupBox>
           </div>
+        )}
+        {activeTab === 2 && (
+          <Frame
+            variant="field"
+            className="w-full h-[calc(100%-48px)] !flex !flex-col"
+          >
+            <ScrollView className="w-full h-full flex flex-col">
+              <UserInformation />
+            </ScrollView>
+          </Frame>
         )}
       </TabBody>
       {/* <div className="flex flex-row justify-end items-center pb-3">

@@ -41,7 +41,7 @@ const StakeableItemsTable = () => {
   const backpacks = data?.data?.Backpack;
 
   return (
-    <div className="[&>*:first-child]:!w-full [&>*:first-child]:before:!border-none flex w-full">
+    <div className="[&>*:first-child]:!w-full flex w-full">
       <Table className="!h-full !flex !flex-col !w-full !flex-1">
         <TableHead className="!h-auto !w-full !flex-1">
           <TableRow className="!flex !items-center !w-full">
@@ -65,7 +65,7 @@ const StakeableItemsTable = () => {
               disabled={isDapper}
               className="flex-grow"
             >
-              Rewards
+              Pending
             </CustomTableHeadCell>
             <CustomTableHeadCell
               onClick={() => {
@@ -76,7 +76,7 @@ const StakeableItemsTable = () => {
               disabled={isDapper}
               className="flex-grow"
             >
-              Stake Status
+              Status
             </CustomTableHeadCell>
           </TableRow>
         </TableHead>

@@ -4,30 +4,18 @@ import React from "react";
 
 export const GlobalStyles = React.memo(createGlobalStyle`
   ${styleReset}
-  @font-face {
-    font-family: 'ms_sans_serif';
-    src: url('/fonts/ms_sans_serif.woff2') format('woff2');
-    font-weight: 400;
-    font-style: normal
-  }
-  @font-face {
-    font-family: 'ms_sans_serif';
-    src: url('/fonts/ms_sans_serif_bold.woff2') format('woff2');
-    font-weight: bold;
-    font-style: normal
-  }
 
   body {
     --safe-area-inset-bottom: constant(safe-area-inset-bottom); 
     --safe-area-inset-bottom: env(safe-area-inset-bottom);
     font-family: 'ms_sans_serif', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
       Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    width: 100%;
-    position: relative;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+    width: 100% !important;
+    position: relative !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex-grow: 1 !important;
   }
 
   #__next {
@@ -42,9 +30,23 @@ export const GlobalStyles = React.memo(createGlobalStyle`
     text-decoration: none;
   }
 
-  // * {
-  //   box-sizing: border-box;
-  // }
+  * {
+    box-sizing: border-box !important;
+  }
+
+  * {
+    &:before {
+      box-sizing: content-box !important;
+    }
+    &:after {
+      box-sizing: content-box !important;
+    }
+  }
+
+  option {
+    color: black !important;
+    background: #ccc !important;
+  }
 
   @keyframes flicker {
     0% {

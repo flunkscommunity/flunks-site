@@ -75,8 +75,51 @@ const GumDashboard = () => {
   return (
     <>
       <div className="flex-shrink-0 grid grid-cols-1">
-        <Frame variant="outside" className="w-full h-full">
-          <div className="flex flex-col items-start px-4 py-2">
+        <Frame
+          variant="outside"
+          className="w-full h-full !min-h-[212px] !bg-bottom !bg-cover !bg-no-repeat !flex !items-center !justify-center"
+          style={{
+            backgroundImage: "url('/images/gum-bg.webp')",
+          }}
+        >
+          <Frame variant="field" className="!px-3 !py-3 !flex flex-col w-[80%]">
+            <div className="flex flex-row gap-4 items-center w-full justify-between">
+              <span className="text-lg">Accrued $GUM</span>
+              <animated.span className="font-black text-lg">
+                {pendingRewardsProps.number &&
+                  pendingRewardsProps.number.to((n) => n.toFixed(5))}
+              </animated.span>
+            </div>
+            <div className="flex flex-row gap-4 items-center w-full justify-between">
+              <span className="text-lg">$GUM Balance</span>
+              <animated.span className="font-black text-lg">
+                {gumBalanceProps.number &&
+                  gumBalanceProps.number.to((n) => n.toFixed(5))}
+              </animated.span>
+            </div>
+          </Frame>
+
+          {/* <Frame variant="field" className="!p-10 !flex flex-col">
+            <div className="flex w-full">
+              <Frame
+                variant="well"
+                className="col-span-9 flex-grow items-center px-2 py-1"
+              >
+                <span>$GUM Balance</span>
+              </Frame>
+              <Frame
+                variant="well"
+                className="col-span-3 !flex items-end justify-end px-2 py-1 z-[1]"
+              >
+                <animated.span>
+                  {gumBalanceProps.number &&
+                    gumBalanceProps.number.to((n) => n.toFixed(5))}
+                </animated.span>
+              </Frame>
+            </div>
+          </Frame> */}
+
+          {/* <div className="flex flex-col items-start px-4 py-2">
             <div className="relative flex flex-row items-center w-full justify-between">
               <div className="flex flex-col items-start">
                 <span className="text-base font-bold">Flunks</span>
@@ -104,7 +147,6 @@ const GumDashboard = () => {
                     variant="well"
                     className="col-span-3 !flex items-end justify-end px-2 py-1 z-[1]"
                   >
-                    {/* {gumBalance} */}
                     <animated.span>
                       {gumBalanceProps.number &&
                         gumBalanceProps.number.to((n) => n.toFixed(5))}
@@ -132,7 +174,7 @@ const GumDashboard = () => {
                 </div>
               </>
             )}
-          </div>
+          </div> */}
         </Frame>
       </div>
       <MenuList inline>

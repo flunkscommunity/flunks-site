@@ -40,10 +40,10 @@ const RowItem: React.FC<RowItemProps> = (props) => {
           />
           <ImageBackground className="w-6 h-6 lg:w-10 lg:h-10 absolute z-0 rounded-full right-2" />
         </div>
-        <span className="hidden lg:block text-sm lg:text-base leading-[1] mr-1 mt-0.5 truncate">
+        <span className="hidden lg:block text-sm lg:text-base mr-1 truncate">
           {props.prettyCollection} #{props.tokenId}
         </span>
-        <span className="lg:hidden text-sm lg:text-base mt-0.5 tracking-widest truncate">
+        <span className="lg:hidden text-sm lg:text-base tracking-widest truncate">
           #{props.tokenId}
         </span>
       </CustomTableDataCell>
@@ -60,6 +60,8 @@ const RowItem: React.FC<RowItemProps> = (props) => {
                 props.tokenId
               )
             }
+            size="sm"
+            variant="thin"
           >
             Stake
           </Button>
@@ -72,6 +74,8 @@ const RowItem: React.FC<RowItemProps> = (props) => {
                 props.tokenId
               )
             }
+            size="sm"
+            variant="thin"
           >
             Unstake
           </Button>

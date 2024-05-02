@@ -15,7 +15,6 @@ const Container = styled.div`
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  max-width: 80px;
   text-align: center;
   cursor: pointer;
 `;
@@ -47,21 +46,14 @@ const DesktopAppIcon: React.FC<Props> = (props) => {
   };
 
   return (
-    <Draggable disabled={true} bounds="parent">
-      <div
-        style={{
-          width: 80,
-          margin: 8,
-        }}
-      >
-        <div onDoubleClick={onDoubleClick} onClick={handleMobileOpen}>
-          <Container className="group">
-            <AppIcon icon={icon} />
-            <AppTitle className="group-hover:!bg-[#30c5ff80]">
-              <span>{title}</span>
-            </AppTitle>
-          </Container>
-        </div>
+    <Draggable disabled={true} bounds="parent" defaultClassName="w-auto !max-w-[100px] h-auto">
+      <div onDoubleClick={onDoubleClick} onClick={handleMobileOpen} className="p-2 flex-shrink-0 max-w-full">
+        <Container className="group flex flex-col gap-2 items-center">
+          <AppIcon icon={icon} />
+          <AppTitle className="group-hover:!bg-[#30c5ff80] text-pretty max-w-[80px] min-w-[80px] text-center">
+            <span className="text-xl">{title}</span>
+          </AppTitle>
+        </Container>
       </div>
     </Draggable>
   );

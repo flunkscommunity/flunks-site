@@ -15,14 +15,20 @@ import {
 // @ts-ignore
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
 import useThemeSettings from "store/useThemeSettings";
+import React from "react";
+
+const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const { theme } = useThemeSettings();
+  return <ThemeProvider theme={theme.theme}>{children}</ThemeProvider>;
+};
 
 const MyApp: AppType = ({ Component, pageProps }) => {
-  const { theme } = useThemeSettings();
+  const memodGlobalStyles = React.useMemo(() => <GlobalStyles />, []);
+
   return (
     <>
-      <GlobalStyles />
-
-      <ThemeProvider theme={theme.theme}>
+      {memodGlobalStyles}
+      <ThemeWrapper>
         <WindowsProvider>
           <ClaimBackpackProvider>
             <DynamicContextProvider
@@ -37,7 +43,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
             </DynamicContextProvider>
           </ClaimBackpackProvider>
         </WindowsProvider>
-      </ThemeProvider>
+      </ThemeWrapper>
     </>
   );
 };
