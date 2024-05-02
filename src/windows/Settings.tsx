@@ -82,7 +82,6 @@ const Settings: React.FC = () => {
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   backgroundBlendMode: "overlay",
-                  imageRendering: "pixelated",
                 }}
               />
             </div>

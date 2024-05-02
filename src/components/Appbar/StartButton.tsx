@@ -23,13 +23,16 @@ const CustomMenuListItem = styled(MenuListItem)`
 `;
 
 const AuthButton = () => {
-  const { user, handleLogOut } = useDynamicContext();
+  const { user, setShowDynamicUserProfile } = useDynamicContext();
 
   if (user) {
     return (
-      <CustomMenuListItem onClick={handleLogOut} className="!text-xl">
-        <img src="/images/logout.png" width="32px" height="32px" />
-        Sign Out
+      <CustomMenuListItem
+        onClick={() => setShowDynamicUserProfile(true)}
+        className="!text-xl"
+      >
+        <img src="/images/icons/user.png" width="32px" height="32px" />
+        Open Wallet
       </CustomMenuListItem>
     );
   }

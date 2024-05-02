@@ -189,7 +189,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
             }}
             onDoubleClick={handleMaximize}
           >
-            <span className="!text-xl mb-1.5">{headerTitle}</span>
+            <span className="!text-xl">{headerTitle}</span>
             {showHeaderActions && (
               <WindowButtons>
                 {showMaximizeButton && (

@@ -1,6 +1,14 @@
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
-import { animated, config, useSpring } from "@react-spring/web";
+import {
+  animated,
+  config,
+  useChain,
+  useSpring,
+  useSpringRef,
+} from "@react-spring/web";
+import { useFclTransactionContext } from "contexts/FclTransactionContext";
 import { useStakingContext } from "contexts/StakingContext";
+import useSounds from "hooks/useSounds";
 import { useEffect, useRef, useState } from "react";
 import {
   Button,
@@ -11,8 +19,58 @@ import {
   MenuListItem,
   Separator,
 } from "react95";
+import { TX_STATUS } from "reducers/TxStatusReducer";
 import { getGumBalance } from "web3/script-get-gum-balance";
 import { getPendingRewardsAll } from "web3/script-pending-reward-all";
+
+const GumAnimation = () => {
+  const { playSound, sounds } = useSounds();
+  const { state, resetState } = useFclTransactionContext();
+
+  const transitionUpRef = useSpringRef();
+  const transitionUp = useSpring({
+    to: { opacity: 0 },
+    ref: transitionUpRef,
+  });
+
+  useEffect(() => {
+    if (state.txStatus === TX_STATUS.SUCCESS && state.txName === "claim-gum") {
+      transitionUpRef.start({
+        from: { y: "500%", opacity: 1, scale: 1 },
+        to: { y: "-25%", opacity: 1, scale: 1 },
+        config: config.wobbly,
+        onRest: () => {
+          playSound(sounds.successGumClaim);
+          setTimeout(
+            () =>
+              transitionUpRef.start({
+                from: { opacity: 1, scale: 1 },
+                to: { opacity: 0, scale: 10 },
+                config: config.stiff,
+                onRest: () => {
+                  resetState();
+                },
+              }),
+            500
+          );
+        },
+      });
+    }
+  }, [state]);
+
+  // useChain([transitionUpRef, explodeAndFadeOutRef], [0, 1.5]);
+
+  return (
+    <div className="pointer-events-none absolute w-full h-full inset-0 flex items-center justify-center z-20">
+      <animated.div
+        style={transitionUp}
+        className="absolute w-[200px] h-[200px] origin-center"
+      >
+        <div className="gumcoin" />
+      </animated.div>
+    </div>
+  );
+};
 
 const GumDashboard = () => {
   const { user, primaryWallet, setShowDynamicUserProfile } =
@@ -74,7 +132,7 @@ const GumDashboard = () => {
 
   return (
     <>
-      <div className="flex-shrink-0 grid grid-cols-1">
+      <div className="relative flex-shrink-0 grid grid-cols-1">
         <Frame
           variant="outside"
           className="w-full h-full !min-h-[212px] !bg-bottom !bg-cover !bg-no-repeat !flex !items-center !justify-center"
@@ -98,83 +156,6 @@ const GumDashboard = () => {
               </animated.span>
             </div>
           </Frame>
-
-          {/* <Frame variant="field" className="!p-10 !flex flex-col">
-            <div className="flex w-full">
-              <Frame
-                variant="well"
-                className="col-span-9 flex-grow items-center px-2 py-1"
-              >
-                <span>$GUM Balance</span>
-              </Frame>
-              <Frame
-                variant="well"
-                className="col-span-3 !flex items-end justify-end px-2 py-1 z-[1]"
-              >
-                <animated.span>
-                  {gumBalanceProps.number &&
-                    gumBalanceProps.number.to((n) => n.toFixed(5))}
-                </animated.span>
-              </Frame>
-            </div>
-          </Frame> */}
-
-          {/* <div className="flex flex-col items-start px-4 py-2">
-            <div className="relative flex flex-row items-center w-full justify-between">
-              <div className="flex flex-col items-start">
-                <span className="text-base font-bold">Flunks</span>
-
-                <span className="text-base">Exclusive</span>
-              </div>
-              <Frame
-                variant="field"
-                className="!flex-grow-0 py-1.5 px-2 !flex gap-2 items-center ml-auto"
-              >
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                <span className="mt-0.5">{walletAddress}</span>
-              </Frame>
-            </div>
-            {true && (
-              <>
-                <div className="flex pt-4 w-full">
-                  <Frame
-                    variant="well"
-                    className="col-span-9 flex-grow items-center px-2 py-1"
-                  >
-                    <span>GUM Balance</span>
-                  </Frame>
-                  <Frame
-                    variant="well"
-                    className="col-span-3 !flex items-end justify-end px-2 py-1 z-[1]"
-                  >
-                    <animated.span>
-                      {gumBalanceProps.number &&
-                        gumBalanceProps.number.to((n) => n.toFixed(5))}
-                    </animated.span>
-                  </Frame>
-                </div>
-                <div className="flex flex-col w-full items-start gap-2">
-                  <div className="flex w-full">
-                    <Frame
-                      variant="well"
-                      className="col-span-9 flex-grow items-center px-2 py-1"
-                    >
-                      <span>Pending Gum</span>
-                    </Frame>
-                    <Frame
-                      variant="well"
-                      className="col-span-3 !flex items-end justify-end px-2 py-1"
-                    >
-                      <animated.span>
-                        {pendingRewardsProps.number &&
-                          pendingRewardsProps.number.to((n) => n.toFixed(5))}
-                      </animated.span>
-                    </Frame>
-                  </div>
-                </div>
-              </>
-            )}
-          </div> */}
         </Frame>
       </div>
       <MenuList inline>
@@ -217,6 +198,7 @@ const GumDashboard = () => {
           Claim
         </MenuListItem>
       </MenuList>
+      <GumAnimation />
     </>
   );
 };

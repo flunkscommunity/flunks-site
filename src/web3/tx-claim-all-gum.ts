@@ -14,6 +14,6 @@ export const claimAll = async () => {
     cadence: TRANSACTION as string,
     // @ts-ignore
     authorizations: [fcl.authz],
-    limit: 1000,
+    limit: 9999,
   });
 };

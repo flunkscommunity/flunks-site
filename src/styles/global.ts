@@ -34,7 +34,7 @@ export const GlobalStyles = React.memo(createGlobalStyle`
     box-sizing: border-box !important;
   }
 
-  * {
+  *:not(button) {
     &:before {
       box-sizing: content-box !important;
     }

@@ -13,7 +13,7 @@ export const unstakeOne = async (
   tokenId: number
 ) => {
   if (!pool) return Promise.resolve(null);
-  if (!tokenId) return Promise.resolve(null);
+  if (!tokenId?.toString()) return Promise.resolve(null);
 
   const capitalizedPool = pool.charAt(0).toUpperCase() + pool.slice(1);
 
@@ -22,6 +22,6 @@ export const unstakeOne = async (
     args: (arg, t) => [arg(capitalizedPool, t.String), arg(tokenId, t.UInt64)],
     // @ts-ignore
     authorizations: [fcl.authz],
-    limit: 1000,
+    limit: 9999,
   });
 };
