@@ -1,6 +1,7 @@
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { animated, config, useSpring } from "@react-spring/web";
 import { useStakingContext } from "contexts/StakingContext";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Button,
   Frame,
@@ -26,6 +27,8 @@ const GumDashboard = () => {
     walletStakeInfo,
   } = useStakingContext();
   const [refreshTimer, setRefreshTimer] = useState(0);
+  const previousGumBalace = useRef<number>(gumBalance || 0);
+  const previousPendingRewards = useRef<number>(pendingRewards || 0);
 
   const handleRefreshInfo = () => {
     // Can only refresh every 30 seconds
@@ -43,28 +46,31 @@ const GumDashboard = () => {
     return;
   };
 
-  // const [gumBalance, setGumBalance] = useState(0);
-  // const [pendingRewards, setPendingRewards] = useState(0);
-
   const walletAddress = primaryWallet?.address || null;
 
-  // const getPendingRewards = async () => {
-  //   getPendingRewardsAll(walletAddress).then(setPendingRewards);
-  // };
+  const gumBalanceProps = useSpring({
+    from: { number: Number(previousGumBalace?.current || 0) },
+    number: Number(gumBalance),
+    duration: 1000,
+  });
 
-  // useEffect(() => {
-  //   if (!walletAddress) return;
+  const pendingRewardsProps = useSpring({
+    from: { number: Number(previousPendingRewards?.current || 0) },
+    number: Number(pendingRewards),
+    duration: 1000,
+  });
 
-  //   // poll every 30 seconds
-  //   const interval = setInterval(() => {
-  //     getPendingRewards();
-  //   }, 30000);
+  useEffect(() => {
+    setTimeout(() => {
+      previousGumBalace.current = gumBalance;
+    }, 0);
+  }, [gumBalance]);
 
-  //   getPendingRewardsAll(walletAddress).then(setPendingRewards);
-  //   getGumBalance(walletAddress).then(setGumBalance);
-
-  //   return () => clearInterval(interval);
-  // }, [walletAddress]);
+  useEffect(() => {
+    setTimeout(() => {
+      previousPendingRewards.current = pendingRewards;
+    }, 0);
+  }, [pendingRewards]);
 
   return (
     <>
@@ -72,12 +78,10 @@ const GumDashboard = () => {
         <Frame variant="outside" className="w-full h-full">
           <div className="flex flex-col items-start px-4 py-2">
             <div className="relative flex flex-row items-center w-full justify-between">
-              <div className="flex flex-row items-center">
-                {/* <img
-                  src="/images/icons/gum-inactive.png"
-                  className="!scale-125"
-                /> */}
-                <span className="text-xl font-bold">v96.0</span>
+              <div className="flex flex-col items-start">
+                <span className="text-base font-bold">Flunks</span>
+
+                <span className="text-base">Exclusive</span>
               </div>
               <Frame
                 variant="field"
@@ -98,26 +102,15 @@ const GumDashboard = () => {
                   </Frame>
                   <Frame
                     variant="well"
-                    className="col-span-3 !flex items-end justify-end px-2 py-1"
+                    className="col-span-3 !flex items-end justify-end px-2 py-1 z-[1]"
                   >
-                    {gumBalance}
+                    {/* {gumBalance} */}
+                    <animated.span>
+                      {gumBalanceProps.number &&
+                        gumBalanceProps.number.to((n) => n.toFixed(5))}
+                    </animated.span>
                   </Frame>
                 </div>
-                {/* <div className="flex w-full">
-                <Frame
-                  variant="well"
-                  className="col-span-9 flex-grow items-center px-2 py-1"
-                >
-                  <span>Staked Items</span>
-                </Frame>
-                <Frame
-                  variant="well"
-                  className="col-span-3 !flex items-end justify-end px-2 py-1"
-                >
-                  0
-                </Frame>
-              </div> */}
-                {/* <Separator orientation="horizontal" className="!my-2" /> */}
                 <div className="flex flex-col w-full items-start gap-2">
                   <div className="flex w-full">
                     <Frame
@@ -130,10 +123,12 @@ const GumDashboard = () => {
                       variant="well"
                       className="col-span-3 !flex items-end justify-end px-2 py-1"
                     >
-                      {pendingRewards}
+                      <animated.span>
+                        {pendingRewardsProps.number &&
+                          pendingRewardsProps.number.to((n) => n.toFixed(5))}
+                      </animated.span>
                     </Frame>
                   </div>
-                  {/* <Button className="ml-auto min-w-[100px]">Claim</Button> */}
                 </div>
               </>
             )}

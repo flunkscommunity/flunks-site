@@ -3,6 +3,7 @@ import React, { forwardRef } from "react";
 import { AppBar, Button, ScrollViewProps, TextInput, Toolbar } from "react95";
 import styled from "styled-components";
 import Appbar from "./Appbar/Appbar";
+import useThemeSettings from "store/useThemeSettings";
 
 export const StyledScrollView = styled.div<Pick<ScrollViewProps, "shadow">>`
   position: relative;
@@ -122,17 +123,34 @@ const MonitorScreenContainer = styled.div`
 
 const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
   ({ backgroundStyles, children, showBottomBar, ...otherProps }, ref) => {
-    const { windows } = useWindowsContext();
+    const { backgroundColor, backgroundImage, oldMonitorMode } =
+      useThemeSettings();
 
     return (
       <Wrapper ref={ref} {...otherProps}>
         <Inner>
           <MonitorBody>
-            <Background className="crt" style={backgroundStyles}>
-              <MonitorScreenContainer>{children}</MonitorScreenContainer>
+            <div
+              className={`crt h-full w-full ${
+                oldMonitorMode ? "old-monitor" : ""
+              }`}
+            >
+              <Background
+                style={{
+                  ...backgroundStyles,
+                  backgroundColor,
+                  backgroundImage: `url(${backgroundImage})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundBlendMode: "overlay",
+                  imageRendering: "pixelated",
+                }}
+              >
+                <MonitorScreenContainer>{children}</MonitorScreenContainer>
 
-              {showBottomBar && <Appbar />}
-            </Background>
+                {showBottomBar && <Appbar />}
+              </Background>
+            </div>
           </MonitorBody>
         </Inner>
       </Wrapper>

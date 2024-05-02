@@ -1,9 +1,14 @@
+import {
+  DynamicMultiWalletPromptsWidget,
+  useDynamicContext,
+} from "@dynamic-labs/sdk-react-core";
 import { useStakingContext } from "contexts/StakingContext";
-import { Anchor, Frame, TableBody, Tooltip } from "react95";
+import { Anchor, Button, Frame, TableBody, Tooltip } from "react95";
 
 export default function DapperIncompatibility() {
-  // const { walletStakeInfo } = useStakingContext();
-  const walletStakeInfo = [];
+  const { walletStakeInfo } = useStakingContext();
+  const { setShowDynamicUserProfile } = useDynamicContext();
+
   return (
     <>
       <TableBody className="!relative !h-full !flex !flex-col !w-full !items-center">
@@ -29,28 +34,61 @@ export default function DapperIncompatibility() {
             </Tooltip>{" "}
             in your Dapper Wallet cannot earn gum. The transactions and
             contracts required to earn gum are not supported by Dapper Wallet.
-            Please use a different wallet to earn gum.
           </p>
 
           <p>
             Moving forward, all future Flunks related contracts and transactions
-            will not be supported by Dapper Wallet. If you wish to participate
-            in future developments, please consider using a different wallet.
+            will not be supported by Dapper Wallet. We recommend either
+            transferring your Flunk items to a different wallet or using Dapper
+            Wallets new{" "}
+            <Anchor
+              href="https://support.meetdapper.com/hc/en-us/articles/20744347884819-Account-Linking-and-FAQ"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Account Linking feature
+            </Anchor>{" "}
+            to link a supported wallet to your Dapper account.
           </p>
 
           <p>
+            <span className="block font-bold text-lg mb-2">
+              Account Linking:
+            </span>
+            Account linking allows you to connect your Dapper account with
+            external wallets to do more with your NFTs and enable an enhanced
+            collector experience along the way. It also allows you to exercise
+            self-custody of your Dapper NFTs using a non-custodial wallet of
+            your choice.
+            <Anchor
+              href="https://support.meetdapper.com/hc/en-us/articles/20744347884819-Account-Linking-and-FAQ"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block"
+            >
+              More Information about the Account Linking feature.
+            </Anchor>{" "}
+          </p>
+
+          <p>
+            <span className="block font-bold text-lg mb-2">
+              Transferring your NFTs:
+            </span>
             Dapper Wallet provides a secure and easy way to transfer your Flunk
             items to a different wallet. Navigate to{" "}
             <Anchor
               href="https://accounts.meetdapper.com/inventory?page=1&sort=DESC&collection=553b5004-99fb-4c18-944b-6b292dba5bc4"
               target="_blank"
               rel="noopener noreferrer"
-              className="block"
             >
               Dapper Wallet
             </Anchor>{" "}
             to start transferring your Flunk items.
           </p>
+
+          <Button onClick={() => setShowDynamicUserProfile(true)}>
+            Change Wallet
+          </Button>
         </div>
       </TableBody>
       <Frame

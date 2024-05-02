@@ -42,9 +42,9 @@ export const GlobalStyles = React.memo(createGlobalStyle`
     text-decoration: none;
   }
 
-  * {
-    box-sizing: border-box;
-  }
+  // * {
+  //   box-sizing: border-box;
+  // }
 
   @keyframes flicker {
     0% {
@@ -176,6 +176,11 @@ export const GlobalStyles = React.memo(createGlobalStyle`
       text-shadow: 2.6208764473832513px 0 1px rgba(0,30,255,0.5), -2.6208764473832513px 0 1px rgba(255,0,80,0.3), 0 0 3px;
     }
   }
+  .old-monitor {
+    &:after {
+      animation: flicker 0.5s infinite;
+    }
+  }
   .crt::after {
     content: " ";
     display: block;
@@ -188,7 +193,6 @@ export const GlobalStyles = React.memo(createGlobalStyle`
     opacity: 0;
     z-index: 2;
     pointer-events: none;
-    animation: flicker 0.06s infinite;
     z-index: 99999;
   }
   .crt::before {
@@ -206,7 +210,7 @@ export const GlobalStyles = React.memo(createGlobalStyle`
     z-index: 99999;
   }
   .crt {
-    // animation: textShadow 1.6s infinite;
+    // animation: textShadow 10s infinite;
   }
   .close-icon {
     display: inline-block;

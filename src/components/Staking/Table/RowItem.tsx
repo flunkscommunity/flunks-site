@@ -43,12 +43,12 @@ const RowItem: React.FC<RowItemProps> = (props) => {
         <span className="hidden lg:block text-sm lg:text-base leading-[1] mr-1 mt-0.5 truncate">
           {props.prettyCollection} #{props.tokenId}
         </span>
-        <span className="lg:hidden text-sm lg:text-base leading-[1] mt-0.5 tracking-widest truncate">
+        <span className="lg:hidden text-sm lg:text-base mt-0.5 tracking-widest truncate">
           #{props.tokenId}
         </span>
       </CustomTableDataCell>
       <CustomTableDataCell className="text-sm lg:text-base !justify-start">
-        {props.rewards}
+        {Number(props?.rewards || 0.0).toFixed(5)}
       </CustomTableDataCell>
 
       <CustomTableDataCell className="!justify-end text-sm lg:text-base">

@@ -7,18 +7,22 @@ import "config/fcl";
 import "../styles/globals.css";
 import WindowsProvider from "contexts/WindowsContext";
 import ClaimBackpackProvider from "contexts/BackpackClaimContext";
-import { DynamicContextProvider, DynamicUserProfile } from "@dynamic-labs/sdk-react-core";
+import {
+  DynamicContextProvider,
+  DynamicMultiWalletPromptsWidget,
+  DynamicUserProfile,
+} from "@dynamic-labs/sdk-react-core";
 // @ts-ignore
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
-
-
+import useThemeSettings from "store/useThemeSettings";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
+  const { theme } = useThemeSettings();
   return (
     <>
       <GlobalStyles />
 
-      <ThemeProvider theme={original}>
+      <ThemeProvider theme={theme.theme}>
         <WindowsProvider>
           <ClaimBackpackProvider>
             <DynamicContextProvider

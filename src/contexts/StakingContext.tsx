@@ -231,8 +231,9 @@ const StakingProvider: React.FC<ProviderProps> = (props) => {
         {children}
         {(state.txStatus === TX_STATUS.STARTED ||
           state.txStatus === TX_STATUS.PENDING) && (
-          <div className="absolute inset-0 w-full h-full bg-black/60 flex items-center justify-center z-20">
+          <div className="fixed inset-0 w-full h-full bg-black/60 flex flex-col gap-2 items-center justify-center z-20">
             <Hourglass />
+            <span className="text-white">Sit tight, transactions can take a minute.</span>
           </div>
         )}
       </div>
