@@ -6,7 +6,15 @@ import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
 import useInitCollection from "hooks/useInitCollection";
 import { useEffect } from "react";
-import { Button, Frame, GroupBox, Hourglass } from "react95";
+import {
+  Button,
+  Frame,
+  GroupBox,
+  Hourglass,
+  MenuList,
+  MenuListItem,
+  Separator,
+} from "react95";
 import ErrorWindow from "windows/ErrorWindow";
 
 const ICONS = {
@@ -16,11 +24,11 @@ const ICONS = {
 
 export const InfoItem: React.FC<{ label: string; value: string }> = (props) => {
   return (
-    <div className="flex flex-row flex-wrap gap-y-1.5 gap-x-4">
-      <label className="min-w-[150px] text-pretty opacity-50">
+    <div className="flex flex-row flex-wrap gap-x-4">
+      <label className="min-w-[150px] text-pretty opacity-80 text-lg">
         {props.label}:
       </label>
-      <span className="max-w-fit w-full min-w-[150px] text-pretty">
+      <span className="max-w-fit w-full min-w-[150px] text-pretty text-lg">
         {props.value}
       </span>
     </div>
@@ -28,7 +36,8 @@ export const InfoItem: React.FC<{ label: string; value: string }> = (props) => {
 };
 
 const UserInformation = () => {
-  const { user, primaryWallet } = useDynamicContext();
+  const { user, primaryWallet, setShowDynamicUserProfile } =
+    useDynamicContext();
   const { isInitialized, initializeCollection, isLoading, error, setError } =
     useInitCollection(primaryWallet?.address);
   const { openWindow, closeWindow } = useWindowsContext();
@@ -65,68 +74,100 @@ const UserInformation = () => {
   }, [error]);
 
   return (
-    <div className="!mx-2 lg:!mx-5 lg:!mt-4 !mt-2 !mb-3">
-      {!user && (
-        <div className="w-full h-full flex items-center justify-center">
-          <Hourglass />
-        </div>
-      )}
-      {user && (
-        <div className="flex flex-col gap-y-3 pb-4">
-          <InfoItem label="Username" value={user.username} />
-          <InfoItem label="Email" value={user.email} />
-          <InfoItem label="User Identifier" value={user.userId} />
-          <InfoItem label="Connected Wallet" value={primaryWallet.address} />
-          <InfoItem
-            label="Wallet Provider"
-            value={primaryWallet.connector.name}
-          />
-          <div className="flex flex-row items-center flex-wrap gap-y-1.5 gap-x-4">
-            <label className="min-w-[150px] text-pretty opacity-50">
-              Contracts Initialized:
-            </label>
-            <span className="max-w-fit w-full min-w-[150px] text-pretty">
-              {isInitialized && "Yes"}
-              {!isInitialized && (
-                <Button
-                  disabled={isLoading}
-                  size="sm"
-                  onClick={initializeCollection}
-                >
-                  Initialize Collection
-                </Button>
-              )}
-            </span>
+    <>
+      <div className="!mx-2 lg:!mx-5 lg:!mt-4 !mt-2 !mb-3">
+        {!user && (
+          <div className="w-full h-full flex items-center justify-center">
+            <Hourglass />
           </div>
-          <span className="text-pretty opacity-50">Verified Wallets</span>
+        )}
+        {user && (
+          <div className="flex flex-col gap-y-3 pb-4">
+            <InfoItem label="Username" value={user.username} />
+            <InfoItem label="Email" value={user.email} />
+            <InfoItem label="Connected Wallet" value={primaryWallet.address} />
+            <InfoItem
+              label="Wallet Provider"
+              value={primaryWallet.connector.name}
+            />
+            <div className="flex flex-row items-center flex-wrap gap-x-4">
+              <label className="min-w-[150px] text-pretty opacity-80 text-lg">
+                Contracts Initialized:
+              </label>
+              <span className="max-w-fit w-full min-w-[150px] text-pretty text-lg">
+                {isInitialized && "Yes"}
+                {!isInitialized && (
+                  <Button
+                    disabled={isLoading}
+                    size="sm"
+                    onClick={initializeCollection}
+                  >
+                    Initialize Collection
+                  </Button>
+                )}
+              </span>
+            </div>
+            <Button
+              onClick={() => setShowDynamicUserProfile(true)}
+              className="mr-auto !px-10"
+            >
+              Edit
+            </Button>
 
-          {user.verifiedCredentials.map((credential) => {
-            if (!credential.walletName) return null;
+            <Separator className="!my-4" />
 
-            return (
-              <GroupBox
-                variant="flat"
-                label={credential.walletName || credential.format}
-                key={credential.id}
-                className="flex items-center gap-4 max-w-[300px] w-full"
-              >
-                <img
-                  src={ICONS[credential.walletName]}
-                  alt={credential.walletName}
-                  className="w-4 h-4"
-                />
-                <span className="mt-1">{credential.address}</span>
-              </GroupBox>
-            );
-          })}
-        </div>
-      )}
-      {isLoading && (
-        <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-black/40">
-          <Hourglass />
-        </div>
-      )}
-    </div>
+            <div className="flex flex-col">
+              <span className="text-pretty text-xl font-bold">
+                Verified Wallets
+              </span>
+              <span className="text-lg max-w-[400px]">
+                Verified wallets are wallets you have linked to your email, this
+                allows your to easily switch between your wallets. You may not
+                sign transactions on behalf of your other wallets, only your
+                connected wallet.
+              </span>
+            </div>
+
+            <div>
+              {user.verifiedCredentials.map((credential) => {
+                if (!credential.walletName) return null;
+
+                return (
+                  <div className="flex flex-row w-full max-w-[400px]">
+                    <Frame
+                      variant="field"
+                      key={credential.id}
+                      className="!flex items-center gap-3 w-auto px-3 py-2"
+                    >
+                      <img
+                        src={ICONS[credential.walletName]}
+                        alt={credential.walletName}
+                        className="w-6 h-6"
+                      />
+                    </Frame>
+                    <Frame
+                      variant="field"
+                      key={credential.id}
+                      className="!flex items-center gap-3 w-full px-3 py-2"
+                    >
+                      <span className="text-lg">{credential.address}</span>
+                    </Frame>
+                  </div>
+                );
+              })}
+            </div>
+            <Button className="mr-auto !px-10" onClick={() => setShowDynamicUserProfile(true)}>
+              Link another wallet
+            </Button>
+          </div>
+        )}
+        {isLoading && (
+          <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-black/40">
+            <Hourglass />
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

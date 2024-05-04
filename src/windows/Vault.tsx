@@ -128,37 +128,20 @@ const ScrollViewWithBackground = styled(ScrollView)`
 `;
 
 const YourStudents: React.FC = () => {
-  // const { walletAddress } = useUser();
   const { primaryWallet } = useDynamicContext();
-  // const walletAddress = primaryWallet?.address;
   const { closeWindow, openWindow } = useWindowsContext();
-  // const [activeTab, setActiveTab] = useState(0);
-  // const { data, isValidating } = useSwrWrapper({
-  //   fetcher:
-  //     UsersApiInstance.usersControllerGetUserNftsByWalletAddress.bind(
-  //       UsersApiInstance
-  //     ),
-  //   requestParameters: {
-  //     walletAddress,
-  //   },
-  //   key: `${walletAddress}-students`,
-  // });
-  // const flunks = data?.Flunks || [];
-  // const backpacks = data?.Backpack || [];
-
-  // WORKING ON REWORKING THE STUDENT DIRECTORY
 
   return (
     <DraggableResizeableWindow
       offSetHeight={44}
-      headerTitle="Flunkfolio"
+      headerTitle="Vault Explorer"
       authGuard={true}
       windowsId={WINDOW_IDS.YOUR_STUDENTS}
       onClose={() => {
         closeWindow(WINDOW_IDS.YOUR_STUDENTS);
       }}
-      initialHeight="60%"
-      initialWidth="60%"
+      initialHeight="auto"
+      initialWidth="auto"
     >
       <SlowProgressBar bgImage="/images/your-students-bg.png">
         <ItemsGrid />

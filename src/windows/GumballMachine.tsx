@@ -40,7 +40,7 @@ const GumballMachine: React.FC = () => {
   }
 
   return (
-    <AppLoader bgImage="/images/loading/gumball.webp">
+    <AppLoader bgImage="/images/loading/gum-app-bg.webp">
       <DraggableResizeableWindow
         offSetHeight={44}
         headerTitle="Gumball Machine v96"

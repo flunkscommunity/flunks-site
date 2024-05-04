@@ -1,27 +1,10 @@
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
-import {
-  animated,
-  config,
-  useChain,
-  useSpring,
-  useSpringRef,
-} from "@react-spring/web";
+import { animated, config, useSpring, useSpringRef } from "@react-spring/web";
 import { useFclTransactionContext } from "contexts/FclTransactionContext";
 import { useStakingContext } from "contexts/StakingContext";
 import useSounds from "hooks/useSounds";
 import { useEffect, useRef, useState } from "react";
-import {
-  Button,
-  Frame,
-  Handle,
-  Hourglass,
-  MenuList,
-  MenuListItem,
-  Separator,
-} from "react95";
+import { Frame, Handle, Hourglass, MenuList, MenuListItem } from "react95";
 import { TX_STATUS } from "reducers/TxStatusReducer";
-import { getGumBalance } from "web3/script-get-gum-balance";
-import { getPendingRewardsAll } from "web3/script-pending-reward-all";
 
 const GumAnimation = () => {
   const { playSound, sounds } = useSounds();
@@ -58,8 +41,6 @@ const GumAnimation = () => {
     }
   }, [state]);
 
-  // useChain([transitionUpRef, explodeAndFadeOutRef], [0, 1.5]);
-
   return (
     <div className="pointer-events-none absolute w-full h-full inset-0 flex items-center justify-center z-20">
       <animated.div
@@ -73,8 +54,6 @@ const GumAnimation = () => {
 };
 
 const GumDashboard = () => {
-  const { user, primaryWallet, setShowDynamicUserProfile } =
-    useDynamicContext();
   const {
     gumBalance,
     pendingRewards,
@@ -103,8 +82,6 @@ const GumDashboard = () => {
 
     return;
   };
-
-  const walletAddress = primaryWallet?.address || null;
 
   const gumBalanceProps = useSpring({
     from: { number: Number(previousGumBalace?.current || 0) },
@@ -174,7 +151,8 @@ const GumDashboard = () => {
           onClick={stakeAll}
           disabled={
             isDapper ||
-            walletStakeInfo.every((info) => info.stakingInfo !== null)
+            walletStakeInfo.every((info) => info.stakingInfo !== null) ||
+            walletStakeInfo.length < 1
           }
           className="mr-auto !cursor-pointer"
         >
@@ -183,7 +161,7 @@ const GumDashboard = () => {
         <MenuListItem
           className="!cursor-pointer flex items-center gap-2"
           onClick={handleRefreshInfo}
-          disabled={isDapper || refreshTimer > 0}
+          disabled={isDapper || refreshTimer > 0 || walletStakeInfo.length < 1}
         >
           {refreshTimer > 0 && (
             <Hourglass size={16} className="opacity-50 mb-0.5" />
@@ -192,7 +170,9 @@ const GumDashboard = () => {
         </MenuListItem>
         <MenuListItem
           onClick={claimAll}
-          disabled={isDapper}
+          disabled={
+            isDapper || walletStakeInfo.length < 1 || pendingRewards === 0
+          }
           className="!cursor-pointer"
         >
           Claim

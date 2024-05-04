@@ -48,6 +48,7 @@ const Settings: React.FC = () => {
 
   const debouncedSetBackgroundStyle = debounce(
     (e: ChangeEvent<HTMLInputElement>) => {
+      setBackgroundImage("");
       setBackgroundColor(e.target.value);
     },
     100
@@ -63,8 +64,8 @@ const Settings: React.FC = () => {
         closeWindow(WINDOW_IDS.SETTINGS);
       }}
       showMaximizeButton={false}
-      initialHeight="auto"
-      initialWidth="auto"
+      initialHeight="40%"
+      initialWidth="40%"
     >
       <Tabs value={activeTab} onChange={setActiveTab}>
         <Tab value={0}>Background</Tab>
@@ -81,7 +82,6 @@ const Settings: React.FC = () => {
                   backgroundImage: `url(${backgroundImage})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
-                  backgroundBlendMode: "overlay",
                 }}
               />
             </div>
@@ -89,7 +89,7 @@ const Settings: React.FC = () => {
               label={"Background"}
               className="flex items-center gap-4 w-full flex-col"
             >
-              <div className="w-full flex gap-2 flex-col lg:flex-row">
+              {/* <div className="w-full flex gap-2 flex-col lg:flex-row">
                 <TextInput
                   value={backgroundUrl}
                   placeholder="Enter background URL"
@@ -113,9 +113,13 @@ const Settings: React.FC = () => {
                     Remove
                   </Button>
                 </div>
-              </div>
-              <div className="ml-auto">
-                <span>Color Overlay: </span>
+              </div> */}
+
+              <div className="flex gap-4 items-center w-full justify-between">
+                <div className="flex flex-col items-start ">
+                  <span className="text-lg font-black">Background Color</span>
+                  <span className="text-sm">Replaces current background</span>
+                </div>
                 <ColorInput
                   onChange={debouncedSetBackgroundStyle}
                   defaultValue={backgroundColor}
@@ -163,11 +167,8 @@ const Settings: React.FC = () => {
           </div>
         )}
         {activeTab === 2 && (
-          <Frame
-            variant="field"
-            className="w-full h-[calc(100%-48px)] !flex !flex-col"
-          >
-            <ScrollView className="w-full h-full flex flex-col">
+          <Frame variant="well" className="w-full h-full !flex !flex-col">
+            <ScrollView className="w-full h-full flex flex-col !p-0">
               <UserInformation />
             </ScrollView>
           </Frame>

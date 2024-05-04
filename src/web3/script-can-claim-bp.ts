@@ -9,9 +9,10 @@ pub fun main(templateID: UInt64): Bool{
 }
 `;
 
-export async function checkBackpackClaimed({ templateId }) {
-  if (!templateId) return Promise.resolve(null);
+export async function checkBackpackClaimed(tokenId: number) {
+  if (!tokenId?.toString()) return Promise.resolve(null);
+
   return fcl
-    .send([fcl.script(CODE), fcl.args([fcl.arg(templateId, t.UInt64)])])
+    .send([fcl.script(CODE), fcl.args([fcl.arg(tokenId, t.UInt64)])])
     .then(fcl.decode);
 }

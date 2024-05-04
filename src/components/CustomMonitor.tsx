@@ -142,7 +142,7 @@ const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
                   backgroundImage: `url(${backgroundImage})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
-                  backgroundBlendMode: "overlay",
+                  // backgroundBlendMode: "overlay",
                   imageRendering: "crisp-edges",
                 }}
               >

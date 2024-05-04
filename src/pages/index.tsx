@@ -43,8 +43,8 @@ const Desktop = () => {
         />
 
         <DesktopAppIcon
-          title="Your Students"
-          icon="/images/your-students.png"
+          title="Flunkfolio"
+          icon="/images/icons/vault.png"
           onDoubleClick={() => {
             openWindow({
               key: WINDOW_IDS.YOUR_STUDENTS,
@@ -84,7 +84,7 @@ const Desktop = () => {
           }}
         >
           <DesktopAppIcon
-            title="Twitter"
+            title="X"
             icon="/images/icons/x.png"
             onDoubleClick={() => {
               return null;
