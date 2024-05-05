@@ -26,12 +26,12 @@ const useThemeSettings = create<useThemeSettings>()(
         backgroundImage: "",
         setBackgroundImage: (backgroundImage: string) =>
           set((state) => ({ backgroundImage })),
-        oldMonitorMode: true,
+        oldMonitorMode: false,
         setOldMonitorMode: (oldMonitorMode: boolean) =>
           set((state) => ({ oldMonitorMode })),
         theme: {
-          name: "original",
-          theme: index.original,
+          name: "eggplant",
+          theme: index.eggplant,
         },
         setTheme: (theme: { name: keyof typeof index; theme: typeof index }) =>
           set((state) => ({ theme })),

@@ -77,7 +77,6 @@ const ClaimFormForm: React.FC<Props> = (props) => {
         display: "flex",
         flexDirection: "column",
         gap: "1rem",
-        padding: "1rem",
         alignItems: "center",
         overflow: "hidden",
         position: "relative",
@@ -199,7 +198,7 @@ const ClaimFormForm: React.FC<Props> = (props) => {
             )}
           </Stack>
 
-          <GroupBox
+          <div
             label="ITEM DETAILS"
             variant="flat"
             style={{
@@ -220,7 +219,7 @@ const ClaimFormForm: React.FC<Props> = (props) => {
             <GroupBox label="Date Found" variant="flat">
               <P>07/27/2022</P>
             </GroupBox>
-          </GroupBox>
+          </div>
 
           <GroupBox label="Guardian Signature" variant="flat">
             <H3>Student guardian’s signature is required to claim item.</H3>
@@ -245,13 +244,13 @@ const ClaimFormForm: React.FC<Props> = (props) => {
                     borderBottom: "3px solid #CCC",
                   }}
                 >
-                  <P>{shouldFetch && claimedEvent && claimedEvent?.signer}</P>
+                  <P><span className="opacity-50">X</span> {claimedEvent && claimedEvent?.signer}</P>
                 </div>
                 <P>Signature</P>
               </div>
             </Stack>
 
-            {!shouldFetch && (
+            {!claimedItem && (
               <div
                 style={{
                   marginTop: "2rem",

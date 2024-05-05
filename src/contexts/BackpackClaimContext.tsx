@@ -30,8 +30,7 @@ const ClaimBackpackProvider: React.FC<{ children: React.ReactNode }> = (
   };
 
   useEffect(() => {
-    const negateLoadingTime = router.asPath === "/" ? 30000 : 10000;
-    setTimeout(refreshClaimData, negateLoadingTime);
+    refreshClaimData();
   }, []);
 
   return (

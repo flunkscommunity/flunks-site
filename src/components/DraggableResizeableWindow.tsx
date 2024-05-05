@@ -177,6 +177,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           ...props.style,
         }}
         onClick={bringWindowToFront}
+        id={props.windowsId}
       >
         <strong>
           <WindowHeader

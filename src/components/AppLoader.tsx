@@ -42,7 +42,7 @@ const AppLoader: React.FC<Props> = (props) => {
   return complete ? (
     <>{children}</>
   ) : (
-    <div className="shadow-2xl flex flex-col absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-[800px] h-auto object-contain">
+    <div className="shadow-2xl flex flex-col absolute z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-[800px] h-auto object-contain">
       <Frame>
         <img
           src={bgImage}

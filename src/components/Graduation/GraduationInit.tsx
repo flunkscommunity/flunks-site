@@ -31,7 +31,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
   const [percentage, setPercentage] = useState(0);
   const divOverlayRef = useRef<HTMLDivElement>(null);
   const [graduatedUrl, setGraduatedUrl] = useState("");
-  const [canGraduate, setCanGraduate] = useState(false);
+  const [canGraduate, setCanGraduate] = useState(true);
   const [graduationDate, setGraduationDate] = useState();
 
   useEffect(() => {
@@ -332,10 +332,16 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
                 handleGraduate();
               }}
               id="typewriter"
-              disabled={state.txStatus === TX_STATUS.STARTED || !canGraduate}
+              disabled={
+                true || state.txStatus === TX_STATUS.STARTED || !canGraduate
+              }
             >
               Hack Grades
             </Button>
+            <P className="max-w-[200px]">
+              Graduation is currently deactivated <br /><br/>
+              Please keep an eye out on our discord for updates.
+            </P>
             {state.txStatus === TX_STATUS.ERROR && (
               <P>
                 If the problem persists, <br />
