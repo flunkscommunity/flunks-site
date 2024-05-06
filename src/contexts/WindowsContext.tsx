@@ -23,7 +23,12 @@ const WindowsProvider: React.FC<ProviderProps> = (props) => {
   const bringWindowToFront = (windowKey: string) => {
     const windowElement = document.getElementById(windowKey);
     let maxZ = 0;
-    for (let child of Array.from(windowElement.parentElement?.children || [])) {
+
+    if (!windowElement?.parentElement) return;
+
+    for (let child of Array.from(
+      windowElement?.parentElement?.children || []
+    )) {
       if ((child as HTMLDivElement).style.zIndex) {
         const zIndex = parseInt((child as HTMLDivElement).style.zIndex);
         if (zIndex > maxZ) {
