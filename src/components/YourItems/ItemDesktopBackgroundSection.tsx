@@ -99,7 +99,6 @@ const DesktopBackgroundSection = ({ src, itemSrc, pixelSrc }) => {
           </div>
           <Button
             onClick={() => {
-              console.log("Setting background image to", activeBg.src);
               setBackgroundImage(activeBg.src);
             }}
           >
