@@ -95,19 +95,21 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
           <img src="/images/icons/gum-machine.png" width="32px" height="32px" />
           Gumball Machine
         </CustomMenuListItem>
-        <CustomMenuListItem
-          onClick={() => {
-            openWindow({
-              key: WINDOW_IDS.STUDENT_EXPLORER,
-              window: <StudentExplorer />,
-            });
-            props.closeStartMenu();
-          }}
-          className="!text-xl"
+        <a
+          href="https://www.flowty.io/collection/0x807c3d470888cc48/Flunks"
+          target="_blank"
+          rel="noreferrer noopener"
         >
-          <img src="/images/icons/flowty.png" width="32px" height="32px" />
-          Marketplace
-        </CustomMenuListItem>
+          <CustomMenuListItem
+            onClick={() => {
+              return null;
+            }}
+            className="!text-xl"
+          >
+            <img src="/images/icons/flowty.png" width="32px" height="32px" />
+            Marketplace
+          </CustomMenuListItem>
+        </a>
         <CustomMenuListItem
           onClick={() => {
             openWindow({
