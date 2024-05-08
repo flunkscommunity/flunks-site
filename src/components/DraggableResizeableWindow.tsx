@@ -51,7 +51,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
   const windowRef = useRef<HTMLDivElement>(null);
   const draggableRef = useRef<Draggable>(null);
   const { width, height } = useWindowSize();
-  const { closeWindow } = useWindowsContext();
+  const { closeWindow, bringWindowToFront } = useWindowsContext();
   const { user } = useDynamicContext();
 
   const handleMaximize = () => {
@@ -79,31 +79,6 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     }
   };
 
-  const bringWindowToFront = (e?: React.MouseEvent<HTMLDivElement>) => {
-    if (e) {
-      e.stopPropagation();
-    }
-
-    if (windowRef.current) {
-      let maxZ = 0;
-
-      for (let child of Array.from(
-        windowRef.current.parentElement?.children || []
-      )) {
-        if ((child as HTMLDivElement).style.zIndex) {
-          const zIndex = parseInt((child as HTMLDivElement).style.zIndex);
-          if (zIndex > maxZ) {
-            maxZ = zIndex;
-          }
-        }
-      }
-
-      if (windowRef.current.style.zIndex === maxZ.toString()) return;
-
-      windowRef.current.style.zIndex = `${maxZ + 1}`;
-    }
-  };
-
   useEffect(() => {
     if (width < 768 && draggableRef.current) {
       draggableRef.current.setState({
@@ -117,7 +92,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     if (windowRef.current) {
       const numOfChildren = windowRef.current.parentElement?.children.length;
 
-      bringWindowToFront();
+      bringWindowToFront(props.windowsId);
       if (draggableRef.current) {
         draggableRef.current.setState({
           x: width < 768 ? 0 : numOfChildren * 10,
@@ -127,7 +102,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     }
   }, []);
 
-  const onStart = () => bringWindowToFront();
+  const onStart = () => bringWindowToFront(props.windowsId);
   const isMobile = width < 768;
 
   if (authGuard && !user) {
@@ -176,7 +151,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           maxHeight: "calc(100% - 48px)",
           ...props.style,
         }}
-        onClick={bringWindowToFront}
+        onClick={() => bringWindowToFront(props.windowsId)}
         id={props.windowsId}
       >
         <strong>
@@ -195,7 +170,11 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
               <WindowButtons>
                 {onHelp && (
                   <Button onClick={onHelp}>
-                    <img src="/images/icons/question.png" width="60%" height="60%" />
+                    <img
+                      src="/images/icons/question.png"
+                      width="60%"
+                      height="60%"
+                    />
                   </Button>
                 )}
                 {showMaximizeButton && (

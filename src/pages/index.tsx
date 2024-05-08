@@ -13,6 +13,7 @@ import LostAndFound from "windows/LostAndFound";
 import LoginScreen from "components/LoginScreen";
 import GumballMachine from "windows/GumballMachine";
 import useThemeSettings from "store/useThemeSettings";
+import ProjectJnr from "windows/ProjectJnr";
 
 const Desktop = () => {
   const { windows, openWindow } = useWindowsContext();
@@ -53,16 +54,16 @@ const Desktop = () => {
           }}
         />
 
-        {/* <DesktopAppIcon
-          title="Lost and Found"
-          icon="/images/lost-and-found.png"
+        <DesktopAppIcon
+          title="Project J.N.R"
+          icon="/images/icons/experiment-3d.png"
           onDoubleClick={() => {
             openWindow({
-              key: WINDOW_IDS.LOST_AND_FOUND,
-              window: <LostAndFound />,
+              key: WINDOW_IDS.PROJECT_JNR,
+              window: <ProjectJnr />,
             });
           }}
-        /> */}
+        />
 
         <a
           href="https://twitter.com/Flunks_NFT"

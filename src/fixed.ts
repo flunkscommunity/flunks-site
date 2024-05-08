@@ -8,6 +8,7 @@ export const WINDOW_IDS = {
   ERROR: "error",
   GUMBALL_MACHINE: "gumball-machine",
   GUMBALL_MACHINE_HELP: "gumball-machine-help",
+  PROJECT_JNR: "project-jnr",
 };
 
 export const WINDOW_APP_INFO_TO_WINDOW_ID = {
@@ -31,9 +32,9 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appIcon: "/images/icons/settings.png",
     key: WINDOW_IDS.SETTINGS,
   },
-  [WINDOW_IDS.GUMBALL_MACHINE]: {
-    appName: "Gumball Machine",
-    appIcon: "/images/icons/gum-machine.png",
-    key: WINDOW_IDS.GUMBALL_MACHINE,
+  [WINDOW_IDS.PROJECT_JNR]: {
+    appName: "Project JNR",
+    appIcon: "/images/icons/experiment-3d.png",
+    key: WINDOW_IDS.PROJECT_JNR,
   },
 };
