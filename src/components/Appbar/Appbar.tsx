@@ -1,6 +1,8 @@
-import { AppBar, MenuListItem, Toolbar } from "react95";
+import { AppBar, Frame, MenuListItem, Toolbar } from "react95";
 import styled from "styled-components";
 import StartButton from "./StartButton";
+import QuickMenu from "./QuickMenu";
+import AppWindows from "./AppWindows";
 
 const CustomMenuListItem = styled(MenuListItem)`
   display: flex;
@@ -21,17 +23,18 @@ const Appbar = () => {
       }}
     >
       <Toolbar
-        style={{ justifyContent: "space-between", position: "relative" }}
+        style={{
+          justifyContent: "space-between",
+          position: "relative",
+        }}
       >
-        <div
-          style={{
-            position: "relative",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
+        <div className="flex items-center flex-grow-0 w-full max-w-full">
           <StartButton />
+          <div className="max-w-auto overflow-hidden flex mr-1">
+            <AppWindows />
+          </div>
         </div>
+        <QuickMenu />
       </Toolbar>
     </AppBar>
   );

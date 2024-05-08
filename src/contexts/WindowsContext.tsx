@@ -1,15 +1,28 @@
+import { WINDOW_APP_INFO_TO_WINDOW_ID } from "fixed";
 import React, { useContext, createContext, useState, useEffect } from "react";
+
+interface WindowApp {
+  key: string;
+  appName: string;
+  appIcon: string;
+}
 
 interface ContextState {
   windows: Record<string, React.ReactNode>;
+  windowApps: WindowApp[];
   openWindow: (window: Record<string, React.ReactNode>) => void;
   closeWindow: (windowId: string) => void;
+  bringWindowToFront: (windowId: string) => void;
+  activeWindow: string;
 }
 
 export const WindowsContext = createContext<ContextState>({
   windows: {},
+  windowApps: [],
   openWindow: () => {},
   closeWindow: () => {},
+  bringWindowToFront: () => {},
+  activeWindow: "",
 });
 
 interface ProviderProps {
@@ -19,6 +32,8 @@ interface ProviderProps {
 const WindowsProvider: React.FC<ProviderProps> = (props) => {
   const { children } = props;
   const [windows, setWindows] = useState<Record<string, React.ReactNode>>({});
+  const [windowApps, setWindowApps] = useState<WindowApp[]>([]);
+  const [activeWindow, setActiveWindow] = useState<string>("");
 
   const bringWindowToFront = (windowKey: string) => {
     const windowElement = document.getElementById(windowKey);
@@ -38,6 +53,7 @@ const WindowsProvider: React.FC<ProviderProps> = (props) => {
     }
 
     windowElement.style.zIndex = `${maxZ + 1}`;
+    setActiveWindow(windowKey);
   };
 
   const openWindow = (window: { key: string; window: React.ReactNode }) => {
@@ -56,6 +72,12 @@ const WindowsProvider: React.FC<ProviderProps> = (props) => {
       ...windows,
       [key]: _window,
     }));
+
+    setActiveWindow(key);
+
+    if (WINDOW_APP_INFO_TO_WINDOW_ID[key]) {
+      addWindowApp(WINDOW_APP_INFO_TO_WINDOW_ID[key]);
+    }
   };
 
   const closeWindow = (windowKey: string) => {
@@ -63,18 +85,31 @@ const WindowsProvider: React.FC<ProviderProps> = (props) => {
       const { [windowKey]: _, ...rest } = windows;
       return rest;
     });
+
+    if (WINDOW_APP_INFO_TO_WINDOW_ID[windowKey]) {
+      removeWindowApp(WINDOW_APP_INFO_TO_WINDOW_ID[windowKey]);
+    }
   };
 
-  useEffect(() => {
-    // console.log("windows", windows);
-  });
+  const addWindowApp = (windowApp: WindowApp) => {
+    setWindowApps((windowApps) => [...windowApps, windowApp]);
+  };
+
+  const removeWindowApp = (windowApp: WindowApp) => {
+    setWindowApps((windowApps) => {
+      return windowApps.filter((app) => app.key !== windowApp.key);
+    });
+  };
 
   return (
     <WindowsContext.Provider
       value={{
         windows,
+        windowApps,
         openWindow,
         closeWindow,
+        bringWindowToFront,
+        activeWindow,
       }}
     >
       {children}
@@ -83,13 +118,7 @@ const WindowsProvider: React.FC<ProviderProps> = (props) => {
 };
 
 export const useWindowsContext = (): ContextState => {
-  const { windows, openWindow, closeWindow } = useContext(WindowsContext);
-
-  return {
-    windows,
-    openWindow,
-    closeWindow,
-  };
+  return useContext(WindowsContext);
 };
 
 export default WindowsProvider;

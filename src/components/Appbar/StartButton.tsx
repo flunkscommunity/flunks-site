@@ -64,11 +64,24 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
     <MenuList className="!absolute bottom-[calc(100%+6px)] -left-1 min-w-[300px] !flex !flex-row">
       <SideLogoContainer className="w-10 relative">
         <div className="absolute -bottom-5 left-1 text-xl origin-[0_0] -rotate-90 text-nowrap">
-          <FlunksLogoText className="font-black mr-2">FLUNKS</FlunksLogoText>
+          <FlunksLogoText className="font-black mr-1">FLUNKS</FlunksLogoText>
           <NintyFiveLogoText className="font-medium">95</NintyFiveLogoText>
         </div>
       </SideLogoContainer>
       <div className="flex flex-col w-full">
+        <CustomMenuListItem
+          onClick={() => {
+            openWindow({
+              key: WINDOW_IDS.YOUR_STUDENTS,
+              window: <YourStudents />,
+            });
+            props.closeStartMenu();
+          }}
+          className="!text-xl"
+        >
+          <img src="/images/icons/vault.png" width="32px" height="32px" />
+          Flunkfolio
+        </CustomMenuListItem>
         <CustomMenuListItem
           onClick={() => {
             openWindow({
@@ -92,34 +105,8 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
           }}
           className="!text-xl"
         >
-          <img src="/images/student-directory.png" width="32px" height="32px" />
-          Student Directory
-        </CustomMenuListItem>
-        <CustomMenuListItem
-          onClick={() => {
-            openWindow({
-              key: WINDOW_IDS.YOUR_STUDENTS,
-              window: <YourStudents />,
-            });
-            props.closeStartMenu();
-          }}
-          className="!text-xl"
-        >
-          <img src="/images/your-students.png" width="32px" height="32px" />
-          Your Students
-        </CustomMenuListItem>
-        <CustomMenuListItem
-          onClick={() => {
-            openWindow({
-              key: WINDOW_IDS.LOST_AND_FOUND,
-              window: <LostAndFound />,
-            });
-            props.closeStartMenu();
-          }}
-          className="!text-xl"
-        >
-          <img src="/images/lost-and-found.png" width="32px" height="32px" />
-          Lost and Found
+          <img src="/images/icons/flowty.png" width="32px" height="32px" />
+          Marketplace
         </CustomMenuListItem>
         <CustomMenuListItem
           onClick={() => {
@@ -151,7 +138,7 @@ const StartButton = () => {
   }
 
   return (
-    <div className="relative">
+    <div className="relative flex-shrink-0">
       {open && <StartMenu closeStartMenu={() => setOpen(false)} />}
       <Button
         onClick={() => setOpen(!open)}

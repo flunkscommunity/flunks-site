@@ -55,7 +55,7 @@ const DesktopAppIcon: React.FC<Props> = (props) => {
         <Container className="group flex flex-col gap-2 items-center">
           <AppIcon icon={icon} />
           <AppTitle className="group-hover:!bg-[#30c5ff80] text-pretty max-w-[80px] min-w-[80px] text-center backdrop-blur-lg">
-            <span className="text-xl text-white font-bold drop-shadow-[0px_2px_1px_rgba(0,0,0,1)]">{title}</span>
+            <span className="text-xl text-white font-bold drop-shadow-[0px_2px_1px_rgba(0,0,0,1)] tracking-wide">{title}</span>
           </AppTitle>
         </Container>
       </div>

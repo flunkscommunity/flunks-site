@@ -325,7 +325,7 @@ const ItemsGrid: React.FC = () => {
               size="lg"
               className="flex flex-row items-center gap-2 !text-xl !px-4 !py-3 min-w-[230px] mt-4"
             >
-              <img src="/images/icons/flowty-outlined.svg" className="h-5" />
+              <img src="/images/icons/flowty.png" className="h-5" />
               Flunks on Flowty
             </Button>
           </a>
@@ -338,7 +338,7 @@ const ItemsGrid: React.FC = () => {
               size="lg"
               className="flex flex-row items-center gap-2 !text-xl !px-4 !py-3 min-w-[230px] mt-2"
             >
-              <img src="/images/icons/flowty-outlined.svg" className="h-5" />
+              <img src="/images/icons/flowty.png" className="h-5" />
               Backpacks on Flowty
             </Button>
           </a>

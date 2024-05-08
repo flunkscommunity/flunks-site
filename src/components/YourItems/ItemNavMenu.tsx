@@ -23,7 +23,7 @@ const NavMenu: React.FC<NavMenu> = ({ onBack, collectionName, tokenId }) => {
           rel="noreferrer noopener"
           className="flex items-center"
         >
-          <img src="/images/icons/flowty-outlined.svg" className="h-8 w-auto" />
+          <img src="/images/icons/flowty.png" className="h-8 w-auto" />
         </a>
       </MenuListItem>
     </MenuList>

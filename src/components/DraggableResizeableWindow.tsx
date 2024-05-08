@@ -137,7 +137,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           <>
             <Button onClick={() => closeWindow(props.windowsId)}>Close</Button>
             <DynamicConnectButton>
-              <Button as={"a"} primary={true} className="ml-auto">
+              <Button as={"a"} className="ml-auto">
                 Sign In
               </Button>
             </DynamicConnectButton>

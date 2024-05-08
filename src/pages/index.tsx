@@ -32,17 +32,6 @@ const Desktop = () => {
     <>
       <div className="flex flex-col max-h-[calc(100vh-64px)] w-full flex-wrap items-start gap-4 content-start">
         <DesktopAppIcon
-          title="Student Directory"
-          icon="/images/student-directory.png"
-          onDoubleClick={() => {
-            openWindow({
-              key: WINDOW_IDS.STUDENT_EXPLORER,
-              window: <StudentExplorer />,
-            });
-          }}
-        />
-
-        <DesktopAppIcon
           title="Flunkfolio"
           icon="/images/icons/vault.png"
           onDoubleClick={() => {
@@ -64,7 +53,7 @@ const Desktop = () => {
           }}
         />
 
-        <DesktopAppIcon
+        {/* <DesktopAppIcon
           title="Lost and Found"
           icon="/images/lost-and-found.png"
           onDoubleClick={() => {
@@ -73,7 +62,7 @@ const Desktop = () => {
               window: <LostAndFound />,
             });
           }}
-        />
+        /> */}
 
         <a
           href="https://twitter.com/Flunks_NFT"
@@ -103,6 +92,23 @@ const Desktop = () => {
           <DesktopAppIcon
             title="Discord"
             icon="/images/icons/discord.png"
+            onDoubleClick={() => {
+              return null;
+            }}
+          />
+        </a>
+
+        <a
+          href="https://www.flowty.io/collection/0x807c3d470888cc48/Flunks"
+          target="_blank"
+          rel="noreferrer noopener"
+          style={{
+            textDecoration: "none",
+          }}
+        >
+          <DesktopAppIcon
+            title="Market"
+            icon="/images/icons/flowty.png"
             onDoubleClick={() => {
               return null;
             }}

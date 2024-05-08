@@ -64,8 +64,8 @@ const Settings: React.FC = () => {
         closeWindow(WINDOW_IDS.SETTINGS);
       }}
       showMaximizeButton={false}
-      initialHeight="40%"
-      initialWidth="40%"
+      initialHeight="auto"
+      initialWidth="auto"
     >
       <Tabs value={activeTab} onChange={setActiveTab}>
         <Tab value={0}>Background</Tab>
