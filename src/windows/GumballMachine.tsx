@@ -28,7 +28,7 @@ const GumballMachine: React.FC = () => {
               Close
             </Button>
             <DynamicConnectButton>
-              <Button as={"a"} className="ml-auto">
+              <Button className="ml-auto">
                 Sign In
               </Button>
             </DynamicConnectButton>
