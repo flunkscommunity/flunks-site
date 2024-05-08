@@ -14,7 +14,7 @@ const QuickMenu = () => {
 
   return (
     <Frame variant="well" className="!h-9 px-4 !flex items-center">
-      <span className="leading-[1] text-xl min-w-[68px] text-center">{format(time, "p")}</span>
+      <span className="leading-[1] text-xl min-w-[68px] text-center text-nowrap font-bold">{format(time, "p")}</span>
     </Frame>
   );
 };

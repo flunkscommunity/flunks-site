@@ -23,6 +23,7 @@ interface Props {
   authGuard?: boolean;
   windowsId: string;
   style?: React.CSSProperties;
+  onHelp?: () => void;
 }
 
 const WindowButtons = styled.div`
@@ -45,6 +46,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     windowClassName = "",
     resizable = true,
     authGuard = props.authGuard || false,
+    onHelp,
   } = props;
   const windowRef = useRef<HTMLDivElement>(null);
   const draggableRef = useRef<Draggable>(null);
@@ -137,9 +139,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           <>
             <Button onClick={() => closeWindow(props.windowsId)}>Close</Button>
             <DynamicConnectButton>
-              <Button className="ml-auto">
-                Sign In
-              </Button>
+              <Button className="ml-auto">Sign In</Button>
             </DynamicConnectButton>
           </>
         }
@@ -193,6 +193,11 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
             <span className="!text-xl">{headerTitle}</span>
             {showHeaderActions && (
               <WindowButtons>
+                {onHelp && (
+                  <Button onClick={onHelp}>
+                    <img src="/images/icons/question.png" width="60%" height="60%" />
+                  </Button>
+                )}
                 {showMaximizeButton && (
                   <Button onClick={handleMaximize}>
                     <img src="/images/maximize.png" width="60%" height="60%" />

@@ -7,6 +7,7 @@ export const WINDOW_IDS = {
   SETTINGS: "settings",
   ERROR: "error",
   GUMBALL_MACHINE: "gumball-machine",
+  GUMBALL_MACHINE_HELP: "gumball-machine-help",
 };
 
 export const WINDOW_APP_INFO_TO_WINDOW_ID = {

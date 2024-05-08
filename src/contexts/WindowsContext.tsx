@@ -10,7 +10,7 @@ interface WindowApp {
 interface ContextState {
   windows: Record<string, React.ReactNode>;
   windowApps: WindowApp[];
-  openWindow: (window: Record<string, React.ReactNode>) => void;
+  openWindow: (window: { key: string; window: React.ReactNode }) => void;
   closeWindow: (windowId: string) => void;
   bringWindowToFront: (windowId: string) => void;
   activeWindow: string;
@@ -73,9 +73,8 @@ const WindowsProvider: React.FC<ProviderProps> = (props) => {
       [key]: _window,
     }));
 
-    setActiveWindow(key);
-
     if (WINDOW_APP_INFO_TO_WINDOW_ID[key]) {
+      setActiveWindow(key);
       addWindowApp(WINDOW_APP_INFO_TO_WINDOW_ID[key]);
     }
   };
