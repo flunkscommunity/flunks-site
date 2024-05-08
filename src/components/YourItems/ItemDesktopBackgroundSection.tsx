@@ -6,21 +6,21 @@ const DesktopBackgroundSection = ({ src, itemSrc, pixelSrc }) => {
   const { setBackgroundImage, backgroundImage } = useThemeSettings();
   const [activeBg, setActiveBg] = useState<{ src: string; label: string }>({
     src: itemSrc,
-    label: "2D Flunk",
+    label: "Portrait",
   });
 
   useEffect(() => {
     if (!pixelSrc) {
       if (backgroundImage === itemSrc) {
-        setActiveBg({ src: itemSrc, label: "Pixel Flunk" });
+        setActiveBg({ src: itemSrc, label: "Original" });
       } else if (backgroundImage === src) {
         setActiveBg({ src, label: "Backdrop" });
       }
     } else {
       if (backgroundImage === itemSrc) {
-        setActiveBg({ src: itemSrc, label: "2D Flunk" });
+        setActiveBg({ src: itemSrc, label: "Portrait" });
       } else if (backgroundImage === pixelSrc) {
-        setActiveBg({ src: pixelSrc, label: "Pixel Flunk" });
+        setActiveBg({ src: pixelSrc, label: "Original" });
       } else if (backgroundImage === src) {
         setActiveBg({ src, label: "Backdrop" });
       }
@@ -32,15 +32,15 @@ const DesktopBackgroundSection = ({ src, itemSrc, pixelSrc }) => {
       if (activeBg.src === itemSrc) {
         setActiveBg({ src, label: "Backdrop" });
       } else {
-        setActiveBg({ src: itemSrc, label: "Pixel Flunk" });
+        setActiveBg({ src: itemSrc, label: "Original" });
       }
     } else {
       if (activeBg.src === itemSrc) {
-        setActiveBg({ src: pixelSrc, label: "Pixel Flunk" });
+        setActiveBg({ src: pixelSrc, label: "Original" });
       } else if (activeBg.src === pixelSrc) {
         setActiveBg({ src, label: "Backdrop" });
       } else {
-        setActiveBg({ src: itemSrc, label: "2D Flunk" });
+        setActiveBg({ src: itemSrc, label: "Portrait" });
       }
     }
   };
@@ -50,15 +50,15 @@ const DesktopBackgroundSection = ({ src, itemSrc, pixelSrc }) => {
       if (activeBg.src === itemSrc) {
         setActiveBg({ src, label: "Backdrop" });
       } else {
-        setActiveBg({ src: itemSrc, label: "Pixel Flunk" });
+        setActiveBg({ src: itemSrc, label: "Original" });
       }
     } else {
       if (activeBg.src === itemSrc) {
-        setActiveBg({ src: pixelSrc, label: "Pixel Flunk" });
-      } else if (activeBg.src === pixelSrc) {
         setActiveBg({ src, label: "Backdrop" });
+      } else if (activeBg.src === pixelSrc) {
+        setActiveBg({ src: itemSrc, label: "Portrait" });
       } else {
-        setActiveBg({ src: itemSrc, label: "2D Flunk" });
+        setActiveBg({ src: pixelSrc, label: "Original" });
       }
     }
   };
@@ -68,7 +68,7 @@ const DesktopBackgroundSection = ({ src, itemSrc, pixelSrc }) => {
       <span className="text-lg font-bold">DESKTOP BACKGROUND</span>
       <div className="flex flex-col w-full gap-5">
         <span className="text-base lg:text-lg">
-          Use your Flunk or your Flunks's backdrop as your desktop background
+          Use your Flunks or your Flunks' backdrop as your desktop background
         </span>
         <div className="mx-auto flex flex-col">
           <div className="mx-auto">
@@ -99,6 +99,7 @@ const DesktopBackgroundSection = ({ src, itemSrc, pixelSrc }) => {
           </div>
           <Button
             onClick={() => {
+              console.log("Setting background image to", activeBg.src);
               setBackgroundImage(activeBg.src);
             }}
           >

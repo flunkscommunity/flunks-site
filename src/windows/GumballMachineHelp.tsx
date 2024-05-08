@@ -23,9 +23,8 @@ const GumballMachineHelp: React.FC = () => {
         <Frame variant="field" className="!w-full !h-auto">
           <article className="p-4 flex flex-col items-start gap-6 max-w-[400px]">
             <div>
-
-            <h1 className="text-2xl">Gumball Machine Version 01</h1>
-            <h2>User Manual</h2>
+              <h1 className="text-2xl">Gumball Machine Version 01</h1>
+              <h2>User Manual</h2>
             </div>
 
             <div className="flex flex-col gap-2">

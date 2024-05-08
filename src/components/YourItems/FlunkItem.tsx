@@ -84,7 +84,9 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
         <GumSection pool={"Flunks"} tokenId={props.tokenId} />
         {props.metadata?.Backdrop?.toUpperCase() && (
           <DesktopBackgroundSection
-            src={`/images/backdrops/${props.metadata?.Backdrop?.toUpperCase()}.png`}
+            src={`/images/backdrops/${props.metadata?.Backdrop?.split(" ")
+              ?.join("-")
+              ?.toUpperCase()}.png`}
             itemSrc={props.metadata.uri}
             pixelSrc={props.metadata?.pixelUri}
           />
