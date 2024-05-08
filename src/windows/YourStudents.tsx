@@ -1,14 +1,38 @@
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
-import SlowProgressBar from "components/SlowProgressBar";
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import {
+  DynamicConnectButton,
+  useDynamicContext,
+} from "@dynamic-labs/sdk-react-core";
 import ItemsGrid from "components/YourItems/ItemsGrid";
 import AppLoader from "components/AppLoader";
+import ErrorWindow from "./ErrorWindow";
+import { Button } from "react95";
 
 const YourStudents: React.FC = () => {
   const { user } = useDynamicContext();
   const { closeWindow, openWindow } = useWindowsContext();
+
+  if (!user) {
+    return (
+      <ErrorWindow
+        title="Error Starting Program"
+        message="You're not signed in. Please sign in to continue.."
+        actions={
+          <>
+            <Button onClick={() => closeWindow(WINDOW_IDS.YOUR_STUDENTS)}>
+              Close
+            </Button>
+            <DynamicConnectButton>
+              <Button className="ml-auto">Sign In</Button>
+            </DynamicConnectButton>
+          </>
+        }
+        windowId={WINDOW_IDS.YOUR_STUDENTS}
+      />
+    );
+  }
 
   return (
     <AppLoader bgImage="/images/your-students-bg.png">

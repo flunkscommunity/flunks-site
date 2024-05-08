@@ -36,7 +36,7 @@ export const InfoItem: React.FC<{ label: string; value: string }> = (props) => {
 };
 
 const UserInformation = () => {
-  const { user, primaryWallet, setShowDynamicUserProfile } =
+  const { user, primaryWallet, setShowDynamicUserProfile, isAuthenticated } =
     useDynamicContext();
   const { isInitialized, initializeCollection, isLoading, error, setError } =
     useInitCollection(primaryWallet?.address);
@@ -76,7 +76,17 @@ const UserInformation = () => {
   return (
     <>
       <div className="!mx-2 lg:!mx-5 lg:!mt-4 !mt-2 !mb-3">
-        {!user && (
+        {!isAuthenticated && (
+          <div className="w-full h-full flex items-center justify-center">
+            <DynamicConnectButton buttonClassName="w-full mt-10">
+              <Button className="!w-full !text-xl min-w-[200px] gap-2">
+                <img src="/images/logout.png" width="32px" height="32px" />
+                Sign In
+              </Button>
+            </DynamicConnectButton>
+          </div>
+        )}
+        {!user && isAuthenticated && (
           <div className="w-full h-full flex items-center justify-center">
             <Hourglass />
           </div>
@@ -156,7 +166,10 @@ const UserInformation = () => {
                 );
               })}
             </div>
-            <Button className="mr-auto !px-10" onClick={() => setShowDynamicUserProfile(true)}>
+            <Button
+              className="mr-auto !px-10"
+              onClick={() => setShowDynamicUserProfile(true)}
+            >
               Link another wallet
             </Button>
           </div>

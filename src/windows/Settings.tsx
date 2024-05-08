@@ -59,7 +59,7 @@ const Settings: React.FC = () => {
       offSetHeight={44}
       headerTitle="Settings"
       windowsId={WINDOW_IDS.SETTINGS}
-      authGuard={true}
+      authGuard={false}
       onClose={() => {
         closeWindow(WINDOW_IDS.SETTINGS);
       }}
@@ -126,12 +126,6 @@ const Settings: React.FC = () => {
                 />
               </div>
             </GroupBox>
-            {/* <GroupBox
-              label={"Vintage"}
-              className="flex items-center gap-4 w-full flex-col"
-            >
-              
-            </GroupBox> */}
           </div>
         )}
         {activeTab === 1 && (
