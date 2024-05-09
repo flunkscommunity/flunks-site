@@ -7,4 +7,5 @@ export const WINDOW_IDS = {
   SETTINGS: "settings",
   ERROR: "error",
   GUMBALL_MACHINE: "gumball-machine",
+  WELCOME: "welcome",
 };

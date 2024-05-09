@@ -12,6 +12,7 @@ import GumballMachine from "windows/GumballMachine";
 import LostAndFound from "windows/LostAndFound";
 import Settings from "windows/Settings";
 import StudentExplorer from "windows/StudentExplorer";
+import Welcome from "windows/Welcome";
 import YourStudents from "windows/YourStudents";
 
 const CustomMenuListItem = styled(MenuListItem)`
@@ -130,6 +131,19 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
         >
           <img src="/images/icons/settings.png" width="32px" height="32px" />
           Settings
+        </CustomMenuListItem>
+        <CustomMenuListItem
+          onClick={() => {
+            openWindow({
+              key: WINDOW_IDS.WELCOME,
+              window: <Welcome />,
+            });
+            props.closeStartMenu();
+          }}
+          className="!text-xl"
+        >
+          <img src="/images/icons/settings.png" width="32px" height="32px" />
+          Welcome
         </CustomMenuListItem>
         <Separator />
         <AuthButton />
