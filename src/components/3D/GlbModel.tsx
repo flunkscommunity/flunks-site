@@ -1,6 +1,11 @@
 import { type PrimitiveProps, type ThreeElements } from "@react-three/fiber";
 import { forwardRef, Suspense, useEffect, useMemo } from "react";
 import { Loader, useGLTF } from "@react-three/drei";
+import {
+  MeshBasicMaterial,
+  MeshPhongMaterial,
+  MeshStandardMaterial,
+} from "three";
 
 interface GlbModelProps extends PrimitiveProps {
   url: string;
@@ -16,7 +21,7 @@ const GlbModel = forwardRef<ThreeElements["primitive"], GlbModelProps>(
     // const copiedScene = useMemo(() => scene.clone(), [scene]);
 
     useEffect(() => {
-      if(!scene) return;
+      if (!scene) return;
 
       scene.traverse((child) => {
         if (child.isMesh) {

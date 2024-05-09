@@ -2,8 +2,10 @@ import {
   Bounds,
   Center,
   Environment,
+  Grid,
   OrbitControls,
   PerspectiveCamera,
+  SpotLight,
   Stage,
 } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
@@ -20,15 +22,15 @@ const Camera = React.forwardRef<ThreePerspectiveCamera, PerspectiveCameraProps>(
       <>
         <PerspectiveCamera
           ref={ref}
-          // makeDefault
+          makeDefault
           attach={"camera"}
-          fov={20}
+          fov={50}
           {...props}
         />
 
         <OrbitControls
           // enableZoom={false}
-          // makeDefault
+          makeDefault
           rotateSpeed={0.5}
           autoRotate
           autoRotateSpeed={1}
@@ -36,11 +38,12 @@ const Camera = React.forwardRef<ThreePerspectiveCamera, PerspectiveCameraProps>(
           keyPanSpeed={0.5}
           // target={[0, 0, 0]}
           maxPolarAngle={Math.PI / 2}
-          minPolarAngle={Math.PI / 2}
+          minPolarAngle={Math.PI / 2.7}
           // maxAzimuthAngle={degToRad(80)}
           // minAzimuthAngle={degToRad(5)}
           enablePan={false}
-          // minDistance={15}
+          minDistance={9}
+          maxDistance={11}
         />
       </>
     );
@@ -51,23 +54,23 @@ Camera.displayName = "Camera";
 const Lights = () => {
   return (
     <>
-      {/* <ambientLight intensity={0.2} color={"white"} castShadow  /> */}
-      <directionalLight
-        intensity={0}
-        position={[0, 10, 5]}
+      {/* <ambientLight intensity={1} color={"white"}  /> */}
+      {/* <directionalLight
+        intensity={2}
+        position={[1, 10, 10]}
         color="blue"
         shadow-bias={-0.0001}
-        shadow-camera-left={2}
-        shadow-camera-right={-2}
-        shadow-camera-top={2}
-        shadow-camera-bottom={-2}
+        shadow-camera-left={5}
+        shadow-camera-right={-5}
+        shadow-camera-top={5}
+        shadow-camera-bottom={-5}
         // shadow-camera-near={1}
         // shadow-camera-far={10}
         castShadow
         shadow-mapSize-height={2048}
         shadow-mapSize-width={2048}
-      />
-      <directionalLight intensity={1} position={[0, 20, 20]} color="green" />
+      /> */}
+      {/* <directionalLight intensity={20} position={[0, 20, 20]} color="green" /> */}
     </>
   );
 };
@@ -77,12 +80,12 @@ const CanvasChildren = () => {
     <>
       <Camera />
       <Lights />
-      <Environment preset="sunset" blur={1} />
+      {/* <Environment preset="sunset" /> */}
     </>
   );
 };
 
-const TRAITS_BY_CLASS = {
+export const TRAITS_BY_CLASS = {
   //origami
   art: {
     back: "/3d/ORIGAMI/BACK.ART.ORIGAMI.glb",
@@ -124,7 +127,7 @@ const TRAITS_BY_CLASS = {
     torso: "/3d/PLAGUE-DOCTOR/TORSO.HISTORY.PLAGUE DOCTOR.glb",
   },
   // casino
-  maths: {
+  mathematics: {
     back: "/3d/CASINO/BACK.MATHS.CASINO.glb",
     bottoms: "/3d/CASINO/BOTTOMS.MATHS.CASINO.glb",
     head: "/3d/CASINO/HEAD.MATHS.CASINO.glb",
@@ -165,24 +168,436 @@ const TRAITS_BY_CLASS = {
   },
 };
 
-const TRAIT_COLLECTION_NAME = {
+export const TRAIT_COLLECTION_NAME = {
   art: "Origami",
   biology: "Skeleton",
   chemistry: "Radioactive",
   history: "Plague Doctor",
-  maths: "Casino",
+  mathematics: "Casino",
   music: "Barbershop",
   physics: "Robot",
   sport: "Baseball",
 };
 
-const JnrCanvas = () => {
+export const TRAIT_IMAGES_BY_CLASS = {
+  art: {
+    back: "/images/jnr-traits/origami-back.png",
+    bottoms: "/images/jnr-traits/origami-bottoms.png",
+    head: "/images/jnr-traits/origami-head.png",
+    rh: "/images/jnr-traits/origami-lh.png",
+    lh: "/images/jnr-traits/origami-rh.png",
+    shoes: "/images/jnr-traits/origami-shoes.png",
+    torso: "/images/jnr-traits/origami-torso.png",
+  },
+  biology: {
+    back: "/images/jnr-traits/skeleton-back.png",
+    bottoms: "/images/jnr-traits/skeleton-bottoms.png",
+    head: "/images/jnr-traits/skeleton-head.png",
+    rh: "/images/jnr-traits/skeleton-lh.png",
+    lh: "/images/jnr-traits/skeleton-rh.png",
+    shoes: "/images/jnr-traits/skeleton-shoes.png",
+    torso: "/images/jnr-traits/skeleton-torso.png",
+  },
+  chemistry: {
+    back: "/images/jnr-traits/radioactive-back.png",
+    bottoms: "/images/jnr-traits/radioactive-bottoms.png",
+    head: "/images/jnr-traits/radioactive-head.png",
+    rh: "/images/jnr-traits/radioactive-lh.png",
+    lh: "/images/jnr-traits/radioactive-rh.png",
+    shoes: "/images/jnr-traits/radioactive-shoes.png",
+    torso: "/images/jnr-traits/radioactive-torso.png",
+  },
+  history: {
+    back: "/images/jnr-traits/plague-doctor-back.png",
+    bottoms: "/images/jnr-traits/plague-doctor-bottoms.png",
+    head: "/images/jnr-traits/plague-doctor-head.png",
+    rh: "/images/jnr-traits/plague-doctor-lh.png",
+    lh: "/images/jnr-traits/plague-doctor-rh.png",
+    shoes: "/images/jnr-traits/plague-doctor-shoes.png",
+    torso: "/images/jnr-traits/plague-doctor-torso.png",
+  },
+  mathematics: {
+    back: "/images/jnr-traits/casino-back.png",
+    bottoms: "/images/jnr-traits/casino-bottoms.png",
+    head: "/images/jnr-traits/casino-head.png",
+    rh: "/images/jnr-traits/casino-lh.png",
+    lh: "/images/jnr-traits/casino-rh.png",
+    shoes: "/images/jnr-traits/casino-shoes.png",
+    torso: "/images/jnr-traits/casino-torso.png",
+  },
+  music: {
+    back: "/images/jnr-traits/barbershop-back.png",
+    bottoms: "/images/jnr-traits/barbershop-bottoms.png",
+    head: "/images/jnr-traits/barbershop-head.png",
+    rh: "/images/jnr-traits/barbershop-lh.png",
+    lh: "/images/jnr-traits/barbershop-rh.png",
+    shoes: "/images/jnr-traits/barbershop-shoes.png",
+    torso: "/images/jnr-traits/barbershop-torso.png",
+  },
+  physics: {
+    back: "/images/jnr-traits/robot-back.png",
+    bottoms: "/images/jnr-traits/robot-bottoms.png",
+    head: "/images/jnr-traits/robot-head.png",
+    rh: "/images/jnr-traits/robot-lh.png",
+    lh: "/images/jnr-traits/robot-rh.png",
+    shoes: "/images/jnr-traits/robot-shoes.png",
+    torso: "/images/jnr-traits/robot-torso.png",
+  },
+  sport: {
+    back: "/images/jnr-traits/baseball-back.png",
+    bottoms: "/images/jnr-traits/baseball-bottoms.png",
+    head: "/images/jnr-traits/baseball-head.png",
+    rh: "/images/jnr-traits/baseball-lh.png",
+    lh: "/images/jnr-traits/baseball-rh.png",
+    shoes: "/images/jnr-traits/baseball-shoes.png",
+    torso: "/images/jnr-traits/baseball-torso.png",
+  },
+};
+
+export const TRAIT_IMAGES_BY_URL = {
+  [TRAITS_BY_CLASS.art.back]: {
+    url: TRAIT_IMAGES_BY_CLASS.art.back,
+    trait: "back",
+    glbUrl: TRAITS_BY_CLASS.art.back,
+  },
+  [TRAITS_BY_CLASS.art.bottoms]: {
+    url: TRAIT_IMAGES_BY_CLASS.art.bottoms,
+    trait: "bottoms",
+    glbUrl: TRAITS_BY_CLASS.art.bottoms,
+  },
+  [TRAITS_BY_CLASS.art.head]: {
+    url: TRAIT_IMAGES_BY_CLASS.art.head,
+    trait: "head",
+    glbUrl: TRAITS_BY_CLASS.art.head,
+  },
+  [TRAITS_BY_CLASS.art.lh]: {
+    url: TRAIT_IMAGES_BY_CLASS.art.lh,
+    trait: "lh",
+    glbUrl: TRAITS_BY_CLASS.art.lh,
+  },
+  [TRAITS_BY_CLASS.art.rh]: {
+    url: TRAIT_IMAGES_BY_CLASS.art.rh,
+    trait: "rh",
+    glbUrl: TRAITS_BY_CLASS.art.rh,
+  },
+  [TRAITS_BY_CLASS.art.shoes]: {
+    url: TRAIT_IMAGES_BY_CLASS.art.shoes,
+    trait: "shoes",
+    glbUrl: TRAITS_BY_CLASS.art.shoes,
+  },
+  [TRAITS_BY_CLASS.art.torso]: {
+    url: TRAIT_IMAGES_BY_CLASS.art.torso,
+    trait: "torso",
+    glbUrl: TRAITS_BY_CLASS.art.torso,
+  },
+  [TRAITS_BY_CLASS.biology.back]: {
+    url: TRAIT_IMAGES_BY_CLASS.biology.back,
+    trait: "back",
+    glbUrl: TRAITS_BY_CLASS.biology.back,
+  },
+  [TRAITS_BY_CLASS.biology.bottoms]: {
+    url: TRAIT_IMAGES_BY_CLASS.biology.bottoms,
+    trait: "bottoms",
+    glbUrl: TRAITS_BY_CLASS.biology.bottoms,
+  },
+  [TRAITS_BY_CLASS.biology.head]: {
+    url: TRAIT_IMAGES_BY_CLASS.biology.head,
+    trait: "head",
+    glbUrl: TRAITS_BY_CLASS.biology.head,
+  },
+  [TRAITS_BY_CLASS.biology.lh]: {
+    url: TRAIT_IMAGES_BY_CLASS.biology.lh,
+    trait: "lh",
+    glbUrl: TRAITS_BY_CLASS.biology.lh,
+  },
+  [TRAITS_BY_CLASS.biology.rh]: {
+    url: TRAIT_IMAGES_BY_CLASS.biology.rh,
+    trait: "rh",
+    glbUrl: TRAITS_BY_CLASS.biology.rh,
+  },
+  [TRAITS_BY_CLASS.biology.shoes]: {
+    url: TRAIT_IMAGES_BY_CLASS.biology.shoes,
+    trait: "shoes",
+    glbUrl: TRAITS_BY_CLASS.biology.shoes,
+  },
+  [TRAITS_BY_CLASS.biology.torso]: {
+    url: TRAIT_IMAGES_BY_CLASS.biology.torso,
+    trait: "torso",
+    glbUrl: TRAITS_BY_CLASS.biology.torso,
+  },
+  [TRAITS_BY_CLASS.chemistry.back]: {
+    url: TRAIT_IMAGES_BY_CLASS.chemistry.back,
+    trait: "back",
+    glbUrl: TRAITS_BY_CLASS.chemistry.back,
+  },
+  [TRAITS_BY_CLASS.chemistry.bottoms]: {
+    url: TRAIT_IMAGES_BY_CLASS.chemistry.bottoms,
+    trait: "bottoms",
+    glbUrl: TRAITS_BY_CLASS.chemistry.bottoms,
+  },
+  [TRAITS_BY_CLASS.chemistry.head]: {
+    url: TRAIT_IMAGES_BY_CLASS.chemistry.head,
+    trait: "head",
+    glbUrl: TRAITS_BY_CLASS.chemistry.head,
+  },
+  [TRAITS_BY_CLASS.chemistry.lh]: {
+    url: TRAIT_IMAGES_BY_CLASS.chemistry.lh,
+    trait: "lh",
+    glbUrl: TRAITS_BY_CLASS.chemistry.lh,
+  },
+  [TRAITS_BY_CLASS.chemistry.rh]: {
+    url: TRAIT_IMAGES_BY_CLASS.chemistry.rh,
+    trait: "rh",
+    glbUrl: TRAITS_BY_CLASS.chemistry.rh,
+  },
+  [TRAITS_BY_CLASS.chemistry.shoes]: {
+    url: TRAIT_IMAGES_BY_CLASS.chemistry.shoes,
+    trait: "shoes",
+    glbUrl: TRAITS_BY_CLASS.chemistry.shoes,
+  },
+  [TRAITS_BY_CLASS.chemistry.torso]: {
+    url: TRAIT_IMAGES_BY_CLASS.chemistry.torso,
+    trait: "torso",
+    glbUrl: TRAITS_BY_CLASS.chemistry.torso,
+  },
+  [TRAITS_BY_CLASS.history.back]: {
+    url: TRAIT_IMAGES_BY_CLASS.history.back,
+    trait: "back",
+    glbUrl: TRAITS_BY_CLASS.history.back,
+  },
+  [TRAITS_BY_CLASS.history.bottoms]: {
+    url: TRAIT_IMAGES_BY_CLASS.history.bottoms,
+    trait: "bottoms",
+    glbUrl: TRAITS_BY_CLASS.history.bottoms,
+  },
+  [TRAITS_BY_CLASS.history.head]: {
+    url: TRAIT_IMAGES_BY_CLASS.history.head,
+    trait: "head",
+    glbUrl: TRAITS_BY_CLASS.history.head,
+  },
+  [TRAITS_BY_CLASS.history.lh]: {
+    url: TRAIT_IMAGES_BY_CLASS.history.lh,
+    trait: "lh",
+    glbUrl: TRAITS_BY_CLASS.history.lh,
+  },
+  [TRAITS_BY_CLASS.history.rh]: {
+    url: TRAIT_IMAGES_BY_CLASS.history.rh,
+    trait: "rh",
+    glbUrl: TRAITS_BY_CLASS.history.rh,
+  },
+  [TRAITS_BY_CLASS.history.shoes]: {
+    url: TRAIT_IMAGES_BY_CLASS.history.shoes,
+    trait: "shoes",
+    glbUrl: TRAITS_BY_CLASS.history.shoes,
+  },
+  [TRAITS_BY_CLASS.history.torso]: {
+    url: TRAIT_IMAGES_BY_CLASS.history.torso,
+    trait: "torso",
+    glbUrl: TRAITS_BY_CLASS.history.torso,
+  },
+  [TRAITS_BY_CLASS.mathematics.back]: {
+    url: TRAIT_IMAGES_BY_CLASS.mathematics.back,
+    trait: "back",
+    glbUrl: TRAITS_BY_CLASS.mathematics.back,
+  },
+  [TRAITS_BY_CLASS.mathematics.bottoms]: {
+    url: TRAIT_IMAGES_BY_CLASS.mathematics.bottoms,
+    trait: "bottoms",
+    glbUrl: TRAITS_BY_CLASS.mathematics.bottoms,
+  },
+  [TRAITS_BY_CLASS.mathematics.head]: {
+    url: TRAIT_IMAGES_BY_CLASS.mathematics.head,
+    trait: "head",
+    glbUrl: TRAITS_BY_CLASS.mathematics.head,
+  },
+  [TRAITS_BY_CLASS.mathematics.lh]: {
+    url: TRAIT_IMAGES_BY_CLASS.mathematics.lh,
+    trait: "lh",
+    glbUrl: TRAITS_BY_CLASS.mathematics.lh,
+  },
+  [TRAITS_BY_CLASS.mathematics.rh]: {
+    url: TRAIT_IMAGES_BY_CLASS.mathematics.rh,
+    trait: "rh",
+    glbUrl: TRAITS_BY_CLASS.mathematics.rh,
+  },
+  [TRAITS_BY_CLASS.mathematics.shoes]: {
+    url: TRAIT_IMAGES_BY_CLASS.mathematics.shoes,
+    trait: "shoes",
+    glbUrl: TRAITS_BY_CLASS.mathematics.shoes,
+  },
+  [TRAITS_BY_CLASS.mathematics.torso]: {
+    url: TRAIT_IMAGES_BY_CLASS.mathematics.torso,
+    trait: "torso",
+    glbUrl: TRAITS_BY_CLASS.mathematics.torso,
+  },
+  [TRAITS_BY_CLASS.music.back]: {
+    url: TRAIT_IMAGES_BY_CLASS.music.back,
+    trait: "back",
+    glbUrl: TRAITS_BY_CLASS.music.back,
+  },
+  [TRAITS_BY_CLASS.music.bottoms]: {
+    url: TRAIT_IMAGES_BY_CLASS.music.bottoms,
+    trait: "bottoms",
+    glbUrl: TRAITS_BY_CLASS.music.bottoms,
+  },
+  [TRAITS_BY_CLASS.music.head]: {
+    url: TRAIT_IMAGES_BY_CLASS.music.head,
+    trait: "head",
+    glbUrl: TRAITS_BY_CLASS.music.head,
+  },
+  [TRAITS_BY_CLASS.music.lh]: {
+    url: TRAIT_IMAGES_BY_CLASS.music.lh,
+    trait: "lh",
+    glbUrl: TRAITS_BY_CLASS.music.lh,
+  },
+  [TRAITS_BY_CLASS.music.rh]: {
+    url: TRAIT_IMAGES_BY_CLASS.music.rh,
+    trait: "rh",
+    glbUrl: TRAITS_BY_CLASS.music.rh,
+  },
+  [TRAITS_BY_CLASS.music.shoes]: {
+    url: TRAIT_IMAGES_BY_CLASS.music.shoes,
+    trait: "shoes",
+    glbUrl: TRAITS_BY_CLASS.music.shoes,
+  },
+  [TRAITS_BY_CLASS.music.torso]: {
+    url: TRAIT_IMAGES_BY_CLASS.music.torso,
+    trait: "torso",
+    glbUrl: TRAITS_BY_CLASS.music.torso,
+  },
+  [TRAITS_BY_CLASS.physics.back]: {
+    url: TRAIT_IMAGES_BY_CLASS.physics.back,
+    trait: "back",
+    glbUrl: TRAITS_BY_CLASS.physics.back,
+  },
+  [TRAITS_BY_CLASS.physics.bottoms]: {
+    url: TRAIT_IMAGES_BY_CLASS.physics.bottoms,
+    trait: "bottoms",
+    glbUrl: TRAITS_BY_CLASS.physics.bottoms,
+  },
+  [TRAITS_BY_CLASS.physics.head]: {
+    url: TRAIT_IMAGES_BY_CLASS.physics.head,
+    trait: "head",
+    glbUrl: TRAITS_BY_CLASS.physics.head,
+  },
+  [TRAITS_BY_CLASS.physics.lh]: {
+    url: TRAIT_IMAGES_BY_CLASS.physics.lh,
+    trait: "lh",
+    glbUrl: TRAITS_BY_CLASS.physics.lh,
+  },
+  [TRAITS_BY_CLASS.physics.rh]: {
+    url: TRAIT_IMAGES_BY_CLASS.physics.rh,
+    trait: "rh",
+    glbUrl: TRAITS_BY_CLASS.physics.rh,
+  },
+  [TRAITS_BY_CLASS.physics.shoes]: {
+    url: TRAIT_IMAGES_BY_CLASS.physics.shoes,
+    trait: "shoes",
+    glbUrl: TRAITS_BY_CLASS.physics.shoes,
+  },
+  [TRAITS_BY_CLASS.physics.torso]: {
+    url: TRAIT_IMAGES_BY_CLASS.physics.torso,
+    trait: "torso",
+    glbUrl: TRAITS_BY_CLASS.physics.torso,
+  },
+  [TRAITS_BY_CLASS.sport.back]: {
+    url: TRAIT_IMAGES_BY_CLASS.sport.back,
+    trait: "back",
+    glbUrl: TRAITS_BY_CLASS.sport.back,
+  },
+  [TRAITS_BY_CLASS.sport.bottoms]: {
+    url: TRAIT_IMAGES_BY_CLASS.sport.bottoms,
+    trait: "bottoms",
+    glbUrl: TRAITS_BY_CLASS.sport.bottoms,
+  },
+  [TRAITS_BY_CLASS.sport.head]: {
+    url: TRAIT_IMAGES_BY_CLASS.sport.head,
+    trait: "head",
+    glbUrl: TRAITS_BY_CLASS.sport.head,
+  },
+  [TRAITS_BY_CLASS.sport.lh]: {
+    url: TRAIT_IMAGES_BY_CLASS.sport.lh,
+    trait: "lh",
+    glbUrl: TRAITS_BY_CLASS.sport.lh,
+  },
+  [TRAITS_BY_CLASS.sport.rh]: {
+    url: TRAIT_IMAGES_BY_CLASS.sport.rh,
+    trait: "rh",
+    glbUrl: TRAITS_BY_CLASS.sport.rh,
+  },
+  [TRAITS_BY_CLASS.sport.shoes]: {
+    url: TRAIT_IMAGES_BY_CLASS.sport.shoes,
+    trait: "shoes",
+    glbUrl: TRAITS_BY_CLASS.sport.shoes,
+  },
+  [TRAITS_BY_CLASS.sport.torso]: {
+    url: TRAIT_IMAGES_BY_CLASS.sport.torso,
+    trait: "torso",
+    glbUrl: TRAITS_BY_CLASS.sport.torso,
+  },
+};
+
+interface JnrCanvasProps {
+  traits: {
+    back: string;
+    bottoms: string;
+    head: string;
+    lh: string;
+    rh: string;
+    shoes: string;
+    torso: string;
+  };
+}
+
+const JnrCanvas: React.FC<JnrCanvasProps> = (props) => {
   const canvasRef = useRef<Canvas>(null);
   const [selectedClass, setSelectedClass] = React.useState("biology");
 
   return (
+    <Canvas
+      ref={canvasRef}
+      gl={{
+        antialias: true,
+        precision: "highp",
+        preserveDrawingBuffer: true,
+        premultipliedAlpha: false,
+      }}
+      flat
+      shadows={{
+        enabled: true,
+        type: PCFSoftShadowMap,
+      }}
+      className="bg-black min-h-[50%]"
+    >
+      <CanvasChildren />
+      {/* <Center>
+      <Bounds> */}
+      <group>
+        <GlbModel url={"/3d/base.glb"} />
+        <GlbModel url={"/3d/base-eyes.glb"} />
+        {Object.values(props.traits).map((trait) => (
+          <GlbModel url={trait} />
+        ))}
+      </group>
+      <GlbModel url={"/3d/stand.glb"} />
+      <Grid
+        renderOrder={-1}
+        position={[0, -2.17, 0]}
+        infiniteGrid
+        cellSize={0.3}
+        cellThickness={2}
+        sectionSize={3.3}
+        sectionThickness={0}
+        sectionColor={"#63FF5F"}
+        cellColor={"#63FF5F"}
+        fadeDistance={12}
+      />
+    </Canvas>
+  );
+
+  return (
     <div className="h-full flex flex-col w-full">
-      <Frame
+      {/* <Frame
         variant="field"
         className="!h-auto !flex lg:!hidden flex-nowrap overflow-x-auto !w-full py-2 px-2"
       >
@@ -204,43 +619,7 @@ const JnrCanvas = () => {
             {nameOfClass} - {TRAIT_COLLECTION_NAME[nameOfClass]}
           </Button>
         ))}
-      </Frame>
-      <Canvas
-        ref={canvasRef}
-        gl={{
-          antialias: true,
-          precision: "highp",
-          preserveDrawingBuffer: true,
-          premultipliedAlpha: false,
-        }}
-        flat
-        shadows={{
-          enabled: true,
-          type: PCFSoftShadowMap,
-        }}
-        className="w-full h-full"
-      >
-        <CanvasChildren />
-        <Center>
-          <Bounds>
-            <group>
-              <GlbModel url={"/3d/base.glb"} />
-              <GlbModel url={"/3d/base-eyes.glb"} />
-              {Object.keys(TRAITS_BY_CLASS[selectedClass]).map((trait) => (
-                <GlbModel url={TRAITS_BY_CLASS[selectedClass][trait]} />
-              ))}
-            </group>
-          </Bounds>
-        </Center>
-        <mesh
-          rotation={[-Math.PI / 2, 0, 0]}
-          position={[0, 0, 0]}
-          receiveShadow
-        >
-          <planeGeometry args={[20, 20]} />
-          <shadowMaterial transparent opacity={0.1} />
-        </mesh>
-      </Canvas>
+      </Frame> */}
     </div>
   );
 };
