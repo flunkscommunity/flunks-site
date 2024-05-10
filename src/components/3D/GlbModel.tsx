@@ -3,8 +3,11 @@ import { forwardRef, Suspense, useEffect, useMemo } from "react";
 import { Loader, useGLTF } from "@react-three/drei";
 import {
   MeshBasicMaterial,
+  MeshLambertMaterial,
   MeshPhongMaterial,
+  MeshPhysicalMaterial,
   MeshStandardMaterial,
+  MeshToonMaterial,
 } from "three";
 
 interface GlbModelProps extends PrimitiveProps {
@@ -27,6 +30,19 @@ const GlbModel = forwardRef<ThreeElements["primitive"], GlbModelProps>(
         if (child.isMesh) {
           child.castShadow = true;
           child.receiveShadow = true;
+          var prevMaterial = child.material;
+
+          if (
+            prevMaterial.type === "MeshBasicMaterial" ||
+            prevMaterial.type === "MeshToonMaterial"
+          )
+            return;
+
+          child.material = new MeshToonMaterial({
+            color: prevMaterial.emissive,
+            emissive: prevMaterial.emissive,
+            emissiveIntensity: 0,
+          });
         }
       });
     }, [scene]);

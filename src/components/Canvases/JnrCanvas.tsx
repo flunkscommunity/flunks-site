@@ -1,4 +1,5 @@
 import {
+  AsciiRenderer,
   Bounds,
   Center,
   Environment,
@@ -54,7 +55,7 @@ Camera.displayName = "Camera";
 const Lights = () => {
   return (
     <>
-      {/* <ambientLight intensity={1} color={"white"}  /> */}
+      <ambientLight intensity={1} color={"white"} />
       {/* <directionalLight
         intensity={2}
         position={[1, 10, 10]}
@@ -70,7 +71,7 @@ const Lights = () => {
         shadow-mapSize-height={2048}
         shadow-mapSize-width={2048}
       /> */}
-      {/* <directionalLight intensity={20} position={[0, 20, 20]} color="green" /> */}
+      <directionalLight intensity={2} position={[0, 2, 5]} color="white" />
     </>
   );
 };

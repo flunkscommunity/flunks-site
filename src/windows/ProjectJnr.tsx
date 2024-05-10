@@ -36,6 +36,7 @@ const FrameWithBackground = styled(Frame)`
 // RH TRAIT
 // LH TRAIT
 // HEAD TRAIT
+// BASE EYES url = /images/jnr-traits/base-eyes.png
 // BASE HEAD url = /images/jnr-traits/base-head.png
 // TORSO TRAIT
 // BASE TORSO url = /images/jnr-traits/base-torso.png
@@ -63,6 +64,7 @@ const TraitImage = ({
     "/images/jnr-traits/base-torso.png",
     traitName === "torso" ? src : "",
     "/images/jnr-traits/base-head.png",
+    "/images/jnr-traits/base-eyes.png",
     traitName === "head" ? src : "",
     traitName === "lh" ? src : "",
     traitName === "rh" ? src : "",
@@ -134,6 +136,10 @@ const FullTraitsImage: React.FC<{
       />
       <img
         src="/images/jnr-traits/base-head.png"
+        className="!absolute w-full h-full object-contain"
+      />
+      <img
+        src="/images/jnr-traits/base-eyes.png"
         className="!absolute w-full h-full object-contain"
       />
       <img
