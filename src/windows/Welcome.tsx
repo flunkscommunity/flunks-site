@@ -6,6 +6,7 @@ import { WINDOW_IDS } from "fixed";
 import { Button, Frame, Checkbox } from "react95";
 import styled from "styled-components";
 import GumballMachine from "./GumballMachine";
+import WelcomePopup from "./WelcomePopup";
 
 const Welcome: React.FC = () => {
   const { closeWindow, openWindow } = useWindowsContext();
@@ -54,7 +55,7 @@ const Welcome: React.FC = () => {
       </a>
     </p>,
     <p>
-      [5/5] You can stake you Flunks items at the{" "}
+      [5/5] You can stake your Flunks items at the{" "}
       <span
         onClick={() =>
           openWindow({
@@ -105,7 +106,16 @@ const Welcome: React.FC = () => {
             />
           </section>
           <section className="basis-1/3 flex flex-col mt-8 gap-2">
-            <Button>What's New</Button>
+            <Button
+              onClick={() =>
+                openWindow({
+                  key: WINDOW_IDS.WELCOME_POPUP,
+                  window: <WelcomePopup />,
+                })
+              }
+            >
+              What's New
+            </Button>
             <Button onClick={handleNextTip}>Next Tip</Button>
             <Button
               onClick={() => closeWindow(WINDOW_IDS.WELCOME)}

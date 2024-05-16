@@ -8,4 +8,5 @@ export const WINDOW_IDS = {
   ERROR: "error",
   GUMBALL_MACHINE: "gumball-machine",
   WELCOME: "welcome",
+  WELCOME_POPUP: "welcome-popup",
 };
