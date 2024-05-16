@@ -11,7 +11,8 @@ const WelcomePopup: React.FC = () => {
     <DraggableResizeableWindow
       offSetHeight={44}
       headerTitle="What's New"
-      initialHeight="85%"
+      headerIcon="/images/icons/whats_new.png"
+      initialHeight="90%"
       initialWidth="35%"
       authGuard={false}
       windowsId={WINDOW_IDS.WELCOME_POPUP}
@@ -25,12 +26,12 @@ const WelcomePopup: React.FC = () => {
         style={{
           marginTop: "2rem",
           padding: "2rem",
-          height: 450,
+          height: 500,
           width: 500,
         }}
       >
         <h2 className="text-xl font-bold">Non-Custodial Wallets</h2>
-        <p className="text-lg">
+        <p className="text-lg pb-6">
           Moving forward, you will need to log in with a non-custodial wallet to
           use newer features like the Gumball Machine on the Flunks95 website.
           Recommended non-custodial wallets include{" "}

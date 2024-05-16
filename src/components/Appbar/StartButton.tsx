@@ -70,6 +70,23 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
         <CustomMenuListItem
           onClick={() => {
             openWindow({
+              key: WINDOW_IDS.WELCOME,
+              window: <Welcome />,
+            });
+            props.closeStartMenu();
+          }}
+          className="!text-xl"
+        >
+          <img
+            src="/images/icons/getting_started.png"
+            width="32px"
+            height="32px"
+          />
+          Getting Started
+        </CustomMenuListItem>
+        <CustomMenuListItem
+          onClick={() => {
+            openWindow({
               key: WINDOW_IDS.GUMBALL_MACHINE,
               window: <GumballMachine />,
             });
@@ -131,19 +148,6 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
         >
           <img src="/images/icons/settings.png" width="32px" height="32px" />
           Settings
-        </CustomMenuListItem>
-        <CustomMenuListItem
-          onClick={() => {
-            openWindow({
-              key: WINDOW_IDS.WELCOME,
-              window: <Welcome />,
-            });
-            props.closeStartMenu();
-          }}
-          className="!text-xl"
-        >
-          <img src="/images/icons/settings.png" width="32px" height="32px" />
-          Welcome
         </CustomMenuListItem>
         <Separator />
         <AuthButton />

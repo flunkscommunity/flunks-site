@@ -74,7 +74,7 @@ const Welcome: React.FC = () => {
   return (
     <DraggableResizeableWindow
       offSetHeight={44}
-      headerTitle="Welcome"
+      headerTitle="Getting Started"
       initialHeight="60%"
       initialWidth="55%"
       authGuard={false}
