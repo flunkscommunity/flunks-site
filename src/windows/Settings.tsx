@@ -23,6 +23,28 @@ import useThemeSettings from "store/useThemeSettings";
 import styled from "styled-components";
 import debounce from "lodash/debounce";
 import index from "react95/dist/themes/index";
+import {
+  CustomScrollArea,
+  CustomStyledScrollView,
+} from "components/CustomStyledScrollView";
+
+const AVOIDED_THEMES = [
+  "aiee",
+  "solarizedLight",
+  "solarizedDark",
+  "blackAndWhite",
+  "toner",
+  "windows1",
+  "highContrast",
+  "hotdogStand",
+  "white",
+  "polarized",
+  "powerShell",
+  "seawater",
+  "violetDark",
+  "vistaesqueMidnight",
+  "modernDark"
+];
 
 const Settings: React.FC = () => {
   const { closeWindow } = useWindowsContext();
@@ -39,10 +61,12 @@ const Settings: React.FC = () => {
   } = useThemeSettings();
   const [backgroundUrl, setBackgroundUrl] = useState<string>(backgroundImage);
 
-  const themeSelectOptions = Object.keys(index).map((key, i) => ({
-    value: i.toString(),
-    label: key,
-  }));
+  const themeSelectOptions = Object.keys(index)
+    .map((key, i) => ({
+      value: i.toString(),
+      label: key,
+    }))
+    .filter((option) => !AVOIDED_THEMES.includes(option.label));
 
   const [activeTab, setActiveTab] = useState(0);
 
@@ -161,11 +185,11 @@ const Settings: React.FC = () => {
           </div>
         )}
         {activeTab === 2 && (
-          <Frame variant="well" className="w-full h-full !flex !flex-col">
-            <ScrollView className="w-full h-full flex flex-col !p-0">
+          <CustomStyledScrollView className="w-full h-full flex flex-col !p-0">
+            <CustomScrollArea>
               <UserInformation />
-            </ScrollView>
-          </Frame>
+            </CustomScrollArea>
+          </CustomStyledScrollView>
         )}
       </TabBody>
       {/* <div className="flex flex-row justify-end items-center pb-3">

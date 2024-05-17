@@ -16,7 +16,6 @@ const GumSection = ({ pool, tokenId }) => {
       <span className="text-lg font-bold mb-2">$GUM INFORMATION</span>
       <Frame variant="well" className="w-full p-4 !flex flex-col gap-2">
         <InfoItem label="Pool" value={pool} />
-        <InfoItem label="Token ID" value={tokenId} />
         <InfoItem
           label="$GUM Multiplier"
           value={POOL_TO_MULTIPLIER[pool as keyof typeof POOL_TO_MULTIPLIER]}

@@ -74,113 +74,111 @@ const UserInformation = () => {
   }, [error]);
 
   return (
-    <>
-      <div className="!mx-2 lg:!mx-5 lg:!mt-4 !mt-2 !mb-3">
-        {!isAuthenticated && (
-          <div className="w-full h-full flex items-center justify-center">
-            <DynamicConnectButton buttonClassName="w-full mt-10">
-              <Button className="!w-full !text-xl min-w-[200px] gap-2">
-                <img src="/images/logout.png" width="32px" height="32px" />
-                Sign In
-              </Button>
-            </DynamicConnectButton>
+    <div className="!mx-2 lg:!mx-5 lg:!mt-4 !mt-2 !mb-3">
+      {!isAuthenticated && (
+        <div className="w-full h-full flex items-center justify-center">
+          <DynamicConnectButton buttonClassName="w-full mt-10">
+            <Button className="!w-full !text-xl min-w-[200px] gap-2">
+              <img src="/images/logout.png" width="32px" height="32px" />
+              Sign In
+            </Button>
+          </DynamicConnectButton>
+        </div>
+      )}
+      {!user && isAuthenticated && (
+        <div className="w-full h-full flex items-center justify-center">
+          <Hourglass />
+        </div>
+      )}
+      {user && (
+        <div className="flex flex-col gap-y-3 pb-4">
+          <InfoItem label="Username" value={user.username} />
+          <InfoItem label="Email" value={user.email} />
+          <InfoItem label="Connected Wallet" value={primaryWallet.address} />
+          <InfoItem
+            label="Wallet Provider"
+            value={primaryWallet.connector.name}
+          />
+          <div className="flex flex-row items-center flex-wrap gap-x-4">
+            <label className="min-w-[150px] text-pretty opacity-80 text-lg">
+              Contracts Initialized:
+            </label>
+            <span className="max-w-fit w-full min-w-[150px] text-pretty text-lg">
+              {isInitialized && "Yes"}
+              {!isInitialized && (
+                <Button
+                  disabled={isLoading}
+                  size="sm"
+                  onClick={initializeCollection}
+                >
+                  Initialize Collection
+                </Button>
+              )}
+            </span>
           </div>
-        )}
-        {!user && isAuthenticated && (
-          <div className="w-full h-full flex items-center justify-center">
-            <Hourglass />
+          <Button
+            onClick={() => setShowDynamicUserProfile(true)}
+            className="mr-auto !px-10"
+          >
+            Edit
+          </Button>
+
+          <Separator className="!my-4" />
+
+          <div className="flex flex-col">
+            <span className="text-pretty text-xl font-bold">
+              Verified Wallets
+            </span>
+            <span className="text-lg max-w-[400px]">
+              Verified wallets are wallets you have linked to your email, this
+              allows your to easily switch between your wallets. You may not
+              sign transactions on behalf of your other wallets, only your
+              connected wallet.
+            </span>
           </div>
-        )}
-        {user && (
-          <div className="flex flex-col gap-y-3 pb-4">
-            <InfoItem label="Username" value={user.username} />
-            <InfoItem label="Email" value={user.email} />
-            <InfoItem label="Connected Wallet" value={primaryWallet.address} />
-            <InfoItem
-              label="Wallet Provider"
-              value={primaryWallet.connector.name}
-            />
-            <div className="flex flex-row items-center flex-wrap gap-x-4">
-              <label className="min-w-[150px] text-pretty opacity-80 text-lg">
-                Contracts Initialized:
-              </label>
-              <span className="max-w-fit w-full min-w-[150px] text-pretty text-lg">
-                {isInitialized && "Yes"}
-                {!isInitialized && (
-                  <Button
-                    disabled={isLoading}
-                    size="sm"
-                    onClick={initializeCollection}
+
+          <div>
+            {user.verifiedCredentials.map((credential) => {
+              if (!credential.walletName) return null;
+
+              return (
+                <div className="flex flex-row w-full max-w-[400px]">
+                  <Frame
+                    variant="field"
+                    key={credential.id}
+                    className="!flex items-center gap-3 w-auto px-3 py-2"
                   >
-                    Initialize Collection
-                  </Button>
-                )}
-              </span>
-            </div>
-            <Button
-              onClick={() => setShowDynamicUserProfile(true)}
-              className="mr-auto !px-10"
-            >
-              Edit
-            </Button>
-
-            <Separator className="!my-4" />
-
-            <div className="flex flex-col">
-              <span className="text-pretty text-xl font-bold">
-                Verified Wallets
-              </span>
-              <span className="text-lg max-w-[400px]">
-                Verified wallets are wallets you have linked to your email, this
-                allows your to easily switch between your wallets. You may not
-                sign transactions on behalf of your other wallets, only your
-                connected wallet.
-              </span>
-            </div>
-
-            <div>
-              {user.verifiedCredentials.map((credential) => {
-                if (!credential.walletName) return null;
-
-                return (
-                  <div className="flex flex-row w-full max-w-[400px]">
-                    <Frame
-                      variant="field"
-                      key={credential.id}
-                      className="!flex items-center gap-3 w-auto px-3 py-2"
-                    >
-                      <img
-                        src={ICONS[credential.walletName]}
-                        alt={credential.walletName}
-                        className="w-6 h-6"
-                      />
-                    </Frame>
-                    <Frame
-                      variant="field"
-                      key={credential.id}
-                      className="!flex items-center gap-3 w-full px-3 py-2"
-                    >
-                      <span className="text-lg">{credential.address}</span>
-                    </Frame>
-                  </div>
-                );
-              })}
-            </div>
-            <Button
-              className="mr-auto !px-10"
-              onClick={() => setShowDynamicUserProfile(true)}
-            >
-              Link another wallet
-            </Button>
+                    <img
+                      src={ICONS[credential.walletName]}
+                      alt={credential.walletName}
+                      className="w-6 h-6"
+                    />
+                  </Frame>
+                  <Frame
+                    variant="field"
+                    key={credential.id}
+                    className="!flex items-center gap-3 w-full px-3 py-2"
+                  >
+                    <span className="text-lg">{credential.address}</span>
+                  </Frame>
+                </div>
+              );
+            })}
           </div>
-        )}
-        {isLoading && (
-          <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-black/40">
-            <Hourglass />
-          </div>
-        )}
-      </div>
-    </>
+          <Button
+            className="mr-auto !px-10"
+            onClick={() => setShowDynamicUserProfile(true)}
+          >
+            Link another wallet
+          </Button>
+        </div>
+      )}
+      {isLoading && (
+        <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-black/40">
+          <Hourglass />
+        </div>
+      )}
+    </div>
   );
 };
 

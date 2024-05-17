@@ -28,7 +28,7 @@ const TraitSection = ({ metadata }) => {
   );
 
   return (
-    <div className="mt-6 flex flex-col px-3 gap-4">
+    <div className="mt-6 flex flex-col px-3 gap-2">
       <span className="text-lg font-bold">TRAITS</span>
       <div className="flex flex-col w-full">
         {Object.entries(metadata).map(([traitName, traitValue]) => {

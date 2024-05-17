@@ -33,19 +33,23 @@ import { getGumBalance } from "web3/script-get-gum-balance";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
 import GumballMachine from "windows/GumballMachine";
+import {
+  CustomScrollArea,
+  CustomStyledScrollView,
+} from "components/CustomStyledScrollView";
 
 const CustomImage = styled.img`
   background-color: ${({ theme }) => theme.borderLight};
 `;
 
-const ScrollViewWithBackground = styled(ScrollView)`
+const ScrollViewWithBackground = styled(CustomScrollArea)`
   background-image: linear-gradient(
-      ${({ theme }) => theme.borderLightest} 1px,
+      ${({ theme }) => theme.borderLightest}3F 1px,
       transparent 1px
     ),
     linear-gradient(
       to right,
-      ${({ theme }) => theme.borderLightest} 1px,
+      ${({ theme }) => theme.borderLightest}3F 1px,
       ${({ theme }) => theme.material} 1px
     );
   background-size: 20px 20px;
@@ -345,48 +349,54 @@ const ItemsGrid: React.FC = () => {
         </Frame>
       )}
       {!activeItem && !noItems && (
-        <ScrollViewWithBackground
+        <CustomStyledScrollView
           ref={scrollViewRef}
           className="!p-0 !w-full max-w-full !m-0 [&>div]:!p-0"
           style={{
             height: activeItem ? "100%" : "calc(100% - 152px)",
           }}
         >
-          {viewType === "grid" && (
-            <GridedView
-              items={memodCombinedItems}
-              setActiveItem={setActiveItem}
-            />
-          )}
-          {viewType === "table" && (
-            <TableView
-              items={memodCombinedItems}
-              setActiveItem={setActiveItem}
-            />
-          )}
-        </ScrollViewWithBackground>
+          <ScrollViewWithBackground>
+            {viewType === "grid" && (
+              <GridedView
+                items={memodCombinedItems}
+                setActiveItem={setActiveItem}
+              />
+            )}
+            {viewType === "table" && (
+              <TableView
+                items={memodCombinedItems}
+                setActiveItem={setActiveItem}
+              />
+            )}
+          </ScrollViewWithBackground>
+        </CustomStyledScrollView>
       )}
       {activeItem && activeItem.collectionName === "flunks" && (
-        <ScrollViewWithBackground
+        <CustomStyledScrollView
           ref={scrollViewRef}
           className="!p-0 !w-full max-w-full !m-0 [&>div]:!p-0"
           style={{
             height: activeItem ? "100%" : "calc(100% - 160px)",
           }}
         >
-          <FlunkItem {...activeItem} onBack={() => setActiveItem(null)} />
-        </ScrollViewWithBackground>
+          <ScrollViewWithBackground>
+            <FlunkItem {...activeItem} onBack={() => setActiveItem(null)} />
+          </ScrollViewWithBackground>
+        </CustomStyledScrollView>
       )}
       {activeItem && activeItem.collectionName === "backpack" && (
-        <ScrollViewWithBackground
+        <CustomStyledScrollView
           ref={scrollViewRef}
           className="!p-0 !w-full max-w-full !m-0 [&>div]:!p-0"
           style={{
             height: activeItem ? "100%" : "calc(100% - 160px)",
           }}
         >
-          <BackpackItem {...activeItem} onBack={() => setActiveItem(null)} />
-        </ScrollViewWithBackground>
+          <ScrollViewWithBackground>
+            <BackpackItem {...activeItem} onBack={() => setActiveItem(null)} />
+          </ScrollViewWithBackground>
+        </CustomStyledScrollView>
       )}
     </div>
   );

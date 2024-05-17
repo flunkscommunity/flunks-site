@@ -51,10 +51,14 @@ const SideLogoContainer = styled.div`
   background-color: ${({ theme }) => theme.borderDark};
 `;
 const FlunksLogoText = styled.span`
-  color: ${({ theme }) => theme.borderLight};
+  color: ${({ theme }) => "white"};
+  opacity: 0.5;
+  // text-shadow: 1px 1px 0 ${({ theme }) => "white"};
 `;
 const NintyFiveLogoText = styled.span`
-  color: ${({ theme }) => theme.borderLightest};
+  color: ${({ theme }) => "white"};
+  opacity: 1;
+  // text-shadow: 1px 1px 0 ${({ theme }) => "white"};
 `;
 
 const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
@@ -63,9 +67,13 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
   return (
     <MenuList className="!absolute bottom-[calc(100%+6px)] -left-1 min-w-[300px] !flex !flex-row">
       <SideLogoContainer className="w-10 relative">
-        <div className="absolute -bottom-5 left-1 text-xl origin-[0_0] -rotate-90 text-nowrap">
-          <FlunksLogoText className="font-black mr-1">FLUNKS</FlunksLogoText>
-          <NintyFiveLogoText className="font-medium">95</NintyFiveLogoText>
+        <div className="absolute -bottom-5 left-0.5 text-2xl origin-[0_0] -rotate-90 text-nowrap mix-blend-plus-lighter">
+          <FlunksLogoText className="font-black mr-1 tracking-widest">
+            FLUNKS
+          </FlunksLogoText>
+          <NintyFiveLogoText className="font-light tracking-widest">
+            95
+          </NintyFiveLogoText>
         </div>
       </SideLogoContainer>
       <div className="flex flex-col w-full">
