@@ -14,7 +14,6 @@ const WelcomePopup: React.FC = () => {
       headerIcon="/images/icons/whats_new.png"
       initialHeight="90%"
       initialWidth="35%"
-      authGuard={false}
       windowsId={WINDOW_IDS.WELCOME_POPUP}
       onClose={() => {
         closeWindow(WINDOW_IDS.WELCOME_POPUP);

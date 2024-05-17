@@ -4,7 +4,6 @@ import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
 import { Button, Frame, Checkbox } from "react95";
-import styled from "styled-components";
 import GumballMachine from "./GumballMachine";
 import WelcomePopup from "./WelcomePopup";
 
@@ -16,6 +15,7 @@ const Welcome: React.FC = () => {
     setTipIndex((prevIndex) => (prevIndex + 1) % tips.length);
   };
 
+  const icon = "/images/icons/did-you-know.png";
   const tips = [
     <p>
       [1/5] Flunks are cute but mischievous high-schoolers wreaking havoc on
@@ -77,7 +77,6 @@ const Welcome: React.FC = () => {
       headerTitle="Getting Started"
       initialHeight="60%"
       initialWidth="55%"
-      authGuard={false}
       windowsId={WINDOW_IDS.WELCOME}
       onClose={() => {
         closeWindow(WINDOW_IDS.WELCOME);
@@ -93,17 +92,16 @@ const Welcome: React.FC = () => {
               style={{
                 marginTop: "2rem",
                 padding: "2rem",
-                height: 200,
+                height: 160,
                 width: 500,
               }}
             >
-              <h2 className="text-xl font-bold">Did you know...</h2>
+              <div className="flex">
+                <img src={icon} className="pr-2"></img>
+                <h2 className="text-xl font-bold pt-2">Did you know...</h2>
+              </div>
               {tips[tipIndex]}
             </Frame>
-            <Checkbox
-              label="Show this Welcome Screen the next time you start Flunks95"
-              className="pt-2"
-            />
           </section>
           <section className="basis-1/3 flex flex-col mt-8 gap-2">
             <Button
@@ -117,13 +115,19 @@ const Welcome: React.FC = () => {
               What's New
             </Button>
             <Button onClick={handleNextTip}>Next Tip</Button>
-            <Button
-              onClick={() => closeWindow(WINDOW_IDS.WELCOME)}
-              className=""
-            >
-              Close
-            </Button>
           </section>
+        </div>
+        <div className="flex flex-row items-center justify-between w-full pt-2">
+          <Checkbox
+            label="Show this Welcome Screen the next time you start Flunks95"
+            className="pt-2"
+          />
+          <Button
+            onClick={() => closeWindow(WINDOW_IDS.WELCOME)}
+            className="basis-1/3"
+          >
+            Close
+          </Button>
         </div>
       </div>
     </DraggableResizeableWindow>
