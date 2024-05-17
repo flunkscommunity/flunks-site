@@ -47,6 +47,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     resizable = true,
     authGuard = props.authGuard || false,
     onHelp,
+    ref
   } = props;
   const windowRef = useRef<HTMLDivElement>(null);
   const draggableRef = useRef<Draggable>(null);
