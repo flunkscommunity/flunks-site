@@ -108,7 +108,7 @@ const PRODUCTS: {
     description: (
       <span className="text-xl md:text-xl max-w-2xl text-pretty">
         The latest craze at Flunks High: Pocket Juniors (or JNRs). These 3D
-        models, dressed to represent different school subjects, are becoming the
+        models, dressed (by you) to represent different school subjects, are becoming the
         must-have companions on campus, sure to deplete your $GUM reserves.
         <br />
         <br />
@@ -122,9 +122,9 @@ const PRODUCTS: {
     title: "Flunks 3D (Coming Soon)",
     description: (
       <span className="text-xl md:text-xl max-w-2xl text-pretty">
-        Flunks 3D is a collection of 10K 3D models of each Flunk. Each model is
-        dressed according to their Clique and Superlative and can be posed in
-        various ways.
+        Flunks 3D is a further evolution of the Flunks brand. These 3D models
+        will be available with a variety of traits and accessories, allowing
+        collectors to create unique and personalized models.
         <br />
         <br />
         More details coming soon. 👀
