@@ -1,4 +1,8 @@
 import { a, config, useScroll } from "@react-spring/web";
+import OurApps from "components/AboutUs/OurApps";
+import OurProducts from "components/AboutUs/OurProducts";
+import OurTeam from "components/AboutUs/OurTeam";
+import Timeline from "components/AboutUs/Timeline";
 import CrowdSimulator from "components/CrowdSimulator";
 import {
   CustomScrollArea,
@@ -20,15 +24,43 @@ import {
 import styled from "styled-components";
 
 const BackgroundDiv = styled(Frame)`
-  background-color: ${({ theme }) => theme.canvas};
+  background-color: ${({ theme }) => theme.material};
   background-image: linear-gradient(
-      ${({ theme }) => theme.borderLightest} 1px,
+      ${({ theme }) => {
+          // color is rgb, turn it int rgba with 0.25 alpha
+          const color = theme.canvasText;
+
+          if (color.startsWith("rgb")) {
+            return color.replace(")", ", 0.10)").replace("rgb", "rgba");
+          }
+
+          if (color === "black") {
+            return "rgba(0, 0, 0, 0.10)";
+          }
+
+          return `${theme.canvasText}1A`;
+        }}
+        1px,
       transparent 1px
     ),
     linear-gradient(
       to right,
-      ${({ theme }) => theme.borderLightest} 1px,
-      ${({ theme }) => theme.canvas} 1px
+      ${({ theme }) => {
+          // color is rgb, turn it int rgba with 0.25 alpha
+          const color = theme.canvasText;
+
+          if (color.startsWith("rgb")) {
+            return color.replace(")", ", 0.10)").replace("rgb", "rgba");
+          }
+
+          if (color === "black") {
+            return "rgba(0, 0, 0, 0.10)";
+          }
+
+          return `${theme.canvasText}1A`;
+        }}
+        1px,
+      ${({ theme }) => theme.material} 1px
     );
   background-size: 32px 32px;
 `;
@@ -54,7 +86,7 @@ const Polaroid = (props: { image: string; x: number; y: number }) => {
       <Frame className="!flex flex-col items-center gap-2 pb-10 px-2 pt-2">
         <Frame
           variant="well"
-          className="w-28 h-28 md:w-64 md:h-64 object-cover relative"
+          className="w-28 h-28 md:w-[300px] md:h-[300px] object-cover relative"
         >
           <img
             src={props.image}
@@ -71,8 +103,8 @@ const Polaroid = (props: { image: string; x: number; y: number }) => {
 const RANGES = {
   onceUponATimeText: {
     desktop: [
-      [0, 0.5, 1],
-      [0, 0.5, 1],
+      [0, 0.1, 1],
+      [0, 0.1, 1],
     ],
     tablet: [
       [0.1, 0.16, 1],
@@ -100,130 +132,75 @@ const AboutUs = () => {
       initialHeight="100%"
       initialWidth="100%"
       windowsId={WINDOW_IDS.ABOUT_US}
+      resizable={false}
+      showMaximizeButton={false}
     >
       <CustomStyledScrollView className="!h-full !w-full">
         <CustomScrollArea
           ref={containerRef}
           className="!w-full !h-full !overflow-x-hidden"
         >
-          <Frame variant="field" className="!h-auto w-full !flex flex-col">
-            <div className="h-full max-w-[1200px] mx-auto min-h-screen w-full px-6 lg:px-12 py-10 lg:py-[40px] !flex flex-col items-start justify-start gap-10 md:gap-[112px]">
-              <div className="flex flex-row gap-2 items-center justify-between w-full">
+          <BackgroundDiv
+            variant="field"
+            className="relative pb-[330px] !h-auto w-full !flex flex-col overflow-hidden"
+          >
+            <div className="h-full relative mx-auto min-h-[600px] w-full px-4 lg:px-20 py-10 lg:py-[80px] !flex flex-col items-start justify-start gap-10 md:gap-[112px]">
+              <div className="flex flex-col max-w-[1440px] mx-auto lg:flex-row gap-10 items-center justify-between w-full">
                 <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty">
-                  Flunks is a web3 brand that combines the nostalgia of
-                  high-school with the excitement of NFTs and modern technology.
+                  Flunks is a web3 brand that blends high school nostalgia with
+                  the excitement of NFTs and modern technology.
                 </span>
-                <div className="relative hidden xl:block scale-90">
-                  <Frame className="!flex !absolute top-0 -left-[60%] scale-90 flex-col items-center gap-2 pb-10 px-2 pt-2 -rotate-12">
-                    <Frame
-                      variant="well"
-                      className="w-28 h-28 md:w-64 md:h-64 object-cover relative"
-                    >
-                      <img
-                        src={
-                          "https://res.cloudinary.com/hxn7xk7oa/image/fetch/c_lfill,w_1200,h_1200,q_100,f_auto/https://storage.googleapis.com/flunk-graduation/5a4b2cdca6b0563f5ffd50bcee78bd2a12e0547d9eeef0a1ea8d6ba6f7ce5094.png"
-                        }
-                        alt="Flunk"
-                        className="w-full h-full !select-none"
-                      />
-                      <div className="absolute inset-0 w-full h-full" />
-                    </Frame>
-                  </Frame>
-                  <Frame className="!flex !absolute top-0 left-[50%] scale-[0.8] flex-col items-center gap-2 pb-10 px-2 pt-2 rotate-12">
-                    <Frame
-                      variant="well"
-                      className="w-28 h-28 md:w-64 md:h-64 object-cover relative"
-                    >
-                      <img
-                        src={
-                          "https://res.cloudinary.com/hxn7xk7oa/image/fetch/c_lfill,w_1200,h_1200,q_100,f_auto/https://storage.googleapis.com/flunk-graduation/7465eeede3419aaa6def3cf3811bb4ce7416320da65fd60d6aa4d56cd3b4d0d3.png"
-                        }
-                        alt="Flunk"
-                        className="w-full h-full !select-none"
-                      />
-                      <div className="absolute inset-0 w-full h-full" />
-                    </Frame>
-                  </Frame>
-                  <Frame className="!flex flex-col items-center gap-2 pb-10 px-2 pt-2 -rotate-3">
-                    <Frame
-                      variant="well"
-                      className="w-28 h-28 md:w-64 md:h-64 object-cover relative"
-                    >
-                      <img
-                        src={
-                          "https://res.cloudinary.com/hxn7xk7oa/image/fetch/c_lfill,w_1200,h_1200,q_100,f_auto/https://images.ongaia.com/ipfs/QmZPxYTEx8E5cNy5SzXWDkJQg8j5C3bKV6v7csaowkovua/497e9f78b8baf7dea1754da06812fc5d1eca8d28444de1a11a51c459f03400a0.jpg"
-                        }
-                        alt="Flunk"
-                        className="w-full h-full !select-none"
-                      />
-                      <div className="absolute inset-0 w-full h-full" />
-                    </Frame>
-                  </Frame>
+              </div>
+
+              <div className="flex flex-col max-w-[1440px] mx-auto lg:flex-row gap-10 items-center justify-end w-full">
+                <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty">
+                  Founded in 2022 by web3 enthusiasts, Flunks has quickly become
+                  a staple in the FLOW ecosystem. Our mission is to deliver a
+                  tasteful fusion of art and technology.
+                </span>
+              </div>
+
+              <div className="flex flex-col max-w-[1440px] mx-auto lg:flex-row gap-10 items-center justify-between w-full">
+                <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty">
+                  <u>Community is at the core of Flunks.</u> From the community
+                  vote that named us to the creation of the Cafeteria DAO,
+                  Flunks is a project by the people, for the people.
+                </span>
+              </div>
+            </div>
+            <div className="w-full flex flex-col mt-20">
+              <div className="flex w-full px-4 lg:px-20">
+                <div className="max-w-[1440px] mx-auto w-full flex">
+                  <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty uppercase ml-auto underline">
+                    Our Art
+                  </span>
                 </div>
               </div>
-              {/* <video
-                src="https://storage.googleapis.com/flunks_public/rebrand/map-bg-optimized.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                poster="https://storage.googleapis.com/flunks_public/rebrand/map-poster.jpg"
-                className="w-full aspect-video object-cover mix-blend-multiply"
-              /> */}
-              <div className="flex flex-col gap-4 mt-10">
-                <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty">
-                  Our Timeline
-                </span>
-                <span className="text-xl md:text-2xl font-normal max-w-2xl text-pretty">
-                  Over the years we have developed a range of products that are
-                  designed to be fun and engaging.
-                </span>
 
-                <div className="grid grid-cols-2 w-full gap-10">
-                  <div className="flex flex-col items-center gap-2">
-                    <img
-                      src="https://res.cloudinary.com/hxn7xk7oa/image/fetch/c_lfill,w_1200,h_1200,q_100,f_auto/https://storage.googleapis.com/flunk-graduation/7465eeede3419aaa6def3cf3811bb4ce7416320da65fd60d6aa4d56cd3b4d0d3.png"
-                      className="w-full h-auto"
-                    />
-                    <span className="text-xl md:text-2xl font-bold">
-                      Flunks
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-center gap-2">
-                    <img
-                      src="https://res.cloudinary.com/hxn7xk7oa/image/fetch/c_lfill,w_1200,h_1200,q_100,f_auto/https://storage.googleapis.com/backpack_public/backpack/38ba8e5b3025d0a53dac9c2306654116f922bce8804fa53d3089e948b04e9b24.png"
-                      className="w-full h-auto"
-                    />
-                    <span className="text-xl md:text-2xl font-bold">
-                      Backpacks
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-center gap-2">
-                    <img
-                      src="https://zeero.art/images/logos/zeero-solo-black.svg"
-                      className="w-full h-auto"
-                    />
-                    <span className="text-xl md:text-2xl font-bold">
-                      Zeero Marketplace
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-center gap-2 h-full justify-center">
-                    <img
-                      src="https://storage.googleapis.com/flunks_public/rebrand/pocketjnrs.png"
-                      className="w-full h-auto"
-                    />
-                    <span className="text-xl md:text-2xl font-bold text-pretty">
-                      Pocket Juniors (coming soon)
-                    </span>
-                  </div>
+              <OurProducts />
+            </div>
+            <div className="w-full flex flex-col mt-20">
+              <div className="flex w-full px-4 lg:px-20">
+                <div className="max-w-[1440px] mx-auto w-full flex">
+                  <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty uppercase ml-auto underline">
+                    Our Apps
+                  </span>
+                </div>
+              </div>
+
+              <OurApps />
+            </div>
+            <div className="w-full flex flex-col mt-20">
+              <div className="flex w-full px-4 lg:px-20 flex-col">
+                <div className="max-w-[1440px] mx-auto w-full flex flex-col">
+                  <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty uppercase ml-auto underline">
+                    Our Team
+                  </span>
+
+                  <OurTeam />
                 </div>
               </div>
             </div>
-          </Frame>
-          <Frame
-            variant="status"
-            className="relative h-[300px] max-h-[70%] w-full bg-white !flex items-center overflow-hidden justify-center flex-col gap-6 max-w-full overflow-x-hidden"
-          >
             <div className="absolute -bottom-4 w-full left-0 z-0 mix-blend-luminosity px-1">
               <CrowdSimulator
                 spriteSheetUrl="/images/Footer-Crowd.webp"
@@ -231,32 +208,7 @@ const AboutUs = () => {
                 cols={2}
               />
             </div>
-            <div className="relative flex flex-col items-start justify-start">
-              <span className="text-7xl md:text-9xl tracking-wide font-bold uppercase mix-blend-difference">
-                Flunks
-              </span>
-              <HeaderText className="text-7xl md:text-9xl font-bold tracking-wide uppercase absolute mix-blend-difference">
-                Flunks
-              </HeaderText>
-            </div>
-            {/* <span className="absolute top-[60%] text-lg md:text-4xl font-bold uppercase max-w-[400px] text-center -rotate-3">
-              cute but mischievous high-schoolers wreaking havoc on FLow!
-            </span> */}
-          </Frame>
-          {/* <Frame variant="well" className="!w-full py-2">
-            <Marquee autoFill>
-              <MarqueeText className="text-4xl ml-4 font-bold">
-                The Birth of Flunks
-              </MarqueeText>
-            </Marquee>
-          </Frame> */}
-          {/* <Frame variant="field" className="!w-full py-2">
-            <Marquee autoFill>
-              <MarqueeText className="text-4xl ml-4 font-bold">
-                BACKPACKS AND MARKETPLACE REVOLUTION
-              </MarqueeText>
-            </Marquee>
-          </Frame> */}
+          </BackgroundDiv>
         </CustomScrollArea>
       </CustomStyledScrollView>
     </DraggableResizeableWindow>
