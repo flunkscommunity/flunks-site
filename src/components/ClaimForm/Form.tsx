@@ -52,21 +52,43 @@ const ClaimFormForm: React.FC<Props> = (props) => {
   const { nft, shouldFetch } = props;
   const { metadata, templateId, tokenId } = nft;
   const { uri } = metadata as Metadata;
-  const { flunksData } = useBackpackClaimed();
+  const { flunksData, refreshClaimData } = useBackpackClaimed();
   const [claimedItem, setClaimedItem] = useState<MarketplaceIndividualNftDto>();
+
+  const { executeTx, state, resetState } = useFclTransactionContext();
+  const [loading, setLoading] = useState(false);
+
   const claimedEvent =
     flunksData && flunksData[tokenId] ? flunksData[tokenId] : null;
-  const { executeTx, state } = useFclTransactionContext();
+
   useEffect(() => {
     if (!claimedEvent) return;
 
-    CollectionApiInstance.collectionControllerGetNftByCollectionNameAndTokenId({
-      collectionName: "backpack",
-      tokenId: Number(claimedEvent.backpackTokenID),
-    }).then((res) => {
-      setClaimedItem(res.data);
-    });
+    setLoading(true);
+    setTimeout(
+      () =>
+        CollectionApiInstance.collectionControllerGetNftByCollectionNameAndTokenId(
+          {
+            collectionName: "backpack",
+            tokenId: Number(claimedEvent.backpackTokenID),
+          }
+        )
+          .then((res) => {
+            console.log("claimedItem", res.data);
+            setClaimedItem(res.data);
+          })
+          .finally(() => {
+            setLoading(false);
+          }),
+      1000
+    );
   }, [claimedEvent]);
+
+  useEffect(() => {
+    if (state.txStatus === TX_STATUS.SUCCESS) {
+      refreshClaimData();
+    }
+  }, [state]);
 
   const locations = {
     geek: "Computer lab",
@@ -90,20 +112,13 @@ const ClaimFormForm: React.FC<Props> = (props) => {
         position: "relative",
       }}
     >
-      {state.txStatus === TX_STATUS.STARTED && (
-        <div
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            zIndex: 9999,
-          }}
-        >
-          <Hourglass size={32} />
+      {(state.txStatus === TX_STATUS.STARTED ||
+        state.txStatus === TX_STATUS.PENDING) && (
+        <div className="fixed inset-0 w-full h-full bg-black/60 flex flex-col gap-2 items-center justify-center z-20">
+          <Hourglass />
+          <span className="text-white">
+            Sit tight, transactions can take a minute.
+          </span>
         </div>
       )}
       <CustomStyledScrollView
@@ -141,7 +156,7 @@ const ClaimFormForm: React.FC<Props> = (props) => {
                     width: "100%",
                   }}
                 >
-                  <P>Flunk #{tokenId + 1}</P>
+                  <P>Flunk #{templateId}</P>
                 </GroupBox>
               </div>
               {claimedItem && (
@@ -191,14 +206,17 @@ const ClaimFormForm: React.FC<Props> = (props) => {
                       alignItems: "center",
                     }}
                   >
-                    <H1
-                      style={{
-                        fontSize: "6rem",
-                        fontWeight: "normal",
-                      }}
-                    >
-                      ?
-                    </H1>
+                    {!loading && (
+                      <H1
+                        style={{
+                          fontSize: "6rem",
+                          fontWeight: "normal",
+                        }}
+                      >
+                        ?
+                      </H1>
+                    )}
+                    {loading && <Hourglass />}
                   </Frame>
                   <GroupBox
                     label="CLAIMED ITEM"
@@ -268,7 +286,7 @@ const ClaimFormForm: React.FC<Props> = (props) => {
                 </div>
               </Stack>
 
-              {!claimedItem && (
+              {(!claimedItem && !loading) && (
                 <div
                   style={{
                     marginTop: "2rem",

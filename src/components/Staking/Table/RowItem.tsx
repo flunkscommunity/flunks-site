@@ -21,6 +21,7 @@ interface RowItemProps {
   collectionName: string;
   stakingInfo: StakingInfo;
   rewards: number;
+  serialNumber: number;
 }
 
 const ImageBackground = styled.div`
@@ -41,10 +42,10 @@ const RowItem: React.FC<RowItemProps> = (props) => {
           <ImageBackground className="w-6 h-6 lg:w-10 lg:h-10 absolute z-0 rounded-full right-2" />
         </div>
         <span className="hidden lg:block text-sm lg:text-base mr-1 truncate">
-          {props.prettyCollection} #{props.tokenId}
+          {props.prettyCollection} #{props.serialNumber}
         </span>
         <span className="lg:hidden text-sm lg:text-base tracking-widest truncate">
-          #{props.tokenId}
+          #{props.serialNumber}
         </span>
       </CustomTableDataCell>
       <CustomTableDataCell className="text-sm lg:text-base !justify-start">

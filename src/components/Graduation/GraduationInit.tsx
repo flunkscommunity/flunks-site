@@ -191,10 +191,11 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
               src={graduatedUrl}
               style={{
                 width: "100%",
-                height: "100%",
+                height: "auto",
                 maxWidth: "360px",
                 maxHeight: "360px",
               }}
+              className="!aspect-square"
             />
             {percentage >= 100 && (
               <div
@@ -259,13 +260,13 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
             </div>
           )}
 
-          <P className="max-w-[350px]">
+          <P className="max-w-[350px] !px-2">
             Congratulations on your graduation! You have worked hard and
             achieved an important milestone. I wish you all the best as you move
             on to the next phase of your life and pursue your dreams. Well done!
           </P>
           <br />
-          <P className="max-w-[350px]">
+          <P className="max-w-[350px] !px-2">
             It's amazing to think about how much you have grown and changed over
             the past year. Here is your graduation photo:
           </P>

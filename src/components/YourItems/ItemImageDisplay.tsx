@@ -5,6 +5,7 @@ interface ImageDisplayProps {
   src: string;
   collectionItemName: string;
   tokenId: number | string;
+  templateId: number;
   pixelSrc: string;
 }
 
@@ -15,6 +16,7 @@ const ImageDisplay: React.FC<ImageDisplayProps> = ({
   src,
   collectionItemName,
   tokenId,
+  templateId,
   pixelSrc,
 }) => {
   const [activeImage, setActiveImage] = useState(src);
@@ -69,7 +71,7 @@ const ImageDisplay: React.FC<ImageDisplayProps> = ({
             variant="well"
             className="!w-auto !mr-auto !flex !flex-grow-0 px-2"
           >
-            <span className="text-lg lg:text-xl font-bold">#{tokenId}</span>
+            <span className="text-lg lg:text-xl font-bold">#{templateId}</span>
           </Frame>
         </Frame>
       </Frame>

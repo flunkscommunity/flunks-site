@@ -80,7 +80,7 @@ const GridedView: React.FC<{
                     <span>
                       {nft.collectionName === "flunks" ? "Flunk" : "Backpack"}
                     </span>
-                    <span>#{nft.tokenId}</span>
+                    <span>#{nft.templateId}</span>
                   </div>
                 </Frame>
                 <Frame
@@ -128,7 +128,7 @@ const TableView: React.FC<{
                   className="w-full h-full px-3 !flex items-center"
                 >
                   {nft.collectionName === "flunks" ? "Flunk" : "Backpack"} #
-                  {nft.tokenId}
+                  {nft.templateId}
                 </Frame>
 
                 <Frame
