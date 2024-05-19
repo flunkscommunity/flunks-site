@@ -25,7 +25,7 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
     if (props.metadata?.Type === "Graduated") {
       setCanGraduate(false);
     } else {
-      checkCanGraduate(Number(props.templateId)).then(setCanGraduate);
+      checkCanGraduate(Number(props.tokenId)).then(setCanGraduate);
     }
 
     return () => {
@@ -38,12 +38,14 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
       <NavMenu
         collectionName={"Flunks"}
         tokenId={props.tokenId}
+        templateId={props.templateId}
         onBack={props.onBack}
       />
       <ImageDisplay
         src={props.metadata.uri}
         collectionItemName={"Flunk"}
         tokenId={props.tokenId}
+        templateId={props.templateId}
         pixelSrc={props.metadata?.pixelUri}
       />
       <Frame className="!w-full h-auto pb-4">

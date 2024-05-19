@@ -92,7 +92,8 @@ const StakeableItemsTable = () => {
                   collectionName={item.collection}
                   image={item.MetadataViewsDisplay.thumbnail.url}
                   tokenId={Number(item.tokenID)}
-                  key={`${item.collection}-${item.tokenID}`}
+                  serialNumber={Number(item.serialNumber)}
+                  key={`${item.collection}-${item.serialNumber}`}
                   stakingInfo={item.stakingInfo}
                   rewards={item.rewards}
                 />

@@ -10,6 +10,10 @@ import { graduate } from "web3/tx-grauate";
 import Confetti from "react-confetti";
 import { checkGraduationDates } from "web3/script-get-graduation-date";
 import { isAfter } from "date-fns";
+import {
+  CustomScrollArea,
+  CustomStyledScrollView,
+} from "components/CustomStyledScrollView";
 
 interface GraduationInitProps {
   flunk: MarketplaceIndividualNftDto;
@@ -83,8 +87,6 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
     );
   };
 
-  // console.log("graduatedUrl", graduatedUrl);
-
   const hackTexts = [
     "$ ssh student@schoolserver.edu",
     "student@schoolserver.edu's password:",
@@ -114,7 +116,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
     "Your MySQL connection id is 8",
     "Server version: 8.0.21 MySQL Community Server - GPL",
     "",
-    "Copyright (c) 1995, 2022, Flunks High and/or its affiliates. All rights reserved.",
+    `Copyright (c) 1995 - ${new Date().getFullYear()}, Flunks High and/or its affiliates. All rights reserved.`,
     "",
     "Type 'help;' or 'h' for help. Type 'c' to clear the current input statement.",
     "",
@@ -169,115 +171,107 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
 
   if (endHacking) {
     return (
-      <Frame
-        variant="field"
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          // justifyContent: "center",
-          overflow: "auto",
-          position: "relative",
-          gap: ".5rem",
-          padding: "1rem",
-          textAlign: "center",
-        }}
-      >
-        <Confetti />
-        <H1
-          style={{
-            paddingTop: "1rem",
-          }}
-        >
-          GRADUATED!!
-        </H1>
-        <P>
-          Congratulations on your graduation! You have worked hard and achieved
-          an important milestone. I wish you all the best as you move on to the
-          next phase of your life and pursue your dreams. Well done!
-        </P>
-        <br />
-        <P>
-          It's amazing to think about how much you have grown and changed over
-          the past year. Here is your graduation photo:
-        </P>
-        <div
-          style={{
-            position: "relative",
-          }}
-        >
-          <FlunkImage
-            src={graduatedUrl}
+      <CustomStyledScrollView className="min-h-full">
+        <CustomScrollArea className="flex flex-col items-center">
+          <Confetti className="w-full" />
+          <H1
             style={{
-              width: "100%",
-              height: "100%",
-              maxWidth: "360px",
-              maxHeight: "360px",
+              paddingTop: "1rem",
             }}
-          />
-          {percentage >= 100 && (
-            <div
+          >
+            GRADUATED!!
+          </H1>
+
+          <div
+            style={{
+              position: "relative",
+            }}
+          >
+            <FlunkImage
+              src={graduatedUrl}
               style={{
                 width: "100%",
-                display: "flex",
-                justifyContent: "center",
+                height: "auto",
+                maxWidth: "360px",
+                maxHeight: "360px",
               }}
-            >
-              <a
-                target="_blank"
-                rel="noreferrer noopener"
-                href={graduatedUrl}
-                download={`#${flunk.templateId}.png`}
+              className="!aspect-square"
+            />
+            {percentage >= 100 && (
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
               >
-                <Button onClick={handleLoadFaster}>Save Graduated Image</Button>
-              </a>
+                <a
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  href={graduatedUrl}
+                  download={`#${flunk.templateId}.png`}
+                >
+                  <Button onClick={handleLoadFaster}>
+                    Save Graduated Image
+                  </Button>
+                </a>
+              </div>
+            )}
+
+            <div
+              ref={divOverlayRef}
+              style={{
+                position: "absolute",
+                bottom: "0",
+                left: "0",
+                width: "100%",
+                height: "100%",
+                backgroundColor: "#CCCCCC",
+              }}
+            />
+          </div>
+
+          <H3>Flunk #{flunk.templateId}</H3>
+
+          <P
+            style={{
+              textAlign: "center",
+              marginTop: ".5rem",
+              marginBottom: ".5rem",
+            }}
+          >
+            The school server is a little slow, <br /> give it a few minutes...
+          </P>
+
+          <div
+            style={{
+              maxWidth: "360px",
+              width: "100%",
+            }}
+          >
+            <ProgressBar value={Math.floor(percentage)} />
+          </div>
+
+          {percentage < 100 && (
+            <div>
+              <Button onMouseDown={handleLoadFaster} onClick={handleLoadFaster}>
+                Load FASTER!!!!!
+              </Button>
             </div>
           )}
 
-          <div
-            ref={divOverlayRef}
-            style={{
-              position: "absolute",
-              bottom: "0",
-              left: "0",
-              width: "100%",
-              height: "100%",
-              backgroundColor: "#CCCCCC",
-            }}
-          />
-        </div>
-
-        <H3>Flunk #{flunk.templateId}</H3>
-
-        <P
-          style={{
-            textAlign: "center",
-            marginTop: ".5rem",
-            marginBottom: ".5rem",
-          }}
-        >
-          The school server is a little slow, <br /> give it a few minutes...
-        </P>
-
-        <div
-          style={{
-            maxWidth: "360px",
-            width: "100%",
-          }}
-        >
-          <ProgressBar value={Math.floor(percentage)} />
-        </div>
-
-        {percentage < 100 && (
-          <div>
-            <Button onMouseDown={handleLoadFaster} onClick={handleLoadFaster}>
-              Load FASTER!!!!!
-            </Button>
-          </div>
-        )}
-      </Frame>
+          <P className="max-w-[350px] !px-2">
+            Congratulations on your graduation! You have worked hard and
+            achieved an important milestone. I wish you all the best as you move
+            on to the next phase of your life and pursue your dreams. Well done!
+          </P>
+          <br />
+          <P className="max-w-[350px] !px-2">
+            It's amazing to think about how much you have grown and changed over
+            the past year. Here is your graduation photo:
+          </P>
+        </CustomScrollArea>
+      </CustomStyledScrollView>
     );
   }
 
@@ -298,6 +292,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
         color: "#00FF00",
         overflow: "auto",
         position: "relative",
+        padding: "0.5rem",
       }}
     >
       {state.txStatus !== TX_STATUS.PENDING &&
@@ -332,16 +327,10 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
                 handleGraduate();
               }}
               id="typewriter"
-              disabled={
-                true || state.txStatus === TX_STATUS.STARTED || !canGraduate
-              }
+              disabled={state.txStatus === TX_STATUS.STARTED || !canGraduate}
             >
               Hack Grades
             </Button>
-            <P className="max-w-[200px]">
-              Graduation is currently deactivated <br /><br/>
-              Please keep an eye out on our discord for updates.
-            </P>
             {state.txStatus === TX_STATUS.ERROR && (
               <P>
                 If the problem persists, <br />

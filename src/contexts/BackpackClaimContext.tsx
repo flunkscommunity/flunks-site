@@ -4,6 +4,7 @@ import getBackpackClaimedData, {
 import { useRouter } from "next/router";
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 import reducer from "reducers/ClaimDataReducer";
+import useSWR from "swr";
 
 interface ContextProps {
   state: FormattedBackpackClaimData;
@@ -16,28 +17,20 @@ const ClaimBackpackProvider: React.FC<{ children: React.ReactNode }> = (
   props
 ) => {
   const { children } = props;
-  const [state, dispatch] = useReducer(reducer, {
-    flunksData: null,
-    backpackData: null,
+
+  const { data, mutate } = useSWR("claimData", getBackpackClaimedData, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false,
+    revalidateIfStale: false,
   });
-  const router = useRouter();
-
-  const refreshClaimData = () => {
-    dispatch({ type: "LOADING" });
-    getBackpackClaimedData().then((data) => {
-      dispatch({ type: "REFRESHED", payload: data });
-    });
-  };
-
-  useEffect(() => {
-    refreshClaimData();
-  }, []);
 
   return (
     <ClaimBackpackContext.Provider
       value={{
-        state,
-        refreshClaimData,
+        state: data,
+        refreshClaimData: mutate,
       }}
     >
       {children}

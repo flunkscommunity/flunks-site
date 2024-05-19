@@ -23,6 +23,8 @@ const ClaimForm: React.FC<Props> = (props) => {
       initialHeight="auto"
       initialWidth="auto"
       windowsId={`claim-form-${flunk.templateId}`}
+      resizable={false}
+      showMaximizeButton={false}
     >
       <FclTransactionProvider>
         <ClaimFormForm nft={flunk} shouldFetch={shouldFetch} />

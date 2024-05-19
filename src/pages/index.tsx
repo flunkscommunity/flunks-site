@@ -14,6 +14,7 @@ import LoginScreen from "components/LoginScreen";
 import GumballMachine from "windows/GumballMachine";
 import useThemeSettings from "store/useThemeSettings";
 import ProjectJnr from "windows/ProjectJnr";
+import AboutUs from "windows/AboutUs";
 
 const Desktop = () => {
   const { windows, openWindow } = useWindowsContext();
@@ -61,6 +62,17 @@ const Desktop = () => {
             openWindow({
               key: WINDOW_IDS.PROJECT_JNR,
               window: <ProjectJnr />,
+            });
+          }}
+        />
+
+        <DesktopAppIcon
+          title="About Us"
+          icon="/images/icons/about-us.png"
+          onDoubleClick={() => {
+            openWindow({
+              key: WINDOW_IDS.ABOUT_US,
+              window: <AboutUs />,
             });
           }}
         />

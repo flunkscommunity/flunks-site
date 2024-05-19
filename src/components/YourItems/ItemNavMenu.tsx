@@ -3,6 +3,7 @@ import { Handle, MenuList, MenuListItem } from "react95";
 interface NavMenu {
   collectionName: string;
   tokenId: number | string;
+  templateId: number;
   onBack: () => void;
 }
 

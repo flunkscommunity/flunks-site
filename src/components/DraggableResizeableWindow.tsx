@@ -47,6 +47,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     resizable = true,
     authGuard = props.authGuard || false,
     onHelp,
+    ref,
   } = props;
   const windowRef = useRef<HTMLDivElement>(null);
   const draggableRef = useRef<Draggable>(null);
@@ -79,6 +80,14 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     }
   };
 
+  const _bringWindowToFront = (e?: React.MouseEvent<HTMLDivElement>) => {
+    if (e) {
+      e.stopPropagation();
+    }
+
+    bringWindowToFront(props.windowsId);
+  };
+
   useEffect(() => {
     if (width < 768 && draggableRef.current) {
       draggableRef.current.setState({
@@ -92,7 +101,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     if (windowRef.current) {
       const numOfChildren = windowRef.current.parentElement?.children.length;
 
-      bringWindowToFront(props.windowsId);
+      _bringWindowToFront();
       if (draggableRef.current) {
         draggableRef.current.setState({
           x: width < 768 ? 0 : numOfChildren * 10,
@@ -102,7 +111,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     }
   }, []);
 
-  const onStart = () => bringWindowToFront(props.windowsId);
+  const onStart = () => _bringWindowToFront();
   const isMobile = width < 768;
 
   if (authGuard && !user) {
@@ -151,7 +160,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           maxHeight: "calc(100% - 48px)",
           ...props.style,
         }}
-        onClick={() => bringWindowToFront(props.windowsId)}
+        onClick={_bringWindowToFront}
         id={props.windowsId}
       >
         <strong>
