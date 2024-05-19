@@ -288,7 +288,7 @@ const AboutUs = () => {
                         className="px-2 py-4 !flex flex-col gap-2 items-center justify-between w-full"
                       >
                         <a
-                          href={discordStats.instant_invite}
+                          href={discordStats?.instant_invite}
                           target="_blank"
                           rel="noreferrer noopener"
                           className="w-full"
