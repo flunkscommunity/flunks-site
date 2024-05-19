@@ -14,7 +14,17 @@ import { WINDOW_IDS } from "fixed";
 import { useRef } from "react";
 import Draggable from "react-draggable";
 import Marquee from "react-fast-marquee";
-import { Frame, ScrollView, ScrollViewProps, createScrollbars } from "react95";
+import {
+  Frame,
+  ScrollView,
+  ScrollViewProps,
+  createScrollbars,
+  TableBody,
+  TableRow,
+  TableDataCell,
+  Avatar,
+  Button,
+} from "react95";
 import {
   createBorderStyles,
   createBoxStyles,
@@ -22,6 +32,7 @@ import {
   insetShadow,
 } from "react95/dist/common";
 import styled from "styled-components";
+import useSWR from "swr";
 
 const BackgroundDiv = styled(Frame)`
   background-color: ${({ theme }) => theme.material};
@@ -113,6 +124,8 @@ const RANGES = {
   },
 };
 
+const fetcher = (url) => fetch(url).then((r) => r.json());
+
 const AboutUs = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { closeWindow } = useWindowsContext();
@@ -120,11 +133,22 @@ const AboutUs = () => {
     config: config.gentle,
     container: containerRef,
   });
-  const draggableRef = useRef<HTMLDivElement>(null);
+
+  const { data: discordStats } = useSWR(
+    "https://discord.com/api/guilds/929609214215725056/widget.json",
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshWhenHidden: false,
+      refreshWhenOffline: false,
+      revalidateIfStale: false,
+      revalidateOnMount: true,
+    }
+  );
 
   return (
     <DraggableResizeableWindow
-      ref={draggableRef}
       onClose={() => {
         closeWindow(WINDOW_IDS.ABOUT_US);
       }}
@@ -198,6 +222,87 @@ const AboutUs = () => {
                   </span>
 
                   <OurTeam />
+                </div>
+              </div>
+            </div>
+            <div className="w-full flex flex-col mt-28">
+              <div className="flex w-full flex-col">
+                <div className="max-w-[1440px] mx-auto w-full flex flex-col">
+                  <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty uppercase mx-auto">
+                    Join our Community
+                  </span>
+
+                  <div className="flex gap-4 mt-10 overflow-hidden flex-col px-2 w-full items-center">
+                    {/* <div className="flex flex-col">
+                      <iframe
+                        src="https://discord.com/widget?id=929609214215725056&theme=dark"
+                        width="600"
+                        height="450"
+                        allowTransparency={true}
+                        frameBorder="0"
+                        sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+                        className="max-w-[280px] lg:max-w-full"
+                      ></iframe>
+                    </div> */}
+                    <Frame
+                      variant="field"
+                      className="max-w-[600px] h-full max-h-[400px] w-full overflow-hidden"
+                    >
+                      <Frame className="px-2 py-4 !flex gap-2 items-center justify-between w-full">
+                        <div className="flex items-center gap-2">
+                          <img
+                            src="/images/icons/discord.png"
+                            className="h-8"
+                          />
+                          <span className="text-lg font-bold">Discord</span>
+                        </div>
+
+                        <span className="text-lg font-bold">
+                          {discordStats?.presence_count || 0} Flunks Online
+                        </span>
+                      </Frame>
+
+                      <CustomStyledScrollView>
+                        <CustomScrollArea className="!max-h-[200px] w-full overflow-y-auto">
+                          {discordStats?.members?.map((member) => (
+                            <TableRow
+                              key={member.id}
+                              className="!w-full !flex items-center !h-full py-2"
+                            >
+                              <TableDataCell className="flex items-center justify-center">
+                                <Avatar
+                                  src={member.avatar_url}
+                                  className="w-8 h-8"
+                                />
+                              </TableDataCell>
+                              <TableDataCell className="flex-grow">
+                                {member.username}
+                              </TableDataCell>
+                              <TableDataCell>{member.status}</TableDataCell>
+                            </TableRow>
+                          ))}
+                        </CustomScrollArea>
+                      </CustomStyledScrollView>
+                      <Frame
+                        variant="well"
+                        className="px-2 py-4 !flex flex-col gap-2 items-center justify-between w-full"
+                      >
+                        <a
+                          href={discordStats.instant_invite}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="w-full"
+                        >
+                          <Button
+                            fullWidth
+                            className="font-bold !py-8 !text-2xl"
+                          >
+                            JOIN NOW
+                          </Button>
+                        </a>
+                      </Frame>
+                    </Frame>
+                  </div>
                 </div>
               </div>
             </div>

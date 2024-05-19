@@ -17,12 +17,12 @@ const ClaimForm: React.FC<Props> = (props) => {
   return (
     <DraggableResizeableWindow
       onClose={() => {
-        closeWindow(`claim-form-${flunk.templateId}`);
+        closeWindow(`claim-form-${flunk.tokenId + 1}`);
       }}
-      headerTitle={`Claim Form - Student #${flunk.templateId}`}
+      headerTitle={`Claim Form - Student #${flunk.tokenId + 1}`}
       initialHeight="auto"
       initialWidth="auto"
-      windowsId={`claim-form-${flunk.templateId}`}
+      windowsId={`claim-form-${flunk.tokenId + 1}`}
       resizable={false}
       showMaximizeButton={false}
     >

@@ -25,7 +25,7 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
     if (props.metadata?.Type === "Graduated") {
       setCanGraduate(false);
     } else {
-      checkCanGraduate(Number(props.templateId)).then(setCanGraduate);
+      checkCanGraduate(Number(props.tokenId)).then(setCanGraduate);
     }
 
     return () => {
