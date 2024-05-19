@@ -173,7 +173,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
     return (
       <CustomStyledScrollView className="min-h-full">
         <CustomScrollArea className="flex flex-col items-center">
-          <Confetti />
+          <Confetti className="w-full" />
           <H1
             style={{
               paddingTop: "1rem",
