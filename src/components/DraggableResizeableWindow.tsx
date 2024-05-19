@@ -24,6 +24,7 @@ interface Props {
   windowsId: string;
   style?: React.CSSProperties;
   onHelp?: () => void;
+  toolbar?: React.ReactNode;
 }
 
 const WindowButtons = styled.div`
@@ -47,7 +48,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     resizable = true,
     authGuard = props.authGuard || false,
     onHelp,
-    ref,
+    toolbar,
   } = props;
   const windowRef = useRef<HTMLDivElement>(null);
   const draggableRef = useRef<Draggable>(null);
@@ -199,7 +200,14 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           </WindowHeader>
         </strong>
 
-        <WindowContent className="!px-2 !pt-4 flex flex-col w-full flex-grow max-h-[calc(100%-44px)]">
+        {toolbar}
+
+        <WindowContent
+          className="!px-2 flex flex-col w-full flex-grow max-h-[calc(100%-44px)]"
+          style={{
+            paddingTop: !!toolbar ? "0" : "16px",
+          }}
+        >
           {children}
         </WindowContent>
       </Window>

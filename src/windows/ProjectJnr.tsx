@@ -6,18 +6,20 @@ import {
   MenuListItem,
   ScrollView,
   Button,
+  Toolbar,
 } from "react95";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
-import JnrCanvas, {
-  TRAITS_BY_CLASS,
-  TRAIT_COLLECTION_NAME,
-  TRAIT_IMAGES_BY_CLASS,
-  TRAIT_IMAGES_BY_URL,
-} from "components/Canvases/JnrCanvas";
+import JnrCanvas from "components/Canvases/JnrCanvas";
 import Marquee from "react-fast-marquee";
 import styled from "styled-components";
 import React, { Fragment, useState } from "react";
+import {
+  CustomScrollArea,
+  CustomStyledScrollView,
+} from "components/CustomStyledScrollView";
+import Inventory from "components/Jnrs/Inventory";
+import { JnrCanvasProvider } from "contexts/JnrCanvasContext";
 
 const FrameWithBackground = styled(Frame)`
   background-image: linear-gradient(
@@ -32,131 +34,47 @@ const FrameWithBackground = styled(Frame)`
   background-size: 20px 20px;
 `;
 
-// image stack order reversed:
-// RH TRAIT
-// LH TRAIT
-// HEAD TRAIT
-// BASE EYES url = /images/jnr-traits/base-eyes.png
-// BASE HEAD url = /images/jnr-traits/base-head.png
-// TORSO TRAIT
-// BASE TORSO url = /images/jnr-traits/base-torso.png
-// BOTTOMS TRAIT
-// SHOES TRAIT
-// BASE BOTTOMS url = /images/jnr-traits/base-bottoms.png
-// BACK TRAIT
+const BackgroundDiv = styled(Frame)`
+  background-color: ${({ theme }) => theme.canvas};
+  background-image: linear-gradient(
+      ${({ theme }) => {
+          // color is rgb, turn it int rgba with 0.25 alpha
+          const color = theme.canvasText;
 
-const TraitImage = ({
-  src,
-  traitName,
-  onClick,
-  active,
-}: {
-  src: string;
-  traitName: string;
-  onClick: (src) => void;
-  active?: boolean;
-}) => {
-  const imageRenderOrder = [
-    traitName === "back" ? src : "",
-    "/images/jnr-traits/base-bottoms.png",
-    traitName === "shoes" ? src : "",
-    traitName === "bottoms" ? src : "",
-    "/images/jnr-traits/base-torso.png",
-    traitName === "torso" ? src : "",
-    "/images/jnr-traits/base-head.png",
-    "/images/jnr-traits/base-eyes.png",
-    traitName === "head" ? src : "",
-    traitName === "lh" ? src : "",
-    traitName === "rh" ? src : "",
-  ];
+          if (color.startsWith("rgb")) {
+            return color.replace(")", ", 0.10)").replace("rgb", "rgba");
+          }
 
-  return (
-    <Button
-      className="w-full min-h-[100px] h-full relative"
-      onClick={() => {
-        onClick(src);
-      }}
-      active={active}
-    >
-      {imageRenderOrder.map((src, index) => {
-        if (src === "") return null;
+          if (color === "black") {
+            return "rgba(0, 0, 0, 0.10)";
+          }
 
-        return (
-          <img
-            key={index}
-            src={src}
-            className="!absolute w-full h-full object-contain"
-            style={{ zIndex: index }}
-          />
-        );
-      })}
-    </Button>
-  );
-};
+          return `${theme.canvasText}1A`;
+        }}
+        1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to right,
+      ${({ theme }) => {
+          // color is rgb, turn it int rgba with 0.25 alpha
+          const color = theme.canvasText;
 
-const FullTraitsImage: React.FC<{
-  back: string;
-  bottoms: string;
-  head: string;
-  lh: string;
-  rh: string;
-  shoes: string;
-  torso: string;
-}> = (props) => {
-  const { back, bottoms, head, lh, rh, shoes, torso } = props;
+          if (color.startsWith("rgb")) {
+            return color.replace(")", ", 0.10)").replace("rgb", "rgba");
+          }
 
-  return (
-    <FrameWithBackground
-      variant="well"
-      className="w-full h-full relative min-h-[300px] !bg-gradient-to-bl from-white/10 to-black/10"
-    >
-      <img
-        src={TRAIT_IMAGES_BY_URL[back].url}
-        className="!absolute w-full h-full object-contain"
-      />
-      <img
-        src="/images/jnr-traits/base-bottoms.png"
-        className="!absolute w-full h-full object-contain"
-      />
-      <img
-        src={TRAIT_IMAGES_BY_URL[shoes].url}
-        className="!absolute w-full h-full object-contain"
-      />
-      <img
-        src={TRAIT_IMAGES_BY_URL[bottoms].url}
-        className="!absolute w-full h-full object-contain"
-      />
-      <img
-        src="/images/jnr-traits/base-torso.png"
-        className="!absolute w-full h-full object-contain"
-      />
-      <img
-        src={TRAIT_IMAGES_BY_URL[torso].url}
-        className="!absolute w-full h-full object-contain"
-      />
-      <img
-        src="/images/jnr-traits/base-head.png"
-        className="!absolute w-full h-full object-contain"
-      />
-      <img
-        src="/images/jnr-traits/base-eyes.png"
-        className="!absolute w-full h-full object-contain"
-      />
-      <img
-        src={TRAIT_IMAGES_BY_URL[head].url}
-        className="!absolute w-full h-full object-contain"
-      />
-      <img
-        src={TRAIT_IMAGES_BY_URL[lh].url}
-        className="!absolute w-full h-full object-contain"
-      />
-      <img
-        src={TRAIT_IMAGES_BY_URL[rh].url}
-        className="!absolute w-full h-full object-contain"
-      />
-    </FrameWithBackground>
-  );
-};
+          if (color === "black") {
+            return "rgba(0, 0, 0, 0.10)";
+          }
+
+          return `${theme.canvasText}1A`;
+        }}
+        1px,
+      ${({ theme }) => theme.canvas} 1px
+    );
+  background-size: 32px 32px;
+`;
 
 const ProjectJnr: React.FC = () => {
   const { closeWindow } = useWindowsContext();
@@ -178,6 +96,7 @@ const ProjectJnr: React.FC = () => {
     torso: "/3d/SKELETON/TORSO.BIOLOGY.SKELETON.glb",
   });
   const [show2d, setShow2d] = useState(false);
+  const [showApp, setShowApp] = useState(false);
 
   return (
     <DraggableResizeableWindow
@@ -192,14 +111,23 @@ const ProjectJnr: React.FC = () => {
       showMaximizeButton={false}
       resizable={false}
     >
-      <div className="flex flex-col lg:flex-row-reverse w-full h-full gap-2">
-        {/* <Frame variant="field" className="">
-          <div className="absolute inset-0 z-0 flex flex-col justify-end opacity-100 mix-blend-overlay">
-          <Marquee autoFill>
-            <span className="ml-4 text-6xl">- PREVIEW ONLY - TOP SECRET</span>
-          </Marquee>
+      <JnrCanvasProvider>
+        <div className="flex flex-col-reverse lg:flex-row h-full w-full">
+          <div className="w-full h-[50%] lg:h-full lg:max-w-[450px]">
+            <Inventory />
+          </div>
+
+          <JnrCanvas traits={selectedTraits} />
         </div>
-        </Frame> */}
+      </JnrCanvasProvider>
+    </DraggableResizeableWindow>
+  );
+};
+
+export default ProjectJnr;
+
+{
+  /* <div className="flex flex-col lg:flex-row-reverse w-full h-full gap-2">
         <JnrCanvas traits={selectedTraits} />
         <ScrollView className="h-[calc(100%-50%-8px)] lg:h-full w-full max-w-[400px] !p-0">
           <Frame variant="field" className="w-full">
@@ -263,13 +191,5 @@ const ProjectJnr: React.FC = () => {
             </ScrollView>
           </div>
         </ScrollView>
-        {/* <Frame
-          variant="field"
-          className="!w-[400px] min-w-[400px]  !flex-shrink-0"
-        ></Frame> */}
-      </div>
-    </DraggableResizeableWindow>
-  );
-};
-
-export default ProjectJnr;
+      </div> */
+}
