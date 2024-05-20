@@ -9,17 +9,19 @@ import React, {
 // import { authenticate, unauthenticate, currentUser } from "@onflow/fcl";
 import useUserStore from "store/useUserStore";
 
+export interface SelectedTraits {
+  back: JnrTrait;
+  bottoms: JnrTrait;
+  head: JnrTrait;
+  lh: JnrTrait;
+  rh: JnrTrait;
+  shoes: JnrTrait;
+  torso: JnrTrait;
+}
+
 interface JnrCanvasContextProps {
   ownedTraits: UserTraits;
-  selectedTraits: {
-    back: JnrTrait;
-    bottoms: JnrTrait;
-    head: JnrTrait;
-    lh: JnrTrait;
-    rh: JnrTrait;
-    shoes: JnrTrait;
-    torso: JnrTrait;
-  };
+  selectedTraits: SelectedTraits;
   equipTrait: (trait: JnrTrait, group: string) => void;
   randomizeSelectedTraits: () => void;
 }
@@ -61,7 +63,7 @@ const ChooseRandomSelectedTraits = (ownedTraits: UserTraits) => {
 
 export const JnrCanvasProvider = ({ children }) => {
   const data = USERS_TRAITS;
-  const [selectedTraits, setSelectedTraits] = useState(
+  const [selectedTraits, setSelectedTraits] = useState<SelectedTraits>(
     ChooseRandomSelectedTraits(data)
   );
 

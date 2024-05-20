@@ -8,6 +8,7 @@ import { useMemo, useState } from "react";
 import {
   Button,
   Frame,
+  FrameProps,
   Handle,
   MenuList,
   MenuListItem,
@@ -56,7 +57,15 @@ const Classes = [
   { name: "Sport", class: "sport" },
 ];
 
-const TraitImage = ({ src, traitName }: { src: string; traitName: string }) => {
+export const TraitImage = ({
+  src,
+  traitName,
+  className,
+}: {
+  src: string;
+  traitName: string;
+  className?: string;
+}) => {
   const imageRenderOrder = [
     traitName === "back" ? src : "",
     "/images/jnr-traits/base-bottoms.png",
@@ -72,7 +81,11 @@ const TraitImage = ({ src, traitName }: { src: string; traitName: string }) => {
   ];
 
   return (
-    <div className="w-full min-h-[80px] lg:min-h-[128px] h-full relative">
+    <div
+      className={`w-full min-h-[80px] lg:min-h-[128px] h-full relative ${
+        className || ""
+      }`}
+    >
       {imageRenderOrder.map((src, index) => {
         if (src === "") return null;
 
@@ -81,13 +94,22 @@ const TraitImage = ({ src, traitName }: { src: string; traitName: string }) => {
             key={index}
             src={src}
             className="!absolute w-full h-full object-contain"
-            style={{ zIndex: index }}
+            style={{
+              zIndex: index,
+              opacity: [1, 4, 6, 7].includes(index) ? 0.2 : 1,
+              filter: [1, 4, 6, 7].includes(index) ? "grayscale(100%)" : "none",
+            }}
           />
         );
       })}
     </div>
   );
 };
+
+const TraitImageFrame = styled(Frame)`
+  background-color: ${({ theme, id }) =>
+    id === "selected" ? "#00000099" : "#000000CC"};
+`;
 
 const OwnedTrait: React.FC<JnrTrait> = (trait) => {
   const { selectedTraits, equipTrait } = useJnrCanvas();
@@ -112,9 +134,42 @@ const OwnedTrait: React.FC<JnrTrait> = (trait) => {
           </span>
         </Frame>
       </div>
-      <Frame variant="status" className="!flex flex-col gap-2 w-full relative">
+      <TraitImageFrame
+        id={isActive ? "selected" : "unselected"}
+        variant="status"
+        className="!flex flex-col gap-2 w-full relative"
+      >
         <TraitImage src={trait.thumbnail} traitName={trait.group} />
-      </Frame>
+      </TraitImageFrame>
+      <div className="w-full !flex">
+        <Frame
+          variant="well"
+          className="w-full !flex items-center justify-between px-2 py-1 gap-2"
+        >
+          <img
+            src="/images/icons/attack-64x64.png"
+            alt="attack"
+            className="w-3 h-3"
+          />
+          <span className="text-base lg:text-xl leading-[1] drop-shadow-[-0.5px_2px_0_rgba(255,255,255,0.8)]">
+            {trait.metadata.attack}
+          </span>
+        </Frame>
+
+        <Frame
+          variant="well"
+          className="w-full !flex items-center justify-between px-2 gap-2"
+        >
+          <span className="text-base lg:text-xl leading-[1] drop-shadow-[-0.5px_2px_0_rgba(255,255,255,0.8)]">
+            {trait.metadata.defense}
+          </span>
+          <img
+            src="/images/icons/defense-64x64.png"
+            alt="attack"
+            className="w-3 h-3"
+          />
+        </Frame>
+      </div>
       <div className="flex items-center w-full">
         <Frame variant="field" className="w-full capitalize px-2 !flex">
           <span className="text-lg text-center w-full">{trait.set}</span>
@@ -133,13 +188,13 @@ const Inventory = () => {
   );
 
   return (
-    <CustomStyledScrollView className="h-full w-full">
-      <CustomScrollArea className="!p-0 relative bg-white">
+    <CustomStyledScrollView className="!p-0 !w-full max-w-full !m-0 [&>div]:!p-0 h-full">
+      <CustomScrollArea>
         <Frame className="!flex flex-row items-center justify-between w-full py-2 px-2 !sticky top-0 z-50 gap-1">
           <span className="text-lg font-bold">Sample Inventory</span>
           <Button onClick={randomizeSelectedTraits}>Randomize</Button>
         </Frame>
-        <div className="!grid w-full h-full grid-cols-[repeat(auto-fill,minmax(150px,1fr))]">
+        <div className="!grid w-full h-full grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-2.5 px-2 py-2">
           {allOwnedTraits.map((trait) => {
             return <OwnedTrait key={trait.thumbnail} {...trait} />;
           })}

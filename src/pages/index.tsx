@@ -56,8 +56,8 @@ const Desktop = () => {
         />
 
         <DesktopAppIcon
-          title="Project J.N.R"
-          icon="/images/icons/experiment-3d.png"
+          title="JNR.exe"
+          icon="/images/icons/pocket-juniors-50x50.png"
           onDoubleClick={() => {
             openWindow({
               key: WINDOW_IDS.PROJECT_JNR,

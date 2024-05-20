@@ -211,8 +211,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "back",
       groupLabel: "Back",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 5) + 1,
       },
     },
     {
@@ -224,8 +224,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "bottoms",
       groupLabel: "Bottoms",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -237,8 +237,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "head",
       groupLabel: "Head",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -250,8 +250,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "rh",
       groupLabel: "Right Hand",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 10) + 3,
       },
     },
     {
@@ -263,8 +263,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "lh",
       groupLabel: "Left Hand",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 10) + 3,
+        defense: Math.floor(Math.random() * 0) + 1,
       },
     },
     {
@@ -276,8 +276,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "shoes",
       groupLabel: "Shoes",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -289,8 +289,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "torso",
       groupLabel: "Torso",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 0) + 0,
+        defense: Math.floor(Math.random() * 9) + 1,
       },
     },
   ],
@@ -304,8 +304,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "back",
       groupLabel: "Back",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 5) + 1,
       },
     },
     {
@@ -317,8 +317,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "bottoms",
       groupLabel: "Bottoms",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -330,8 +330,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "head",
       groupLabel: "Head",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -343,8 +343,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "rh",
       groupLabel: "Right Hand",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 10) + 3,
       },
     },
     {
@@ -356,8 +356,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "lh",
       groupLabel: "Left Hand",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 10) + 3,
+        defense: Math.floor(Math.random() * 0) + 1,
       },
     },
     {
@@ -369,8 +369,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "shoes",
       groupLabel: "Shoes",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -382,8 +382,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "torso",
       groupLabel: "Torso",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 0) + 0,
+        defense: Math.floor(Math.random() * 9) + 1,
       },
     },
   ],
@@ -397,8 +397,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "back",
       groupLabel: "Back",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 5) + 1,
       },
     },
     {
@@ -410,8 +410,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "bottoms",
       groupLabel: "Bottoms",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -423,8 +423,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "head",
       groupLabel: "Head",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -436,8 +436,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "rh",
       groupLabel: "Right Hand",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 10) + 3,
       },
     },
     {
@@ -449,8 +449,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "lh",
       groupLabel: "Left Hand",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 10) + 3,
+        defense: Math.floor(Math.random() * 0) + 1,
       },
     },
     {
@@ -462,8 +462,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "shoes",
       groupLabel: "Shoes",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -475,8 +475,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "torso",
       groupLabel: "Torso",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 0) + 0,
+        defense: Math.floor(Math.random() * 9) + 1,
       },
     },
   ],
@@ -490,8 +490,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "back",
       groupLabel: "Back",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 5) + 1,
       },
     },
     {
@@ -503,8 +503,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "bottoms",
       groupLabel: "Bottoms",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -516,8 +516,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "head",
       groupLabel: "Head",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -529,8 +529,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "rh",
       groupLabel: "Right Hand",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 10) + 3,
       },
     },
     {
@@ -542,8 +542,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "lh",
       groupLabel: "Left Hand",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 10) + 3,
+        defense: Math.floor(Math.random() * 0) + 1,
       },
     },
     {
@@ -555,8 +555,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "shoes",
       groupLabel: "Shoes",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -568,8 +568,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "torso",
       groupLabel: "Torso",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 0) + 0,
+        defense: Math.floor(Math.random() * 9) + 1,
       },
     },
   ],
@@ -583,8 +583,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "back",
       groupLabel: "Back",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 5) + 1,
       },
     },
     {
@@ -596,8 +596,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "bottoms",
       groupLabel: "Bottoms",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -609,8 +609,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "head",
       groupLabel: "Head",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -622,8 +622,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "rh",
       groupLabel: "Right Hand",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 10) + 3,
       },
     },
     {
@@ -635,8 +635,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "lh",
       groupLabel: "Left Hand",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 10) + 3,
+        defense: Math.floor(Math.random() * 0) + 1,
       },
     },
     {
@@ -648,8 +648,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "shoes",
       groupLabel: "Shoes",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -661,8 +661,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "torso",
       groupLabel: "Torso",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 0) + 0,
+        defense: Math.floor(Math.random() * 9) + 1,
       },
     },
   ],
@@ -676,8 +676,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "back",
       groupLabel: "Back",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 5) + 1,
       },
     },
     {
@@ -689,8 +689,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "bottoms",
       groupLabel: "Bottoms",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -702,8 +702,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "head",
       groupLabel: "Head",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -715,8 +715,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "rh",
       groupLabel: "Right Hand",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 10) + 3,
       },
     },
     {
@@ -728,8 +728,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "lh",
       groupLabel: "Left Hand",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 10) + 3,
+        defense: Math.floor(Math.random() * 0) + 1,
       },
     },
     {
@@ -741,8 +741,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "shoes",
       groupLabel: "Shoes",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -754,8 +754,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "torso",
       groupLabel: "Torso",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 0) + 0,
+        defense: Math.floor(Math.random() * 9) + 1,
       },
     },
   ],
@@ -769,8 +769,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "back",
       groupLabel: "Back",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 5) + 1,
       },
     },
     {
@@ -782,8 +782,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "bottoms",
       groupLabel: "Bottoms",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -795,8 +795,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "head",
       groupLabel: "Head",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -808,8 +808,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "rh",
       groupLabel: "Right Hand",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 10) + 3,
       },
     },
     {
@@ -821,8 +821,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "lh",
       groupLabel: "Left Hand",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 10) + 3,
+        defense: Math.floor(Math.random() * 0) + 1,
       },
     },
     {
@@ -834,8 +834,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "shoes",
       groupLabel: "Shoes",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -847,8 +847,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "torso",
       groupLabel: "Torso",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 0) + 0,
+        defense: Math.floor(Math.random() * 9) + 1,
       },
     },
   ],
@@ -862,8 +862,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "back",
       groupLabel: "Back",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 5) + 1,
       },
     },
     {
@@ -875,8 +875,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "bottoms",
       groupLabel: "Bottoms",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -888,8 +888,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "head",
       groupLabel: "Head",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -901,8 +901,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "rh",
       groupLabel: "Right Hand",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 10) + 3,
       },
     },
     {
@@ -914,8 +914,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "lh",
       groupLabel: "Left Hand",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 10) + 3,
+        defense: Math.floor(Math.random() * 0) + 1,
       },
     },
     {
@@ -927,8 +927,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "shoes",
       groupLabel: "Shoes",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 8) + 1,
       },
     },
     {
@@ -940,8 +940,8 @@ export const USERS_TRAITS: UserTraits = {
       group: "torso",
       groupLabel: "Torso",
       metadata: {
-        attack: 10,
-        defense: 10,
+        attack: Math.floor(Math.random() * 0) + 0,
+        defense: Math.floor(Math.random() * 9) + 1,
       },
     },
   ],

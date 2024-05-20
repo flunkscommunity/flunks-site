@@ -10,7 +10,7 @@ import {
   Stage,
 } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import React, { useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { PCFSoftShadowMap } from "three";
 import { type PerspectiveCamera as ThreePerspectiveCamera } from "three/src/cameras/PerspectiveCamera";
 import { type PerspectiveCameraProps } from "@react-three/fiber";
@@ -19,6 +19,9 @@ import { Button, Frame } from "react95";
 import { degToRad } from "three/src/math/MathUtils";
 import styled from "styled-components";
 import { useJnrCanvas } from "contexts/JnrCanvasContext";
+import { useWindowsContext } from "contexts/WindowsContext";
+import useWindowSize from "hooks/useWindowSize";
+import { debounce } from "lodash";
 
 const Camera = React.forwardRef<ThreePerspectiveCamera, PerspectiveCameraProps>(
   (props, ref) => {
@@ -88,28 +91,22 @@ const CanvasChildren = () => {
 };
 
 interface JnrCanvasProps {
-  traits: {
-    back: string;
-    bottoms: string;
-    head: string;
-    lh: string;
-    rh: string;
-    shoes: string;
-    torso: string;
-  };
+  children?: React.ReactNode;
 }
 
 export const CanvasWithBorders = styled(Canvas)`
-  border-style: inset;
-  border-bottom: 4px solid ${({ theme }) => theme.borderLight};
-  border-right: 4px solid ${({ theme }) => theme.borderLight};
-  border-top: 4px solid ${({ theme }) => theme.borderDark};
-  border-left: 4px solid ${({ theme }) => theme.borderDark};
+  // border-style: inset;
+  // border-bottom: 4px solid ${({ theme }) => theme.borderLight};
+  // border-right: 4px solid ${({ theme }) => theme.borderLight};
+  // border-top: 4px solid ${({ theme }) => theme.borderDark};
+  // border-left: 4px solid ${({ theme }) => theme.borderDark};
 `;
 
-const JnrCanvas: React.FC<JnrCanvasProps> = (props) => {
+const TheCanvas: React.FC<JnrCanvasProps> = React.memo((props) => {
   const canvasRef = useRef<Canvas>(null);
   const { selectedTraits } = useJnrCanvas();
+  const { openWindow } = useWindowsContext();
+  const { width } = useWindowSize();
 
   return (
     <CanvasWithBorders
@@ -125,12 +122,12 @@ const JnrCanvas: React.FC<JnrCanvasProps> = (props) => {
         enabled: true,
         type: PCFSoftShadowMap,
       }}
-      // resize={{ debounce: 0 }}
-      className="bg-black min-h-[50%] transition-all"
+      resize={{
+        debounce: 0,
+      }}
+      className="z-10 h-full w-full bg-black"
     >
       <CanvasChildren />
-      {/* <Center>
-      <Bounds> */}
       <group>
         <GlbModel url={"/3d/base.glb"} />
         <GlbModel url={"/3d/base-eyes.glb"} />
@@ -153,32 +150,16 @@ const JnrCanvas: React.FC<JnrCanvasProps> = (props) => {
       />
     </CanvasWithBorders>
   );
+});
+
+const JnrCanvas: React.FC<JnrCanvasProps> = (props) => {
+  const { selectedTraits } = useJnrCanvas();
 
   return (
-    <div className="h-full flex flex-col w-full">
-      {/* <Frame
-        variant="field"
-        className="!h-auto !flex lg:!hidden flex-nowrap overflow-x-auto !w-full py-2 px-2"
-      >
-        Scroll for more (SHIFT + scroll for horizontal scroll)
+    <div className="relative w-full h-full flex flex-grow flex-col">
+      <Frame className="w-full h-full">
+        <TheCanvas {...props} />
       </Frame>
-      <Frame
-        variant="well"
-        className="!h-auto pt-2 pb-3 px-2 !flex flex-nowrap gap-2 overflow-x-auto !w-full no-scrollbar"
-      >
-        {Object.keys(TRAITS_BY_CLASS).map((nameOfClass) => (
-          <Button
-            key={nameOfClass}
-            active={selectedClass === nameOfClass}
-            onClick={() => {
-              setSelectedClass(nameOfClass);
-            }}
-            className="!flex-shrink-0"
-          >
-            {nameOfClass} - {TRAIT_COLLECTION_NAME[nameOfClass]}
-          </Button>
-        ))}
-      </Frame> */}
     </div>
   );
 };

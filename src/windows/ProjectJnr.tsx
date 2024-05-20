@@ -20,6 +20,9 @@ import {
 } from "components/CustomStyledScrollView";
 import Inventory from "components/Jnrs/Inventory";
 import { JnrCanvasProvider } from "contexts/JnrCanvasContext";
+import JnrCollectibleCard from "components/Jnrs/JnrCollectibleCard";
+import EquippedItems from "components/Jnrs/EquippedItems";
+import useWindowSize from "hooks/useWindowSize";
 
 const FrameWithBackground = styled(Frame)`
   background-image: linear-gradient(
@@ -78,58 +81,112 @@ const BackgroundDiv = styled(Frame)`
 
 const ProjectJnr: React.FC = () => {
   const { closeWindow } = useWindowsContext();
-  const [selectedTraits, setSelectedTraits] = useState<{
-    back: string;
-    bottoms: string;
-    head: string;
-    lh: string;
-    rh: string;
-    shoes: string;
-    torso: string;
-  }>({
-    back: "/3d/SKELETON/BACK.BIOLOGY.SKELETON.glb",
-    bottoms: "/3d/SKELETON/BOTTOMS.BIOLOGY.SKELETON.glb",
-    head: "/3d/SKELETON/HEAD.BIOLOGY.SKELETON.glb",
-    lh: "/3d/SKELETON/LH.BIOLOGY.SKELETON.glb",
-    rh: "/3d/SKELETON/RH.BIOLOGY.SKELETON.glb",
-    shoes: "/3d/SKELETON/SHOES.BIOLOGY.SKELETON.glb",
-    torso: "/3d/SKELETON/TORSO.BIOLOGY.SKELETON.glb",
-  });
-  const [show2d, setShow2d] = useState(false);
-  const [showApp, setShowApp] = useState(false);
+  const { height } = useWindowSize();
 
   return (
-    <DraggableResizeableWindow
-      offSetHeight={44}
-      headerTitle="Project J.N.R"
-      onClose={() => {
-        closeWindow(WINDOW_IDS.PROJECT_JNR);
-      }}
-      windowsId={WINDOW_IDS.PROJECT_JNR}
-      initialHeight="100%"
-      initialWidth="100%"
-      showMaximizeButton={false}
-      resizable={false}
-    >
-      <JnrCanvasProvider>
-        <div className="flex flex-col-reverse lg:flex-row h-full w-full">
-          <div className="w-full h-[50%] lg:h-full lg:max-w-[450px]">
-            <Inventory />
+    <JnrCanvasProvider>
+      <DraggableResizeableWindow
+        offSetHeight={44}
+        headerTitle="JNR.exe"
+        onClose={() => {
+          closeWindow(WINDOW_IDS.PROJECT_JNR);
+        }}
+        windowsId={WINDOW_IDS.PROJECT_JNR}
+        initialHeight="100%"
+        initialWidth="100%"
+        showMaximizeButton={false}
+        resizable={false}
+      >
+        <Frame className="!w-full !h-full max-w-full max-h-full !grid grid-cols-12 grid-rows-2">
+          <Frame
+            variant="button"
+            className="col-span-12 lg:col-span-6 lg:row-span-1 xl:col-span-5 2xl:col-span-3  p-1"
+          >
+            <Frame variant="well" className="w-full h-full p-px">
+              <JnrCanvas />
+            </Frame>
+          </Frame>
+
+          <Frame
+            variant="button"
+            className="row-span-1 col-span-12 lg:col-span-6 lg:row-span-2 xl:col-span-7 2xl:col-span-9"
+          >
+            <Frame variant="well" className="w-full h-full p-px">
+              <Inventory />
+            </Frame>
+          </Frame>
+
+          <Frame
+            variant="button"
+            className={`!hidden  lg:col-span-6 xl:col-span-5 2xl:col-span-3 row-span-1 !p-1 ${
+              height < 700 ? "!hidden" : "lg:!block"
+            }`}
+          >
+            <Frame variant="well" className="w-full h-full p-2">
+              <EquippedItems />
+            </Frame>
+          </Frame>
+        </Frame>
+        {/* 
+        <Frame className="xl:!hidden !w-full !h-full max-w-full max-h-full !hidden lg:!grid grid-cols-12 grid-rows-2">
+          <Frame
+            variant="well"
+            className="col-span-6 row-span-2 !bg-blue-500"
+          ></Frame>
+          <Frame
+            variant="well"
+            className="col-span-6 row-span-1 !bg-red-500"
+          ></Frame>
+          <Frame
+            variant="well"
+            className="col-span-6 row-span-1 !bg-green-500"
+          ></Frame>
+        </Frame>
+
+        <Frame className="!w-full !h-full max-w-full max-h-full !grid lg:!hidden grid-cols-12 grid-rows-2">
+          <Frame
+            variant="well"
+            className="col-span-12 row-span-1 !bg-red-500"
+          ></Frame>
+          <Frame
+            variant="well"
+            className="col-span-12 row-span-1 !bg-blue-500"
+          ></Frame>
+        </Frame> */}
+
+        {/* <div className="flex flex-col-reverse xl:flex-row h-full w-full">
+          <div
+            className={`w-full ${
+              mobileExpandTraitMenu ? "h-3/4" : "h-1/2"
+            } xl:h-full xl:max-w-[500px] xl:min-w-[500px] flex-shrink-0`}
+          >
+            <Inventory
+              onExpand={() => {
+                setMobileExpandTraitMenu((prev) => !prev);
+              }}
+            />
           </div>
 
-          <JnrCanvas traits={selectedTraits} />
-        </div>
-      </JnrCanvasProvider>
-    </DraggableResizeableWindow>
+          <div
+            className="w-full xl:w-[calc(100%-500px)]"
+            style={{
+              minHeight: mobileExpandTraitMenu ? "25%" : "50%",
+            }}
+          >
+            <JnrCanvas />
+          </div>
+        </div> */}
+      </DraggableResizeableWindow>
+    </JnrCanvasProvider>
   );
 };
 
 export default ProjectJnr;
 
 {
-  /* <div className="flex flex-col lg:flex-row-reverse w-full h-full gap-2">
+  /* <div className="flex flex-col xl:flex-row-reverse w-full h-full gap-2">
         <JnrCanvas traits={selectedTraits} />
-        <ScrollView className="h-[calc(100%-50%-8px)] lg:h-full w-full max-w-[400px] !p-0">
+        <ScrollView className="h-[calc(100%-50%-8px)] xl:h-full w-full max-w-[400px] !p-0">
           <Frame variant="field" className="w-full">
             <Marquee autoFill>
               <span className="text-xl">- PREVIEW ONLY - TOP SECRET</span>
