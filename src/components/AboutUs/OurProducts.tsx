@@ -32,11 +32,11 @@ const Product = ({
         <Marquee autoFill direction={direction}>
           {images.map((image, index) => (
             <Frame key={index} className="!p-2 ml-4 !pb-1">
-              <Frame variant="well" className="!p-0">
+              <Frame variant="well" className="!p-0 w-[150px] h-[150px] lg:w-[250px] lg:h-[250px] overflow-hidden">
                 <img
                   src={image}
                   alt="Flunk"
-                  className="w-[150px] h-[150px] lg:w-[250px] lg:h-[250px] object-cover"
+                  className="w-[150px] h-[150px] lg:w-[250px] lg:h-[250px] object-cover scale-105"
                 />
               </Frame>
             </Frame>
@@ -108,8 +108,9 @@ const PRODUCTS: {
     description: (
       <span className="text-xl md:text-xl max-w-2xl text-pretty">
         The latest craze at Flunks High: Pocket Juniors (or JNRs). These 3D
-        models, dressed (by you) to represent different school subjects, are becoming the
-        must-have companions on campus, sure to deplete your $GUM reserves.
+        models, dressed (by you) to represent different school subjects, are
+        becoming the must-have companions on campus, sure to deplete your $GUM
+        reserves.
         <br />
         <br />
         More details coming soon. 👀
@@ -130,7 +131,18 @@ const PRODUCTS: {
         More details coming soon. 👀
       </span>
     ),
-    images: ["https://via.placeholder.com/250"],
+    images: [
+      "/images/about-us/f3d-1.webp",
+      "/images/about-us/f3d-2.webp",
+      "/images/about-us/f3d-3.webp",
+      "/images/about-us/f3d-4.webp",
+      "/images/about-us/f3d-5.webp",
+      "/images/about-us/f3d-6.webp",
+      "/images/about-us/f3d-7.webp",
+      "/images/about-us/f3d-8.webp",
+      "/images/about-us/f3d-9.webp",
+      "/images/about-us/f3d-10.webp",
+    ],
     direction: "left",
   },
 ];
