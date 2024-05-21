@@ -36,6 +36,6 @@ export const initAllCollections = async () => {
     cadence: TRANSACTION as string,
     // @ts-ignore
     authorizations: [authz],
-    limit: 1000,
+    limit: 9999,
   });
 };

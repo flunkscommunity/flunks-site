@@ -1,13 +1,12 @@
-// import * as fcl from "@onflow/fcl";
-// import * as t from "@onflow/types";
+import * as fcl from "@onflow/fcl";
+import * as t from "@onflow/types";
 
-// const CODE = `import FlunksGraduation from 0x807c3d470888cc48
+const CODE = `import FlunksGraduation from 0x807c3d470888cc48
 
-// pub fun main(): {UInt64: UInt64} {
-//   return FlunksGraduation.getFlunksGraduationTimeTable()
-// }`;
+pub fun main(): {UInt64: UInt64} {
+  return FlunksGraduation.getFlunksGraduationTimeTable()
+}`;
 
-// export async function checkGraduationDates() {
-//   // if (!tokenId) return Promise.resolve(null);
-//   return fcl.send([fcl.script(CODE), fcl.args([])]).then(fcl.decode);
-// }
+export async function checkGraduationDates() {
+  return fcl.send([fcl.script(CODE), fcl.args([])]).then(fcl.decode);
+}

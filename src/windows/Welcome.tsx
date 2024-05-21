@@ -75,8 +75,10 @@ const Welcome: React.FC = () => {
     <DraggableResizeableWindow
       offSetHeight={44}
       headerTitle="Getting Started"
-      initialHeight="60%"
-      initialWidth="55%"
+      initialHeight="auto"
+      initialWidth="auto"
+      resizable={false}
+      showMaximizeButton={false}
       windowsId={WINDOW_IDS.WELCOME}
       onClose={() => {
         closeWindow(WINDOW_IDS.WELCOME);
@@ -84,18 +86,9 @@ const Welcome: React.FC = () => {
     >
       <div className="p-4">
         <h1 className="text-4xl">Welcome to Flunks95</h1>
-        <div className="flex">
+        <div className="flex gap-6">
           <section className="basis-2/3 flex flex-col">
-            <Frame
-              className="!gap-4"
-              variant="field"
-              style={{
-                marginTop: "2rem",
-                padding: "2rem",
-                height: 160,
-                width: 500,
-              }}
-            >
+            <Frame className="!gap-4 mt-8 p-8 h-[10rem]" variant="field">
               <div className="flex">
                 <img src={icon} className="pr-2"></img>
                 <h2 className="text-xl font-bold pt-2">Did you know...</h2>
@@ -117,10 +110,10 @@ const Welcome: React.FC = () => {
             <Button onClick={handleNextTip}>Next Tip</Button>
           </section>
         </div>
-        <div className="flex flex-row items-center justify-between w-full pt-2">
+        <div className="flex flex-row items-center justify-between w-full pt-2 gap-4">
           <Checkbox
             label="Show this Welcome Screen the next time you start Flunks95"
-            className="pt-2"
+            className="pt-2 basis-2/3"
           />
           <Button
             onClick={() => closeWindow(WINDOW_IDS.WELCOME)}

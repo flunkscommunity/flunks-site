@@ -2,7 +2,6 @@ import { MarketplaceIndividualNftDto } from "api/generated";
 // import GraduationForm from "components/Graduation/Form";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import GraduationInit from "components/Graduation/GraduationInit";
-import NftDetailsFrame from "components/NftDetailsFrame";
 import { FclTransactionProvider } from "contexts/FclTransactionContext";
 import { useWindowsContext } from "contexts/WindowsContext";
 
@@ -20,8 +19,9 @@ const Graduation: React.FC<Props> = (props) => {
         closeWindow(`graduation-${flunk.templateId}`);
       }}
       headerTitle={`Terminal`}
-      initialHeight="80%"
-      initialWidth="80%"
+      initialHeight="70%"
+      initialWidth="40%"
+      windowsId={`graduation-${flunk.templateId}`}
     >
       <FclTransactionProvider>
         <GraduationInit flunk={flunk} />

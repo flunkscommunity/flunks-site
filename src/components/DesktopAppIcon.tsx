@@ -28,7 +28,7 @@ const AppIcon = styled.div<{ icon: string }>`
   background-position: center;
 `;
 
-const AppTitle = styled(H4)`
+const AppTitle = styled.div`
   color: white;
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -46,16 +46,22 @@ const DesktopAppIcon: React.FC<Props> = (props) => {
   };
 
   return (
-    <Draggable disabled={true} bounds="parent" defaultClassName="w-auto !max-w-[100px] h-auto">
-      <div onDoubleClick={onDoubleClick} onClick={handleMobileOpen} className="p-2 flex-shrink-0 max-w-full">
+    <div className="w-auto !max-w-[100px] h-auto">
+      <div
+        // onDoubleClick={onDoubleClick}
+        onClick={onDoubleClick}
+        className="p-2 flex-shrink-0 max-w-full"
+      >
         <Container className="group flex flex-col gap-2 items-center">
           <AppIcon icon={icon} />
-          <AppTitle className="group-hover:!bg-[#30c5ff80] text-pretty max-w-[80px] min-w-[80px] text-center">
-            <span className="text-xl">{title}</span>
+          <AppTitle className="group-hover:!bg-[#30c5ff80] text-pretty max-w-[80px] min-w-[80px] text-center backdrop-blur-lg">
+            <span className="text-xl text-white font-bold drop-shadow-[0px_2px_1px_rgba(0,0,0,1)] tracking-wide">
+              {title}
+            </span>
           </AppTitle>
         </Container>
       </div>
-    </Draggable>
+    </div>
   );
 };
 

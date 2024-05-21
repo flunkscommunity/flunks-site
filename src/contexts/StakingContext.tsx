@@ -193,6 +193,7 @@ const StakingProvider: React.FC<ProviderProps> = (props) => {
   }, [state.txStatus]);
 
   const _stakeSingle = (pool: "Flunks" | "Backpack", tokenID: number) => {
+    console.log("Staking single", pool, tokenID);
     resetState();
     executeTx(() => stakeOne(pool, tokenID));
   };
@@ -204,7 +205,7 @@ const StakingProvider: React.FC<ProviderProps> = (props) => {
 
   const _claimAll = () => {
     resetState();
-    executeTx(claimAll);
+    executeTx(claimAll, "claim-gum");
   };
 
   return (

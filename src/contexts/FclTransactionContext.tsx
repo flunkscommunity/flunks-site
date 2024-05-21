@@ -9,9 +9,10 @@ interface FclTransactionContextType {
   state: {
     txStatus: TX_STATUS;
     txMessage: string;
+    txName: string;
   };
   dispatch: React.Dispatch<any>;
-  executeTx: (tx: () => Promise<string>) => void;
+  executeTx: (tx: () => Promise<string>, txName?: string) => void;
   resetState: () => void;
 }
 
@@ -27,14 +28,22 @@ export const FclTransactionProvider = ({ children }: any) => {
     dispatch({ type: "RESET", txStatus: TX_STATUS.DEFAULT });
   };
 
-  const executeTx = async (tx: () => Promise<string>) => {
+  const executeTx = async (tx: () => Promise<string>, txName = "") => {
     let unsub;
     try {
-      dispatch({ type: "UPDATE_STATUS", txStatus: TX_STATUS.STARTED });
+      dispatch({
+        type: "UPDATE_STATUS",
+        txStatus: TX_STATUS.STARTED,
+        txName: txName,
+      });
 
       const txId = await tx();
 
-      dispatch({ type: "UPDATE_STATUS", txStatus: TX_STATUS.PENDING });
+      dispatch({
+        type: "UPDATE_STATUS",
+        txStatus: TX_STATUS.PENDING,
+        txName: txName,
+      });
 
       unsub = await fcl.tx(txId).subscribe((newState) => {
         console.log("executeTx STATE CHANGED", newState);
@@ -45,10 +54,11 @@ export const FclTransactionProvider = ({ children }: any) => {
 
       // When transaction succeeds, `txStatus` will be an Object:
       // see `SAMPLE_TX_STATUS_SUCCESS` at the end of this file
-      if (txStatus && txStatus.status === 4 && txStatus.statusCode === 0) {
+      if (txStatus && txStatus.status === 4 && txStatus?.statusCode === 0) {
         dispatch({
           type: "UPDATE_STATUS",
           txStatus: TX_STATUS.SUCCESS,
+          txName: txName,
         });
         // printing tx data for now, since we might want to look at the transaction events
         console.log("txStatus", txStatus);
@@ -57,6 +67,7 @@ export const FclTransactionProvider = ({ children }: any) => {
         dispatch({
           type: "UPDATE_STATUS",
           txStatus: TX_STATUS.ERROR,
+          txName: txName,
         });
       }
     } catch (error) {
@@ -65,6 +76,7 @@ export const FclTransactionProvider = ({ children }: any) => {
         type: "UPDATE_STATUS",
         txStatus: TX_STATUS.ERROR,
         txMessage: error.toString() as string,
+        txName: txName,
       });
     } finally {
       if (unsub) {

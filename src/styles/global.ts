@@ -34,7 +34,16 @@ export const GlobalStyles = React.memo(createGlobalStyle`
     box-sizing: border-box !important;
   }
 
-  * {
+  div[data-testid="select-button"] {
+    &:before {
+      box-sizing: border-box !important;
+    }
+    &:after {
+      box-sizing: border-box !important;
+    }
+  }
+
+  *:not(button) {
     &:before {
       box-sizing: content-box !important;
     }
@@ -182,6 +191,9 @@ export const GlobalStyles = React.memo(createGlobalStyle`
     &:after {
       animation: flicker 0.5s infinite;
     }
+  }
+  .text-flicker {
+    animation: textShadow 0.1s infinite;
   }
   .crt::after {
     content: " ";

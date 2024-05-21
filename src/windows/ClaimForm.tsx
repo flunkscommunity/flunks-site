@@ -19,9 +19,12 @@ const ClaimForm: React.FC<Props> = (props) => {
       onClose={() => {
         closeWindow(`claim-form-${flunk.templateId}`);
       }}
-      headerTitle={`Student #${flunk.templateId} - claim form`}
-      initialHeight="60%"
-      initialWidth="60%"
+      headerTitle={`Claim Form - Student #${flunk.templateId}`}
+      initialHeight="auto"
+      initialWidth="auto"
+      windowsId={`claim-form-${flunk.templateId}`}
+      resizable={false}
+      showMaximizeButton={false}
     >
       <FclTransactionProvider>
         <ClaimFormForm nft={flunk} shouldFetch={shouldFetch} />

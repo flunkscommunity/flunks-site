@@ -9,4 +9,29 @@ export const WINDOW_IDS = {
   GUMBALL_MACHINE: "gumball-machine",
   WELCOME: "welcome",
   WELCOME_POPUP: "welcome-popup",
+  GUMBALL_MACHINE_HELP: "gumball-machine-help",
+  ABOUT_US: "about-us",
+};
+
+export const WINDOW_APP_INFO_TO_WINDOW_ID = {
+  [WINDOW_IDS.YOUR_STUDENTS]: {
+    appName: "Flunkfolio",
+    appIcon: "/images/icons/vault.png",
+    key: WINDOW_IDS.YOUR_STUDENTS,
+  },
+  [WINDOW_IDS.SETTINGS]: {
+    appName: "Settings",
+    appIcon: "/images/icons/settings.png",
+    key: WINDOW_IDS.SETTINGS,
+  },
+  [WINDOW_IDS.GUMBALL_MACHINE]: {
+    appName: "Gumball Machine",
+    appIcon: "/images/icons/gum-machine.png",
+    key: WINDOW_IDS.GUMBALL_MACHINE,
+  },
+  [WINDOW_IDS.ABOUT_US]: {
+    appName: "About Us",
+    appIcon: "/images/icons/about-us.png",
+    key: WINDOW_IDS.ABOUT_US,
+  },
 };

@@ -1,0 +1,18 @@
+import * as fcl from "@onflow/fcl";
+import * as t from "@onflow/types";
+
+const CODE = `import BackpackMinter from 0x807c3d470888cc48
+
+pub fun main(templateID: UInt64): Bool{
+  let map = BackpackMinter.getClaimedBackPacksPerFlunkTemplateID()
+  return map.containsKey(templateID)
+}
+`;
+
+export async function checkBackpackClaimed(tokenId: number) {
+  if (!tokenId?.toString()) return Promise.resolve(null);
+
+  return fcl
+    .send([fcl.script(CODE), fcl.args([fcl.arg(tokenId, t.UInt64)])])
+    .then(fcl.decode);
+}

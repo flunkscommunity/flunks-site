@@ -4,6 +4,7 @@ const useSounds = () => {
   const sounds = useMemo(
     () => ({
       error: new Audio("/sounds/error.mp3"),
+      successGumClaim: new Audio("/sounds/success-gum-claim.mp3"),
     }),
     []
   );

@@ -11,7 +11,7 @@ export const getTokenStakeInfo = async (
   pool: "Flunks" | "Backpack",
   tokenId: number
 ) => {
-  if (!tokenId) return Promise.resolve(null);
+  if (!tokenId?.toString()) return Promise.resolve(null);
   if (!address) return Promise.resolve(null);
   if (!pool) return Promise.resolve(null);
 

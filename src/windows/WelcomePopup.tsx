@@ -12,23 +12,16 @@ const WelcomePopup: React.FC = () => {
       offSetHeight={44}
       headerTitle="What's New"
       headerIcon="/images/icons/whats_new.png"
-      initialHeight="90%"
-      initialWidth="35%"
+      initialHeight="auto"
+      initialWidth="auto"
+      resizable={false}
+      showMaximizeButton={false}
       windowsId={WINDOW_IDS.WELCOME_POPUP}
       onClose={() => {
         closeWindow(WINDOW_IDS.WELCOME_POPUP);
       }}
     >
-      <Frame
-        className="!gap-4"
-        variant="field"
-        style={{
-          marginTop: "2rem",
-          padding: "2rem",
-          height: 500,
-          width: 500,
-        }}
-      >
+      <Frame className="!gap-4 mt-8 p-8 h-[30rem] w-[32rem]" variant="field">
         <h2 className="text-xl font-bold">Non-Custodial Wallets</h2>
         <p className="text-lg pb-6">
           Moving forward, you will need to log in with a non-custodial wallet to

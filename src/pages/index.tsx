@@ -13,6 +13,7 @@ import LostAndFound from "windows/LostAndFound";
 import LoginScreen from "components/LoginScreen";
 import GumballMachine from "windows/GumballMachine";
 import useThemeSettings from "store/useThemeSettings";
+import AboutUs from "windows/AboutUs";
 
 const Desktop = () => {
   const { windows, openWindow } = useWindowsContext();
@@ -32,19 +33,8 @@ const Desktop = () => {
     <>
       <div className="flex flex-col max-h-[calc(100vh-64px)] w-full flex-wrap items-start gap-4 content-start">
         <DesktopAppIcon
-          title="Student Directory"
-          icon="/images/student-directory.png"
-          onDoubleClick={() => {
-            openWindow({
-              key: WINDOW_IDS.STUDENT_EXPLORER,
-              window: <StudentExplorer />,
-            });
-          }}
-        />
-
-        <DesktopAppIcon
-          title="Your Students"
-          icon="/images/your-students.png"
+          title="Flunkfolio"
+          icon="/images/icons/vault.png"
           onDoubleClick={() => {
             openWindow({
               key: WINDOW_IDS.YOUR_STUDENTS,
@@ -64,13 +54,24 @@ const Desktop = () => {
           }}
         />
 
-        <DesktopAppIcon
+        {/* <DesktopAppIcon
           title="Lost and Found"
           icon="/images/lost-and-found.png"
           onDoubleClick={() => {
             openWindow({
               key: WINDOW_IDS.LOST_AND_FOUND,
               window: <LostAndFound />,
+            });
+          }}
+        /> */}
+
+        <DesktopAppIcon
+          title="About Us"
+          icon="/images/icons/about-us.png"
+          onDoubleClick={() => {
+            openWindow({
+              key: WINDOW_IDS.ABOUT_US,
+              window: <AboutUs />,
             });
           }}
         />
@@ -84,7 +85,7 @@ const Desktop = () => {
           }}
         >
           <DesktopAppIcon
-            title="Twitter"
+            title="X"
             icon="/images/icons/x.png"
             onDoubleClick={() => {
               return null;
@@ -103,6 +104,23 @@ const Desktop = () => {
           <DesktopAppIcon
             title="Discord"
             icon="/images/icons/discord.png"
+            onDoubleClick={() => {
+              return null;
+            }}
+          />
+        </a>
+
+        <a
+          href="https://www.flowty.io/collection/0x807c3d470888cc48/Flunks"
+          target="_blank"
+          rel="noreferrer noopener"
+          style={{
+            textDecoration: "none",
+          }}
+        >
+          <DesktopAppIcon
+            title="Market"
+            icon="/images/icons/flowty.png"
             onDoubleClick={() => {
               return null;
             }}

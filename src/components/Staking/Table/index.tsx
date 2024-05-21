@@ -28,17 +28,9 @@ const CustomTableDataCell = styled(TableDataCell)`
 
 const StakeableItemsTable = () => {
   const { isDapper, walletStakeInfo, sortStakeInfo } = useStakingContext();
-  const { primaryWallet } = useDynamicContext();
-  const nameOrderByRef = useRef<"asc" | "dsc">("asc");
-  const earnedOrderByRef = useRef<"asc" | "dsc">("asc");
-  const earningOrderByRef = useRef<"asc" | "dsc">("asc");
-
-  const { data } = useUsersControllerGetUserNftsByWalletAddress(
-    primaryWallet.address
-  );
-
-  const flunks = data?.data?.Flunks;
-  const backpacks = data?.data?.Backpack;
+  const nameOrderByRef = useRef<"asc" | "dsc">("dsc");
+  const earnedOrderByRef = useRef<"asc" | "dsc">("dsc");
+  const earningOrderByRef = useRef<"asc" | "dsc">("dsc");
 
   return (
     <div className="[&>*:first-child]:!w-full flex w-full">
@@ -100,7 +92,8 @@ const StakeableItemsTable = () => {
                   collectionName={item.collection}
                   image={item.MetadataViewsDisplay.thumbnail.url}
                   tokenId={Number(item.tokenID)}
-                  key={`${item.collection}-${item.tokenID}`}
+                  serialNumber={Number(item.serialNumber)}
+                  key={`${item.collection}-${item.serialNumber}`}
                   stakingInfo={item.stakingInfo}
                   rewards={item.rewards}
                 />
