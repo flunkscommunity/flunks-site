@@ -623,5 +623,3 @@ export function JnrBox(props: Props) {
     </group>
   );
 }
-
-useGLTF.preload("/3d/jnrbox-transformed.glb");
