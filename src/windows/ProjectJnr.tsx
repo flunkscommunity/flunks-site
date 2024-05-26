@@ -369,16 +369,7 @@ const ProjectJnr: React.FC = () => {
                         <JnrBox scroll={scroll} />
                       </Center>
                     </Bounds>
-                    <Environment
-                      files={[
-                        "/envs/px.jpg",
-                        "/envs/nx.jpg",
-                        "/envs/py.jpg",
-                        "/envs/ny.jpg",
-                        "/envs/pz.jpg",
-                        "/envs/nz.jpg",
-                      ]}
-                    />
+                    <Environment preset="forest" />
                   </Suspense>
                 </Canvas>
               </div>

@@ -101,9 +101,10 @@ interface Props {
 
 export function JnrBox(props: Props) {
   const group = useRef<THREE.Group>();
-  const { nodes, materials, animations } = useGLTF(
-    "/3d/jnrbox-transformed.glb"
-  ) as GLTFResult;
+  const { scene, animations } = useGLTF("/3d/jnrbox-transformed.glb");
+  // const { nodes, materials, animations } = useGLTF(
+  //   "/3d/jnrbox-transformed.glb"
+  // ) as GLTFResult;
   const { actions } = useAnimations<GLTFActions>(animations, group);
   const extras = { receiveShadow: true, castShadow: true };
 
@@ -117,18 +118,19 @@ export function JnrBox(props: Props) {
       actions["Animation"].getClip().duration * props.scroll.current,
       0.05
     );
-    // group.current.children.forEach((child, index) => {
-    //   const et = state.clock.elapsedTime;
-    //   child.position.y = Math.sin((et + index * 2000) / 2) * 1;
-    //   child.rotation.x = Math.sin((et + index * 2000) / 3) / 10;
-    //   child.rotation.y = Math.cos((et + index * 2000) / 2) / 10;
-    //   child.rotation.z = Math.sin((et + index * 2000) / 3) / 10;
-    // });
+    group.current.children.forEach((child, index) => {
+      const et = state.clock.elapsedTime;
+      child.position.y = Math.sin((et + index * 2000) / 2) * 1;
+      child.rotation.x = Math.sin((et + index * 2000) / 3) / 10;
+      child.rotation.y = Math.cos((et + index * 2000) / 2) / 10;
+      child.rotation.z = Math.sin((et + index * 2000) / 3) / 10;
+    });
   });
 
   return (
     <group ref={group} {...props.groupProps} dispose={null}>
-      <group name="Scene">
+      <primitive object={scene} dispose={null} />
+      {/* <group name="Scene">
         <group name="BOX" position={[0, 2.85, -0.21]} scale={0.94}>
           <group name="BOX_OPENING">
             <primitive object={nodes.MAIN} />
@@ -138,21 +140,18 @@ export function JnrBox(props: Props) {
                 geometry={nodes.Cube010.geometry}
                 material={materials["BOX MAIN"]}
                 skeleton={nodes.Cube010.skeleton}
-                {...extras}
               />
               <skinnedMesh
                 name="Cube010_1"
                 geometry={nodes.Cube010_1.geometry}
                 material={materials["Nacre (Nácar)"]}
                 skeleton={nodes.Cube010_1.skeleton}
-                {...extras}
               />
               <skinnedMesh
                 name="Cube010_2"
                 geometry={nodes.Cube010_2.geometry}
                 material={materials["BOX MAIN INSIDE"]}
                 skeleton={nodes.Cube010_2.skeleton}
-                {...extras}
               />
             </group>
             <skinnedMesh
@@ -160,14 +159,12 @@ export function JnrBox(props: Props) {
               geometry={nodes.BOX_PLINTH.geometry}
               material={materials.Material}
               skeleton={nodes.BOX_PLINTH.skeleton}
-              {...extras}
             />
             <skinnedMesh
               name="Retopo_BOX_FILM"
               geometry={nodes.Retopo_BOX_FILM.geometry}
               material={materials["BOX FILM.001"]}
               skeleton={nodes.Retopo_BOX_FILM.skeleton}
-              {...extras}
             />
           </group>
           <group name="JNRS" position={[0, -3.02, 0.22]} scale={1.06}>
@@ -181,25 +178,21 @@ export function JnrBox(props: Props) {
                 name="DKFYB6"
                 geometry={nodes.DKFYB6.geometry}
                 material={materials["YELLOW ORANGE"]}
-                {...extras}
               />
               <mesh
                 name="DKFYB6_1"
                 geometry={nodes.DKFYB6_1.geometry}
                 material={materials["DARK GREY 3"]}
-                {...extras}
               />
               <mesh
                 name="DKFYB6_2"
                 geometry={nodes.DKFYB6_2.geometry}
                 material={materials["GREY DARK"]}
-                {...extras}
               />
               <mesh
                 name="DKFYB6_3"
                 geometry={nodes.DKFYB6_3.geometry}
                 material={materials.OH_Outline_Material}
-                {...extras}
               />
             </group>
             <group
@@ -211,25 +204,21 @@ export function JnrBox(props: Props) {
                 name="Merged_PM3D_SHORTS1_2002"
                 geometry={nodes.Merged_PM3D_SHORTS1_2002.geometry}
                 material={materials.OH_Outline_Material}
-                {...extras}
               />
               <mesh
                 name="Merged_PM3D_SHORTS1_2002_1"
                 geometry={nodes.Merged_PM3D_SHORTS1_2002_1.geometry}
                 material={materials["GREEN EARTH DARK"]}
-                {...extras}
               />
               <mesh
                 name="Merged_PM3D_SHORTS1_2002_2"
                 geometry={nodes.Merged_PM3D_SHORTS1_2002_2.geometry}
                 material={materials.YELLOW}
-                {...extras}
               />
               <mesh
                 name="Merged_PM3D_SHORTS1_2002_3"
                 geometry={nodes.Merged_PM3D_SHORTS1_2002_3.geometry}
                 material={materials["GREEN EARTH"]}
-                {...extras}
               />
             </group>
             <group
@@ -242,31 +231,26 @@ export function JnrBox(props: Props) {
                 name="Merged_Apple002"
                 geometry={nodes.Merged_Apple002.geometry}
                 material={materials.OH_Outline_Material}
-                {...extras}
               />
               <mesh
                 name="Merged_Apple002_1"
                 geometry={nodes.Merged_Apple002_1.geometry}
                 material={materials["OUTLINE GREEN"]}
-                {...extras}
               />
               <mesh
                 name="Merged_Apple002_2"
                 geometry={nodes.Merged_Apple002_2.geometry}
                 material={materials["SAND SHADING"]}
-                {...extras}
               />
               <mesh
                 name="Merged_Apple002_3"
                 geometry={nodes.Merged_Apple002_3.geometry}
                 material={materials.SAND}
-                {...extras}
               />
               <mesh
                 name="Merged_Apple002_4"
                 geometry={nodes.Merged_Apple002_4.geometry}
                 material={materials["OUTLINE RED"]}
-                {...extras}
               />
             </group>
             <group
@@ -279,43 +263,36 @@ export function JnrBox(props: Props) {
                 name="Merged_JNRS_HANDS1"
                 geometry={nodes.Merged_JNRS_HANDS1.geometry}
                 material={materials.RED}
-                {...extras}
               />
               <mesh
                 name="Merged_JNRS_HANDS1_1"
                 geometry={nodes.Merged_JNRS_HANDS1_1.geometry}
                 material={materials.WHITE}
-                {...extras}
               />
               <mesh
                 name="Merged_JNRS_HANDS1_2"
                 geometry={nodes.Merged_JNRS_HANDS1_2.geometry}
                 material={materials["DARK GREY 3"]}
-                {...extras}
               />
               <mesh
                 name="Merged_JNRS_HANDS1_3"
                 geometry={nodes.Merged_JNRS_HANDS1_3.geometry}
                 material={materials.GREY}
-                {...extras}
               />
               <mesh
                 name="Merged_JNRS_HANDS1_4"
                 geometry={nodes.Merged_JNRS_HANDS1_4.geometry}
                 material={materials.WHITE}
-                {...extras}
               />
               <mesh
                 name="Merged_JNRS_HANDS1_5"
                 geometry={nodes.Merged_JNRS_HANDS1_5.geometry}
                 material={materials.YELLOW}
-                {...extras}
               />
               <mesh
                 name="Merged_JNRS_HANDS1_6"
                 geometry={nodes.Merged_JNRS_HANDS1_6.geometry}
                 material={materials.OH_Outline_Material}
-                {...extras}
               />
             </group>
             <group
@@ -327,49 +304,41 @@ export function JnrBox(props: Props) {
                 name="Merged_RUBIKS_WINGS_2011"
                 geometry={nodes.Merged_RUBIKS_WINGS_2011.geometry}
                 material={materials.WHITE}
-                {...extras}
               />
               <mesh
                 name="Merged_RUBIKS_WINGS_2011_1"
                 geometry={nodes.Merged_RUBIKS_WINGS_2011_1.geometry}
                 material={materials.OH_Outline_Material}
-                {...extras}
               />
               <mesh
                 name="Merged_RUBIKS_WINGS_2011_2"
                 geometry={nodes.Merged_RUBIKS_WINGS_2011_2.geometry}
                 material={materials.ORANGE}
-                {...extras}
               />
               <mesh
                 name="Merged_RUBIKS_WINGS_2011_3"
                 geometry={nodes.Merged_RUBIKS_WINGS_2011_3.geometry}
                 material={materials.RED}
-                {...extras}
               />
               <mesh
                 name="Merged_RUBIKS_WINGS_2011_4"
                 geometry={nodes.Merged_RUBIKS_WINGS_2011_4.geometry}
                 material={materials.YELLOW}
-                {...extras}
               />
               <mesh
                 name="Merged_RUBIKS_WINGS_2011_5"
                 geometry={nodes.Merged_RUBIKS_WINGS_2011_5.geometry}
                 material={materials["HOT SKY BLUE"]}
-                {...extras}
               />
               <mesh
                 name="Merged_RUBIKS_WINGS_2011_6"
                 geometry={nodes.Merged_RUBIKS_WINGS_2011_6.geometry}
                 material={materials["DARK GREY 3"]}
-                {...extras}
               />
               <mesh
                 name="Merged_RUBIKS_WINGS_2011_7"
                 geometry={nodes.Merged_RUBIKS_WINGS_2011_7.geometry}
                 material={materials["GREEN LIGHT"]}
-                {...extras}
               />
             </group>
             <group
@@ -381,25 +350,21 @@ export function JnrBox(props: Props) {
                 name="Merged_PM3D_Cylinder3D1_2003"
                 geometry={nodes.Merged_PM3D_Cylinder3D1_2003.geometry}
                 material={materials.BRICK}
-                {...extras}
               />
               <mesh
                 name="Merged_PM3D_Cylinder3D1_2003_1"
                 geometry={nodes.Merged_PM3D_Cylinder3D1_2003_1.geometry}
                 material={materials.OH_Outline_Material}
-                {...extras}
               />
               <mesh
                 name="Merged_PM3D_Cylinder3D1_2003_2"
                 geometry={nodes.Merged_PM3D_Cylinder3D1_2003_2.geometry}
                 material={materials["DARK GREY 3"]}
-                {...extras}
               />
               <mesh
                 name="Merged_PM3D_Cylinder3D1_2003_3"
                 geometry={nodes.Merged_PM3D_Cylinder3D1_2003_3.geometry}
                 material={materials.SAND}
-                {...extras}
               />
             </group>
             <group
@@ -412,31 +377,26 @@ export function JnrBox(props: Props) {
                 name="Merged_Extract3"
                 geometry={nodes.Merged_Extract3.geometry}
                 material={materials["GREY DARK"]}
-                {...extras}
               />
               <mesh
                 name="Merged_Extract3_1"
                 geometry={nodes.Merged_Extract3_1.geometry}
                 material={materials["YELLOW ORANGE"]}
-                {...extras}
               />
               <mesh
                 name="Merged_Extract3_2"
                 geometry={nodes.Merged_Extract3_2.geometry}
                 material={materials["SAND SHADING"]}
-                {...extras}
               />
               <mesh
                 name="Merged_Extract3_3"
                 geometry={nodes.Merged_Extract3_3.geometry}
                 material={materials.RED}
-                {...extras}
               />
               <mesh
                 name="Merged_Extract3_4"
                 geometry={nodes.Merged_Extract3_4.geometry}
                 material={materials.OH_Outline_Material}
-                {...extras}
               />
             </group>
             <group name="ARMS" position={[0, 0.04, 0]}>
@@ -444,13 +404,11 @@ export function JnrBox(props: Props) {
                 name="ARMS_1"
                 geometry={nodes.ARMS_1.geometry}
                 material={materials.GREY}
-                {...extras}
               />
               <mesh
                 name="ARMS_2"
                 geometry={nodes.ARMS_2.geometry}
                 material={materials.OH_Outline_Material}
-                {...extras}
               />
             </group>
             <mesh
@@ -460,7 +418,6 @@ export function JnrBox(props: Props) {
               position={[0, 0.04, 0]}
               rotation={[Math.PI / 2, 0, 0]}
               scale={0.01}
-              {...extras}
             />
             <mesh
               name="EYES001"
@@ -469,7 +426,6 @@ export function JnrBox(props: Props) {
               position={[0, 0.04, 0]}
               rotation={[Math.PI / 2, 0, 0]}
               scale={0.01}
-              {...extras}
             />
             <mesh
               name="FEET"
@@ -477,20 +433,17 @@ export function JnrBox(props: Props) {
               material={materials.GREY}
               rotation={[Math.PI / 2, 0, 0]}
               scale={0.01}
-              {...extras}
             />
             <group name="LEGS">
               <mesh
                 name="Merged_Apple7006"
                 geometry={nodes.Merged_Apple7006.geometry}
                 material={materials.GREY}
-                {...extras}
               />
               <mesh
                 name="Merged_Apple7006_1"
                 geometry={nodes.Merged_Apple7006_1.geometry}
                 material={materials.OH_Outline_Material}
-                {...extras}
               />
             </group>
             <mesh
@@ -500,7 +453,6 @@ export function JnrBox(props: Props) {
               position={[0, 0.04, 0]}
               rotation={[Math.PI / 2, 0, 0]}
               scale={0.01}
-              {...extras}
             />
           </group>
         </group>
@@ -619,7 +571,7 @@ export function JnrBox(props: Props) {
             </group>
           </group>
         </group>
-      </group>
+      </group> */}
     </group>
   );
 }
