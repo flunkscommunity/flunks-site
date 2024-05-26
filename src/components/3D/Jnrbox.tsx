@@ -117,13 +117,13 @@ export function JnrBox(props: Props) {
       actions["Animation"].getClip().duration * props.scroll.current,
       0.05
     );
-    group.current.children.forEach((child, index) => {
-      const et = state.clock.elapsedTime;
-      child.position.y = Math.sin((et + index * 2000) / 2) * 1;
-      child.rotation.x = Math.sin((et + index * 2000) / 3) / 10;
-      child.rotation.y = Math.cos((et + index * 2000) / 2) / 10;
-      child.rotation.z = Math.sin((et + index * 2000) / 3) / 10;
-    });
+    // group.current.children.forEach((child, index) => {
+    //   const et = state.clock.elapsedTime;
+    //   child.position.y = Math.sin((et + index * 2000) / 2) * 1;
+    //   child.rotation.x = Math.sin((et + index * 2000) / 3) / 10;
+    //   child.rotation.y = Math.cos((et + index * 2000) / 2) / 10;
+    //   child.rotation.z = Math.sin((et + index * 2000) / 3) / 10;
+    // });
   });
 
   return (
