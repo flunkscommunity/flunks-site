@@ -356,6 +356,7 @@ const ProjectJnr: React.FC = () => {
                   />
                   <OrbitControls
                     enableZoom={false}
+                    enableRotate={false}
                     makeDefault
                     target={[0, 0, 0]}
                     maxPolarAngle={Math.PI / 2}
