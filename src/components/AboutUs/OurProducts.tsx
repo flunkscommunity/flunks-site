@@ -32,11 +32,17 @@ const Product = ({
         <Marquee autoFill direction={direction}>
           {images.map((image, index) => (
             <Frame key={index} className="!p-2 ml-4 !pb-1">
-              <Frame variant="well" className="!p-0 w-[150px] h-[150px] lg:w-[250px] lg:h-[250px] overflow-hidden">
+              <Frame
+                variant="well"
+                className="!p-0 w-[150px] h-[150px] lg:w-[375px] lg:h-[375px] overflow-hidden"
+              >
                 <img
                   src={image}
                   alt="Flunk"
-                  className="w-[150px] h-[150px] lg:w-[250px] lg:h-[250px] object-cover scale-105"
+                  className="w-[150px] h-[150px] lg:w-[375px] lg:h-[375px] object-cover bg-gray-200"
+                  style={{
+                    imageRendering: "auto",
+                  }}
                 />
               </Frame>
             </Frame>
@@ -64,7 +70,18 @@ const PRODUCTS: {
         generated.
       </span>
     ),
-    images: ["https://via.placeholder.com/250"],
+    images: [
+      "/images/about-us/fp-1.avif",
+      "/images/about-us/fp-2.avif",
+      "/images/about-us/fp-3.avif",
+      "/images/about-us/fp-4.avif",
+      "/images/about-us/fp-5.avif",
+      "/images/about-us/fp-6.avif",
+      "/images/about-us/fp-7.avif",
+      "/images/about-us/fp-8.avif",
+      "/images/about-us/fp-9.avif",
+      "/images/about-us/fp-10.avif",
+    ],
     direction: "left",
   },
   {
@@ -81,7 +98,18 @@ const PRODUCTS: {
         no duplicates allowed!
       </span>
     ),
-    images: ["https://via.placeholder.com/250"],
+    images: [
+      "/images/about-us/bp-1.avif",
+      "/images/about-us/bp-2.avif",
+      "/images/about-us/bp-3.avif",
+      "/images/about-us/bp-4.avif",
+      "/images/about-us/bp-5.avif",
+      "/images/about-us/bp-6.avif",
+      "/images/about-us/bp-7.avif",
+      "/images/about-us/bp-8.avif",
+      "/images/about-us/bp-9.avif",
+      "/images/about-us/bp-10.avif",
+    ],
     direction: "right",
   },
   {
@@ -100,7 +128,18 @@ const PRODUCTS: {
         pieces of art.
       </span>
     ),
-    images: ["https://via.placeholder.com/250"],
+    images: [
+      "/images/about-us/f2d-1.avif",
+      "/images/about-us/f2d-2.avif",
+      "/images/about-us/f2d-3.avif",
+      "/images/about-us/f2d-4.avif",
+      "/images/about-us/f2d-5.avif",
+      "/images/about-us/f2d-6.avif",
+      "/images/about-us/f2d-7.avif",
+      "/images/about-us/f2d-8.avif",
+      "/images/about-us/f2d-9.avif",
+      "/images/about-us/f2d-10.avif",
+    ],
     direction: "left",
   },
   {
@@ -116,7 +155,18 @@ const PRODUCTS: {
         More details coming soon. 👀
       </span>
     ),
-    images: ["https://via.placeholder.com/250"],
+    images: [
+      "/images/about-us/jnr-1.png",
+      "/images/about-us/jnr-2.png",
+      "/images/about-us/jnr-3.png",
+      "/images/about-us/jnr-4.png",
+      "/images/about-us/jnr-5.png",
+      "/images/about-us/jnr-6.png",
+      "/images/about-us/jnr-7.png",
+      "/images/about-us/jnr-8.png",
+      "/images/about-us/jnr-9.png",
+      "/images/about-us/jnr-10.png",
+    ],
     direction: "right",
   },
   {

@@ -24,6 +24,7 @@ import {
   TableDataCell,
   Avatar,
   Button,
+  Anchor,
 } from "react95";
 import {
   createBorderStyles,
@@ -186,9 +187,16 @@ const AboutUs = () => {
 
               <div className="flex flex-col max-w-[1440px] mx-auto lg:flex-row gap-10 items-center justify-between w-full">
                 <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty">
-                  <u>Community is at the core of Flunks.</u> From the community
-                  vote that named us to the creation of the Cafeteria DAO,
-                  Flunks is a project by the people, for the people.
+                  <Anchor
+                    href={discordStats?.instant_invite}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  >
+                    Community is at the core of Flunks.
+                  </Anchor>{" "}
+                  From the community vote that named us to the creation of the
+                  Cafeteria DAO, Flunks is a project by the people, for the
+                  people.
                 </span>
               </div>
             </div>

@@ -24,6 +24,7 @@ interface JnrCanvasContextProps {
   selectedTraits: SelectedTraits;
   equipTrait: (trait: JnrTrait, group: string) => void;
   randomizeSelectedTraits: () => void;
+  createRandomJnr: () => SelectedTraits;
 }
 
 const JnrCanvasContext = React.createContext<JnrCanvasContextProps>({
@@ -39,6 +40,15 @@ const JnrCanvasContext = React.createContext<JnrCanvasContextProps>({
   },
   equipTrait: () => {},
   randomizeSelectedTraits: () => {},
+  createRandomJnr: () => ({
+    back: null,
+    bottoms: null,
+    head: null,
+    lh: null,
+    rh: null,
+    shoes: null,
+    torso: null,
+  }),
 });
 
 const ChooseRandomSelectedTraits = (ownedTraits: UserTraits) => {
@@ -76,6 +86,10 @@ export const JnrCanvasProvider = ({ children }) => {
     setSelectedTraits(ChooseRandomSelectedTraits(data));
   }, [data]);
 
+  const createRandomJnr = useCallback(() => {
+    return ChooseRandomSelectedTraits(data);
+  }, [data]);
+
   return (
     <JnrCanvasContext.Provider
       value={{
@@ -83,6 +97,7 @@ export const JnrCanvasProvider = ({ children }) => {
         selectedTraits,
         equipTrait,
         randomizeSelectedTraits,
+        createRandomJnr,
       }}
     >
       {children}

@@ -111,7 +111,7 @@ const TraitImageFrame = styled(Frame)`
     id === "selected" ? "#00000099" : "#000000CC"};
 `;
 
-const OwnedTrait: React.FC<JnrTrait> = (trait) => {
+export const OwnedTrait: React.FC<JnrTrait> = (trait) => {
   const { selectedTraits, equipTrait } = useJnrCanvas();
   const isActive = selectedTraits[trait.group]?.glbUrl === trait.glbUrl;
 
@@ -141,40 +141,38 @@ const OwnedTrait: React.FC<JnrTrait> = (trait) => {
       >
         <TraitImage src={trait.thumbnail} traitName={trait.group} />
       </TraitImageFrame>
-      <div className="w-full !flex">
-        <Frame
-          variant="well"
-          className="w-full !flex items-center justify-between px-2 py-1 gap-2"
-        >
-          <img
-            src="/images/icons/attack-64x64.png"
-            alt="attack"
-            className="w-3 h-3"
-          />
-          <span className="text-base lg:text-xl leading-[1] drop-shadow-[-0.5px_2px_0_rgba(255,255,255,0.8)]">
-            {trait.metadata.attack}
-          </span>
-        </Frame>
-
-        <Frame
-          variant="well"
-          className="w-full !flex items-center justify-between px-2 gap-2"
-        >
-          <span className="text-base lg:text-xl leading-[1] drop-shadow-[-0.5px_2px_0_rgba(255,255,255,0.8)]">
-            {trait.metadata.defense}
-          </span>
-          <img
-            src="/images/icons/defense-64x64.png"
-            alt="attack"
-            className="w-3 h-3"
-          />
-        </Frame>
-      </div>
       <div className="flex items-center w-full">
         <Frame variant="field" className="w-full capitalize px-2 !flex">
           <span className="text-lg text-center w-full">{trait.set}</span>
         </Frame>
       </div>
+    </Button>
+  );
+};
+
+export const OwnedTraitAlt: React.FC<JnrTrait> = (trait) => {
+  const { selectedTraits, equipTrait } = useJnrCanvas();
+  const isActive = selectedTraits[trait.group]?.glbUrl === trait.glbUrl;
+
+  const handleClick = () => {
+    equipTrait(trait, trait.group);
+  };
+
+  return (
+    <Button
+      active={isActive}
+      data-state={isActive ? "active" : "inactive"}
+      onClick={handleClick}
+      disabled={isActive}
+      className="!flex flex-col w-full !py-2 !h-full"
+    >
+      <TraitImageFrame
+        id={isActive ? "selected" : "unselected"}
+        variant="status"
+        className="!flex flex-col gap-2 w-full relative"
+      >
+        <TraitImage src={trait.thumbnail} traitName={trait.group} />
+      </TraitImageFrame>
     </Button>
   );
 };

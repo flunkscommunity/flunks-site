@@ -48,7 +48,7 @@ const TEAM: {
         Flunks ecosystem.
       </span>
     ),
-    image: "https://via.placeholder.com/250",
+    image: "/images/about-us/alfred.png",
   },
   {
     name: "Ben",
@@ -60,7 +60,7 @@ const TEAM: {
         Flunks.
       </span>
     ),
-    image: "https://via.placeholder.com/250",
+    image: "/images/about-us/ben.png",
   },
   {
     name: "Eric",
@@ -71,7 +71,7 @@ const TEAM: {
         community engagement for the Flunks ecosystem.
       </span>
     ),
-    image: "https://via.placeholder.com/250",
+    image: "/images/about-us/buddsy.png",
   },
   {
     name: "Ervin",
@@ -83,7 +83,7 @@ const TEAM: {
         for the Flunks Originals collection.
       </span>
     ),
-    image: "https://via.placeholder.com/250",
+    image: "/images/about-us/ervin.png",
   },
   {
     name: "Gerald",
@@ -94,7 +94,7 @@ const TEAM: {
         ensuring it is functional and user-friendly.
       </span>
     ),
-    image: "https://via.placeholder.com/250",
+    image: "/images/about-us/gerald.png",
   },
   {
     name: "Maddy",
@@ -105,7 +105,7 @@ const TEAM: {
         together, ensuring everything runs smoothly behind the scenes.
       </span>
     ),
-    image: "https://via.placeholder.com/250",
+    image: "/images/about-us/maddy.png",
   },
   {
     name: "Tom",
@@ -117,7 +117,7 @@ const TEAM: {
         ecosystem.
       </span>
     ),
-    image: "https://via.placeholder.com/250",
+    image: "/images/about-us/tom.png",
   },
   {
     name: "Victor",
@@ -128,7 +128,7 @@ const TEAM: {
         design of the Flunks ecosystem.
       </span>
     ),
-    image: "https://via.placeholder.com/250",
+    image: "/images/about-us/victor.png",
   },
 ];
 

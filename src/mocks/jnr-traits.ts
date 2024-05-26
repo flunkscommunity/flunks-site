@@ -194,11 +194,76 @@ export interface JnrTrait {
     defense: number;
   };
   set: string;
+  stats?: {
+    attack?: number;
+    defense?: number;
+    speed?: number;
+    health?: number;
+    crit?: number;
+    hit?: number;
+    dodge?: number;
+  };
 }
 
 export type UserTraits = {
   [key in JnrTrait["class"]]: JnrTrait[];
 };
+
+function getRandomStatsForGroup(group) {
+  switch (group) {
+    case "back":
+      return {
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 3) + 1,
+        speed: Math.floor(Math.random() * 3) + 1,
+        health: Math.floor(Math.random() * 10) + 5,
+      };
+    case "bottoms":
+      return {
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 3) + 1,
+        speed: Math.floor(Math.random() * 5) + 1,
+        health: Math.floor(Math.random() * 10) + 5,
+      };
+    case "head":
+      return {
+        attack: Math.floor(Math.random() * 2) + 1,
+        defense: Math.floor(Math.random() * 3) + 1,
+        crit: Math.floor(Math.random() * 5) + 1,
+        hit: Math.floor(Math.random() * 20) + 10,
+      };
+    case "rh":
+      return {
+        attack: Math.floor(Math.random() * 3) + 1,
+        defense: Math.floor(Math.random() * 10) + 3,
+        speed: Math.floor(Math.random() * 3) + 1,
+        dodge: Math.floor(Math.random() * 3) + 1,
+      };
+    case "lh":
+      return {
+        attack: Math.floor(Math.random() * 10) + 3,
+        defense: Math.floor(Math.random() * 1) + 1,
+        speed: Math.floor(Math.random() * 3) + 1,
+        crit: Math.floor(Math.random() * 3) + 1,
+      };
+    case "shoes":
+      return {
+        attack: Math.floor(Math.random() * 5) + 1,
+        defense: Math.floor(Math.random() * 2) + 1,
+        speed: Math.floor(Math.random() * 3) + 1,
+        dodge: Math.floor(Math.random() * 3) + 1,
+      };
+    case "torso":
+      return {
+        attack: Math.floor(Math.random() * 1) + 0,
+        defense: Math.floor(Math.random() * 9) + 1,
+        health: Math.floor(Math.random() * 10) + 5,
+        hit: Math.floor(Math.random() * 20) + 10,
+      };
+    default:
+      return {};
+  }
+}
 
 export const USERS_TRAITS: UserTraits = {
   art: [
@@ -210,6 +275,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/ORIGAMI/BACK.ART.ORIGAMI.glb",
       group: "back",
       groupLabel: "Back",
+      stats: getRandomStatsForGroup("back"),
       metadata: {
         attack: Math.floor(Math.random() * 3) + 1,
         defense: Math.floor(Math.random() * 5) + 1,
@@ -223,6 +289,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/ORIGAMI/BOTTOMS.ART.ORIGAMI.glb",
       group: "bottoms",
       groupLabel: "Bottoms",
+      stats: getRandomStatsForGroup("bottoms"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -236,6 +303,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/ORIGAMI/HEAD.ART.ORIGAMI.glb",
       group: "head",
       groupLabel: "Head",
+      stats: getRandomStatsForGroup("head"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -249,6 +317,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/ORIGAMI/LH.ART.ORIGAMI.glb",
       group: "rh",
       groupLabel: "Right Hand",
+      stats: getRandomStatsForGroup("rh"),
       metadata: {
         attack: Math.floor(Math.random() * 3) + 1,
         defense: Math.floor(Math.random() * 10) + 3,
@@ -262,6 +331,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/ORIGAMI/RH.ART.ORIGAMI.glb",
       group: "lh",
       groupLabel: "Left Hand",
+      stats: getRandomStatsForGroup("lh"),
       metadata: {
         attack: Math.floor(Math.random() * 10) + 3,
         defense: Math.floor(Math.random() * 0) + 1,
@@ -275,6 +345,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/ORIGAMI/SHOES.ART.ORIGAMI.glb",
       group: "shoes",
       groupLabel: "Shoes",
+      stats: getRandomStatsForGroup("shoes"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -288,6 +359,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/ORIGAMI/TORSO.ART.ORIGAMI.glb",
       group: "torso",
       groupLabel: "Torso",
+      stats: getRandomStatsForGroup("torso"),
       metadata: {
         attack: Math.floor(Math.random() * 0) + 0,
         defense: Math.floor(Math.random() * 9) + 1,
@@ -303,6 +375,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/SKELETON/BACK.BIOLOGY.SKELETON.glb",
       group: "back",
       groupLabel: "Back",
+      stats: getRandomStatsForGroup("back"),
       metadata: {
         attack: Math.floor(Math.random() * 3) + 1,
         defense: Math.floor(Math.random() * 5) + 1,
@@ -316,6 +389,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/SKELETON/BOTTOMS.BIOLOGY.SKELETON.glb",
       group: "bottoms",
       groupLabel: "Bottoms",
+      stats: getRandomStatsForGroup("bottoms"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -329,6 +403,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/SKELETON/HEAD.BIOLOGY.SKELETON.glb",
       group: "head",
       groupLabel: "Head",
+      stats: getRandomStatsForGroup("head"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -342,6 +417,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/SKELETON/LH.BIOLOGY.SKELETON.glb",
       group: "rh",
       groupLabel: "Right Hand",
+      stats: getRandomStatsForGroup("rh"),
       metadata: {
         attack: Math.floor(Math.random() * 3) + 1,
         defense: Math.floor(Math.random() * 10) + 3,
@@ -355,6 +431,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/SKELETON/RH.BIOLOGY.SKELETON.glb",
       group: "lh",
       groupLabel: "Left Hand",
+      stats: getRandomStatsForGroup("lh"),
       metadata: {
         attack: Math.floor(Math.random() * 10) + 3,
         defense: Math.floor(Math.random() * 0) + 1,
@@ -368,6 +445,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/SKELETON/SHOES.BIOLOGY.SKELETON.glb",
       group: "shoes",
       groupLabel: "Shoes",
+      stats: getRandomStatsForGroup("shoes"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -381,6 +459,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/SKELETON/TORSO.BIOLOGY.SKELETON.glb",
       group: "torso",
       groupLabel: "Torso",
+      stats: getRandomStatsForGroup("torso"),
       metadata: {
         attack: Math.floor(Math.random() * 0) + 0,
         defense: Math.floor(Math.random() * 9) + 1,
@@ -396,6 +475,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/RADIOACTIVE/BACK.CHEMISTRY.RADIOACTIVE.glb",
       group: "back",
       groupLabel: "Back",
+      stats: getRandomStatsForGroup("back"),
       metadata: {
         attack: Math.floor(Math.random() * 3) + 1,
         defense: Math.floor(Math.random() * 5) + 1,
@@ -409,6 +489,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/RADIOACTIVE/BOTTOMS.CHEMISTRY.RADIOACTIVE.glb",
       group: "bottoms",
       groupLabel: "Bottoms",
+      stats: getRandomStatsForGroup("bottoms"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -422,6 +503,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/RADIOACTIVE/HEAD.CHEMISTRY.RADIOACTIVE.glb",
       group: "head",
       groupLabel: "Head",
+      stats: getRandomStatsForGroup("head"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -435,6 +517,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/RADIOACTIVE/LH.CHEMISTRY.RADIOACTIVE.glb",
       group: "rh",
       groupLabel: "Right Hand",
+      stats: getRandomStatsForGroup("rh"),
       metadata: {
         attack: Math.floor(Math.random() * 3) + 1,
         defense: Math.floor(Math.random() * 10) + 3,
@@ -448,6 +531,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/RADIOACTIVE/RH.CHEMISTRY.RADIOACTIVE.glb",
       group: "lh",
       groupLabel: "Left Hand",
+      stats: getRandomStatsForGroup("lh"),
       metadata: {
         attack: Math.floor(Math.random() * 10) + 3,
         defense: Math.floor(Math.random() * 0) + 1,
@@ -461,6 +545,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/RADIOACTIVE/SHOES.CHEMISTRY.RADIOACTIVE.glb",
       group: "shoes",
       groupLabel: "Shoes",
+      stats: getRandomStatsForGroup("shoes"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -474,6 +559,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/RADIOACTIVE/TORSO.CHEMISTRY.RADIOACTIVE.glb",
       group: "torso",
       groupLabel: "Torso",
+      stats: getRandomStatsForGroup("torso"),
       metadata: {
         attack: Math.floor(Math.random() * 0) + 0,
         defense: Math.floor(Math.random() * 9) + 1,
@@ -489,6 +575,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/PLAGUE-DOCTOR/BACK.HISTORY.PLAGUE DOCTOR.glb",
       group: "back",
       groupLabel: "Back",
+      stats: getRandomStatsForGroup("back"),
       metadata: {
         attack: Math.floor(Math.random() * 3) + 1,
         defense: Math.floor(Math.random() * 5) + 1,
@@ -502,6 +589,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/PLAGUE-DOCTOR/BOTTOMS.HISTORY.PLAGUE DOCTOR.glb",
       group: "bottoms",
       groupLabel: "Bottoms",
+      stats: getRandomStatsForGroup("bottoms"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -515,6 +603,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/PLAGUE-DOCTOR/HEAD.HISTORY.PLAGUE DOCTOR.glb",
       group: "head",
       groupLabel: "Head",
+      stats: getRandomStatsForGroup("head"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -528,6 +617,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/PLAGUE-DOCTOR/LH.HISTORY.PLAGUE DOCTOR.glb",
       group: "rh",
       groupLabel: "Right Hand",
+      stats: getRandomStatsForGroup("rh"),
       metadata: {
         attack: Math.floor(Math.random() * 3) + 1,
         defense: Math.floor(Math.random() * 10) + 3,
@@ -541,6 +631,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/PLAGUE-DOCTOR/RH.HISTORY.PLAGUE DOCTOR.glb",
       group: "lh",
       groupLabel: "Left Hand",
+      stats: getRandomStatsForGroup("lh"),
       metadata: {
         attack: Math.floor(Math.random() * 10) + 3,
         defense: Math.floor(Math.random() * 0) + 1,
@@ -554,6 +645,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/PLAGUE-DOCTOR/SHOES.HISTORY.PLAGUE DOCTOR.glb",
       group: "shoes",
       groupLabel: "Shoes",
+      stats: getRandomStatsForGroup("shoes"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -567,6 +659,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/PLAGUE-DOCTOR/TORSO.HISTORY.PLAGUE DOCTOR.glb",
       group: "torso",
       groupLabel: "Torso",
+      stats: getRandomStatsForGroup("torso"),
       metadata: {
         attack: Math.floor(Math.random() * 0) + 0,
         defense: Math.floor(Math.random() * 9) + 1,
@@ -582,6 +675,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/CASINO/BACK.MATHS.CASINO.glb",
       group: "back",
       groupLabel: "Back",
+      stats: getRandomStatsForGroup("back"),
       metadata: {
         attack: Math.floor(Math.random() * 3) + 1,
         defense: Math.floor(Math.random() * 5) + 1,
@@ -595,6 +689,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/CASINO/BOTTOMS.MATHS.CASINO.glb",
       group: "bottoms",
       groupLabel: "Bottoms",
+      stats: getRandomStatsForGroup("bottoms"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -608,6 +703,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/CASINO/HEAD.MATHS.CASINO.glb",
       group: "head",
       groupLabel: "Head",
+      stats: getRandomStatsForGroup("head"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -621,6 +717,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/CASINO/LH.MATHS.CASINO.glb",
       group: "rh",
       groupLabel: "Right Hand",
+      stats: getRandomStatsForGroup("rh"),
       metadata: {
         attack: Math.floor(Math.random() * 3) + 1,
         defense: Math.floor(Math.random() * 10) + 3,
@@ -634,6 +731,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/CASINO/RH.MATHS.CASINO.glb",
       group: "lh",
       groupLabel: "Left Hand",
+      stats: getRandomStatsForGroup("lh"),
       metadata: {
         attack: Math.floor(Math.random() * 10) + 3,
         defense: Math.floor(Math.random() * 0) + 1,
@@ -647,6 +745,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/CASINO/SHOES.MATHS.CASINO.glb",
       group: "shoes",
       groupLabel: "Shoes",
+      stats: getRandomStatsForGroup("shoes"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -660,6 +759,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/CASINO/TORSO.MATHS.CASINO.glb",
       group: "torso",
       groupLabel: "Torso",
+      stats: getRandomStatsForGroup("torso"),
       metadata: {
         attack: Math.floor(Math.random() * 0) + 0,
         defense: Math.floor(Math.random() * 9) + 1,
@@ -675,6 +775,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/BARBERSHOP/BACK.MUSIC.BARBERSHOP.glb",
       group: "back",
       groupLabel: "Back",
+      stats: getRandomStatsForGroup("back"),
       metadata: {
         attack: Math.floor(Math.random() * 3) + 1,
         defense: Math.floor(Math.random() * 5) + 1,
@@ -688,6 +789,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/BARBERSHOP/BOTTOMS.MUSIC.BARBERSHOP.glb",
       group: "bottoms",
       groupLabel: "Bottoms",
+      stats: getRandomStatsForGroup("bottoms"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -701,6 +803,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/BARBERSHOP/HEAD.MUSIC.BARBERSHOP.glb",
       group: "head",
       groupLabel: "Head",
+      stats: getRandomStatsForGroup("head"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -714,6 +817,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/BARBERSHOP/LH.MUSIC.BARBERSHOP.glb",
       group: "rh",
       groupLabel: "Right Hand",
+      stats: getRandomStatsForGroup("rh"),
       metadata: {
         attack: Math.floor(Math.random() * 3) + 1,
         defense: Math.floor(Math.random() * 10) + 3,
@@ -727,6 +831,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/BARBERSHOP/RH.MUSIC.BARBERSHOP.glb",
       group: "lh",
       groupLabel: "Left Hand",
+      stats: getRandomStatsForGroup("lh"),
       metadata: {
         attack: Math.floor(Math.random() * 10) + 3,
         defense: Math.floor(Math.random() * 0) + 1,
@@ -740,6 +845,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/BARBERSHOP/SHOES.MUSIC.BARBERSHOP.glb",
       group: "shoes",
       groupLabel: "Shoes",
+      stats: getRandomStatsForGroup("shoes"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -753,6 +859,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/BARBERSHOP/TORSO.MUSIC.BARBERSHOP.glb",
       group: "torso",
       groupLabel: "Torso",
+      stats: getRandomStatsForGroup("torso"),
       metadata: {
         attack: Math.floor(Math.random() * 0) + 0,
         defense: Math.floor(Math.random() * 9) + 1,
@@ -768,6 +875,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/ROBOT/BACK.PHYSICS.ROBOT.glb",
       group: "back",
       groupLabel: "Back",
+      stats: getRandomStatsForGroup("back"),
       metadata: {
         attack: Math.floor(Math.random() * 3) + 1,
         defense: Math.floor(Math.random() * 5) + 1,
@@ -781,6 +889,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/ROBOT/BOTTOMS.PHYSICS.ROBOT.glb",
       group: "bottoms",
       groupLabel: "Bottoms",
+      stats: getRandomStatsForGroup("bottoms"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -794,6 +903,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/ROBOT/HEAD.PHYSICS.ROBOT.glb",
       group: "head",
       groupLabel: "Head",
+      stats: getRandomStatsForGroup("head"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -807,6 +917,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/ROBOT/LH.PHYSICS.ROBOT.glb",
       group: "rh",
       groupLabel: "Right Hand",
+      stats: getRandomStatsForGroup("rh"),
       metadata: {
         attack: Math.floor(Math.random() * 3) + 1,
         defense: Math.floor(Math.random() * 10) + 3,
@@ -820,6 +931,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/ROBOT/RH.PHYSICS.ROBOT.glb",
       group: "lh",
       groupLabel: "Left Hand",
+      stats: getRandomStatsForGroup("lh"),
       metadata: {
         attack: Math.floor(Math.random() * 10) + 3,
         defense: Math.floor(Math.random() * 0) + 1,
@@ -833,6 +945,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/ROBOT/SHOES.PHYSICS.ROBOT.glb",
       group: "shoes",
       groupLabel: "Shoes",
+      stats: getRandomStatsForGroup("shoes"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -846,6 +959,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/ROBOT/TORSO.PHYSICS.ROBOT.glb",
       group: "torso",
       groupLabel: "Torso",
+      stats: getRandomStatsForGroup("torso"),
       metadata: {
         attack: Math.floor(Math.random() * 0) + 0,
         defense: Math.floor(Math.random() * 9) + 1,
@@ -861,6 +975,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/BASEBALL/BACK.SPORT.BASEBALL.glb",
       group: "back",
       groupLabel: "Back",
+      stats: getRandomStatsForGroup("back"),
       metadata: {
         attack: Math.floor(Math.random() * 3) + 1,
         defense: Math.floor(Math.random() * 5) + 1,
@@ -874,6 +989,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/BASEBALL/BOTTOMS.SPORT.BASEBALL.glb",
       group: "bottoms",
       groupLabel: "Bottoms",
+      stats: getRandomStatsForGroup("bottoms"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -887,6 +1003,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/BASEBALL/HEAD.SPORT.BASEBALL.glb",
       group: "head",
       groupLabel: "Head",
+      stats: getRandomStatsForGroup("head"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -900,6 +1017,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/BASEBALL/LH.SPORT.BASEBALL.glb",
       group: "rh",
       groupLabel: "Right Hand",
+      stats: getRandomStatsForGroup("rh"),
       metadata: {
         attack: Math.floor(Math.random() * 3) + 1,
         defense: Math.floor(Math.random() * 10) + 3,
@@ -913,6 +1031,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/BASEBALL/RH.SPORT.BASEBALL.glb",
       group: "lh",
       groupLabel: "Left Hand",
+      stats: getRandomStatsForGroup("lh"),
       metadata: {
         attack: Math.floor(Math.random() * 10) + 3,
         defense: Math.floor(Math.random() * 0) + 1,
@@ -926,6 +1045,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/BASEBALL/SHOES.SPORT.BASEBALL.glb",
       group: "shoes",
       groupLabel: "Shoes",
+      stats: getRandomStatsForGroup("shoes"),
       metadata: {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 8) + 1,
@@ -939,6 +1059,7 @@ export const USERS_TRAITS: UserTraits = {
       glbUrl: "/3d/BASEBALL/TORSO.SPORT.BASEBALL.glb",
       group: "torso",
       groupLabel: "Torso",
+      stats: getRandomStatsForGroup("torso"),
       metadata: {
         attack: Math.floor(Math.random() * 0) + 0,
         defense: Math.floor(Math.random() * 9) + 1,

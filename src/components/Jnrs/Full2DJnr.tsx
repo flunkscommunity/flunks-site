@@ -33,8 +33,8 @@ const Full2DJnr: React.FC<{
   const { back, bottoms, head, lh, rh, shoes, torso } = selectedTraits;
 
   return (
-    <FrameWithBackground
-      variant="well"
+    <Frame
+      variant="field"
       className={`w-full h-full overflow-hidden ${className || ""}`}
     >
       <img
@@ -81,7 +81,7 @@ const Full2DJnr: React.FC<{
         src={rh.thumbnail}
         className="!absolute w-full h-full object-contain"
       />
-    </FrameWithBackground>
+    </Frame>
   );
 };
 
