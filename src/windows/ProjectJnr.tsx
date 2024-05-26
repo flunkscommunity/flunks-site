@@ -307,9 +307,35 @@ function Loader() {
   return <Html center>{progress} % loaded</Html>;
 }
 
+const MemodCanvas = React.memo(({ scroll }) => {
+  return (
+    <Canvas
+      gl={{
+        antialias: true,
+        precision: "highp",
+        preserveDrawingBuffer: true,
+        premultipliedAlpha: false,
+      }}
+      shadows
+      flat
+      className="pointer-events-none "
+    >
+      <PerspectiveCamera makeDefault attach={"camera"} position={[0, 0, 10]} />
+      <ambientLight intensity={1} />
+      <Suspense fallback={<Loader />}>
+        <Bounds fit clip>
+          <Center>
+            <JnrBox scroll={scroll} />
+          </Center>
+        </Bounds>
+        <Environment preset="forest" />
+      </Suspense>
+    </Canvas>
+  );
+});
+
 const ProjectJnr: React.FC = () => {
   const { closeWindow } = useWindowsContext();
-  const { height } = useWindowSize();
   const scroll = useRef(0);
 
   return (
@@ -326,57 +352,29 @@ const ProjectJnr: React.FC = () => {
         showMaximizeButton={false}
         resizable={false}
       >
-        <CustomStyledScrollView className="w-full h-full">
+        <CustomStyledScrollView
+          className="w-full h-full"
+          onTouchMove={(e) => {
+            console.log(e);
+          }}
+        >
           <CustomScrollAreaAsField
             onScroll={(e) => {
               // scroll.current =
               //   e.target.scrollTop / (e.target.scrollHeight - window.innerHeight);
               scroll.current =
                 e.target.scrollTop /
-                (e.target.scrollHeight / 4 - window.innerHeight);
+                (e.target.scrollHeight / 3.8 - window.innerHeight);
             }}
             className="relative w-full !p-0"
+            onTouchMove={(e) => e.stopPropagation()}
           >
-            <div className="flex flex-col h-[300%] max-w-[1440px] mx-auto">
-              <div className="sticky top-0 left-0 w-full h-[34%] pointer-events-none z-0 flex-shrink-0">
-                <Canvas
-                  gl={{
-                    antialias: true,
-                    precision: "highp",
-                    preserveDrawingBuffer: true,
-                    premultipliedAlpha: false,
-                  }}
-                  shadows
-                  flat
-                >
-                  <PerspectiveCamera
-                    makeDefault
-                    attach={"camera"}
-                    position={[0, 0, 5]}
-                  />
-                  <OrbitControls
-                    enableZoom={false}
-                    enableRotate={false}
-                    makeDefault
-                    target={[0, 0, 0]}
-                    maxPolarAngle={Math.PI / 2}
-                    minPolarAngle={Math.PI / 2}
-                    enablePan={false}
-                  />
-                  <ambientLight intensity={1} />
-                  <Suspense fallback={<Loader />}>
-                    <Bounds fit clip>
-                      <Center>
-                        <JnrBox scroll={scroll} />
-                      </Center>
-                    </Bounds>
-                    <Environment preset="forest" />
-                  </Suspense>
-                </Canvas>
+            <div className="relative flex flex-col mx-auto h-[300%] z-0 pointer-events-none">
+              <div className="sticky top-0 w-full h-[33%] z-0 flex-shrink-0 pointer-events-none">
+                <MemodCanvas scroll={scroll} />
               </div>
-              <div className="static h-full flex flex-col"></div>
-              <div className="absolute top-0 left-0 w-full pointer-events-none z-0 flex-shrink-0 flex flex-col pt-10">
-                <span className="text-3xl lg:text-6xl font-bold mx-auto text-center">
+              <div className="absolute top-0 left-0 w-full pointer-events-none flex-shrink-0 flex flex-col pt-10 z-10">
+                <span className="text-3xl lg:text-6xl font-bold mx-auto text-center px-2">
                   POCKET JUNIORS (J.N.R)
                 </span>
                 <span className="text-xl lg:text-4xl font-bold mx-auto text-center animate-pulse">
@@ -384,7 +382,7 @@ const ProjectJnr: React.FC = () => {
                 </span>
               </div>
             </div>
-            <div className="flex flex-col min-h-[300%]">
+            <div className="flex flex-col h-full">
               <span className="font-bold text-3xl lg:text-6xl text-center max-w-[700px] mx-auto mb-[112px] lg:mb-[20%]">
                 Introducing Pocket Juniors (J.N.R) – the coolest craze to hit
                 the schoolyard! <br />{" "}
@@ -404,6 +402,7 @@ const ProjectJnr: React.FC = () => {
                 <Frame className="w-full !grid grid-col-[repeat(auto-fill,minmax(160px,1fr))] gap-4 overflow-hidden p-4">
                   {CLASSES.map((item) => (
                     <Frame
+                      key={item.className}
                       variant="well"
                       className="w-full !min-h-[300px] h-full !flex flex-col items-center justify-center relative !overflow-hidden contrast-125"
                       style={{

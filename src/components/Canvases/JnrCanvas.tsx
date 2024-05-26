@@ -59,7 +59,7 @@ Camera.displayName = "Camera";
 const Lights = () => {
   return (
     <>
-      <ambientLight intensity={1} color={"white"} />
+      <ambientLight intensity={5} color={"white"} />
       {/* <directionalLight
         intensity={2}
         position={[1, 10, 10]}

@@ -101,14 +101,12 @@ interface Props {
 
 export function JnrBox(props: Props) {
   const group = useRef<THREE.Group>();
-  const { scene, animations } = useGLTF("/3d/jnrbox-transformed.glb");
-  // const { nodes, materials, animations } = useGLTF(
-  //   "/3d/jnrbox-transformed.glb"
-  // ) as GLTFResult;
+  // const { scene, animations } = useGLTF("/3d/jnrbox-transformed.glb");
+  const { nodes, materials, animations } = useGLTF(
+    "/3d/jnrbox-transformed.glb"
+  ) as GLTFResult;
   const { actions } = useAnimations<GLTFActions>(animations, group);
-  const extras = { receiveShadow: true, castShadow: true };
-
-  console.log("actions", Object.entries(actions)); // "Animation"
+  const [showModel, setShowModel] = React.useState(false);
 
   useEffect(() => void (actions["Animation"].play().paused = true), []);
 
@@ -127,10 +125,38 @@ export function JnrBox(props: Props) {
     });
   });
 
+  // useEffect(() => {
+  //   if (!scene) return;
+
+  //   scene.traverse((child) => {
+  //     if (child.isMesh) {
+  //       child.castShadow = true;
+  //       child.receiveShadow = true;
+  //       var prevMaterial = child.material;
+
+  //       if (
+  //         prevMaterial.type === "MeshBasicMaterial" ||
+  //         prevMaterial.type === "MeshToonMaterial"
+  //       )
+  //         return;
+
+  //       child.material = new THREE.MeshToonMaterial({
+  //         color: prevMaterial.emissive,
+  //         emissive: prevMaterial.emissive,
+  //         emissiveIntensity: 0,
+  //       });
+  //     }
+  //   });
+
+  //   setShowModel(true);
+  // }, [scene]);
+
+  // if (!showModel) return null;
+
   return (
     <group ref={group} {...props.groupProps} dispose={null}>
-      <primitive object={scene} dispose={null} />
-      {/* <group name="Scene">
+      {/* <primitive object={scene} dispose={null} /> */}
+      <group name="Scene">
         <group name="BOX" position={[0, 2.85, -0.21]} scale={0.94}>
           <group name="BOX_OPENING">
             <primitive object={nodes.MAIN} />
@@ -138,32 +164,32 @@ export function JnrBox(props: Props) {
               <skinnedMesh
                 name="Cube010"
                 geometry={nodes.Cube010.geometry}
-                material={materials["BOX MAIN"]}
+                // material={materials["BOX MAIN"]}
                 skeleton={nodes.Cube010.skeleton}
               />
               <skinnedMesh
                 name="Cube010_1"
                 geometry={nodes.Cube010_1.geometry}
-                material={materials["Nacre (Nácar)"]}
+                // material={materials["Nacre (Nácar)"]}
                 skeleton={nodes.Cube010_1.skeleton}
               />
               <skinnedMesh
                 name="Cube010_2"
                 geometry={nodes.Cube010_2.geometry}
-                material={materials["BOX MAIN INSIDE"]}
+                // material={materials["BOX MAIN INSIDE"]}
                 skeleton={nodes.Cube010_2.skeleton}
               />
             </group>
             <skinnedMesh
               name="BOX_PLINTH"
               geometry={nodes.BOX_PLINTH.geometry}
-              material={materials.Material}
+              // material={materials.Material}
               skeleton={nodes.BOX_PLINTH.skeleton}
             />
             <skinnedMesh
               name="Retopo_BOX_FILM"
               geometry={nodes.Retopo_BOX_FILM.geometry}
-              material={materials["BOX FILM.001"]}
+              // material={materials["BOX FILM.001"]}
               skeleton={nodes.Retopo_BOX_FILM.skeleton}
             />
           </group>
@@ -571,7 +597,7 @@ export function JnrBox(props: Props) {
             </group>
           </group>
         </group>
-      </group> */}
+      </group>
     </group>
   );
 }

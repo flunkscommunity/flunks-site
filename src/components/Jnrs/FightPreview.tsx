@@ -89,6 +89,7 @@ const JnrCard = ({
           </span>
           {STATS.map((stat) => (
             <Frame
+              key={`${name}-${stat.stat}`}
               variant="well"
               className="!flex items-center justify-between p-1 lg:p-2"
             >
