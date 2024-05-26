@@ -32,9 +32,11 @@ import {
   Bounds,
   Center,
   Environment,
+  Html,
   OrbitControls,
   PerspectiveCamera,
   Stage,
+  useProgress,
 } from "@react-three/drei";
 import Full2DJnr from "components/Jnrs/Full2DJnr";
 import EquipPreview from "components/Jnrs/EquipPreview";
@@ -300,6 +302,11 @@ const CLASSES = [
   },
 ];
 
+function Loader() {
+  const { active, progress, errors, item, loaded, total } = useProgress();
+  return <Html center>{progress} % loaded</Html>;
+}
+
 const ProjectJnr: React.FC = () => {
   const { closeWindow } = useWindowsContext();
   const { height } = useWindowSize();
@@ -333,9 +340,13 @@ const ProjectJnr: React.FC = () => {
             <div className="flex flex-col h-[300%] max-w-[1440px] mx-auto">
               <div className="sticky top-0 left-0 w-full h-[34%] pointer-events-none z-0 flex-shrink-0">
                 <Canvas
+                  gl={{
+                    antialias: true,
+                    precision: "highp",
+                    preserveDrawingBuffer: true,
+                    premultipliedAlpha: false,
+                  }}
                   shadows
-                  eventSource={document?.getElementById("root")}
-                  eventPrefix="client"
                   flat
                 >
                   <PerspectiveCamera
@@ -352,7 +363,7 @@ const ProjectJnr: React.FC = () => {
                     enablePan={false}
                   />
                   <ambientLight intensity={1} />
-                  <Suspense fallback={null}>
+                  <Suspense fallback={<Loader />}>
                     <Bounds fit clip>
                       <Center>
                         <JnrBox scroll={scroll} />
@@ -413,7 +424,9 @@ const ProjectJnr: React.FC = () => {
                         <span className="text-white text-3xl font-bold">
                           {item.className}
                         </span>
-                        <span className="text-white text-xl font-normal max-w-[325px] text-center">{item.description}</span>
+                        <span className="text-white text-xl font-normal max-w-[325px] text-center">
+                          {item.description}
+                        </span>
                       </div>
                     </Frame>
                   ))}
