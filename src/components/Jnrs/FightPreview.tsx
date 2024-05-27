@@ -22,11 +22,11 @@ attack?: number;
 const STATS = [
   { name: "Health", stat: "health" },
   { name: "Attack", stat: "attack" },
-  { name: "Defense", stat: "defense" },
-  { name: "Speed", stat: "speed" },
-  { name: "Crit", stat: "crit" },
-  { name: "Hit", stat: "hit" },
-  { name: "Dodge", stat: "dodge" },
+  // { name: "Defense", stat: "defense" },
+  // { name: "Speed", stat: "speed" },
+  // { name: "Crit", stat: "crit" },
+  // { name: "Hit", stat: "hit" },
+  // { name: "Dodge", stat: "dodge" },
 ];
 
 const PERCENTAGE_STATS = ["crit", "hit", "dodge"];

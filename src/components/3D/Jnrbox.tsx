@@ -5,7 +5,7 @@ Command: npx gltfjsx@6.1.7 .\jnrbox-2.glb --transform -R 2048 --types --keepname
 
 import * as THREE from "three";
 import React, { useEffect, useRef } from "react";
-import { useGLTF, useAnimations } from "@react-three/drei";
+import { useGLTF, useAnimations, useBounds } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useFrame } from "@react-three/fiber";
 
@@ -105,10 +105,10 @@ export function JnrBox(props: Props) {
   const group = useRef<THREE.Group>();
   // const { scene, animations } = useGLTF("/3d/jnrbox-transformed.glb");
   const { nodes, materials, animations } = useGLTF(
-    "/3d/jnrbox-2-transformed.glb"
+    "/3d/jnr-box-transformed.glb"
   ) as GLTFResult;
   const { actions } = useAnimations<GLTFActions>(animations, group);
-  const [showModel, setShowModel] = React.useState(false);
+  const bounds = useBounds();
 
   useEffect(() => void (actions["Animation"].play().paused = true), []);
 
@@ -126,6 +126,11 @@ export function JnrBox(props: Props) {
       child.rotation.z = Math.sin((et + index * 2000) / 3) / 10;
     });
   });
+
+  useEffect(() => {
+    if (!group.current) return;
+    bounds.refresh().fit().moveTo([0, -1, 15]);
+  }, [group.current]);
 
   return (
     <group ref={group} {...props} dispose={null}>

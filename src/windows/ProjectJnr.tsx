@@ -1,31 +1,14 @@
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
-import {
-  Anchor,
-  Frame,
-  MenuList,
-  MenuListItem,
-  ScrollView,
-  Button,
-  Toolbar,
-  Window,
-  WindowHeader,
-  WindowContent,
-} from "react95";
+import { Button, Frame, Toolbar } from "react95";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
-import JnrCanvas from "components/Canvases/JnrCanvas";
-import Marquee from "react-fast-marquee";
 import styled from "styled-components";
 import React, { Fragment, Suspense, useRef, useState } from "react";
 import {
   CustomScrollArea,
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
-import Inventory from "components/Jnrs/Inventory";
 import { JnrCanvasProvider } from "contexts/JnrCanvasContext";
-import JnrCollectibleCard from "components/Jnrs/JnrCollectibleCard";
-import EquippedItems from "components/Jnrs/EquippedItems";
-import useWindowSize from "hooks/useWindowSize";
 import { Canvas } from "@react-three/fiber";
 import { JnrBox } from "components/3D/Jnrbox";
 import {
@@ -41,6 +24,7 @@ import {
 import Full2DJnr from "components/Jnrs/Full2DJnr";
 import EquipPreview from "components/Jnrs/EquipPreview";
 import FightPreview from "components/Jnrs/FightPreview";
+import JnrTeaserMain from "components/JnrTeaser/JnrTeaserMain";
 
 const FrameWithBackground = styled(Frame)`
   background-image: linear-gradient(
@@ -323,7 +307,7 @@ const MemodCanvas = React.memo(({ scroll }) => {
       <PerspectiveCamera makeDefault attach={"camera"} position={[0, 0, 10]} />
       <ambientLight intensity={1} />
       <Suspense fallback={<Loader />}>
-        <Bounds fit clip>
+        <Bounds fit clip margin={1.5}>
           <Center>
             <JnrBox scroll={scroll} />
           </Center>
@@ -351,8 +335,22 @@ const ProjectJnr: React.FC = () => {
         initialWidth="100%"
         showMaximizeButton={false}
         resizable={false}
+        toolbar={
+          <Toolbar>
+            <Button variant="menu" size="lg">
+              File
+            </Button>
+            <Button variant="menu" size="lg">
+              Edit
+            </Button>
+            <Button variant="menu" size="lg" disabled>
+              Save
+            </Button>
+          </Toolbar>
+        }
       >
-        <CustomStyledScrollView
+        <JnrTeaserMain />
+        {/* <CustomStyledScrollView
           className="w-full h-full"
           onTouchMove={(e) => {
             console.log(e);
@@ -370,7 +368,7 @@ const ProjectJnr: React.FC = () => {
             onTouchMove={(e) => e.stopPropagation()}
           >
             <div className="relative flex flex-col mx-auto h-[300%] z-0 pointer-events-none">
-              <div className="sticky top-0 w-full h-[33%] z-0 flex-shrink-0 pointer-events-none">
+              <div className="sticky top-0 w-full h-[33%] z-0 flex-shrink-0 max-w-[1440px] mx-auto pointer-events-none">
                 <MemodCanvas scroll={scroll} />
               </div>
               <div className="absolute top-0 left-0 w-full pointer-events-none flex-shrink-0 flex flex-col pt-10 z-10">
@@ -448,7 +446,7 @@ const ProjectJnr: React.FC = () => {
               </div>
             </div>
           </CustomScrollAreaAsField>
-        </CustomStyledScrollView>
+        </CustomStyledScrollView> */}
       </DraggableResizeableWindow>
     </JnrCanvasProvider>
   );
