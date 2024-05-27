@@ -47,7 +47,7 @@ const PrettyThings = ({ scroll }) => {
       position={[0, -7, 3]}
     >
       <Cloud
-        segments={100}
+        segments={10}
         bounds={[30, 2, 2]}
         volume={10}
         color="white"
