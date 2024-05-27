@@ -3,7 +3,7 @@ import { useState } from "react";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
-import { Button, Frame, Checkbox } from "react95";
+import { Button, Frame, Checkbox, Separator } from "react95";
 import GumballMachine from "./GumballMachine";
 import WelcomePopup from "./WelcomePopup";
 
@@ -85,10 +85,13 @@ const Welcome: React.FC = () => {
       }}
     >
       <div className="p-4">
-        <h1 className="text-4xl">Welcome to Flunks95</h1>
-        <div className="flex gap-6">
+        <h1 className="lg:text-4xl text-3xl font-bold">Welcome to Flunks95</h1>
+        <div className="lg:flex-row flex flex-col gap-6">
           <section className="basis-2/3 flex flex-col">
-            <Frame className="!gap-4 mt-8 p-8 h-[10rem]" variant="field">
+            <Frame
+              className="!gap-4 lg:mt-8 mt-4 p-8 h-[12rem] lg:h-[10rem] max-w-[32rem]"
+              variant="field"
+            >
               <div className="flex">
                 <img src={icon} className="pr-2"></img>
                 <h2 className="text-xl font-bold pt-2">Did you know...</h2>
@@ -96,7 +99,7 @@ const Welcome: React.FC = () => {
               {tips[tipIndex]}
             </Frame>
           </section>
-          <section className="basis-1/3 flex flex-col mt-8 gap-2">
+          <section className="basis-1/3 flex flex-col lg:mt-8 gap-2">
             <Button
               onClick={() =>
                 openWindow({
@@ -110,14 +113,15 @@ const Welcome: React.FC = () => {
             <Button onClick={handleNextTip}>Next Tip</Button>
           </section>
         </div>
-        <div className="flex flex-row items-center justify-between w-full pt-2 gap-4">
+        <Separator />
+        <div className="flex flex-col lg:flex-row justify-between w-full pt-2 gap-4">
           <Checkbox
             label="Show this Welcome Screen the next time you start Flunks95"
-            className="pt-2 basis-2/3"
+            className="pt-2 lg:basis-2/3 order-last lg:order-none"
           />
           <Button
             onClick={() => closeWindow(WINDOW_IDS.WELCOME)}
-            className="basis-1/3"
+            className="lg:basis-1/3 w-full lg:w-auto"
           >
             Close
           </Button>
