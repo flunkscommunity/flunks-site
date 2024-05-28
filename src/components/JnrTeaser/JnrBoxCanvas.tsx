@@ -24,7 +24,7 @@ import {
 import { JnrBox } from "components/3D/Jnrbox";
 import { BlendFunction, GlitchMode } from "postprocessing";
 import { MutableRefObject, Suspense, useRef } from "react";
-import { MeshBasicMaterial, MeshStandardMaterial } from "three";
+import { MathUtils, MeshBasicMaterial, MeshStandardMaterial } from "three";
 
 interface Props {
   scroll: MutableRefObject<number>;
@@ -35,8 +35,28 @@ const PrettyThings = ({ scroll }) => {
 
   useFrame(() => {
     if (cloudsRef.current) {
-      cloudsRef.current.position.y = -scroll.current * 2 - 5;
-      cloudsRef.current.position.z = -scroll.current * 5 + 3;
+      /*
+        THREE.MathUtils.lerp(
+      actions["Animation"].time,
+      actions["Animation"].getClip().duration * props.scroll.current,
+      0.05
+    );
+      */
+
+      // cloudsRef.current.position.y = -scroll.current * 2 - 5;
+      // cloudsRef.current.position.z = -scroll.current * 9 + 6;
+
+      cloudsRef.current.position.y = MathUtils.lerp(
+        cloudsRef.current.position.y,
+        -scroll.current * 2 - 5,
+        0.05
+      );
+
+      cloudsRef.current.position.z = MathUtils.lerp(
+        cloudsRef.current.position.z,
+        -scroll.current * 9 + 6,
+        0.05
+      );
     }
   });
 
@@ -47,9 +67,10 @@ const PrettyThings = ({ scroll }) => {
       position={[0, -7, 3]}
     >
       <Cloud
-        segments={10}
+        seed={3}
+        segments={30}
         bounds={[30, 2, 2]}
-        volume={10}
+        volume={12}
         color="white"
         speed={0.3}
       />
