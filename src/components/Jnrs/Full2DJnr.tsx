@@ -28,9 +28,64 @@ const FrameWithBackground = styled(Frame)`
 const Full2DJnr: React.FC<{
   selectedTraits: SelectedTraits;
   className?: string;
+  withBackground?: boolean;
 }> = (props) => {
-  const { selectedTraits, className } = props;
+  const { selectedTraits, className, withBackground } = props;
   const { back, bottoms, head, lh, rh, shoes, torso } = selectedTraits;
+
+  if (withBackground) {
+    return (
+      <FrameWithBackground
+        variant="field"
+        className={`w-full h-full overflow-hidden !bg-transparent ${className || ""}`}
+      >
+        <img
+          src={back.thumbnail}
+          className="!absolute w-full h-full object-contain"
+        />
+        <img
+          src="/images/jnr-traits/base-bottoms.png"
+          className="!absolute w-full h-full object-contain"
+        />
+        <img
+          src={shoes.thumbnail}
+          className="!absolute w-full h-full object-contain"
+        />
+        <img
+          src={bottoms.thumbnail}
+          className="!absolute w-full h-full object-contain"
+        />
+        <img
+          src="/images/jnr-traits/base-torso.png"
+          className="!absolute w-full h-full object-contain"
+        />
+        <img
+          src={torso.thumbnail}
+          className="!absolute w-full h-full object-contain"
+        />
+        <img
+          src="/images/jnr-traits/base-head.png"
+          className="!absolute w-full h-full object-contain"
+        />
+        <img
+          src="/images/jnr-traits/base-eyes.png"
+          className="!absolute w-full h-full object-contain"
+        />
+        <img
+          src={head.thumbnail}
+          className="!absolute w-full h-full object-contain"
+        />
+        <img
+          src={lh.thumbnail}
+          className="!absolute w-full h-full object-contain"
+        />
+        <img
+          src={rh.thumbnail}
+          className="!absolute w-full h-full object-contain"
+        />
+      </FrameWithBackground>
+    );
+  }
 
   return (
     <Frame

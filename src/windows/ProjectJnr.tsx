@@ -125,7 +125,7 @@ const CustomScrollAreaAsField = styled(CustomScrollArea)`
   background-size: 32px 32px;
 `;
 
-const CLASSES = [
+export const CLASSES = [
   {
     className: "HISTORY",
     description:
@@ -168,7 +168,7 @@ const CLASSES = [
     ],
   },
   {
-    className: "MATHS",
+    className: "MATH",
     description:
       "Strategists and thinkers, leveraging calculations and probability to gain the upper hand in any situation.",
     set: "PC",
@@ -335,19 +335,6 @@ const ProjectJnr: React.FC = () => {
         initialWidth="100%"
         showMaximizeButton={false}
         resizable={false}
-        toolbar={
-          <Toolbar>
-            <Button variant="menu" size="lg">
-              File
-            </Button>
-            <Button variant="menu" size="lg">
-              Edit
-            </Button>
-            <Button variant="menu" size="lg" disabled>
-              Save
-            </Button>
-          </Toolbar>
-        }
       >
         <JnrTeaserMain />
         {/* <CustomStyledScrollView

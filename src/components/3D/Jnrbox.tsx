@@ -13,67 +13,66 @@ import {
 } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { extend, useFrame } from "@react-three/fiber";
+
 type GLTFResult = GLTF & {
   nodes: {
-    BOX_PLINTH: THREE.Mesh;
-    BOX_MAIN_1: THREE.SkinnedMesh;
-    BOX_MAIN_2: THREE.SkinnedMesh;
-    BOX_MAIN_3: THREE.SkinnedMesh;
-    BOX_MAIN_4: THREE.SkinnedMesh;
-    ["JNR_MERGED_+_DECIMATED_1"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_2"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_3"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_4"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_5"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_6"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_7"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_8"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_9"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_10"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_11"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_12"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_13"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_14"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_15"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_16"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_17"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_18"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_19"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_20"]: THREE.Mesh;
-    ["JNR_MERGED_+_DECIMATED_21"]: THREE.Mesh;
-    MAIN: THREE.Bone;
-    neutral_bone: THREE.Bone;
-  };
+    BOX_PLINTH: THREE.Mesh
+    BOX_MAIN_1: THREE.SkinnedMesh
+    BOX_MAIN_2: THREE.SkinnedMesh
+    BOX_MAIN_3: THREE.SkinnedMesh
+    BOX_MAIN_4: THREE.SkinnedMesh
+    ['JNR_MERGED_+_DECIMATED_1']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_2']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_3']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_4']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_5']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_6']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_7']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_8']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_9']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_10']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_11']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_12']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_13']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_14']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_15']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_16']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_17']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_18']: THREE.Mesh
+    ['JNR_MERGED_+_DECIMATED_19']: THREE.Mesh
+    MAIN: THREE.Bone
+    neutral_bone: THREE.Bone
+  }
   materials: {
-    BLACK: THREE.MeshStandardMaterial;
-    ["BOX MAIN"]: THREE.MeshStandardMaterial;
-    CHROME: THREE.MeshStandardMaterial;
-    ["BOX MAIN LID"]: THREE.MeshStandardMaterial;
-    ["BOX MAIN INSIDE"]: THREE.MeshStandardMaterial;
-    ["GREY DARK"]: THREE.MeshStandardMaterial;
-    ["YELLOW ORANGE"]: THREE.MeshStandardMaterial;
-    ["SAND SHADING"]: THREE.MeshStandardMaterial;
-    RED: THREE.MeshStandardMaterial;
-    BRICK: THREE.MeshStandardMaterial;
-    ["DARK GREY 3"]: THREE.MeshStandardMaterial;
-    SAND: THREE.MeshStandardMaterial;
-    WHITE: THREE.MeshStandardMaterial;
-    ORANGE: THREE.MeshStandardMaterial;
-    YELLOW: THREE.MeshStandardMaterial;
-    ["HOT SKY BLUE"]: THREE.MeshStandardMaterial;
-    ["GREEN LIGHT"]: THREE.MeshStandardMaterial;
-    GREY: THREE.MeshStandardMaterial;
-    ["OUTLINE GREEN"]: THREE.MeshBasicMaterial;
-    ["OUTLINE RED"]: THREE.MeshStandardMaterial;
-    ["GREEN EARTH DARK"]: THREE.MeshStandardMaterial;
-    ["GREEN EARTH"]: THREE.MeshStandardMaterial;
-    ["TENNIS BALL GREEN"]: THREE.MeshStandardMaterial;
-    OH_Outline_Material: THREE.MeshBasicMaterial;
-  };
-};
+    BLACK: THREE.MeshStandardMaterial
+    ['BOX MAIN']: THREE.MeshStandardMaterial
+    CHROME: THREE.MeshStandardMaterial
+    ['BOX MAIN LID']: THREE.MeshStandardMaterial
+    ['BOX MAIN INSIDE']: THREE.MeshStandardMaterial
+    ['GREY DARK']: THREE.MeshStandardMaterial
+    ['YELLOW ORANGE']: THREE.MeshStandardMaterial
+    ['SAND SHADING']: THREE.MeshStandardMaterial
+    RED: THREE.MeshStandardMaterial
+    BRICK: THREE.MeshStandardMaterial
+    ['DARK GREY 3']: THREE.MeshStandardMaterial
+    SAND: THREE.MeshStandardMaterial
+    WHITE: THREE.MeshStandardMaterial
+    ORANGE: THREE.MeshStandardMaterial
+    YELLOW: THREE.MeshStandardMaterial
+    ['HOT SKY BLUE']: THREE.MeshStandardMaterial
+    ['GREEN LIGHT']: THREE.MeshStandardMaterial
+    GREY: THREE.MeshStandardMaterial
+    ['OUTLINE GREEN']: THREE.MeshBasicMaterial
+    ['OUTLINE RED']: THREE.MeshStandardMaterial
+    ['GREEN EARTH DARK']: THREE.MeshStandardMaterial
+    ['GREEN EARTH']: THREE.MeshStandardMaterial
+    ['TENNIS BALL GREEN']: THREE.MeshStandardMaterial
+    OH_Outline_Material: THREE.MeshBasicMaterial
+  }
+}
 
-type ActionName = "Animation";
-type GLTFActions = Record<ActionName, THREE.AnimationAction>;
+type ActionName = 'Animation'
+type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
 interface Props {
   groupProps?: JSX.IntrinsicElements["group"];
@@ -143,325 +142,115 @@ export function JnrBox(props: Props) {
           <group name="BOX_OPENING_ARMATURE" position={[0, -0.68, -0.21]}>
             <primitive object={nodes.MAIN} />
             <primitive object={nodes.neutral_bone} />
-            <mesh
-              name="BOX_PLINTH"
-              geometry={nodes.BOX_PLINTH.geometry}
-              material={materials.BLACK}
-              position={[0, -3.02, 0.22]}
-            />
+            <mesh name="BOX_PLINTH" geometry={nodes.BOX_PLINTH.geometry} material={materials.BLACK} position={[0, -3.02, 0.22]} />
             <group name="BOX_MAIN">
-              <skinnedMesh
-                name="BOX_MAIN_1"
-                geometry={nodes.BOX_MAIN_1.geometry}
-                material={materials["BOX MAIN"]}
-                skeleton={nodes.BOX_MAIN_1.skeleton}
-              />
-              <skinnedMesh
-                name="BOX_MAIN_2"
-                geometry={nodes.BOX_MAIN_2.geometry}
-                material={materials.CHROME}
-                skeleton={nodes.BOX_MAIN_2.skeleton}
-              />
-              <skinnedMesh
-                name="BOX_MAIN_3"
-                geometry={nodes.BOX_MAIN_3.geometry}
-                material={materials["BOX MAIN LID"]}
-                skeleton={nodes.BOX_MAIN_3.skeleton}
-              />
-              <skinnedMesh
-                name="BOX_MAIN_4"
-                geometry={nodes.BOX_MAIN_4.geometry}
-                material={materials["BOX MAIN INSIDE"]}
-                skeleton={nodes.BOX_MAIN_4.skeleton}
-              />
+              <skinnedMesh name="BOX_MAIN_1" geometry={nodes.BOX_MAIN_1.geometry} material={materials['BOX MAIN']} skeleton={nodes.BOX_MAIN_1.skeleton} />
+              <skinnedMesh name="BOX_MAIN_2" geometry={nodes.BOX_MAIN_2.geometry} material={materials.CHROME} skeleton={nodes.BOX_MAIN_2.skeleton} />
+              <skinnedMesh name="BOX_MAIN_3" geometry={nodes.BOX_MAIN_3.geometry} material={materials['BOX MAIN LID']} skeleton={nodes.BOX_MAIN_3.skeleton} />
+              <skinnedMesh name="BOX_MAIN_4" geometry={nodes.BOX_MAIN_4.geometry} material={materials['BOX MAIN INSIDE']} skeleton={nodes.BOX_MAIN_4.skeleton} />
             </group>
           </group>
         </group>
         <group name="JNR001" position={[0, 2.85, -0.21]} scale={0.94}>
           <group name="JNR002" position={[0, -0.66, 0]}>
-            <group
-              name="JNR_MERGED_+_DECIMATED"
-              position={[0, -2.36, 0.22]}
-              scale={1.06}
-            >
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_1"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_1"].geometry}
-                material={materials["GREY DARK"]}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_2"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_2"].geometry}
-                material={materials["YELLOW ORANGE"]}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_3"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_3"].geometry}
-                material={materials["SAND SHADING"]}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_4"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_4"].geometry}
-                material={materials.RED}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_5"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_5"].geometry}
-                material={materials.BRICK}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_6"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_6"].geometry}
-                material={materials["DARK GREY 3"]}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_7"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_7"].geometry}
-                material={materials.SAND}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_8"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_8"].geometry}
-                material={materials.WHITE}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_9"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_9"].geometry}
-                material={materials.ORANGE}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_10"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_10"].geometry}
-                material={materials.YELLOW}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_11"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_11"].geometry}
-                material={materials["HOT SKY BLUE"]}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_12"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_12"].geometry}
-                material={materials["GREEN LIGHT"]}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_13"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_13"].geometry}
-                material={materials.GREY}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_14"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_14"].geometry}
-                material={materials["OUTLINE GREEN"]}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_15"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_15"].geometry}
-                material={materials["OUTLINE RED"]}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_16"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_16"].geometry}
-                material={materials["GREEN EARTH DARK"]}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_17"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_17"].geometry}
-                material={materials["GREEN EARTH"]}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_18"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_18"].geometry}
-                material={materials.GREY}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_19"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_19"].geometry}
-                material={materials.WHITE}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_20"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_20"].geometry}
-                material={materials["TENNIS BALL GREEN"]}
-              />
-
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_21"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_21"].geometry}
-                material={materials.OH_Outline_Material}
-              />
+            <group name="JNR_MERGED_+_DECIMATED" position={[0, -2.36, 0.22]} scale={1.06}>
+              <mesh name="JNR_MERGED_+_DECIMATED_1" geometry={nodes['JNR_MERGED_+_DECIMATED_1'].geometry} material={materials['GREY DARK']} />
+              <mesh name="JNR_MERGED_+_DECIMATED_2" geometry={nodes['JNR_MERGED_+_DECIMATED_2'].geometry} material={materials['YELLOW ORANGE']} />
+              <mesh name="JNR_MERGED_+_DECIMATED_3" geometry={nodes['JNR_MERGED_+_DECIMATED_3'].geometry} material={materials['SAND SHADING']} />
+              <mesh name="JNR_MERGED_+_DECIMATED_4" geometry={nodes['JNR_MERGED_+_DECIMATED_4'].geometry} material={materials.RED} />
+              <mesh name="JNR_MERGED_+_DECIMATED_5" geometry={nodes['JNR_MERGED_+_DECIMATED_5'].geometry} material={materials.BRICK} />
+              <mesh name="JNR_MERGED_+_DECIMATED_6" geometry={nodes['JNR_MERGED_+_DECIMATED_6'].geometry} material={materials['DARK GREY 3']} />
+              <mesh name="JNR_MERGED_+_DECIMATED_7" geometry={nodes['JNR_MERGED_+_DECIMATED_7'].geometry} material={materials.SAND} />
+              <mesh name="JNR_MERGED_+_DECIMATED_8" geometry={nodes['JNR_MERGED_+_DECIMATED_8'].geometry} material={materials.WHITE} />
+              <mesh name="JNR_MERGED_+_DECIMATED_9" geometry={nodes['JNR_MERGED_+_DECIMATED_9'].geometry} material={materials.ORANGE} />
+              <mesh name="JNR_MERGED_+_DECIMATED_10" geometry={nodes['JNR_MERGED_+_DECIMATED_10'].geometry} material={materials.YELLOW} />
+              <mesh name="JNR_MERGED_+_DECIMATED_11" geometry={nodes['JNR_MERGED_+_DECIMATED_11'].geometry} material={materials['HOT SKY BLUE']} />
+              <mesh name="JNR_MERGED_+_DECIMATED_12" geometry={nodes['JNR_MERGED_+_DECIMATED_12'].geometry} material={materials['GREEN LIGHT']} />
+              <mesh name="JNR_MERGED_+_DECIMATED_13" geometry={nodes['JNR_MERGED_+_DECIMATED_13'].geometry} material={materials.GREY} />
+              <mesh name="JNR_MERGED_+_DECIMATED_14" geometry={nodes['JNR_MERGED_+_DECIMATED_14'].geometry} material={materials['OUTLINE GREEN']} />
+              <mesh name="JNR_MERGED_+_DECIMATED_15" geometry={nodes['JNR_MERGED_+_DECIMATED_15'].geometry} material={materials['OUTLINE RED']} />
+              <mesh name="JNR_MERGED_+_DECIMATED_16" geometry={nodes['JNR_MERGED_+_DECIMATED_16'].geometry} material={materials['GREEN EARTH DARK']} />
+              <mesh name="JNR_MERGED_+_DECIMATED_17" geometry={nodes['JNR_MERGED_+_DECIMATED_17'].geometry} material={materials['GREEN EARTH']} />
+              <mesh name="JNR_MERGED_+_DECIMATED_18" geometry={nodes['JNR_MERGED_+_DECIMATED_18'].geometry} material={materials['TENNIS BALL GREEN']} />
+              <mesh name="JNR_MERGED_+_DECIMATED_19" geometry={nodes['JNR_MERGED_+_DECIMATED_19'].geometry} material={materials.OH_Outline_Material} />
             </group>
-            <group
-              name="JNR_MERGED_+_DECIMATED"
-              position={[0, -2.36, 0.22]}
-              scale={1.06}
-            >
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_1-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_1"].geometry}
-              >
+            <group name="JNR_MERGED_+_DECIMTED" position={[0, -2.36, 0.22]} scale={1.06}>
+              <mesh name="outline_1" geometry={nodes['JNR_MERGED_+_DECIMATED_1'].geometry} >
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_2-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_2"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_2" geometry={nodes['JNR_MERGED_+_DECIMATED_2'].geometry} >
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_3-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_3"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_3" geometry={nodes['JNR_MERGED_+_DECIMATED_3'].geometry} >
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_4-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_4"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_4" geometry={nodes['JNR_MERGED_+_DECIMATED_4'].geometry} >
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_5-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_5"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_5" geometry={nodes['JNR_MERGED_+_DECIMATED_5'].geometry} >
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_6-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_6"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_6" geometry={nodes['JNR_MERGED_+_DECIMATED_6'].geometry} >
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_7-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_7"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_7" geometry={nodes['JNR_MERGED_+_DECIMATED_7'].geometry} >
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_8-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_8"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_8" geometry={nodes['JNR_MERGED_+_DECIMATED_8'].geometry} >
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_9-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_9"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_9" geometry={nodes['JNR_MERGED_+_DECIMATED_9'].geometry} >
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_10-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_10"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_10" geometry={nodes['JNR_MERGED_+_DECIMATED_10'].geometry}>
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_11-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_11"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_11" geometry={nodes['JNR_MERGED_+_DECIMATED_11'].geometry}>
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_12-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_12"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_12" geometry={nodes['JNR_MERGED_+_DECIMATED_12'].geometry}>
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_13-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_13"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_13" geometry={nodes['JNR_MERGED_+_DECIMATED_13'].geometry}>
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_14-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_14"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_14" geometry={nodes['JNR_MERGED_+_DECIMATED_14'].geometry}>
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_15-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_15"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_15" geometry={nodes['JNR_MERGED_+_DECIMATED_15'].geometry}>
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_16-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_16"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_16" geometry={nodes['JNR_MERGED_+_DECIMATED_16'].geometry}>
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_17-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_17"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_17" geometry={nodes['JNR_MERGED_+_DECIMATED_17'].geometry}>
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_18-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_18"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_18" geometry={nodes['JNR_MERGED_+_DECIMATED_18'].geometry}>
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_19-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_19"].geometry}
-              >
+                </mesh>
+              <mesh name="outline_19" geometry={nodes['JNR_MERGED_+_DECIMATED_19'].geometry}>
                 {/* @ts-ignore */}
                 <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_20-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_20"].geometry}
-              >
-                {/* @ts-ignore */}
-                <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
-              <mesh
-                name="JNR_MERGED_+_DECIMATED_21-outline"
-                geometry={nodes["JNR_MERGED_+_DECIMATED_21"].geometry}
-              >
-                {/* @ts-ignore */}
-                <hullMaterial depthWrite={true} color="black" side={1} />
-              </mesh>
+                </mesh>
             </group>
           </group>
         </group>

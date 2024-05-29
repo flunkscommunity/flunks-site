@@ -8,8 +8,10 @@ import useIsMounted from "hooks/useIsMounted";
 import React from "react";
 import { Button, MenuList, MenuListItem, Separator } from "react95";
 import styled from "styled-components";
+import AboutUs from "windows/AboutUs";
 import GumballMachine from "windows/GumballMachine";
 import LostAndFound from "windows/LostAndFound";
+import ProjectJnr from "windows/ProjectJnr";
 import Settings from "windows/Settings";
 import StudentExplorer from "windows/StudentExplorer";
 import YourStudents from "windows/YourStudents";
@@ -102,6 +104,36 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
         >
           <img src="/images/icons/gum-machine.png" width="32px" height="32px" />
           Gumball Machine
+        </CustomMenuListItem>
+        <CustomMenuListItem
+          onClick={() => {
+            openWindow({
+              key: WINDOW_IDS.PROJECT_JNR,
+              window: <ProjectJnr />,
+            });
+            props.closeStartMenu();
+          }}
+          className="!text-xl"
+        >
+          <img
+            src="/images/icons/pocket-juniors-50x50.png"
+            width="32px"
+            height="32px"
+          />
+          Pocket Juniors
+        </CustomMenuListItem>
+        <CustomMenuListItem
+          onClick={() => {
+            openWindow({
+              key: WINDOW_IDS.ABOUT_US,
+              window: <AboutUs />,
+            });
+            props.closeStartMenu();
+          }}
+          className="!text-xl"
+        >
+          <img src="/images/icons/about-us.png" width="32px" height="32px" />
+          About Us
         </CustomMenuListItem>
         <a
           href="https://www.flowty.io/collection/0x807c3d470888cc48/Flunks"

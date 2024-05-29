@@ -29,7 +29,7 @@ const Product = ({
         className="!py-4 overflow-hidden mt-2"
         variant="well"
       >
-        <Marquee autoFill direction={direction}>
+        <Marquee pauseOnClick autoFill direction={direction}>
           {images.map((image, index) => (
             <Frame key={index} className="!p-2 ml-4 !pb-1">
               <Frame

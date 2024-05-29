@@ -35,10 +35,10 @@ const YourStudents: React.FC = () => {
   }
 
   return (
-    <AppLoader bgImage="/images/your-students-bg.png">
+    <AppLoader bgImage="/images/flunkfolio.webp">
       <DraggableResizeableWindow
         offSetHeight={44}
-        headerTitle={`Flunkfolio - ${user?.username || "UNKNOWN"}`}
+        headerTitle={`Flunkfolio - ${user?.username || "Not Logged In"}`}
         authGuard={true}
         windowsId={WINDOW_IDS.YOUR_STUDENTS}
         onClose={() => {

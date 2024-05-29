@@ -6,6 +6,7 @@ import {
   Environment,
   Fisheye,
   PerspectiveCamera,
+  Sky,
   Sparkles,
   Stars,
 } from "@react-three/drei";
@@ -24,6 +25,7 @@ import {
 import { JnrBox } from "components/3D/Jnrbox";
 import { BlendFunction, GlitchMode } from "postprocessing";
 import { MutableRefObject, Suspense, useRef } from "react";
+import { useTheme } from "styled-components";
 import { MathUtils, MeshBasicMaterial, MeshStandardMaterial } from "three";
 
 interface Props {
@@ -32,57 +34,47 @@ interface Props {
 
 const PrettyThings = ({ scroll }) => {
   const cloudsRef = useRef(null);
+  const theme = useTheme();
+
+  console.log(theme);
 
   useFrame(() => {
     if (cloudsRef.current) {
-      /*
-        THREE.MathUtils.lerp(
-      actions["Animation"].time,
-      actions["Animation"].getClip().duration * props.scroll.current,
-      0.05
-    );
-      */
-
-      // cloudsRef.current.position.y = -scroll.current * 2 - 5;
-      // cloudsRef.current.position.z = -scroll.current * 9 + 6;
-
       cloudsRef.current.position.y = MathUtils.lerp(
         cloudsRef.current.position.y,
-        -scroll.current * 2 - 5,
-        0.05
-      );
-
-      cloudsRef.current.position.z = MathUtils.lerp(
-        cloudsRef.current.position.z,
-        -scroll.current * 9 + 6,
+        -scroll.current * 7 - 7,
         0.05
       );
     }
   });
 
   return (
-    <Clouds
-      ref={cloudsRef}
-      material={MeshStandardMaterial}
-      position={[0, -7, 3]}
-    >
-      <Cloud
-        seed={3}
-        segments={30}
-        bounds={[30, 2, 2]}
-        volume={12}
-        color="white"
-        speed={0.3}
-      />
-      <Cloud
-        seed={1}
-        scale={2}
-        volume={5}
-        color="cyan"
-        fade={100}
-        speed={0.3}
-      />
-    </Clouds>
+    <>
+      <Clouds
+        ref={cloudsRef}
+        material={MeshStandardMaterial}
+        position={[0, -7, 5]}
+      >
+        <Cloud
+          seed={3}
+          segments={30}
+          bounds={[30, 2, 2]}
+          volume={12}
+          color="white"
+          speed={0.3}
+        />
+        <Cloud
+          seed={1}
+          scale={2}
+          volume={5}
+          color="lightblue"
+          fade={100}
+          speed={0.3}
+        />
+      </Clouds>
+      <Stars />
+      <Sky sunPosition={[5, 5, 0]} />
+    </>
   );
 };
 
@@ -108,21 +100,7 @@ const JnrBoxCanvas = ({ scroll }) => {
           </Bounds>
         </Center>
         <PrettyThings scroll={scroll} />
-        <Stars />
-        <Environment
-          background
-          backgroundRotation={[0, 10, 0]}
-          backgroundBlurriness={0.15}
-          files={[
-            "/envs/sky/px.jpg",
-            "/envs/sky/nx.jpg",
-            "/envs/sky/py.jpg",
-            "/envs/sky/ny.jpg",
-            "/envs/sky/pz.jpg",
-            "/envs/sky/nz.jpg",
-          ]}
-          environmentIntensity={1}
-        />
+        <Environment preset="sunset" />
       </Suspense>
     </Canvas>
   );

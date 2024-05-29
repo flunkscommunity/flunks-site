@@ -84,7 +84,7 @@ const JnrCard = ({
           <Full2DJnr selectedTraits={selectedTraits} />
         </div>
         <Frame variant="well" className="w-full !flex flex-col p-2">
-          <span className="text-lg lg:text-2xl font-bold text-center">
+          <span className="text-lg lg:text-2xl font-bold text-center pb-2">
             {name}
           </span>
           {STATS.map((stat) => (
@@ -95,7 +95,7 @@ const JnrCard = ({
             >
               <span className="lg:text-2xl">{stat.name}</span>
               <span className="lg:text-2xl">
-                {statsCombined[stat.stat]}
+                {stat.name === "Health" ? 40 + statsCombined[stat.stat] : statsCombined[stat.stat]}
                 {PERCENTAGE_STATS.includes(stat.stat) ? "%" : ""}
               </span>
             </Frame>
@@ -115,7 +115,7 @@ const FightPreview = () => {
   };
 
   return (
-    <CustomStyledScrollView className="!p-0 !overflow-hidden">
+    <CustomStyledScrollView className="!p-0 !overflow-hidden max-w-[1440px] mx-auto w-full">
       <CustomScrollArea className="!p-0">
         <div className="w-full !flex !flex-nowrap">
           <JnrCard

@@ -216,40 +216,40 @@ function getRandomStatsForGroup(group) {
         attack: Math.floor(Math.random() * 3) + 1,
         defense: Math.floor(Math.random() * 3) + 1,
         speed: Math.floor(Math.random() * 3) + 1,
-        health: Math.floor(Math.random() * 10) + 5,
+        health: Math.floor(Math.random() * 20) + 5,
       };
     case "bottoms":
       return {
         attack: Math.floor(Math.random() * 2) + 1,
         defense: Math.floor(Math.random() * 3) + 1,
         speed: Math.floor(Math.random() * 5) + 1,
-        health: Math.floor(Math.random() * 10) + 5,
+        health: Math.floor(Math.random() * 20) + 5,
       };
     case "head":
       return {
         attack: Math.floor(Math.random() * 2) + 1,
-        defense: Math.floor(Math.random() * 3) + 1,
+        health: Math.floor(Math.random() * 3) + 1,
         crit: Math.floor(Math.random() * 5) + 1,
         hit: Math.floor(Math.random() * 20) + 10,
       };
     case "rh":
       return {
-        attack: Math.floor(Math.random() * 3) + 1,
-        defense: Math.floor(Math.random() * 10) + 3,
+        attack: Math.floor(Math.random() * 2) + 1,
+        health: Math.floor(Math.random() * 10) + 3,
         speed: Math.floor(Math.random() * 3) + 1,
         dodge: Math.floor(Math.random() * 3) + 1,
       };
     case "lh":
       return {
         attack: Math.floor(Math.random() * 10) + 3,
-        defense: Math.floor(Math.random() * 1) + 1,
+        health: Math.floor(Math.random() * 1) + 1,
         speed: Math.floor(Math.random() * 3) + 1,
         crit: Math.floor(Math.random() * 3) + 1,
       };
     case "shoes":
       return {
-        attack: Math.floor(Math.random() * 5) + 1,
-        defense: Math.floor(Math.random() * 2) + 1,
+        attack: Math.floor(Math.random() * 2) + 1,
+        health: Math.floor(Math.random() * 2) + 1,
         speed: Math.floor(Math.random() * 3) + 1,
         dodge: Math.floor(Math.random() * 3) + 1,
       };
@@ -257,7 +257,7 @@ function getRandomStatsForGroup(group) {
       return {
         attack: Math.floor(Math.random() * 1) + 0,
         defense: Math.floor(Math.random() * 9) + 1,
-        health: Math.floor(Math.random() * 10) + 5,
+        health: Math.floor(Math.random() * 20) + 5,
         hit: Math.floor(Math.random() * 20) + 10,
       };
     default:

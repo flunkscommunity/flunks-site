@@ -2,7 +2,7 @@ import {
   CustomScrollArea,
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
-import { Avatar, Frame, ProgressBar } from "react95";
+import { Avatar, Button, Frame, ProgressBar } from "react95";
 import JnrBoxCanvas from "./JnrBoxCanvas";
 import { useEffect, useRef } from "react";
 import { useProgress } from "@react-three/drei";
@@ -14,6 +14,15 @@ import {
   useSpringRef,
 } from "@react-spring/web";
 import IntroJnrs from "./IntroJnrs";
+import { CLASSES } from "windows/ProjectJnr";
+import EquipPreview from "components/Jnrs/EquipPreview";
+import FightPreview from "components/Jnrs/FightPreview";
+import JnrCollectibleCard, {
+  JnrCollectibleCardReffed,
+} from "components/Jnrs/JnrCollectibleCard";
+import { useJnrCanvas } from "contexts/JnrCanvasContext";
+import { toPng } from "html-to-image";
+import { FrameWithBackground, FrameWithCheckedBackground } from "components/AboutUs/FrameWithBackground";
 
 const StyledLoader = styled.div`
   background-color: ${({ theme }) => theme.material};
@@ -25,6 +34,7 @@ const JnrTeaserMain = () => {
   const animationScrollContainer = useRef<HTMLDivElement>(null);
   const scroll = useRef(0);
   const { progress, loaded } = useProgress();
+  const { randomizeSelectedTraits } = useJnrCanvas();
 
   const handleScroll = (e: React.UIEvent<HTMLElement>) => {
     const heightOfScrollContainer =
@@ -67,9 +77,63 @@ const JnrTeaserMain = () => {
     }
   }, [loaded]);
 
+  const elementRef = useRef<HTMLDivElement>(null);
+
+  const htmlToImageConvert = (element: HTMLElement) => {
+    // Store the original styles
+    const originalTransform = element.style.transform;
+
+    // Fixed dimensions
+    const fixedWidth = 1056;
+    const fixedHeight = 1808;
+
+    // Calculate the scale factors
+    const scaleX = fixedWidth / element.offsetWidth;
+    const scaleY = fixedHeight / element.offsetHeight;
+
+    // Apply the scale transformation
+    element.style.transform = `scale(${scaleX}, ${scaleY})`;
+    element.style.transformOrigin = "top left";
+
+    toPng(element, {
+      cacheBust: false,
+      width: fixedWidth,
+      height: fixedHeight,
+      canvasWidth: fixedWidth,
+      canvasHeight: fixedHeight,
+    })
+      .then((dataUrl) => {
+        // Revert the scale transformation
+        element.style.transform = originalTransform;
+
+        const link = document.createElement("a");
+        link.download = "pocket-junior.png";
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((err) => {
+        // Revert the scale transformation in case of error
+        element.style.transform = originalTransform;
+        console.log(err);
+      });
+  };
+
+  // const htmlToImageConvert = (element: HTMLElement) => {
+  //   toPng(element, { cacheBust: false, width: 1056, height: 1808, canvasWidth: 1056, canvasHeight: 1808})
+  //     .then((dataUrl) => {
+  //       const link = document.createElement("a");
+  //       link.download = "pocket-junior.png";
+  //       link.href = dataUrl;
+  //       link.click();
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+
   return (
     <div className="flex flex-col h-full relative">
-      <CustomStyledScrollView className="w-full h-[calc(100%-52px)]">
+      <CustomStyledScrollView className="w-full h-[calc(100%)]">
         <CustomScrollArea
           onScroll={handleScroll}
           className="relative w-full"
@@ -106,56 +170,57 @@ const JnrTeaserMain = () => {
               </div>
             </div>
             <div className="flex flex-col h-full">
-              <div className="w-full flex flex-col gap-10 mx-auto mb-[112px] lg:mb-[20%]">
+              <div className="w-full flex flex-col gap-10 mx-auto mb-[112px] lg:mb-[10%]">
                 <IntroJnrs />
               </div>
 
-              <div className="w-full flex flex-col gap-10 max-w-[1440px] mx-auto mb-[112px] lg:mb-[20%]">
+              <div className="w-full flex flex-col gap-10 max-w-[1440px] mx-auto mb-[112px] lg:mb-[10%]">
                 <span className="font-bold text-2xl lg:text-4xl text-center max-w-[700px] mx-auto px-4">
-                  Dive into 8 unique classes: History, Art, Maths, Biology,
+                  Dive into 8 unique classes: History, Art, Math, Biology,
                   Music, Sport, Physics, and Chemistry! Each class comes with
                   its own captivating themes, specialized traits, and dynamic
                   abilities, bringing a new level of excitement to every battle.
                 </span>
 
-                {/* <Frame className="w-full !grid grid-col-[repeat(auto-fill,minmax(160px,1fr))] gap-4 overflow-hidden p-4">
-                {CLASSES.map((item) => (
-                  <Frame
-                    key={item.className}
-                    variant="well"
-                    className="w-full !min-h-[300px] h-full !flex flex-col items-center justify-center relative !overflow-hidden contrast-125"
-                    style={{
-                      backgroundImage: `url(${item.setImage})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "50% 30%",
-                    }}
-                  >
-                    <div className=" z-10 absolute w-full h-full inset-0 bg-black/50 flex flex-col items-center justify-center gap-3 px-4">
-                      <span className="text-white text-3xl font-bold">
-                        {item.className}
-                      </span>
-                      <span className="text-white text-xl font-normal max-w-[325px] text-center">
-                        {item.description}
-                      </span>
-                    </div>
-                  </Frame>
-                ))}
-              </Frame> */}
+                <Frame className="w-full !grid grid-col-[repeat(auto-fill,minmax(160px,1fr))] gap-4 overflow-hidden p-4">
+                  {CLASSES.map((item) => (
+                    <Frame
+                      key={item.className}
+                      variant="well"
+                      className="w-full !min-h-[300px] h-full hover:!bg-[position:0%_100%] hover:!bg-[size:200%_4000%] group !flex flex-col items-center justify-center relative !overflow-hidden contrast-125"
+                      style={{
+                        backgroundImage: `url(${item.setImage})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "50% 30%",
+                      }}
+                    >
+                      <div className=" z-10 absolute py-6 w-full h-full inset-0 bg-black/50 group-hover:bg-black/20 group-hover:mix-blend-luminosity transition-all flex flex-col items-center justify-center gap-3 px-4">
+                        <span className="text-white text-3xl font-bold">
+                          {item.className}
+                        </span>
+                        <span className="text-white text-xl font-normal max-w-[325px] text-center">
+                          {item.description}
+                        </span>
+                      </div>
+                    </Frame>
+                  ))}
+                </Frame>
               </div>
 
-              <div className="w-full flex flex-col gap-10 max-w-[1440px] mx-auto mb-[112px] lg:mb-[20%]">
-                <span className="font-bold text-2xl lg:text-4xl text-center max-w-[700px] mx-auto px-4">
+              <div className="w-full flex flex-col gap-10 max-w-[1440px] mx-auto mb-[112px] lg:mb-[10%]">
+                <span className="font-bold text-2xl lg:text-4xl text-pretty text-center max-w-[700px] mx-auto px-4">
                   Equip your JNR with powerful traits! Discover and unlock a
                   vast array of unique abilities, customizing your Pocket Junior
-                  for epic battles and strategic dominance. With each trait
-                  enhancing your JNR's stats and skills, you can create the
-                  perfect team to outsmart and outfight your opponents.
+                  for epic battles and strategic dominance. <br /> <br /> With
+                  each trait enhancing your JNR's stats and skills, you can
+                  create the perfect team to outsmart and outfight your
+                  opponents.
                 </span>
 
-                {/* <EquipPreview /> */}
+                <EquipPreview />
               </div>
 
-              <div className="w-full flex flex-col gap-10 mx-auto ">
+              <div className="w-full flex flex-col gap-10 mx-auto mb-[112px] lg:mb-[10%]">
                 <span className="font-bold text-2xl lg:text-4xl text-center max-w-[700px] mx-auto px-4">
                   Form your team, plan your strategy, and let the battles begin!
                   Challenge other players and see who reigns supreme in the
@@ -163,7 +228,36 @@ const JnrTeaserMain = () => {
                   battle for ultimate glory awaits!
                 </span>
 
-                {/* <FightPreview /> */}
+                <FightPreview />
+              </div>
+
+              <div className="w-full flex flex-col gap-10 mx-auto pb-1">
+                <span className="font-bold text-2xl lg:text-6xl text-center max-w-[700px] mx-auto px-4">
+                  CLOSED BETA APPLICATION COMING SOON!
+                  <br /> <br />
+                  In the meantime, create your free playing card!
+                </span>
+
+                <Frame className="!flex max-w-[1440px] mx-auto w-full h-full flex-col relative">
+                  <Frame className="px-2 py-2 !flex items-end justify-end sticky top-0 gap-1">
+                    <Button
+                      onClick={() => {
+                        if (elementRef.current) {
+                          htmlToImageConvert(elementRef.current);
+                        }
+                      }}
+                    >
+                      Save
+                    </Button>
+                    <Button onClick={randomizeSelectedTraits}>Randomize</Button>
+                  </Frame>
+                  <FrameWithCheckedBackground
+                    variant="well"
+                    className="!flex py-10 w-full items-center justify-center overflow-hidden h-full max-h-[500px] lg:max-h-none"
+                  >
+                    <JnrCollectibleCardReffed ref={elementRef} />
+                  </FrameWithCheckedBackground>
+                </Frame>
               </div>
             </div>
           </div>

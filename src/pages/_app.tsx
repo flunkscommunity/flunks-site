@@ -33,7 +33,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           <ClaimBackpackProvider>
             <DynamicContextProvider
               settings={{
-                environmentId: "f14ca865-c434-4bb6-92dd-7e260a491773",
+                environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID,
                 walletConnectors: [FlowWalletConnectors],
               }}
             >

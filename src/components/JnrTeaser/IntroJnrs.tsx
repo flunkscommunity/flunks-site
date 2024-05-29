@@ -17,15 +17,18 @@ const IMAGES = [
 
 const IntroJnrs = () => {
   return (
-    <FrameWithBackground className="py-4 overflow-hidden pt-[80px] !flex flex-col gap-[112px]" variant="well">
+    <FrameWithBackground
+      className="py-4 overflow-hidden pt-[80px] !flex flex-col gap-[112px]"
+      variant="well"
+    >
       <span className="font-bold text-2xl lg:text-4xl text-center max-w-[700px] mx-auto px-4">
-        Introducing Pocket Juniors (J.N.R) <br/> The coolest craze to hit the
+        Introducing Pocket Juniors (J.N.R) <br /> The coolest craze to hit the
         schoolyard! <br />{" "}
         <span className="text-xl lg:text-3xl font-normal">
           *💥 cue explosion sound 💥*
         </span>
       </span>
-      <Marquee autoFill direction={"left"}>
+      <Marquee pauseOnClick autoFill direction={"left"}>
         {IMAGES.map((image, index) => (
           <Frame key={index} className="!p-2 ml-4 !pb-1">
             <Frame
