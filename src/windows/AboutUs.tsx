@@ -287,7 +287,7 @@ const AboutUs = () => {
                                 className="w-8 h-8"
                               />
                             </TableDataCell>
-                            <TableDataCell className="flex-grow text-lg">
+                            <TableDataCell className="flex-grow text-lg !text-black">
                               {member.username}
                             </TableDataCell>
                             <TableDataCell className="capitalize flex items-center gap-1">

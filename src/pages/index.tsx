@@ -56,7 +56,7 @@ const Desktop = () => {
         />
 
         <DesktopAppIcon
-          title="JNR.exe"
+          title="Pocket Juniors"
           icon="/images/icons/pocket-juniors-50x50.png"
           onDoubleClick={() => {
             openWindow({

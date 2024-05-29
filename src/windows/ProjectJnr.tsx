@@ -326,7 +326,7 @@ const ProjectJnr: React.FC = () => {
     <JnrCanvasProvider>
       <DraggableResizeableWindow
         offSetHeight={44}
-        headerTitle="JNR.exe"
+        headerTitle="Pocket Juniors - Preview"
         onClose={() => {
           closeWindow(WINDOW_IDS.PROJECT_JNR);
         }}

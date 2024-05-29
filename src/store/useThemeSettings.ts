@@ -20,18 +20,18 @@ const useThemeSettings = create<useThemeSettings>()(
   persist(
     (set) => {
       return {
-        backgroundColor: "#008080",
+        backgroundColor: "#008585",
         setBackgroundColor: (backgroundColor: string) =>
           set((state) => ({ backgroundColor })),
-        backgroundImage: "",
+        backgroundImage: "https://storage.googleapis.com/flunks_public/desktop-backgrounds/flunksbg.webp",
         setBackgroundImage: (backgroundImage: string) =>
           set((state) => ({ backgroundImage })),
         oldMonitorMode: false,
         setOldMonitorMode: (oldMonitorMode: boolean) =>
           set((state) => ({ oldMonitorMode })),
         theme: {
-          name: "eggplant",
-          theme: index.eggplant,
+          name: "tokyoDark",
+          theme: index.tokyoDark,
         },
         setTheme: (theme: { name: keyof typeof index; theme: typeof index }) =>
           set((state) => ({ theme })),

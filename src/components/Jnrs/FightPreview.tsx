@@ -95,7 +95,7 @@ const JnrCard = ({
             >
               <span className="lg:text-2xl">{stat.name}</span>
               <span className="lg:text-2xl">
-                {stat.name === "Health" ? 40 + statsCombined[stat.stat] : statsCombined[stat.stat]}
+                {stat.name === "Health" ? 20 + statsCombined[stat.stat] : statsCombined[stat.stat]}
                 {PERCENTAGE_STATS.includes(stat.stat) ? "%" : ""}
               </span>
             </Frame>

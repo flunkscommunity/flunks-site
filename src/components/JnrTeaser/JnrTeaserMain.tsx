@@ -2,7 +2,7 @@ import {
   CustomScrollArea,
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
-import { Avatar, Button, Frame, ProgressBar } from "react95";
+import { Avatar, Button, Frame, Handle, ProgressBar } from "react95";
 import JnrBoxCanvas from "./JnrBoxCanvas";
 import { useEffect, useRef } from "react";
 import { useProgress } from "@react-three/drei";
@@ -21,8 +21,11 @@ import JnrCollectibleCard, {
   JnrCollectibleCardReffed,
 } from "components/Jnrs/JnrCollectibleCard";
 import { useJnrCanvas } from "contexts/JnrCanvasContext";
-import { toPng } from "html-to-image";
-import { FrameWithBackground, FrameWithCheckedBackground } from "components/AboutUs/FrameWithBackground";
+import { toJpeg, toPng } from "html-to-image";
+import {
+  FrameWithBackground,
+  FrameWithCheckedBackground,
+} from "components/AboutUs/FrameWithBackground";
 
 const StyledLoader = styled.div`
   background-color: ${({ theme }) => theme.material};
@@ -82,6 +85,7 @@ const JnrTeaserMain = () => {
   const htmlToImageConvert = (element: HTMLElement) => {
     // Store the original styles
     const originalTransform = element.style.transform;
+    const originalTransformOrigin = element.style.transformOrigin;
 
     // Fixed dimensions
     const fixedWidth = 1056;
@@ -95,7 +99,7 @@ const JnrTeaserMain = () => {
     element.style.transform = `scale(${scaleX}, ${scaleY})`;
     element.style.transformOrigin = "top left";
 
-    toPng(element, {
+    toJpeg(element, {
       cacheBust: false,
       width: fixedWidth,
       height: fixedHeight,
@@ -105,15 +109,17 @@ const JnrTeaserMain = () => {
       .then((dataUrl) => {
         // Revert the scale transformation
         element.style.transform = originalTransform;
+        element.style.transformOrigin = originalTransformOrigin;
 
         const link = document.createElement("a");
-        link.download = "pocket-junior.png";
+        link.download = "pocket-junior.jpg";
         link.href = dataUrl;
         link.click();
       })
       .catch((err) => {
         // Revert the scale transformation in case of error
         element.style.transform = originalTransform;
+        element.style.transformOrigin = originalTransformOrigin;
         console.log(err);
       });
   };
@@ -130,6 +136,13 @@ const JnrTeaserMain = () => {
   //       console.log(err);
   //     });
   // };
+
+  const handleScrollToEquip = () => {
+    const equip = document.getElementById("equip");
+    if (equip) {
+      equip.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <div className="flex flex-col h-full relative">
@@ -207,7 +220,10 @@ const JnrTeaserMain = () => {
                 </Frame>
               </div>
 
-              <div className="w-full flex flex-col gap-10 max-w-[1440px] mx-auto mb-[112px] lg:mb-[10%]">
+              <div
+                id="equip"
+                className="w-full flex flex-col gap-10 max-w-[1440px] mx-auto mb-[112px] lg:mb-[10%]"
+              >
                 <span className="font-bold text-2xl lg:text-4xl text-pretty text-center max-w-[700px] mx-auto px-4">
                   Equip your JNR with powerful traits! Discover and unlock a
                   vast array of unique abilities, customizing your Pocket Junior
@@ -234,12 +250,19 @@ const JnrTeaserMain = () => {
               <div className="w-full flex flex-col gap-10 mx-auto pb-1">
                 <span className="font-bold text-2xl lg:text-6xl text-center max-w-[700px] mx-auto px-4">
                   CLOSED BETA APPLICATION COMING SOON!
-                  <br /> <br />
-                  In the meantime, create your free playing card!
+                </span>
+                <span className="text-xl lg:text-4xl text-center max-w-[700px] mx-auto px-4">
+                  In the meantime, create your very own Pocket Junior
+                  collectible card!
                 </span>
 
-                <Frame className="!flex max-w-[1440px] mx-auto w-full h-full flex-col relative">
+                <Frame
+                  variant="well"
+                  className="!flex max-w-[1440px] mx-auto w-full h-full flex-col relative"
+                >
                   <Frame className="px-2 py-2 !flex items-end justify-end sticky top-0 gap-1">
+                    <Button onClick={randomizeSelectedTraits}>Randomize</Button>
+                    <Handle className="mx-1"/>
                     <Button
                       onClick={() => {
                         if (elementRef.current) {
@@ -249,7 +272,6 @@ const JnrTeaserMain = () => {
                     >
                       Save
                     </Button>
-                    <Button onClick={randomizeSelectedTraits}>Randomize</Button>
                   </Frame>
                   <FrameWithCheckedBackground
                     variant="well"
