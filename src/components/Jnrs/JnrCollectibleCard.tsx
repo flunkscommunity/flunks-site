@@ -207,126 +207,132 @@ export const JnrCollectibleCardReffed = forwardRef<HTMLDivElement>(
     );
 
     return (
-      <Window
+      <div
         ref={elementRef}
-        className="w-[528px] h-auto scale-50 lg:scale-100 origin-center"
+        className="min-w-[528px] h-auto origin-center !shadow-none scale-50 lg:scale-100"
       >
-        <WindowHeader className="!w-full !flex items-center justify-between !py-6 !px-2">
-          <span className="text-3xl font-bold">Pocket Junior #????</span>
-          <div>
-            <img
-              src="/images/jnr-logo.png"
-              alt="heart"
-              className="w-auto h-10"
-            />
-          </div>
-        </WindowHeader>
-        <div className="w-[516px] px-2 py-2">
-          <div className="relative ">
-            <Full2DJnr
-              selectedTraits={selectedTraits}
-              className="min-h-[400px]"
-              withBackground={true}
-              backgroundColor={CLASS_TO_BG_COLOR[randomClass] as string}
-            />
-            <div
-              className="absolute top-1 text-xl uppercase font-bold right-1 z-20 px-5 py-1"
-              style={{
-                clipPath: "polygon(0 0, 100% 0, 90% 100%, 10% 100%)",
-                backgroundColor: theme.material,
-              }}
-            >
-              {randomClass}
+        <Window className="!w-full !h-full origin-center !shadow-none">
+          <WindowHeader className="!w-full !flex items-center justify-between !py-6 !px-2">
+            <span className="text-3xl font-bold">Pocket Junior #????</span>
+            <div>
+              <img
+                src="/images/jnr-logo.png"
+                alt="heart"
+                className="w-auto h-10"
+              />
             </div>
-            <div
-              className="absolute top-[5px] text-xl uppercase font-bold right-1 px-5 py-1 scale-105 z-10"
-              style={{
-                clipPath: "polygon(0 0, 100% 0, 90% 100%, 10% 100%)",
-                backgroundColor: theme.borderDark,
-              }}
-            >
-              {randomClass}
+          </WindowHeader>
+          <div className="w-[516px] px-2 py-2">
+            <div className="relative ">
+              <Full2DJnr
+                selectedTraits={selectedTraits}
+                className="min-h-[400px]"
+                withBackground={true}
+                backgroundColor={CLASS_TO_BG_COLOR[randomClass] as string}
+                extraLayers={
+                  <div className="absolute -top-[2px] left-[2px] w-full">
+                    <div
+                      className="absolute text-xl uppercase font-bold z-20 px-5 py-1"
+                      style={{
+                        clipPath: "polygon(0 0, 100% 0, 90% 100%, 10% 100%)",
+                        backgroundColor: theme.material,
+                      }}
+                    >
+                      {randomClass}
+                    </div>
+                    <div
+                      className="absolute text-xl uppercase font-bold top-[2px] px-5 py-1 scale-105 z-10"
+                      style={{
+                        clipPath: "polygon(0 0, 100% 0, 90% 100%, 10% 100%)",
+                        backgroundColor: theme.borderDark,
+                      }}
+                    >
+                      {randomClass}
+                    </div>
+                  </div>
+                }
+              />
             </div>
-          </div>
-          <div className="w-full !flex gap-2">
-            <Frame variant="well" className="w-full !flex items-center">
-              <Frame
-                variant="well"
-                className="h-full px-2 py-2 flex-shrink-0 !flex items-center justify-center"
-              >
-                <img
-                  src="/images/icons/attack-64x64.png"
-                  alt="attack"
-                  className="w-8 h-8"
-                />
+            <div className="w-full !flex gap-2">
+              <Frame variant="well" className="w-full !flex items-center">
+                <Frame
+                  variant="well"
+                  className="h-full px-2 py-2 flex-shrink-0 !flex items-center justify-center"
+                >
+                  <img
+                    src="/images/icons/attack-64x64.png"
+                    alt="attack"
+                    className="w-8 h-8"
+                  />
+                </Frame>
+                <Frame
+                  variant="well"
+                  className="h-full w-full px-2 py-2 !flex items-center justify-center"
+                >
+                  <span className="text-3xl leading-[1] drop-shadow-[-0.5px_2px_0_rgba(255,255,255,0.8)]">
+                    {statsCombined.attack}
+                  </span>
+                </Frame>
               </Frame>
-              <Frame
-                variant="well"
-                className="h-full w-full px-2 py-2 !flex items-center justify-center"
-              >
-                <span className="text-3xl leading-[1] drop-shadow-[-0.5px_2px_0_rgba(255,255,255,0.8)]">
-                  {statsCombined.attack}
-                </span>
+              <Frame variant="well" className="w-full !flex items-center">
+                <Frame
+                  variant="well"
+                  className="h-full w-full px-2 py-2 !flex items-center justify-center"
+                >
+                  <span className="text-3xl leading-[1] drop-shadow-[-0.5px_2px_0_rgba(255,255,255,0.8)]">
+                    {statsCombined.health}
+                  </span>
+                </Frame>
+                <Frame
+                  variant="well"
+                  className="h-full px-2 py-2 flex-shrink-0 !flex items-center justify-center"
+                >
+                  <img
+                    src="/images/icons/defense-64x64.png"
+                    alt="attack"
+                    className="w-8 h-8"
+                  />
+                </Frame>
               </Frame>
-            </Frame>
-            <Frame variant="well" className="w-full !flex items-center">
-              <Frame
-                variant="well"
-                className="h-full w-full px-2 py-2 !flex items-center justify-center"
-              >
-                <span className="text-3xl leading-[1] drop-shadow-[-0.5px_2px_0_rgba(255,255,255,0.8)]">
-                  {statsCombined.health}
-                </span>
-              </Frame>
-              <Frame
-                variant="well"
-                className="h-full px-2 py-2 flex-shrink-0 !flex items-center justify-center"
-              >
-                <img
-                  src="/images/icons/defense-64x64.png"
-                  alt="attack"
-                  className="w-8 h-8"
-                />
-              </Frame>
-            </Frame>
-          </div>
-          <Frame
-            variant="field"
-            className="!flex flex-col w-full px-4 py-4 my-2"
-          >
-            <span className="text-2xl">
-              Introducing Pocket Juniors – the latest craze at Flunks High!
-              <br />
-              <br />
-              Collect and customize mini-figures from 8 unique classes like Art,
-              Biology, and Sports, each with totally unique sets. Complete full
-              sets, equip them with various items, and watch them battle for
-              epic prizes. Coming soon to Flunks.io.
-            </span>
-          </Frame>
-
-          <div className="flex flex-row">
-            <Frame
-              variant="well"
-              className="h-full px-2 py-2 flex-shrink tracking-widest !flex items-start justify-start w-full"
-            >
-              <span className="text-2xl font-bold">
-                First Edition Junior 2024
-              </span>
-            </Frame>
+            </div>
             <Frame
               variant="field"
-              className="px-2 flex-shrink relative flex-col tracking-widest !flex items-center justify-center"
+              className="!flex flex-col w-full px-4 py-4 my-2"
             >
-              <img
-                src="/images/logoicon.png"
-                alt="heart"
-                className="h-6 grayscale"
-              />
+              <span className="text-2xl">
+                Introducing Pocket Juniors – the latest craze at Flunks High!
+                <br />
+                <br />
+                Collect and customize mini-figures from 8 unique classes like
+                Art, Biology, and Sports, each with totally unique sets.
+                Complete full sets, equip them with various items, and watch
+                them battle for epic prizes. Coming soon to Flunks.io.
+              </span>
             </Frame>
+
+            <div className="flex flex-row">
+              <Frame
+                variant="well"
+                className="h-full px-2 py-2 flex-shrink tracking-widest !flex items-start justify-start w-full"
+              >
+                <span className="text-2xl font-bold">
+                  First Edition Junior 2024
+                </span>
+              </Frame>
+              <Frame
+                variant="field"
+                className="px-2 flex-shrink relative flex-col tracking-widest !flex items-center justify-center"
+              >
+                <img
+                  src="/images/logoicon.png"
+                  alt="heart"
+                  className="h-6 grayscale"
+                />
+              </Frame>
+            </div>
           </div>
-        </div>
-      </Window>
+        </Window>
+      </div>
     );
   }
 );

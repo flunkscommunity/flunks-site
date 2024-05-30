@@ -2,7 +2,7 @@ import {
   CustomScrollArea,
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
-import { Avatar, Button, Frame, Handle, ProgressBar } from "react95";
+import { Avatar, Button, Frame, Handle, Hourglass, ProgressBar } from "react95";
 import JnrBoxCanvas from "./JnrBoxCanvas";
 import { useEffect, useRef, useState } from "react";
 import { useProgress } from "@react-three/drei";
@@ -21,11 +21,12 @@ import JnrCollectibleCard, {
   JnrCollectibleCardReffed,
 } from "components/Jnrs/JnrCollectibleCard";
 import { useJnrCanvas } from "contexts/JnrCanvasContext";
-import { toJpeg, toPng } from "html-to-image";
+import { toBlob, toJpeg, toPng } from "html-to-image";
 import {
   FrameWithBackground,
   FrameWithCheckedBackground,
 } from "components/AboutUs/FrameWithBackground";
+import { domToPng } from "modern-screenshot";
 
 const StyledLoader = styled.div`
   background-color: ${({ theme }) => theme.material};
@@ -82,15 +83,11 @@ const JnrTeaserMain = () => {
 
   const elementRef = useRef<HTMLDivElement>(null);
   const [generatedImage, setGeneratedImage] = useState<string>("");
+  const [isGeneratedImageLoading, setIsGeneratedImageLoading] = useState(false);
 
-  const generateImage = () => {
+  const generateImage = async () => {
     if (elementRef.current) {
       const element = elementRef.current;
-
-      const originalTransform = element.style.transform;
-      const originalTransformOrigin = element.style.transformOrigin;
-      const originalMarginBottom = element.style.marginBottom;
-      const originalMarginRight = element.style.marginRight;
 
       // Fixed dimensions
       const fixedWidth = 1056;
@@ -100,30 +97,23 @@ const JnrTeaserMain = () => {
       const scaleX = fixedWidth / element.offsetWidth;
       const scaleY = fixedHeight / element.offsetHeight;
 
-      // Apply the scale transformation
-      element.style.transform = `scale(${scaleX}, ${scaleY})`;
-      element.style.transformOrigin = "top left";
-      element.style.marginRight = "4px";
-      element.style.marginBottom = "4px";
-
-      toPng(element, {
-        cacheBust: false,
-        width: fixedWidth,
-        height: fixedHeight,
-        canvasWidth: fixedWidth,
-        canvasHeight: fixedHeight,
-      })
-        .then((dataUrl) => {
-          setGeneratedImage(dataUrl);
-          // Revert the scale transformation
-          element.style.transform = originalTransform;
-          element.style.transformOrigin = originalTransformOrigin;
-          element.style.marginRight = originalMarginRight;
-          element.style.marginBottom = originalMarginBottom;
-        })
-        .catch((err) => {
-          console.error(err);
+      setIsGeneratedImageLoading(true);
+      try {
+        const dataUrl = await domToPng(element, {
+          width: fixedWidth,
+          height: fixedHeight,
+          style: {
+            transform: `scale(${scaleX}, ${scaleY})`,
+            transformOrigin: "top left",
+          },
         });
+
+        setGeneratedImage(dataUrl);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsGeneratedImageLoading(false);
+      }
     }
   };
 
@@ -258,9 +248,7 @@ const JnrTeaserMain = () => {
                       variant="well"
                       className="!flex py-10 w-full items-center justify-center overflow-hidden h-full max-h-[500px] lg:max-h-none"
                     >
-                      <div ref={elementRef}>
-                        <JnrCollectibleCardReffed />
-                      </div>
+                      <JnrCollectibleCardReffed ref={elementRef} />
                     </FrameWithCheckedBackground>
                   </Frame>
                 </div>
@@ -270,20 +258,21 @@ const JnrTeaserMain = () => {
         </CustomStyledScrollView>
         <AnimatedStyledLoader
           style={fadeOutSpring}
-          className="absolute inset-0 w-full h-[calc(100%-52px)] flex items-center flex-col gap-4 justify-end"
+          className="absolute inset-0 w-full h-full flex items-center flex-col gap-4 justify-end"
         >
-          <div className="flex flex-col gap-4 max-w-[1440px] mx-auto w-full items-center justify-center">
+          <div className="flex flex-col gap-4 max-w-[1440px] mx-auto w-full items-center justify-center px-4">
             <span className="text-2xl animate-pulse">
               Loading the JNR Experience
             </span>
             <ProgressBar value={Number(progress.toFixed(0))} />
           </div>
         </AnimatedStyledLoader>
-        {generatedImage && (
+        {(generatedImage || isGeneratedImageLoading) && (
           <div
             onClick={(e) => {
               if (e.target === e.currentTarget) {
-                setGeneratedImage("");
+                if (isGeneratedImageLoading) return;
+                setGeneratedImage(null);
               }
             }}
             className="!absolute inset-0 !bg-black/50 backdrop-blur-lg z-50 p-4 flex flex-col gap-4 items-center justify-center"
@@ -295,7 +284,10 @@ const JnrTeaserMain = () => {
               Right click and save the image to your device! On mobile, long
               press and save the image.
             </span>
-            <img src={generatedImage} className="max-h-[60%] flex-shrink" />
+            {!isGeneratedImageLoading && (
+              <img src={generatedImage} className="max-h-[60%] flex-shrink" />
+            )}
+            {isGeneratedImageLoading && <Hourglass className="w-16 h-16" />}
             <span className="text-xl text-center text-white/50 pointer-events-none max-w-[375px]">
               Click anywhere outside of the image to close this view.
             </span>

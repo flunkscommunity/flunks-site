@@ -32,6 +32,7 @@ const Full2DJnr: React.FC<{
   className?: string;
   withBackground?: boolean;
   backgroundColor?: string;
+  extraLayers?: React.ReactNode;
 }> = (props) => {
   const { selectedTraits, className, withBackground } = props;
   const { back, bottoms, head, lh, rh, shoes, torso } = selectedTraits;
@@ -40,7 +41,7 @@ const Full2DJnr: React.FC<{
     return (
       <Frame
         variant="field"
-        className={`w-full h-full overflow-hidden ${className || ""}`}
+        className={`w-full h-full !overflow-hidden relative ${className || ""}`}
         style={{
           backgroundColor: props.backgroundColor,
           backgroundImage: `url("/images/flunks-watermark.png")`,
@@ -93,6 +94,7 @@ const Full2DJnr: React.FC<{
           src={rh.thumbnail}
           className="!absolute w-full h-full object-contain"
         />
+        {props.extraLayers}
       </Frame>
     );
   }

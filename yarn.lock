@@ -4630,6 +4630,11 @@ minimist@^1.2.0, minimist@^1.2.6:
   resolved "https://registry.yarnpkg.com/minipass/-/minipass-7.1.1.tgz#f7f85aff59aa22f110b20e27692465cf3bf89481"
   integrity sha512-UZ7eQ+h8ywIRAW1hIEl2AqdwzJucU/Kp59+8kkZeSvafXhZjul247BvIJjEVFVeON6d7lM46XX1HXCduKAS8VA==
 
+modern-screenshot@^4.4.39:
+  version "4.4.39"
+  resolved "https://registry.yarnpkg.com/modern-screenshot/-/modern-screenshot-4.4.39.tgz#4c8b7a9ecb899e68b6d4111abfa71043f326847a"
+  integrity sha512-p+I4yLZUDnoJMa5zoi+71nLQmoLQ6WRU4W8vZu1BZk2PlIYOz5mGnj9/7t2lGWKYeOr4zo6pajhY0/9TS5Zcdw==
+
 ms@2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
