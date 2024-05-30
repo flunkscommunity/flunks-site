@@ -25,7 +25,7 @@ interface FormattedClaimEventData {
   signer: string;
 }
 
-interface FormattedBackpackClaimData {
+export interface FormattedBackpackClaimData {
   flunksData: Record<string, FormattedClaimEventData> | null;
   backpackData: Record<string, FormattedClaimEventData> | null;
 }
@@ -37,7 +37,7 @@ const getBackpackClaimedData =
       "https://prod-main-net-dashboard-api.azurewebsites.net/api/company/ab832502-41e5-456c-95ec-a572bf5c10aa/search?eventType=A.807c3d470888cc48.BackpackMinter.BackpackClaimed";
 
     try {
-      const response = await axios.get<{ data: RawClaimEventData[] }>(url);
+      const response = await axios.get<RawClaimEventData[]>(url);
       const { data } = response;
       const formattedData = data.reduce(
         (accumulator, current) => {

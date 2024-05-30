@@ -1,9 +1,8 @@
-import { MarketplaceIndividualNftDto } from "api/generated";
 import { FlunkImage } from "components/CustomMonitor";
 import { H1, H3, P } from "components/Typography";
 import { useFclTransactionContext } from "contexts/FclTransactionContext";
 import { useEffect, useRef, useState } from "react";
-import { Button, Frame, ProgressBar, Toolbar } from "react95";
+import { Button, Frame, ProgressBar } from "react95";
 import { TX_STATUS } from "reducers/TxStatusReducer";
 import Typewriter from "typewriter-effect";
 import { graduate } from "web3/tx-grauate";
@@ -14,6 +13,7 @@ import {
   CustomScrollArea,
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
+import { MarketplaceIndividualNftDto } from "generated/models";
 
 interface GraduationInitProps {
   flunk: MarketplaceIndividualNftDto;
@@ -30,13 +30,11 @@ export const uInt64StrToDate = (uInt64Str: string): Date => {
 const GraduationInit: React.FC<GraduationInitProps> = (props) => {
   const { flunk } = props;
   const { executeTx, state } = useFclTransactionContext();
-  const [startHack, setStartHack] = useState(false);
   const [endHacking, setEndHacking] = useState(false);
   const [percentage, setPercentage] = useState(0);
   const divOverlayRef = useRef<HTMLDivElement>(null);
   const [graduatedUrl, setGraduatedUrl] = useState("");
   const [canGraduate, setCanGraduate] = useState(true);
-  const [graduationDate, setGraduationDate] = useState();
 
   useEffect(() => {
     if (!flunk) return;

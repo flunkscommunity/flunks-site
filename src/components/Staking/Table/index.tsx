@@ -32,6 +32,8 @@ const StakeableItemsTable = () => {
   const earnedOrderByRef = useRef<"asc" | "dsc">("dsc");
   const earningOrderByRef = useRef<"asc" | "dsc">("dsc");
 
+  console.log(walletStakeInfo);
+
   return (
     <div className="[&>*:first-child]:!w-full flex w-full">
       <Table className="!h-full !flex !flex-col !w-full !flex-1">

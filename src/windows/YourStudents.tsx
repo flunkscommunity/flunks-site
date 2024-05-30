@@ -35,7 +35,7 @@ const YourStudents: React.FC = () => {
   }
 
   return (
-    <AppLoader bgImage="/images/flunkfolio.webp">
+    <AppLoader bgImage="/images/loading/flunkfolio.webp">
       <DraggableResizeableWindow
         offSetHeight={44}
         headerTitle={`Flunkfolio - ${user?.username || "Not Logged In"}`}

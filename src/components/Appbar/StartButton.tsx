@@ -10,10 +10,8 @@ import { Button, MenuList, MenuListItem, Separator } from "react95";
 import styled from "styled-components";
 import AboutUs from "windows/AboutUs";
 import GumballMachine from "windows/GumballMachine";
-import LostAndFound from "windows/LostAndFound";
 import ProjectJnr from "windows/ProjectJnr";
 import Settings from "windows/Settings";
-import StudentExplorer from "windows/StudentExplorer";
 import YourStudents from "windows/YourStudents";
 
 const CustomMenuListItem = styled(MenuListItem)`
@@ -42,7 +40,7 @@ const AuthButton = () => {
   return (
     <DynamicConnectButton buttonClassName="w-full">
       <CustomMenuListItem className="!w-full !text-xl">
-        <img src="/images/logout.png" width="32px" height="32px" />
+        <img src="/images/icons/logout.png" width="32px" height="32px" />
         Sign In
       </CustomMenuListItem>
     </DynamicConnectButton>
@@ -188,7 +186,7 @@ const StartButton = () => {
         className="font-black !flex !items-center gap-1"
       >
         <img
-          src={"/images/os-logo.png"}
+          src={"/images/logos/os-logo.png"}
           alt="flunks-95 logo"
           className="object-contain max-h-5 mr-1"
         />

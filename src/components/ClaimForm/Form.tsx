@@ -1,20 +1,9 @@
-import { MarketplaceIndividualNftDto } from "api/generated";
-import { Button, Frame, GroupBox, Hourglass, ScrollView } from "react95";
+import { Button, Frame, GroupBox, Hourglass } from "react95";
 import styled from "styled-components";
 import { Metadata } from "types/NFT";
-import GraduationBox from "components/NftDetailsBoxes/GraduationBox";
-import GuardianBox from "components/NftDetailsBoxes/GuardianBox";
-import TraitsBox from "components/NftDetailsBoxes/TraitsBox";
-import { H1, H3, H4, P } from "components/Typography";
+import { H1, H3, P } from "components/Typography";
 import { useEffect, useState } from "react";
-import getBackpackClaimedData, {
-  FormattedBackpackClaimData,
-  FormattedClaimEventData,
-} from "api/getBackpackClaimedData";
-import getCollectionsNftById from "api/getCollectionNftById";
-import { format } from "date-fns";
 import { useBackpackClaimed } from "contexts/BackpackClaimContext";
-import { CollectionApiInstance } from "api";
 import { useFclTransactionContext } from "contexts/FclTransactionContext";
 import { TX_STATUS } from "reducers/TxStatusReducer";
 import { claimBackpack } from "web3/tx-claim-backpack";
@@ -22,6 +11,8 @@ import {
   CustomScrollArea,
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
+import { MarketplaceIndividualNftDto } from "generated/models";
+import { collectionControllerGetNftByCollectionNameAndTokenId } from "generated/api/collection/collection";
 
 interface Props {
   nft: MarketplaceIndividualNftDto;
@@ -67,11 +58,9 @@ const ClaimFormForm: React.FC<Props> = (props) => {
     setLoading(true);
     setTimeout(
       () =>
-        CollectionApiInstance.collectionControllerGetNftByCollectionNameAndTokenId(
-          {
-            collectionName: "backpack",
-            tokenId: Number(claimedEvent.backpackTokenID),
-          }
+        collectionControllerGetNftByCollectionNameAndTokenId(
+          "backpack",
+          Number(claimedEvent.backpackTokenID)
         )
           .then((res) => {
             setClaimedItem(res.data);
@@ -285,7 +274,7 @@ const ClaimFormForm: React.FC<Props> = (props) => {
                 </div>
               </Stack>
 
-              {(!claimedItem && !loading) && (
+              {!claimedItem && !loading && (
                 <div
                   style={{
                     marginTop: "2rem",
@@ -296,7 +285,7 @@ const ClaimFormForm: React.FC<Props> = (props) => {
                     onClick={() => {
                       executeTx(claimBackpack({ tokenID: tokenId }));
                     }}
-                    fullWidth={"true"}
+                    fullWidth
                   >
                     Sign
                   </Button>

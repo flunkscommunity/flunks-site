@@ -1,23 +1,17 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import CustomMonitor from "components/CustomMonitor";
-import StudentExplorer from "windows/StudentExplorer";
 import { useWindowsContext } from "contexts/WindowsContext";
 import DesktopAppIcon from "components/DesktopAppIcon";
-import Draggable from "react-draggable";
 import { WINDOW_IDS } from "fixed";
 import React, { useEffect, useMemo, useState } from "react";
-import { useUser } from "contexts/WalletContext";
 import YourStudents from "windows/YourStudents";
-import LostAndFound from "windows/LostAndFound";
-import LoginScreen from "components/LoginScreen";
 import GumballMachine from "windows/GumballMachine";
-import useThemeSettings from "store/useThemeSettings";
 import ProjectJnr from "windows/ProjectJnr";
 import AboutUs from "windows/AboutUs";
 import { ProgressBar } from "react95";
 import { useTheme } from "styled-components";
-import { animated, config, useSpring, useSpringRef } from "@react-spring/web";
+import { animated, config, useSpring } from "@react-spring/web";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -65,6 +59,7 @@ const FullScreenLoader = () => {
       <ProgressBar
         variant="tile"
         style={{
+          // @ts-ignore
           backgroundColor: theme.canvas,
         }}
         value={Math.floor(percent)}
@@ -229,7 +224,7 @@ const Home: NextPage = () => {
           name="description"
           content="Welcome to the Flunks Highschool computer."
         />
-        <link rel="icon" href="/images/os-logo.png" />
+        <link rel="icon" href="/images/logos/os-logo.png" />
       </Head>
 
       <MonitorScreenWrapper>

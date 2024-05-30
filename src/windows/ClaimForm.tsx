@@ -1,9 +1,8 @@
-import { MarketplaceIndividualNftDto } from "api/generated";
 import ClaimFormForm from "components/ClaimForm/Form";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
-import NftDetailsFrame from "components/NftDetailsFrame";
 import { FclTransactionProvider } from "contexts/FclTransactionContext";
 import { useWindowsContext } from "contexts/WindowsContext";
+import { MarketplaceIndividualNftDto } from "generated/models";
 
 interface Props {
   flunk: MarketplaceIndividualNftDto;

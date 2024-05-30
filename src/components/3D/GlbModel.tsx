@@ -2,11 +2,6 @@ import { type PrimitiveProps, type ThreeElements } from "@react-three/fiber";
 import { forwardRef, Suspense, useEffect, useMemo } from "react";
 import { Loader, useGLTF } from "@react-three/drei";
 import {
-  MeshBasicMaterial,
-  MeshLambertMaterial,
-  MeshPhongMaterial,
-  MeshPhysicalMaterial,
-  MeshStandardMaterial,
   MeshToonMaterial,
 } from "three";
 
@@ -27,9 +22,11 @@ const GlbModel = forwardRef<ThreeElements["primitive"], GlbModelProps>(
       if (!scene) return;
 
       scene.traverse((child) => {
+        // @ts-ignore
         if (child.isMesh) {
           child.castShadow = true;
           child.receiveShadow = true;
+          // @ts-ignore
           var prevMaterial = child.material;
 
           if (
@@ -37,7 +34,7 @@ const GlbModel = forwardRef<ThreeElements["primitive"], GlbModelProps>(
             prevMaterial.type === "MeshToonMaterial"
           )
             return;
-
+          // @ts-ignore
           child.material = new MeshToonMaterial({
             color: prevMaterial.emissive,
             emissive: prevMaterial.emissive,

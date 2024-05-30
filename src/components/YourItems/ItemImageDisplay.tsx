@@ -41,7 +41,7 @@ const ImageDisplay: React.FC<ImageDisplayProps> = ({
         }")`,
       }}
     >
-      <div variant="well" className="flex flex-col">
+      <div className="flex flex-col">
         <Frame className="w-auto h-auto !flex flex-col relative min-w-full min-h-full max-w-[250px] lg:max-w-[500px] p-2">
           <Frame variant="well">
             <img src={activeImage} className="w-full h-full flex-shrink" />

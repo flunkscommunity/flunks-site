@@ -201,7 +201,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
                 )}
                 {showMaximizeButton && (
                   <Button id="action" onClick={handleMaximize}>
-                    <img src="/images/maximize.png" width="60%" height="60%" />
+                    <img src="/images/icons/maximize.png" width="60%" height="60%" />
                   </Button>
                 )}
                 <Button

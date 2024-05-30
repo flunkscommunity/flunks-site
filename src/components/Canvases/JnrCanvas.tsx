@@ -1,27 +1,15 @@
-import {
-  AsciiRenderer,
-  Bounds,
-  Center,
-  Environment,
-  Grid,
-  OrbitControls,
-  PerspectiveCamera,
-  SpotLight,
-  Stage,
-} from "@react-three/drei";
+import { Grid, OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useRef } from "react";
 import { PCFSoftShadowMap } from "three";
 import { type PerspectiveCamera as ThreePerspectiveCamera } from "three/src/cameras/PerspectiveCamera";
 import { type PerspectiveCameraProps } from "@react-three/fiber";
 import GlbModel from "components/3D/GlbModel";
-import { Button, Frame } from "react95";
-import { degToRad } from "three/src/math/MathUtils";
+import { Frame } from "react95";
 import styled from "styled-components";
 import { useJnrCanvas } from "contexts/JnrCanvasContext";
 import { useWindowsContext } from "contexts/WindowsContext";
 import useWindowSize from "hooks/useWindowSize";
-import { debounce } from "lodash";
 
 const Camera = React.forwardRef<ThreePerspectiveCamera, PerspectiveCameraProps>(
   (props, ref) => {
@@ -103,6 +91,7 @@ export const CanvasWithBorders = styled(Canvas)`
 `;
 
 const TheCanvas: React.FC<JnrCanvasProps> = React.memo((props) => {
+  // @ts-ignore
   const canvasRef = useRef<Canvas>(null);
   const { selectedTraits } = useJnrCanvas();
   const { openWindow } = useWindowsContext();

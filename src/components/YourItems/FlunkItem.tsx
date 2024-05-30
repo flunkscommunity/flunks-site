@@ -6,7 +6,6 @@ import TraitSection from "./ItemTraitSection";
 import DesktopBackgroundSection from "./ItemDesktopBackgroundSection";
 import GumSection from "./ItemGumSection";
 import { useEffect, useState } from "react";
-import { checkBackpackClaimed } from "web3/script-can-claim-bp";
 import { checkCanGraduate } from "web3/script-check-can-graduate";
 import { useWindowsContext } from "contexts/WindowsContext";
 import Graduation from "windows/Graduation";

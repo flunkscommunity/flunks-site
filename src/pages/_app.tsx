@@ -11,6 +11,7 @@ import {
   DynamicContextProvider,
   DynamicMultiWalletPromptsWidget,
   DynamicUserProfile,
+  RemoveWallets,
 } from "@dynamic-labs/sdk-react-core";
 // @ts-ignore
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
@@ -35,6 +36,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
               settings={{
                 environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID,
                 walletConnectors: [FlowWalletConnectors],
+                walletsFilter: RemoveWallets(["dapper"]),
               }}
             >
               <Component {...pageProps} />

@@ -24,7 +24,6 @@ const CrowdSimulator: React.FC<CrowdSimulatorProps> = (props) => {
     <canvas
       ref={canvasRef}
       className="h-[300px] w-full"
-      style={{ backgroundColor: props?.bgColor }}
     />
   );
 };

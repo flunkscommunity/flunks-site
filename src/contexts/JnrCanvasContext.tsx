@@ -6,8 +6,6 @@ import React, {
   useMemo,
   useState,
 } from "react";
-// import { authenticate, unauthenticate, currentUser } from "@onflow/fcl";
-import useUserStore from "store/useUserStore";
 
 export interface SelectedTraits {
   back: JnrTrait;

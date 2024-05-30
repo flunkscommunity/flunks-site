@@ -5,7 +5,7 @@ const CODE = `
 // This script will get a list of all the stake information for a particular address and its linked account(s)
 import NonFungibleToken from 0x1d7e57aa55817448
 import Staking from 0x807c3d470888cc48
-import HybridCustody from 0xd8a7e05a7ac670c0
+import HybridCustodyHelper from 0x807c3d470888cc48
 import Flunks from 0x807c3d470888cc48
 import Backpack from 0x807c3d470888cc48
 import MetadataViews from 0x1d7e57aa55817448
@@ -31,22 +31,6 @@ pub struct AccountTokenMetadataWithStakeInfo {
         self.stakingInfo = stakingInfo
         self.collection = collection
         self.rewards = rewards
-    }
-}
-
-pub fun getChildAccounts(parentAddress: Address): [Address] {
-    // Attempt to borrow a reference to the parent's Manager resource via the public path
-    let parentPublic = getAccount(parentAddress)
-        .getCapability(HybridCustody.ManagerPublicPath)
-        .borrow<&HybridCustody.Manager{HybridCustody.ManagerPublic}>()
-
-    // Check if the borrowing was successful
-    if let parentManager = parentPublic {
-        // Retrieve and return the child account addresses if the reference was successfully borrowed
-        return parentManager.getChildAddresses()
-    } else {
-        // Return an empty array if the reference could not be borrowed
-        return []
     }
 }
 
@@ -131,7 +115,7 @@ pub fun main(address: Address): [AccountTokenMetadataWithStakeInfo] {
     }
 
     // Get tokenIDs for child accounts (Flunks)
-    let childAddresses = getChildAccounts(parentAddress: address)
+    let childAddresses = HybridCustodyHelper.getChildAccounts(parentAddress: address)
     if childAddresses.length != 0 {
         for childAddress in childAddresses {
             let childCollection: &Flunks.Collection{NonFungibleToken.CollectionPublic}? = getAccount(childAddress)

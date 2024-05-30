@@ -1,8 +1,7 @@
-import { a, config, useScroll } from "@react-spring/web";
+import { config, useScroll } from "@react-spring/web";
 import OurApps from "components/AboutUs/OurApps";
 import OurProducts from "components/AboutUs/OurProducts";
 import OurTeam from "components/AboutUs/OurTeam";
-import Timeline from "components/AboutUs/Timeline";
 import CrowdSimulator from "components/CrowdSimulator";
 import {
   CustomScrollArea,
@@ -13,25 +12,7 @@ import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
 import { useRef } from "react";
 import Draggable from "react-draggable";
-import Marquee from "react-fast-marquee";
-import {
-  Frame,
-  ScrollView,
-  ScrollViewProps,
-  createScrollbars,
-  TableBody,
-  TableRow,
-  TableDataCell,
-  Avatar,
-  Button,
-  Anchor,
-} from "react95";
-import {
-  createBorderStyles,
-  createBoxStyles,
-  createFlatBoxStyles,
-  insetShadow,
-} from "react95/dist/common";
+import { Frame, TableDataCell, Avatar, Button, Anchor } from "react95";
 import styled from "styled-components";
 import useSWR from "swr";
 
@@ -75,15 +56,6 @@ const BackgroundDiv = styled(Frame)`
       ${({ theme }) => theme.canvas} 1px
     );
   background-size: 32px 32px;
-`;
-
-const HeaderText = styled.span`
-  color: ${({ theme }) => theme.progress};
-`;
-
-const MarqueeText = styled.span`
-  color: ${({ theme }) => theme.canvasText};
-  text-shadow: ${({ theme }) => theme.canvasTextDisabledShadow} 1px 1px;
 `;
 
 const Polaroid = (props: { image: string; x: number; y: number }) => {

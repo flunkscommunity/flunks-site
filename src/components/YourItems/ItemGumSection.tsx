@@ -10,7 +10,15 @@ const POOL_TO_MULTIPLIER = {
   Backpacks: "+1 $GUM per day",
 };
 
-const GumSection = ({ pool, tokenId, slots }) => {
+const GumSection = ({
+  pool,
+  tokenId,
+  slots,
+}: {
+  pool: string;
+  tokenId: number;
+  slots?: number;
+}) => {
   const multiplier = useMemo(() => {
     if (pool === "Flunks") return `+5 $GUM per day`;
     if (!slots) return "+1 $GUM per day";

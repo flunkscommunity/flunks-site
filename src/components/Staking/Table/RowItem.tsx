@@ -65,12 +65,12 @@ const RowItem: React.FC<RowItemProps> = (props) => {
         )}
         {props.stakingInfo && (
           <Button
-            onClick={() =>
+            onClick={() => {
               unstakeSingle(
                 props.collectionName as "Backpack" | "Flunks",
                 props.tokenId
-              )
-            }
+              );
+            }}
             size="sm"
             variant="thin"
           >

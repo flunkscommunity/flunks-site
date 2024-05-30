@@ -1,4 +1,3 @@
-import { useUser } from "contexts/WalletContext";
 import { useEffect, useState } from "react";
 import { isWalletCollectionInitialized } from "web3/script-check-collection-init";
 import { initAllCollections } from "web3/tx-initialize-account";

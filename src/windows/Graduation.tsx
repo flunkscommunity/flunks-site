@@ -1,9 +1,8 @@
-import { MarketplaceIndividualNftDto } from "api/generated";
-// import GraduationForm from "components/Graduation/Form";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import GraduationInit from "components/Graduation/GraduationInit";
 import { FclTransactionProvider } from "contexts/FclTransactionContext";
 import { useWindowsContext } from "contexts/WindowsContext";
+import { MarketplaceIndividualNftDto } from "generated/models";
 
 interface Props {
   flunk: MarketplaceIndividualNftDto;

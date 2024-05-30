@@ -85,7 +85,7 @@ const UserInformation = () => {
         <div className="w-full h-full flex items-center justify-center">
           <DynamicConnectButton buttonClassName="w-full mt-10">
             <Button className="!w-full !text-xl min-w-[200px] gap-2">
-              <img src="/images/logout.png" width="32px" height="32px" />
+              <img src="/images/icons/logout.png" width="32px" height="32px" />
               Sign In
             </Button>
           </DynamicConnectButton>

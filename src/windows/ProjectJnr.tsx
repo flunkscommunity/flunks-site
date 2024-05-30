@@ -291,33 +291,6 @@ function Loader() {
   return <Html center>{progress} % loaded</Html>;
 }
 
-const MemodCanvas = React.memo(({ scroll }) => {
-  return (
-    <Canvas
-      gl={{
-        antialias: true,
-        precision: "highp",
-        preserveDrawingBuffer: true,
-        premultipliedAlpha: false,
-      }}
-      shadows
-      flat
-      className="pointer-events-none "
-    >
-      <PerspectiveCamera makeDefault attach={"camera"} position={[0, 0, 10]} />
-      <ambientLight intensity={1} />
-      <Suspense fallback={<Loader />}>
-        <Bounds fit clip margin={1.5}>
-          <Center>
-            <JnrBox scroll={scroll} />
-          </Center>
-        </Bounds>
-        <Environment preset="forest" />
-      </Suspense>
-    </Canvas>
-  );
-});
-
 const ProjectJnr: React.FC = () => {
   const { closeWindow } = useWindowsContext();
   const scroll = useRef(0);

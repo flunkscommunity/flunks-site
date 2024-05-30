@@ -110,6 +110,7 @@ export function JnrBox(props: Props) {
   const { nodes, materials, animations } = useGLTF(
     "/3d/jnr-box-transformed.glb"
   ) as GLTFResult;
+  // @ts-ignore
   const { actions } = useAnimations<GLTFActions>(animations, group);
   const bounds = useBounds();
 

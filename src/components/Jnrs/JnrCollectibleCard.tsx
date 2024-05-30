@@ -41,10 +41,7 @@ const JnrCollectibleCard = () => {
     CLASSES[Math.floor(Math.random() * CLASSES.length)].className;
 
   return (
-    <Window
-      ref={elementRef}
-      className="w-[528px] h-auto scale-50 lg:scale-100 origin-center"
-    >
+    <Window className="w-[528px] h-auto scale-50 lg:scale-100 origin-center">
       <WindowHeader className="!w-full !flex items-center justify-between !py-6 !px-2">
         <span className="text-3xl font-bold">Pocket Junior #????</span>
         <div>
@@ -66,6 +63,7 @@ const JnrCollectibleCard = () => {
             className="absolute top-1 text-xl uppercase  font-bold right-1 z-20 px-5 py-1"
             style={{
               clipPath: "polygon(0 0, 100% 0, 90% 100%, 10% 100%)",
+              // @ts-ignore
               backgroundColor: theme.material,
             }}
           >
@@ -75,6 +73,7 @@ const JnrCollectibleCard = () => {
             className="absolute top-[5px] text-xl uppercase font-bold right-1 px-5 py-1 scale-105 z-10"
             style={{
               clipPath: "polygon(0 0, 100% 0, 90% 100%, 10% 100%)",
+              // @ts-ignore
               backgroundColor: theme.borderDark,
             }}
           >
@@ -147,7 +146,7 @@ const JnrCollectibleCard = () => {
             className="px-2 py-2 flex-shrink text-xl tracking-widest !flex items-start justify-start"
           >
             <img
-              src="/images/logoicon.png"
+              src="/images/logos/flunks.png"
               alt="heart"
               className="h-7 my-auto"
             />
@@ -216,7 +215,7 @@ export const JnrCollectibleCardReffed = forwardRef<HTMLDivElement>(
             <span className="text-3xl font-bold">Pocket Junior #????</span>
             <div>
               <img
-                src="/images/jnr-logo.png"
+                src="/images/logos/jnr-logo.png"
                 alt="heart"
                 className="w-auto h-10"
               />
@@ -235,6 +234,7 @@ export const JnrCollectibleCardReffed = forwardRef<HTMLDivElement>(
                       className="absolute text-xl uppercase font-bold z-20 px-5 py-1"
                       style={{
                         clipPath: "polygon(0 0, 100% 0, 90% 100%, 10% 100%)",
+                        // @ts-ignore
                         backgroundColor: theme.material,
                       }}
                     >
@@ -244,6 +244,7 @@ export const JnrCollectibleCardReffed = forwardRef<HTMLDivElement>(
                       className="absolute text-xl uppercase font-bold top-[2px] px-5 py-1 scale-105 z-10"
                       style={{
                         clipPath: "polygon(0 0, 100% 0, 90% 100%, 10% 100%)",
+                        // @ts-ignore
                         backgroundColor: theme.borderDark,
                       }}
                     >
@@ -324,7 +325,7 @@ export const JnrCollectibleCardReffed = forwardRef<HTMLDivElement>(
                 className="px-2 flex-shrink relative flex-col tracking-widest !flex items-center justify-center"
               >
                 <img
-                  src="/images/logoicon.png"
+                  src="/images/logos/flunks.png"
                   alt="heart"
                   className="h-6 grayscale"
                 />

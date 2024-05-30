@@ -314,6 +314,7 @@ const ItemsGrid: React.FC = () => {
               ]}
               width={140}
               onChange={(e) => {
+                // @ts-ignore
                 setActiveCollection(e);
               }}
               disabled={
@@ -405,12 +406,14 @@ const ItemsGrid: React.FC = () => {
           <ScrollViewWithBackground>
             {viewType === "grid" && (
               <GridedView
+                // @ts-ignore
                 items={memodCombinedItems}
                 setActiveItem={handleOpenFlunkfolioItem}
               />
             )}
             {viewType === "table" && (
               <TableView
+                // @ts-ignore
                 items={memodCombinedItems}
                 setActiveItem={handleOpenFlunkfolioItem}
               />
