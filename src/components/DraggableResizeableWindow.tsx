@@ -207,7 +207,6 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
                 <Button
                   id="action"
                   onClick={(e) => {
-                    console.log("clicked");
                     e.stopPropagation();
                     onClose();
                   }}

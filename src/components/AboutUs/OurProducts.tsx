@@ -116,7 +116,7 @@ const PRODUCTS: {
     title: "Flunk Portraits",
     description: (
       <span className="text-xl md:text-xl max-w-2xl text-pretty">
-        Flunk Portraits are a re-imagining of the Flunk Originals. Each trait
+        Flunk Portraits are a reimagination of the Flunk Originals. Each trait
         from the Originals collection has been meticulously redrawn in four
         variations to match the Clique (Geek, Freak, Jock, and Prep) of the
         Flunk.
@@ -199,7 +199,7 @@ const PRODUCTS: {
 
 const OurProducts = () => {
   return (
-    <div className="flex flex-col gap-20 mt-10 overflow-hidden">
+    <div className="flex flex-col gap-20 mt-12 overflow-hidden">
       {PRODUCTS.map((product, index) => (
         <Product key={index} {...product} />
       ))}

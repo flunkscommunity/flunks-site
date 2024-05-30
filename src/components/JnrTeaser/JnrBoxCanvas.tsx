@@ -36,8 +36,6 @@ const PrettyThings = ({ scroll }) => {
   const cloudsRef = useRef(null);
   const theme = useTheme();
 
-  console.log(theme);
-
   useFrame(() => {
     if (cloudsRef.current) {
       cloudsRef.current.position.y = MathUtils.lerp(

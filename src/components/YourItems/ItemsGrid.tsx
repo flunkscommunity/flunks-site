@@ -37,6 +37,7 @@ import {
   CustomScrollArea,
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
+import FlunkfolioItem from "windows/FlunkfolioItem";
 
 const CustomImage = styled.img`
   background-color: ${({ theme }) => theme.borderLight};
@@ -170,7 +171,12 @@ const ItemsGrid: React.FC = () => {
 
   const memodCombinedItems = useMemo(() => {
     if (activeCollection.value === 0) {
-      return Object.values(data?.data || {}).flat();
+      const combinedItems = {
+        Flunks: data?.data?.Flunks || [],
+        Backpack: data?.data?.Backpack || [],
+      };
+
+      return Object.values(combinedItems || {}).flat();
     } else if (activeCollection.value === 1) {
       return data?.data?.Flunks || [];
     } else {
@@ -188,6 +194,47 @@ const ItemsGrid: React.FC = () => {
   }, [walletAddress]);
 
   const noItems = !memodCombinedItems?.length;
+
+  const handleOpenFlunkfolioItem = (nft: MarketplaceIndividualNftDto) => {
+    openWindow({
+      key: `${WINDOW_IDS.FLUNKFOLIO_ITEM}${nft.templateId}`,
+      window: (
+        <FlunkfolioItem
+          title={`${nft.collectionName === "flunks" ? "Flunk" : "Backpack"} #${
+            nft.templateId
+          } - Full Details`}
+          templateId={nft.templateId}
+        >
+          {nft.collectionName === "flunks" && (
+            <CustomStyledScrollView
+              ref={scrollViewRef}
+              className="!p-0 !w-full max-w-full !m-0 [&>div]:!p-0"
+              style={{
+                height: nft ? "100%" : "calc(100% - 160px)",
+              }}
+            >
+              <ScrollViewWithBackground>
+                <FlunkItem {...nft} onBack={() => setActiveItem(null)} />
+              </ScrollViewWithBackground>
+            </CustomStyledScrollView>
+          )}
+          {nft.collectionName === "backpack" && (
+            <CustomStyledScrollView
+              ref={scrollViewRef}
+              className="!p-0 !w-full max-w-full !m-0 [&>div]:!p-0"
+              style={{
+                height: nft ? "100%" : "calc(100% - 160px)",
+              }}
+            >
+              <ScrollViewWithBackground>
+                <BackpackItem {...nft} onBack={() => setActiveItem(null)} />
+              </ScrollViewWithBackground>
+            </CustomStyledScrollView>
+          )}
+        </FlunkfolioItem>
+      ),
+    });
+  };
 
   return (
     <div className="!w-full !h-full max-w-full max-h-full flex flex-col">
@@ -267,7 +314,6 @@ const ItemsGrid: React.FC = () => {
               ]}
               width={140}
               onChange={(e) => {
-                console.log(e);
                 setActiveCollection(e);
               }}
               disabled={
@@ -360,41 +406,15 @@ const ItemsGrid: React.FC = () => {
             {viewType === "grid" && (
               <GridedView
                 items={memodCombinedItems}
-                setActiveItem={setActiveItem}
+                setActiveItem={handleOpenFlunkfolioItem}
               />
             )}
             {viewType === "table" && (
               <TableView
                 items={memodCombinedItems}
-                setActiveItem={setActiveItem}
+                setActiveItem={handleOpenFlunkfolioItem}
               />
             )}
-          </ScrollViewWithBackground>
-        </CustomStyledScrollView>
-      )}
-      {activeItem && activeItem.collectionName === "flunks" && (
-        <CustomStyledScrollView
-          ref={scrollViewRef}
-          className="!p-0 !w-full max-w-full !m-0 [&>div]:!p-0"
-          style={{
-            height: activeItem ? "100%" : "calc(100% - 160px)",
-          }}
-        >
-          <ScrollViewWithBackground>
-            <FlunkItem {...activeItem} onBack={() => setActiveItem(null)} />
-          </ScrollViewWithBackground>
-        </CustomStyledScrollView>
-      )}
-      {activeItem && activeItem.collectionName === "backpack" && (
-        <CustomStyledScrollView
-          ref={scrollViewRef}
-          className="!p-0 !w-full max-w-full !m-0 [&>div]:!p-0"
-          style={{
-            height: activeItem ? "100%" : "calc(100% - 160px)",
-          }}
-        >
-          <ScrollViewWithBackground>
-            <BackpackItem {...activeItem} onBack={() => setActiveItem(null)} />
           </ScrollViewWithBackground>
         </CustomStyledScrollView>
       )}

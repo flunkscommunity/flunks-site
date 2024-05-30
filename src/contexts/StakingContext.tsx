@@ -4,7 +4,6 @@ import { NftDtoMetadata } from "generated/models";
 import React, { useContext, createContext, useState, useEffect } from "react";
 import { getGumBalance } from "web3/script-get-gum-balance";
 import { getPendingRewardsAll } from "web3/script-pending-reward-all";
-import { getPendingRewardsOne } from "web3/script-pending-reward-one";
 import { stakeAll } from "web3/tx-stake-all";
 import { useFclTransactionContext } from "./FclTransactionContext";
 import { Button, Hourglass } from "react95";
@@ -193,7 +192,6 @@ const StakingProvider: React.FC<ProviderProps> = (props) => {
   }, [state.txStatus]);
 
   const _stakeSingle = (pool: "Flunks" | "Backpack", tokenID: number) => {
-    console.log("Staking single", pool, tokenID);
     resetState();
     executeTx(() => stakeOne(pool, tokenID));
   };

@@ -25,7 +25,6 @@ const GraduationBox: React.FC<Props> = (props) => {
   const { nft } = props;
   const { metadata } = nft;
   const { pixelUri, Type } = metadata;
-  // console.log("here", pixelUri, Type);
 
   if (Type && Type === "Graduated")
     return (

@@ -78,7 +78,6 @@ export const JnrCanvasProvider = ({ children }) => {
   );
 
   const equipTrait = useCallback((trait: JnrTrait, group: string) => {
-    console.log("equipTrait", trait, group);
     setSelectedTraits((prev) => ({ ...prev, [group]: trait }));
   }, []);
 

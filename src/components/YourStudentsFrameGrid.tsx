@@ -65,7 +65,6 @@ const YourStudentsFrameGrid: React.FC = () => {
     onChange(inView) {
       if (inView && cursor < nfts.Flunks.length) {
         setCursor(cursor + 1);
-        // console.log(cursor);
       }
     },
   });

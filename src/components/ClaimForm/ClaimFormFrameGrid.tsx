@@ -75,7 +75,6 @@ const ClaimFormFrameGrid: React.FC<Props> = (props) => {
     onChange(inView) {
       if (inView && cursor < paginatedNfts?.length) {
         setCursor(cursor + 1);
-        // console.log(cursor);
       }
     },
   });

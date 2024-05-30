@@ -74,7 +74,6 @@ const ClaimFormForm: React.FC<Props> = (props) => {
           }
         )
           .then((res) => {
-            console.log("claimedItem", res.data);
             setClaimedItem(res.data);
           })
           .finally(() => {

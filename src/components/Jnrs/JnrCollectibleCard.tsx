@@ -158,6 +158,17 @@ const JnrCollectibleCard = () => {
   );
 };
 
+export const CLASS_TO_BG_COLOR = {
+  HISTORY: "#FFC2C2",
+  ART: "#FFF4BC",
+  MATH: "#D2FFC2",
+  BIOLOGY: "#C2F0FF",
+  MUSIC: "#AECFFF",
+  SPORT: "#DAD1FF",
+  PHYSICS: "#EABDFF",
+  CHEMISTRY: "#FFCCFA",
+};
+
 export const JnrCollectibleCardReffed = forwardRef<HTMLDivElement>(
   (props, elementRef) => {
     const { selectedTraits } = useJnrCanvas();
@@ -190,8 +201,10 @@ export const JnrCollectibleCardReffed = forwardRef<HTMLDivElement>(
     }, [selectedTraits]);
 
     const theme = useTheme();
-    const randomClass =
-      CLASSES[Math.floor(Math.random() * CLASSES.length)].className;
+    const randomClass = useMemo(
+      () => CLASSES[Math.floor(Math.random() * CLASSES.length)].className,
+      [selectedTraits]
+    );
 
     return (
       <Window
@@ -214,9 +227,10 @@ export const JnrCollectibleCardReffed = forwardRef<HTMLDivElement>(
               selectedTraits={selectedTraits}
               className="min-h-[400px]"
               withBackground={true}
+              backgroundColor={CLASS_TO_BG_COLOR[randomClass] as string}
             />
             <div
-              className="absolute top-1 text-xl uppercase  font-bold right-1 z-20 px-5 py-1"
+              className="absolute top-1 text-xl uppercase font-bold right-1 z-20 px-5 py-1"
               style={{
                 clipPath: "polygon(0 0, 100% 0, 90% 100%, 10% 100%)",
                 backgroundColor: theme.material,
@@ -304,7 +318,11 @@ export const JnrCollectibleCardReffed = forwardRef<HTMLDivElement>(
               variant="field"
               className="px-2 flex-shrink relative flex-col tracking-widest !flex items-center justify-center"
             >
-              <img src="/images/logoicon.png" alt="heart" className="h-6 grayscale" />
+              <img
+                src="/images/logoicon.png"
+                alt="heart"
+                className="h-6 grayscale"
+              />
             </Frame>
           </div>
         </div>

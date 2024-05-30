@@ -39,7 +39,6 @@ const getBackpackClaimedData =
     try {
       const response = await axios.get<{ data: RawClaimEventData[] }>(url);
       const { data } = response;
-      console.log("called");
       const formattedData = data.reduce(
         (accumulator, current) => {
           const { blockEventData, eventDate, flowTransactionId } = current;

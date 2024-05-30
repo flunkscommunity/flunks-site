@@ -203,7 +203,7 @@ const AboutUs = () => {
             <div className="w-full flex flex-col mt-20">
               <div className="flex w-full px-4 lg:px-20">
                 <div className="max-w-[1440px] mx-auto w-full flex">
-                  <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty uppercase ml-auto underline">
+                  <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty uppercase underline">
                     Our Art
                   </span>
                 </div>
@@ -214,7 +214,7 @@ const AboutUs = () => {
             <div className="w-full flex flex-col mt-20">
               <div className="flex w-full px-4 lg:px-20">
                 <div className="max-w-[1440px] mx-auto w-full flex">
-                  <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty uppercase ml-auto underline">
+                  <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty uppercase underline">
                     Our Apps
                   </span>
                 </div>
@@ -225,7 +225,7 @@ const AboutUs = () => {
             <div className="w-full flex flex-col mt-20">
               <div className="flex w-full px-4 lg:px-20 flex-col">
                 <div className="max-w-[1440px] mx-auto w-full flex flex-col">
-                  <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty uppercase ml-auto underline">
+                  <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty uppercase underline">
                     Our Team
                   </span>
 

@@ -15,6 +15,63 @@ import GumballMachine from "windows/GumballMachine";
 import useThemeSettings from "store/useThemeSettings";
 import ProjectJnr from "windows/ProjectJnr";
 import AboutUs from "windows/AboutUs";
+import { ProgressBar } from "react95";
+import { useTheme } from "styled-components";
+import { animated, config, useSpring, useSpringRef } from "@react-spring/web";
+
+const FullScreenLoader = () => {
+  const [percent, setPercent] = useState(0);
+  const [complete, setComplete] = useState(false);
+
+  const fadeOutSpring = useSpring({
+    from: { opacity: 1, scale: 1 },
+    to: {
+      opacity: complete ? 0 : 1,
+      scale: complete ? 1.5 : 1,
+    },
+    config: config.slow,
+  });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setPercent((previousPercent) => {
+        if (previousPercent === 100) {
+          clearInterval(timer);
+          setComplete(true);
+          return 0;
+        }
+        const diff = Math.random() * 10;
+        return Math.min(previousPercent + diff, 100);
+      });
+    }, 200);
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  const theme = useTheme();
+
+  return (
+    <animated.div
+      className="bg-black pointer-events-none fixed inset-0 z-[1001] bg-cover bg-center flex flex-col items-center justify-end gap-10"
+      style={{
+        backgroundImage: `url('/images/loading/bootup.webp')`,
+        ...fadeOutSpring,
+      }}
+    >
+      <span className="text-3xl font-bold animate-pulse">
+        Starting Flunks 95
+      </span>
+      <ProgressBar
+        variant="tile"
+        style={{
+          backgroundColor: theme.canvas,
+        }}
+        value={Math.floor(percent)}
+      />
+    </animated.div>
+  );
+};
 
 const Desktop = () => {
   const { windows, openWindow } = useWindowsContext();
@@ -129,6 +186,7 @@ const Desktop = () => {
         </a>
       </div>
       {windowsMemod}
+      <FullScreenLoader />
     </>
   );
 };

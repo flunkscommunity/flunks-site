@@ -41,15 +41,14 @@ const ImageDisplay: React.FC<ImageDisplayProps> = ({
         }")`,
       }}
     >
-      <Frame variant="well" className="flex flex-col">
-        <div className="w-auto h-auto relative min-w-full min-h-full max-h-[250px] max-w-[250px]">
-          <img
-            src={activeImage}
-            className="max-h-[250px] max-w-[250px] flex-shrink"
-          />
+      <div variant="well" className="flex flex-col">
+        <Frame className="w-auto h-auto !flex flex-col relative min-w-full min-h-full max-w-[250px] lg:max-w-[500px] p-2">
+          <Frame variant="well">
+            <img src={activeImage} className="w-full h-full flex-shrink" />
+          </Frame>
           {pixelSrc && (
             <Button
-              className="!absolute z-10 top-1 right-1"
+              className="!absolute z-10 top-4 right-4"
               onClick={() => {
                 if (activeImage === src) {
                   setActiveImage(pixelSrc);
@@ -57,24 +56,32 @@ const ImageDisplay: React.FC<ImageDisplayProps> = ({
                   setActiveImage(src);
                 }
               }}
+              active={activeImage === pixelSrc}
             >
               🎓
             </Button>
           )}
-        </div>
-        <Frame variant="inside" className="w-full !mb-0 !flex !items-center">
-          <Frame variant="well" className="w-full px-2">
-            <span className="text-lg lg:text-xl">{collectionItemName}</span>
-          </Frame>
-
           <Frame
             variant="well"
-            className="!w-auto !mr-auto !flex !flex-grow-0 px-2"
+            className="w-full !mb-0 !flex !items-center mt-1"
           >
-            <span className="text-lg lg:text-xl font-bold">#{templateId}</span>
+            <Frame variant="field" className="w-full px-3 py-2">
+              <span className="text-lg lg:text-2xl tracking-widest font-bold">
+                {collectionItemName}
+              </span>
+            </Frame>
+
+            <Frame
+              variant="field"
+              className="!w-auto !mr-auto !flex !flex-grow-0 px-3 py-2"
+            >
+              <span className="text-lg lg:text-2xl font-bold tracking-wide">
+                #{templateId}
+              </span>
+            </Frame>
           </Frame>
         </Frame>
-      </Frame>
+      </div>
     </Frame>
   );
 };

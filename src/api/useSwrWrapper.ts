@@ -110,7 +110,6 @@ export const useSwrInfiniteWrapper = <T, A>(
   // We don't use the "_" parameter as it's a fixed cachekey (created in defaultGetKey) used to
   // separate different caches in the SWR global cache state
   const fetcherWrapper = async (_: string, swrPage: number) => {
-    // console.log("useSwrInfiniteWrapper", swrPage)
     const res = await fetcher(
       {
         ...requestParameters,

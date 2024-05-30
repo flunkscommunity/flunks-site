@@ -22,15 +22,21 @@ const ICONS = {
   dapper: "https://iconic.dynamic-static-assets.com/icons/sprite.svg#dapper",
 };
 
-export const InfoItem: React.FC<{ label: string; value: string }> = (props) => {
+export const InfoItem: React.FC<{
+  label: string;
+  value: string | React.ReactNode;
+}> = (props) => {
   return (
     <div className="flex flex-row flex-wrap gap-x-4">
       <label className="min-w-[150px] text-pretty opacity-80 text-lg">
         {props.label}:
       </label>
-      <span className="max-w-fit w-full min-w-[150px] text-pretty text-lg">
-        {props.value}
-      </span>
+      {typeof props.value === "string" && (
+        <span className="max-w-fit w-full min-w-[150px] text-pretty text-lg">
+          {props.value}
+        </span>
+      )}
+      {typeof props.value !== "string" && props.value}
     </div>
   );
 };

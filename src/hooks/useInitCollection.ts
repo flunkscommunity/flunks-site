@@ -16,7 +16,6 @@ const useInitCollection = (walletAddress: string) => {
 
     await initAllCollections()
       .then((data) => {
-        console.log(data);
         setControl((prev) => prev + 1);
       })
       .catch((err) => {
@@ -31,7 +30,6 @@ const useInitCollection = (walletAddress: string) => {
     if (!walletAddress) return;
 
     isWalletCollectionInitialized(walletAddress).then((data) => {
-      console.log(data);
       setIsInitialized(data);
     });
   }, [walletAddress, control]);

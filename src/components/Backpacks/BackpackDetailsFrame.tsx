@@ -44,7 +44,6 @@ const BackpackDetailsFrame: React.FC<Props> = (props) => {
       setGraduatedUrl(
         `https://storage.googleapis.com/flunk-graduation/${hash}.png`
       );
-      console.log("here");
     });
   }, [nft]);
 

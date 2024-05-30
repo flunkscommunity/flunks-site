@@ -51,7 +51,7 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
       <Frame className="!w-full h-auto pb-4">
         {(canClaimBackpack || canGraduate) && (
           <>
-            <div className="px-3 py-2 !flex !items-center !justify-between">
+            <div className="px-3 py-2 !flex !items-center !justify-between max-w-[1440px] mx-auto">
               <div className="flex gap-2">
                 {canClaimBackpack && (
                   <Button

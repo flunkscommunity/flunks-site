@@ -26,17 +26,23 @@ const BackpackItem: React.FC<BackpackItemProps> = (props) => {
       <NavMenu
         collectionName={"Backpack"}
         tokenId={props.tokenId}
+        templateId={props.templateId}
         onBack={props.onBack}
       />
       <ImageDisplay
         src={props.metadata.uri}
         collectionItemName={"Backpack"}
         tokenId={props.tokenId}
+        templateId={props.templateId}
         pixelSrc={props.metadata?.pixelUri}
       />
       <Frame className="!w-full h-auto pb-4">
         <TraitSection metadata={props.metadata} />
-        <GumSection pool={"Backpacks"} tokenId={props.tokenId} />
+        <GumSection
+          pool={"Backpacks"}
+          tokenId={props.tokenId}
+          slots={props.metadata.slots}
+        />
       </Frame>
     </div>
   );

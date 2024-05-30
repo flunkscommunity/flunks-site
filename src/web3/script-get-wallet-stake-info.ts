@@ -70,7 +70,7 @@ pub fun getItemMetadataFlunks(address: Address, tokenID: UInt64): AccountTokenMe
 
     let stakingInfo = Staking.getStakingInfo(signerAddress: address, pool: "Flunks", tokenID: tokenID)
 
-    let rewards = Staking.pendingRewards(pool: "Flunks", tokenID: tokenID)
+    let rewards = Staking.pendingRewards(pool: "Flunks", ownerAddress: address, tokenID: tokenID)
 
     return AccountTokenMetadataWithStakeInfo(
         owner: address,
@@ -104,7 +104,7 @@ pub fun getItemMetadataBackpack(address: Address, tokenID: UInt64): AccountToken
 
     let stakingInfo = Staking.getStakingInfo(signerAddress: address, pool: "Backpack", tokenID: tokenID)
 
-    let rewards = Staking.pendingRewards(pool: "Backpack", tokenID: tokenID)
+    let rewards = Staking.pendingRewards(pool: "Backpack", ownerAddress: address, tokenID: tokenID)
 
     return AccountTokenMetadataWithStakeInfo(
         owner: address,

@@ -81,6 +81,10 @@ const Settings: React.FC = () => {
       label: "Flunks 95 Setup",
       url: "https://storage.googleapis.com/flunks_public/desktop-backgrounds/flunksbg.webp",
     },
+    {
+      label: "Flunks 95 Startup",
+      url: "https://storage.googleapis.com/flunks_public/desktop-backgrounds/bootup.webp",
+    },
   ];
 
   const [activeTab, setActiveTab] = useState(0);

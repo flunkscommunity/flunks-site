@@ -10,6 +10,7 @@ export const WINDOW_IDS = {
   GUMBALL_MACHINE_HELP: "gumball-machine-help",
   PROJECT_JNR: "project-jnr",
   ABOUT_US: "about-us",
+  FLUNKFOLIO_ITEM: "flunkfolio-item-",
 };
 
 export const WINDOW_APP_INFO_TO_WINDOW_ID = {
@@ -29,8 +30,8 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     key: WINDOW_IDS.SETTINGS,
   },
   [WINDOW_IDS.PROJECT_JNR]: {
-    appName: "Project JNR",
-    appIcon: "/images/icons/experiment-3d.png",
+    appName: "Pocket Juniors",
+    appIcon: "/images/icons/pocket-juniors-50x50.png",
     key: WINDOW_IDS.PROJECT_JNR,
   },
   [WINDOW_IDS.ABOUT_US]: {

@@ -71,7 +71,6 @@ const NftFrameGrid: React.FC<Props> = (props) => {
     onChange(inView) {
       if (inView && cursor < paginatedNfts?.length) {
         setCursor(cursor + 1);
-        // console.log(cursor);
       }
     },
   });
@@ -181,7 +180,6 @@ export const NftFrame: React.FC<{ nft: MarketplaceIndividualNftDto }> = (
       setGraduatedUrl(
         `https://storage.googleapis.com/flunk-graduation/${hash}.png`
       );
-      console.log("here");
     });
   }, [nft]);
 

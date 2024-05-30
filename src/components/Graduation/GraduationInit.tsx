@@ -43,21 +43,11 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
 
     checkGraduationDates().then((data) => {
       const graduationDate = uInt64StrToDate(data[flunk.tokenId].toString());
-      console.log(graduationDate);
       if (graduationDate) {
         setCanGraduate(isAfter(new Date(), graduationDate));
       }
     });
   }, [flunk]);
-
-  // useEffect(() => {
-  //   if (!flunk) return;
-
-  //   checkCanGraduate({ tokenId: flunk.tokenId }).then((data) => {
-  //     console.log(data);
-  //     setCanGraduate(data);
-  //   });
-  // }, [flunk]);
 
   const sha256 = async (str: string) => {
     const buf = new TextEncoder().encode(str);
