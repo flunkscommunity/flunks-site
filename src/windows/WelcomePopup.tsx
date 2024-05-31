@@ -7,6 +7,7 @@ import { Frame } from "react95";
 
 const WelcomePopup: React.FC = () => {
   const { closeWindow } = useWindowsContext();
+  const isMobile = window.innerWidth < 768;
 
   return (
     <DraggableResizeableWindow
@@ -24,7 +25,7 @@ const WelcomePopup: React.FC = () => {
     >
       <ScrollView className="w-full h-full" shadow={false}>
         <Frame
-          className="!gap-4 p-8 h-auto w-auto lg:h-[30rem] lg:w-[32rem]"
+          className="lg:gap-4 p-8 h-auto w-auto lg:h-[30rem] lg:w-[32rem]"
           variant="field"
         >
           <h2 className="text-xl font-bold">Non-Custodial Wallets</h2>

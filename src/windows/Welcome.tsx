@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
@@ -10,9 +10,23 @@ import WelcomePopup from "./WelcomePopup";
 const Welcome: React.FC = () => {
   const { closeWindow, openWindow } = useWindowsContext();
   const [tipIndex, setTipIndex] = useState(0);
+  const [showWelcome, setShowWelcome] = useState(true);
 
   const handleNextTip = () => {
     setTipIndex((prevIndex) => (prevIndex + 1) % tips.length);
+  };
+
+  useEffect(() => {
+    const showWelcomeScreen = localStorage.getItem("showWelcomeScreen");
+    if (showWelcomeScreen === "false") {
+      setShowWelcome(false);
+    }
+  }, []);
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = event.target.checked;
+    setShowWelcome(isChecked);
+    localStorage.setItem("showWelcomeScreen", isChecked.toString());
   };
 
   const icon = "/images/icons/did-you-know.png";
@@ -72,62 +86,73 @@ const Welcome: React.FC = () => {
   ];
 
   return (
-    <DraggableResizeableWindow
-      offSetHeight={44}
-      headerTitle="Getting Started"
-      initialHeight="auto"
-      initialWidth="auto"
-      resizable={false}
-      showMaximizeButton={false}
-      windowsId={WINDOW_IDS.WELCOME}
-      onClose={() => {
-        closeWindow(WINDOW_IDS.WELCOME);
-      }}
-    >
-      <div className="p-4">
-        <h1 className="lg:text-4xl text-3xl font-bold">Welcome to Flunks95</h1>
-        <div className="lg:flex-row flex flex-col gap-6">
-          <section className="basis-2/3 flex flex-col">
-            <Frame
-              className="!gap-4 lg:mt-8 mt-4 p-8 h-[12rem] lg:h-[10rem] max-w-[32rem]"
-              variant="field"
-            >
-              <div className="flex">
-                <img src={icon} className="pr-2"></img>
-                <h2 className="text-xl font-bold pt-2">Did you know...</h2>
-              </div>
-              {tips[tipIndex]}
-            </Frame>
-          </section>
-          <section className="basis-1/3 flex flex-col lg:mt-8 gap-2">
-            <Button
-              onClick={() =>
-                openWindow({
-                  key: WINDOW_IDS.WELCOME_POPUP,
-                  window: <WelcomePopup />,
-                })
-              }
-            >
-              What's New
-            </Button>
-            <Button onClick={handleNextTip}>Next Tip</Button>
-          </section>
-        </div>
-        <Separator />
-        <div className="flex flex-col lg:flex-row justify-between w-full pt-2 gap-4">
-          <Checkbox
-            label="Show this Welcome Screen the next time you start Flunks95"
-            className="pt-2 lg:basis-2/3 order-last lg:order-none"
-          />
-          <Button
-            onClick={() => closeWindow(WINDOW_IDS.WELCOME)}
-            className="lg:basis-1/3 w-full lg:w-auto"
-          >
-            Close
-          </Button>
-        </div>
-      </div>
-    </DraggableResizeableWindow>
+    <>
+      {setShowWelcome && (
+        <DraggableResizeableWindow
+          offSetHeight={44}
+          headerTitle="Getting Started"
+          headerIcon="/images/icons/getting_started.png"
+          initialHeight="auto"
+          initialWidth="auto"
+          resizable={false}
+          showMaximizeButton={false}
+          windowsId={WINDOW_IDS.WELCOME}
+          onClose={() => {
+            closeWindow(WINDOW_IDS.WELCOME);
+          }}
+        >
+          <div className="p-4">
+            <h1 className="lg:text-4xl text-3xl font-bold">
+              Welcome to Flunks95
+            </h1>
+            <div className="lg:flex-row flex flex-col gap-6">
+              <section className="basis-2/3 flex flex-col">
+                <Frame
+                  className="!gap-4 lg:mt-8 mt-4 p-8 h-[12rem] lg:h-[10rem] max-w-[32rem]"
+                  variant="field"
+                >
+                  <div className="flex">
+                    <img src={icon} className="pr-2"></img>
+                    <h2 className="text-xl font-bold pt-2">Did you know...</h2>
+                  </div>
+                  {tips[tipIndex]}
+                </Frame>
+              </section>
+              <section className="basis-1/3 flex flex-col lg:mt-8 gap-2">
+                <Button
+                  onClick={() =>
+                    openWindow({
+                      key: WINDOW_IDS.WELCOME_POPUP,
+                      window: <WelcomePopup />,
+                    })
+                  }
+                >
+                  What's New
+                </Button>
+                <Button onClick={handleNextTip}>Next Tip</Button>
+                <div className="mt-auto">
+                  <Separator />
+                </div>
+              </section>
+            </div>
+            <div className="flex flex-col lg:flex-row justify-between w-full pt-2 gap-4">
+              <Checkbox
+                onChange={handleCheckboxChange}
+                checked={showWelcome}
+                label="Show this Welcome Screen the next time you start Flunks95"
+                className="pt-2 lg:basis-2/3 order-last lg:order-none"
+              />
+              <Button
+                onClick={() => closeWindow(WINDOW_IDS.WELCOME)}
+                className="lg:basis-1/3 w-full lg:w-auto"
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+        </DraggableResizeableWindow>
+      )}
+    </>
   );
 };
 
