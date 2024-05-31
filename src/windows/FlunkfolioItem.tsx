@@ -4,7 +4,7 @@ import { WINDOW_IDS } from "fixed";
 
 interface Props {
   title: string;
-  templateId: number;
+  templateId: string;
   children: React.ReactNode;
 }
 

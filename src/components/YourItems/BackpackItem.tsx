@@ -15,8 +15,9 @@ import NavMenu from "./ItemNavMenu";
 import ImageDisplay from "./ItemImageDisplay";
 import TraitSection from "./ItemTraitSection";
 import GumSection from "./ItemGumSection";
+import { NftItem } from "./ItemsGrid";
 
-interface BackpackItemProps extends MarketplaceIndividualNftDto {
+interface BackpackItemProps extends NftItem {
   onBack: () => void;
 }
 
@@ -25,23 +26,25 @@ const BackpackItem: React.FC<BackpackItemProps> = (props) => {
     <div className="w-full h-full relative">
       <NavMenu
         collectionName={"Backpack"}
-        tokenId={props.tokenId}
-        templateId={props.templateId}
+        tokenId={props.tokenID}
+        templateId={Number(props.serialNumber)}
         onBack={props.onBack}
       />
       <ImageDisplay
-        src={props.metadata.uri}
+        src={props.MetadataViewsDisplay.thumbnail.url}
         collectionItemName={"Backpack"}
-        tokenId={props.tokenId}
-        templateId={props.templateId}
-        pixelSrc={props.metadata?.pixelUri}
+        tokenId={props.tokenID}
+        templateId={Number(props.serialNumber)}
+        pixelSrc={props.traits?.pixelUri}
       />
       <Frame className="!w-full h-auto pb-4">
-        <TraitSection metadata={props.metadata} />
+        <TraitSection metadata={props.traits} />
         <GumSection
           pool={"Backpacks"}
-          tokenId={props.tokenId}
-          slots={props.metadata.slots}
+          tokenId={Number(props.tokenID)}
+          slots={Number(props.traits.slots)}
+          claimedRewards={Number(props?.claimedRewards)?.toFixed(2)}
+          rewards={Number(props.rewards)?.toFixed(2)}
         />
       </Frame>
     </div>

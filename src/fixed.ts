@@ -9,6 +9,7 @@ export const WINDOW_IDS = {
   PROJECT_JNR: "project-jnr",
   ABOUT_US: "about-us",
   FLUNKFOLIO_ITEM: "flunkfolio-item-",
+  FLUNK_E_MART: "flunk-e-mart",
 };
 
 export const WINDOW_APP_INFO_TO_WINDOW_ID = {

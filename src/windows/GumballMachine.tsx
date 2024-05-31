@@ -1,5 +1,5 @@
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
-import { Button, Frame } from "react95";
+import { Button, Frame, Toolbar } from "react95";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
 import AppLoader from "components/AppLoader";
@@ -55,6 +55,16 @@ const GumballMachine: React.FC = () => {
         }}
         initialWidth="500px"
         initialHeight="70%"
+        toolbar={
+          <Toolbar>
+            <Button variant="menu" size="sm" active>
+              Main
+            </Button>
+            <Button variant="menu" size="sm" disabled>
+              Leaderboard
+            </Button>
+          </Toolbar>
+        }
       >
         <FclTransactionProvider>
           <StakingProvider>

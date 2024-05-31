@@ -226,7 +226,7 @@ const StakingProvider: React.FC<ProviderProps> = (props) => {
         claimSingle: () => {},
       }}
     >
-      <div className="relative h-full w-full flex flex-col">
+      <div className="relative h-[calc(100%-36px)] w-full flex flex-col">
         {children}
         {(state.txStatus === TX_STATUS.STARTED ||
           state.txStatus === TX_STATUS.PENDING) && (

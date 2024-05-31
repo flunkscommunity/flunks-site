@@ -12,6 +12,7 @@ import AboutUs from "windows/AboutUs";
 import { ProgressBar } from "react95";
 import { useTheme } from "styled-components";
 import { animated, config, useSpring } from "@react-spring/web";
+import FlunkEMart from "windows/FlunkMart";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -114,6 +115,17 @@ const Desktop = () => {
             openWindow({
               key: WINDOW_IDS.PROJECT_JNR,
               window: <ProjectJnr />,
+            });
+          }}
+        />
+
+        <DesktopAppIcon
+          title="Flunk E Mart"
+          icon="/images/icons/flunk-e-mart.png"
+          onDoubleClick={() => {
+            openWindow({
+              key: WINDOW_IDS.FLUNK_E_MART,
+              window: <FlunkEMart windowId={WINDOW_IDS.FLUNK_E_MART} />,
             });
           }}
         />

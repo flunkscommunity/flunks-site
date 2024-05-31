@@ -51,8 +51,6 @@ const ClassItem = (item: (typeof CLASSES)[0]) => {
     }
   }, [inView, isTablet]);
 
-  console.log(inView);
-
   return (
     <Frame
       ref={ref}

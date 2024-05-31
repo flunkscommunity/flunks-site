@@ -5,13 +5,14 @@ import ImageDisplay from "./ItemImageDisplay";
 import TraitSection from "./ItemTraitSection";
 import DesktopBackgroundSection from "./ItemDesktopBackgroundSection";
 import GumSection from "./ItemGumSection";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { checkCanGraduate } from "web3/script-check-can-graduate";
 import { useWindowsContext } from "contexts/WindowsContext";
 import Graduation from "windows/Graduation";
 import ClaimForm from "windows/ClaimForm";
+import { NftItem } from "./ItemsGrid";
 
-interface FlunkItemProps extends MarketplaceIndividualNftDto {
+interface FlunkItemProps extends NftItem {
   onBack: () => void;
 }
 
@@ -21,31 +22,31 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
   const { openWindow } = useWindowsContext();
 
   useEffect(() => {
-    if (props.metadata?.Type === "Graduated") {
+    if (props.traits.Type === "Graduated") {
       setCanGraduate(false);
     } else {
-      checkCanGraduate(Number(props.tokenId)).then(setCanGraduate);
+      checkCanGraduate(Number(props.tokenID)).then(setCanGraduate);
     }
 
     return () => {
       setCanGraduate(false);
     };
-  }, [props.tokenId]);
+  }, [props.tokenID]);
 
   return (
     <div className="w-full h-full relative">
       <NavMenu
         collectionName={"Flunks"}
-        tokenId={props.tokenId}
-        templateId={props.templateId}
+        tokenId={props.tokenID}
+        templateId={Number(props.serialNumber)}
         onBack={props.onBack}
       />
       <ImageDisplay
-        src={props.metadata.uri}
+        src={props.MetadataViewsDisplay.thumbnail.url}
         collectionItemName={"Flunk"}
-        tokenId={props.tokenId}
-        templateId={props.templateId}
-        pixelSrc={props.metadata?.pixelUri}
+        tokenId={props.tokenID}
+        templateId={Number(props.serialNumber)}
+        pixelSrc={props.traits?.pixelUri}
       />
       <Frame className="!w-full h-auto pb-4">
         {(canClaimBackpack || canGraduate) && (
@@ -56,7 +57,7 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
                   <Button
                     onClick={() => {
                       openWindow({
-                        key: `claim-form-${props.templateId}`,
+                        key: `claim-form-${props.serialNumber}`,
                         window: <ClaimForm flunk={props} shouldFetch={false} />,
                       });
                     }}
@@ -68,7 +69,7 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
                   <Button
                     onClick={() => {
                       openWindow({
-                        key: `graduation-${props.templateId}`,
+                        key: `graduation-${props.serialNumber}`,
                         window: <Graduation flunk={props} />,
                       });
                     }}
@@ -81,15 +82,20 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
             <Separator />
           </>
         )}
-        <TraitSection metadata={props.metadata} />
-        <GumSection pool={"Flunks"} tokenId={props.tokenId} />
-        {props.metadata?.Backdrop?.toUpperCase() && (
+        <TraitSection metadata={props.traits} />
+        <GumSection
+          pool={"Flunks"}
+          tokenId={props.tokenID}
+          claimedRewards={Number(props?.claimedRewards)?.toFixed(2)}
+          rewards={Number(props.rewards)?.toFixed(2)}
+        />
+        {props.traits?.Backdrop?.toUpperCase() && (
           <DesktopBackgroundSection
-            src={`/images/backdrops/${props.metadata?.Backdrop?.split(" ")
+            src={`/images/backdrops/${props.traits?.Backdrop?.split(" ")
               ?.join("-")
               ?.toUpperCase()}.png`}
-            itemSrc={props.metadata.uri}
-            pixelSrc={props.metadata?.pixelUri}
+            itemSrc={props.MetadataViewsDisplay.thumbnail.url}
+            pixelSrc={props.traits?.pixelUri}
           />
         )}
       </Frame>
