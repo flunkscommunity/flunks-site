@@ -6,6 +6,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { CLASSES } from "windows/ProjectJnr";
 
 export interface SelectedTraits {
   back: JnrTrait;
@@ -23,6 +24,7 @@ interface JnrCanvasContextProps {
   equipTrait: (trait: JnrTrait, group: string) => void;
   randomizeSelectedTraits: () => void;
   createRandomJnr: () => SelectedTraits;
+  selectedClass: string;
 }
 
 const JnrCanvasContext = React.createContext<JnrCanvasContextProps>({
@@ -47,6 +49,7 @@ const JnrCanvasContext = React.createContext<JnrCanvasContextProps>({
     shoes: null,
     torso: null,
   }),
+  selectedClass: "",
 });
 
 const ChooseRandomSelectedTraits = (ownedTraits: UserTraits) => {
@@ -87,6 +90,11 @@ export const JnrCanvasProvider = ({ children }) => {
     return ChooseRandomSelectedTraits(data);
   }, [data]);
 
+  const randomClass = useMemo(
+    () => CLASSES[Math.floor(Math.random() * CLASSES.length)].className,
+    []
+  );
+
   return (
     <JnrCanvasContext.Provider
       value={{
@@ -95,6 +103,7 @@ export const JnrCanvasProvider = ({ children }) => {
         equipTrait,
         randomizeSelectedTraits,
         createRandomJnr,
+        selectedClass: randomClass,
       }}
     >
       {children}

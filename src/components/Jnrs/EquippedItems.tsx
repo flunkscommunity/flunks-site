@@ -1,11 +1,14 @@
 import { useJnrCanvas } from "contexts/JnrCanvasContext";
-import Full2DJnr from "./Full2DJnr";
+import Full2DJnr, { Class } from "./Full2DJnr";
 import { Frame } from "react95";
 import {
   CustomScrollArea,
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
 import { TraitImage } from "./Inventory";
+import { useMemo } from "react";
+import { CLASSES } from "windows/ProjectJnr";
+import { CLASS_TO_BG_COLOR } from "./JnrCollectibleCard";
 
 const traitOrder = ["lh", "rh", "head", "back", "torso", "bottoms", "shoes"];
 
@@ -27,7 +30,9 @@ const EquippedItem = ({ trait }) => {
           <span className="text-base text-center">{trait.metadata.attack}</span>
         </div>
         <div className="flex flex-row gap-1 items-center">
-          <span className="text-base text-center">{trait.metadata.defense}</span>
+          <span className="text-base text-center">
+            {trait.metadata.defense}
+          </span>
           <img
             src="/images/icons/defense-64x64.png"
             alt="attack"
@@ -40,13 +45,15 @@ const EquippedItem = ({ trait }) => {
 };
 
 const EquippedItems = () => {
-  const { selectedTraits } = useJnrCanvas();
+  const { selectedTraits, selectedClass } = useJnrCanvas();
 
   return (
     <div className="relative w-full h-full flex flex-col">
       <Full2DJnr
         selectedTraits={selectedTraits}
         className="!bg-[#E9E9E9] !bg-none"
+        jnrClass={selectedClass as Class}
+        backgroundColor={CLASS_TO_BG_COLOR[selectedClass]}
       />
       <CustomStyledScrollView className="w-full flex h-[50%] flex-shrink-0">
         <CustomScrollArea className="flex flex-row overflow-x-auto flex-nowrap !p-0">

@@ -1,15 +1,17 @@
 import { useJnrCanvas } from "contexts/JnrCanvasContext";
 import { Button, Frame, MenuList, ScrollView } from "react95";
-import Full2DJnr from "./Full2DJnr";
+import Full2DJnr, { Class } from "./Full2DJnr";
 import {
   CustomScrollArea,
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
 import { useMemo } from "react";
 import { OwnedTrait, OwnedTraitAlt } from "./Inventory";
+import { CLASSES } from "windows/ProjectJnr";
+import { CLASS_TO_BG_COLOR } from "./JnrCollectibleCard";
 
 const EquipPreview = () => {
-  const { selectedTraits, ownedTraits, randomizeSelectedTraits } =
+  const { selectedTraits, ownedTraits, randomizeSelectedTraits, selectedClass } =
     useJnrCanvas();
   const allTraits = useMemo(
     () => Object.values(ownedTraits).flat(),
@@ -19,14 +21,19 @@ const EquipPreview = () => {
   return (
     <Frame className="!flex flex-col lg:flex-row w-full mx-auto h-[510px] lg:h-[720px] overflow-hidden p-4">
       <div className="h-1/2 w-full lg:h-full lg:w-2/4 !aspect-square flex-shrink-0">
-        <Full2DJnr selectedTraits={selectedTraits} />
+        <Full2DJnr
+          selectedTraits={selectedTraits}
+          jnrClass={selectedClass as Class}
+          withBackground
+          backgroundColor={CLASS_TO_BG_COLOR[selectedClass]}
+        />
       </div>
       <div className="w-full h-full">
         <Frame
           variant="well"
           className="!flex items-center justify-end !py-2 px-1"
         >
-          <Button onClick={randomizeSelectedTraits} variant="menu">
+          <Button onClick={randomizeSelectedTraits}>
             Randomize
           </Button>
         </Frame>

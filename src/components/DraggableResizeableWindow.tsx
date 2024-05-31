@@ -115,7 +115,6 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
   const onStart = () => _bringWindowToFront();
   const isMobile = width < 768;
 
-
   const getHeight = useCallback(() => {
     if (width < 768) return "100%";
     if (initialHeight === "auto" && height < 900) {
@@ -124,7 +123,6 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
 
     return initialHeight;
   }, [height]);
-
 
   if (authGuard && !user) {
     return (
@@ -156,6 +154,10 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           ? { x: width / 2 - 200, y: height / 2 - 200 }
           : undefined
       }
+      defaultPosition={{
+        x: width / 2 - windowRef.current?.clientWidth! / 2,
+        y: height / 2 - windowRef.current?.clientHeight! / 2 - offSetHeight,
+      }}
       cancel="#action"
     >
       <Window
@@ -201,7 +203,11 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
                 )}
                 {showMaximizeButton && (
                   <Button id="action" onClick={handleMaximize}>
-                    <img src="/images/icons/maximize.png" width="60%" height="60%" />
+                    <img
+                      src="/images/icons/maximize.png"
+                      width="60%"
+                      height="60%"
+                    />
                   </Button>
                 )}
                 <Button

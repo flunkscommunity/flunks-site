@@ -1,6 +1,6 @@
 import { SelectedTraits, useJnrCanvas } from "contexts/JnrCanvasContext";
 import { Button, Frame, MenuList, ScrollView } from "react95";
-import Full2DJnr from "./Full2DJnr";
+import Full2DJnr, { Class } from "./Full2DJnr";
 import {
   CustomScrollArea,
   CustomStyledScrollView,
@@ -8,6 +8,8 @@ import {
 import { useMemo, useState } from "react";
 import { OwnedTrait, OwnedTraitAlt } from "./Inventory";
 import { simulateFight } from "scripts/simulate-fight";
+import { CLASS_TO_BG_COLOR } from "./JnrCollectibleCard";
+import { CLASSES } from "windows/ProjectJnr";
 
 /*
 attack?: number;
@@ -35,10 +37,12 @@ const JnrCard = ({
   selectedTraits,
   name,
   onAddJnr,
+  jnrClass,
 }: {
   selectedTraits?: SelectedTraits;
   name?: string;
   onAddJnr?: () => void;
+  jnrClass: Class;
 }) => {
   const statsCombined = useMemo(() => {
     if (!selectedTraits) return {};
@@ -81,7 +85,12 @@ const JnrCard = ({
     <Frame className="!flex flex-col w-1/3 min-w-[250px] overflow-hidden p-4 !flex-shrink-0">
       <div className="w-full flex flex-col h-full">
         <div className="min-h-[150px] lg:min-h-[300px]">
-          <Full2DJnr selectedTraits={selectedTraits} />
+          <Full2DJnr
+            selectedTraits={selectedTraits}
+            jnrClass={jnrClass}
+            withBackground
+            backgroundColor={CLASS_TO_BG_COLOR[jnrClass]}
+          />
         </div>
         <Frame variant="well" className="w-full !flex flex-col p-2">
           <span className="text-lg lg:text-2xl font-bold text-center pb-2">
@@ -95,7 +104,9 @@ const JnrCard = ({
             >
               <span className="lg:text-2xl">{stat.name}</span>
               <span className="lg:text-2xl">
-                {stat.name === "Health" ? 20 + statsCombined[stat.stat] : statsCombined[stat.stat]}
+                {stat.name === "Health"
+                  ? 20 + statsCombined[stat.stat]
+                  : statsCombined[stat.stat]}
                 {PERCENTAGE_STATS.includes(stat.stat) ? "%" : ""}
               </span>
             </Frame>
@@ -107,12 +118,22 @@ const JnrCard = ({
 };
 
 const FightPreview = () => {
-  const { selectedTraits, createRandomJnr } = useJnrCanvas();
+  const { selectedTraits, createRandomJnr, selectedClass } = useJnrCanvas();
   const [yourJnrs, setYourJnrs] = useState<SelectedTraits[]>([]);
 
   const handleAddJnr = () => {
     setYourJnrs((prev) => [...prev, createRandomJnr()]);
   };
+
+  const randomClasses = useMemo(
+    () => [
+      CLASSES[Math.floor(Math.random() * CLASSES.length)].className,
+      CLASSES[Math.floor(Math.random() * CLASSES.length)].className,
+      CLASSES[Math.floor(Math.random() * CLASSES.length)].className,
+      CLASSES[Math.floor(Math.random() * CLASSES.length)].className,
+    ],
+    []
+  );
 
   return (
     <CustomStyledScrollView className="!p-0 !overflow-hidden max-w-[1440px] mx-auto w-full">
@@ -121,12 +142,14 @@ const FightPreview = () => {
           <JnrCard
             selectedTraits={selectedTraits}
             name={`Your Future J.N.R #${1}`}
+            jnrClass={selectedClass as Class}
           />
           {yourJnrs.map((jnr, index) => (
             <JnrCard
               key={index}
               selectedTraits={jnr}
               name={`Your Future J.N.R #${index + 2}`}
+              jnrClass={randomClasses[index] as Class}
             />
           ))}
           {yourJnrs.length <= 1 && <JnrCard onAddJnr={handleAddJnr} />}

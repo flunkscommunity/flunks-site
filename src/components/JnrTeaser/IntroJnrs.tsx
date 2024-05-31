@@ -3,16 +3,16 @@ import Marquee from "react-fast-marquee";
 import { Frame } from "react95";
 
 const IMAGES = [
-  "/images/about-us/jnr-1.png",
-  "/images/about-us/jnr-2.png",
-  "/images/about-us/jnr-3.png",
-  "/images/about-us/jnr-4.png",
-  "/images/about-us/jnr-5.png",
-  "/images/about-us/jnr-6.png",
-  "/images/about-us/jnr-7.png",
-  "/images/about-us/jnr-8.png",
-  "/images/about-us/jnr-9.png",
-  "/images/about-us/jnr-10.png",
+  "/images/about-us/jnr-1.webp",
+  "/images/about-us/jnr-2.webp",
+  "/images/about-us/jnr-3.webp",
+  "/images/about-us/jnr-8.webp",
+  "/images/about-us/jnr-4.webp",
+  "/images/about-us/jnr-5.webp",
+  "/images/about-us/jnr-6.webp",
+  "/images/about-us/jnr-7.webp",
+  "/images/about-us/jnr-9.webp",
+  "/images/about-us/jnr-10.webp",
 ];
 
 const IntroJnrs = () => {

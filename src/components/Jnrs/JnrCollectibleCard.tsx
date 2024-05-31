@@ -7,7 +7,7 @@ import { CLASSES } from "windows/ProjectJnr";
 import { toPng } from "html-to-image";
 
 const JnrCollectibleCard = () => {
-  const { selectedTraits } = useJnrCanvas();
+  const { selectedTraits, selectedClass } = useJnrCanvas();
   const statsCombined = useMemo(() => {
     if (!selectedTraits) return {};
     return Object.values(selectedTraits).reduce(
@@ -37,8 +37,6 @@ const JnrCollectibleCard = () => {
   }, [selectedTraits]);
 
   const theme = useTheme();
-  const randomClass =
-    CLASSES[Math.floor(Math.random() * CLASSES.length)].className;
 
   return (
     <Window className="w-[528px] h-auto scale-50 lg:scale-100 origin-center">
@@ -58,6 +56,7 @@ const JnrCollectibleCard = () => {
             selectedTraits={selectedTraits}
             className="min-h-[400px]"
             withBackground={true}
+            jnrClass={selectedClass}
           />
           <div
             className="absolute top-1 text-xl uppercase  font-bold right-1 z-20 px-5 py-1"
@@ -67,7 +66,7 @@ const JnrCollectibleCard = () => {
               backgroundColor: theme.material,
             }}
           >
-            {randomClass}
+            {selectedClass}
           </div>
           <div
             className="absolute top-[5px] text-xl uppercase font-bold right-1 px-5 py-1 scale-105 z-10"
@@ -77,7 +76,7 @@ const JnrCollectibleCard = () => {
               backgroundColor: theme.borderDark,
             }}
           >
-            {randomClass}
+            {selectedClass}
           </div>
         </div>
         <div className="w-full !flex gap-2">
@@ -158,19 +157,19 @@ const JnrCollectibleCard = () => {
 };
 
 export const CLASS_TO_BG_COLOR = {
-  HISTORY: "#FFC2C2",
-  ART: "#FFF4BC",
-  MATH: "#D2FFC2",
-  BIOLOGY: "#C2F0FF",
-  MUSIC: "#AECFFF",
-  SPORT: "#DAD1FF",
-  PHYSICS: "#EABDFF",
-  CHEMISTRY: "#FFCCFA",
+  HISTORY: "#E59B9B",
+  ART: "#E5C094",
+  MATH: "#8BDDE5",
+  BIOLOGY: "#B5E5AB",
+  MUSIC: "#8FB0E5",
+  SPORT: "#A99FE5",
+  PHYSICS: "#E5B1E5",
+  CHEMISTRY: "#E3E5A3",
 };
 
 export const JnrCollectibleCardReffed = forwardRef<HTMLDivElement>(
   (props, elementRef) => {
-    const { selectedTraits } = useJnrCanvas();
+    const { selectedTraits, selectedClass } = useJnrCanvas();
     const statsCombined = useMemo(() => {
       if (!selectedTraits) return {};
       return Object.values(selectedTraits).reduce(
@@ -200,10 +199,6 @@ export const JnrCollectibleCardReffed = forwardRef<HTMLDivElement>(
     }, [selectedTraits]);
 
     const theme = useTheme();
-    const randomClass = useMemo(
-      () => CLASSES[Math.floor(Math.random() * CLASSES.length)].className,
-      [selectedTraits]
-    );
 
     return (
       <div
@@ -226,8 +221,9 @@ export const JnrCollectibleCardReffed = forwardRef<HTMLDivElement>(
               <Full2DJnr
                 selectedTraits={selectedTraits}
                 className="min-h-[400px]"
+                jnrClass={selectedClass}
                 withBackground={true}
-                backgroundColor={CLASS_TO_BG_COLOR[randomClass] as string}
+                backgroundColor={CLASS_TO_BG_COLOR[selectedClass] as string}
                 extraLayers={
                   <div className="absolute -top-[2px] left-[2px] w-full">
                     <div
@@ -238,7 +234,7 @@ export const JnrCollectibleCardReffed = forwardRef<HTMLDivElement>(
                         backgroundColor: theme.material,
                       }}
                     >
-                      {randomClass}
+                      {selectedClass}
                     </div>
                     <div
                       className="absolute text-xl uppercase font-bold top-[2px] px-5 py-1 scale-105 z-10"
@@ -248,7 +244,7 @@ export const JnrCollectibleCardReffed = forwardRef<HTMLDivElement>(
                         backgroundColor: theme.borderDark,
                       }}
                     >
-                      {randomClass}
+                      {selectedClass}
                     </div>
                   </div>
                 }
@@ -317,7 +313,7 @@ export const JnrCollectibleCardReffed = forwardRef<HTMLDivElement>(
                 className="h-full px-2 py-2 flex-shrink tracking-widest !flex items-start justify-start w-full"
               >
                 <span className="text-2xl font-bold">
-                  First Edition Junior 2024
+                  Promotional Edition Junior 2024
                 </span>
               </Frame>
               <Frame

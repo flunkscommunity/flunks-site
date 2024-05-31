@@ -9,8 +9,7 @@ import HybridCustodyHelper from 0x807c3d470888cc48
 import Flunks from 0x807c3d470888cc48
 import Backpack from 0x807c3d470888cc48
 import MetadataViews from 0x1d7e57aa55817448
-
-// mainnet test run: flow scripts execute ./cadence/scripts/GUM/get-owner-stake-info.cdc 0xeff7b7c7795a4d56 --network mainnet
+import GUMStakingTracker from 0x807c3d470888cc48
 
 pub struct AccountTokenMetadataWithStakeInfo {
     pub let owner: Address
@@ -21,8 +20,10 @@ pub struct AccountTokenMetadataWithStakeInfo {
     pub let stakingInfo: Staking.StakingInfo?
     pub let collection: String?
     pub let rewards: UFix64?
+    pub let claimedRewards: UFix64?
 
-    init(owner: Address, tokenID: UInt64, metadataViewsDisplay: MetadataViews.Display, serialNumber: UInt64, traits: MetadataViews.Traits, stakingInfo: Staking.StakingInfo?, collection: String?, rewards: UFix64?) {
+
+    init(owner: Address, tokenID: UInt64, metadataViewsDisplay: MetadataViews.Display, serialNumber: UInt64, traits: MetadataViews.Traits, stakingInfo: Staking.StakingInfo?, collection: String?, rewards: UFix64?, claimedRewards: UFix64?) {
         self.owner = owner
         self.tokenID = tokenID
         self.MetadataViewsDisplay = metadataViewsDisplay
@@ -31,6 +32,7 @@ pub struct AccountTokenMetadataWithStakeInfo {
         self.stakingInfo = stakingInfo
         self.collection = collection
         self.rewards = rewards
+        self.claimedRewards = claimedRewards
     }
 }
 
@@ -56,6 +58,8 @@ pub fun getItemMetadataFlunks(address: Address, tokenID: UInt64): AccountTokenMe
 
     let rewards = Staking.pendingRewards(pool: "Flunks", ownerAddress: address, tokenID: tokenID)
 
+    let claimedRewards = GUMStakingTracker.getClaimedFlunksTracker()[tokenID] ?? 0.0
+
     return AccountTokenMetadataWithStakeInfo(
         owner: address,
         tokenID: tokenID,
@@ -64,7 +68,8 @@ pub fun getItemMetadataFlunks(address: Address, tokenID: UInt64): AccountTokenMe
         traits: traits,
         stakingInfo: stakingInfo,
         collection: "Flunks",
-        rewards: rewards
+        rewards: rewards,
+        claimedRewards: claimedRewards
     )
 }
 
@@ -90,6 +95,8 @@ pub fun getItemMetadataBackpack(address: Address, tokenID: UInt64): AccountToken
 
     let rewards = Staking.pendingRewards(pool: "Backpack", ownerAddress: address, tokenID: tokenID)
 
+    let claimedRewards = GUMStakingTracker.getClaimedBackpackTracker()[tokenID] ?? 0.0
+
     return AccountTokenMetadataWithStakeInfo(
         owner: address,
         tokenID: tokenID,
@@ -98,7 +105,8 @@ pub fun getItemMetadataBackpack(address: Address, tokenID: UInt64): AccountToken
         traits: traits,
         stakingInfo: stakingInfo,
         collection: "Backpack",
-        rewards: rewards
+        rewards: rewards,
+        claimedRewards: claimedRewards
     )
 }
 

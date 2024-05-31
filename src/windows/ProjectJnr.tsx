@@ -131,7 +131,7 @@ export const CLASSES = [
     description:
       "Masters of the past, wielding ancient wisdom and strategies to outmaneuver their foes.",
     set: "Plague Doctor",
-    setImage: "/images/about-us/jnr-8.png",
+    setImage: "/images/about-us/jnr-7.webp",
     spells: [
       {
         type: "Offensive",
@@ -152,7 +152,7 @@ export const CLASSES = [
     description:
       "Creators of beauty and chaos, using their artistic talents to inspire allies and confound enemies.",
     set: "Origami",
-    setImage: "/images/about-us/jnr-7.png",
+    setImage: "/images/about-us/jnr-9.webp",
     spells: [
       {
         type: "Offensive",
@@ -172,7 +172,7 @@ export const CLASSES = [
     description:
       "Strategists and thinkers, leveraging calculations and probability to gain the upper hand in any situation.",
     set: "PC",
-    setImage: "/images/about-us/jnr-1.png",
+    setImage: "/images/about-us/jnr-5.webp",
     spells: [
       {
         type: "Offensive",
@@ -193,7 +193,7 @@ export const CLASSES = [
     description:
       "Masters of life and nature, utilizing biological knowledge to heal and harm with equal proficiency.",
     set: "Skeleton",
-    setImage: "/images/about-us/jnr-9.png",
+    setImage: "/images/about-us/jnr-6.webp",
     spells: [
       {
         type: "Offensive",
@@ -212,7 +212,7 @@ export const CLASSES = [
     description:
       "Sonic virtuosos who use the power of sound to inspire allies and disorient enemies.",
     set: "Disco",
-    setImage: "/images/about-us/jnr-2.png",
+    setImage: "/images/about-us/jnr-4.webp",
     spells: [
       {
         type: "Offensive",
@@ -231,7 +231,7 @@ export const CLASSES = [
     description:
       "Athletic champions who use their physical prowess to dominate the battlefield.",
     set: "Baseball",
-    setImage: "/images/about-us/jnr-5.png",
+    setImage: "/images/about-us/jnr-3.webp",
     spells: [
       {
         type: "Offensive",
@@ -250,7 +250,7 @@ export const CLASSES = [
     description:
       "Masters of the physical universe, manipulating the laws of nature to their advantage.",
     set: "Robot",
-    setImage: "/images/about-us/jnr-3.png",
+    setImage: "/images/about-us/jnr-2.webp",
     spells: [
       {
         type: "Offensive",
@@ -270,7 +270,7 @@ export const CLASSES = [
     description:
       "Alchemists and scientists who use chemical reactions to devastate enemies and protect allies.",
     set: "Radioactive",
-    setImage: "/images/about-us/jnr-10.png",
+    setImage: "/images/about-us/jnr-1.webp",
     spells: [
       {
         type: "Offensive",

@@ -53,6 +53,8 @@ const GumballMachine: React.FC = () => {
             window: <GumballMachineHelp />,
           });
         }}
+        initialWidth="500px"
+        initialHeight="70%"
       >
         <FclTransactionProvider>
           <StakingProvider>

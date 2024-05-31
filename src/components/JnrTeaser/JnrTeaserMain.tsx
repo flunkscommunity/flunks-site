@@ -10,6 +10,7 @@ import styled from "styled-components";
 import {
   SpringValue,
   animated,
+  useInView,
   useSpring,
   useSpringRef,
 } from "@react-spring/web";
@@ -27,12 +28,58 @@ import {
   FrameWithCheckedBackground,
 } from "components/AboutUs/FrameWithBackground";
 import { domToPng } from "modern-screenshot";
+import useWindowSize from "hooks/useWindowSize";
 
 const StyledLoader = styled.div`
   background-color: ${({ theme }) => theme.material};
 `;
 
 const AnimatedStyledLoader = animated(StyledLoader);
+
+const ClassItem = (item: (typeof CLASSES)[0]) => {
+  const [ref, inView] = useInView({
+    amount: 1
+  });
+  const { isTablet } = useWindowSize();
+  const [hideBg, setHideBg] = useState(false);
+
+  useEffect(() => {
+    if (inView && isTablet) {
+      setHideBg(true);
+    } else {
+      setHideBg(false);
+    }
+  }, [inView, isTablet]);
+
+  console.log(inView);
+
+  return (
+    <Frame
+      ref={ref}
+      key={item.className}
+      variant="well"
+      className={`${
+        hideBg ? "!bg-[size:200%_4000%] !bg-[position:0%_100%]" : ""
+      } w-full !min-h-[300px] h-full lg:hover:!bg-[position:0%_100%] lg:hover:!bg-[size:200%_4000%] group !flex flex-col items-center justify-center relative !overflow-hidden contrast-125`}
+      style={{
+        backgroundImage: `url(${item.setImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "50% 30%",
+      }}
+    >
+      <div
+        className={`${
+          hideBg ? "!bg-black/40" : ""
+        } z-10 absolute py-6 w-full h-full inset-0 bg-black/70 lg:group-hover:bg-black/40 lg:group-hover:mix-blend-luminosity transition-all flex flex-col items-center justify-center gap-3 px-4`}
+      >
+        <span className="text-white text-3xl font-bold">{item.className}</span>
+        <span className="text-white text-xl font-normal max-w-[325px] text-center">
+          {item.description}
+        </span>
+      </div>
+    </Frame>
+  );
+};
 
 const JnrTeaserMain = () => {
   const animationScrollContainer = useRef<HTMLDivElement>(null);
@@ -164,33 +211,19 @@ const JnrTeaserMain = () => {
                 <div className="w-full flex flex-col gap-10 max-w-[1440px] mx-auto mb-[112px] lg:mb-[10%]">
                   <span className="font-bold text-2xl lg:text-4xl text-center max-w-[700px] mx-auto px-4">
                     Dive into 8 unique classes: History, Art, Math, Biology,
-                    Music, Sport, Physics, and Chemistry! Each class comes with
-                    its own captivating themes, specialized traits, and dynamic
-                    abilities, bringing a new level of excitement to every
-                    battle.
+                    Music, Sport, Physics, and Chemistry!
+                    <br />
+                    <br />
+                    <span className="text-xl lg:text-3xl">
+                      Each class comes with its own captivating themes,
+                      specialized traits, and dynamic abilities, bringing a new
+                      level of excitement to every battle.
+                    </span>
                   </span>
 
-                  <Frame className="w-full !grid grid-col-[repeat(auto-fill,minmax(160px,1fr))] gap-4 overflow-hidden p-4">
+                  <Frame className="w-full !grid grid-cols-1 lg:grid-cols-2 gap-4 overflow-hidden p-4">
                     {CLASSES.map((item) => (
-                      <Frame
-                        key={item.className}
-                        variant="well"
-                        className="w-full !min-h-[300px] h-full hover:!bg-[position:0%_100%] hover:!bg-[size:200%_4000%] group !flex flex-col items-center justify-center relative !overflow-hidden contrast-125"
-                        style={{
-                          backgroundImage: `url(${item.setImage})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "50% 30%",
-                        }}
-                      >
-                        <div className=" z-10 absolute py-6 w-full h-full inset-0 bg-black/50 group-hover:bg-black/20 group-hover:mix-blend-luminosity transition-all flex flex-col items-center justify-center gap-3 px-4">
-                          <span className="text-white text-3xl font-bold">
-                            {item.className}
-                          </span>
-                          <span className="text-white text-xl font-normal max-w-[325px] text-center">
-                            {item.description}
-                          </span>
-                        </div>
-                      </Frame>
+                      <ClassItem key={item.setImage} {...item} />
                     ))}
                   </Frame>
                 </div>
@@ -203,9 +236,12 @@ const JnrTeaserMain = () => {
                     Equip your JNR with powerful traits! Discover and unlock a
                     vast array of unique abilities, customizing your Pocket
                     Junior for epic battles and strategic dominance. <br />{" "}
-                    <br /> With each trait enhancing your JNR's stats and
-                    skills, you can create the perfect team to outsmart and
-                    outfight your opponents.
+                    <br />{" "}
+                    <span className="text-xl lg:text-3xl">
+                      With each trait enhancing your JNR's stats and skills, you
+                      can create the perfect team to outsmart and outfight your
+                      opponents.
+                    </span>
                   </span>
 
                   <EquipPreview />

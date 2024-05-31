@@ -142,7 +142,8 @@ const AboutUs = () => {
             className="!h-auto w-full !flex flex-col overflow-hidden z-50 static pb-28"
           >
             <div className="h-full relative mx-auto min-h-[600px] w-full px-4 lg:px-20 py-10 lg:py-[80px] !flex flex-col items-start justify-start gap-10 md:gap-[112px]">
-              <div className="flex flex-col max-w-[1440px] mx-auto lg:flex-row gap-10 items-center justify-between w-full">
+              <div className="flex flex-col max-w-[1440px] mx-auto lg:flex-col gap-10 items-start w-full">
+                <img src="/images/logos/flunks.png" className="h-24" />
                 <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty">
                   Flunks is a web3 brand that blends high school nostalgia with
                   the excitement of NFTs and modern technology.
