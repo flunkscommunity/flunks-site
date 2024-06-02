@@ -11,6 +11,9 @@ import Backpack from 0x807c3d470888cc48
 import MetadataViews from 0x1d7e57aa55817448
 import GUMStakingTracker from 0x807c3d470888cc48
 
+
+// mainnet test run: flow scripts execute ./cadence/scripts/GUM/get-owner-stake-info.cdc 0xeff7b7c7795a4d56 --network mainnet
+
 pub struct AccountTokenMetadataWithStakeInfo {
     pub let owner: Address
     pub let tokenID: UInt64
@@ -21,9 +24,21 @@ pub struct AccountTokenMetadataWithStakeInfo {
     pub let collection: String?
     pub let rewards: UFix64?
     pub let claimedRewards: UFix64?
+    pub let pixelUrl: String?
 
 
-    init(owner: Address, tokenID: UInt64, metadataViewsDisplay: MetadataViews.Display, serialNumber: UInt64, traits: MetadataViews.Traits, stakingInfo: Staking.StakingInfo?, collection: String?, rewards: UFix64?, claimedRewards: UFix64?) {
+    init(
+        owner: Address,
+        tokenID: UInt64,
+        metadataViewsDisplay: MetadataViews.Display,
+        serialNumber: UInt64,
+        traits: MetadataViews.Traits,
+        stakingInfo: Staking.StakingInfo?,
+        collection: String?,
+        rewards: UFix64?,
+        claimedRewards: UFix64?,
+        pixelUrl: String?
+    ) {
         self.owner = owner
         self.tokenID = tokenID
         self.MetadataViewsDisplay = metadataViewsDisplay
@@ -33,6 +48,7 @@ pub struct AccountTokenMetadataWithStakeInfo {
         self.collection = collection
         self.rewards = rewards
         self.claimedRewards = claimedRewards
+        self.pixelUrl = pixelUrl
     }
 }
 
@@ -60,6 +76,9 @@ pub fun getItemMetadataFlunks(address: Address, tokenID: UInt64): AccountTokenMe
 
     let claimedRewards = GUMStakingTracker.getClaimedFlunksTracker()[tokenID] ?? 0.0
 
+    let pixelUrlView = item.resolveView(Type<Flunks.PixelUrl>())
+    let pixelUrlStr = pixelUrlView as! String?
+
     return AccountTokenMetadataWithStakeInfo(
         owner: address,
         tokenID: tokenID,
@@ -69,7 +88,8 @@ pub fun getItemMetadataFlunks(address: Address, tokenID: UInt64): AccountTokenMe
         stakingInfo: stakingInfo,
         collection: "Flunks",
         rewards: rewards,
-        claimedRewards: claimedRewards
+        claimedRewards: claimedRewards,
+        pixelUrl: pixelUrlStr
     )
 }
 
@@ -106,7 +126,8 @@ pub fun getItemMetadataBackpack(address: Address, tokenID: UInt64): AccountToken
         stakingInfo: stakingInfo,
         collection: "Backpack",
         rewards: rewards,
-        claimedRewards: claimedRewards
+        claimedRewards: claimedRewards,
+        pixelUrl: nil
     )
 }
 

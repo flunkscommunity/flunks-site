@@ -20,6 +20,9 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
   const [canClaimBackpack] = useState(true);
   const [canGraduate, setCanGraduate] = useState(false);
   const { openWindow } = useWindowsContext();
+  const [activeSrc, setActiveSrc] = useState(
+    props.MetadataViewsDisplay.thumbnail.url
+  );
 
   useEffect(() => {
     if (props.traits.Type === "Graduated") {
@@ -33,6 +36,14 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
     };
   }, [props.tokenID]);
 
+  useEffect(() => {
+    // Preload pxelated image
+    if (props.pixelUrl) {
+      const img = new Image();
+      img.src = props.pixelUrl;
+    }
+  }, []);
+
   return (
     <div className="w-full h-full relative">
       <NavMenu
@@ -40,48 +51,55 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
         tokenId={props.tokenID}
         templateId={Number(props.serialNumber)}
         onBack={props.onBack}
+        extraButtons={
+          <>
+            <Button
+              className="ml-auto w-full"
+              active={activeSrc === props.pixelUrl}
+              disabled={!props.pixelUrl || activeSrc === props.pixelUrl}
+              onClick={() => setActiveSrc(props.pixelUrl)}
+            >
+              <span className="text-xl leading-[1]">PX</span>
+            </Button>
+            <Button
+              className="w-full"
+              active={activeSrc === props.MetadataViewsDisplay.thumbnail.url}
+              disabled={activeSrc === props.MetadataViewsDisplay.thumbnail.url}
+              onClick={() =>
+                setActiveSrc(props.MetadataViewsDisplay.thumbnail.url)
+              }
+            >
+              <span className="text-xl leading-[1]">2D</span>
+            </Button>
+            {canGraduate && (
+              <Button className="w-full">
+                <img
+                  src="/images/icons/graduation.png"
+                  className="h-6 w-auto"
+                />
+              </Button>
+            )}
+            <Button
+              className="w-full"
+              onClick={() => {
+                openWindow({
+                  key: `claim-form-${props.serialNumber}`,
+                  window: <ClaimForm flunk={props} shouldFetch={false} />,
+                });
+              }}
+            >
+              <img src="/images/icons/backpack.png" className="h-6 w-auto" />
+            </Button>
+          </>
+        }
       />
       <ImageDisplay
-        src={props.MetadataViewsDisplay.thumbnail.url}
+        src={activeSrc}
         collectionItemName={"Flunk"}
         tokenId={props.tokenID}
         templateId={Number(props.serialNumber)}
-        pixelSrc={props.traits?.pixelUri}
       />
       <Frame className="!w-full h-auto pb-4">
-        {(canClaimBackpack || canGraduate) && (
-          <>
-            <div className="px-3 py-2 !flex !items-center !justify-between max-w-[1440px] mx-auto">
-              <div className="flex gap-2">
-                {canClaimBackpack && (
-                  <Button
-                    onClick={() => {
-                      openWindow({
-                        key: `claim-form-${props.serialNumber}`,
-                        window: <ClaimForm flunk={props} shouldFetch={false} />,
-                      });
-                    }}
-                  >
-                    Backpack Claim Form
-                  </Button>
-                )}
-                {canGraduate && (
-                  <Button
-                    onClick={() => {
-                      openWindow({
-                        key: `graduation-${props.serialNumber}`,
-                        window: <Graduation flunk={props} />,
-                      });
-                    }}
-                  >
-                    Graduation
-                  </Button>
-                )}
-              </div>
-            </div>
-            <Separator />
-          </>
-        )}
         <TraitSection metadata={props.traits} />
         <GumSection
           pool={"Flunks"}
@@ -95,7 +113,7 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
               ?.join("-")
               ?.toUpperCase()}.png`}
             itemSrc={props.MetadataViewsDisplay.thumbnail.url}
-            pixelSrc={props.traits?.pixelUri}
+            pixelSrc={props.pixelUrl}
           />
         )}
       </Frame>

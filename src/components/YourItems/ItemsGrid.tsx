@@ -144,6 +144,7 @@ export interface CombinedObject {
   collection: string;
   rewards: string;
   claimedRewards: string;
+  pixelUrl: string;
 }
 
 export interface NftItem {
@@ -156,6 +157,7 @@ export interface NftItem {
   collection: string;
   rewards: string;
   claimedRewards: string;
+  pixelUrl: string;
 }
 
 const TableView: React.FC<{
