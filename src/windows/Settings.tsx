@@ -75,11 +75,15 @@ const Settings: React.FC = () => {
     },
     {
       label: "Windows XP Flunk",
-      url: "https://storage.googleapis.com/flunks_public/desktop-backgrounds/windows-xp-broken.webp",
+      url: "https://storage.googleapis.com/flunks_public/desktop-backgrounds/posterized.webp",
     },
     {
-      label: "Windows 95 Setup",
-      url: "https://storage.googleapis.com/flunks_public/desktop-backgrounds/setup.png",
+      label: "Flunks 95 Setup",
+      url: "https://storage.googleapis.com/flunks_public/desktop-backgrounds/flunksbg.webp",
+    },
+    {
+      label: "Flunks 95 Startup",
+      url: "https://storage.googleapis.com/flunks_public/desktop-backgrounds/bootup.webp",
     },
   ];
 

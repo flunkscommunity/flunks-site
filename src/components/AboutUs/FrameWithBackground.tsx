@@ -6,3 +6,16 @@ export const FrameWithBackground = styled(Frame)`
   background-blend-mode: overlay;
   background-repeat: no-repeat;
 `;
+
+export const FrameWithCheckedBackground = styled(Frame)`
+  background-image: linear-gradient(
+      ${({ theme }) => theme.borderLightest}3F 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to right,
+      ${({ theme }) => theme.borderLightest}3F 1px,
+      ${({ theme }) => theme.material} 1px
+    );
+  background-size: 20px 20px;
+`;

@@ -9,7 +9,7 @@ interface FclTransactionContextType {
   state: {
     txStatus: TX_STATUS;
     txMessage: string;
-    txName: string;
+    txName?: string;
   };
   dispatch: React.Dispatch<any>;
   executeTx: (tx: () => Promise<string>, txName?: string) => void;
@@ -44,7 +44,7 @@ export const FclTransactionProvider = ({ children }: any) => {
         txStatus: TX_STATUS.PENDING,
         txName: txName,
       });
-
+      console.log(txId);
       unsub = await fcl.tx(txId).subscribe((newState) => {
         console.log("executeTx STATE CHANGED", newState);
       });
@@ -54,7 +54,7 @@ export const FclTransactionProvider = ({ children }: any) => {
 
       // When transaction succeeds, `txStatus` will be an Object:
       // see `SAMPLE_TX_STATUS_SUCCESS` at the end of this file
-      if (txStatus && txStatus.status === 4 && txStatus?.statusCode === 0) {
+      if (txStatus && txStatus.status === 4) {
         dispatch({
           type: "UPDATE_STATUS",
           txStatus: TX_STATUS.SUCCESS,

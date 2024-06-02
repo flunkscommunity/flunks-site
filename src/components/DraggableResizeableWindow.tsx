@@ -1,6 +1,6 @@
 import { useWindowsContext } from "contexts/WindowsContext";
 import useWindowSize from "hooks/useWindowSize";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { Button, Window, WindowContent, WindowHeader } from "react95";
 import styled from "styled-components";
@@ -25,6 +25,7 @@ interface Props {
   windowsId: string;
   style?: React.CSSProperties;
   onHelp?: () => void;
+  toolbar?: React.ReactNode;
 }
 
 const WindowButtons = styled.div`
@@ -49,7 +50,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     resizable = true,
     authGuard = props.authGuard || false,
     onHelp,
-    ref,
+    toolbar,
   } = props;
   const windowRef = useRef<HTMLDivElement>(null);
   const draggableRef = useRef<Draggable>(null);
@@ -88,25 +89,6 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     }
 
     bringWindowToFront(props.windowsId);
-
-    // if (windowRef.current) {
-    //   let maxZ = 0;
-
-    //   for (let child of Array.from(
-    //     windowRef.current.parentElement?.children || []
-    //   )) {
-    //     if ((child as HTMLDivElement).style.zIndex) {
-    //       const zIndex = parseInt((child as HTMLDivElement).style.zIndex);
-    //       if (zIndex > maxZ) {
-    //         maxZ = zIndex;
-    //       }
-    //     }
-    //   }
-
-    //   if (windowRef.current.style.zIndex === maxZ.toString()) return;
-
-    //   windowRef.current.style.zIndex = `${maxZ + 1}`;
-    // }
   };
 
   useEffect(() => {
@@ -134,6 +116,15 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
 
   const onStart = () => _bringWindowToFront();
   const isMobile = width < 768;
+
+  const getHeight = useCallback(() => {
+    if (width < 768) return "100%";
+    if (initialHeight === "auto" && height < 900) {
+      return "100%";
+    }
+
+    return initialHeight;
+  }, [height]);
 
   if (authGuard && !user) {
     return (
@@ -165,6 +156,11 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           ? { x: width / 2 - 200, y: height / 2 - 200 }
           : undefined
       }
+      defaultPosition={{
+        x: width / 2 - windowRef.current?.clientWidth! / 2,
+        y: height / 2 - windowRef.current?.clientHeight! / 2 - offSetHeight,
+      }}
+      cancel="#action"
     >
       <Window
         ref={windowRef}
@@ -177,7 +173,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           maxWidth: "100%",
           minWidth: width < 768 ? "100%" : "375px",
           minHeight: width < 768 ? "calc(100% - 48px)" : "",
-          height: width < 768 ? "100%" : initialHeight,
+          height: getHeight(),
           maxHeight: "calc(100% - 48px)",
           ...props.style,
         }}
@@ -202,7 +198,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
             {showHeaderActions && (
               <WindowButtons>
                 {onHelp && (
-                  <Button onClick={onHelp}>
+                  <Button id="action" onClick={onHelp}>
                     <img
                       src="/images/icons/question.png"
                       width="60%"
@@ -211,11 +207,22 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
                   </Button>
                 )}
                 {showMaximizeButton && (
-                  <Button onClick={handleMaximize}>
-                    <img src="/images/maximize.png" width="60%" height="60%" />
+                  <Button id="action" onClick={handleMaximize}>
+                    <img
+                      src="/images/icons/maximize.png"
+                      width="60%"
+                      height="60%"
+                    />
                   </Button>
                 )}
-                <Button onClick={onClose}>
+                <Button
+                  id="action"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                  }}
+                  className="pointer-events-auto"
+                >
                   <span className="close-icon" />
                 </Button>
               </WindowButtons>
@@ -223,7 +230,14 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           </WindowHeader>
         </strong>
 
-        <WindowContent className="!px-2 !pt-4 flex flex-col w-full flex-grow max-h-[calc(100%-44px)]">
+        {toolbar}
+
+        <WindowContent
+          className="!px-2 flex flex-col w-full flex-grow max-h-[calc(100%-44px)]"
+          style={{
+            paddingTop: !!toolbar ? "0" : "16px",
+          }}
+        >
           {children}
         </WindowContent>
       </Window>

@@ -5,8 +5,10 @@ import { H3, P } from "./Typography";
 import Image from "next/image";
 
 interface Props {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   bgImage: string;
+  progress?: number;
+  artificalSlowdownByMs?: number;
 }
 
 const WelcomeContainer = styled.div`
@@ -23,6 +25,8 @@ const AppLoader: React.FC<Props> = (props) => {
   const [complete, setComplete] = useState(false);
 
   useEffect(() => {
+    if (props.progress) return;
+
     const timer = setInterval(() => {
       setPercent((previousPercent) => {
         if (previousPercent === 100) {
@@ -39,8 +43,27 @@ const AppLoader: React.FC<Props> = (props) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (props.progress) {
+      if (props.artificalSlowdownByMs) {
+        setTimeout(() => {
+          setPercent(props.progress);
+          if (props.progress === 100) {
+            setComplete(true);
+          }
+        }, props.artificalSlowdownByMs);
+      } else {
+        setPercent(props.progress);
+      }
+
+      if (props.progress === 100) {
+        setComplete(true);
+      }
+    }
+  }, [props.progress]);
+
   return complete ? (
-    <>{children}</>
+    <>{children ? children : null}</>
   ) : (
     <div className="shadow-2xl flex flex-col absolute z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-[800px] h-auto object-contain">
       <Frame>
@@ -49,10 +72,7 @@ const AppLoader: React.FC<Props> = (props) => {
           alt="bgImage"
           className="w-full h-auto object-contain"
         />
-        <ProgressBar
-          variant="default"
-          value={Math.floor(percent)}
-        />
+        <ProgressBar variant="default" value={Math.floor(percent)} />
       </Frame>
     </div>
   );

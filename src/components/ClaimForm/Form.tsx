@@ -1,20 +1,9 @@
-import { MarketplaceIndividualNftDto } from "api/generated";
-import { Button, Frame, GroupBox, Hourglass, ScrollView } from "react95";
+import { Button, Frame, GroupBox, Hourglass } from "react95";
 import styled from "styled-components";
 import { Metadata } from "types/NFT";
-import GraduationBox from "components/NftDetailsBoxes/GraduationBox";
-import GuardianBox from "components/NftDetailsBoxes/GuardianBox";
-import TraitsBox from "components/NftDetailsBoxes/TraitsBox";
-import { H1, H3, H4, P } from "components/Typography";
+import { H1, H3, P } from "components/Typography";
 import { useEffect, useState } from "react";
-import getBackpackClaimedData, {
-  FormattedBackpackClaimData,
-  FormattedClaimEventData,
-} from "api/getBackpackClaimedData";
-import getCollectionsNftById from "api/getCollectionNftById";
-import { format } from "date-fns";
 import { useBackpackClaimed } from "contexts/BackpackClaimContext";
-import { CollectionApiInstance } from "api";
 import { useFclTransactionContext } from "contexts/FclTransactionContext";
 import { TX_STATUS } from "reducers/TxStatusReducer";
 import { claimBackpack } from "web3/tx-claim-backpack";
@@ -22,9 +11,12 @@ import {
   CustomScrollArea,
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
+import { MarketplaceIndividualNftDto } from "generated/models";
+import { collectionControllerGetNftByCollectionNameAndTokenId } from "generated/api/collection/collection";
+import { NftItem } from "components/YourItems/ItemsGrid";
 
 interface Props {
-  nft: MarketplaceIndividualNftDto;
+  nft: NftItem;
   shouldFetch: boolean;
 }
 
@@ -50,8 +42,12 @@ export const ImageWithBackground = styled.img`
 
 const ClaimFormForm: React.FC<Props> = (props) => {
   const { nft, shouldFetch } = props;
-  const { metadata, templateId, tokenId } = nft;
-  const { uri } = metadata as Metadata;
+  const {
+    MetadataViewsDisplay: metadata,
+    serialNumber: templateId,
+    tokenID: tokenId,
+  } = nft;
+  const { url: uri } = metadata.thumbnail;
   const { flunksData, refreshClaimData } = useBackpackClaimed();
   const [claimedItem, setClaimedItem] = useState<MarketplaceIndividualNftDto>();
 
@@ -67,14 +63,11 @@ const ClaimFormForm: React.FC<Props> = (props) => {
     setLoading(true);
     setTimeout(
       () =>
-        CollectionApiInstance.collectionControllerGetNftByCollectionNameAndTokenId(
-          {
-            collectionName: "backpack",
-            tokenId: Number(claimedEvent.backpackTokenID),
-          }
+        collectionControllerGetNftByCollectionNameAndTokenId(
+          "backpack",
+          Number(claimedEvent.backpackTokenID)
         )
           .then((res) => {
-            console.log("claimedItem", res.data);
             setClaimedItem(res.data);
           })
           .finally(() => {
@@ -244,9 +237,7 @@ const ClaimFormForm: React.FC<Props> = (props) => {
               </GroupBox>
 
               <GroupBox label="LOCATION" variant="flat">
-                <P>
-                  {locations[nft?.metadata?.Clique?.toLowerCase() || "geek"]}
-                </P>
+                <P>{locations[nft?.traits?.Clique?.toLowerCase() || "geek"]}</P>
               </GroupBox>
 
               {/* <GroupBox label="Date Found" variant="flat">
@@ -286,7 +277,7 @@ const ClaimFormForm: React.FC<Props> = (props) => {
                 </div>
               </Stack>
 
-              {(!claimedItem && !loading) && (
+              {!claimedItem && !loading && (
                 <div
                   style={{
                     marginTop: "2rem",
@@ -295,9 +286,9 @@ const ClaimFormForm: React.FC<Props> = (props) => {
                 >
                   <Button
                     onClick={() => {
-                      executeTx(claimBackpack({ tokenID: tokenId }));
+                      executeTx(claimBackpack({ tokenID: Number(tokenId) }));
                     }}
-                    fullWidth={"true"}
+                    fullWidth
                   >
                     Sign
                   </Button>

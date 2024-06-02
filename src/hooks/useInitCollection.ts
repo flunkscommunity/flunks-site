@@ -1,4 +1,3 @@
-import { useUser } from "contexts/WalletContext";
 import { useEffect, useState } from "react";
 import { isWalletCollectionInitialized } from "web3/script-check-collection-init";
 import { initAllCollections } from "web3/tx-initialize-account";
@@ -16,7 +15,6 @@ const useInitCollection = (walletAddress: string) => {
 
     await initAllCollections()
       .then((data) => {
-        console.log(data);
         setControl((prev) => prev + 1);
       })
       .catch((err) => {
@@ -31,7 +29,6 @@ const useInitCollection = (walletAddress: string) => {
     if (!walletAddress) return;
 
     isWalletCollectionInitialized(walletAddress).then((data) => {
-      console.log(data);
       setIsInitialized(data);
     });
   }, [walletAddress, control]);

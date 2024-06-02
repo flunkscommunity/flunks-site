@@ -1,3 +1,0 @@
-// FixedLayout
-
-// export default FixedLayout;

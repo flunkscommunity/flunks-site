@@ -1,6 +1,7 @@
 import create from "zustand";
 import { persist } from "zustand/middleware";
 import index from "react95/dist/themes/index";
+import { Theme } from "react95/dist/types";
 
 interface useThemeSettings {
   backgroundColor: string;
@@ -18,20 +19,22 @@ interface useThemeSettings {
 
 const useThemeSettings = create<useThemeSettings>()(
   persist(
+    // @ts-ignore
     (set) => {
       return {
-        backgroundColor: "#008080",
+        backgroundColor: "#008585",
         setBackgroundColor: (backgroundColor: string) =>
           set((state) => ({ backgroundColor })),
-        backgroundImage: "",
+        backgroundImage:
+          "https://storage.googleapis.com/flunks_public/desktop-backgrounds/flunksbg.webp",
         setBackgroundImage: (backgroundImage: string) =>
           set((state) => ({ backgroundImage })),
         oldMonitorMode: false,
         setOldMonitorMode: (oldMonitorMode: boolean) =>
           set((state) => ({ oldMonitorMode })),
         theme: {
-          name: "eggplant",
-          theme: index.eggplant,
+          name: "tokyoDark",
+          theme: index.tokyoDark as Theme,
         },
         setTheme: (theme: { name: keyof typeof index; theme: typeof index }) =>
           set((state) => ({ theme })),

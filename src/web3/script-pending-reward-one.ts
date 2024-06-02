@@ -3,13 +3,14 @@ import * as t from "@onflow/types";
 
 const CODE = `import Staking from 0x807c3d470888cc48
 
-pub fun main(pool: String, tokenID: UInt64): UFix64 {
-  return Staking.pendingRewards(pool: pool, tokenID: tokenID)
+pub fun main(pool: String, ownerAddress: Address, tokenID: UInt64): UFix64 {
+  return Staking.pendingRewards(pool: pool, ownerAddress: Address, tokenID: tokenID)
 }
 `;
 
 export const getPendingRewardsOne = async (
   pool: "Flunks" | "Backpack",
+  ownerAddress: string,
   tokenId: number
 ) => {
   if (!pool) return Promise.resolve(null);
@@ -22,6 +23,7 @@ export const getPendingRewardsOne = async (
       fcl.script(CODE),
       fcl.args([
         fcl.arg(capitalizedPool, t.String),
+        fcl.arg(ownerAddress, t.Address),
         fcl.arg(tokenId, t.UInt64),
       ]),
     ])

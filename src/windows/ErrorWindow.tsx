@@ -22,7 +22,7 @@ const ErrorWindow: React.FC<Props> = (props) => {
   }, []);
 
   return (
-    <div className="bg-black/80 fixed inset-0 z-[999]">
+    <div className="bg-black/80 absolute inset-0 z-[999] flex items-center justify-center md:block">
       <DraggableResizeableWindow
         windowsId={windowId}
         offSetHeight={44}
@@ -36,7 +36,12 @@ const ErrorWindow: React.FC<Props> = (props) => {
         initialHeight="auto"
         initialWidth="auto"
         openCentered
-        style={{maxWidth: "400px"}}
+        style={{
+          maxWidth: "400px",
+          maxHeight: "200px",
+          minHeight: "auto",
+          minWidth: "auto",
+        }}
         resizable={false}
       >
         <div className="flex flex-col h-full gap-2 justify-center">

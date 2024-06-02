@@ -1,8 +1,7 @@
-import { a, config, useScroll } from "@react-spring/web";
+import { config, useScroll } from "@react-spring/web";
 import OurApps from "components/AboutUs/OurApps";
 import OurProducts from "components/AboutUs/OurProducts";
 import OurTeam from "components/AboutUs/OurTeam";
-import Timeline from "components/AboutUs/Timeline";
 import CrowdSimulator from "components/CrowdSimulator";
 import {
   CustomScrollArea,
@@ -13,24 +12,7 @@ import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
 import { useRef } from "react";
 import Draggable from "react-draggable";
-import Marquee from "react-fast-marquee";
-import {
-  Frame,
-  ScrollView,
-  ScrollViewProps,
-  createScrollbars,
-  TableBody,
-  TableRow,
-  TableDataCell,
-  Avatar,
-  Button,
-} from "react95";
-import {
-  createBorderStyles,
-  createBoxStyles,
-  createFlatBoxStyles,
-  insetShadow,
-} from "react95/dist/common";
+import { Frame, TableDataCell, Avatar, Button, Anchor } from "react95";
 import styled from "styled-components";
 import useSWR from "swr";
 
@@ -74,15 +56,6 @@ const BackgroundDiv = styled(Frame)`
       ${({ theme }) => theme.canvas} 1px
     );
   background-size: 32px 32px;
-`;
-
-const HeaderText = styled.span`
-  color: ${({ theme }) => theme.progress};
-`;
-
-const MarqueeText = styled.span`
-  color: ${({ theme }) => theme.canvasText};
-  text-shadow: ${({ theme }) => theme.canvasTextDisabledShadow} 1px 1px;
 `;
 
 const Polaroid = (props: { image: string; x: number; y: number }) => {
@@ -169,7 +142,8 @@ const AboutUs = () => {
             className="!h-auto w-full !flex flex-col overflow-hidden z-50 static pb-28"
           >
             <div className="h-full relative mx-auto min-h-[600px] w-full px-4 lg:px-20 py-10 lg:py-[80px] !flex flex-col items-start justify-start gap-10 md:gap-[112px]">
-              <div className="flex flex-col max-w-[1440px] mx-auto lg:flex-row gap-10 items-center justify-between w-full">
+              <div className="flex flex-col max-w-[1440px] mx-auto lg:flex-col gap-10 items-start w-full">
+                <img src="/images/logos/flunks.png" className="h-24" />
                 <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty">
                   Flunks is a web3 brand that blends high school nostalgia with
                   the excitement of NFTs and modern technology.
@@ -186,16 +160,23 @@ const AboutUs = () => {
 
               <div className="flex flex-col max-w-[1440px] mx-auto lg:flex-row gap-10 items-center justify-between w-full">
                 <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty">
-                  <u>Community is at the core of Flunks.</u> From the community
-                  vote that named us to the creation of the Cafeteria DAO,
-                  Flunks is a project by the people, for the people.
+                  <Anchor
+                    href={discordStats?.instant_invite}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  >
+                    Community is at the core of Flunks.
+                  </Anchor>{" "}
+                  From the community vote that named us to the creation of the
+                  Cafeteria DAO, Flunks is a project by the people, for the
+                  people.
                 </span>
               </div>
             </div>
             <div className="w-full flex flex-col mt-20">
               <div className="flex w-full px-4 lg:px-20">
                 <div className="max-w-[1440px] mx-auto w-full flex">
-                  <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty uppercase ml-auto underline">
+                  <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty uppercase underline">
                     Our Art
                   </span>
                 </div>
@@ -206,7 +187,7 @@ const AboutUs = () => {
             <div className="w-full flex flex-col mt-20">
               <div className="flex w-full px-4 lg:px-20">
                 <div className="max-w-[1440px] mx-auto w-full flex">
-                  <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty uppercase ml-auto underline">
+                  <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty uppercase underline">
                     Our Apps
                   </span>
                 </div>
@@ -217,7 +198,7 @@ const AboutUs = () => {
             <div className="w-full flex flex-col mt-20">
               <div className="flex w-full px-4 lg:px-20 flex-col">
                 <div className="max-w-[1440px] mx-auto w-full flex flex-col">
-                  <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty uppercase ml-auto underline">
+                  <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty uppercase underline">
                     Our Team
                   </span>
 
@@ -279,7 +260,7 @@ const AboutUs = () => {
                                 className="w-8 h-8"
                               />
                             </TableDataCell>
-                            <TableDataCell className="flex-grow text-lg">
+                            <TableDataCell className="flex-grow text-lg !text-black">
                               {member.username}
                             </TableDataCell>
                             <TableDataCell className="capitalize flex items-center gap-1">
