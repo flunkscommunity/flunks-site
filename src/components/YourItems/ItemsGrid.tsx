@@ -4,7 +4,7 @@ import {
   usersControllerGetUserNftsByWalletAddress,
 } from "generated/api/users/users";
 import { MarketplaceIndividualNftDto } from "generated/models";
-import React, { use, useMemo, useState } from "react";
+import React, { use, useEffect, useMemo, useState } from "react";
 import {
   Button,
   Frame,
@@ -37,6 +37,8 @@ import {
   CustomScrollArea,
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
+import FlunkfolioItem from "windows/FlunkfolioItem";
+import { getWalletStakeInfo } from "web3/script-get-wallet-stake-info";
 
 const CustomImage = styled.img`
   background-color: ${({ theme }) => theme.borderLight};
@@ -56,17 +58,17 @@ const ScrollViewWithBackground = styled(CustomScrollArea)`
 `;
 
 const GridedView: React.FC<{
-  items: MarketplaceIndividualNftDto[];
-  setActiveItem: (nft: MarketplaceIndividualNftDto) => void;
+  items: NftItem[];
+  setActiveItem: (nft: NftItem) => void;
 }> = ({ items, setActiveItem }) => {
   return (
     <div className="grid grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))]">
-      {items.map((nft: MarketplaceIndividualNftDto) => (
+      {items.map((nft: NftItem) => (
         <Frame variant="window" className="p-2">
           <Frame variant="field" className="relative !flex !flex-col">
             <Frame variant="well" className="!w-full !h-full">
               <CustomImage
-                src={nft.metadata.uri}
+                src={nft.MetadataViewsDisplay.thumbnail.url}
                 className="min-w-full min-h-full"
               />
             </Frame>
@@ -78,9 +80,9 @@ const GridedView: React.FC<{
                 >
                   <div className="text-xl flex items-center justify-between">
                     <span>
-                      {nft.collectionName === "flunks" ? "Flunk" : "Backpack"}
+                      {nft.collection === "Flunks" ? "Flunk" : "Backpack"}
                     </span>
-                    <span>#{nft.templateId}</span>
+                    <span>#{nft.serialNumber}</span>
                   </div>
                 </Frame>
                 <Frame
@@ -104,13 +106,67 @@ const GridedView: React.FC<{
   );
 };
 
+interface Thumbnail {
+  url: string;
+}
+
+interface MetadataViewsDisplay {
+  name: string;
+  description: string;
+  thumbnail: Thumbnail;
+}
+
+interface Trait {
+  name: string;
+  value: string;
+  displayType: string | null;
+  rarity: string | null;
+}
+
+interface Traits {
+  traits: Trait[];
+}
+
+interface StakingInfo {
+  staker: string;
+  tokenID: string;
+  stakedAtInSeconds: string;
+  pool: string;
+}
+
+export interface CombinedObject {
+  owner: string;
+  tokenID: string;
+  MetadataViewsDisplay: MetadataViewsDisplay;
+  traits: Traits;
+  serialNumber: string;
+  stakingInfo: StakingInfo;
+  collection: string;
+  rewards: string;
+  claimedRewards: string;
+  pixelUrl: string;
+}
+
+export interface NftItem {
+  owner: string;
+  tokenID: string;
+  MetadataViewsDisplay: MetadataViewsDisplay;
+  traits: Record<string, string>;
+  serialNumber: string;
+  stakingInfo: StakingInfo;
+  collection: string;
+  rewards: string;
+  claimedRewards: string;
+  pixelUrl: string;
+}
+
 const TableView: React.FC<{
-  items: MarketplaceIndividualNftDto[];
-  setActiveItem: (nft: MarketplaceIndividualNftDto) => void;
+  items: NftItem[];
+  setActiveItem: (nft: NftItem) => void;
 }> = ({ items, setActiveItem }) => {
   return (
     <div className="grid grid-cols-[repeat(auto-fill,_minmax(240px,_1fr))]">
-      {items.map((nft: MarketplaceIndividualNftDto) => (
+      {items.map((nft: NftItem) => (
         <button
           className="flex h-full group !p-0"
           onClick={() => {
@@ -118,7 +174,10 @@ const TableView: React.FC<{
           }}
         >
           <Frame variant="field" className="h-full flex-shrink-0">
-            <img src={nft.metadata.uri} className="h-full max-h-[40px]" />
+            <img
+              src={nft.MetadataViewsDisplay.thumbnail.url}
+              className="h-full max-h-[40px]"
+            />
           </Frame>
           <Frame variant="well" className="w-full h-full ">
             <div className="max-h-[40px] h-[40px] !flex flex-col items-start justify-start">
@@ -127,8 +186,8 @@ const TableView: React.FC<{
                   variant="status"
                   className="w-full h-full px-3 !flex items-center"
                 >
-                  {nft.collectionName === "flunks" ? "Flunk" : "Backpack"} #
-                  {nft.templateId}
+                  {nft.collection === "Flunks" ? "Flunk" : "Backpack"} #
+                  {nft.serialNumber}
                 </Frame>
 
                 <Frame
@@ -165,16 +224,59 @@ const ItemsGrid: React.FC = () => {
     value: 0,
     label: "All Items",
   });
+  const [data, setData] = useState<CombinedObject[]>(null!);
 
-  const { data } = useUsersControllerGetUserNftsByWalletAddress(walletAddress);
+  useEffect(() => {
+    getWalletStakeInfo(walletAddress).then(setData);
+  }, []);
 
-  const memodCombinedItems = useMemo(() => {
+  const memodDataByCollection = useMemo<NftItem[]>(() => {
+    if (!data) return [];
+
+    const dataByCollection = data?.reduce(
+      (acc, item) => {
+        if (item.collection === "Flunks") {
+          acc.Flunks.push(item);
+        } else if (item.collection === "Backpack") {
+          acc.Backpack.push(item);
+        }
+        return acc;
+      },
+      { Flunks: [], Backpack: [] }
+    );
+
+    return dataByCollection;
+  }, [data]);
+
+  const memodCombinedItems = useMemo<NftItem[]>(() => {
+    if (!data) return [];
+
+    const dataByCollection = data?.reduce(
+      (acc, item) => {
+        if (Array.isArray(item?.traits?.traits)) {
+          // @ts-ignore
+          item.traits = item.traits.traits.reduce((acc, trait) => {
+            acc[trait.name] = trait.value;
+            return acc;
+          }, {}) as NftItem["traits"];
+        }
+
+        if (item.collection === "Flunks") {
+          acc.Flunks.push(item);
+        } else if (item.collection === "Backpack") {
+          acc.Backpack.push(item);
+        }
+        return acc;
+      },
+      { Flunks: [], Backpack: [] }
+    );
+
     if (activeCollection.value === 0) {
-      return Object.values(data?.data || {}).flat();
+      return data;
     } else if (activeCollection.value === 1) {
-      return data?.data?.Flunks || [];
+      return dataByCollection.Flunks || [];
     } else {
-      return data?.data?.Backpack || [];
+      return dataByCollection.Backpack || [];
     }
   }, [data, activeCollection]);
 
@@ -189,6 +291,47 @@ const ItemsGrid: React.FC = () => {
 
   const noItems = !memodCombinedItems?.length;
 
+  const handleOpenFlunkfolioItem = (nft: NftItem) => {
+    openWindow({
+      key: `${WINDOW_IDS.FLUNKFOLIO_ITEM}${nft.serialNumber}`,
+      window: (
+        <FlunkfolioItem
+          title={`${nft.collection === "Flunks" ? "Flunk" : "Backpack"} #${
+            nft.serialNumber
+          } - Full Details`}
+          templateId={nft.serialNumber}
+        >
+          {nft.collection === "Flunks" && (
+            <CustomStyledScrollView
+              ref={scrollViewRef}
+              className="!p-0 !w-full max-w-full !m-0 [&>div]:!p-0"
+              style={{
+                height: nft ? "100%" : "calc(100% - 160px)",
+              }}
+            >
+              <ScrollViewWithBackground>
+                <FlunkItem {...nft} onBack={() => setActiveItem(null)} />
+              </ScrollViewWithBackground>
+            </CustomStyledScrollView>
+          )}
+          {nft.collection === "Backpack" && (
+            <CustomStyledScrollView
+              ref={scrollViewRef}
+              className="!p-0 !w-full max-w-full !m-0 [&>div]:!p-0"
+              style={{
+                height: nft ? "100%" : "calc(100% - 160px)",
+              }}
+            >
+              <ScrollViewWithBackground>
+                <BackpackItem {...nft} onBack={() => setActiveItem(null)} />
+              </ScrollViewWithBackground>
+            </CustomStyledScrollView>
+          )}
+        </FlunkfolioItem>
+      ),
+    });
+  };
+
   return (
     <div className="!w-full !h-full max-w-full max-h-full flex flex-col">
       {!activeItem && (
@@ -202,7 +345,7 @@ const ItemsGrid: React.FC = () => {
                 >
                   <span className="text-lg">Flunks</span>
                   <span className="text-lg font-bold">
-                    {data?.data?.Flunks?.length || 0}
+                    {memodDataByCollection?.Flunks?.length || 0}
                   </span>
                 </Frame>
               </div>
@@ -213,7 +356,7 @@ const ItemsGrid: React.FC = () => {
                 >
                   <span className="text-lg">Backpacks</span>
                   <span className="text-lg font-bold">
-                    {data?.data?.Backpack?.length || 0}
+                    {memodDataByCollection?.Backpack?.length || 0}
                   </span>
                 </Frame>
               </div>
@@ -267,12 +410,12 @@ const ItemsGrid: React.FC = () => {
               ]}
               width={140}
               onChange={(e) => {
-                console.log(e);
+                // @ts-ignore
                 setActiveCollection(e);
               }}
               disabled={
-                data?.data?.Flunks?.length === 0 ||
-                data?.data?.Backpack?.length === 0 ||
+                memodDataByCollection?.Flunks?.length === 0 ||
+                memodDataByCollection?.Backpack?.length === 0 ||
                 noItems
               }
               variant="default"
@@ -359,42 +502,18 @@ const ItemsGrid: React.FC = () => {
           <ScrollViewWithBackground>
             {viewType === "grid" && (
               <GridedView
+                // @ts-ignore
                 items={memodCombinedItems}
-                setActiveItem={setActiveItem}
+                setActiveItem={handleOpenFlunkfolioItem}
               />
             )}
             {viewType === "table" && (
               <TableView
+                // @ts-ignore
                 items={memodCombinedItems}
-                setActiveItem={setActiveItem}
+                setActiveItem={handleOpenFlunkfolioItem}
               />
             )}
-          </ScrollViewWithBackground>
-        </CustomStyledScrollView>
-      )}
-      {activeItem && activeItem.collectionName === "flunks" && (
-        <CustomStyledScrollView
-          ref={scrollViewRef}
-          className="!p-0 !w-full max-w-full !m-0 [&>div]:!p-0"
-          style={{
-            height: activeItem ? "100%" : "calc(100% - 160px)",
-          }}
-        >
-          <ScrollViewWithBackground>
-            <FlunkItem {...activeItem} onBack={() => setActiveItem(null)} />
-          </ScrollViewWithBackground>
-        </CustomStyledScrollView>
-      )}
-      {activeItem && activeItem.collectionName === "backpack" && (
-        <CustomStyledScrollView
-          ref={scrollViewRef}
-          className="!p-0 !w-full max-w-full !m-0 [&>div]:!p-0"
-          style={{
-            height: activeItem ? "100%" : "calc(100% - 160px)",
-          }}
-        >
-          <ScrollViewWithBackground>
-            <BackpackItem {...activeItem} onBack={() => setActiveItem(null)} />
           </ScrollViewWithBackground>
         </CustomStyledScrollView>
       )}

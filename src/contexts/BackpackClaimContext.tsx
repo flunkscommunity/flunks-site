@@ -1,9 +1,7 @@
 import getBackpackClaimedData, {
   FormattedBackpackClaimData,
 } from "api/getBackpackClaimedData";
-import { useRouter } from "next/router";
-import React, { createContext, useContext, useEffect, useReducer } from "react";
-import reducer from "reducers/ClaimDataReducer";
+import React, { createContext, useContext } from "react";
 import useSWR from "swr";
 
 interface ContextProps {

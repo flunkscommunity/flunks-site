@@ -6,15 +6,24 @@ const TraitItem = ({ traitName, traitValue }) => {
     <div className="flex flex-row w-full">
       <Frame
         variant="status"
-        className="w-auto min-w-[50%] px-2 py-1 !flex gap-2"
+        className="!flex items-center justify-center w-auto p-2"
       >
         <img
-          src={`/images/icons/Icon-${traitName}.png`}
-          className="h-6 lg:h-8 w-auto"
+          src={
+            traitName === "slots"
+              ? `/images/icons/Icon-slots.png`
+              : `/images/icons/Icon-${traitName}.png`
+          }
+          className="flex-shrink-0"
         />
-        <span className="text-base lg:text-xl capitalize">{traitName}</span>
       </Frame>
-      <Frame variant="status" className="w-full truncate text-nowrap px-2 py-1">
+      <Frame
+        variant="status"
+        className="w-auto min-w-[40%] px-2 py-1 !flex gap-2 items-center"
+      >
+        <span className="text-base lg:text-xl capitalize font-bold">{traitName}</span>
+      </Frame>
+      <Frame variant="status" className="w-full truncate text-wrap !flex items-center px-2 py-1">
         <span className="text-base lg:text-xl capitalize">{traitValue}</span>
       </Frame>
     </div>
@@ -28,7 +37,7 @@ const TraitSection = ({ metadata }) => {
   );
 
   return (
-    <div className="mt-6 flex flex-col px-3 gap-2">
+    <div className="mt-6 flex flex-col px-3 gap-2 max-w-[1440px] mx-auto">
       <span className="text-lg font-bold">TRAITS</span>
       <div className="flex flex-col w-full">
         {Object.entries(metadata).map(([traitName, traitValue]) => {

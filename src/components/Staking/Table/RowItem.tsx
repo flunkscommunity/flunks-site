@@ -1,11 +1,7 @@
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { StakingInfo, useStakingContext } from "contexts/StakingContext";
 import React from "react";
 import { Button, TableDataCell, TableRow } from "react95";
 import styled from "styled-components";
-import { getTokenStakeInfo } from "web3/script-get-token-stake-info";
-import { getPendingRewardsOne } from "web3/script-pending-reward-one";
-import { stakeOne } from "web3/tx-stake-one";
 
 const CustomTableDataCell = styled(TableDataCell)`
   flex: 1 0 0%;
@@ -69,12 +65,12 @@ const RowItem: React.FC<RowItemProps> = (props) => {
         )}
         {props.stakingInfo && (
           <Button
-            onClick={() =>
+            onClick={() => {
               unstakeSingle(
                 props.collectionName as "Backpack" | "Flunks",
                 props.tokenId
-              )
-            }
+              );
+            }}
             size="sm"
             variant="thin"
           >

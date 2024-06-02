@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Monitor } from "react95";
+import { Button, Frame, Monitor } from "react95";
 import useThemeSettings from "store/useThemeSettings";
 
 const DesktopBackgroundSection = ({ src, itemSrc, pixelSrc }) => {
@@ -64,13 +64,13 @@ const DesktopBackgroundSection = ({ src, itemSrc, pixelSrc }) => {
   };
 
   return (
-    <div className="mt-6 flex flex-col px-3">
+    <div className="mt-6 flex flex-col px-3 max-w-[1440px] mx-auto">
       <span className="text-lg font-bold">DESKTOP BACKGROUND</span>
       <div className="flex flex-col w-full gap-5">
         <span className="text-base lg:text-lg">
           Use your Flunks or your Flunks' backdrop as your desktop background
         </span>
-        <div className="mx-auto flex flex-col">
+        <Frame variant="well" className="mx-auto !flex flex-col w-full px-2 py-10">
           <div className="mx-auto">
             <Monitor
               backgroundStyles={{
@@ -83,17 +83,17 @@ const DesktopBackgroundSection = ({ src, itemSrc, pixelSrc }) => {
               }}
             />
           </div>
-          <div className="!w-full !flex items-center justify-between my-2">
-            <Button onClick={handlePrev} variant="menu" square>
+          <div className="flex w-full max-w-[240px] mx-auto items-start justify-between my-2 gap-2 mt-3">
+            <Button onClick={handlePrev} square variant="thin" className="flex-shrink-0">
               <img src="/images/icons/arrow-left.png" className="h-6 w-auto" />
             </Button>
-            <div className="flex items-center gap-1">
+            <Frame variant="well" className="!flex justify-center items-center gap-1 w-full py-1.5">
               {activeBg.src === backgroundImage && (
                 <div className="h-2.5 w-2.5 bg-green-500 rounded-full" />
               )}
               <span className="text-lg leading-[1]">{activeBg.label}</span>
-            </div>
-            <Button onClick={handleNext} variant="menu" square>
+            </Frame>
+            <Button onClick={handleNext} square variant="thin" className="flex-shrink-0">
               <img src="/images/icons/arrow-right.png" className="h-6 w-auto" />
             </Button>
           </div>
@@ -101,10 +101,11 @@ const DesktopBackgroundSection = ({ src, itemSrc, pixelSrc }) => {
             onClick={() => {
               setBackgroundImage(activeBg.src);
             }}
+            className="mx-auto"
           >
             Set as Desktop Background
           </Button>
-        </div>
+        </Frame>
       </div>
     </div>
   );

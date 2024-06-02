@@ -1,9 +1,8 @@
-import { MarketplaceIndividualNftDto } from "api/generated";
 import { FlunkImage } from "components/CustomMonitor";
 import { H1, H3, P } from "components/Typography";
 import { useFclTransactionContext } from "contexts/FclTransactionContext";
 import { useEffect, useRef, useState } from "react";
-import { Button, Frame, ProgressBar, Toolbar } from "react95";
+import { Button, Frame, ProgressBar } from "react95";
 import { TX_STATUS } from "reducers/TxStatusReducer";
 import Typewriter from "typewriter-effect";
 import { graduate } from "web3/tx-grauate";
@@ -14,9 +13,11 @@ import {
   CustomScrollArea,
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
+import { MarketplaceIndividualNftDto } from "generated/models";
+import { NftItem } from "components/YourItems/ItemsGrid";
 
 interface GraduationInitProps {
-  flunk: MarketplaceIndividualNftDto;
+  flunk: NftItem;
 }
 
 export const uInt64StrToDate = (uInt64Str: string): Date => {
@@ -30,34 +31,22 @@ export const uInt64StrToDate = (uInt64Str: string): Date => {
 const GraduationInit: React.FC<GraduationInitProps> = (props) => {
   const { flunk } = props;
   const { executeTx, state } = useFclTransactionContext();
-  const [startHack, setStartHack] = useState(false);
   const [endHacking, setEndHacking] = useState(false);
   const [percentage, setPercentage] = useState(0);
   const divOverlayRef = useRef<HTMLDivElement>(null);
   const [graduatedUrl, setGraduatedUrl] = useState("");
   const [canGraduate, setCanGraduate] = useState(true);
-  const [graduationDate, setGraduationDate] = useState();
 
   useEffect(() => {
     if (!flunk) return;
 
     checkGraduationDates().then((data) => {
-      const graduationDate = uInt64StrToDate(data[flunk.tokenId].toString());
-      console.log(graduationDate);
+      const graduationDate = uInt64StrToDate(data[flunk.tokenID].toString());
       if (graduationDate) {
         setCanGraduate(isAfter(new Date(), graduationDate));
       }
     });
   }, [flunk]);
-
-  // useEffect(() => {
-  //   if (!flunk) return;
-
-  //   checkCanGraduate({ tokenId: flunk.tokenId }).then((data) => {
-  //     console.log(data);
-  //     setCanGraduate(data);
-  //   });
-  // }, [flunk]);
 
   const sha256 = async (str: string) => {
     const buf = new TextEncoder().encode(str);
@@ -72,7 +61,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
   useEffect(() => {
     if (!flunk) return;
 
-    sha256(flunk.templateId.toString()).then((hash) => {
+    sha256(flunk.serialNumber.toString()).then((hash) => {
       setGraduatedUrl(
         `https://storage.googleapis.com/flunk-graduation/${hash}.png`
       );
@@ -82,7 +71,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
   const handleGraduate = () => {
     executeTx(
       graduate({
-        tokenID: flunk.tokenId,
+        tokenID: Number(flunk.tokenID),
       })
     );
   };
@@ -127,23 +116,23 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
     "You can turn off this feature to get a quicker startup with -A",
     "",
     "Database changed",
-    `mysql> SELECT * FROM students WHERE name='Flunk #${flunk.templateId}';`,
+    `mysql> SELECT * FROM students WHERE name='Flunk #${flunk.serialNumber}';`,
     "+--------+-------+-------+-------+-------+-------+",
     "| name   | math  | science  | history  | english  | average  |",
     "+--------+-------+-------+-------+-------+-------+",
-    `| Flunk #${flunk.templateId}  | 50    | 45    | 40    | 35    | 42.5  |`,
+    `| Flunk #${flunk.serialNumber}  | 50    | 45    | 40    | 35    | 42.5  |`,
     "+--------+-------+-------+-------+-------+-------+",
     "1 row in set (0.00 sec)",
     "",
-    `mysql> UPDATE students SET math=95, science=90, history=85, english=80, average=(95+90+85+80)/4 WHERE name='Flunk ${flunk.templateId}';`,
+    `mysql> UPDATE students SET math=95, science=90, history=85, english=80, average=(95+90+85+80)/4 WHERE name='Flunk ${flunk.serialNumber}';`,
     "Query OK, 1 row affected (0.00 sec)",
     "Rows matched: 1  Changed: 1  Warnings: 0",
     "",
-    `mysql> SELECT * FROM students WHERE name='Flunk #${flunk.templateId}';`,
+    `mysql> SELECT * FROM students WHERE name='Flunk #${flunk.serialNumber}';`,
     "+--------+-------+-------+-------+-------+-------+",
     "| name   | math  | science  | history  | english  | average  |",
     "+--------+-------+-------+-------+-------+-------+",
-    `| Flunk #${flunk.templateId}  | 95    | 90    | 85    | 80    | 88.75  |`,
+    `| Flunk #${flunk.serialNumber}  | 95    | 90    | 85    | 80    | 88.75  |`,
     "+--------+-------+-------+-------+-------+-------+",
     "1 row in set (0.00 sec)",
     "",
@@ -209,7 +198,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
                   target="_blank"
                   rel="noreferrer noopener"
                   href={graduatedUrl}
-                  download={`#${flunk.templateId}.png`}
+                  download={`#${flunk.serialNumber}.png`}
                 >
                   <Button onClick={handleLoadFaster}>
                     Save Graduated Image
@@ -231,7 +220,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
             />
           </div>
 
-          <H3>Flunk #{flunk.templateId}</H3>
+          <H3>Flunk #{flunk.serialNumber}</H3>
 
           <P
             style={{
@@ -260,15 +249,11 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
             </div>
           )}
 
-          <P className="max-w-[350px] !px-2">
+          <P className="max-w-[350px] !px-2 !text-center">
             Congratulations on your graduation! You have worked hard and
-            achieved an important milestone. I wish you all the best as you move
-            on to the next phase of your life and pursue your dreams. Well done!
-          </P>
-          <br />
-          <P className="max-w-[350px] !px-2">
-            It's amazing to think about how much you have grown and changed over
-            the past year. Here is your graduation photo:
+            achieved an important milestone. We wish you all the best as you
+            move on to the next phase of your life and pursue your dreams. Well
+            done!
           </P>
         </CustomScrollArea>
       </CustomStyledScrollView>

@@ -1,9 +1,5 @@
-import { useWindowsContext } from "contexts/WindowsContext";
 import useWindowSize from "hooks/useWindowSize";
-import Draggable from "react-draggable";
 import styled from "styled-components";
-import StudentExplorer from "windows/StudentExplorer";
-import { H1, H4 } from "./Typography";
 
 interface Props {
   title: string;
