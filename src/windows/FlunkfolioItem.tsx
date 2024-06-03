@@ -21,6 +21,7 @@ const FlunkfolioItem: React.FC<Props> = (props) => {
       headerTitle={title}
       initialHeight="70%"
       initialWidth="auto"
+      headerIcon="/images/icons/vault.png"
     >
       {children}
     </DraggableResizeableWindow>

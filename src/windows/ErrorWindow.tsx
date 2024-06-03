@@ -43,6 +43,7 @@ const ErrorWindow: React.FC<Props> = (props) => {
           minWidth: "auto",
         }}
         resizable={false}
+        headerIcon="/images/icons/error.png"
       >
         <div className="flex flex-col h-full gap-2 justify-center">
           <div className="flex flex-col items-start gap-10">

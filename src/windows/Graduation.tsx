@@ -22,6 +22,7 @@ const Graduation: React.FC<Props> = (props) => {
       initialHeight="70%"
       initialWidth="40%"
       windowsId={`graduation-${flunk.serialNumber}`}
+      headerIcon="/images/icons/graduation.png"
     >
       <FclTransactionProvider>
         <GraduationInit flunk={flunk} />

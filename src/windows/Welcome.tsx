@@ -3,30 +3,26 @@ import { useState, useEffect } from "react";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
-import { Button, Frame, Checkbox, Separator } from "react95";
+import { Button, Frame, Checkbox, Separator, Anchor } from "react95";
 import GumballMachine from "./GumballMachine";
 import WelcomePopup from "./WelcomePopup";
+import useGettingStarted from "store/useGettingStarted";
 
 const Welcome: React.FC = () => {
   const { closeWindow, openWindow } = useWindowsContext();
   const [tipIndex, setTipIndex] = useState(0);
-  const [showWelcome, setShowWelcome] = useState(true);
+  const {
+    showGettingStartedOnStartup: showWelcome,
+    setShowGettingStartedOnStartup: setShowWelcome,
+  } = useGettingStarted();
 
   const handleNextTip = () => {
     setTipIndex((prevIndex) => (prevIndex + 1) % tips.length);
   };
 
-  useEffect(() => {
-    const showWelcomeScreen = localStorage.getItem("showWelcomeScreen");
-    if (showWelcomeScreen === "false") {
-      setShowWelcome(false);
-    }
-  }, []);
-
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.target.checked;
     setShowWelcome(isChecked);
-    localStorage.setItem("showWelcomeScreen", isChecked.toString());
   };
 
   const icon = "/images/icons/did-you-know.png";
@@ -41,46 +37,36 @@ const Welcome: React.FC = () => {
     <p>
       [3/5] You'll need to create an account and login with a non-custodial
       wallet like{" "}
-      <a
-        href="https://lilico.app/"
-        target="_blank"
-        className="underline text-blue-500"
-      >
+      <Anchor href="https://lilico.app/" target="_blank">
         Lilico
-      </a>{" "}
+      </Anchor>{" "}
       and{" "}
-      <a
-        href="https://blocto.io/"
-        target="_blank"
-        className="underline text-blue-500"
-      >
+      <Anchor href="https://blocto.io/" target="_blank">
         Blocto
-      </a>{" "}
+      </Anchor>{" "}
       to have full access to Flunks95
     </p>,
     <p>
       [4/5] You can get Flunks items on marketplaces like{" "}
-      <a
+      <Anchor
         target="_blank"
         href="https://www.flowty.io/collection/0x807c3d470888cc48/Flunks"
-        className="underline text-blue-500"
       >
         Flowty
-      </a>
+      </Anchor>
     </p>,
     <p>
       [5/5] You can stake your Flunks items at the{" "}
-      <span
+      <Anchor
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.GUMBALL_MACHINE,
             window: <GumballMachine />,
           })
         }
-        className="underline text-blue-500 cursor-pointer"
       >
         Gumball Machine
-      </span>{" "}
+      </Anchor>{" "}
       to earn $GUM
     </p>,
   ];
@@ -92,7 +78,7 @@ const Welcome: React.FC = () => {
           offSetHeight={44}
           headerTitle="Getting Started"
           headerIcon="/images/icons/getting_started.png"
-          initialHeight="auto"
+          initialHeight="416px"
           initialWidth="auto"
           resizable={false}
           showMaximizeButton={false}
@@ -100,6 +86,7 @@ const Welcome: React.FC = () => {
           onClose={() => {
             closeWindow(WINDOW_IDS.WELCOME);
           }}
+          windowClassName="lg:!absolute lg:!top-1/2 lg:!left-1/2 lg:!transform lg:!-translate-x-1/2 lg:!-translate-y-1/2 lg:!min-w-[700px] !z-0"
         >
           <div className="p-4">
             <h1 className="lg:text-4xl text-3xl font-bold">
@@ -108,10 +95,10 @@ const Welcome: React.FC = () => {
             <div className="lg:flex-row flex flex-col gap-6">
               <section className="basis-2/3 flex flex-col">
                 <Frame
-                  className="!gap-4 lg:mt-8 mt-4 p-8 h-[12rem] lg:h-[10rem] max-w-[32rem]"
+                  className="!gap-4 lg:mt-8 mt-4 p-8 min-h-[12rem] lg:min-h-[10rem] max-w-[32rem]"
                   variant="field"
                 >
-                  <div className="flex">
+                  <div className="flex gap-2 mb-2 items-center">
                     <img src={icon} className="pr-2"></img>
                     <h2 className="text-xl font-bold pt-2">Did you know...</h2>
                   </div>

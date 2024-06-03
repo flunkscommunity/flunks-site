@@ -192,7 +192,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
             onDoubleClick={handleMaximize}
           >
             <div className="flex items-center gap-2">
-              {headerIcon && <img src={headerIcon}></img>}
+              {headerIcon && <img src={headerIcon} className="h-5"></img>}
               <span className="!text-xl">{headerTitle}</span>
             </div>
             {showHeaderActions && (

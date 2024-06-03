@@ -131,6 +131,7 @@ const AboutUs = () => {
       windowsId={WINDOW_IDS.ABOUT_US}
       resizable={false}
       showMaximizeButton={false}
+      headerIcon="/images/icons/about-us.png"
     >
       <CustomStyledScrollView className="!h-full !w-full">
         <CustomScrollArea
@@ -143,14 +144,14 @@ const AboutUs = () => {
           >
             <div className="h-full relative mx-auto min-h-[600px] w-full px-4 lg:px-20 py-10 lg:py-[80px] !flex flex-col items-start justify-start gap-10 md:gap-[112px]">
               <div className="flex flex-col max-w-[1440px] mx-auto lg:flex-col gap-10 items-start w-full">
-                <img src="/images/logos/flunks.png" className="h-24" />
+                <img src="/images/logos/flunks.png" className="h-[50px] lg:h-24" />
                 <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty">
                   Flunks is a web3 brand that blends high school nostalgia with
                   the excitement of NFTs and modern technology.
                 </span>
               </div>
 
-              <div className="flex flex-col max-w-[1440px] mx-auto lg:flex-row gap-10 items-center justify-end w-full">
+              <div className="flex flex-col max-w-[1440px] mx-auto gap-10 items-end w-full">
                 <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty">
                   Founded in 2022 by web3 enthusiasts, Flunks has quickly become
                   a staple in the FLOW ecosystem. Our mission is to deliver a
@@ -158,7 +159,7 @@ const AboutUs = () => {
                 </span>
               </div>
 
-              <div className="flex flex-col max-w-[1440px] mx-auto lg:flex-row gap-10 items-center justify-between w-full">
+              <div className="flex flex-col max-w-[1440px] mx-auto gap-10 items-start w-full">
                 <span className="text-3xl md:text-6xl font-bold max-w-2xl text-pretty">
                   <Anchor
                     href={discordStats?.instant_invite}

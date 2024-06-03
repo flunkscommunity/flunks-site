@@ -33,6 +33,7 @@ const useWindowSize = () => {
 
   return {
     ...windowSize,
+    isMobile,
     isTablet,
   };
 };

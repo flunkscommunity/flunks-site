@@ -59,7 +59,7 @@ const GumDashboard = () => {
     pendingRewards,
     stakeAll,
     claimAll,
-    isDapper,
+    canStake,
     refreshStakeInfo,
     walletStakeInfo,
   } = useStakingContext();
@@ -139,7 +139,7 @@ const GumDashboard = () => {
         <MenuListItem square={true} disabled className="!relative">
           <img
             src={
-              isDapper
+              canStake
                 ? "/images/icons/gum-inactive.png"
                 : "/images/icons/gum-active.png"
             }
@@ -150,7 +150,7 @@ const GumDashboard = () => {
         <MenuListItem
           onClick={stakeAll}
           disabled={
-            isDapper ||
+            !canStake ||
             walletStakeInfo.every((info) => info.stakingInfo !== null) ||
             walletStakeInfo.length < 1
           }
@@ -161,7 +161,7 @@ const GumDashboard = () => {
         <MenuListItem
           className="!cursor-pointer flex items-center gap-2"
           onClick={handleRefreshInfo}
-          disabled={isDapper || refreshTimer > 0 || walletStakeInfo.length < 1}
+          disabled={!canStake || refreshTimer > 0 || walletStakeInfo.length < 1}
         >
           {refreshTimer > 0 && (
             <Hourglass size={16} className="opacity-50 mb-0.5" />
@@ -171,7 +171,7 @@ const GumDashboard = () => {
         <MenuListItem
           onClick={claimAll}
           disabled={
-            isDapper || walletStakeInfo.length < 1 || pendingRewards === 0
+            !canStake || walletStakeInfo.length < 1 || pendingRewards === 0
           }
           className="!cursor-pointer"
         >
