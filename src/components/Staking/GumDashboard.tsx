@@ -139,7 +139,7 @@ const GumDashboard = () => {
         <MenuListItem square={true} disabled className="!relative">
           <img
             src={
-              canStake
+              !canStake
                 ? "/images/icons/gum-inactive.png"
                 : "/images/icons/gum-active.png"
             }

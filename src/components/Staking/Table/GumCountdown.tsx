@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { differenceInSeconds, format } from "date-fns";
 import { useStakingContext } from "contexts/StakingContext";
 
-const GumCountdown = ({ targetDate }) => {
+const targetDate = new Date("2024-06-03T19:00:00.00Z");
+
+const GumCountdown = () => {
   const { setCanStake } = useStakingContext();
   const [timeRemaining, setTimeRemaining] = useState(
     differenceInSeconds(new Date(targetDate), new Date())

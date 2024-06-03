@@ -73,7 +73,7 @@ const StakeableItemsTable = () => {
             </CustomTableHeadCell>
           </TableRow>
         </TableHead>
-        {!canStake && <GumCountdown targetDate={new Date("2024-06-03T19:00:00.00Z")} />}
+        {!canStake && <GumCountdown />}
 
         {canStake && (
           <TableBody className="!h-full !flex !flex-col !w-full no-scrollbar">
