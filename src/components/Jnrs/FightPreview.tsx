@@ -61,10 +61,10 @@ const JnrCard = ({
         };
       },
       {
-        attack: 0,
+        attack: 10,
         defense: 0,
         speed: 0,
-        health: 0,
+        health: 20,
         crit: 0,
         hit: 0,
         dodge: 0,
@@ -104,9 +104,7 @@ const JnrCard = ({
             >
               <span className="lg:text-2xl">{stat.name}</span>
               <span className="lg:text-2xl">
-                {stat.name === "Health"
-                  ? 20 + statsCombined[stat.stat]
-                  : statsCombined[stat.stat]}
+                {statsCombined[stat.stat]}
                 {PERCENTAGE_STATS.includes(stat.stat) ? "%" : ""}
               </span>
             </Frame>

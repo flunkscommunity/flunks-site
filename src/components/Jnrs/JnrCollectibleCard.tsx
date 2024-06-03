@@ -7,34 +7,7 @@ import { CLASSES } from "windows/ProjectJnr";
 import { toPng } from "html-to-image";
 
 const JnrCollectibleCard = () => {
-  const { selectedTraits, selectedClass } = useJnrCanvas();
-  const statsCombined = useMemo(() => {
-    if (!selectedTraits) return {};
-    return Object.values(selectedTraits).reduce(
-      (acc, trait) => {
-        if (!trait) return acc;
-        const stats = trait.stats;
-        return {
-          attack: acc.attack + (stats.attack || 0),
-          defense: acc.defense + (stats.defense || 0),
-          speed: acc.speed + (stats.speed || 0),
-          health: acc.health + (stats.health || 0),
-          crit: acc.crit + (stats.crit || 0),
-          hit: acc.hit + (stats.hit || 0),
-          dodge: acc.dodge + (stats.dodge || 0),
-        };
-      },
-      {
-        attack: 0,
-        defense: 0,
-        speed: 0,
-        health: 40,
-        crit: 0,
-        hit: 0,
-        dodge: 0,
-      }
-    );
-  }, [selectedTraits]);
+  const { selectedTraits, selectedClass, statsCombined } = useJnrCanvas();
 
   const theme = useTheme();
 
