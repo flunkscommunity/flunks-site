@@ -28,7 +28,8 @@ const CustomTableDataCell = styled(TableDataCell)`
 `;
 
 const StakeableItemsTable = () => {
-  const { canStake, walletStakeInfo, sortStakeInfo } = useStakingContext();
+  const { canStake, walletStakeInfo, sortStakeInfo, canLoadData } =
+    useStakingContext();
   const nameOrderByRef = useRef<"asc" | "dsc">("dsc");
   const earnedOrderByRef = useRef<"asc" | "dsc">("dsc");
   const earningOrderByRef = useRef<"asc" | "dsc">("dsc");
@@ -75,7 +76,7 @@ const StakeableItemsTable = () => {
         </TableHead>
         {!canStake && <GumCountdown />}
 
-        {canStake && (
+        {canStake && canLoadData && (
           <TableBody className="!h-full !flex !flex-col !w-full no-scrollbar">
             {walletStakeInfo.length < 1 && (
               <TableRow className="!flex !items-center !w-full">
@@ -99,6 +100,26 @@ const StakeableItemsTable = () => {
                   rewards={item.rewards}
                 />
               ))}
+          </TableBody>
+        )}
+
+        {canStake && !canLoadData && (
+          <TableBody className="!relative !h-full !flex !flex-col !w-full !items-center pt-10">
+            <span className="text-3xl">🐋</span>
+            <span className="text-xl font-bold my-2">
+              Your wallet is too large
+            </span>
+
+            <span className="text-base max-w-[230px] text-center">
+              The Gum Machine app is unable to load your items due to the large
+              size of your wallet. We're working diligently to resolve this
+              issue as soon as possible. We apologize for the inconvenience and
+              appreciate your patience.
+              <br />
+              <br />
+              In the mean time you can still stake your items and claim accrued
+              gum using the buttons above!
+            </span>
           </TableBody>
         )}
       </Table>

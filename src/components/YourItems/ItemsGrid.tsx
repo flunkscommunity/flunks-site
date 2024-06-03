@@ -39,6 +39,7 @@ import {
 } from "components/CustomStyledScrollView";
 import FlunkfolioItem from "windows/FlunkfolioItem";
 import { getWalletStakeInfo } from "web3/script-get-wallet-stake-info";
+import { getWalletInfoShallow } from "web3/script-get-wallet-items-shallow";
 
 const CustomImage = styled.img`
   background-color: ${({ theme }) => theme.borderLight};
@@ -224,11 +225,28 @@ const ItemsGrid: React.FC = () => {
     value: 0,
     label: "All Items",
   });
+  const [canLoadData, setCanLoadData] = useState<boolean>(false);
   const [data, setData] = useState<CombinedObject[]>(null!);
 
   useEffect(() => {
-    getWalletStakeInfo(walletAddress).then(setData);
+    getWalletInfoShallow(walletAddress).then(
+      (data: { flunks: string[]; backpack: string[] }) => {
+        const flunkItems = data?.flunks?.length || 0;
+        const backpackItems = data?.backpack?.length || 0;
+
+        if (flunkItems + backpackItems > 80) {
+          setCanLoadData(false);
+        } else {
+          setCanLoadData(true);
+        }
+      }
+    );
   }, []);
+
+  useEffect(() => {
+    if (!canLoadData) return;
+    getWalletStakeInfo(walletAddress).then(setData);
+  }, [canLoadData]);
 
   const memodDataByCollection = useMemo<NftItem[]>(() => {
     if (!data) return [];
@@ -451,7 +469,7 @@ const ItemsGrid: React.FC = () => {
           <Separator className="!my-2" />
         </>
       )}
-      {noItems && (
+      {noItems && canLoadData && (
         <Frame
           variant="field"
           className="h-full !flex items-center justify-center flex-col"
@@ -489,6 +507,24 @@ const ItemsGrid: React.FC = () => {
               Backpacks on Flowty
             </Button>
           </a>
+        </Frame>
+      )}
+      {noItems && !canLoadData && (
+        <Frame
+          variant="field"
+          className="h-full !flex items-center justify-center flex-col"
+        >
+          <span className="text-3xl">🐋</span>
+          <span className="text-xl font-bold my-2">
+            Your wallet is too large
+          </span>
+
+          <span className="text-base max-w-[230px] text-center">
+            The Flunkfolio app is unable to load your items due to the large
+            size of your wallet. We're working diligently to resolve this issue
+            as soon as possible. We apologize for the inconvenience and
+            appreciate your patience.
+          </span>
         </Frame>
       )}
       {!activeItem && !noItems && (
