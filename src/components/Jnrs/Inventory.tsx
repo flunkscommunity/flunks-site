@@ -93,7 +93,7 @@ export const TraitImage = ({
           <img
             key={index}
             src={src}
-            className="!absolute w-full h-full object-contain"
+            className="!absolute w-full h-full object-contain select-none pointer-events-none"
             style={{
               zIndex: index,
               opacity: [1, 4, 6, 7].includes(index) ? 0.2 : 1,

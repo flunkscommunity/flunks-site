@@ -10,8 +10,8 @@ const TraitItem = ({ traitName, traitValue }) => {
       >
         <img
           src={
-            traitName === "slots"
-              ? `/images/icons/Icon-slots.png`
+            traitName.toLocaleLowerCase() === "slots"
+              ? `/images/icons/slots.png`
               : `/images/icons/Icon-${traitName}.png`
           }
           className="flex-shrink-0"
