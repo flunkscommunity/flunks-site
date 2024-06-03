@@ -39,7 +39,7 @@ const Product = ({
                 <img
                   src={image}
                   alt="Flunk"
-                  className="w-[150px] h-[150px] lg:w-[375px] lg:h-[375px] object-cover bg-gray-200"
+                  className="w-[150px] h-[150px] lg:w-[375px] lg:h-[375px] object-cover bg-gray-200 select-none pointer-events-none"
                   style={{
                     imageRendering: "auto",
                   }}

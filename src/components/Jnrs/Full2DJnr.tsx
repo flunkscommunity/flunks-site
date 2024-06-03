@@ -114,56 +114,56 @@ const Full2DJnr: React.FC<{
       >
         <img
           src={back.thumbnail}
-          className="!absolute w-full h-full object-contain"
+          className="!absolute w-full h-full object-contain select-none pointer-events-none"
         />
         <img
           src={
             JNR_BASE_BY_CLASS[props.jnrClass?.toLocaleLowerCase()]?.bottoms ||
             "/images/jnr-traits/base-bottoms.png"
           }
-          className="!absolute w-full h-full object-contain"
+          className="!absolute w-full h-full object-contain select-none pointer-events-none"
         />
         <img
           src={shoes.thumbnail}
-          className="!absolute w-full h-full object-contain"
+          className="!absolute w-full h-full object-contain select-none pointer-events-none"
         />
         <img
           src={bottoms.thumbnail}
-          className="!absolute w-full h-full object-contain"
+          className="!absolute w-full h-full object-contain select-none pointer-events-none"
         />
         <img
           src={
             JNR_BASE_BY_CLASS[props.jnrClass?.toLocaleLowerCase()]?.torso ||
             "/images/jnr-traits/base-torso.png"
           }
-          className="!absolute w-full h-full object-contain"
+          className="!absolute w-full h-full object-contain select-none pointer-events-none"
         />
         <img
           src={torso.thumbnail}
-          className="!absolute w-full h-full object-contain"
+          className="!absolute w-full h-full object-contain select-none pointer-events-none"
         />
         <img
           src={
             JNR_BASE_BY_CLASS[props.jnrClass?.toLocaleLowerCase()]?.head ||
             "/images/jnr-traits/base-head.png"
           }
-          className="!absolute w-full h-full object-contain"
+          className="!absolute w-full h-full object-contain select-none pointer-events-none"
         />
         <img
           src="/images/jnr-traits/base-eyes.png"
-          className="!absolute w-full h-full object-contain"
+          className="!absolute w-full h-full object-contain select-none pointer-events-none"
         />
         <img
           src={head.thumbnail}
-          className="!absolute w-full h-full object-contain"
+          className="!absolute w-full h-full object-contain select-none pointer-events-none"
         />
         <img
           src={lh.thumbnail}
-          className="!absolute w-full h-full object-contain"
+          className="!absolute w-full h-full object-contain select-none pointer-events-none"
         />
         <img
           src={rh.thumbnail}
-          className="!absolute w-full h-full object-contain"
+          className="!absolute w-full h-full object-contain select-none pointer-events-none"
         />
         {props.extraLayers}
       </Frame>
@@ -177,56 +177,56 @@ const Full2DJnr: React.FC<{
     >
       <img
         src={back.thumbnail}
-        className="!absolute w-full h-full object-contain"
+        className="!absolute w-full h-full object-contain select-none pointer-events-none"
       />
       <img
         src={
           JNR_BASE_BY_CLASS[props.jnrClass?.toLocaleLowerCase()]?.bottoms ||
           "/images/jnr-traits/base-bottoms.png"
         }
-        className="!absolute w-full h-full object-contain"
+        className="!absolute w-full h-full object-contain select-none pointer-events-none"
       />
       <img
         src={shoes.thumbnail}
-        className="!absolute w-full h-full object-contain"
+        className="!absolute w-full h-full object-contain select-none pointer-events-none"
       />
       <img
         src={bottoms.thumbnail}
-        className="!absolute w-full h-full object-contain"
+        className="!absolute w-full h-full object-contain select-none pointer-events-none"
       />
       <img
         src={
           JNR_BASE_BY_CLASS[props.jnrClass?.toLocaleLowerCase()]?.torso ||
           "/images/jnr-traits/base-torso.png"
         }
-        className="!absolute w-full h-full object-contain"
+        className="!absolute w-full h-full object-contain select-none pointer-events-none"
       />
       <img
         src={torso.thumbnail}
-        className="!absolute w-full h-full object-contain"
+        className="!absolute w-full h-full object-contain select-none pointer-events-none"
       />
       <img
         src={
           JNR_BASE_BY_CLASS[props.jnrClass?.toLocaleLowerCase()]?.head ||
           "/images/jnr-traits/base-head.png"
         }
-        className="!absolute w-full h-full object-contain"
+        className="!absolute w-full h-full object-contain select-none pointer-events-none"
       />
       <img
         src="/images/jnr-traits/base-eyes.png"
-        className="!absolute w-full h-full object-contain"
+        className="!absolute w-full h-full object-contain select-none pointer-events-none"
       />
       <img
         src={head.thumbnail}
-        className="!absolute w-full h-full object-contain"
+        className="!absolute w-full h-full object-contain select-none pointer-events-none"
       />
       <img
         src={lh.thumbnail}
-        className="!absolute w-full h-full object-contain"
+        className="!absolute w-full h-full object-contain select-none pointer-events-none"
       />
       <img
         src={rh.thumbnail}
-        className="!absolute w-full h-full object-contain"
+        className="!absolute w-full h-full object-contain select-none pointer-events-none"
       />
       {props.extraLayers}
     </Frame>

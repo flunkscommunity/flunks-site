@@ -308,6 +308,7 @@ const ProjectJnr: React.FC = () => {
         initialWidth="100%"
         showMaximizeButton={false}
         resizable={false}
+        headerIcon="/images/icons/pocket-juniors-50x50.png"
       >
         <JnrTeaserMain />
        
