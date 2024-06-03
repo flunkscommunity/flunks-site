@@ -1,6 +1,6 @@
-import { WINDOW_APP_INFO_TO_WINDOW_ID } from "fixed";
+import { WINDOW_APP_INFO_TO_WINDOW_ID, WINDOW_IDS } from "fixed";
 import React, { useContext, createContext, useState, useEffect } from "react";
-import { track } from '@vercel/analytics';
+import { track } from "@vercel/analytics";
 
 interface WindowApp {
   key: string;
@@ -59,8 +59,10 @@ const WindowsProvider: React.FC<ProviderProps> = (props) => {
 
   const openWindow = (window: { key: string; window: React.ReactNode }) => {
     const { key, window: _window } = window;
- 
-    track('Window Opened', { window: key });
+
+    if (key !== WINDOW_IDS.WELCOME) {
+      track("Window Opened", { window: key });
+    }
 
     // If window is already open, bring it to the front of the UI by setting z-index
     if (windows[key]) {
