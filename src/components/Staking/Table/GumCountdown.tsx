@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { differenceInSeconds, format } from "date-fns";
 import { useStakingContext } from "contexts/StakingContext";
 
-const targetDate = new Date("2024-06-03T19:00:00.00Z");
+const targetDate = new Date("2024-06-03T22:00:00.00Z");
 
 const GumCountdown = () => {
   const { setCanStake } = useStakingContext();
