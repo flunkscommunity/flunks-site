@@ -1,12 +1,10 @@
 // prettier-ignore
-import {invariant} from "@onflow/util-invariant"
 import { mutate, authz } from "@onflow/fcl";
 
 const TRANSACTION = `import NonFungibleToken from 0x1d7e57aa55817448
 import Flunks from 0x807c3d470888cc48
 import Backpack from 0x807c3d470888cc48
 import Patch from 0x807c3d470888cc48
-
 
 transaction() {
   prepare(signer: AuthAccount) {
@@ -33,11 +31,11 @@ transaction() {
   }
 }`;
 
-export function initializeFlunksCollection() {
-  return async () =>
-    await mutate({
-      cadence: TRANSACTION as string,
-      authorizations: [authz],
-      limit: 1000,
-    });
-}
+export const initAllCollections = async () => {
+  return await mutate({
+    cadence: TRANSACTION as string,
+    // @ts-ignore
+    authorizations: [authz],
+    limit: 9999,
+  });
+};

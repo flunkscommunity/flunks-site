@@ -1,18 +1,23 @@
-import { MarketplaceIndividualNftDto } from "api/generated";
 import { FlunkImage } from "components/CustomMonitor";
 import { H1, H3, P } from "components/Typography";
 import { useFclTransactionContext } from "contexts/FclTransactionContext";
 import { useEffect, useRef, useState } from "react";
-import { Button, Frame, ProgressBar, Toolbar } from "react95";
+import { Button, Frame, ProgressBar } from "react95";
 import { TX_STATUS } from "reducers/TxStatusReducer";
 import Typewriter from "typewriter-effect";
 import { graduate } from "web3/tx-grauate";
 import Confetti from "react-confetti";
 import { checkGraduationDates } from "web3/script-get-graduation-date";
 import { isAfter } from "date-fns";
+import {
+  CustomScrollArea,
+  CustomStyledScrollView,
+} from "components/CustomStyledScrollView";
+import { MarketplaceIndividualNftDto } from "generated/models";
+import { NftItem } from "components/YourItems/ItemsGrid";
 
 interface GraduationInitProps {
-  flunk: MarketplaceIndividualNftDto;
+  flunk: NftItem;
 }
 
 export const uInt64StrToDate = (uInt64Str: string): Date => {
@@ -26,32 +31,29 @@ export const uInt64StrToDate = (uInt64Str: string): Date => {
 const GraduationInit: React.FC<GraduationInitProps> = (props) => {
   const { flunk } = props;
   const { executeTx, state } = useFclTransactionContext();
-  const [startHack, setStartHack] = useState(false);
   const [endHacking, setEndHacking] = useState(false);
   const [percentage, setPercentage] = useState(0);
   const divOverlayRef = useRef<HTMLDivElement>(null);
   const [graduatedUrl, setGraduatedUrl] = useState("");
-  const [canGraduate, setCanGraduate] = useState(false);
-  const [graduationDate, setGraduationDate] = useState();
+  const [canGraduate, setCanGraduate] = useState(true);
 
   useEffect(() => {
-    if (!flunk) return;
+    console.log(flunk.pixelUrl);
+    if (flunk.pixelUrl) {
+      setEndHacking(true);
 
-    checkGraduationDates().then((data) => {
-      const graduationDate = uInt64StrToDate(data[flunk.tokenId].toString());
-      console.log(graduationDate);
-      if (graduationDate) {
-        setCanGraduate(isAfter(new Date(), graduationDate));
-      }
-    });
-  }, [flunk]);
+      setPercentage(100);
+    }
+  }, []);
 
   // useEffect(() => {
   //   if (!flunk) return;
 
-  //   checkCanGraduate({ tokenId: flunk.tokenId }).then((data) => {
-  //     console.log(data);
-  //     setCanGraduate(data);
+  //   checkGraduationDates().then((data) => {
+  //     const graduationDate = uInt64StrToDate(data[flunk.tokenID].toString());
+  //     if (graduationDate) {
+  //       setCanGraduate(isAfter(new Date(), graduationDate));
+  //     }
   //   });
   // }, [flunk]);
 
@@ -68,7 +70,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
   useEffect(() => {
     if (!flunk) return;
 
-    sha256(flunk.templateId.toString()).then((hash) => {
+    sha256(flunk.serialNumber.toString()).then((hash) => {
       setGraduatedUrl(
         `https://storage.googleapis.com/flunk-graduation/${hash}.png`
       );
@@ -78,12 +80,10 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
   const handleGraduate = () => {
     executeTx(
       graduate({
-        tokenID: flunk.tokenId,
+        tokenID: Number(flunk.tokenID),
       })
     );
   };
-
-  // console.log("graduatedUrl", graduatedUrl);
 
   const hackTexts = [
     "$ ssh student@schoolserver.edu",
@@ -114,7 +114,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
     "Your MySQL connection id is 8",
     "Server version: 8.0.21 MySQL Community Server - GPL",
     "",
-    "Copyright (c) 1995, 2022, Flunks High and/or its affiliates. All rights reserved.",
+    `Copyright (c) 1995 - ${new Date().getFullYear()}, Flunks High and/or its affiliates. All rights reserved.`,
     "",
     "Type 'help;' or 'h' for help. Type 'c' to clear the current input statement.",
     "",
@@ -125,23 +125,23 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
     "You can turn off this feature to get a quicker startup with -A",
     "",
     "Database changed",
-    `mysql> SELECT * FROM students WHERE name='Flunk #${flunk.templateId}';`,
+    `mysql> SELECT * FROM students WHERE name='Flunk #${flunk.serialNumber}';`,
     "+--------+-------+-------+-------+-------+-------+",
     "| name   | math  | science  | history  | english  | average  |",
     "+--------+-------+-------+-------+-------+-------+",
-    `| Flunk #${flunk.templateId}  | 50    | 45    | 40    | 35    | 42.5  |`,
+    `| Flunk #${flunk.serialNumber}  | 50    | 45    | 40    | 35    | 42.5  |`,
     "+--------+-------+-------+-------+-------+-------+",
     "1 row in set (0.00 sec)",
     "",
-    `mysql> UPDATE students SET math=95, science=90, history=85, english=80, average=(95+90+85+80)/4 WHERE name='Flunk ${flunk.templateId}';`,
+    `mysql> UPDATE students SET math=95, science=90, history=85, english=80, average=(95+90+85+80)/4 WHERE name='Flunk ${flunk.serialNumber}';`,
     "Query OK, 1 row affected (0.00 sec)",
     "Rows matched: 1  Changed: 1  Warnings: 0",
     "",
-    `mysql> SELECT * FROM students WHERE name='Flunk #${flunk.templateId}';`,
+    `mysql> SELECT * FROM students WHERE name='Flunk #${flunk.serialNumber}';`,
     "+--------+-------+-------+-------+-------+-------+",
     "| name   | math  | science  | history  | english  | average  |",
     "+--------+-------+-------+-------+-------+-------+",
-    `| Flunk #${flunk.templateId}  | 95    | 90    | 85    | 80    | 88.75  |`,
+    `| Flunk #${flunk.serialNumber}  | 95    | 90    | 85    | 80    | 88.75  |`,
     "+--------+-------+-------+-------+-------+-------+",
     "1 row in set (0.00 sec)",
     "",
@@ -169,115 +169,104 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
 
   if (endHacking) {
     return (
-      <Frame
-        variant="field"
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          // justifyContent: "center",
-          overflow: "auto",
-          position: "relative",
-          gap: ".5rem",
-          padding: "1rem",
-          textAlign: "center",
-        }}
-      >
-        <Confetti />
-        <H1
-          style={{
-            paddingTop: "1rem",
-          }}
-        >
-          GRADUATED!!
-        </H1>
-        <P>
-          Congratulations on your graduation! You have worked hard and achieved
-          an important milestone. I wish you all the best as you move on to the
-          next phase of your life and pursue your dreams. Well done!
-        </P>
-        <br />
-        <P>
-          It's amazing to think about how much you have grown and changed over
-          the past year. Here is your graduation photo:
-        </P>
-        <div
-          style={{
-            position: "relative",
-          }}
-        >
-          <FlunkImage
-            src={graduatedUrl}
+      <CustomStyledScrollView className="min-h-full">
+        <CustomScrollArea className="flex flex-col items-center">
+          <Confetti className="w-full" />
+          <H1
             style={{
-              width: "100%",
-              height: "100%",
-              maxWidth: "360px",
-              maxHeight: "360px",
+              paddingTop: "1rem",
             }}
-          />
-          {percentage >= 100 && (
-            <div
+          >
+            GRADUATED!!
+          </H1>
+
+          <div
+            style={{
+              position: "relative",
+            }}
+          >
+            <FlunkImage
+              src={graduatedUrl}
               style={{
                 width: "100%",
-                display: "flex",
-                justifyContent: "center",
+                height: "auto",
+                maxWidth: "360px",
+                maxHeight: "360px",
               }}
-            >
-              <a
-                target="_blank"
-                rel="noreferrer noopener"
-                href={graduatedUrl}
-                download={`#${flunk.templateId}.png`}
+              className="!aspect-square"
+            />
+            {percentage >= 100 && (
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+                className="my-2"
               >
-                <Button onClick={handleLoadFaster}>Save Graduated Image</Button>
-              </a>
+                <a
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  href={graduatedUrl}
+                  download={`#${flunk.serialNumber}.png`}
+                >
+                  <Button onClick={handleLoadFaster}>
+                    Save Graduated Image
+                  </Button>
+                </a>
+              </div>
+            )}
+
+            <div
+              ref={divOverlayRef}
+              style={{
+                position: "absolute",
+                bottom: "0",
+                left: "0",
+                width: "100%",
+                height: "100%",
+                backgroundColor: percentage === 100 ? "transparent" : "#CCCCCC",
+              }}
+            />
+          </div>
+
+          <H3>Flunk #{flunk.serialNumber}</H3>
+
+          <P
+            style={{
+              textAlign: "center",
+              marginTop: ".5rem",
+              marginBottom: ".5rem",
+            }}
+          >
+            The school server is a little slow, <br /> give it a few minutes...
+          </P>
+
+          <div
+            style={{
+              maxWidth: "360px",
+              width: "100%",
+            }}
+          >
+            <ProgressBar value={Math.floor(percentage)} />
+          </div>
+
+          {percentage < 100 && (
+            <div>
+              <Button onMouseDown={handleLoadFaster} onClick={handleLoadFaster}>
+                Load FASTER!!!!!
+              </Button>
             </div>
           )}
 
-          <div
-            ref={divOverlayRef}
-            style={{
-              position: "absolute",
-              bottom: "0",
-              left: "0",
-              width: "100%",
-              height: "100%",
-              backgroundColor: "#CCCCCC",
-            }}
-          />
-        </div>
-
-        <H3>Flunk #{flunk.templateId}</H3>
-
-        <P
-          style={{
-            textAlign: "center",
-            marginTop: ".5rem",
-            marginBottom: ".5rem",
-          }}
-        >
-          The school server is a little slow, <br /> give it a few minutes...
-        </P>
-
-        <div
-          style={{
-            maxWidth: "360px",
-            width: "100%",
-          }}
-        >
-          <ProgressBar value={Math.floor(percentage)} />
-        </div>
-
-        {percentage < 100 && (
-          <div>
-            <Button onMouseDown={handleLoadFaster} onClick={handleLoadFaster}>
-              Load FASTER!!!!!
-            </Button>
-          </div>
-        )}
-      </Frame>
+          <P className="max-w-[350px] !px-2 !text-center">
+            Congratulations on your graduation! You have worked hard and
+            achieved an important milestone. We wish you all the best as you
+            move on to the next phase of your life and pursue your dreams. Well
+            done!
+          </P>
+        </CustomScrollArea>
+      </CustomStyledScrollView>
     );
   }
 
@@ -298,6 +287,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
         color: "#00FF00",
         overflow: "auto",
         position: "relative",
+        padding: "0.5rem",
       }}
     >
       {state.txStatus !== TX_STATUS.PENDING &&

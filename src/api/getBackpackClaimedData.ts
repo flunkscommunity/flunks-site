@@ -1,22 +1,23 @@
-// https://prod-main-net-dashboard-api.azurewebsites.net/api/company/ab832502-41e5-456c-95ec-a572bf5c10aa/search?eventType=A.807c3d470888cc48.BackpackMinter.BackpackClaimed
-import client from "./axios";
+import axios from "axios";
 
-type ClaimBlockEventData = {
+// Types for the raw event data structure
+interface RawClaimBlockEventData {
   backpackTokenID: string;
   flunkTokenID: string;
   signer: string;
-};
+}
 
-type ClaimEventData = {
-  blockEventData: ClaimBlockEventData;
+interface RawClaimEventData {
+  blockEventData: RawClaimBlockEventData;
   blockHeight: number;
   eventDate: string;
   flowEventId: string;
   flowTransactionId: string;
   id: string;
-};
+}
 
-export interface FormattedClaimEventData {
+// Types for the formatted event data to be used in UI or further processing
+interface FormattedClaimEventData {
   backpackTokenID?: string;
   flunkTokenID?: string;
   eventDate: string;
@@ -25,50 +26,48 @@ export interface FormattedClaimEventData {
 }
 
 export interface FormattedBackpackClaimData {
-  flunksData: {
-    [key: string]: FormattedClaimEventData;
-  } | null;
-  backpackData: {
-    [key: string]: FormattedClaimEventData;
-  } | null;
+  flunksData: Record<string, FormattedClaimEventData> | null;
+  backpackData: Record<string, FormattedClaimEventData> | null;
 }
 
+// The function to fetch and format the data
 const getBackpackClaimedData =
   async (): Promise<FormattedBackpackClaimData> => {
-    const url = `https://prod-main-net-dashboard-api.azurewebsites.net/api/company/ab832502-41e5-456c-95ec-a572bf5c10aa/search?eventType=A.807c3d470888cc48.BackpackMinter.BackpackClaimed`;
+    const url =
+      "https://prod-main-net-dashboard-api.azurewebsites.net/api/company/ab832502-41e5-456c-95ec-a572bf5c10aa/search?eventType=A.807c3d470888cc48.BackpackMinter.BackpackClaimed";
 
-    const cb = (curr: any, event: ClaimEventData) => {
-      const { blockEventData, eventDate, flowTransactionId } = event;
-      const { backpackTokenID, flunkTokenID, signer } = blockEventData;
-      return {
-        flunksData: {
-          ...curr["flunksData"],
-          [flunkTokenID]: {
+    try {
+      const response = await axios.get<RawClaimEventData[]>(url);
+      const { data } = response;
+      const formattedData = data.reduce(
+        (accumulator, current) => {
+          const { blockEventData, eventDate, flowTransactionId } = current;
+          const { backpackTokenID, flunkTokenID, signer } = blockEventData;
+
+          accumulator.flunksData[flunkTokenID] = {
             backpackTokenID,
             eventDate,
             flowTransactionId,
             signer,
-          },
-        },
-        backpackData: {
-          ...curr["backpackData"],
-          [backpackTokenID]: {
+          };
+
+          accumulator.backpackData[backpackTokenID] = {
             flunkTokenID,
             eventDate,
             flowTransactionId,
             signer,
-          },
-        },
-      };
-    };
+          };
 
-    return client
-      .get(url)
-      .then((res) => res.data)
-      .then((data) => {
-        const formatted = data.reduce(cb, { flunksData: {}, backpackData: {} });
-        return formatted;
-      });
+          return accumulator;
+        },
+        { flunksData: {}, backpackData: {} } as FormattedBackpackClaimData
+      );
+
+      return formattedData;
+    } catch (error) {
+      console.error("Failed to fetch Backpack Claimed data:", error);
+      return { flunksData: null, backpackData: null };
+    }
   };
 
 export default getBackpackClaimedData;

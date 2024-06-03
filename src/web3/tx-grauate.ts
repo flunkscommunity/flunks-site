@@ -19,7 +19,8 @@ export function graduate({tokenID}: GraduateOpts) {
         args: (arg, t) => [
           arg(tokenID, t.UInt64),
         ],
+        // @ts-ignore
         authorizations: [fcl.authz],
-        limit: 1000,
+        limit: 9999,
     })
   }

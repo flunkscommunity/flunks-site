@@ -4,39 +4,21 @@ import React from "react";
 
 export const GlobalStyles = React.memo(createGlobalStyle`
   ${styleReset}
-  @font-face {
-    font-family: 'ms_sans_serif';
-    src: url('/fonts/ms_sans_serif.woff2') format('woff2');
-    font-weight: 400;
-    font-style: normal
-  }
-  @font-face {
-    font-family: 'ms_sans_serif';
-    src: url('/fonts/ms_sans_serif_bold.woff2') format('woff2');
-    font-weight: bold;
-    font-style: normal
-  }
 
   body {
     --safe-area-inset-bottom: constant(safe-area-inset-bottom); 
     --safe-area-inset-bottom: env(safe-area-inset-bottom);
     font-family: 'ms_sans_serif', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
       Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    width: 100%;
-    position: relative;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+    width: 100% !important;
+    position: relative !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex-grow: 1 !important;
   }
 
   #__next {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-  }
-  #__next > div:first-of-type {
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -49,7 +31,30 @@ export const GlobalStyles = React.memo(createGlobalStyle`
   }
 
   * {
-    box-sizing: border-box;
+    box-sizing: border-box !important;
+  }
+
+  div[data-testid="select-button"] {
+    &:before {
+      box-sizing: border-box !important;
+    }
+    &:after {
+      box-sizing: border-box !important;
+    }
+  }
+
+  *:not(button) {
+    &:before {
+      box-sizing: content-box !important;
+    }
+    &:after {
+      box-sizing: content-box !important;
+    }
+  }
+
+  option {
+    color: black !important;
+    background: #ccc !important;
   }
 
   @keyframes flicker {
@@ -182,6 +187,14 @@ export const GlobalStyles = React.memo(createGlobalStyle`
       text-shadow: 2.6208764473832513px 0 1px rgba(0,30,255,0.5), -2.6208764473832513px 0 1px rgba(255,0,80,0.3), 0 0 3px;
     }
   }
+  .old-monitor {
+    &:after {
+      animation: flicker 0.5s infinite;
+    }
+  }
+  .text-flicker {
+    animation: textShadow 0.1s infinite;
+  }
   .crt::after {
     content: " ";
     display: block;
@@ -194,7 +207,6 @@ export const GlobalStyles = React.memo(createGlobalStyle`
     opacity: 0;
     z-index: 2;
     pointer-events: none;
-    animation: flicker 0.06s infinite;
     z-index: 99999;
   }
   .crt::before {
@@ -212,7 +224,7 @@ export const GlobalStyles = React.memo(createGlobalStyle`
     z-index: 99999;
   }
   .crt {
-    // animation: textShadow 1.6s infinite;
+    // animation: textShadow 10s infinite;
   }
   .close-icon {
     display: inline-block;

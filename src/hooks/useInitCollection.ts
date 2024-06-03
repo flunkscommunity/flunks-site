@@ -1,30 +1,44 @@
-import { useUser } from "contexts/WalletContext";
 import { useEffect, useState } from "react";
-import { fetchCollectionExists } from "web3/script-check-collection-init";
-import { initializeFlunksCollection } from "web3/tx-initialize-account";
+import { isWalletCollectionInitialized } from "web3/script-check-collection-init";
+import { initAllCollections } from "web3/tx-initialize-account";
 
-const useInitCollection = () => {
-  const { walletAddress } = useUser();
+const useInitCollection = (walletAddress: string) => {
   const [isInitialized, setIsInitialized] = useState<boolean | null>(null);
-  const [control, setControl] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [control, setControl] = useState<number>(0);
+  const [error, setError] = useState<string | null>(null);
 
   const initializeCollection = async () => {
     if (!walletAddress) return;
-    await initializeFlunksCollection()().then((data) => {
-      setControl(control + 1);
-    });
+
+    setIsLoading(true);
+
+    await initAllCollections()
+      .then((data) => {
+        setControl((prev) => prev + 1);
+      })
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   useEffect(() => {
     if (!walletAddress) return;
-    fetchCollectionExists({ address: walletAddress }).then((data) => {
+
+    isWalletCollectionInitialized(walletAddress).then((data) => {
       setIsInitialized(data);
     });
-  }, [control, walletAddress]);
+  }, [walletAddress, control]);
 
   return {
     isInitialized,
+    isLoading,
     initializeCollection,
+    error,
+    setError,
   };
 };
 

@@ -1,9 +1,5 @@
-import { useWindowsContext } from "contexts/WindowsContext";
 import useWindowSize from "hooks/useWindowSize";
-import Draggable from "react-draggable";
 import styled from "styled-components";
-import StudentExplorer from "windows/StudentExplorer";
-import { H1, H4 } from "./Typography";
 
 interface Props {
   title: string;
@@ -15,7 +11,6 @@ const Container = styled.div`
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  max-width: 80px;
   text-align: center;
   cursor: pointer;
 `;
@@ -29,13 +24,8 @@ const AppIcon = styled.div<{ icon: string }>`
   background-position: center;
 `;
 
-const AppTitle = styled(H4)`
+const AppTitle = styled.div`
   color: white;
-  &:hover {
-    span {
-      background-color: rgba(48, 197, 255, 0.5);
-    }
-  }
   @media (max-width: 768px) {
     font-size: 1rem;
   }
@@ -52,23 +42,22 @@ const DesktopAppIcon: React.FC<Props> = (props) => {
   };
 
   return (
-    <Draggable disabled={true} bounds="parent">
+    <div className="w-auto !max-w-[100px] h-auto">
       <div
-        style={{
-          width: 80,
-          margin: 8,
-        }}
+        // onDoubleClick={onDoubleClick}
+        onClick={onDoubleClick}
+        className="p-2 flex-shrink-0 max-w-full"
       >
-        <div onDoubleClick={onDoubleClick} onClick={handleMobileOpen}>
-          <Container>
-            <AppIcon icon={icon} />
-            <AppTitle>
-              <span>{title}</span>
-            </AppTitle>
-          </Container>
-        </div>
+        <Container className="group flex flex-col gap-2 items-center">
+          <AppIcon icon={icon} />
+          <AppTitle className="group-hover:!bg-[#30c5ff80] text-pretty max-w-[80px] min-w-[80px] text-center backdrop-blur-lg">
+            <span className="text-xl text-white font-bold drop-shadow-[0px_2px_1px_rgba(0,0,0,1)] tracking-wide">
+              {title}
+            </span>
+          </AppTitle>
+        </Container>
       </div>
-    </Draggable>
+    </div>
   );
 };
 

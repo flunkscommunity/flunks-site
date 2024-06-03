@@ -28,7 +28,14 @@ const useWindowSize = () => {
     }
   }, []);
 
-  return windowSize;
+  const isMobile = windowSize.width < 640;
+  const isTablet = windowSize.width < 1024;
+
+  return {
+    ...windowSize,
+    isMobile,
+    isTablet,
+  };
 };
 
 export default useWindowSize;

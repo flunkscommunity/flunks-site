@@ -1,27 +1,22 @@
-import { MarketplaceIndividualNftDto } from "api/generated";
-import { Button, Frame, GroupBox, Hourglass, ScrollView } from "react95";
+import { Button, Frame, GroupBox, Hourglass } from "react95";
 import styled from "styled-components";
 import { Metadata } from "types/NFT";
-import { FlunkImage } from "components/CustomMonitor";
-import GraduationBox from "components/NftDetailsBoxes/GraduationBox";
-import GuardianBox from "components/NftDetailsBoxes/GuardianBox";
-import TraitsBox from "components/NftDetailsBoxes/TraitsBox";
-import { H1, H3, H4, P } from "components/Typography";
+import { H1, H3, P } from "components/Typography";
 import { useEffect, useState } from "react";
-import getBackpackClaimedData, {
-  FormattedBackpackClaimData,
-  FormattedClaimEventData,
-} from "api/getBackpackClaimedData";
-import getCollectionsNftById from "api/getCollectionNftById";
-import { format } from "date-fns";
 import { useBackpackClaimed } from "contexts/BackpackClaimContext";
-import { CollectionApiInstance } from "api";
 import { useFclTransactionContext } from "contexts/FclTransactionContext";
 import { TX_STATUS } from "reducers/TxStatusReducer";
 import { claimBackpack } from "web3/tx-claim-backpack";
+import {
+  CustomScrollArea,
+  CustomStyledScrollView,
+} from "components/CustomStyledScrollView";
+import { MarketplaceIndividualNftDto } from "generated/models";
+import { collectionControllerGetNftByCollectionNameAndTokenId } from "generated/api/collection/collection";
+import { NftItem } from "components/YourItems/ItemsGrid";
 
 interface Props {
-  nft: MarketplaceIndividualNftDto;
+  nft: NftItem;
   shouldFetch: boolean;
 }
 
@@ -40,25 +35,53 @@ const Stack = styled.div`
   }
 `;
 
+export const ImageWithBackground = styled.img`
+  background-color: ${({ theme }) => theme.material};
+  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='40' height='40' patternTransform='scale(1) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(0, 0%, 100%, 0)'/><path d='M15 22h10m-10-4h10M35 2h10M35 38h10m-50 0H5M-5 2H5'  stroke-linecap='square' stroke-width='1.5' stroke='hsla(259, 0%, 100%, 0.24)' fill='none'/><path d='M18-5V5m4-10V5m16 10v10M18 35v10m4-10v10M2 15v10'  stroke-linecap='square' stroke-width='1.5' stroke='hsla(340, 0%, 100%, 0.56)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
+`;
+
 const ClaimFormForm: React.FC<Props> = (props) => {
   const { nft, shouldFetch } = props;
-  const { metadata, templateId, tokenId } = nft;
-  const { uri } = metadata as Metadata;
-  const { flunksData } = useBackpackClaimed();
+  const {
+    MetadataViewsDisplay: metadata,
+    serialNumber: templateId,
+    tokenID: tokenId,
+  } = nft;
+  const { url: uri } = metadata.thumbnail;
+  const { flunksData, refreshClaimData } = useBackpackClaimed();
   const [claimedItem, setClaimedItem] = useState<MarketplaceIndividualNftDto>();
+
+  const { executeTx, state, resetState } = useFclTransactionContext();
+  const [loading, setLoading] = useState(false);
+
   const claimedEvent =
     flunksData && flunksData[tokenId] ? flunksData[tokenId] : null;
-  const { executeTx, state } = useFclTransactionContext();
+
   useEffect(() => {
     if (!claimedEvent) return;
 
-    CollectionApiInstance.collectionControllerGetNftByCollectionNameAndTokenId({
-      collectionName: "backpack",
-      tokenId: Number(claimedEvent.backpackTokenID),
-    }).then((res) => {
-      setClaimedItem(res.data);
-    });
+    setLoading(true);
+    setTimeout(
+      () =>
+        collectionControllerGetNftByCollectionNameAndTokenId(
+          "backpack",
+          Number(claimedEvent.backpackTokenID)
+        )
+          .then((res) => {
+            setClaimedItem(res.data);
+          })
+          .finally(() => {
+            setLoading(false);
+          }),
+      1000
+    );
   }, [claimedEvent]);
+
+  useEffect(() => {
+    if (state.txStatus === TX_STATUS.SUCCESS) {
+      refreshClaimData();
+    }
+  }, [state]);
 
   const locations = {
     geek: "Computer lab",
@@ -77,210 +100,214 @@ const ClaimFormForm: React.FC<Props> = (props) => {
         display: "flex",
         flexDirection: "column",
         gap: "1rem",
-        padding: "1rem",
         alignItems: "center",
         overflow: "hidden",
         position: "relative",
       }}
     >
-      {state.txStatus === TX_STATUS.STARTED && (
-        <div
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            zIndex: 9999,
-          }}
-        >
-          <Hourglass size={32} />
+      {(state.txStatus === TX_STATUS.STARTED ||
+        state.txStatus === TX_STATUS.PENDING) && (
+        <div className="fixed inset-0 w-full h-full bg-black/60 flex flex-col gap-2 items-center justify-center z-20">
+          <Hourglass />
+          <span className="text-white">
+            Sit tight, transactions can take a minute.
+          </span>
         </div>
       )}
-      <ScrollView
+      <CustomStyledScrollView
         style={{
           overflow: "auto",
+          padding: 0,
         }}
       >
-        <Frame
-          variant="field"
-          style={{
-            padding: "1rem",
-            display: "flex",
-            flexDirection: "column",
-            gap: "1rem",
-          }}
-        >
-          <Stack>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "8px",
-                alignItems: "center",
-              }}
-            >
-              <FlunkImage src={uri} width="250px" height="250px" />
-              <GroupBox
-                label="Student"
-                variant="flat"
-                style={{
-                  width: "100%",
-                }}
-              >
-                <P>Flunk #{templateId}</P>
-              </GroupBox>
-            </div>
-            {claimedItem && (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "8px",
-                  alignItems: "center",
-                }}
-              >
-                <FlunkImage
-                  src={claimedItem?.metadata?.uri}
-                  width="250px"
-                  height="250px"
-                />
-                <GroupBox
-                  label="Claimed Item"
-                  variant="flat"
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  <P>Backpack #{claimedItem.templateId}</P>
-                </GroupBox>
-              </div>
-            )}
-            {!claimedItem && (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "8px",
-                  alignItems: "center",
-                }}
-              >
-                <Frame
-                  variant="field"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <H1
-                    style={{
-                      fontSize: "6rem",
-                      fontWeight: "normal",
-                    }}
-                  >
-                    ?
-                  </H1>
-                </Frame>
-                <GroupBox
-                  label="Claimed Item"
-                  variant="flat"
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  <P>????</P>
-                </GroupBox>
-              </div>
-            )}
-          </Stack>
-
-          <GroupBox
-            label="ITEM DETAILS"
-            variant="flat"
+        <CustomScrollArea>
+          <Frame
+            variant="field"
             style={{
-              width: "100%",
+              padding: "1rem",
               display: "flex",
-              flexWrap: "wrap",
+              flexDirection: "column",
               gap: "1rem",
             }}
           >
-            <GroupBox label="Item Type" variant="flat">
-              <P>Backpack</P>
-            </GroupBox>
-
-            <GroupBox label="Location" variant="flat">
-              <P>{locations[nft?.metadata?.Clique?.toLowerCase() || "geek"]}</P>
-            </GroupBox>
-
-            <GroupBox label="Date Found" variant="flat">
-              <P>07/27/2022</P>
-            </GroupBox>
-          </GroupBox>
-
-          <GroupBox label="Guardian Signature" variant="flat">
-            <H3>Student guardian’s signature is required to claim item.</H3>
-
-            <Stack
-              style={{
-                gap: "12px",
-                marginTop: "4rem",
-                alignItems: "center",
-              }}
-            >
+            <Stack>
               <div
                 style={{
                   display: "flex",
                   flexDirection: "column",
                   gap: "8px",
-                  width: "100%",
+                  alignItems: "center",
+                }}
+              >
+                <Frame variant="field">
+                  <img src={uri} alt="flunk" width="250px" height="250px" />
+                </Frame>
+                <GroupBox
+                  label="STUDENT"
+                  variant="flat"
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  <P>Flunk #{templateId}</P>
+                </GroupBox>
+              </div>
+              {claimedItem && (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                    alignItems: "center",
+                  }}
+                >
+                  <Frame variant="field">
+                    <ImageWithBackground
+                      src={claimedItem?.metadata?.uri}
+                      alt="flunk"
+                      width="250px"
+                      height="250px"
+                    />
+                  </Frame>
+                  <GroupBox
+                    label="CLAIMED ITEM"
+                    variant="flat"
+                    style={{
+                      width: "100%",
+                    }}
+                  >
+                    <P>Backpack #{claimedItem.templateId}</P>
+                  </GroupBox>
+                </div>
+              )}
+              {!claimedItem && (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                    alignItems: "center",
+                  }}
+                >
+                  <Frame
+                    variant="field"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    {!loading && (
+                      <H1
+                        style={{
+                          fontSize: "6rem",
+                          fontWeight: "normal",
+                        }}
+                      >
+                        ?
+                      </H1>
+                    )}
+                    {loading && <Hourglass />}
+                  </Frame>
+                  <GroupBox
+                    label="CLAIMED ITEM"
+                    variant="flat"
+                    style={{
+                      width: "100%",
+                    }}
+                  >
+                    <P>????</P>
+                  </GroupBox>
+                </div>
+              )}
+            </Stack>
+
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "1rem",
+              }}
+            >
+              <GroupBox label="ITEM" variant="flat">
+                <P>Backpack</P>
+              </GroupBox>
+
+              <GroupBox label="LOCATION" variant="flat">
+                <P>{locations[nft?.traits?.Clique?.toLowerCase() || "geek"]}</P>
+              </GroupBox>
+
+              {/* <GroupBox label="Date Found" variant="flat">
+              <P>07/27/2022</P>
+            </GroupBox> */}
+            </div>
+
+            <GroupBox label="GUARDIAN SIGNATURE" variant="flat">
+              <H3>Student guardian’s signature is required to claim item.</H3>
+
+              <Stack
+                style={{
+                  gap: "12px",
+                  marginTop: "4rem",
+                  alignItems: "center",
                 }}
               >
                 <div
                   style={{
-                    borderBottom: "3px solid #CCC",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                    width: "100%",
                   }}
                 >
-                  <P>{shouldFetch && claimedEvent && claimedEvent?.signer}</P>
-                </div>
-                <P>Signature</P>
-              </div>
-            </Stack>
-
-            {!shouldFetch && (
-              <div
-                style={{
-                  marginTop: "2rem",
-                  paddingBottom: "1rem",
-                }}
-              >
-                <Button
-                  onClick={() => {
-                    executeTx(claimBackpack({ tokenID: tokenId }));
-                  }}
-                  fullWidth
-                >
-                  Sign
-                </Button>
-
-                {state.txStatus === TX_STATUS.ERROR && (
-                  <P
+                  <div
                     style={{
-                      color: "red",
+                      borderBottom: "3px solid #CCC",
                     }}
                   >
-                    Something went wrong, please try again..
-                  </P>
-                )}
-              </div>
-            )}
-          </GroupBox>
-        </Frame>
-      </ScrollView>
+                    <P>
+                      <span className="opacity-50">X</span>{" "}
+                      {claimedEvent && claimedEvent?.signer}
+                    </P>
+                  </div>
+                  <P>Signature</P>
+                </div>
+              </Stack>
+
+              {!claimedItem && !loading && (
+                <div
+                  style={{
+                    marginTop: "2rem",
+                    paddingBottom: "1rem",
+                  }}
+                >
+                  <Button
+                    onClick={() => {
+                      executeTx(claimBackpack({ tokenID: Number(tokenId) }));
+                    }}
+                    fullWidth
+                  >
+                    Sign
+                  </Button>
+
+                  {state.txStatus === TX_STATUS.ERROR && (
+                    <P
+                      style={{
+                        color: "red",
+                      }}
+                    >
+                      Something went wrong, please try again..
+                    </P>
+                  )}
+                </div>
+              )}
+            </GroupBox>
+          </Frame>
+        </CustomScrollArea>
+      </CustomStyledScrollView>
     </div>
   );
 };

@@ -1,12 +1,12 @@
-import { MarketplaceIndividualNftDto } from "api/generated";
 import ClaimFormForm from "components/ClaimForm/Form";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
-import NftDetailsFrame from "components/NftDetailsFrame";
+import { NftItem } from "components/YourItems/ItemsGrid";
 import { FclTransactionProvider } from "contexts/FclTransactionContext";
 import { useWindowsContext } from "contexts/WindowsContext";
+import { MarketplaceIndividualNftDto } from "generated/models";
 
 interface Props {
-  flunk: MarketplaceIndividualNftDto;
+  flunk: NftItem;
   shouldFetch: boolean;
 }
 
@@ -17,11 +17,15 @@ const ClaimForm: React.FC<Props> = (props) => {
   return (
     <DraggableResizeableWindow
       onClose={() => {
-        closeWindow(`claim-form-${flunk.templateId}`);
+        closeWindow(`claim-form-${flunk.serialNumber}`);
       }}
-      headerTitle={`Student #${flunk.templateId} - claim form`}
-      initialHeight="60%"
-      initialWidth="60%"
+      headerTitle={`Claim Form - Student #${flunk.serialNumber}`}
+      initialHeight="auto"
+      initialWidth="auto"
+      windowsId={`claim-form-${flunk.serialNumber}`}
+      resizable={false}
+      showMaximizeButton={false}
+      headerIcon="/images/icons/backpack.png"
     >
       <FclTransactionProvider>
         <ClaimFormForm nft={flunk} shouldFetch={shouldFetch} />

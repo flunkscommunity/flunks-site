@@ -9,16 +9,18 @@ export enum TX_STATUS {
 export interface TxReducerState {
   txStatus: TX_STATUS;
   txMessage: string;
+  txName?: string;
 }
 
 export interface TxReducerActions {
   type: "UPDATE_STATUS" | "RESET";
   txStatus: TX_STATUS;
   txMessage?: string;
+  txName?: string;
 }
 
 const reducer = (state: TxReducerState, action: TxReducerActions) => {
-  const { type, txStatus, txMessage } = action;
+  const { type, txStatus, txMessage, txName } = action;
 
   switch (type) {
     case "UPDATE_STATUS": {
@@ -26,6 +28,7 @@ const reducer = (state: TxReducerState, action: TxReducerActions) => {
         ...state,
         txStatus,
         txMessage: txMessage || state.txMessage,
+        txName: txName || state.txName,
       };
     }
     case "RESET": {
@@ -33,6 +36,7 @@ const reducer = (state: TxReducerState, action: TxReducerActions) => {
         ...state,
         txStatus: TX_STATUS.DEFAULT,
         txMessage: "",
+        txName: "",
       };
     }
     default:
@@ -43,6 +47,7 @@ const reducer = (state: TxReducerState, action: TxReducerActions) => {
 export const initialState: TxReducerState = {
   txStatus: TX_STATUS.DEFAULT,
   txMessage: "",
+  txName: "",
 };
 
 export default reducer;

@@ -3,6 +3,7 @@ import React, { forwardRef } from "react";
 import { AppBar, Button, ScrollViewProps, TextInput, Toolbar } from "react95";
 import styled from "styled-components";
 import Appbar from "./Appbar/Appbar";
+import useThemeSettings from "store/useThemeSettings";
 
 export const StyledScrollView = styled.div<Pick<ScrollViewProps, "shadow">>`
   position: relative;
@@ -21,8 +22,8 @@ export const StyledScrollView = styled.div<Pick<ScrollViewProps, "shadow">>`
     left: 0;
     top: 0;
     content: "";
-    width: calc(100% - 4px);
-    height: calc(100% - 4px);
+    width: calc(100%);
+    height: calc(100%);
     border-style: solid;
     border-width: 2px;
     border-left-color: ${({ theme }) => theme.borderDarkest};
@@ -122,17 +123,33 @@ const MonitorScreenContainer = styled.div`
 
 const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
   ({ backgroundStyles, children, showBottomBar, ...otherProps }, ref) => {
-    const { windows } = useWindowsContext();
+    const { backgroundColor, backgroundImage, oldMonitorMode } =
+      useThemeSettings();
 
     return (
       <Wrapper ref={ref} {...otherProps}>
         <Inner>
           <MonitorBody>
-            <Background className="crt" style={backgroundStyles}>
-              <MonitorScreenContainer>{children}</MonitorScreenContainer>
+            <div
+              className={`crt h-full w-full ${
+                oldMonitorMode ? "old-monitor" : ""
+              }`}
+            >
+              <Background
+                style={{
+                  ...backgroundStyles,
+                  backgroundColor,
+                  backgroundImage: `url(${backgroundImage})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }}
+              >
+                <MonitorScreenContainer>{children}</MonitorScreenContainer>
 
-              {showBottomBar && <Appbar />}
-            </Background>
+                {showBottomBar && <Appbar />}
+              </Background>
+            </div>
           </MonitorBody>
         </Inner>
       </Wrapper>

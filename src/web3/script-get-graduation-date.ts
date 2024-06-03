@@ -8,6 +8,5 @@ pub fun main(): {UInt64: UInt64} {
 }`;
 
 export async function checkGraduationDates() {
-  // if (!tokenId) return Promise.resolve(null);
   return fcl.send([fcl.script(CODE), fcl.args([])]).then(fcl.decode);
 }
