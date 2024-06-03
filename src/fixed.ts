@@ -5,6 +5,8 @@ export const WINDOW_IDS = {
   SETTINGS: "settings",
   ERROR: "error",
   GUMBALL_MACHINE: "gumball-machine",
+  WELCOME: "welcome",
+  WELCOME_POPUP: "welcome-popup",
   GUMBALL_MACHINE_HELP: "gumball-machine-help",
   PROJECT_JNR: "project-jnr",
   ABOUT_US: "about-us",

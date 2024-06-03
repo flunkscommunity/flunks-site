@@ -26,15 +26,15 @@ const useThemeSettings = create<useThemeSettings>()(
         setBackgroundColor: (backgroundColor: string) =>
           set((state) => ({ backgroundColor })),
         backgroundImage:
-          "https://storage.googleapis.com/flunks_public/desktop-backgrounds/flunksbg.webp",
+          "https://storage.googleapis.com/flunks_public/desktop-backgrounds/posterized.webp",
         setBackgroundImage: (backgroundImage: string) =>
           set((state) => ({ backgroundImage })),
         oldMonitorMode: false,
         setOldMonitorMode: (oldMonitorMode: boolean) =>
           set((state) => ({ oldMonitorMode })),
         theme: {
-          name: "tokyoDark",
-          theme: index.tokyoDark as Theme,
+          name: "millenium",
+          theme: index.millenium as Theme,
         },
         setTheme: (theme: { name: keyof typeof index; theme: typeof index }) =>
           set((state) => ({ theme })),

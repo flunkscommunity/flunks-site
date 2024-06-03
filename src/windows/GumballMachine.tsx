@@ -65,6 +65,8 @@ const GumballMachine: React.FC = () => {
             </Button>
           </Toolbar>
         }
+        
+      headerIcon="/images/icons/gum-machine.png"
       >
         <FclTransactionProvider>
           <StakingProvider>

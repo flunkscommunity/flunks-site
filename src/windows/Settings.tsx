@@ -109,6 +109,8 @@ const Settings: React.FC = () => {
       showMaximizeButton={false}
       initialHeight="auto"
       initialWidth="auto"
+      
+      headerIcon="/images/icons/settings.png"
     >
       <Tabs value={activeTab} onChange={setActiveTab}>
         <Tab value={0}>Background</Tab>

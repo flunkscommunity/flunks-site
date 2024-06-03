@@ -18,6 +18,7 @@ const GumballMachineHelp: React.FC = () => {
       initialWidth="auto"
       showMaximizeButton={false}
       resizable={false}
+      headerIcon="/images/icons/whats_new.png"
     >
       <ScrollView className="!flex !h-full !w-full">
         <Frame variant="field" className="!w-full !h-auto">

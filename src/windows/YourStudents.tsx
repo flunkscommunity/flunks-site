@@ -46,6 +46,7 @@ const YourStudents: React.FC = () => {
         }}
         initialHeight="60%"
         initialWidth="60%"
+        headerIcon="/images/icons/vault.png"
       >
         <ItemsGrid />
       </DraggableResizeableWindow>

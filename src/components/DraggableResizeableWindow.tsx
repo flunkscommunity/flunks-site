@@ -10,6 +10,7 @@ import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 interface Props {
   headerTitle: string;
+  headerIcon?: string;
   children: React.ReactNode;
   onClose?: () => void;
   offSetHeight?: number;
@@ -37,6 +38,7 @@ const WindowButtons = styled.div`
 const DraggableResizeableWindow: React.FC<Props> = (props) => {
   const {
     headerTitle,
+    headerIcon,
     offSetHeight = 0,
     onClose,
     initialHeight = "90%",
@@ -189,7 +191,10 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
             }}
             onDoubleClick={handleMaximize}
           >
-            <span className="!text-xl">{headerTitle}</span>
+            <div className="flex items-center gap-2">
+              {headerIcon && <img src={headerIcon} className="h-5"></img>}
+              <span className="!text-xl">{headerTitle}</span>
+            </div>
             {showHeaderActions && (
               <WindowButtons>
                 {onHelp && (

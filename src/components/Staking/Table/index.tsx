@@ -15,6 +15,7 @@ import styled from "styled-components";
 import { useStakingContext } from "contexts/StakingContext";
 import DapperIncompatibility from "./DapperIncompatibility";
 import { useRef } from "react";
+import GumCountdown from "./GumCountdown";
 
 const CustomTableHeadCell = styled(TableHeadCell)`
   flex: 1 0 0%;
@@ -27,7 +28,7 @@ const CustomTableDataCell = styled(TableDataCell)`
 `;
 
 const StakeableItemsTable = () => {
-  const { isDapper, walletStakeInfo, sortStakeInfo } = useStakingContext();
+  const { canStake, walletStakeInfo, sortStakeInfo } = useStakingContext();
   const nameOrderByRef = useRef<"asc" | "dsc">("dsc");
   const earnedOrderByRef = useRef<"asc" | "dsc">("dsc");
   const earningOrderByRef = useRef<"asc" | "dsc">("dsc");
@@ -43,7 +44,7 @@ const StakeableItemsTable = () => {
                 nameOrderByRef.current =
                   nameOrderByRef.current === "asc" ? "dsc" : "asc";
               }}
-              disabled={isDapper}
+              disabled={!canStake}
               className="flex-grow"
             >
               Item
@@ -54,7 +55,7 @@ const StakeableItemsTable = () => {
                 earnedOrderByRef.current =
                   earnedOrderByRef.current === "asc" ? "dsc" : "asc";
               }}
-              disabled={isDapper}
+              disabled={!canStake}
               className="flex-grow"
             >
               Pending
@@ -65,16 +66,16 @@ const StakeableItemsTable = () => {
                 earningOrderByRef.current =
                   earningOrderByRef.current === "asc" ? "dsc" : "asc";
               }}
-              disabled={isDapper}
+              disabled={!canStake}
               className="flex-grow"
             >
               Status
             </CustomTableHeadCell>
           </TableRow>
         </TableHead>
-        {isDapper && <DapperIncompatibility />}
+        {!canStake && <GumCountdown />}
 
-        {!isDapper && (
+        {canStake && (
           <TableBody className="!h-full !flex !flex-col !w-full no-scrollbar">
             {walletStakeInfo.length < 1 && (
               <TableRow className="!flex !items-center !w-full">

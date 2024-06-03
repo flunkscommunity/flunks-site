@@ -12,6 +12,7 @@ import AboutUs from "windows/AboutUs";
 import GumballMachine from "windows/GumballMachine";
 import ProjectJnr from "windows/ProjectJnr";
 import Settings from "windows/Settings";
+import Welcome from "windows/Welcome";
 import YourStudents from "windows/YourStudents";
 
 const CustomMenuListItem = styled(MenuListItem)`
@@ -133,21 +134,23 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
           <img src="/images/icons/about-us.png" width="32px" height="32px" />
           About Us
         </CustomMenuListItem>
-        <a
-          href="https://www.flowty.io/collection/0x807c3d470888cc48/Flunks"
-          target="_blank"
-          rel="noreferrer noopener"
+        <CustomMenuListItem
+          onClick={() => {
+            openWindow({
+              key: WINDOW_IDS.WELCOME,
+              window: <Welcome />,
+            });
+            props.closeStartMenu();
+          }}
+          className="!text-xl"
         >
-          <CustomMenuListItem
-            onClick={() => {
-              return null;
-            }}
-            className="!text-xl"
-          >
-            <img src="/images/icons/flowty.png" width="32px" height="32px" />
-            Marketplace
-          </CustomMenuListItem>
-        </a>
+          <img
+            src="/images/icons/getting_started.png"
+            width="32px"
+            height="32px"
+          />
+          Getting Started
+        </CustomMenuListItem>
         <CustomMenuListItem
           onClick={() => {
             openWindow({

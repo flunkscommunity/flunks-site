@@ -25,6 +25,7 @@ const ClaimForm: React.FC<Props> = (props) => {
       windowsId={`claim-form-${flunk.serialNumber}`}
       resizable={false}
       showMaximizeButton={false}
+      headerIcon="/images/icons/backpack.png"
     >
       <FclTransactionProvider>
         <ClaimFormForm nft={flunk} shouldFetch={shouldFetch} />

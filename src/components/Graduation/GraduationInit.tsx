@@ -38,15 +38,24 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
   const [canGraduate, setCanGraduate] = useState(true);
 
   useEffect(() => {
-    if (!flunk) return;
+    console.log(flunk.pixelUrl);
+    if (flunk.pixelUrl) {
+      setEndHacking(true);
 
-    checkGraduationDates().then((data) => {
-      const graduationDate = uInt64StrToDate(data[flunk.tokenID].toString());
-      if (graduationDate) {
-        setCanGraduate(isAfter(new Date(), graduationDate));
-      }
-    });
-  }, [flunk]);
+      setPercentage(100);
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   if (!flunk) return;
+
+  //   checkGraduationDates().then((data) => {
+  //     const graduationDate = uInt64StrToDate(data[flunk.tokenID].toString());
+  //     if (graduationDate) {
+  //       setCanGraduate(isAfter(new Date(), graduationDate));
+  //     }
+  //   });
+  // }, [flunk]);
 
   const sha256 = async (str: string) => {
     const buf = new TextEncoder().encode(str);
@@ -193,6 +202,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
                   display: "flex",
                   justifyContent: "center",
                 }}
+                className="my-2"
               >
                 <a
                   target="_blank"
@@ -215,7 +225,7 @@ const GraduationInit: React.FC<GraduationInitProps> = (props) => {
                 left: "0",
                 width: "100%",
                 height: "100%",
-                backgroundColor: "#CCCCCC",
+                backgroundColor: percentage === 100 ? "transparent" : "#CCCCCC",
               }}
             />
           </div>

@@ -36,6 +36,8 @@ const FlunkEMart: React.FC<Props> = (props) => {
           minWidth: "auto",
         }}
         resizable={false}
+        
+      headerIcon="/images/icons/flunk-e-mart.png"
       >
         <div className="flex flex-col h-full gap-2 justify-center">
           <div className="flex flex-col items-start gap-10">

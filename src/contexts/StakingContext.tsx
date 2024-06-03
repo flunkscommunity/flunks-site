@@ -58,7 +58,8 @@ interface ObjectDetails {
 interface ContextState {
   gumBalance: number;
   pendingRewards: number;
-  isDapper: boolean;
+  canStake: boolean;
+  setCanStake: (canStake: boolean) => void;
   walletStakeInfo: ObjectDetails[];
   refreshStakeInfo: () => void;
   sortStakeInfo: (
@@ -75,7 +76,8 @@ interface ContextState {
 export const StakingContext = createContext<ContextState>({
   gumBalance: 0,
   pendingRewards: 0,
-  isDapper: false,
+  canStake: false,
+  setCanStake: () => {},
   walletStakeInfo: [],
   sortStakeInfo: () => {},
   refreshStakeInfo: () => {},
@@ -99,6 +101,7 @@ const StakingProvider: React.FC<ProviderProps> = (props) => {
   const [pendingRewards, setPendingRewards] = useState(0);
   const [walletStakeInfo, setWalletStakeInfo] = useState<ObjectDetails[]>([]);
   const { openWindow, closeWindow } = useWindowsContext();
+  const [canStake, setCanStake] = useState(false);
 
   const { executeTx, state, resetState } = useFclTransactionContext();
 
@@ -211,7 +214,8 @@ const StakingProvider: React.FC<ProviderProps> = (props) => {
       value={{
         gumBalance,
         pendingRewards,
-        isDapper: walletProvider === "Dapper",
+        canStake,
+        setCanStake,
         walletStakeInfo: walletStakeInfo,
         refreshStakeInfo: () => {
           getPendingRewards();

@@ -71,14 +71,19 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
             >
               <span className="text-xl leading-[1]">2D</span>
             </Button>
-            {canGraduate && (
-              <Button className="w-full">
-                <img
-                  src="/images/icons/graduation.png"
-                  className="h-6 w-auto"
-                />
-              </Button>
-            )}
+            {/* {canGraduate && ( */}
+            <Button
+              className="w-full"
+              onClick={() => {
+                openWindow({
+                  key: `graduation-${props.serialNumber}`,
+                  window: <Graduation flunk={props} />,
+                });
+              }}
+            >
+              <img src="/images/icons/graduation.png" className="h-6 w-auto" />
+            </Button>
+            {/* )} */}
             <Button
               className="w-full"
               onClick={() => {

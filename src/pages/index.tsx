@@ -13,6 +13,8 @@ import { ProgressBar } from "react95";
 import { useTheme } from "styled-components";
 import { animated, config, useSpring } from "@react-spring/web";
 import FlunkEMart from "windows/FlunkMart";
+import useGettingStarted from "store/useGettingStarted";
+import Welcome from "windows/Welcome";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -71,6 +73,16 @@ const FullScreenLoader = () => {
 
 const Desktop = () => {
   const { windows, openWindow } = useWindowsContext();
+  const { showGettingStartedOnStartup } = useGettingStarted();
+
+  useEffect(() => {
+    if (showGettingStartedOnStartup) {
+      openWindow({
+        key: WINDOW_IDS.WELCOME,
+        window: <Welcome />,
+      });
+    }
+  }, []);
 
   const windowsMemod = useMemo(() => {
     return (
@@ -85,7 +97,7 @@ const Desktop = () => {
 
   return (
     <>
-      <div className="flex flex-col max-h-[calc(100vh-64px)] w-full flex-wrap items-start gap-4 content-start">
+      <div className="flex relative  flex-col max-h-[calc(100vh-64px)] w-full flex-wrap items-start gap-4 content-start">
         <DesktopAppIcon
           title="Flunkfolio"
           icon="/images/icons/vault.png"
