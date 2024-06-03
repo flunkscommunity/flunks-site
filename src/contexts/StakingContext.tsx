@@ -15,6 +15,7 @@ import { getWalletStakeInfo } from "web3/script-get-wallet-stake-info";
 import { stakeOne } from "web3/tx-stake-one";
 import { unstakeOne } from "web3/tx-unstake-one";
 import { claimAll } from "web3/tx-claim-all-gum";
+import { track } from "@vercel/analytics";
 
 interface MetadataViewsDisplayThumbnail {
   url: string;
@@ -157,6 +158,7 @@ const StakingProvider: React.FC<ProviderProps> = (props) => {
   const _stakeAll = () => {
     resetState();
     executeTx(stakeAll);
+    track("gm_stake_all", { wallet: walletAddress });
   };
 
   useEffect(() => {
@@ -197,16 +199,27 @@ const StakingProvider: React.FC<ProviderProps> = (props) => {
   const _stakeSingle = (pool: "Flunks" | "Backpack", tokenID: number) => {
     resetState();
     executeTx(() => stakeOne(pool, tokenID));
+    track("gm_stake_one", {
+      wallet: walletAddress,
+      tokenID: tokenID,
+      pool: pool,
+    });
   };
 
   const _unstakesingle = (pool: "Flunks" | "Backpack", tokenID: number) => {
     resetState();
     executeTx(() => unstakeOne(pool, tokenID));
+    track("gm_unstake_one", {
+      wallet: walletAddress,
+      tokenID: tokenID,
+      pool: pool,
+    });
   };
 
   const _claimAll = () => {
     resetState();
     executeTx(claimAll, "claim-gum");
+    track("gm_claim_all", { wallet: walletAddress });
   };
 
   return (
@@ -236,7 +249,9 @@ const StakingProvider: React.FC<ProviderProps> = (props) => {
           state.txStatus === TX_STATUS.PENDING) && (
           <div className="fixed inset-0 w-full h-full bg-black/60 flex flex-col gap-2 items-center justify-center z-20">
             <Hourglass />
-            <span className="text-white">Sit tight, transactions can take a minute.</span>
+            <span className="text-white">
+              Sit tight, transactions can take a minute.
+            </span>
           </div>
         )}
       </div>

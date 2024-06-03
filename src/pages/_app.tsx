@@ -17,6 +17,7 @@ import {
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
 import useThemeSettings from "store/useThemeSettings";
 import React from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -40,7 +41,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
               }}
             >
               <Component {...pageProps} />
-
+              <Analytics />
               <DynamicUserProfile />
             </DynamicContextProvider>
           </ClaimBackpackProvider>

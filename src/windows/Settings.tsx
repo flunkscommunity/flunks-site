@@ -3,16 +3,12 @@ import {
   Button,
   Checkbox,
   ColorInput,
-  Frame,
   GroupBox,
   Monitor,
-  ScrollView,
-  Select,
   SelectNative,
   Tab,
   TabBody,
   Tabs,
-  TextInput,
 } from "react95";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
@@ -213,19 +209,6 @@ const Settings: React.FC = () => {
           )}
         </CustomScrollArea>
       </TabBody>
-      {/* <div className="flex flex-row justify-end items-center pb-3">
-          <Button onClick={() => setShowDynamicUserProfile(true)}>
-            Update Settings
-          </Button>
-        </div> */}
-      {/* <Frame
-          variant="field"
-          className="w-full h-[calc(100%-48px)] !flex !flex-col"
-        >
-          <ScrollView className="w-full h-full flex flex-col">
-            <UserInformation />
-          </ScrollView>
-        </Frame> */}
     </DraggableResizeableWindow>
   );
 };
