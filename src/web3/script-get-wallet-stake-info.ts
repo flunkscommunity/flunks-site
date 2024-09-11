@@ -14,25 +14,25 @@ import GUMStakingTracker from 0x807c3d470888cc48
 
 // mainnet test run: flow scripts execute ./cadence/scripts/GUM/get-owner-stake-info.cdc 0xeff7b7c7795a4d56 --network mainnet
 
-pub struct AccountTokenMetadataWithStakeInfo {
-    pub let owner: Address
-    pub let tokenID: UInt64
-    pub let MetadataViewsDisplay: MetadataViews.Display
-    pub let traits: MetadataViews.Traits
-    pub let serialNumber: UInt64
-    pub let stakingInfo: Staking.StakingInfo?
-    pub let collection: String?
-    pub let rewards: UFix64?
-    pub let claimedRewards: UFix64?
-    pub let pixelUrl: String?
+access(all) struct AccountTokenMetadataWithStakeInfo {
+    access(all) let owner: Address
+    access(all) let tokenID: UInt64
+    access(all) let MetadataViewsDisplay: MetadataViews.Display?
+    access(all) let traits: MetadataViews.Traits?
+    access(all) let serialNumber: UInt64
+    access(all) let stakingInfo: Staking.StakingInfo?
+    access(all) let collection: String?
+    access(all) let rewards: UFix64?
+    access(all) let claimedRewards: UFix64?
+    access(all) let pixelUrl: String?
 
 
     init(
         owner: Address,
         tokenID: UInt64,
-        metadataViewsDisplay: MetadataViews.Display,
+        metadataViewsDisplay: MetadataViews.Display?,
         serialNumber: UInt64,
-        traits: MetadataViews.Traits,
+        traits: MetadataViews.Traits?,
         stakingInfo: Staking.StakingInfo?,
         collection: String?,
         rewards: UFix64?,
@@ -52,23 +52,24 @@ pub struct AccountTokenMetadataWithStakeInfo {
     }
 }
 
-pub fun getItemMetadataFlunks(address: Address, tokenID: UInt64): AccountTokenMetadataWithStakeInfo? {
-    let collection = getAccount(address).getCapability<&Flunks.Collection{NonFungibleToken.CollectionPublic}>(Flunks.CollectionPublicPath).borrow()
+access(all) fun getItemMetadataFlunks(address: Address, tokenID: UInt64): AccountTokenMetadataWithStakeInfo? {
+    let collection = getAccount(address)
+        .capabilities.borrow<&Flunks.Collection>(Flunks.CollectionPublicPath)
         ?? panic("Could not borrow a reference to the account's NFT collection")
 
-    let item = collection.borrowNFT(id: tokenID)
+    let item = collection.borrowNFT(tokenID)
 
-    let view = item.resolveView(Type<MetadataViews.Display>())
+    let view = item?.resolveView(Type<MetadataViews.Display>())
         ?? panic("Could not resolve the item's metadata view")
-    let display = view as! MetadataViews.Display
+    let display = view as! MetadataViews.Display?
     
-    let editionView = item.resolveView(Type<MetadataViews.Edition>())
+    let editionView = item?.resolveView(Type<MetadataViews.Edition>())
         ?? panic("Could not get the item's edition view")
-    let edition = editionView as! MetadataViews.Edition
+    let edition = editionView as! MetadataViews.Edition?
 
-    let traitsView = item.resolveView(Type<MetadataViews.Traits>())
+    let traitsView = item?.resolveView(Type<MetadataViews.Traits>())
         ?? panic("Could not get the item's traits view")
-    let traits = traitsView as! MetadataViews.Traits
+    let traits = traitsView as! MetadataViews.Traits?
 
     let stakingInfo = Staking.getStakingInfo(signerAddress: address, pool: "Flunks", tokenID: tokenID)
 
@@ -76,14 +77,14 @@ pub fun getItemMetadataFlunks(address: Address, tokenID: UInt64): AccountTokenMe
 
     let claimedRewards = GUMStakingTracker.getClaimedFlunksTracker()[tokenID] ?? 0.0
 
-    let pixelUrlView = item.resolveView(Type<Flunks.PixelUrl>())
+    let pixelUrlView = item?.resolveView(Type<Flunks.PixelUrl>())
     let pixelUrlStr = pixelUrlView as! String?
 
     return AccountTokenMetadataWithStakeInfo(
         owner: address,
         tokenID: tokenID,
         metadataViewsDisplay: display,
-        serialNumber: edition.number,
+        serialNumber: edition?.number ?? 0,
         traits: traits,
         stakingInfo: stakingInfo,
         collection: "Flunks",
@@ -93,23 +94,24 @@ pub fun getItemMetadataFlunks(address: Address, tokenID: UInt64): AccountTokenMe
     )
 }
 
-pub fun getItemMetadataBackpack(address: Address, tokenID: UInt64): AccountTokenMetadataWithStakeInfo? {
-    let collection = getAccount(address).getCapability<&Backpack.Collection{NonFungibleToken.CollectionPublic}>(Backpack.CollectionPublicPath).borrow()
+access(all) fun getItemMetadataBackpack(address: Address, tokenID: UInt64): AccountTokenMetadataWithStakeInfo? {
+    let collection = getAccount(address)
+        .capabilities.borrow<&Backpack.Collection>(Backpack.CollectionPublicPath)
         ?? panic("Could not borrow a reference to the account's NFT collection")
 
-    let item = collection.borrowNFT(id: tokenID)
+    let item = collection.borrowNFT(tokenID)
 
-    let view = item.resolveView(Type<MetadataViews.Display>())
+    let view = item?.resolveView(Type<MetadataViews.Display>())
         ?? panic("Could not resolve the item's metadata view")
-    let display = view as! MetadataViews.Display
+    let display = view as! MetadataViews.Display?
     
-    let editionView = item.resolveView(Type<MetadataViews.Edition>())
+    let editionView = item?.resolveView(Type<MetadataViews.Edition>())
         ?? panic("Could not get the item's edition view")
-    let edition = editionView as! MetadataViews.Edition
+    let edition = editionView as! MetadataViews.Edition?
 
-    let traitsView = item.resolveView(Type<MetadataViews.Traits>())
+    let traitsView = item?.resolveView(Type<MetadataViews.Traits>())
         ?? panic("Could not get the item's traits view")
-    let traits = traitsView as! MetadataViews.Traits
+    let traits = traitsView as! MetadataViews.Traits?
 
     let stakingInfo = Staking.getStakingInfo(signerAddress: address, pool: "Backpack", tokenID: tokenID)
 
@@ -121,7 +123,7 @@ pub fun getItemMetadataBackpack(address: Address, tokenID: UInt64): AccountToken
         owner: address,
         tokenID: tokenID,
         metadataViewsDisplay: display,
-        serialNumber: edition.number,
+        serialNumber: edition?.number ?? 0,
         traits: traits,
         stakingInfo: stakingInfo,
         collection: "Backpack",
@@ -131,12 +133,12 @@ pub fun getItemMetadataBackpack(address: Address, tokenID: UInt64): AccountToken
     )
 }
 
-pub fun main(address: Address): [AccountTokenMetadataWithStakeInfo] {
+access(all) fun main(address: Address): [AccountTokenMetadataWithStakeInfo] {
     var res: [AccountTokenMetadataWithStakeInfo] = []
 
     // Get tokenIDs for main account (Flunks)
-    let collection: &Flunks.Collection{NonFungibleToken.CollectionPublic}? = getAccount(address)
-        .getCapability<&Flunks.Collection{NonFungibleToken.CollectionPublic}>(Flunks.CollectionPublicPath).borrow()
+    let collection: &Flunks.Collection? = getAccount(address)
+        .capabilities.borrow<&Flunks.Collection>(Flunks.CollectionPublicPath)
     let mainCollectionTokenIDs = collection?.getIDs() ?? []
     for tokenID in mainCollectionTokenIDs {
         let accountTokenMetadata = getItemMetadataFlunks(address: address, tokenID: tokenID)!
@@ -147,8 +149,8 @@ pub fun main(address: Address): [AccountTokenMetadataWithStakeInfo] {
     let childAddresses = HybridCustodyHelper.getChildAccounts(parentAddress: address)
     if childAddresses.length != 0 {
         for childAddress in childAddresses {
-            let childCollection: &Flunks.Collection{NonFungibleToken.CollectionPublic}? = getAccount(childAddress)
-                .getCapability<&Flunks.Collection{NonFungibleToken.CollectionPublic}>(Flunks.CollectionPublicPath).borrow()
+            let childCollection: &Flunks.Collection? = getAccount(childAddress)
+                .capabilities.borrow<&Flunks.Collection>(Flunks.CollectionPublicPath)
             let childCollectionTokenIDs = childCollection?.getIDs() ?? []
             for tokenID in childCollectionTokenIDs {
                 let accountTokenMetadata = getItemMetadataFlunks(address: childAddress, tokenID: tokenID)!
@@ -158,8 +160,8 @@ pub fun main(address: Address): [AccountTokenMetadataWithStakeInfo] {
     }
 
     // Get tokenIDs for main account (Backpacks)
-    let backpackCollection: &Backpack.Collection{NonFungibleToken.CollectionPublic}? = getAccount(address)
-        .getCapability<&Backpack.Collection{NonFungibleToken.CollectionPublic}>(Backpack.CollectionPublicPath).borrow()
+    let backpackCollection: &Backpack.Collection? = getAccount(address)
+        .capabilities.borrow<&Backpack.Collection>(Backpack.CollectionPublicPath) 
     let mainBackpackCollectionTokenIDs = backpackCollection?.getIDs() ?? []
     for tokenID in mainBackpackCollectionTokenIDs {
         let accountTokenMetadata = getItemMetadataBackpack(address: address, tokenID: tokenID)!
@@ -169,8 +171,8 @@ pub fun main(address: Address): [AccountTokenMetadataWithStakeInfo] {
     // Get tokenIDs for child accounts (Backpacks)
     if childAddresses.length != 0 {
         for childAddress in childAddresses {
-            let childCollection: &Backpack.Collection{NonFungibleToken.CollectionPublic}? = getAccount(childAddress)
-                .getCapability<&Backpack.Collection{NonFungibleToken.CollectionPublic}>(Backpack.CollectionPublicPath).borrow()
+            let childCollection: &Backpack.Collection? = getAccount(childAddress)
+                .capabilities.borrow<&Backpack.Collection>(Backpack.CollectionPublicPath)
             let childCollectionTokenIDs = childCollection?.getIDs() ?? []
             for tokenID in childCollectionTokenIDs {
                 let accountTokenMetadata = getItemMetadataBackpack(address: childAddress, tokenID: tokenID)!

@@ -3,8 +3,8 @@ import * as t from "@onflow/types";
 
 const CODE = `import Staking from 0x807c3d470888cc48
 
-pub fun main(pool: String, ownerAddress: Address, tokenID: UInt64): UFix64 {
-  return Staking.pendingRewards(pool: pool, ownerAddress: Address, tokenID: tokenID)
+access(all) fun main(pool: String, ownerAddress: Address, tokenID: UInt64): UFix64 {
+  return Staking.pendingRewards(pool: pool, ownerAddress: ownerAddress, tokenID: tokenID)
 }
 `;
 

@@ -3,7 +3,7 @@ import * as t from "@onflow/types";
 
 const CODE = `import BackpackMinter from 0x807c3d470888cc48
 
-pub fun main(templateID: UInt64): Bool{
+access(all) fun main(templateID: UInt64): Bool{
   let map = BackpackMinter.getClaimedBackPacksPerFlunkTemplateID()
   return map.containsKey(templateID)
 }

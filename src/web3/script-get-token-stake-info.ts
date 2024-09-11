@@ -2,7 +2,7 @@ import * as fcl from "@onflow/fcl";
 import * as t from "@onflow/types";
 
 const CODE = `import Staking from 0x807c3d470888cc48
-pub fun main(signerAddress: Address, pool: String, tokenID: UInt64): Staking.StakingInfo? {
+access(all) fun main(signerAddress: Address, pool: String, tokenID: UInt64): Staking.StakingInfo? {
   return Staking.getStakingInfo(signerAddress: signerAddress, pool: pool, tokenID: tokenID)
 }`;
 

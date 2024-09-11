@@ -11,10 +11,10 @@ import MetadataViews from 0x1d7e57aa55817448
 
 
 // mainnet test run: flow scripts execute ./cadence/scripts/GUM/get-owner-token-ids-with-url-and-edition.cdc 0xeff7b7c7795a4d56 --network mainnet
-pub struct AccountTokenInfo {
-    pub let tokenID: UInt64
-    pub let edition: UInt64
-    pub let url: String
+access(all) struct AccountTokenInfo {
+    access(all) let tokenID: UInt64
+    access(all) let edition: UInt64
+    access(all) let url: String
 
     init(tokenID: UInt64, edition: UInt64, url: String) {
         self.tokenID = tokenID
@@ -23,48 +23,50 @@ pub struct AccountTokenInfo {
     }
 }
 
-pub fun resolveItemUrlAndEditionFlunks(address: Address, tokenID: UInt64): AccountTokenInfo? {
-    let collection = getAccount(address).getCapability<&Flunks.Collection{NonFungibleToken.CollectionPublic}>(Flunks.CollectionPublicPath).borrow()
-        ?? panic("Could not borrow a reference to the account's NFT collection")
+access(all) fun resolveItemUrlAndEditionFlunks(address: Address, tokenID: UInt64): AccountTokenInfo? {
+    let collection = getAccount(address)
+        .capabilities.borrow<&Flunks.Collection>(Flunks.CollectionPublicPath)
+        ?? panic("Could not borrow a reference to the collection")
 
-    let item = collection.borrowNFT(id: tokenID)
-    let editionView = item.resolveView(Type<MetadataViews.Edition>())
+    let item = collection.borrowNFT(tokenID)
+    let editionView = item?.resolveView(Type<MetadataViews.Edition>())
         ?? panic("Could not get the item's edition view")
-    let edition = editionView as! MetadataViews.Edition
-    let view = item.resolveView(Type<MetadataViews.Display>())
+    let edition = editionView as! MetadataViews.Edition?
+    let view = item?.resolveView(Type<MetadataViews.Display>())
         ?? panic("Could not resolve the item's metadata view")
-    let display = view as! MetadataViews.Display
-    let thumbnail = display.thumbnail as! MetadataViews.HTTPFile
+    let display = view as! MetadataViews.Display?
+    let thumbnail = display!.thumbnail as! MetadataViews.HTTPFile
 
     return AccountTokenInfo(
         tokenID: tokenID,
-        edition: edition.number,
-        url: display.thumbnail.uri()
+        edition: edition?.number ?? 0,
+        url: display?.thumbnail?.uri() ?? ""
     )
 }
 
-pub fun resolveItemUrlAndEditionBackpack(address: Address, tokenID: UInt64): AccountTokenInfo? {
-    let collection = getAccount(address).getCapability<&Backpack.Collection{NonFungibleToken.CollectionPublic}>(Backpack.CollectionPublicPath).borrow()
+access(all) fun resolveItemUrlAndEditionBackpack(address: Address, tokenID: UInt64): AccountTokenInfo? {
+    let collection = getAccount(address)
+        .capabilities.borrow<&Backpack.Collection>(Backpack.CollectionPublicPath)
         ?? panic("Could not borrow a reference to the account's NFT collection")
-
-    let item = collection.borrowNFT(id: tokenID)
-    let editionView = item.resolveView(Type<MetadataViews.Edition>())
+    
+    let item = collection.borrowNFT(tokenID)
+    let editionView = item?.resolveView(Type<MetadataViews.Edition>())
         ?? panic("Could not get the item's edition view")
-    let edition = editionView as! MetadataViews.Edition
-    let view = item.resolveView(Type<MetadataViews.Display>())
+    let edition = editionView as! MetadataViews.Edition?
+    let view = item?.resolveView(Type<MetadataViews.Display>())
         ?? panic("Could not resolve the item's metadata view")
-    let display = view as! MetadataViews.Display
-    let thumbnail = display.thumbnail as! MetadataViews.HTTPFile
+    let display = view as! MetadataViews.Display?
+    let thumbnail = display!.thumbnail as! MetadataViews.HTTPFile
 
     return AccountTokenInfo(
         tokenID: tokenID,
-        edition: edition.number,
-        url: display.thumbnail.uri()
+        edition: edition?.number ?? 0,
+        url: display?.thumbnail?.uri() ?? ""
     )
 
 }
 
-pub fun main(address: Address): {String: {UInt64: AccountTokenInfo}} {
+access(all) fun main(address: Address): {String: {UInt64: AccountTokenInfo}} {
     let flunksTokenIds = HybridCustodyHelper.getFlunksTokenIDsFromAllLinkedAccounts(ownerAddress: address)
     let backpackTokenIds = HybridCustodyHelper.getBackpackTokenIDsFromAllLinkedAccounts(ownerAddress: address)
 
