@@ -4,7 +4,7 @@ const TRANSACTION: string = `
 import Staking from 0x807c3d470888cc48
 
 transaction() {
-  prepare(signer: AuthAccount) {
+  prepare(signer: auth(SaveValue, Capabilities, Storage, BorrowValue) &Account) {
       Staking.claimAll(signerAuth: signer)
   }
 }`;
