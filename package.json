@@ -8,11 +8,11 @@
     "start": "next start",
     "lint": "next lint",
     "fetch:openApiSpec": "node ./swagger/fetchApiSpec.ts",
-    "generate:api": "yarn fetch:openApiSpec && orval --config ./orval.config.js"
+    "generate:api": "npm run fetch:openApiSpec && orval --config ./orval.config.js"
   },
   "dependencies": {
-    "@dynamic-labs/flow": "^2.0.0",
-    "@dynamic-labs/sdk-react-core": "^2.0.0",
+    "@dynamic-labs/flow": "^2.6.0",
+    "@dynamic-labs/sdk-react-core": "^2.6.0",
     "@react-spring/web": "^9.7.3",
     "@react-three/drei": "^9.105.6",
     "@react-three/fiber": "^8.16.5",

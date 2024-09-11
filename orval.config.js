@@ -1,5 +1,5 @@
 module.exports = {
-  weebox: {
+  flunks95: {
     input: "./swagger/api-spec.json",
     output: {
       mode: "tags-split",
