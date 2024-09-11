@@ -72,7 +72,7 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
               <span className="text-xl leading-[1]">2D</span>
             </Button>
             {/* {canGraduate && ( */}
-            <Button
+            {/* <Button
               className="w-full"
               onClick={() => {
                 openWindow({
@@ -82,7 +82,7 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
               }}
             >
               <img src="/images/icons/graduation.png" className="h-6 w-auto" />
-            </Button>
+            </Button> */}
             {/* )} */}
             <Button
               className="w-full"

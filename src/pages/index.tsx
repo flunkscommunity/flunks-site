@@ -205,7 +205,6 @@ const Desktop = () => {
         </a>
       </div>
       {windowsMemod}
-      <FullScreenLoader />
     </>
   );
 };

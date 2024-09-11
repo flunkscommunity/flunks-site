@@ -77,7 +77,7 @@ access(all) fun getItemMetadataFlunks(address: Address, tokenID: UInt64): Accoun
 
     let claimedRewards = GUMStakingTracker.getClaimedFlunksTracker()[tokenID] ?? 0.0
 
-    let pixelUrlView = item?.resolveView(Type<Flunks.PixelUrl>())
+    let pixelUrlView = item?.resolveView(Type<Flunks.PixelUrl>()) ?? ""
     let pixelUrlStr = pixelUrlView as! String?
 
     return AccountTokenMetadataWithStakeInfo(
