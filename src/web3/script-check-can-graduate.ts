@@ -1,10 +1,11 @@
 import * as fcl from "@onflow/fcl";
 import * as t from "@onflow/types";
 
-const CODE = `import FlunksGraduation from 0x807c3d470888cc48
+const CODE = `import FlunksGraduationV2 from 0x807c3d470888cc48
 
-pub fun main(tokenID: UInt64): Bool {
-  return !FlunksGraduation.isFlunkGraduated(tokenID: tokenID)
+access(all) fun main(tokenID: UInt64): Bool {
+  let isGraduated = !FlunksGraduationV2.isFlunkGraduated(tokenID: tokenID)
+  return isGraduated
 }
 `;
 

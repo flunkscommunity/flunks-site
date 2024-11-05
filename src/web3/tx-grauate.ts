@@ -1,10 +1,10 @@
 import * as fcl from "@onflow/fcl";
 
-const TRANSACTION: string = `import FlunksGraduation from 0x807c3d470888cc48
+const TRANSACTION: string = `import FlunksGraduationV2 from 0x807c3d470888cc48
 
 transaction(tokenID: UInt64) {
-    prepare(signer: AuthAccount) {
-      FlunksGraduation.graduateFlunk(owner: signer, tokenID: tokenID)
+    prepare(signer: auth(SaveValue, Capabilities, Storage, BorrowValue) &Account) {
+      FlunksGraduationV2.graduateFlunk(owner: signer, tokenID: tokenID)
     }
 }`;
 
