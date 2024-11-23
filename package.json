@@ -11,8 +11,8 @@
     "generate:api": "npm run fetch:openApiSpec && orval --config ./orval.config.js"
   },
   "dependencies": {
-    "@dynamic-labs/flow": "^2.6.0",
-    "@dynamic-labs/sdk-react-core": "^2.6.0",
+    "@dynamic-labs/flow": "^3.8.1",
+    "@dynamic-labs/sdk-react-core": "^3.8.1",
     "@react-spring/web": "^9.7.3",
     "@react-three/drei": "^9.105.6",
     "@react-three/fiber": "^8.16.5",
@@ -26,7 +26,7 @@
     "html-to-image": "^1.11.11",
     "lodash": "^4.17.21",
     "modern-screenshot": "^4.4.39",
-    "next": "14.2.3",
+    "next": "^14.2.18",
     "postprocessing": "^6.35.4",
     "react": "^18",
     "react-confetti": "^6.1.0",

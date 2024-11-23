@@ -6,7 +6,6 @@ import TraitSection from "./ItemTraitSection";
 import DesktopBackgroundSection from "./ItemDesktopBackgroundSection";
 import GumSection from "./ItemGumSection";
 import { useEffect, useMemo, useState } from "react";
-import { checkCanGraduate } from "web3/script-check-can-graduate";
 import { useWindowsContext } from "contexts/WindowsContext";
 import Graduation from "windows/Graduation";
 import ClaimForm from "windows/ClaimForm";
@@ -18,23 +17,10 @@ interface FlunkItemProps extends NftItem {
 
 const FlunkItem: React.FC<FlunkItemProps> = (props) => {
   const [canClaimBackpack] = useState(true);
-  const [canGraduate, setCanGraduate] = useState(false);
   const { openWindow } = useWindowsContext();
   const [activeSrc, setActiveSrc] = useState(
     props.MetadataViewsDisplay.thumbnail.url
   );
-
-  useEffect(() => {
-    if (props.traits.Type === "Graduated") {
-      setCanGraduate(false);
-    } else {
-      checkCanGraduate(Number(props.tokenID)).then(setCanGraduate);
-    }
-
-    return () => {
-      setCanGraduate(false);
-    };
-  }, [props.tokenID]);
 
   useEffect(() => {
     // Preload pxelated image
@@ -71,8 +57,8 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
             >
               <span className="text-xl leading-[1]">2D</span>
             </Button>
-            {/* {canGraduate && ( */}
-            {/* <Button
+
+            <Button
               className="w-full"
               onClick={() => {
                 openWindow({
@@ -82,8 +68,7 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
               }}
             >
               <img src="/images/icons/graduation.png" className="h-6 w-auto" />
-            </Button> */}
-            {/* )} */}
+            </Button>
             <Button
               className="w-full"
               onClick={() => {
