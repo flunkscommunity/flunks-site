@@ -18,6 +18,7 @@ import { FlowWalletConnectors } from "@dynamic-labs/flow";
 import useThemeSettings from "store/useThemeSettings";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
+import { PaginatedItemsProvider } from "contexts/UserPaginatedItems";
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -40,9 +41,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                 walletsFilter: RemoveWallets(["dapper"]),
               }}
             >
-              <Component {...pageProps} />
-              <Analytics />
-              <DynamicUserProfile />
+              <PaginatedItemsProvider>
+                <Component {...pageProps} />
+                <Analytics />
+                <DynamicUserProfile />
+              </PaginatedItemsProvider>
             </DynamicContextProvider>
           </ClaimBackpackProvider>
         </WindowsProvider>
