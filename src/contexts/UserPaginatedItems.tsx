@@ -10,11 +10,11 @@ import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { getOwnerTokenIdsWhale } from "web3/script-get-owner-token-ids-whale";
 import { getOwnerTokenStakeInfoWhale } from "web3/script-get-owner-token-stake-info-whale";
 import useSWR from "swr";
-import { NftItem } from "components/YourItems/ItemsGrid";
+import { ObjectDetails } from "./StakingContext";
 
 // Context Props
 interface PaginatedContextProps {
-  displayedItems: NftItem[];
+  displayedItems: ObjectDetails[];
   flunksCount: number;
   backpacksCount: number;
   currentPage: number;
@@ -25,6 +25,8 @@ interface PaginatedContextProps {
   viewType: "grid" | "table";
   setViewType: (viewType: "grid" | "table") => void;
   currentDataPages: string[][];
+  refresh: () => void;
+  allItems: ObjectDetails[];
 }
 
 const PaginatedItemsContext = createContext<PaginatedContextProps | undefined>(
@@ -37,6 +39,7 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const { primaryWallet } = useDynamicContext();
+  const walletAddress = primaryWallet?.address || null;
   const [tokenDataPages, setTokenDataPages] = useState<{
     flunks: string[][];
     backpack: string[][];
@@ -44,15 +47,17 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
     flunks: [],
     backpack: [],
   });
-  const [flunksMetadata, setFlunksMetadata] = useState<NftItem[][]>([]);
-  const [backpacksMetadata, setBackpacksMetadata] = useState<NftItem[][]>([]);
+  const [flunksMetadata, setFlunksMetadata] = useState<ObjectDetails[][]>([]);
+  const [backpacksMetadata, setBackpacksMetadata] = useState<ObjectDetails[][]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [filter, setFilter] = useState<"flunks" | "backpacks">("flunks");
   const [viewType, setViewType] = useState<"grid" | "table">("grid");
-  const [isLoadingMetadata, setIsLoadingMetadata] = useState(false);
+  const [resetCacheKey, setResetCacheKey] = useState(0);
+
+  console.log(flunksMetadata);
 
   const { data: tokenData } = useSWR(
-    primaryWallet?.address ? ["allData", '0x2e0eac981ef5bd98'] : null,
+    primaryWallet?.address ? ["allData", walletAddress, resetCacheKey] : null,
     (key, address) => getOwnerTokenIdsWhale(address),
     {
       revalidateOnFocus: false,
@@ -74,10 +79,10 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
         setTokenDataPages(tokenDataPage);
 
         const allFlunksMetadata = tokenDataPage.flunks.map((page) =>
-          getOwnerTokenStakeInfoWhale("0x2e0eac981ef5bd98", "flunks", page.map(Number))
+          getOwnerTokenStakeInfoWhale(walletAddress, "flunks", page.map(Number))
         );
         const allBackpacksMetadata = tokenDataPage.backpack.map((page) =>
-          getOwnerTokenStakeInfoWhale("0x2e0eac981ef5bd98", "backpacks", page.map(Number))
+          getOwnerTokenStakeInfoWhale(walletAddress, "backpacks", page.map(Number))
         );
         
         Promise.all(allFlunksMetadata).then((flunksMetadata) => {
@@ -99,6 +104,13 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [flunksMetadata, backpacksMetadata, currentPage, filter]);
 
+  const allItems = useMemo(() => {
+    const flunksMetadataFlat = flunksMetadata.flat();
+    const backpacksMetadataFlat = backpacksMetadata.flat();
+
+    return flunksMetadataFlat.concat(backpacksMetadataFlat);
+  }, [flunksMetadata, backpacksMetadata]);
+
   const value = {
     displayedItems,
     flunksCount: tokenData?.flunks?.length || 0,
@@ -114,6 +126,8 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
     viewType,
     setViewType,
     currentDataPages: filter === "flunks" ? tokenDataPages.flunks : tokenDataPages.backpack,
+    refresh: () => setResetCacheKey((prev) => prev + 1),
+    allItems
   };
 
   return (

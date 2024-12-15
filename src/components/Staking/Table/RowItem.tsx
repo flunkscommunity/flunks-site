@@ -30,13 +30,6 @@ const RowItem: React.FC<RowItemProps> = (props) => {
   return (
     <TableRow className="!flex !items-center justify-center !w-full !min-h-[50px] shadow-sm">
       <CustomTableDataCell className="!items-center !h-full !justify-start">
-        <div className="relative flex items-center justify-center h-full">
-          <img
-            src={props.image}
-            className="w-6 h-6 lg:w-10 lg:h-10 object-contain mr-2 rounded-full z-10"
-          />
-          <ImageBackground className="w-6 h-6 lg:w-10 lg:h-10 absolute z-0 rounded-full right-2" />
-        </div>
         <span className="hidden lg:block text-sm lg:text-base mr-1 truncate">
           {props.prettyCollection} #{props.serialNumber}
         </span>
@@ -55,11 +48,11 @@ const RowItem: React.FC<RowItemProps> = (props) => {
               stakeSingle(
                 props.collectionName as "Backpack" | "Flunks",
                 props.tokenId
-              )
+              ) 
             }
             size="sm"
             variant="thin"
-          >
+          > 
             Stake
           </Button>
         )}

@@ -62,7 +62,6 @@ const GumDashboard = () => {
     canStake,
     refreshStakeInfo,
     walletStakeInfo,
-    canLoadData
   } = useStakingContext();
   const [refreshTimer, setRefreshTimer] = useState(0);
   const previousGumBalace = useRef<number>(gumBalance || 0);
@@ -152,8 +151,8 @@ const GumDashboard = () => {
           onClick={stakeAll}
           disabled={
             !canStake ||
-            (canLoadData && walletStakeInfo.every((info) => info.stakingInfo !== null)) ||
-            (canLoadData && walletStakeInfo.length < 1)
+            (walletStakeInfo.every((info) => info.stakingInfo !== null)) ||
+            (walletStakeInfo.length < 1)
           }
           className="mr-auto !cursor-pointer"
         >
@@ -162,7 +161,7 @@ const GumDashboard = () => {
         <MenuListItem
           className="!cursor-pointer flex items-center gap-2"
           onClick={handleRefreshInfo}
-          disabled={!canStake || refreshTimer > 0 || (canLoadData && walletStakeInfo.length < 1)}
+          disabled={!canStake || refreshTimer > 0 || (walletStakeInfo.length < 1)}
         >
           {refreshTimer > 0 && (
             <Hourglass size={16} className="opacity-50 mb-0.5" />
@@ -172,7 +171,7 @@ const GumDashboard = () => {
         <MenuListItem
           onClick={claimAll}
           disabled={
-            !canStake || (canLoadData && walletStakeInfo.length < 1) || pendingRewards === 0
+            !canStake || (walletStakeInfo.length < 1) || pendingRewards === 0
           }
           className="!cursor-pointer"
         >

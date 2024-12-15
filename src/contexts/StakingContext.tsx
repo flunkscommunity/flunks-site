@@ -17,6 +17,7 @@ import { unstakeOne } from "web3/tx-unstake-one";
 import { claimAll } from "web3/tx-claim-all-gum";
 import { track } from "@vercel/analytics";
 import { getWalletInfoShallow } from "web3/script-get-wallet-items-shallow";
+import { usePaginatedItems } from "./UserPaginatedItems";
 
 interface MetadataViewsDisplayThumbnail {
   url: string;
@@ -46,7 +47,7 @@ export interface StakingInfo {
   pool: string;
 }
 
-interface ObjectDetails {
+export interface ObjectDetails {
   owner: string;
   tokenID: string;
   MetadataViewsDisplay: MetadataViewsDisplay;
@@ -73,7 +74,6 @@ interface ContextState {
   unstakeSingle: (pool: "Flunks" | "Backpack", tokenID: number) => void;
   claimAll: () => void;
   claimSingle: (pool: "Flunks" | "Backpack", tokenID: number) => void;
-  canLoadData: boolean;
 }
 
 export const StakingContext = createContext<ContextState>({
@@ -89,7 +89,6 @@ export const StakingContext = createContext<ContextState>({
   unstakeSingle: () => {},
   claimAll: () => {},
   claimSingle: () => {},
-  canLoadData: false,
 });
 
 interface ProviderProps {
@@ -100,37 +99,21 @@ const StakingProvider: React.FC<ProviderProps> = (props) => {
   const { children } = props;
   const { primaryWallet } = useDynamicContext();
   const walletAddress = primaryWallet?.address || null;
-  const walletProvider = primaryWallet?.connector?.name || null;
   const [gumBalance, setGumBalance] = useState(0);
   const [pendingRewards, setPendingRewards] = useState(0);
+  const { allItems, refresh } = usePaginatedItems();
   const [walletStakeInfo, setWalletStakeInfo] = useState<ObjectDetails[]>([]);
   const { openWindow, closeWindow } = useWindowsContext();
   const [canStake, setCanStake] = useState(false);
-  const [canLoadData, setCanLoadData] = useState(false);
 
   const { executeTx, state, resetState } = useFclTransactionContext();
-
-  useEffect(() => {
-    getWalletInfoShallow(walletAddress).then(
-      (data: { flunks: string[]; backpack: string[] }) => {
-        const flunkItems = data?.flunks?.length || 0;
-        const backpackItems = data?.backpack?.length || 0;
-
-        if (flunkItems + backpackItems > 80) {
-          setCanLoadData(false);
-        } else {
-          setCanLoadData(true);
-        }
-      }
-    );
-  }, []);
 
   const getPendingRewards = () => {
     getPendingRewardsAll(walletAddress).then(setPendingRewards);
   };
 
   const getStakeInfo = () => {
-    getWalletStakeInfo(walletAddress).then(setWalletStakeInfo);
+    refresh();
   };
 
   const sortStakeInfo = (
@@ -171,8 +154,12 @@ const StakingProvider: React.FC<ProviderProps> = (props) => {
 
     getPendingRewardsAll(walletAddress).then(setPendingRewards);
     getGumBalance(walletAddress).then(setGumBalance);
-    canLoadData && getWalletStakeInfo(walletAddress).then(setWalletStakeInfo);
-  }, [walletAddress, canLoadData]);
+  }, [walletAddress]);
+
+  useEffect(() => {
+    if (!walletAddress) return;
+    setWalletStakeInfo(allItems);
+  }, [allItems]);
 
   const _stakeAll = () => {
     resetState();
@@ -252,7 +239,7 @@ const StakingProvider: React.FC<ProviderProps> = (props) => {
         refreshStakeInfo: () => {
           getPendingRewards();
           getStakeInfo();
-          canLoadData && getGumBalance(walletAddress).then(setGumBalance);
+          getGumBalance(walletAddress).then(setGumBalance);
         },
         sortStakeInfo: sortStakeInfo,
         stakeAll: _stakeAll,
@@ -260,7 +247,6 @@ const StakingProvider: React.FC<ProviderProps> = (props) => {
         unstakeSingle: _unstakesingle,
         claimAll: _claimAll,
         claimSingle: () => {},
-        canLoadData,
       }}
     >
       <div className="relative h-[calc(100%-36px)] w-full flex flex-col">
