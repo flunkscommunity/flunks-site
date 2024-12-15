@@ -15,9 +15,10 @@ import {
 } from "components/CustomStyledScrollView";
 import { MarketplaceIndividualNftDto } from "generated/models";
 import { NftItem } from "components/YourItems/ItemsGrid";
+import { ObjectDetails } from "contexts/StakingContext";
 
 interface GraduationInitProps {
-  flunk: NftItem;
+  flunk: ObjectDetails & { pixelUrl: string };
 }
 
 export const uInt64StrToDate = (uInt64Str: string): Date => {

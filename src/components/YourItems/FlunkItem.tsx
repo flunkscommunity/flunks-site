@@ -10,9 +10,11 @@ import { useWindowsContext } from "contexts/WindowsContext";
 import Graduation from "windows/Graduation";
 import ClaimForm from "windows/ClaimForm";
 import { NftItem } from "./ItemsGrid";
+import { ObjectDetails } from "contexts/StakingContext";
 
-interface FlunkItemProps extends NftItem {
+interface FlunkItemProps extends ObjectDetails {
   onBack: () => void;
+  pixelUrl: string;
 }
 
 const FlunkItem: React.FC<FlunkItemProps> = (props) => {
@@ -29,6 +31,14 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
       img.src = props.pixelUrl;
     }
   }, []);
+
+  const _traitsObject = useMemo(() => {
+    return props.traits.traits.reduce((acc, trait) => {
+      acc[trait.name] = trait.value;
+      return acc;
+    }, {});
+  }, [props.traits]);
+
 
   return (
     <div className="w-full h-full relative">
@@ -90,16 +100,16 @@ const FlunkItem: React.FC<FlunkItemProps> = (props) => {
         templateId={Number(props.serialNumber)}
       />
       <Frame className="!w-full h-auto pb-4">
-        <TraitSection metadata={props.traits} />
+        <TraitSection metadata={_traitsObject} />
         <GumSection
           pool={"Flunks"}
           tokenId={props.tokenID}
           claimedRewards={Number(props?.claimedRewards)?.toFixed(2)}
           rewards={Number(props.rewards)?.toFixed(2)}
         />
-        {props.traits?.Backdrop?.toUpperCase() && (
+        {_traitsObject?.Backdrop?.toUpperCase() && (
           <DesktopBackgroundSection
-            src={`/images/backdrops/${props.traits?.Backdrop?.split(" ")
+            src={`/images/backdrops/${_traitsObject?.Backdrop?.split(" ")
               ?.join("-")
               ?.toUpperCase()}.png`}
             itemSrc={props.MetadataViewsDisplay.thumbnail.url}

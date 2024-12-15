@@ -16,12 +16,21 @@ import ImageDisplay from "./ItemImageDisplay";
 import TraitSection from "./ItemTraitSection";
 import GumSection from "./ItemGumSection";
 import { NftItem } from "./ItemsGrid";
+import { ObjectDetails } from "contexts/StakingContext";
 
-interface BackpackItemProps extends NftItem {
+interface BackpackItemProps extends ObjectDetails {
   onBack: () => void;
 }
 
 const BackpackItem: React.FC<BackpackItemProps> = (props) => {
+
+  const _traitsObject = useMemo(() => {
+    return props.traits.traits.reduce((acc, trait) => {
+      acc[trait.name] = trait.value;
+      return acc;
+    }, {});
+  }, [props.traits]);
+
   return (
     <div className="w-full h-full relative">
       <NavMenu
@@ -35,14 +44,13 @@ const BackpackItem: React.FC<BackpackItemProps> = (props) => {
         collectionItemName={"Backpack"}
         tokenId={props.tokenID}
         templateId={Number(props.serialNumber)}
-        pixelSrc={props.traits?.pixelUri}
       />
       <Frame className="!w-full h-auto pb-4">
-        <TraitSection metadata={props.traits} />
+        <TraitSection metadata={_traitsObject} />
         <GumSection
           pool={"Backpacks"}
           tokenId={Number(props.tokenID)}
-          slots={Number(props.traits.slots)}
+          slots={Number(_traitsObject?.slots)}
           claimedRewards={Number(props?.claimedRewards)?.toFixed(2)}
           rewards={Number(props.rewards)?.toFixed(2)}
         />

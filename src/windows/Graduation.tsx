@@ -2,11 +2,12 @@ import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import GraduationInit from "components/Graduation/GraduationInit";
 import { NftItem } from "components/YourItems/ItemsGrid";
 import { FclTransactionProvider } from "contexts/FclTransactionContext";
+import { ObjectDetails } from "contexts/StakingContext";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { MarketplaceIndividualNftDto } from "generated/models";
 
 interface Props {
-  flunk: NftItem;
+  flunk: ObjectDetails & { pixelUrl: string };
 }
 
 const Graduation: React.FC<Props> = (props) => {

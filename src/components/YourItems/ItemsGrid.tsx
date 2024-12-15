@@ -43,6 +43,7 @@ import { getWalletInfoShallow } from "web3/script-get-wallet-items-shallow";
 import YourItemsGridHeader from "./Header/Header";
 import NoItemsMessage from "./NoItemsMessage";
 import { usePaginatedItems } from "contexts/UserPaginatedItems";
+import { ObjectDetails } from "contexts/StakingContext";
 
 const CustomImage = styled.img`
   background-color: ${({ theme }) => theme.borderLight};
@@ -217,12 +218,9 @@ const TableView: React.FC<{
 
 const ItemsGrid: React.FC = () => {
   const { openWindow } = useWindowsContext();
-  const { primaryWallet } = useDynamicContext();
   const scrollViewRef = React.useRef<HTMLDivElement>(null);
   const [activeItem, setActiveItem] =
     useState<MarketplaceIndividualNftDto | null>(null);
-  const [canLoadData, setCanLoadData] = useState<boolean>(false);
-  const [data, setData] = useState<CombinedObject[]>(null!);
 
   const { displayedItems, currentPage, setPage, viewType, currentDataPages } =
     usePaginatedItems();
@@ -236,7 +234,8 @@ const ItemsGrid: React.FC = () => {
 
   const noItems = !memodCombinedItems?.length;
 
-  const handleOpenFlunkfolioItem = (nft: NftItem) => {
+  const handleOpenFlunkfolioItem = (nft: ObjectDetails) => {
+    console.log(nft);
     openWindow({
       key: `${WINDOW_IDS.FLUNKFOLIO_ITEM}${nft.serialNumber}`,
       window: (
@@ -255,7 +254,7 @@ const ItemsGrid: React.FC = () => {
               }}
             >
               <ScrollViewWithBackground>
-                <FlunkItem {...nft} onBack={() => setActiveItem(null)} />
+                <FlunkItem {...nft as ObjectDetails & { pixelUrl: string }} onBack={() => setActiveItem(null)} />
               </ScrollViewWithBackground>
             </CustomStyledScrollView>
           )}
@@ -281,7 +280,7 @@ const ItemsGrid: React.FC = () => {
     <div className="!w-full !h-full max-w-full max-h-full flex flex-col">
       <YourItemsGridHeader />
 
-      {noItems && canLoadData && <NoItemsMessage />}
+      {noItems && <NoItemsMessage />}
       {!activeItem && !noItems && (
         <CustomStyledScrollView
           ref={scrollViewRef}

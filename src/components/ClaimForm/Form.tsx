@@ -2,7 +2,7 @@ import { Button, Frame, GroupBox, Hourglass } from "react95";
 import styled from "styled-components";
 import { Metadata } from "types/NFT";
 import { H1, H3, P } from "components/Typography";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useBackpackClaimed } from "contexts/BackpackClaimContext";
 import { useFclTransactionContext } from "contexts/FclTransactionContext";
 import { TX_STATUS } from "reducers/TxStatusReducer";
@@ -14,9 +14,10 @@ import {
 import { MarketplaceIndividualNftDto } from "generated/models";
 import { collectionControllerGetNftByCollectionNameAndTokenId } from "generated/api/collection/collection";
 import { NftItem } from "components/YourItems/ItemsGrid";
+import { ObjectDetails } from "contexts/StakingContext";
 
 interface Props {
-  nft: NftItem;
+  nft: ObjectDetails & { pixelUrl: string };
   shouldFetch: boolean;
 }
 
@@ -89,6 +90,13 @@ const ClaimFormForm: React.FC<Props> = (props) => {
     freak: "School Shed",
     prep: "Courtyard",
   };
+
+  const _traitsObject = useMemo(() => {
+    return nft.traits.traits.reduce((acc, trait) => {
+      acc[trait.name] = trait.value;
+      return acc;
+    }, {});
+  }, [nft.traits]);
 
   return (
     <div
@@ -237,7 +245,7 @@ const ClaimFormForm: React.FC<Props> = (props) => {
               </GroupBox>
 
               <GroupBox label="LOCATION" variant="flat">
-                <P>{locations[nft?.traits?.Clique?.toLowerCase() || "geek"]}</P>
+                <P>{locations[_traitsObject?.Clique?.toLowerCase() || "geek"]}</P>
               </GroupBox>
 
               {/* <GroupBox label="Date Found" variant="flat">
