@@ -12,7 +12,6 @@ import {
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
 import { MarketplaceIndividualNftDto } from "generated/models";
-import { collectionControllerGetNftByCollectionNameAndTokenId } from "generated/api/collection/collection";
 import { NftItem } from "components/YourItems/ItemsGrid";
 import { ObjectDetails } from "contexts/StakingContext";
 

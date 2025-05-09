@@ -1,8 +1,4 @@
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
-import {
-  useUsersControllerGetUserNftsByWalletAddress,
-  usersControllerGetUserNftsByWalletAddress,
-} from "generated/api/users/users";
 import { MarketplaceIndividualNftDto } from "generated/models";
 import React, { use, useEffect, useMemo, useState } from "react";
 import {
