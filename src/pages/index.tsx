@@ -203,6 +203,14 @@ const Desktop = () => {
             }}
           />
         </a>
+
+        <DesktopAppIcon
+          title="FlunksHub"
+          icon="/images/icons/flunkshub.png"
+          onDoubleClick={() => {
+          window.open("/flunkshub", "_blank");
+  }}
+/>
       </div>
       {windowsMemod}
     </>
