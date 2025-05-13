@@ -15,7 +15,7 @@ import { animated, config, useSpring } from "@react-spring/web";
 import FlunkEMart from "windows/FlunkMart";
 import useGettingStarted from "store/useGettingStarted";
 import Welcome from "windows/Welcome";
-import FlunksHub from "windows/FlunksHub";
+import FlunksHub from "../windows/FlunksHub";
 
 
 const FullScreenLoader = () => {
