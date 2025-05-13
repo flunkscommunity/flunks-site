@@ -207,7 +207,7 @@ const Desktop = () => {
         </a>
 
         <DesktopAppIcon
-          title="Flunks\nHub"
+          title="FlunksHub"
           icon="/images/icons/flunkshub.png"
           onDoubleClick={() => {
             openWindow({
