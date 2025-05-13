@@ -15,6 +15,8 @@ import { animated, config, useSpring } from "@react-spring/web";
 import FlunkEMart from "windows/FlunkMart";
 import useGettingStarted from "store/useGettingStarted";
 import Welcome from "windows/Welcome";
+import FlunksHub from "windows/FlunksHub";
+
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -205,12 +207,16 @@ const Desktop = () => {
         </a>
 
         <DesktopAppIcon
-          title="FlunksHub"
+          title="Flunks\nHub"
           icon="/images/icons/flunkshub.png"
           onDoubleClick={() => {
-          window.open("/flunkshub", "_blank");
+            openWindow({
+             key: WINDOW_IDS.FLUNKS_HUB,
+              window: <FlunksHub />,
+    });
   }}
 />
+
       </div>
       {windowsMemod}
     </>
