@@ -19,6 +19,7 @@ const FlunksHub = () => {
 
 export default FlunksHub;
 
+
 const Welcome: React.FC = () => {
   const { closeWindow, openWindow } = useWindowsContext();
   const [tipIndex, setTipIndex] = useState(0);
