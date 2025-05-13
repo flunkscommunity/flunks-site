@@ -43,20 +43,13 @@ const WelcomePopup: React.FC = () => {
             to use newer features like the Gumball Machine on the Flunks95
             website. Recommended non-custodial wallets include{" "}
             <a
-              href="https://lilico.app/"
+              href="https://www.flow.com/flow-wallet"
               target="_blank"
-              className="underline text-blue-500"
+              className="text-[#0000EE] hover:underline"
             >
-              Lilico
-            </a>{" "}
-            and{" "}
-            <a
-              href="https://blocto.io/"
-              target="_blank"
-              className="underline text-blue-500"
-            >
-              Blocto
+              Flow Wallet
             </a>
+            
             . Remember to transfer all your Flunks items on your Dapper Wallet
             to your non-custodial wallet before logging in. You can also link
             your{" "}
