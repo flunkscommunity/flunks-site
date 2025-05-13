@@ -11,7 +11,7 @@ import useGettingStarted from "store/useGettingStarted";
 const FlunksHub = () => {
   return (
     <div className="p-4 text-white">
-      <h1 className="text-2xl font-bold">🧠 Flunks Hub</h1>
+      <h1 className="text-2xl font-bold">🧠 A/S/L plz </h1>
       <p className="mt-2">All your Flunks tools in one place.</p>
     </div>
   );
