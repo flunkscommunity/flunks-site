@@ -12,7 +12,7 @@ export const WINDOW_IDS = {
   ABOUT_US: "about-us",
   FLUNKFOLIO_ITEM: "flunkfolio-item-",
   FLUNK_E_MART: "flunk-e-mart",
-  FLUNKS_HUB: "FLUNKS_HUB",
+  FLUNKSHUB: "FlunksHub",
 };
 
 export const WINDOW_APP_INFO_TO_WINDOW_ID = {
