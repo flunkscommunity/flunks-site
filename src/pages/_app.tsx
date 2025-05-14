@@ -11,7 +11,6 @@ import {
   DynamicContextProvider,
   DynamicMultiWalletPromptsWidget,
   DynamicUserProfile,
-  RemoveWallets,
 } from "@dynamic-labs/sdk-react-core";
 // @ts-ignore
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
@@ -36,9 +35,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           <ClaimBackpackProvider>
             <DynamicContextProvider
               settings={{
-                environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID,
+                environmentId: "379fb92a-c707-4bcb-bf51-37d9f64ff415",
                 walletConnectors: [FlowWalletConnectors],
-                walletsFilter: RemoveWallets(["dapper"]),
               }}
             >
               <PaginatedItemsProvider>
