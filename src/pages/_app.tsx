@@ -15,7 +15,7 @@ import {
   DynamicContextProvider,
   DynamicUserProfile,
 } from "@dynamic-labs/sdk-react-core";
-import FlowWalletConnectors from "@dynamic-labs/flow";
+import { FlowWalletConnectors } from "@dynamic-labs/flow";
 
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
