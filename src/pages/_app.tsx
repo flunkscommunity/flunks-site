@@ -35,10 +35,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           <ClaimBackpackProvider>
             <DynamicContextProvider
               settings={{
-                environmentId: "379fb92a-c707-4bcb-bf51-37d9f64ff415",
-                walletConnectors: [FlowWalletConnectors],
-                authMode: "wallet-only",
-              }}
+              environmentId: "379fb92a-c707-4bcb-bf51-37d9f64ff415",
+              walletConnectors: [FlowWalletConnectors.lilico],
+  }}
+>
+}}
             >
               <PaginatedItemsProvider>
                 <Component {...pageProps} />
