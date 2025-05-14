@@ -11,7 +11,7 @@ import {
   DynamicContextProvider,
   DynamicUserProfile,
 } from "@dynamic-labs/sdk-react-core";
-import { lilico } from "@dynamic-labs/flow";
+import { FlowWalletConnectors } from "@dynamic-labs/flow";
 import useThemeSettings from "store/useThemeSettings";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
@@ -25,10 +25,6 @@ const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
 const MyApp: AppType = ({ Component, pageProps }) => {
   const memodGlobalStyles = React.useMemo(() => <GlobalStyles />, []);
 
-  const lilicoOnly = FlowWalletConnectors.filter(
-    (connector) => connector.name === "Lilico"
-  );
-
   return (
     <>
       {memodGlobalStyles}
@@ -38,7 +34,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
             <DynamicContextProvider
               settings={{
                 environmentId: "379fb92a-c707-4bcb-bf51-37d9f64ff415",
-                walletConnectors: [lilico],
+                walletConnectors: [FlowWalletConnectors.lilico],
               }}
             >
               <PaginatedItemsProvider>
