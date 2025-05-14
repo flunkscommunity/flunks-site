@@ -5,20 +5,17 @@ import original from "react95/dist/themes/original";
 import "config/fcl";
 
 import "../styles/globals.css";
-
 import WindowsProvider from "contexts/WindowsContext";
 import ClaimBackpackProvider from "contexts/BackpackClaimContext";
-import { PaginatedItemsProvider } from "contexts/UserPaginatedItems";
-import useThemeSettings from "store/useThemeSettings";
-
 import {
   DynamicContextProvider,
   DynamicUserProfile,
 } from "@dynamic-labs/sdk-react-core";
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
-
+import useThemeSettings from "store/useThemeSettings";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
+import { PaginatedItemsProvider } from "contexts/UserPaginatedItems";
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -28,20 +25,20 @@ const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
 const MyApp: AppType = ({ Component, pageProps }) => {
   const memodGlobalStyles = React.useMemo(() => <GlobalStyles />, []);
 
+  const lilicoOnly = FlowWalletConnectors.filter(
+    (connector) => connector.name === "Lilico"
+  );
+
   return (
     <>
       {memodGlobalStyles}
       <ThemeWrapper>
         <WindowsProvider>
           <ClaimBackpackProvider>
-            DynamicContextProvider
+            <DynamicContextProvider
               settings={{
                 environmentId: "379fb92a-c707-4bcb-bf51-37d9f64ff415",
-                walletConnectors: FlowWalletConnectors.filter(
-                  (connector) => connector.name === "Lilico"
-    ),
-  }}
->
+                walletConnectors: lilicoOnly,
               }}
             >
               <PaginatedItemsProvider>
