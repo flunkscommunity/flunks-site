@@ -33,11 +33,14 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       <ThemeWrapper>
         <WindowsProvider>
           <ClaimBackpackProvider>
-            <DynamicContextProvider
+            <<DynamicContextProvider
               settings={{
               environmentId: "379fb92a-c707-4bcb-bf51-37d9f64ff415",
-              walletConnectors: FlowWalletConnectors.filter(
-                (wallet) => wallet?.name === "Lilico"
+              walletConnectors: [FlowWalletConnectors],
+              walletsFilter: (wallet) => wallet.name === "Lilico",
+  }}
+>
+
     ),
   }}
 >
