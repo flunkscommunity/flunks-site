@@ -34,7 +34,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
             <DynamicContextProvider
               settings={{
                 environmentId: "379fb92a-c707-4bcb-bf51-37d9f64ff415",
-                walletConnectors: [FlowWalletConnectors.lilico],
+                walletConnectors: FlowWalletConnectors,
+                walletsFilter: (wallet) => wallet.name === "Lilico",
               }}
             >
               <PaginatedItemsProvider>
