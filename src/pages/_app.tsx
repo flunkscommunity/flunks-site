@@ -11,7 +11,7 @@ import {
   DynamicContextProvider,
   DynamicUserProfile,
 } from "@dynamic-labs/sdk-react-core";
-import { FlowWalletConnectors } from "@dynamic-labs/flow"; // ✅ Correct named import
+import { FlowWalletConnectors } from "@dynamic-labs/flow";
 import useThemeSettings from "store/useThemeSettings";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
