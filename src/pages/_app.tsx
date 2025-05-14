@@ -37,6 +37,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
               settings={{
                 environmentId: "379fb92a-c707-4bcb-bf51-37d9f64ff415",
                 walletConnectors: [FlowWalletConnectors],
+                authMode: "wallet-only",
               }}
             >
               <PaginatedItemsProvider>
