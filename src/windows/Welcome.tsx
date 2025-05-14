@@ -37,12 +37,9 @@ const Welcome: React.FC = () => {
     <p>
       [3/5] You'll need to create an account and login with a non-custodial
       wallet like{" "}
-      <Anchor href="https://lilico.app/" target="_blank">
-        Lilico
-      </Anchor>{" "}
-      and{" "}
-      <Anchor href="https://blocto.io/" target="_blank">
-        Blocto
+      <Anchor href="https://wallet.flow.com/download" target="_blank">
+        Flow
+
       </Anchor>{" "}
       to have full access to Flunks95
     </p>,
