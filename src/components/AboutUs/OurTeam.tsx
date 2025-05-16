@@ -39,96 +39,26 @@ const TEAM: {
   image: string;
 }[] = [
   {
-    name: "Alfred",
+    name: "Skeremy",
     description: (
       <span className="text-xl md:text-xl max-w-2xl text-pretty">
-        Alfred is a smart contract wizard with an extensive background in
-        blockchain technology. As a co-founder of Flunks, he is responsible for
-        developing the smart contracts and the backend systems that power the
-        Flunks ecosystem.
+        Skeremy is the purveyor of vibes in the Flunks universe. He leads the 
+        creative direction behind the scenes and has a background in graphic 
+        design, drugs and nostalgic. 
       </span>
     ),
-    image: "/images/about-us/alfred.png",
+    image: "/images/about-us/skeremy.png",
   },
   {
-    name: "Ben",
+    name: "Nantucket",
     description: (
       <span className="text-xl md:text-xl max-w-2xl text-pretty">
-        Ben is the creative director of Flunks, overseeing the visual identity
-        of the ecosystem. With a background in graphic design and various
-        creative roles, he is also the mind behind the innovative ideas driving
-        Flunks.
+        Nanny is the one and only glue-sniffin' wanderer of Flunks
+        and the greater Web3 realm. With a background in programming and 
+        shenanigans, he's going to keep the gears greased and the train on the tracks.
       </span>
     ),
-    image: "/images/about-us/ben.png",
-  },
-  {
-    name: "Eric",
-    description: (
-      <span className="text-xl md:text-xl max-w-2xl text-pretty">
-        Eric is a marketing professional with expertise in digital marketing and
-        content creation. As a co-founder of Flunks, he manages marketing and
-        community engagement for the Flunks ecosystem.
-      </span>
-    ),
-    image: "/images/about-us/buddsy.png",
-  },
-  {
-    name: "Ervin",
-    description: (
-      <span className="text-xl md:text-xl max-w-2xl text-pretty">
-        Ervin is a software engineer with a passion for blockchain technology.
-        He specializes in web and 3D development. As a co-founder of Flunks, he
-        develops the front-facing side of the ecosystem and served as the artist
-        for the Flunks Originals collection.
-      </span>
-    ),
-    image: "/images/about-us/ervin.png",
-  },
-  {
-    name: "Gerald",
-    description: (
-      <span className="text-xl md:text-xl max-w-2xl text-pretty">
-        Gerald is a software engineer with a background in front-end
-        development. He is responsible for developing the Flunks website,
-        ensuring it is functional and user-friendly.
-      </span>
-    ),
-    image: "/images/about-us/gerald.png",
-  },
-  {
-    name: "Maddy",
-    description: (
-      <span className="text-xl md:text-xl max-w-2xl text-pretty">
-        Maddy manages the office operations, partnership, hiring, and
-        contractual agreements. She is the glue that holds the Flunks team
-        together, ensuring everything runs smoothly behind the scenes.
-      </span>
-    ),
-    image: "/images/about-us/maddy.png",
-  },
-  {
-    name: "Tom",
-    description: (
-      <span className="text-xl md:text-xl max-w-2xl text-pretty">
-        Tom is a multi-talented artist with a background in illustration and 3D
-        modeling. He created the art assets for the Flunks Portraits collection,
-        Pocket Juniors, Flunks 3D, and contributes to the broader Flunks
-        ecosystem.
-      </span>
-    ),
-    image: "/images/about-us/tom.png",
-  },
-  {
-    name: "Victor",
-    description: (
-      <span className="text-xl md:text-xl max-w-2xl text-pretty">
-        Victor is a talented UX/UI designer passionate about creating beautiful
-        and user-friendly interfaces. He is responsible for the usability and
-        design of the Flunks ecosystem.
-      </span>
-    ),
-    image: "/images/about-us/victor.png",
+    image: "/images/about-us/nantucket.png",
   },
 ];
 

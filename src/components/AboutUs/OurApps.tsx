@@ -64,23 +64,6 @@ const PRODUCTS: {
       </span>
     ),
   },
-  {
-    title: "Zeero Marketplace",
-    description: (
-      <span className="text-xl md:text-xl max-w-2xl text-pretty">
-        Zeero is a decentralized marketplace for FLOW NFTs, designed to empower
-        creators and traders by eliminating additional marketplace fees while
-        respecting creator-set royalties. In a landscape saturated with
-        fee-heavy marketplaces, Zeero stands out by providing a platform for
-        free transactions.
-        <br />
-        <br />
-        With a sleek, user-friendly interface, Zeero makes it easy for users to
-        interact with the FLOW blockchain.
-      </span>
-    ),
-    href: "https://zeero.art/",
-  },
 ];
 
 const OurApps = () => {
