@@ -184,7 +184,7 @@ const Desktop = () => {
             title="Discord"
             icon="/images/icons/discord.png"
             onDoubleClick={() => {
-              return null;
+              window.open("https://discord.gg/wuukvhHhS3", "_blank");
             }}
           />
         </a>
