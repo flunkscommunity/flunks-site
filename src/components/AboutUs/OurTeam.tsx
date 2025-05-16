@@ -58,7 +58,7 @@ const TEAM: {
         shenanigans, he's going to keep the gears greased and the train on the tracks.
       </span>
     ),
-    image: "/images/about-us/nantucket.png",
+    image: "/images/about-us/Nantucket.png",
   },
 ];
 
