@@ -39,7 +39,7 @@ const FlunkButton = styled.button<FlunkButtonProps>`
   &:hover {
     transform: scale(1.05);
   }
-\`;
+`;
 
 const FlunkButtons = styled(ButtonArea)`
   right: 90px;
