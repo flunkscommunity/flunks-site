@@ -1,44 +1,88 @@
 import React from "react";
-import DraggableResizeableWindow from "components/DraggableResizeableWindow";
-import { WINDOW_IDS } from "fixed";
-import { useWindowsContext } from "contexts/WindowsContext";
 import styled from "styled-components";
+import { useWindowsContext } from "contexts/WindowsContext";
+import { WINDOW_IDS } from "fixed";
 import { Frame } from "react95";
 
-const ControllerFrame = styled(Frame)`
-  background: url('/images/icons/controller-bg.png') no-repeat center center;
+const ControllerWrapper = styled.div`
+  position: relative;
+  width: 600px;
+  height: 320px;
+  background: transparent;
+  background-image: url("/images/controller-bg.png");
   background-size: contain;
-  width: 500px;
-  height: 300px;
-  border: none;
-  box-shadow: none;
-  padding: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 0 auto;
+`;
+
+const ButtonArea = styled.div`
+  position: absolute;
   display: flex;
+  gap: 16px;
+`;
+
+const FlunkButton = styled.button<{ color?: string }>\`
+  width: 60px;
+  height: 60px;
+  border-radius: 100%;
+  font-weight: bold;
+  background-color: \${({ color }) => color || "#ccc"};
+  border: 2px solid #444;
+  cursor: pointer;
+  box-shadow: 0 2px #000;
+  &:hover {
+    transform: scale(1.05);
+  }
+\`;
+
+const FlunkButtons = styled(ButtonArea)`
+  right: 90px;
+  top: 60px;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+`;
+
+const MenuButtons = styled(ButtonArea)`
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 const Homebase = () => {
+  const { closeWindow } = useWindowsContext();
+
   const goToRoom = (room: string) => {
-    console.log(`Go to ${room}`);
-    // Add navigation logic or open another window
+    console.log(\`Go to \${room}\`);
+    // Replace with navigation logic or window open
   };
 
   return (
-    <ControllerFrame variant="field">
-      <div className="flex gap-4">
-        <button onClick={() => goToRoom("geek")}>🟢 Geek</button>
-        <button onClick={() => goToRoom("freak")}>🔵 Freak</button>
-        <button onClick={() => goToRoom("prep")}>🟡 Prep</button>
-        <button onClick={() => goToRoom("jock")}>🔴 Jock</button>
-      </div>
+    <Frame
+      variant="field"
+      style={{
+        width: 640,
+        height: 360,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        margin: "auto",
+        background: "transparent",
+      }}
+    >
+      <ControllerWrapper>
+        <FlunkButtons>
+          <FlunkButton color="#0f0" onClick={() => goToRoom("geek")}>Geek</FlunkButton>
+          <FlunkButton color="#00f" onClick={() => goToRoom("freak")}>Freak</FlunkButton>
+          <FlunkButton color="#ff0" onClick={() => goToRoom("prep")}>Prep</FlunkButton>
+          <FlunkButton color="#f00" onClick={() => goToRoom("jock")}>Jock</FlunkButton>
+        </FlunkButtons>
 
-      <div className="mt-4 flex gap-2">
-        <button>Start</button>
-        <button>Select</button>
-      </div>
-    </ControllerFrame>
+        <MenuButtons>
+          <FlunkButton onClick={() => console.log("Start pressed")}>Start</FlunkButton>
+          <FlunkButton onClick={() => console.log("Select pressed")}>Select</FlunkButton>
+        </MenuButtons>
+      </ControllerWrapper>
+    </Frame>
   );
 };
 
