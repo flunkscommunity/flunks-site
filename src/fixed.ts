@@ -13,7 +13,7 @@ export const WINDOW_IDS = {
   FLUNKFOLIO_ITEM: "flunkfolio-item-",
   FLUNK_E_MART: "flunk-e-mart",
   FLUNKS_HUB: "Flunks_Hub",
-  HOMEBASE: "HOMEBASE",
+  HOMEBASE: "Homebase",
 
 };
 
