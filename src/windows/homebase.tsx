@@ -19,7 +19,7 @@ const Homebase = () => {
     >
       <div className="p-4 text-lg">
         <p>🏠 Welcome to Homebase.</p>
-        <p>This is your command center!</p>
+        <p>This is your command center for all things Flunks.</p>
       </div>
     </DraggableResizeableWindow>
   );
