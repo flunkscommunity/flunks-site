@@ -209,7 +209,7 @@ const Desktop = () => {
 
           <DesktopAppIcon
             title="Homebase"
-            icon="/images/icons/homebase.png"
+            icon="/images/icons/Homebase.png"
             onDoubleClick={() => {
               openWindow({
                 key: WINDOW_IDS.HOMEBASE,
