@@ -57,7 +57,7 @@ const Homebase = () => {
   const { closeWindow } = useWindowsContext();
 
   const goToRoom = (room: string) => {
-    console.log(\`Go to \${room}\`);
+    console.log(`Go to ${room}`);
     // Replace with navigation logic or window open
   };
 
