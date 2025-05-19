@@ -16,6 +16,7 @@ import FlunkEMart from "windows/FlunkMart";
 import useGettingStarted from "store/useGettingStarted";
 import Welcome from "windows/Welcome";
 import FlunksHub from "../windows/FlunksHub";
+import Homebase from "windows/Homebase";
 
 
 const FullScreenLoader = () => {
@@ -205,6 +206,17 @@ const Desktop = () => {
             }}
           />
         </a>
+
+          <DesktopAppIcon
+            title="Homebase"
+            icon="/images/icons/homebase.png"
+            onDoubleClick={() => {
+              openWindow({
+                key: WINDOW_IDS.HOMEBASE,
+                window: <Homebase />,
+            });
+          }}
+        />
 
         <DesktopAppIcon
           title="FlunksHub"
