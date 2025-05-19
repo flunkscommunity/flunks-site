@@ -1,8 +1,7 @@
-// windows/Homebase.tsx
-import { Frame } from "react95";
+import React from "react";
+import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { WINDOW_IDS } from "fixed";
 import { useWindowsContext } from "contexts/WindowsContext";
-import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 
 const Homebase = () => {
   const { closeWindow } = useWindowsContext();
@@ -11,12 +10,17 @@ const Homebase = () => {
     <DraggableResizeableWindow
       onClose={() => closeWindow(WINDOW_IDS.HOMEBASE)}
       headerTitle="Homebase"
+      initialHeight="80%"
+      initialWidth="80%"
       windowsId={WINDOW_IDS.HOMEBASE}
-      headerIcon="/images/icons/Homebase.png"
+      resizable
+      showMaximizeButton
+      headerIcon="/images/icons/backpack.png"
     >
-      <Frame variant="well" className="p-4">
-        <p>Welcome to the Homebase!</p>
-      </Frame>
+      <div className="p-4 text-lg">
+        <p>🏠 Welcome to Homebase.</p>
+        <p>This is your command center!</p>
+      </div>
     </DraggableResizeableWindow>
   );
 };
