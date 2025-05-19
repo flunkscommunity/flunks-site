@@ -214,6 +214,8 @@ const Desktop = () => {
             openWindow({
               key: WINDOW_IDS.HOMEBASE,
                 window: <Homebase />,
+                appIcon: "/images/icons/homebase.png",
+                appName: "Homebase",                  
     });
   }}
 />
@@ -223,7 +225,7 @@ const Desktop = () => {
           icon="/images/icons/flunkshub.png"
           onDoubleClick={() => {
             openWindow({
-             key: WINDOW_IDS.FLUNKS_HUB,
+              key: WINDOW_IDS.FLUNKS_HUB,
               window: <FlunksHub />,
     });
   }}
