@@ -207,18 +207,16 @@ const Desktop = () => {
           />
         </a>
 
-          <DesktopAppIcon
-            title="Homebase"
-            icon="/images/icons/homebase.png"
-            onDoubleClick={() => {
-              openWindow({
-                key: WINDOW_IDS.HOMEBASE,
+        <DesktopAppIcon
+          title="Homebase"
+          icon="/images/icons/homebase.png"
+          onDoubleClick={() => {
+            openWindow({
+              key: WINDOW_IDS.HOMEBASE,
                 window: <Homebase />,
-                appIcon: "/images/icons/homebase.png",
-                appName: "Homebase",
-            });
-          }}
-        />
+    });
+  }}
+/>
 
         <DesktopAppIcon
           title="FlunksHub"
