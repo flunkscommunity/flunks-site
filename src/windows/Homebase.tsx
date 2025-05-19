@@ -22,13 +22,18 @@ const ButtonArea = styled.div`
   gap: 16px;
 `;
 
-const FlunkButton = styled.button<{ color?: string }>\`
+interface FlunkButtonProps {
+  color?: string;
+}
+
+const FlunkButton = styled.button<FlunkButtonProps>`
   width: 60px;
   height: 60px;
   border-radius: 100%;
+  border: none;
   font-weight: bold;
-  background-color: \${({ color }) => color || "#ccc"};
-  border: 2px solid #444;
+  background-color: ${({ color }) => color || "gray"};
+  color: black;
   cursor: pointer;
   box-shadow: 0 2px #000;
   &:hover {
