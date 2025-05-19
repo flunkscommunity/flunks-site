@@ -15,7 +15,7 @@ const Homebase = () => {
       windowsId={WINDOW_IDS.HOMEBASE}
       resizable
       showMaximizeButton
-      headerIcon="/images/icons/backpack.png"
+      headerIcon="/images/icons/Homebase.png"
     >
       <div className="p-4 text-lg">
         <p>🏠 Welcome to Homebase.</p>
