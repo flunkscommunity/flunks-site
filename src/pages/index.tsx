@@ -214,9 +214,6 @@ const Desktop = () => {
               openWindow({
                 key: WINDOW_IDS.HOMEBASE,
                 window: <Homebase />,
-                appIcon: "/images/icons/homebase.png",
-                appName: "Homebase",
-            });
           }}
         />
 
