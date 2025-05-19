@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { Frame } from "react95";
 
 const ControllerFrame = styled(Frame)`
-  background: url('/images/ui/controller-bg.png') no-repeat center center;
+  background: url('/images/icons/controller-bg.png') no-repeat center center;
   background-size: contain;
   width: 500px;
   height: 300px;
