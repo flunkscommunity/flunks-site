@@ -21,8 +21,14 @@ const Description = styled.p`
   text-align: center;
 `;
 
+const ButtonRow = styled.div`
+  margin-top: 24px;
+  display: flex;
+  gap: 16px;
+`;
+
 const JockRoom = () => {
-  const { closeWindow } = useWindowsContext();
+  const { closeWindow, openWindow } = useWindowsContext();
 
   return (
     <DraggableResizeableWindow
@@ -41,6 +47,11 @@ const JockRoom = () => {
           This is the place for all things athletic and sporty. Get ready to
           train hard and play harder!
         </Description>
+        <ButtonRow>
+          <button onClick={() => openWindow(WINDOW_IDS.FREAK)}>Open Freak Room</button>
+          <button onClick={() => openWindow(WINDOW_IDS.GEEK)}>Open Geek Room</button>
+          <button onClick={() => openWindow(WINDOW_IDS.PREP)}>Open Prep Room</button>
+        </ButtonRow>
       </JockRoomWrapper>
     </DraggableResizeableWindow>
   );

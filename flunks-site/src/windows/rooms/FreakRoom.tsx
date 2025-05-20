@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useWindowsContext } from "../../contexts/WindowsContext";
 import DraggableResizeableWindow from "../../components/DraggableResizeableWindow";
-// Update the import path below to the correct location of WINDOW_IDS in your project
 import { WINDOW_IDS } from "../../fixed";
 
 const RoomWrapper = styled.div`
@@ -22,8 +21,14 @@ const Content = styled.p`
   font-size: 1.2rem;
 `;
 
+const ButtonRow = styled.div`
+  margin-top: 24px;
+  display: flex;
+  gap: 16px;
+`;
+
 const FreakRoom = () => {
-  const { closeWindow } = useWindowsContext();
+  const { closeWindow, openWindow } = useWindowsContext();
 
   return (
     <DraggableResizeableWindow
@@ -39,6 +44,11 @@ const FreakRoom = () => {
       <RoomWrapper>
         <Title>Welcome to the Freak Room!</Title>
         <Content>This room is dedicated to all things freaky and fun!</Content>
+        <ButtonRow>
+          <button onClick={() => openWindow(WINDOW_IDS.GEEK)}>Open Geek Room</button>
+          <button onClick={() => openWindow(WINDOW_IDS.PREP)}>Open Prep Room</button>
+          <button onClick={() => openWindow(WINDOW_IDS.JOCK)}>Open Jock Room</button>
+        </ButtonRow>
       </RoomWrapper>
     </DraggableResizeableWindow>
   );

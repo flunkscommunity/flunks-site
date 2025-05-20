@@ -56,10 +56,25 @@ const ButtonPosition = styled.div<{ left: number; top: number }>`
 `;
 
 const Homebase = () => {
-  const { closeWindow } = useWindowsContext();
+  const { closeWindow, openWindow } = useWindowsContext();
 
   const goToRoom = (room: string) => {
-    console.log(`Go to ${room}`);
+    switch (room) {
+      case "geek":
+        openWindow(WINDOW_IDS.GEEK); // Make sure GEEK exists in WINDOW_IDS
+        break;
+      case "freak":
+        openWindow(WINDOW_IDS.FREAK);
+        break;
+      case "prep":
+        openWindow(WINDOW_IDS.PREP); // Make sure PREP exists in WINDOW_IDS
+        break;
+      case "jock":
+        openWindow(WINDOW_IDS.JOCK); // Make sure JOCK exists in WINDOW_IDS
+        break;
+      default:
+        break;
+    }
   };
 
   return (

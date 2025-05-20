@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useWindowsContext } from '../../contexts/WindowsContext';
 import DraggableResizeableWindow from '../../components/DraggableResizeableWindow';
-// Update the import path below to the correct location of WINDOW_IDS
 import { WINDOW_IDS } from '../../fixed';
 
 const ContentWrapper = styled.div`
@@ -22,8 +21,14 @@ const Description = styled.p`
   color: #666;
 `;
 
+const ButtonRow = styled.div`
+  margin-top: 24px;
+  display: flex;
+  gap: 16px;
+`;
+
 const GeekRoom = () => {
-  const { closeWindow } = useWindowsContext();
+  const { closeWindow, openWindow } = useWindowsContext();
 
   return (
     <DraggableResizeableWindow
@@ -41,7 +46,11 @@ const GeekRoom = () => {
         <Description>
           This room is dedicated to all things geeky. Here you can explore various topics, engage in discussions, and participate in activities that celebrate geek culture.
         </Description>
-        {/* Additional content and functionality can be added here */}
+        <ButtonRow>
+          <button onClick={() => openWindow(WINDOW_IDS.FREAK)}>Open Freak Room</button>
+          <button onClick={() => openWindow(WINDOW_IDS.PREP)}>Open Prep Room</button>
+          <button onClick={() => openWindow(WINDOW_IDS.JOCK)}>Open Jock Room</button>
+        </ButtonRow>
       </ContentWrapper>
     </DraggableResizeableWindow>
   );

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useWindowsContext } from '../../contexts/WindowsContext';
 import DraggableResizeableWindow from '../../components/DraggableResizeableWindow';
 import { WINDOW_IDS } from '../../fixed';
-// If the actual path is different, adjust accordingly.
 
 const ContentWrapper = styled.div`
   padding: 20px;
@@ -22,8 +21,14 @@ const Description = styled.p`
   color: #666;
 `;
 
+const ButtonRow = styled.div`
+  margin-top: 24px;
+  display: flex;
+  gap: 16px;
+`;
+
 const PrepRoom = () => {
-  const { closeWindow } = useWindowsContext();
+  const { closeWindow, openWindow } = useWindowsContext();
 
   return (
     <DraggableResizeableWindow
@@ -42,6 +47,11 @@ const PrepRoom = () => {
           This room is designed for students who are preparing for their classes. 
           Here you can find resources, study materials, and more.
         </Description>
+        <ButtonRow>
+          <button onClick={() => openWindow(WINDOW_IDS.FREAK)}>Open Freak Room</button>
+          <button onClick={() => openWindow(WINDOW_IDS.GEEK)}>Open Geek Room</button>
+          <button onClick={() => openWindow(WINDOW_IDS.JOCK)}>Open Jock Room</button>
+        </ButtonRow>
       </ContentWrapper>
     </DraggableResizeableWindow>
   );
