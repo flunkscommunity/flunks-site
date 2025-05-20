@@ -78,32 +78,32 @@ const Homebase = () => {
       resizable={false}
     >
       <ControllerWrapper>
-        <ButtonArea>
-          {/* Left (G) */}
-          <ButtonPosition left={0} top={60}>
-            <FlunkButton color="green" onClick={() => goToRoom("geek")}>
-              G
-            </FlunkButton>
-          </ButtonPosition>
-          {/* Top (F) */}
-          <ButtonPosition left={60} top={0}>
-            <FlunkButton color="blue" onClick={() => goToRoom("freak")}>
-              F
-            </FlunkButton>
-          </ButtonPosition>
-          {/* Bottom (P) */}
-          <ButtonPosition left={60} top={120}>
-            <FlunkButton color="yellow" onClick={() => goToRoom("prep")}>
-              P
-            </FlunkButton>
-          </ButtonPosition>
-          {/* Right (J) */}
-          <ButtonPosition left={120} top={60}>
-            <FlunkButton color="red" onClick={() => goToRoom("jock")}>
-              J
-            </FlunkButton>
-          </ButtonPosition>
-        </ButtonArea>
+      <ButtonArea>
+        {/* Left (G) */}
+        <ButtonPosition left={0} top={60}>
+        <FlunkButton color="green" onClick={() => window.location.href = "/rooms/geek"}>
+          G
+        </FlunkButton>
+        </ButtonPosition>
+        {/* Top (F) */}
+        <ButtonPosition left={60} top={0}>
+        <FlunkButton color="blue" onClick={() => window.location.href = "/rooms/freak"}>
+          F
+        </FlunkButton>
+        </ButtonPosition>
+        {/* Bottom (P) */}
+        <ButtonPosition left={60} top={120}>
+        <FlunkButton color="yellow" onClick={() => window.location.href = "/rooms/prep"}>
+          P
+        </FlunkButton>
+        </ButtonPosition>
+        {/* Right (J) */}
+        <ButtonPosition left={120} top={60}>
+        <FlunkButton color="red" onClick={() => window.location.href = "/rooms/jock"}>
+          J
+        </FlunkButton>
+        </ButtonPosition>
+      </ButtonArea>
       </ControllerWrapper>
     </DraggableResizeableWindow>
   );
