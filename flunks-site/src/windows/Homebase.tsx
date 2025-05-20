@@ -1,7 +1,9 @@
 import styled from "styled-components";
-import { useWindowsContext } from "contexts/WindowsContext";
-import DraggableResizeableWindow from "components/DraggableResizeableWindow";
-import { WINDOW_IDS } from "fixed";
+import { useWindowsContext } from "../contexts/WindowsContext";
+// Update the import path below if the file is located elsewhere, e.g.:
+import DraggableResizeableWindow from "../components/DraggableResizeableWindow";
+// Update the import path below to the correct location of WINDOW_IDS:
+import { WINDOW_IDS } from "../fixed";
 import Image from "next/image";
 
 const ControllerWrapper = styled.div`

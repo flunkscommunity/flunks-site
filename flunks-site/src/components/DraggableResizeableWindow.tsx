@@ -22,7 +22,19 @@ const Content = styled.div`
   padding: 10px;
 `;
 
-const DraggableResizeableWindow = ({ 
+interface DraggableResizeableWindowProps {
+  windowsId: string;
+  onClose: () => void;
+  initialWidth: string;
+  initialHeight: string;
+  headerTitle: string;
+  headerIcon?: string;
+  showMaximizeButton?: boolean;
+  resizable?: boolean;
+  children: React.ReactNode;
+}
+
+const DraggableResizeableWindow: React.FC<DraggableResizeableWindowProps> = ({ 
   windowsId, 
   onClose, 
   initialWidth, 

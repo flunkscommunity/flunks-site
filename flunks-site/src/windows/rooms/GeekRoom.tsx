@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useWindowsContext } from 'contexts/WindowsContext';
-import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
-import { WINDOW_IDS } from 'fixed';
+import { useWindowsContext } from '../../contexts/WindowsContext';
+import DraggableResizeableWindow from '../../components/DraggableResizeableWindow';
+// Update the import path below to the correct location of WINDOW_IDS
+import { WINDOW_IDS } from '../../fixed';
 
 const ContentWrapper = styled.div`
   padding: 20px;
@@ -26,8 +27,8 @@ const GeekRoom = () => {
 
   return (
     <DraggableResizeableWindow
-      windowsId={WINDOW_IDS.GEEKROOM}
-      onClose={() => closeWindow(WINDOW_IDS.GEEKROOM)}
+      windowsId={WINDOW_IDS.GEEK}
+      onClose={() => closeWindow(WINDOW_IDS.GEEK)}
       initialWidth="640px"
       initialHeight="360px"
       headerTitle="Geek Room"

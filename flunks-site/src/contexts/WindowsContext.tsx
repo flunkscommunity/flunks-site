@@ -16,7 +16,7 @@ export const WindowsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const openWindow = (windowId: string) => {
-    setOpenWindows((prev) => [...new Set([...prev, windowId])]);
+    setOpenWindows((prev) => Array.from(new Set([...prev, windowId])));
   };
 
   return (

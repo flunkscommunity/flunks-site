@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import { useWindowsContext } from "contexts/WindowsContext";
-import DraggableResizeableWindow from "components/DraggableResizeableWindow";
-import { WINDOW_IDS } from "fixed";
+import { useWindowsContext } from "../../contexts/WindowsContext";
+import DraggableResizeableWindow from "../../components/DraggableResizeableWindow";
+// Update the import path below to the correct location of WINDOW_IDS in your project
+import { WINDOW_IDS } from "../../fixed";
 
 const RoomWrapper = styled.div`
   display: flex;

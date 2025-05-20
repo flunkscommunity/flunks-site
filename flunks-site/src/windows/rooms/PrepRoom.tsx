@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useWindowsContext } from 'contexts/WindowsContext';
-import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
-import { WINDOW_IDS } from 'fixed';
+import { useWindowsContext } from '../../contexts/WindowsContext';
+import DraggableResizeableWindow from '../../components/DraggableResizeableWindow';
+import { WINDOW_IDS } from '../../fixed';
+// If the actual path is different, adjust accordingly.
 
 const ContentWrapper = styled.div`
   padding: 20px;
@@ -26,8 +27,8 @@ const PrepRoom = () => {
 
   return (
     <DraggableResizeableWindow
-      windowsId={WINDOW_IDS.PREPROOM}
-      onClose={() => closeWindow(WINDOW_IDS.PREPROOM)}
+      windowsId={WINDOW_IDS.PREP}
+      onClose={() => closeWindow(WINDOW_IDS.PREP)}
       initialWidth="640px"
       initialHeight="360px"
       headerTitle="Prep Room"

@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { useWindowsContext } from "contexts/WindowsContext";
-import DraggableResizeableWindow from "components/DraggableResizeableWindow";
-import { WINDOW_IDS } from "fixed";
+import { useWindowsContext } from "../../contexts/WindowsContext";
+import DraggableResizeableWindow from "../../components/DraggableResizeableWindow";
+import { WINDOW_IDS } from "../../fixed";
 
 const JockRoomWrapper = styled.div`
   display: flex;
@@ -26,8 +26,8 @@ const JockRoom = () => {
 
   return (
     <DraggableResizeableWindow
-      windowsId={WINDOW_IDS.JOCK_ROOM}
-      onClose={() => closeWindow(WINDOW_IDS.JOCK_ROOM)}
+      windowsId={WINDOW_IDS.JOCK}
+      onClose={() => closeWindow(WINDOW_IDS.JOCK)}
       initialWidth="640px"
       initialHeight="360px"
       headerTitle="Jock Room"
