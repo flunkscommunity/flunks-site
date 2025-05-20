@@ -211,11 +211,9 @@ const Desktop = () => {
           title="Homebase"
           icon="/images/icons/homebase.png"
           onDoubleClick={() => {
-            openWindow({
-              key: WINDOW_IDS.HOMEBASE,
-                window: <Homebase />,
-                appIcon: "/images/icons/homebase.png",
-                appName: "Homebase",                  
+    openWindow({
+      key: WINDOW_IDS.HOMEBASE,
+      window: <Homebase />,
     });
   }}
 />
