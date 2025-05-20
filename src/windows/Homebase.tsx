@@ -28,10 +28,19 @@ const FlunkButton = styled.button<{ color: string }>`
   width: 60px;
   height: 60px;
   border-radius: 100%;
-  background-color: ${(props) => props.color};
-  border: none;
+  background: linear-gradient(145deg, ${(props) => props.color}, #fff8 60%, #0003 100%);
+  border: 3px solid #888;
+  box-shadow: 0 4px 12px #0004, 0 1.5px 0 #fff inset;
   cursor: pointer;
   margin: 4px;
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #222;
+  transition: transform 0.08s;
+  &:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 6px #0002;
+  }
 `;
 
 const Homebase = () => {
