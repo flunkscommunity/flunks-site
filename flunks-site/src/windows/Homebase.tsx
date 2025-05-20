@@ -52,11 +52,6 @@ const ButtonPosition = styled.div<{ left: number; top: number }>`
   left: ${(props) => props.left}px;
   top: ${(props) => props.top}px;
 `;
-  GEEK: "geek",
-  FREAK: "freak",
-  PREP: "prep",
-  JOCK: "jock",
-} as const;
 
 const Homebase = () => {
   const { closeWindow } = useWindowsContext();
@@ -75,36 +70,29 @@ const Homebase = () => {
       headerIcon="/images/icons/homebase.png"
       showMaximizeButton={false}
       resizable={false}
+    >
+      <ControllerWrapper>
+        <ButtonArea>
           <ButtonPosition left={0} top={60}>
             <FlunkButton color="green" onClick={() => goToRoom("geek")}>
               G
             </FlunkButton>
           </ButtonPosition>
-          {/* Top (F) */}
           <ButtonPosition left={60} top={0}>
             <FlunkButton color="blue" onClick={() => goToRoom("freak")}>
               F
             </FlunkButton>
           </ButtonPosition>
-          {/* Bottom (P) */}
           <ButtonPosition left={60} top={120}>
             <FlunkButton color="yellow" onClick={() => goToRoom("prep")}>
               P
             </FlunkButton>
           </ButtonPosition>
-          {/* Right (J) */}
           <ButtonPosition left={120} top={60}>
             <FlunkButton color="red" onClick={() => goToRoom("jock")}>
               J
             </FlunkButton>
           </ButtonPosition>
-          <FlunkButton
-            color="red"
-            style={{ left: 120, top: 60 }}
-            onClick={() => goToRoom(ROOM_NAMES.JOCK)}
-          >
-            J
-          </FlunkButton>
         </ButtonArea>
       </ControllerWrapper>
     </DraggableResizeableWindow>
