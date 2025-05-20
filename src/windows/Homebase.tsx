@@ -22,9 +22,14 @@ const BackgroundImage = styled.img`
 const ButtonArea = styled.div`
   position: absolute;
   z-index: 2;
+  width: 180px;
+  height: 180px;
+  left: 340px;
+  top: 60px;
 `;
 
 const FlunkButton = styled.button<{ color: string }>`
+  position: absolute;
   width: 60px;
   height: 60px;
   border-radius: 100%;
@@ -32,7 +37,6 @@ const FlunkButton = styled.button<{ color: string }>`
   border: 3px solid #888;
   box-shadow: 0 4px 12px #0004, 0 1.5px 0 #fff inset;
   cursor: pointer;
-  margin: 4px;
   font-weight: bold;
   font-size: 1.5rem;
   color: #222;
@@ -65,11 +69,39 @@ const Homebase = () => {
         <BackgroundImage src="/images/icons/controller-bg.png" alt="controller" />
 
         {/* Flunk Buttons Positioned */}
-        <ButtonArea style={{ top: 80, right: 100 }}>
-          <FlunkButton color="green" onClick={() => goToRoom("geek")}>G</FlunkButton>
-          <FlunkButton color="blue" onClick={() => goToRoom("freak")}>F</FlunkButton>
-          <FlunkButton color="yellow" onClick={() => goToRoom("prep")}>P</FlunkButton>
-          <FlunkButton color="red" onClick={() => goToRoom("jock")}>J</FlunkButton>
+        <ButtonArea>
+          {/* Left (G) */}
+          <FlunkButton
+            color="green"
+            style={{ left: 0, top: 60 }}
+            onClick={() => goToRoom("geek")}
+          >
+            G
+          </FlunkButton>
+          {/* Top (F) */}
+          <FlunkButton
+            color="blue"
+            style={{ left: 60, top: 0 }}
+            onClick={() => goToRoom("freak")}
+          >
+            F
+          </FlunkButton>
+          {/* Bottom (P) */}
+          <FlunkButton
+            color="yellow"
+            style={{ left: 60, top: 120 }}
+            onClick={() => goToRoom("prep")}
+          >
+            P
+          </FlunkButton>
+          {/* Right (J) */}
+          <FlunkButton
+            color="red"
+            style={{ left: 120, top: 60 }}
+            onClick={() => goToRoom("jock")}
+          >
+            J
+          </FlunkButton>
         </ButtonArea>
       </ControllerWrapper>
     </DraggableResizeableWindow>
