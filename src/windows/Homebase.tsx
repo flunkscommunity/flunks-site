@@ -52,6 +52,7 @@ const ButtonPosition = styled.div<{ left: number; top: number }>`
   left: ${(props) => props.left}px;
   top: ${(props) => props.top}px;
 `;
+const ROOM_NAMES = {
   GEEK: "geek",
   FREAK: "freak",
   PREP: "prep",
@@ -75,6 +76,10 @@ const Homebase = () => {
       headerIcon="/images/icons/homebase.png"
       showMaximizeButton={false}
       resizable={false}
+    >
+      <ControllerWrapper>
+        <ButtonArea>
+          {/* Left (G) */}
           <ButtonPosition left={0} top={60}>
             <FlunkButton color="green" onClick={() => goToRoom("geek")}>
               G
@@ -98,13 +103,6 @@ const Homebase = () => {
               J
             </FlunkButton>
           </ButtonPosition>
-          <FlunkButton
-            color="red"
-            style={{ left: 120, top: 60 }}
-            onClick={() => goToRoom(ROOM_NAMES.JOCK)}
-          >
-            J
-          </FlunkButton>
         </ButtonArea>
       </ControllerWrapper>
     </DraggableResizeableWindow>
