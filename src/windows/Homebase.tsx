@@ -6,10 +6,10 @@ import Image from "next/image";
 import AppLoader from "components/AppLoader";
 
 // Room Components
-import GeekRoom from "windows/rooms/GeekRoom";
-import FreakRoom from "windows/rooms/FreakRoom";
-import PrepRoom from "windows/rooms/PrepRoom";
-import JockRoom from "windows/rooms/JockRoom";
+import GeekRoom from "./rooms/GeekRoom";
+import FreakRoom from "./rooms/FreakRoom";
+import PrepRoom from "./rooms/PrepRoom";
+import JockRoom from "./rooms/JockRoom";
 
 const ControllerWrapper = styled.div`
   position: relative;
