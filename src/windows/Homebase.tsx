@@ -5,6 +5,12 @@ import { WINDOW_IDS } from "fixed";
 import Image from "next/image";
 import AppLoader from "components/AppLoader";
 
+// Room Components
+import GeekRoom from "windows/rooms/GeekRoom";
+import FreakRoom from "windows/rooms/FreakRoom";
+import PrepRoom from "windows/rooms/PrepRoom";
+import JockRoom from "windows/rooms/JockRoom";
+
 const ControllerWrapper = styled.div`
   position: relative;
   width: 600px;
@@ -53,18 +59,22 @@ const ButtonPosition = styled.div<{ left: number; top: number }>`
   left: ${(props) => props.left}px;
   top: ${(props) => props.top}px;
 `;
-const ROOM_NAMES = {
-  GEEK: "geek",
-  FREAK: "freak",
-  PREP: "prep",
-  JOCK: "jock",
-} as const;
 
 const Homebase = () => {
-  const { closeWindow } = useWindowsContext();
+  const { closeWindow, openWindow } = useWindowsContext();
 
-  const goToRoom = (room: string) => {
-    console.log(`Go to ${room}`);
+  const openRoom = (key: string) => {
+    const roomMap: Record<string, JSX.Element> = {
+      geek: <GeekRoom />,
+      freak: <FreakRoom />,
+      prep: <PrepRoom />,
+      jock: <JockRoom />,
+    };
+
+    openWindow({
+      key: key.toUpperCase(),
+      window: roomMap[key],
+    });
   };
 
   return (
@@ -83,25 +93,25 @@ const Homebase = () => {
           <ButtonArea>
             {/* Left (G) */}
             <ButtonPosition left={0} top={60}>
-              <FlunkButton color="green" onClick={() => window.location.href = "/rooms/geek"}>
+              <FlunkButton color="green" onClick={() => openRoom("geek")}>
                 G
               </FlunkButton>
             </ButtonPosition>
             {/* Top (F) */}
             <ButtonPosition left={60} top={0}>
-              <FlunkButton color="blue" onClick={() => window.location.href = "/rooms/freak"}>
+              <FlunkButton color="blue" onClick={() => openRoom("freak")}>
                 F
               </FlunkButton>
             </ButtonPosition>
             {/* Bottom (P) */}
             <ButtonPosition left={60} top={120}>
-              <FlunkButton color="yellow" onClick={() => window.location.href = "/rooms/prep"}>
+              <FlunkButton color="yellow" onClick={() => openRoom("prep")}>
                 P
               </FlunkButton>
             </ButtonPosition>
             {/* Right (J) */}
             <ButtonPosition left={120} top={60}>
-              <FlunkButton color="red" onClick={() => window.location.href = "/rooms/jock"}>
+              <FlunkButton color="red" onClick={() => openRoom("jock")}>
                 J
               </FlunkButton>
             </ButtonPosition>
