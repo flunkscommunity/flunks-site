@@ -1,5 +1,5 @@
 import Head from "next/head";
-import FreakRoom from "../../../flunks-site/src/windows/rooms/FreakRoom";
+import FreakRoom from "../../../windows/rooms/FreakRoom";
 
 const FreakPage = () => (
   <>

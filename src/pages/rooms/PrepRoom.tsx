@@ -1,5 +1,5 @@
 import Head from "next/head";
-import PrepRoom from "../../../flunks-site/src/windows/rooms/PrepRoom";
+import PrepRoom from "../../../windows/rooms/PrepRoom";
 
 const PrepPage = () => (
   <>

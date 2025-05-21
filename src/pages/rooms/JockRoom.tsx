@@ -1,5 +1,5 @@
 import Head from "next/head";
-import JockRoom from "../../../flunks-site/src/windows/rooms/JockRoom";
+import JockRoom from "../../../windows/rooms/JockRoom";
 
 const JockPage = () => (
   <>
