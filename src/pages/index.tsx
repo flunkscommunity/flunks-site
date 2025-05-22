@@ -248,12 +248,15 @@ const Desktop = () => {
         <DraggableResizeableWindow
           windowsId={WINDOW_IDS.SEMESTER_0}
           onClose={() => closeWindow(WINDOW_IDS.SEMESTER_0)}
-          initialWidth="2000px"
-          initialHeight="2000px"
+          initialWidth="100%"
+          initialHeight="100%"
+          resizable={false}
           headerTitle="Semester 0"
           headerIcon="/images/icons/semester0-icon.png"
         >
-          <Semester0Map onClose={() => closeWindow(WINDOW_IDS.SEMESTER_0)} />
+          <Semester0Map 
+            onClose={() => closeWindow(WINDOW_IDS.SEMESTER_0)} 
+            />
         </DraggableResizeableWindow>
       ),
     });
