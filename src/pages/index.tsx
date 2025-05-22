@@ -3,6 +3,7 @@ import Head from "next/head";
 import CustomMonitor from "components/CustomMonitor";
 import { useWindowsContext } from "contexts/WindowsContext";
 import DesktopAppIcon from "components/DesktopAppIcon";
+// import Semester0 from "windows/Semester0"; // Removed because the module does not exist
 import { WINDOW_IDS } from "fixed";
 import React, { useEffect, useMemo, useState } from "react";
 import YourStudents from "windows/YourStudents";
@@ -17,6 +18,7 @@ import useGettingStarted from "store/useGettingStarted";
 import Welcome from "windows/Welcome";
 import FlunksHub from "../windows/FlunksHub";
 import Homebase from "windows/Homebase";
+// import Semester0 from "windows/Semester0"; // Uncomment and adjust if you have a Semester0 window/component
 
 
 const FullScreenLoader = () => {
@@ -225,6 +227,16 @@ const Desktop = () => {
             openWindow({
               key: WINDOW_IDS.FLUNKS_HUB,
               window: <FlunksHub />,
+    });
+  }}
+/>
+        <DesktopAppIcon
+          title="Semester 0"
+          icon="/images/icons/semester0-icon.png"
+          onDoubleClick={() => {
+           openWindow({
+            key: WINDOW_IDS.SEMESTER_0,
+            window: <div>Semester 0 window coming soon!</div>,
     });
   }}
 />

@@ -1,5 +1,6 @@
 import Head from "next/head";
-import JockRoom from "../../../windows/rooms/JockRoom";
+// import JockRoom from "../../../windows/rooms/JockRoom";
+import JockRoom from "./JockRoom";
 
 const JockPage = () => (
   <>

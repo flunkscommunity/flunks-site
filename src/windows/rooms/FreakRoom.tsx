@@ -1,12 +1,13 @@
 import Head from "next/head";
-import FreakRoom from "../../../windows/rooms/FreakRoom";
+// import FreakRoom from "../../../rooms/FreakRoom";
 
 const FreakPage = () => (
   <>
     <Head>
       <title>Freak Room | Flunks</title>
     </Head>
-    <FreakRoom />
+    {/* <FreakRoom /> */}
+    <div>Freak Room content goes here.</div>
   </>
 );
 
