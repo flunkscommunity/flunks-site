@@ -18,6 +18,7 @@ import useGettingStarted from "store/useGettingStarted";
 import Welcome from "windows/Welcome";
 import FlunksHub from "../windows/FlunksHub";
 import Homebase from "windows/Homebase";
+import Semester0Map from "windows/Semester0map";
 // import Semester0 from "windows/Semester0"; // Uncomment and adjust if you have a Semester0 window/component
 
 
@@ -236,7 +237,7 @@ const Desktop = () => {
           onDoubleClick={() => {
            openWindow({
             key: WINDOW_IDS.SEMESTER_0,
-            window: <div>Semester 0 window coming soon!</div>,
+            window: <Semester0Map onClose={() => { /* implement close logic here */ }} />,
     });
   }}
 />

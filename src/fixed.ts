@@ -15,7 +15,7 @@ export const WINDOW_IDS = {
   FLUNKS_HUB: "Flunks_Hub",
   HOMEBASE: "Homebase",
   FREAK: "freak",
-  SEMESTER_0: "semester_0",
+  SEMESTER_0: "semester0Map",
 };
 
 export const WINDOW_APP_INFO_TO_WINDOW_ID = {
