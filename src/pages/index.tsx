@@ -19,6 +19,7 @@ import Welcome from "windows/Welcome";
 import FlunksHub from "../windows/FlunksHub";
 import Homebase from "windows/Homebase";
 import Semester0Map from "windows/Semester0Map";
+import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 // import Semester0 from "windows/Semester0"; // Uncomment and adjust if you have a Semester0 window/component
 
 
@@ -100,6 +101,10 @@ const Desktop = () => {
       </React.Fragment>
     );
   }, [windows]);
+
+  function closeWindow(SEMESTER_0: string): void {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <>
@@ -232,15 +237,30 @@ const Desktop = () => {
   }}
 />
         <DesktopAppIcon
-          title="Semester 0"
-          icon="/images/icons/semester0-icon.png"
-          onDoubleClick={() => {
-           openWindow({
-            key: WINDOW_IDS.SEMESTER_0,
-            window: <Semester0Map onClose={() => { /* implement close logic here */ }} />,
+  title="Semester 0"
+  icon="/images/icons/semester0-icon.png"
+  onDoubleClick={() => {
+    openWindow({
+      key: WINDOW_IDS.SEMESTER_0,
+      window: (
+        <DraggableResizeableWindow
+          windowsId={WINDOW_IDS.SEMESTER_0}
+          onClose={() => closeWindow(WINDOW_IDS.SEMESTER_0)}
+          initialWidth="1200px"
+          initialHeight="800px"
+          headerTitle="Semester 0"
+          headerIcon="/images/icons/semester0-icon.png"
+        >
+          <Semester0Map onClose={function (): void {
+            throw new Error("Function not implemented.");
+          } } />
+        </DraggableResizeableWindow>
+      ),
     });
   }}
 />
+
+/{">"}
 
       </div>
       {windowsMemod}
