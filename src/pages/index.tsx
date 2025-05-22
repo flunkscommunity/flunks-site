@@ -236,24 +236,24 @@ const Desktop = () => {
     });
   }}
 />
-        <DesktopAppIcon
+  <DesktopAppIcon
   title="Semester 0"
   icon="/images/icons/semester0-icon.png"
   onDoubleClick={() => {
     openWindow({
       key: WINDOW_IDS.SEMESTER_0,
+      label: "Semester 0", // ✅ Show label in taskbar
+      icon: "/images/icons/semester0-icon.png", // ✅ Show icon in taskbar
       window: (
         <DraggableResizeableWindow
           windowsId={WINDOW_IDS.SEMESTER_0}
           onClose={() => closeWindow(WINDOW_IDS.SEMESTER_0)}
-          initialWidth="1200px"
-          initialHeight="800px"
+          initialWidth="2000px"
+          initialHeight="2000px"
           headerTitle="Semester 0"
           headerIcon="/images/icons/semester0-icon.png"
         >
-          <Semester0Map onClose={function (): void {
-            throw new Error("Function not implemented.");
-          } } />
+          <Semester0Map onClose={() => closeWindow(WINDOW_IDS.SEMESTER_0)} />
         </DraggableResizeableWindow>
       ),
     });
