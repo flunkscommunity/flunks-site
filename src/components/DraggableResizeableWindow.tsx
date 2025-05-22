@@ -219,12 +219,13 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
                   id="action"
                   onClick={(e) => {
                     e.stopPropagation();
-                    onClose();
-                  }}
-                  className="pointer-events-auto"
-                >
+                    onClose?.(); // ✅ Optional chaining prevents crashes if onClose is missing
+  }}
+  className="pointer-events-auto"
+>
                   <span className="close-icon" />
                 </Button>
+
               </WindowButtons>
             )}
           </WindowHeader>

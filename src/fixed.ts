@@ -51,7 +51,7 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
   },
   [WINDOW_IDS.SEMESTER_0]: {
     appName: "Semester 0",
-    appIcon: "/images/icons/semester_0.png",
+    appIcon: "/images/icons/semester0-icon.png", // ✅ match filename you use elsewhere
     key: WINDOW_IDS.SEMESTER_0,
   },
 };
