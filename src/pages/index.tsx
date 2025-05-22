@@ -18,7 +18,7 @@ import useGettingStarted from "store/useGettingStarted";
 import Welcome from "windows/Welcome";
 import FlunksHub from "../windows/FlunksHub";
 import Homebase from "windows/Homebase";
-import Semester0Map from "windows/Semester0Map";
+import Semester0Map from "windows/Semester0map";
 // import Semester0 from "windows/Semester0"; // Uncomment and adjust if you have a Semester0 window/component
 
 
