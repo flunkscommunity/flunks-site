@@ -79,7 +79,7 @@ const FullScreenLoader = () => {
 };
 
 const Desktop = () => {
-  const { windows, openWindow } = useWindowsContext();
+  const { windows, openWindow, closeWindow } = useWindowsContext();
   const { showGettingStartedOnStartup } = useGettingStarted();
 
   useEffect(() => {
@@ -102,9 +102,6 @@ const Desktop = () => {
     );
   }, [windows]);
 
-  function closeWindow(SEMESTER_0: string): void {
-    throw new Error("Function not implemented.");
-  }
 
   return (
     <>
