@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
-import styles from '../styles/map.module.css'; // Updated to use CSS module
+import styles from '../styles/map.module.css';
 
 interface Props {
   onClose: () => void;
 }
 
 const Semester0Map: React.FC<Props> = ({ onClose }) => {
-  const [hovered, setHovered] = useState<string | null>(null);
-
-  const handleMouseEnter = (location: string) => {
-    setHovered(location);
-  };const Semester0Map: React.FC<Props> = ({ onClose }) => {
   console.log("🛠 Semester0Map rendered. onClose is:", onClose);
   const [hovered, setHovered] = useState<string | null>(null);
 
@@ -22,24 +17,19 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         alt="Semester 0 Map"
       />
 
-      {/* Grayout overlay */}
       {hovered && <div className={styles["map-overlay"]} />}
 
-      {/* Treehouse icon */}
       <div
         className={`${styles.icon} ${styles.treehouse}`}
         onMouseEnter={() => setHovered('treehouse')}
         onMouseLeave={() => setHovered(null)}
       />
-
-      {/* School icon */}
       <div
         className={`${styles.icon} ${styles.school}`}
         onMouseEnter={() => setHovered('school')}
         onMouseLeave={() => setHovered(null)}
       />
 
-      {/* Info Box */}
       {hovered && (
         <div className={styles["info-box"]}>
           {hovered === 'treehouse' && <>🪵 The secret treehouse where the real stories unfold.</>}
@@ -47,7 +37,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      {/* Close button */}
       <button className={styles["close-btn"]} onClick={onClose}>✖</button>
     </div>
   );
