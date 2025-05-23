@@ -43,5 +43,3 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 };
 
 export default Semester0Map;
-
-
