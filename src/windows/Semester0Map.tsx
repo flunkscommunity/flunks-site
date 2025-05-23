@@ -42,4 +42,15 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   );
 };
 
+const WINDOW_IDS = {
+  SEMESTER_0: 'semester0'
+};
+
+<Semester0Map onClose={() => closeWindow(WINDOW_IDS.SEMESTER_0)} />
+function closeWindow(SEMESTER_0: any): void {
+  throw new Error('Function not implemented.');
+}
+
 export default Semester0Map;
+
+
