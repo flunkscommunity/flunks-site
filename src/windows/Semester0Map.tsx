@@ -1,3 +1,7 @@
+const Semester0Map: React.FC<Props> = ({ onClose }) => {
+  console.log("🛠 Semester0Map rendered. onClose is:", onClose);
+  const [hovered, setHovered] = useState<string | null>(null);
+
 import React, { useState } from 'react';
 import styles from '../styles/map.module.css'; // Updated to use CSS module
 
