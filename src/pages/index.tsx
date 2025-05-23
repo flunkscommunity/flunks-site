@@ -254,9 +254,6 @@ const Desktop = () => {
           headerTitle="Semester 0"
           headerIcon="/images/icons/semester0-icon.png"
         >
-          <Semester0Map 
-            onClose={() => closeWindow(WINDOW_IDS.SEMESTER_0)} 
-            />
         </DraggableResizeableWindow>
       ),
     });
