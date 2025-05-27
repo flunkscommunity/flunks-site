@@ -223,6 +223,27 @@ const Desktop = () => {
   }}
 />
 
+<DesktopAppIcon
+  title="Terminal"
+  icon="/images/icons/terminal.png"
+  onDoubleClick={() => {
+    openWindow({
+      key: 'flunks_terminal',
+      window: (
+        <DraggableResizeableWindow
+          windowsId="flunks_terminal"
+          onClose={() => closeWindow('flunks_terminal')}
+          headerTitle="Flunks Terminal"
+          initialWidth="520px"
+          initialHeight="400px"
+        >
+          <FlunksTerminal onClose={() => closeWindow('flunks_terminal')} />
+        </DraggableResizeableWindow>
+      ),
+    });
+  }}
+/>
+
         <DesktopAppIcon
           title="FlunksHub"
           icon="/images/icons/flunkshub.png"

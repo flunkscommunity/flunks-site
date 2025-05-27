@@ -1,0 +1,83 @@
+// components/FlunksTerminal.tsx
+import { useState } from 'react';
+import { Window, WindowHeader, WindowContent, TextField, Button } from 'react95';
+import Draggable from 'react-draggable';
+
+const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
+  const [history, setHistory] = useState<string[]>([]);
+  const [input, setInput] = useState('');
+
+  const handleCommand = () => {
+    const newHistory = [...history, `> ${input}`];
+    let response = '';
+
+    switch (input.toLowerCase()) {
+      case 'help':
+        response = 'Available commands: help, whoami, flunks, clear';
+        break;
+      case 'whoami':
+        response = 'You are a misfit of Flunks High.';
+        break;
+      case 'flunks':
+        response = 'Flunks is a 90s-inspired digital universe full of secrets.';
+        break;
+      case 'clear':
+        setHistory([]);
+        setInput('');
+        return;
+      default:
+        response = 'Command not recognized. Type "help" to see available commands.';
+    }
+
+    setHistory([...newHistory, response]);
+    setInput('');
+  };
+
+  return (
+    <Draggable handle=".drag-handle">
+      <div style={{ position: 'fixed', top: 120, left: 120, zIndex: 9999 }}>
+        <Window style={{ width: 500 }}>
+          <div className="drag-handle">
+            <WindowHeader className="window-title">
+              <span>flunks-terminal.exe</span>
+              <Button onClick={onClose} style={{ float: 'right' }}>
+                <span style={{ fontWeight: 'bold' }}>×</span>
+              </Button>
+            </WindowHeader>
+          </div>
+          <WindowContent>
+            <div
+              style={{
+                backgroundColor: 'black',
+                color: 'lime',
+                fontFamily: 'monospace',
+                height: 300,
+                overflowY: 'auto',
+                padding: '10px',
+                marginBottom: '10px',
+              }}
+            >
+              {history.map((line, i) => (
+                <div key={i}>{line}</div>
+              ))}
+            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleCommand();
+              }}
+            >
+              <TextField
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                fullWidth
+              />
+            </form>
+          </WindowContent>
+        </Window>
+      </div>
+    </Draggable>
+  );
+};
+
+export default FlunksTerminal;
