@@ -44,7 +44,7 @@ const TEAM: {
       <span className="text-xl md:text-xl max-w-2xl text-pretty">
         Skeremy is the purveyor of vibes in the Flunks universe. He leads the 
         creative direction behind the scenes and has a background in graphic 
-        design, drugs and nostalgic. 
+        design, drugs and nostalgia. 
       </span>
     ),
     image: "/images/about-us/skeremy.png",
