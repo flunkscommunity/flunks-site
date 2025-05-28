@@ -1,5 +1,5 @@
 // components/FlunksTerminal.tsx
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Window, WindowHeader, WindowContent, TextField, Button } from 'react95';
 
 const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
@@ -7,6 +7,9 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
   const [input, setInput] = useState('');
   const terminalEndRef = useRef<HTMLDivElement>(null);
 
+    useEffect(() => {
+    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+},  [history]);
 
   const handleCommand = () => {
     const newHistory = [...history, `> ${input}`];
