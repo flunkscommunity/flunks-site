@@ -7,6 +7,8 @@ import {
   Button
 } from 'react95';
 
+const errorSound = typeof Audio !== "undefined" ? new Audio('/sounds/incorrect.mp3') : null;
+const successSound = typeof Audio !== "undefined" ? new Audio('/sounds/correct.mp3') : null;
 const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
   const [history, setHistory] = useState<string[]>([]);
   const [input, setInput] = useState('');
@@ -20,23 +22,36 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
     const newHistory = [...history, `> ${input}`];
     let response = '';
 
-    switch (input.toLowerCase()) {
-      case 'help':
-        response = 'Available commands: help, whoami, flunks, clear';
-        break;
-      case 'whoami':
-        response = 'You are a misfit of Flunks High.';
-        break;
-      case 'flunks':
-        response = 'Flunks is a 90s-inspired digital universe full of secrets.';
-        break;
-      case 'clear':
-        setHistory([]);
-        setInput('');
-        return;
-      default:
-        response = 'Command not recognized. Type "help" to see available commands.';
+let validCommand = true;
+
+switch (input.toLowerCase()) {
+  case 'help':
+    response = 'Available commands: help, whoami, flunks, clear';
+    break;
+  case 'whoami':
+    response = 'You are a misfit of Flunks High.';
+    break;
+  case 'flunks':
+    response = 'Flunks is a 90s-inspired digital universe full of secrets.';
+    break;
+  case 'clear':
+    setHistory([]);
+    setInput('');
+    return;
+  default:
+    response = 'Command not recognized. Type "help" to see available commands.';
+    validCommand = false;
+    if (errorSound) {
+      errorSound.currentTime = 0;
+      errorSound.play();
     }
+    break;
+}
+
+if (validCommand && successSound) {
+  successSound.currentTime = 0;
+  successSound.play();
+}
 
     setHistory([...newHistory, response]);
     setInput('');
