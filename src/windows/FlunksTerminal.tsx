@@ -45,13 +45,21 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
               </Button>
             </WindowHeader>
           </div>
-          <WindowContent>
+          <WindowContent
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              flexGrow: 1,
+              height: '100%',
+            }}
+          >
             <div
               style={{
                 backgroundColor: 'black',
                 color: 'lime',
                 fontFamily: 'monospace',
-                height: 300,
+                height: '100%',
+                minHeight: '240px',
                 overflowY: 'auto',
                 padding: '10px',
                 marginBottom: '10px',
