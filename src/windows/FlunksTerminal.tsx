@@ -107,11 +107,7 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
         </Window>
       </div>
     </Draggable>
-
-
-
-
-export default FlunksTerminal;};  );  );
+  );
 };
 
 export default FlunksTerminal;
