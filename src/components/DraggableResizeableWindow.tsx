@@ -236,9 +236,12 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
         {toolbar}
 
         <WindowContent
-          className="!px-2 flex flex-col w-full flex-grow max-h-[calc(100%-44px)]"
+          className="flex flex-col flex-grow w-full h-full !px-2 max-h-none"
           style={{
             paddingTop: !!toolbar ? "0" : "16px",
+            flexGrow: 1,
+            height: "100%",
+            minHeight: 0,
           }}
         >
           {children}
