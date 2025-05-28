@@ -1,15 +1,20 @@
-// components/FlunksTerminal.tsx
-import { useState, useRef, useEffect } from 'react';
-import { Window, WindowHeader, WindowContent, TextField, Button } from 'react95';
+import { useEffect, useRef, useState } from 'react';
+import {
+  Window,
+  WindowHeader,
+  WindowContent,
+  TextField,
+  Button
+} from 'react95';
 
 const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
   const [history, setHistory] = useState<string[]>([]);
   const [input, setInput] = useState('');
   const terminalEndRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
+  useEffect(() => {
     terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-},  [history]);
+  }, [history]);
 
   const handleCommand = () => {
     const newHistory = [...history, `> ${input}`];
@@ -38,21 +43,8 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        width: '100%',
-      }}
-    >
-      <Window
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-        }}
-      >
+    <div style={{ width: '100%', height: '100%' }}>
+      <Window style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
         <WindowHeader className="window-title">
           <span>flunks-terminal.exe</span>
           <Button onClick={onClose} style={{ float: 'right' }}>
@@ -65,8 +57,9 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
             display: 'flex',
             flexDirection: 'column',
             flexGrow: 1,
-            minHeight: 0,
             padding: 8,
+            height: '100%',
+            minHeight: 0
           }}
         >
           <div
@@ -78,21 +71,22 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
               overflowY: 'auto',
               padding: '10px',
               marginBottom: '10px',
-              minHeight: 0,
+              display: 'flex',
+              flexDirection: 'column'
             }}
           >
             {history.map((line, i) => (
               <div key={i}>{line}</div>
             ))}
             <div ref={terminalEndRef} />
-</div>
-          
+          </div>
 
           <form
             onSubmit={(e) => {
               e.preventDefault();
               handleCommand();
             }}
+            style={{ margin: 0 }}
           >
             <TextField
               value={input}
