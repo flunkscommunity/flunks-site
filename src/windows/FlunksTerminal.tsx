@@ -35,8 +35,26 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <Draggable handle=".drag-handle">
-      <div style={{ position: 'fixed', top: 120, left: 120, zIndex: 9999 }}>
-        <Window style={{ width: 500 }}>
+      <div
+        style={{
+          position: 'fixed',
+          top: 120,
+          left: 120,
+          zIndex: 9999,
+          width: 500,
+          height: 400,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <Window
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
           <div className="drag-handle">
             <WindowHeader className="window-title">
               <span>flunks-terminal.exe</span>
@@ -51,6 +69,7 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
               flexDirection: 'column',
               flexGrow: 1,
               height: '100%',
+              minHeight: 0,
             }}
           >
             <div
@@ -58,11 +77,13 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
                 backgroundColor: 'black',
                 color: 'lime',
                 fontFamily: 'monospace',
-                height: '100%',
-                minHeight: '240px',
+                flexGrow: 1,
+                minHeight: 0,
                 overflowY: 'auto',
                 padding: '10px',
                 marginBottom: '10px',
+                display: 'flex',
+                flexDirection: 'column',
               }}
             >
               {history.map((line, i) => (
@@ -74,6 +95,7 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
                 e.preventDefault();
                 handleCommand();
               }}
+              style={{ margin: 0 }}
             >
               <TextField
                 value={input}
@@ -85,7 +107,11 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
         </Window>
       </div>
     </Draggable>
-  );
+
+
+
+
+export default FlunksTerminal;};  );  );
 };
 
 export default FlunksTerminal;
