@@ -1,7 +1,6 @@
 // components/FlunksTerminal.tsx
 import { useState } from 'react';
 import { Window, WindowHeader, WindowContent, TextField, Button } from 'react95';
-import Draggable from 'react-draggable';
 
 const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
   const [history, setHistory] = useState<string[]>([]);
@@ -34,79 +33,69 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
   };
 
   return (
-    <Draggable handle=".drag-handle">
-      <div
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        width: '100%',
+      }}
+    >
+      <Window
         style={{
-          position: 'fixed',
-          top: 120,
-          left: 120,
-          zIndex: 9999,
-          width: '100%',
-          height: '100%',
           display: 'flex',
           flexDirection: 'column',
+          height: '100%',
         }}
       >
-        <Window
+        <WindowHeader className="window-title">
+          <span>flunks-terminal.exe</span>
+          <Button onClick={onClose} style={{ float: 'right' }}>
+            <span style={{ fontWeight: 'bold' }}>×</span>
+          </Button>
+        </WindowHeader>
+
+        <WindowContent
           style={{
-            width: '100%',
-            height: '100%',
             display: 'flex',
             flexDirection: 'column',
+            flexGrow: 1,
+            minHeight: 0,
+            padding: 8,
           }}
         >
-          <div className="drag-handle">
-            <WindowHeader className="window-title">
-              <span>flunks-terminal.exe</span>
-              <Button onClick={onClose} style={{ float: 'right' }}>
-                <span style={{ fontWeight: 'bold' }}>×</span>
-              </Button>
-            </WindowHeader>
-          </div>
-          <WindowContent
+          <div
             style={{
-              display: 'flex',
-              flexDirection: 'column',
+              backgroundColor: 'black',
+              color: 'lime',
+              fontFamily: 'monospace',
               flexGrow: 1,
-              height: '100%',
+              overflowY: 'auto',
+              padding: '10px',
+              marginBottom: '10px',
               minHeight: 0,
             }}
           >
-            <div
-              style={{
-                backgroundColor: 'black',
-                color: 'lime',
-                fontFamily: 'monospace',
-                flexGrow: 1,
-                minHeight: 0,
-                overflowY: 'auto',
-                padding: '10px',
-                marginBottom: '10px',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              {history.map((line, i) => (
-                <div key={i}>{line}</div>
-              ))}
-            </div>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleCommand();
-              }}
-              style={{ margin: 0 }}
-            >
-              <TextField
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                fullWidth
-              />
-            </form>
-          </WindowContent>
-        </Window>
-      </div>
-    </Draggable>
+            {history.map((line, i) => (
+              <div key={i}>{line}</div>
+            ))}
+          </div>
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleCommand();
+            }}
+          >
+            <TextField
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              fullWidth
+            />
+          </form>
+        </WindowContent>
+      </Window>
+    </div>
   );
 };
 
