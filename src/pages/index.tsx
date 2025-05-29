@@ -19,29 +19,8 @@ import Homebase from "windows/Homebase";
 import Semester0Map from "windows/Semester0Map";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import FlunksTerminal from "windows/FlunksTerminal";
-// import RadioWindow from "windows/RadioWindow"; // Removed because the module does not exist
-// Try default import if WINDOW_IDS is the default export
-// import WINDOW_IDS from "constants";
-
-// Or import everything as an object and use WINDOW_IDS from it
-// import * as constants from "constants";
-// const WINDOW_IDS = constants.WINDOW_IDS;
-// Try default import if WINDOW_IDS is the default export
-// import WINDOW_IDS from "constants";
-
-// Or import everything as an object and use WINDOW_IDS from it
-// Update the import path to the correct location of your constants file
-// Update the import path below to the actual location of your constants file.
-// For example, if your constants are in 'src/constants.ts', use the following:
-// Update the import path below to the actual location of your constants file.
-// For example, if your constants are in 'src/constants.ts', use the following:
-import * as constants from "../../constants";
-const WINDOW_IDS = constants.WINDOW_IDS;
-import { useWindowsContext } from "contexts/WindowsContext";
-
-
-// import Semester0 from "windows/Semester0"; // Uncomment and adjust if you have a Semester0 window/component
-
+import { WINDOW_IDS } from "fixed";
+// import RadioWindow from "windows/RadioWindow"; /
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -105,7 +84,7 @@ const Desktop = () => {
   useEffect(() => {
     if (showGettingStartedOnStartup) {
       openWindow({
-        key: WINDOW_IDS.WELCOME,
+        key: windows.WELCOME,
         window: <Welcome />,
       });
     }
@@ -116,7 +95,7 @@ const Desktop = () => {
       <React.Fragment>
         {Object.keys(windows).length > 0 &&
           Object.entries(windows).map(([key, window]) => (
-            <React.Fragment key={key}>{window}</React.Fragment>
+            <React.Fragment key={key}>{window as React.ReactNode}</React.Fragment>
           ))}
       </React.Fragment>
     );
@@ -131,7 +110,7 @@ const Desktop = () => {
           icon="/images/icons/vault.png"
           onDoubleClick={() => {
             openWindow({
-              key: WINDOW_IDS.YOUR_STUDENTS,
+              key: windows.YOUR_STUDENTS,
               window: <YourStudents />,
             });
           }}
@@ -142,7 +121,7 @@ const Desktop = () => {
           icon="/images/icons/gum-machine.png"
           onDoubleClick={() => {
             openWindow({
-              key: WINDOW_IDS.GUMBALL_MACHINE,
+              key: windows.GUMBALL_MACHINE,
               window: <GumballMachine />,
             });
           }}
@@ -153,7 +132,7 @@ const Desktop = () => {
           icon="/images/icons/pocket-juniors-50x50.png"
           onDoubleClick={() => {
             openWindow({
-              key: WINDOW_IDS.PROJECT_JNR,
+              key: windows.PROJECT_JNR,
               window: <ProjectJnr />,
             });
           }}
@@ -164,7 +143,7 @@ const Desktop = () => {
           icon="/images/icons/flunk-e-mart.png"
           onDoubleClick={() => {
             openWindow({
-              key: WINDOW_IDS.FLUNK_E_MART,
+              key: windows.FLUNK_E_MART,
               window: <FlunkEMart windowId={WINDOW_IDS.FLUNK_E_MART} />,
             });
           }}
@@ -175,7 +154,7 @@ const Desktop = () => {
           icon="/images/icons/about-us.png"
           onDoubleClick={() => {
             openWindow({
-              key: WINDOW_IDS.ABOUT_US,
+              key: windows.ABOUT_US,
               window: <AboutUs />,
             });
           }}
@@ -255,7 +234,7 @@ const Desktop = () => {
           icon="/images/icons/homebase.png"
           onDoubleClick={() => {
     openWindow({
-      key: WINDOW_IDS.HOMEBASE,
+      key: windows.HOMEBASE,
       window: <Homebase />,
     });
   }}
@@ -287,7 +266,7 @@ const Desktop = () => {
           icon="/images/icons/flunkshub.png"
           onDoubleClick={() => {
             openWindow({
-              key: WINDOW_IDS.FLUNKS_HUB,
+              key: windows.FLUNKS_HUB,
               window: <FlunksHub />,
     });
   }}
@@ -297,7 +276,7 @@ const Desktop = () => {
   icon="/images/icons/semester0-icon.png"
   onDoubleClick={() => {
     openWindow({
-      key: WINDOW_IDS.SEMESTER_0,
+      key: windows.SEMESTER_0,
       label: "Semester 0", // ✅ Show label in taskbar
       icon: "/images/icons/semester0-icon.png", // ✅ Show icon in taskbar
       window: (
@@ -376,3 +355,7 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+function useWindowsContext(): { windows: any; openWindow: any; closeWindow: any; } {
+  throw new Error("Function not implemented.");
+}
+
