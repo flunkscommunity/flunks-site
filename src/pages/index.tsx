@@ -1,10 +1,8 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import CustomMonitor from "components/CustomMonitor";
-import { useWindowsContext } from "contexts/WindowsContext";
 import DesktopAppIcon from "components/DesktopAppIcon";
 // import Semester0 from "windows/Semester0"; // Removed because the module does not exist
-import { WINDOW_IDS } from "fixed";
 import React, { useEffect, useMemo, useState } from "react";
 import YourStudents from "windows/YourStudents";
 import GumballMachine from "windows/GumballMachine";
@@ -21,6 +19,26 @@ import Homebase from "windows/Homebase";
 import Semester0Map from "windows/Semester0Map";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import FlunksTerminal from "windows/FlunksTerminal";
+// import RadioWindow from "windows/RadioWindow"; // Removed because the module does not exist
+// Try default import if WINDOW_IDS is the default export
+// import WINDOW_IDS from "constants";
+
+// Or import everything as an object and use WINDOW_IDS from it
+// import * as constants from "constants";
+// const WINDOW_IDS = constants.WINDOW_IDS;
+// Try default import if WINDOW_IDS is the default export
+// import WINDOW_IDS from "constants";
+
+// Or import everything as an object and use WINDOW_IDS from it
+// Update the import path to the correct location of your constants file
+// Update the import path below to the actual location of your constants file.
+// For example, if your constants are in 'src/constants.ts', use the following:
+// Update the import path below to the actual location of your constants file.
+// For example, if your constants are in 'src/constants.ts', use the following:
+import * as constants from "../../constants";
+const WINDOW_IDS = constants.WINDOW_IDS;
+import { useWindowsContext } from "contexts/WindowsContext";
+
 
 // import Semester0 from "windows/Semester0"; // Uncomment and adjust if you have a Semester0 window/component
 
@@ -196,6 +214,24 @@ const Desktop = () => {
             }}
           />
         </a>
+
+{/*
+<<DesktopAppIcon
+  title="Radio"
+  icon="/icons/radio.png" // Make sure this file exists or use a placeholder
+  onDoubleClick={() =>
+    openWindow({
+      key: WINDOW_IDS.RADIO,
+      window: (
+        <CustomMonitor title="Radio" windowId={WINDOW_IDS.RADIO}>
+          <RadioWindow />
+        </CustomMonitor>
+      ),
+    })
+  }
+/>
+*/}
+
 
         <a
           href="https://www.flowty.io/collection/0x807c3d470888cc48/Flunks"

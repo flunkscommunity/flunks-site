@@ -1,3 +1,5 @@
+import FlunksPlayer from "components/FlunksPlayer";
+
 export { default as FLUNK_TRAITS } from "json/flunks-traits.json";
 export const WINDOW_IDS = {
   FILTERS_WINDOW: "filters-window",
@@ -16,6 +18,7 @@ export const WINDOW_IDS = {
   HOMEBASE: "Homebase",
   FREAK: "freak",
   SEMESTER_0: "semester0Map",
+  FLUNKPLAYER: "Radio"
 };
 
 export const WINDOW_APP_INFO_TO_WINDOW_ID = {
@@ -53,5 +56,11 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appName: "Semester 0",
     appIcon: "/images/icons/semester0-icon.png", // ✅ match filename you use elsewhere
     key: WINDOW_IDS.SEMESTER_0,
+  },
+  [WINDOW_IDS.FLUNKPLAYER]: {
+    appName: "Flunks Radio",
+    appIcon: "/images/icons/radio.png",
+    key: WINDOW_IDS.FLUNKPLAYER,
+    windowComponent: FlunksPlayer, // Add the FlunksPlayer component here
   },
 };
