@@ -3,7 +3,7 @@ import Head from "next/head";
 import CustomMonitor from "components/CustomMonitor";
 import DesktopAppIcon from "components/DesktopAppIcon";
 // import Semester0 from "windows/Semester0"; // Removed because the module does not exist
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import YourStudents from "windows/YourStudents";
 import GumballMachine from "windows/GumballMachine";
 import ProjectJnr from "windows/ProjectJnr";
@@ -20,7 +20,6 @@ import Semester0Map from "windows/Semester0Map";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import FlunksTerminal from "windows/FlunksTerminal";
 import { WINDOW_IDS } from "fixed";
-import WebampPlayer from "components/WebampPlayer";
 import dynamic from "next/dynamic";
 import { useWindowsContext } from "contexts/WindowsContext"; // or whatever the actual path is
 
@@ -95,7 +94,7 @@ const Desktop = () => {
     }
   }, []);
 
-const WebampPlayer = dynamic(() => import("components/WebampPlayer"), {
+const WebampPlayer = dynamic(() => import("components/WebampPlayer").then(mod => mod.default), {
   ssr: false,
 });
 
