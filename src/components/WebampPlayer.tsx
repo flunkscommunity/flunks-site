@@ -17,7 +17,7 @@ const WebampPlayer: React.FC = () => {
             artist: "flunks",
             title: "paradise"
               },
-              url: "/public/audio/paradise.mp3"
+              url: "public/audio/paradise.mp3"
             }
           ],
         });
