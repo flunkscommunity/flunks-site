@@ -10,16 +10,26 @@ const WebampPlayer: React.FC = () => {
       try {
         const { default: Webamp } = await import("webamp");
 
+        const playlist = [
+          {
+            metaData: {
+              artist: "Flunks",
+              title: "Paradise"
+            },
+            url: "/audio/paradise.mp3" // ✅ relative to the public/ folder
+          },
+          {
+            metaData: {
+              artist: "Flunks",
+              title: "Another Track"
+            },
+            url: "/audio/another-track.mp3"
+          }
+          // Add more here
+        ];
+
         webampInstance = new Webamp({
-          initialTracks: [
-            {
-              metaData: {
-            artist: "flunks",
-            title: "paradise"
-              },
-              url: "public/audio/paradise.mp3"
-            }
-          ],
+          initialTracks: playlist
         });
 
         if (Webamp.browserIsSupported() && containerRef.current) {
@@ -28,25 +38,18 @@ const WebampPlayer: React.FC = () => {
           console.warn("Webamp not supported or container missing.");
         }
       } catch (err) {
-        console.error("Failed to load Webamp:", err);
+        console.error("Webamp failed to load:", err);
       }
     };
 
     loadWebamp();
 
     return () => {
-      if (webampInstance) {
-        webampInstance.dispose();
-      }
+      webampInstance?.dispose();
     };
   }, []);
 
-  return (
-    <div
-      ref={containerRef}
-      style={{ width: "100%", height: "100%" }}
-    />
-  );
+  return <div ref={containerRef} style={{ width: "100%", height: "100%" }} />;
 };
 
 export default WebampPlayer;
