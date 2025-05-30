@@ -17,8 +17,7 @@ const WebampPlayer: React.FC = () => {
               },
               url: "/audio/paradise.mp3"
             }
-          ],
-          allowDragging: true
+          ]
         });
 
         if (Webamp.browserIsSupported()) {

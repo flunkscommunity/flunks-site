@@ -1,5 +1,5 @@
 // /src/windows/RadioWindow.tsx
-import FlunksPlayer from "../components/FlunksPlayer";
+import WebampPlayer from "../components/WebampPlayer";
 
 export default function RadioWindow() {
   return (
@@ -14,7 +14,7 @@ export default function RadioWindow() {
         overflow: "hidden",
       }}
     >
-      <FlunksPlayer />
+      <WebampPlayer />
     </div>
   );
 }
