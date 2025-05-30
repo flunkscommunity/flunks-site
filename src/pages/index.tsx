@@ -22,6 +22,8 @@ import FlunksTerminal from "windows/FlunksTerminal";
 import { WINDOW_IDS } from "fixed";
 import WebampPlayer from "components/WebampPlayer";
 import dynamic from "next/dynamic";
+import { useWindowsContext } from "contexts/WindowsContext"; // or whatever the actual path is
+
 
 // import RadioWindow from "windows/RadioWindow"; /
 
@@ -87,7 +89,7 @@ const Desktop = () => {
   useEffect(() => {
     if (showGettingStartedOnStartup) {
       openWindow({
-        key: windows.WELCOME,
+        key: WINDOW_IDS.WELCOME,
         window: <Welcome />,
       });
     }
@@ -116,7 +118,7 @@ const WebampPlayer = dynamic(() => import("components/WebampPlayer"), {
           icon="/images/icons/vault.png"
           onDoubleClick={() => {
             openWindow({
-              key: windows.YOUR_STUDENTS,
+              key: WINDOW_IDS.YOUR_STUDENTS,
               window: <YourStudents />,
             });
           }}
@@ -127,7 +129,7 @@ const WebampPlayer = dynamic(() => import("components/WebampPlayer"), {
           icon="/images/icons/gum-machine.png"
           onDoubleClick={() => {
             openWindow({
-              key: windows.GUMBALL_MACHINE,
+              key: WINDOW_IDS.GUMBALL_MACHINE,
               window: <GumballMachine />,
             });
           }}
@@ -138,7 +140,7 @@ const WebampPlayer = dynamic(() => import("components/WebampPlayer"), {
           icon="/images/icons/pocket-juniors-50x50.png"
           onDoubleClick={() => {
             openWindow({
-              key: windows.PROJECT_JNR,
+              key: WINDOW_IDS.PROJECT_JNR,
               window: <ProjectJnr />,
             });
           }}
@@ -149,7 +151,7 @@ const WebampPlayer = dynamic(() => import("components/WebampPlayer"), {
           icon="/images/icons/flunk-e-mart.png"
           onDoubleClick={() => {
             openWindow({
-              key: windows.FLUNK_E_MART,
+              key: WINDOW_IDS.FLUNK_E_MART,
               window: <FlunkEMart windowId={WINDOW_IDS.FLUNK_E_MART} />,
             });
           }}
@@ -160,7 +162,7 @@ const WebampPlayer = dynamic(() => import("components/WebampPlayer"), {
           icon="/images/icons/about-us.png"
           onDoubleClick={() => {
             openWindow({
-              key: windows.ABOUT_US,
+              key: WINDOW_IDS.ABOUT_US,
               window: <AboutUs />,
             });
           }}
@@ -188,12 +190,12 @@ const WebampPlayer = dynamic(() => import("components/WebampPlayer"), {
   icon="/images/icons/radio.png" // Make sure this icon exists
   onDoubleClick={() =>
     openWindow({
-      key: WINDOW_IDS.RADIO,
+      key: WINDOW_IDS.WEBAMPPLAYER,
       window: (
         <DraggableResizeableWindow
-          windowsId={WINDOW_IDS.RADIO}
-          onClose={() => closeWindow(WINDOW_IDS.RADIO)}
-          headerTitle="Webamp Radio"
+          windowsId={WINDOW_IDS.WEBAMPPLAYER}
+          onClose={() => closeWindow(WINDOW_IDS.WEBAMPPLAYER)}
+          headerTitle="Radio"
           initialWidth="480px"
           initialHeight="370px"
           headerIcon="/images/icons/radio.png" // optional
@@ -262,7 +264,7 @@ const WebampPlayer = dynamic(() => import("components/WebampPlayer"), {
           icon="/images/icons/homebase.png"
           onDoubleClick={() => {
     openWindow({
-      key: windows.HOMEBASE,
+      key: WINDOW_IDS.HOMEBASE,
       window: <Homebase />,
     });
   }}
@@ -289,13 +291,13 @@ const WebampPlayer = dynamic(() => import("components/WebampPlayer"), {
   }}
 />
 
-        <DesktopAppIcon
-          title="FlunksHub"
-          icon="/images/icons/flunkshub.png"
-          onDoubleClick={() => {
-            openWindow({
-              key: windows.FLUNKS_HUB,
-              window: <FlunksHub />,
+<DesktopAppIcon
+  title="FlunksHub"
+  icon="/images/icons/flunkshub.png"
+  onDoubleClick={() => {
+    openWindow({
+      key: WINDOW_IDS.FLUNKS_HUB,
+      window: <FlunksHub />,
     });
   }}
 />
@@ -304,7 +306,7 @@ const WebampPlayer = dynamic(() => import("components/WebampPlayer"), {
   icon="/images/icons/semester0-icon.png"
   onDoubleClick={() => {
     openWindow({
-      key: windows.SEMESTER_0,
+      key: WINDOW_IDS.SEMESTER_0,
       label: "Semester 0", // ✅ Show label in taskbar
       icon: "/images/icons/semester0-icon.png", // ✅ Show icon in taskbar
       window: (
@@ -383,7 +385,3 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-function useWindowsContext(): { windows: any; openWindow: any; closeWindow: any; } {
-  throw new Error("Function not implemented.");
-}
-

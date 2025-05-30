@@ -22,7 +22,6 @@ const WebampPlayer: React.FC = () => {
           url: "https://archive.org/download/DaftPunkHarderBetterFasterStronger_201811/Daft%20Punk%20-%20Harder%20Better%20Faster%20Stronger.mp3"
         }
       ],
-      allowDragging: true,
     });
 
     if (Webamp.browserIsSupported() && containerRef.current) {
