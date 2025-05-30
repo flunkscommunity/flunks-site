@@ -3,7 +3,7 @@ import Head from "next/head";
 import CustomMonitor from "components/CustomMonitor";
 import DesktopAppIcon from "components/DesktopAppIcon";
 // import Semester0 from "windows/Semester0"; // Removed because the module does not exist
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import YourStudents from "windows/YourStudents";
 import GumballMachine from "windows/GumballMachine";
 import ProjectJnr from "windows/ProjectJnr";
@@ -20,6 +20,9 @@ import Semester0Map from "windows/Semester0Map";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import FlunksTerminal from "windows/FlunksTerminal";
 import { WINDOW_IDS } from "fixed";
+import WebampPlayer from "components/WebampPlayer";
+import dynamic from "next/dynamic";
+
 // import RadioWindow from "windows/RadioWindow"; /
 
 const FullScreenLoader = () => {
@@ -90,6 +93,10 @@ const Desktop = () => {
     }
   }, []);
 
+const WebampPlayer = dynamic(() => import("components/WebampPlayer"), {
+  ssr: false,
+});
+
   const windowsMemod = useMemo(() => {
     return (
       <React.Fragment>
@@ -100,7 +107,6 @@ const Desktop = () => {
       </React.Fragment>
     );
   }, [windows]);
-
 
   return (
     <>
@@ -176,6 +182,28 @@ const Desktop = () => {
             }}
           />
         </a>
+
+<DesktopAppIcon
+  title="Radio"
+  icon="/images/icons/radio.png" // Make sure this icon exists
+  onDoubleClick={() =>
+    openWindow({
+      key: WINDOW_IDS.RADIO,
+      window: (
+        <DraggableResizeableWindow
+          windowsId={WINDOW_IDS.RADIO}
+          onClose={() => closeWindow(WINDOW_IDS.RADIO)}
+          headerTitle="Webamp Radio"
+          initialWidth="480px"
+          initialHeight="370px"
+          headerIcon="/images/icons/radio.png" // optional
+        >
+          <WebampPlayer />
+        </DraggableResizeableWindow>
+      ),
+    })
+  }
+/>
 
         <a
           href="https://discord.gg/flunks"

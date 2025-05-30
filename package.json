@@ -40,6 +40,7 @@
     "three": "^0.164.1",
     "typewriter-effect": "^2.19.0",
     "viem": "^2.9.21",
+    "webamp": "^1.5.0",
     "zod": "^3.18.0",
     "zustand": "^4.1.4"
   },

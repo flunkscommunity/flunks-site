@@ -18,7 +18,7 @@ export const WINDOW_IDS = {
   HOMEBASE: "Homebase",
   FREAK: "freak",
   SEMESTER_0: "semester0Map",
-  FLUNKPLAYER: "Radio"
+  RADIO: "radio_window"
 };
 
 export const WINDOW_APP_INFO_TO_WINDOW_ID = {
