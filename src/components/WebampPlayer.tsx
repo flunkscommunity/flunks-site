@@ -1,8 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 
 const WebampPlayer: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-
   useEffect(() => {
     let webampInstance: any = null;
 
@@ -10,32 +8,24 @@ const WebampPlayer: React.FC = () => {
       try {
         const { default: Webamp } = await import("webamp");
 
-        const playlist = [
-          {
-            metaData: {
-              artist: "Flunks",
-              title: "Paradise"
-            },
-            url: "/audio/paradise.mp3" // ✅ relative to the public/ folder
-          },
-          {
-            metaData: {
-              artist: "Flunks",
-              title: "Another Track"
-            },
-            url: "/audio/another-track.mp3"
-          }
-          // Add more here
-        ];
-
         webampInstance = new Webamp({
-          initialTracks: playlist
+          initialTracks: [
+            {
+              metaData: {
+                artist: "Flunks",
+                title: "Paradise"
+              },
+              url: "/audio/paradise.mp3"
+            }
+          ],
+          allowDragging: true
         });
 
-        if (Webamp.browserIsSupported() && containerRef.current) {
-          webampInstance.renderWhenReady(containerRef.current);
+        if (Webamp.browserIsSupported()) {
+          console.log("Rendering Webamp...");
+          webampInstance.renderWhenReady();
         } else {
-          console.warn("Webamp not supported or container missing.");
+          console.warn("Webamp not supported in this browser.");
         }
       } catch (err) {
         console.error("Webamp failed to load:", err);
@@ -49,7 +39,8 @@ const WebampPlayer: React.FC = () => {
     };
   }, []);
 
-  return <div ref={containerRef} style={{ width: "100%", height: "100%" }} />;
+  // ❌ No container needed — Webamp renders itself globally
+  return null;
 };
 
 export default WebampPlayer;
