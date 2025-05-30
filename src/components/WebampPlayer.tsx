@@ -4,38 +4,49 @@ const WebampPlayer: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // Dynamically import Webamp only on the client
-    import("webamp").then(({ default: Webamp }) => {
-      const webamp = new Webamp({
-        initialTracks: [
-          {
-            metaData: {
-              artist: "Nirvana",
-              title: "Smells Like Teen Spirit"
-            },
-            url: "https://upload.wikimedia.org/wikipedia/en/4/45/Smells_Like_Teen_Spirit_sample.ogg"
-          },
-          {
-            metaData: {
-              artist: "Daft Punk",
-              title: "Harder Better Faster Stronger"
-            },
-            url: "https://archive.org/download/DaftPunkHarderBetterFasterStronger_201811/Daft%20Punk%20-%20Harder%20Better%20Faster%20Stronger.mp3"
-          }
-        ]
-      });
+    let webampInstance: any = null;
 
-      if (Webamp.browserIsSupported() && containerRef.current) {
-        webamp.renderWhenReady(containerRef.current);
+    const loadWebamp = async () => {
+      try {
+        const { default: Webamp } = await import("webamp");
+
+        webampInstance = new Webamp({
+          initialTracks: [
+            {
+              metaData: {
+            artist: "flunks",
+            title: "paradise"
+              },
+              url: "/public/audio/paradise.mp3"
+            }
+          ],
+        });
+
+        if (Webamp.browserIsSupported() && containerRef.current) {
+          webampInstance.renderWhenReady(containerRef.current);
+        } else {
+          console.warn("Webamp not supported or container missing.");
+        }
+      } catch (err) {
+        console.error("Failed to load Webamp:", err);
       }
-    });
+    };
+
+    loadWebamp();
 
     return () => {
-      // No disposal necessary on
+      if (webampInstance) {
+        webampInstance.dispose();
+      }
     };
   }, []);
 
-  return <div ref={containerRef} />;
+  return (
+    <div
+      ref={containerRef}
+      style={{ width: "100%", height: "100%" }}
+    />
+  );
 };
 
 export default WebampPlayer;
