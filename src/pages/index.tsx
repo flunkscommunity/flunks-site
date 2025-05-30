@@ -223,24 +223,6 @@ const WebampPlayer = dynamic(() => import("components/WebampPlayer").then(mod =>
           />
         </a>
 
-{/*
-<<DesktopAppIcon
-  title="Radio"
-  icon="/icons/radio.png" // Make sure this file exists or use a placeholder
-  onDoubleClick={() =>
-    openWindow({
-      key: WINDOW_IDS.RADIO,
-      window: (
-        <CustomMonitor title="Radio" windowId={WINDOW_IDS.RADIO}>
-          <RadioWindow />
-        </CustomMonitor>
-      ),
-    })
-  }
-/>
-*/}
-
-
         <a
           href="https://www.flowty.io/collection/0x807c3d470888cc48/Flunks"
           target="_blank"
@@ -330,7 +312,9 @@ const WebampPlayer = dynamic(() => import("components/WebampPlayer").then(mod =>
 /{">"}
 
       </div>
-      {windowsMemod}
+      <WebampPlayer />
+{windowsMemod}
+
     </>
   );
 };

@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 const WebampPlayer: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     let webampInstance: any = null;
 
@@ -13,16 +15,16 @@ const WebampPlayer: React.FC = () => {
             {
               metaData: {
                 artist: "Flunks",
-                title: "Paradise"
+                title: "Paradise",
               },
-              url: "/audio/paradise.mp3"
-            }
-          ]
+              url: "/audio/paradise.mp3",
+            },
+          ],
         });
 
         if (Webamp.browserIsSupported()) {
           console.log("Rendering Webamp...");
-          webampInstance.renderWhenReady();
+          webampInstance.renderWhenReady(containerRef.current!);
         } else {
           console.warn("Webamp not supported in this browser.");
         }
@@ -38,8 +40,8 @@ const WebampPlayer: React.FC = () => {
     };
   }, []);
 
-  // ❌ No container needed — Webamp renders itself globally
-  return null;
+  // ✅ Add a container div so it renders on the page
+  return <div id="webamp-container" ref={containerRef} />;
 };
 
 export default WebampPlayer;
