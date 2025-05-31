@@ -7,18 +7,17 @@ const WebampPlayer: React.FC = () => {
   useEffect(() => {
     const load = async () => {
       const { default: Webamp } = await import("webamp");
-      const llamaUrl = "/audio/llama.mp3"; // Must exist in /public/audio/
+      const Url = "/public/audio/paradise.mp3"; // Must exist in /public/audio/
       const skinUrl = "/skins/TopazAmp1-2.wsz"; // Must exist in /public/skins/
 
       const webamp = new Webamp({
         initialTracks: [
           {
             metaData: {
-              artist: "DJ Mike Llama",
-              title: "Llama Whippin' Intro",
+              artist: "flunks",
+              title: "paradise",
             },
-            url: llamaUrl,
-            duration: 5.322286,
+            url: "/audio/paradise.mp3",
           },
         ],
         availableSkins: [
