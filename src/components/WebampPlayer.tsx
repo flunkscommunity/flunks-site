@@ -32,6 +32,7 @@ const WebampPlayer: React.FC = () => {
         console.error("Webamp failed to load:", err);
       }
     };
+    autoPlay: true
 
     loadWebamp();
 
