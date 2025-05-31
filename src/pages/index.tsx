@@ -2,7 +2,6 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import CustomMonitor from "components/CustomMonitor";
 import DesktopAppIcon from "components/DesktopAppIcon";
-// import Semester0 from "windows/Semester0"; // Removed because the module does not exist
 import React, { useEffect, useMemo, useState } from "react";
 import YourStudents from "windows/YourStudents";
 import GumballMachine from "windows/GumballMachine";
@@ -21,15 +20,15 @@ import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import FlunksTerminal from "windows/FlunksTerminal";
 import { WINDOW_IDS } from "fixed";
 import dynamic from "next/dynamic";
-import { useWindowsContext } from "contexts/WindowsContext"; // or whatever the actual path is
+import { useWindowsContext } from "contexts/WindowsContext";
 
-
-// import RadioWindow from "windows/RadioWindow"; /
+const WebampPlayer = dynamic(() => import("components/WebampPlayer"), {
+  ssr: false,
+});
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
   const [complete, setComplete] = useState(false);
-
   const fadeOutSpring = useSpring({
     from: { opacity: 1, scale: 1 },
     to: {
@@ -38,43 +37,31 @@ const FullScreenLoader = () => {
     },
     config: config.slow,
   });
+  const theme = useTheme();
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setPercent((previousPercent) => {
-        if (previousPercent === 100) {
+      setPercent((prev) => {
+        if (prev >= 100) {
           clearInterval(timer);
           setComplete(true);
           return 0;
         }
-        const diff = Math.random() * 10;
-        return Math.min(previousPercent + diff, 100);
+        return Math.min(prev + Math.random() * 10, 100);
       });
     }, 200);
-    return () => {
-      clearInterval(timer);
-    };
+    return () => clearInterval(timer);
   }, []);
-
-  const theme = useTheme();
 
   return (
     <animated.div
       className="bg-black pointer-events-none fixed inset-0 z-[1001] bg-cover bg-center flex flex-col items-center justify-end gap-10"
-      style={{
-        backgroundImage: `url('/images/loading/bootup.webp')`,
-        ...fadeOutSpring,
-      }}
+      style={{ backgroundImage: `url('/images/loading/bootup.webp')`, ...fadeOutSpring }}
     >
-      <span className="text-3xl font-bold animate-pulse">
-        Starting Flunks 95
-      </span>
+      <span className="text-3xl font-bold animate-pulse">Starting Flunks 95</span>
       <ProgressBar
         variant="tile"
-        style={{
-          // @ts-ignore
-          backgroundColor: theme.canvas,
-        }}
+        style={{ backgroundColor: theme.canvas }}
         value={Math.floor(percent)}
       />
     </animated.div>
@@ -84,277 +71,164 @@ const FullScreenLoader = () => {
 const Desktop = () => {
   const { windows, openWindow, closeWindow } = useWindowsContext();
   const { showGettingStartedOnStartup } = useGettingStarted();
+  const [showPlayer, setShowPlayer] = useState(false);
 
   useEffect(() => {
     if (showGettingStartedOnStartup) {
-      openWindow({
-        key: WINDOW_IDS.WELCOME,
-        window: <Welcome />,
-      });
+      openWindow({ key: WINDOW_IDS.WELCOME, window: <Welcome /> });
     }
   }, []);
 
-const WebampPlayer = dynamic(() => import('components/WebampPlayer'), {
-  ssr: false,
-});
-
-  const windowsMemod = useMemo(() => {
-    return (
-      <React.Fragment>
-        {Object.keys(windows).length > 0 &&
-          Object.entries(windows).map(([key, window]) => (
-            <React.Fragment key={key}>{window as React.ReactNode}</React.Fragment>
-          ))}
-      </React.Fragment>
-    );
-  }, [windows]);
+  const windowsMemod = useMemo(() => (
+    <>
+      {Object.entries(windows).map(([key, window]) => (
+        <React.Fragment key={key}>{window as React.ReactNode}</React.Fragment>
+      ))}
+    </>
+  ), [windows]);
 
   return (
     <>
-      <div className="flex relative  flex-col max-h-[calc(100vh-64px)] w-full flex-wrap items-start gap-4 content-start">
+      <div className="flex relative flex-col max-h-[calc(100vh-64px)] w-full flex-wrap items-start gap-4 content-start">
         <DesktopAppIcon
           title="Flunkfolio"
           icon="/images/icons/vault.png"
-          onDoubleClick={() => {
-            openWindow({
-              key: WINDOW_IDS.YOUR_STUDENTS,
-              window: <YourStudents />,
-            });
-          }}
+          onDoubleClick={() => openWindow({ key: WINDOW_IDS.YOUR_STUDENTS, window: <YourStudents /> })}
         />
 
         <DesktopAppIcon
           title="Gumball Machine"
           icon="/images/icons/gum-machine.png"
-          onDoubleClick={() => {
-            openWindow({
-              key: WINDOW_IDS.GUMBALL_MACHINE,
-              window: <GumballMachine />,
-            });
-          }}
+          onDoubleClick={() => openWindow({ key: WINDOW_IDS.GUMBALL_MACHINE, window: <GumballMachine /> })}
         />
 
         <DesktopAppIcon
           title="Pocket Juniors"
           icon="/images/icons/pocket-juniors-50x50.png"
-          onDoubleClick={() => {
-            openWindow({
-              key: WINDOW_IDS.PROJECT_JNR,
-              window: <ProjectJnr />,
-            });
-          }}
+          onDoubleClick={() => openWindow({ key: WINDOW_IDS.PROJECT_JNR, window: <ProjectJnr /> })}
         />
 
         <DesktopAppIcon
           title="Flunk E Mart"
           icon="/images/icons/flunk-e-mart.png"
-          onDoubleClick={() => {
-            openWindow({
-              key: WINDOW_IDS.FLUNK_E_MART,
-              window: <FlunkEMart windowId={WINDOW_IDS.FLUNK_E_MART} />,
-            });
-          }}
+          onDoubleClick={() => openWindow({ key: WINDOW_IDS.FLUNK_E_MART, window: <FlunkEMart windowId={WINDOW_IDS.FLUNK_E_MART} /> })}
         />
 
         <DesktopAppIcon
           title="About Us"
           icon="/images/icons/about-us.png"
-          onDoubleClick={() => {
-            openWindow({
-              key: WINDOW_IDS.ABOUT_US,
-              window: <AboutUs />,
-            });
-          }}
+          onDoubleClick={() => openWindow({ key: WINDOW_IDS.ABOUT_US, window: <AboutUs /> })}
         />
 
-        <a
-          href="https://twitter.com/Flunks_NFT"
-          target="_blank"
-          rel="noreferrer noopener"
-          style={{
-            textDecoration: "none",
-          }}
-        >
-          <DesktopAppIcon
-            title="X"
-            icon="/images/icons/x.png"
-            onDoubleClick={() => {
-              return null;
-            }}
-          />
-        </a>
+        <DesktopAppIcon
+          title="Radio"
+          icon="/images/icons/radio.png"
+          onDoubleClick={() => setShowPlayer(true)}
+        />
 
-        <a
-          href="https://discord.gg/flunks"
-          target="_blank"
-          rel="noreferrer noopener"
-          style={{
-            textDecoration: "none",
-          }}
-        >
+        <a href="https://discord.gg/flunks" target="_blank" rel="noreferrer noopener">
           <DesktopAppIcon
             title="Discord"
             icon="/images/icons/discord.png"
-            onDoubleClick={() => {
-              window.open("https://discord.gg/wuukvhHhS3", "_blank");
-            }}
+            onDoubleClick={() => window.open("https://discord.gg/wuukvhHhS3", "_blank")}
           />
         </a>
 
-        <a
-          href="https://www.flowty.io/collection/0x807c3d470888cc48/Flunks"
-          target="_blank"
-          rel="noreferrer noopener"
-          style={{
-            textDecoration: "none",
-          }}
-        >
-          <DesktopAppIcon
-            title="Market"
-            icon="/images/icons/flowty.png"
-            onDoubleClick={() => {
-              return null;
-            }}
-          />
+        <a href="https://www.flowty.io/collection/0x807c3d470888cc48/Flunks" target="_blank" rel="noreferrer noopener">
+          <DesktopAppIcon title="Market" icon="/images/icons/flowty.png" onDoubleClick={() => null} />
         </a>
+
+        <DesktopAppIcon title="Homebase" icon="/images/icons/homebase.png" onDoubleClick={() => openWindow({ key: WINDOW_IDS.HOMEBASE, window: <Homebase /> })} />
 
         <DesktopAppIcon
-          title="Homebase"
-          icon="/images/icons/homebase.png"
-          onDoubleClick={() => {
-    openWindow({
-      key: WINDOW_IDS.HOMEBASE,
-      window: <Homebase />,
-    });
-  }}
-/>
+          title="Terminal"
+          icon="/images/icons/terminal.png"
+          onDoubleClick={() => openWindow({
+            key: 'flunks_terminal',
+            window: (
+              <DraggableResizeableWindow
+                windowsId="flunks_terminal"
+                onClose={() => closeWindow('flunks_terminal')}
+                headerTitle="Flunks Terminal"
+                initialWidth="520px"
+                initialHeight="400px"
+              >
+                <FlunksTerminal onClose={() => closeWindow('flunks_terminal')} />
+              </DraggableResizeableWindow>
+            )
+          })}
+        />
 
-<DesktopAppIcon
-  title="Terminal"
-  icon="/images/icons/terminal.png"
-  onDoubleClick={() => {
-    openWindow({
-      key: 'flunks_terminal',
-      window: (
-        <DraggableResizeableWindow
-          windowsId="flunks_terminal"
-          onClose={() => closeWindow('flunks_terminal')}
-          headerTitle="Flunks Terminal"
-          initialWidth="520px"
-          initialHeight="400px"
-        >
-          <FlunksTerminal onClose={() => closeWindow('flunks_terminal')} />
-        </DraggableResizeableWindow>
-      ),
-    });
-  }}
-/>
+        <DesktopAppIcon title="FlunksHub" icon="/images/icons/flunkshub.png" onDoubleClick={() => openWindow({ key: WINDOW_IDS.FLUNKS_HUB, window: <FlunksHub /> })} />
 
-<DesktopAppIcon
-  title="FlunksHub"
-  icon="/images/icons/flunkshub.png"
-  onDoubleClick={() => {
-    openWindow({
-      key: WINDOW_IDS.FLUNKS_HUB,
-      window: <FlunksHub />,
-    });
-  }}
-/>
-  <DesktopAppIcon
-  title="Semester 0"
-  icon="/images/icons/semester0-icon.png"
-  onDoubleClick={() => {
-    openWindow({
-      key: WINDOW_IDS.SEMESTER_0,
-      label: "Semester 0", // ✅ Show label in taskbar
-      icon: "/images/icons/semester0-icon.png", // ✅ Show icon in taskbar
-      window: (
-        <DraggableResizeableWindow
-          windowsId={WINDOW_IDS.SEMESTER_0}
-          onClose={() => closeWindow(WINDOW_IDS.SEMESTER_0)}
-          initialWidth="100%"
-          initialHeight="100%"
-          resizable={false}
-          headerTitle="Semester 0"
-          headerIcon="/images/icons/semester0-icon.png"
-        >
-          <Semester0Map 
-            onClose={() => closeWindow(WINDOW_IDS.SEMESTER_0)} 
-          />
-        </DraggableResizeableWindow>
-      ),
-    });
-  }}
-/>
-
-/{">"}
-
+        <DesktopAppIcon
+          title="Semester 0"
+          icon="/images/icons/semester0-icon.png"
+          onDoubleClick={() => openWindow({
+            key: WINDOW_IDS.SEMESTER_0,
+            label: "Semester 0",
+            icon: "/images/icons/semester0-icon.png",
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.SEMESTER_0}
+                onClose={() => closeWindow(WINDOW_IDS.SEMESTER_0)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+                headerTitle="Semester 0"
+                headerIcon="/images/icons/semester0-icon.png"
+              >
+                <Semester0Map onClose={() => closeWindow(WINDOW_IDS.SEMESTER_0)} />
+              </DraggableResizeableWindow>
+            ),
+          })}
+        />
       </div>
-      <WebampPlayer />
-{windowsMemod}
 
+      {showPlayer && (
+        <div style={{ position: "fixed", bottom: 20, left: 20, zIndex: 9999 }}>
+          <button onClick={() => setShowPlayer(false)}>❌</button>
+          <WebampPlayer />
+        </div>
+      )}
+
+      {windowsMemod}
     </>
   );
 };
 
-const MonitorScreenWrapper: React.FC<React.PropsWithChildren> = ({
-  children,
-}) => {
-  return (
-    <CustomMonitor
-      backgroundStyles={{
-        overflow: "hidden",
-        width: "100%",
-        height: "100%",
-        position: "relative",
-        display: "flex",
-      }}
-      showBottomBar
-    >
-      {children}
-    </CustomMonitor>
-  );
-};
+const MonitorScreenWrapper: React.FC<React.PropsWithChildren> = ({ children }) => (
+  <CustomMonitor
+    backgroundStyles={{
+      overflow: "hidden",
+      width: "100%",
+      height: "100%",
+      position: "relative",
+      display: "flex",
+    }}
+    showBottomBar
+  >
+    {children}
+  </CustomMonitor>
+);
 
 const Home: NextPage = () => {
   const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) {
-    return null;
-  }
+  useEffect(() => { setIsMounted(true); }, []);
+  if (!isMounted) return null;
 
   return (
     <>
       <Head>
         <title>Flunks</title>
-        <meta
-          name="description"
-          content="Welcome to the Flunks Highschool computer."
-        />
+        <meta name="description" content="Welcome to the Flunks Highschool computer." />
         <link rel="icon" href="/images/logos/os-logo.png" />
       </Head>
-
       <MonitorScreenWrapper>
         <Desktop />
       </MonitorScreenWrapper>
     </>
   );
 };
-
-<div
-  style={{
-    position: "fixed",
-    bottom: 20,
-    right: 20,
-    zIndex: 9999,
-  }}
->
-  <WebampPlayer />
-</div>
-
 
 export default Home;
