@@ -1,9 +1,16 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const WebampPlayer: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isReady, setIsReady] = useState(false); // ✅ trigger after DOM mounts
 
   useEffect(() => {
+    setIsReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isReady || !containerRef.current) return;
+
     let webampInstance: any = null;
 
     const loadWebamp = async () => {
@@ -13,10 +20,7 @@ const WebampPlayer: React.FC = () => {
         webampInstance = new Webamp({
           initialTracks: [
             {
-              metaData: {
-                artist: "Flunks",
-                title: "Paradise",
-              },
+              metaData: { artist: "Flunks", title: "Paradise" },
               url: "/audio/paradise.mp3",
             },
           ],
@@ -32,16 +36,14 @@ const WebampPlayer: React.FC = () => {
         console.error("Webamp failed to load:", err);
       }
     };
-    autoPlay: true
 
     loadWebamp();
 
     return () => {
       webampInstance?.dispose();
     };
-  }, []);
+  }, [isReady]);
 
-  // ✅ Add a container div so it renders on the page
   return <div id="webamp-container" ref={containerRef} />;
 };
 
