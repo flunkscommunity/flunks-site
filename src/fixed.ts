@@ -61,6 +61,6 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appName: "Radio",
     appIcon: "/images/icons/radio.png",
     key: WINDOW_IDS.WEBAMPPLAYER,
-    windowComponent: WebampPlayer, // Add the FlunksPlayer component here
+    windowComponent: WebampPlayer,
   },
 };

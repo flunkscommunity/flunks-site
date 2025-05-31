@@ -1,50 +1,43 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
 
 const WebampPlayer: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isReady, setIsReady] = useState(false); // ✅ trigger after DOM mounts
 
   useEffect(() => {
-    setIsReady(true);
-  }, []);
+    const load = async () => {
+      const { default: Webamp } = await import("webamp");
+      const llamaUrl = "/audio/llama.mp3"; // Must exist in /public/audio/
+      const skinUrl = "/skins/TopazAmp1-2.wsz"; // Must exist in /public/skins/
 
-  useEffect(() => {
-    if (!isReady || !containerRef.current) return;
-
-    let webampInstance: any = null;
-
-    const loadWebamp = async () => {
-      try {
-        const { default: Webamp } = await import("webamp");
-
-        webampInstance = new Webamp({
-          initialTracks: [
-            {
-              metaData: { artist: "Flunks", title: "Paradise" },
-              url: "/audio/paradise.mp3",
+      const webamp = new Webamp({
+        initialTracks: [
+          {
+            metaData: {
+              artist: "DJ Mike Llama",
+              title: "Llama Whippin' Intro",
             },
-          ],
-        });
+            url: llamaUrl,
+            duration: 5.322286,
+          },
+        ],
+        availableSkins: [
+          {
+            url: skinUrl,
+            name: "Topaz",
+          },
+        ],
+      });
 
-        if (Webamp.browserIsSupported()) {
-          console.log("Rendering Webamp...");
-          webampInstance.renderWhenReady(containerRef.current!);
-        } else {
-          console.warn("Webamp not supported in this browser.");
-        }
-      } catch (err) {
-        console.error("Webamp failed to load:", err);
+      if (Webamp.browserIsSupported() && containerRef.current) {
+        webamp.renderWhenReady(containerRef.current);
       }
     };
 
-    loadWebamp();
+    load();
+  }, []);
 
-    return () => {
-      webampInstance?.dispose();
-    };
-  }, [isReady]);
-
-  return <div id="webamp-container" ref={containerRef} />;
+  return <div ref={containerRef} id="webamp-container" />;
 };
 
 export default WebampPlayer;
