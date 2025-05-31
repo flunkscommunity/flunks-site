@@ -345,4 +345,16 @@ const Home: NextPage = () => {
   );
 };
 
+<div
+  style={{
+    position: "fixed",
+    bottom: 20,
+    right: 20,
+    zIndex: 9999,
+  }}
+>
+  <WebampPlayer />
+</div>
+
+
 export default Home;
