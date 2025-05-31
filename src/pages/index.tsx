@@ -123,8 +123,25 @@ const Desktop = () => {
    <DesktopAppIcon
   title="Radio"
   icon="/images/icons/radio.png"
-  onDoubleClick={() => setShowPlayer(true)}
+  onDoubleClick={() =>
+    openWindow({
+      key: WINDOW_IDS.WEBAMPPLAYER,
+      window: (
+        <DraggableResizeableWindow
+          windowsId={WINDOW_IDS.WEBAMPPLAYER}
+          onClose={() => closeWindow(WINDOW_IDS.WEBAMPPLAYER)}
+          headerTitle="Radio"
+          initialWidth="480px"
+          initialHeight="370px"
+          headerIcon="/images/icons/radio.png"
+        >
+          <WebampPlayer />
+        </DraggableResizeableWindow>
+      ),
+    })
+  }
 />
+/{">"}
 
 <a
   href="https://twitter.com/Flunks_NFT"
