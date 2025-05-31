@@ -94,7 +94,7 @@ const Desktop = () => {
     }
   }, []);
 
-const WebampPlayer = dynamic(() => import("components/WebampPlayer").then(mod => mod.default), {
+const WebampPlayer = dynamic(() => import('components/WebampPlayer'), {
   ssr: false,
 });
 
