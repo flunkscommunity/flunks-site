@@ -262,4 +262,10 @@ const Home: NextPage = () => {
   );
 };
 
+<><div id="app"></div><script src="https://unpkg.com/webamp"></script><script>
+  const app = document.getElementById("app")
+  const webamp = new Webamp();
+  webamp.renderWhenReady(app);
+</script></>
+
 export default Home;
