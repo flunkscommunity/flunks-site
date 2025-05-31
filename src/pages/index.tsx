@@ -61,7 +61,7 @@ const FullScreenLoader = () => {
       <span className="text-3xl font-bold animate-pulse">Starting Flunks 95</span>
       <ProgressBar
         variant="tile"
-        style={{ backgroundColor: theme.canvas }}
+        style={{ backgroundColor: (theme as any).background || "#fff" }}
         value={Math.floor(percent)}
       />
     </animated.div>
@@ -120,11 +120,24 @@ const Desktop = () => {
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.ABOUT_US, window: <AboutUs /> })}
         />
 
-        <DesktopAppIcon
-          title="Radio"
-          icon="/images/icons/radio.png"
-          onDoubleClick={() => setShowPlayer(true)}
-        />
+   <DesktopAppIcon
+  title="Radio"
+  icon="/images/icons/radio.png"
+  onDoubleClick={() => setShowPlayer(true)}
+/>
+
+<a
+  href="https://twitter.com/Flunks_NFT"
+  target="_blank"
+  rel="noreferrer noopener"
+  style={{ textDecoration: "none" }}
+>
+  <DesktopAppIcon
+    title="X"
+    icon="/images/icons/x.png"
+    onDoubleClick={() => null}
+  />
+</a>
 
         <a href="https://discord.gg/flunks" target="_blank" rel="noreferrer noopener">
           <DesktopAppIcon
@@ -159,7 +172,8 @@ const Desktop = () => {
           })}
         />
 
-        <DesktopAppIcon title="FlunksHub" icon="/images/icons/flunkshub.png" onDoubleClick={() => openWindow({ key: WINDOW_IDS.FLUNKS_HUB, window: <FlunksHub /> })} />
+        <DesktopAppIcon title="FlunksHub" icon="/images/icons/flunkshub.png" 
+        onDoubleClick={() => openWindow({ key: WINDOW_IDS.FLUNKS_HUB, window: <FlunksHub /> })} />
 
         <DesktopAppIcon
           title="Semester 0"

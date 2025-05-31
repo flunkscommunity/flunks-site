@@ -1,4 +1,3 @@
-import FlunksPlayer from "components/FlunksPlayer";
 import WebampPlayer from "components/WebampPlayer";
 
 export { default as FLUNK_TRAITS } from "json/flunks-traits.json";
