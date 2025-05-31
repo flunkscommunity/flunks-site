@@ -184,28 +184,6 @@ const WebampPlayer = dynamic(() => import("components/WebampPlayer").then(mod =>
           />
         </a>
 
-<DesktopAppIcon
-  title="Radio"
-  icon="/images/icons/radio.png" // Make sure this icon exists
-  onDoubleClick={() =>
-    openWindow({
-      key: WINDOW_IDS.WEBAMPPLAYER,
-      window: (
-        <DraggableResizeableWindow
-          windowsId={WINDOW_IDS.WEBAMPPLAYER}
-          onClose={() => closeWindow(WINDOW_IDS.WEBAMPPLAYER)}
-          headerTitle="Radio"
-          initialWidth="480px"
-          initialHeight="370px"
-          headerIcon="/images/icons/radio.png" // optional
-        >
-          <WebampPlayer />
-        </DraggableResizeableWindow>
-      ),
-    })
-  }
-/>
-
         <a
           href="https://discord.gg/flunks"
           target="_blank"
