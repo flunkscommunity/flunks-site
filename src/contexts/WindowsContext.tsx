@@ -6,6 +6,7 @@ interface WindowApp {
   key: string;
   appName: string;
   appIcon: string;
+  isMinimized?: boolean;
 }
 
 interface ContextState {
@@ -14,16 +15,24 @@ interface ContextState {
   openWindow: (window: { key: string; window: React.ReactNode }) => void;
   closeWindow: (windowId: string) => void;
   bringWindowToFront: (windowId: string) => void;
+  minimizeWindow: (windowId: string) => void;
+  restoreWindow: (windowId: string) => void;
   activeWindow: string;
 }
 
 export const WindowsContext = createContext<ContextState>({
   windows: {},
   windowApps: [],
-  openWindow: () => {},
-  closeWindow: () => {},
-  bringWindowToFront: () => {},
+  openWindow: () => { },
+  closeWindow: () => { },
+  bringWindowToFront: () => { },
   activeWindow: "",
+  minimizeWindow: function (windowId: string): void {
+    throw new Error("Function not implemented.");
+  },
+  restoreWindow: function (windowId: string): void {
+    throw new Error("Function not implemented.");
+  }
 });
 
 interface ProviderProps {
@@ -105,6 +114,24 @@ const WindowsProvider: React.FC<ProviderProps> = (props) => {
     });
   };
 
+const minimizeWindow = (windowKey: string) => {
+  setWindowApps((apps) =>
+    apps.map((app) =>
+      app.key === windowKey ? { ...app, isMinimized: true } : app
+    )
+  );
+};
+
+const restoreWindow = (windowKey: string) => {
+  setWindowApps((apps) =>
+    apps.map((app) =>
+      app.key === windowKey ? { ...app, isMinimized: false } : app
+    )
+  );
+  bringWindowToFront(windowKey);
+};
+
+
   return (
     <WindowsContext.Provider
       value={{
@@ -113,6 +140,8 @@ const WindowsProvider: React.FC<ProviderProps> = (props) => {
         openWindow,
         closeWindow,
         bringWindowToFront,
+        minimizeWindow,
+        restoreWindow,
         activeWindow,
       }}
     >

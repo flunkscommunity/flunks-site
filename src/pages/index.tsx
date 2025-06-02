@@ -81,23 +81,25 @@ const FullScreenLoader = () => {
 };
 
 const Desktop = () => {
-  const { windows, openWindow, closeWindow } = useWindowsContext();
-  const { showGettingStartedOnStartup } = useGettingStarted();
-  const [showPlayer, setShowPlayer] = useState(false);
+const { windows, openWindow, closeWindow, windowApps } = useWindowsContext();
+const { showGettingStartedOnStartup } = useGettingStarted();
+const [showPlayer, setShowPlayer] = useState(false);
 
-  useEffect(() => {
-    if (showGettingStartedOnStartup) {
-      openWindow({ key: WINDOW_IDS.WELCOME, window: <Welcome /> });
-    }
-  }, []);
+useEffect(() => {
+  if (showGettingStartedOnStartup) {
+    openWindow({ key: WINDOW_IDS.WELCOME, window: <Welcome /> });
+  }
+}, []);
 
-  const windowsMemod = useMemo(() => (
-    <>
-      {Object.entries(windows).map(([key, window]) => (
-        <React.Fragment key={key}>{window as React.ReactNode}</React.Fragment>
-      ))}
-    </>
-  ), [windows]);
+const windowsMemod = useMemo(() => (
+  <>
+    {Object.entries(windows).map(([key, window]) => {
+      const app = windowApps.find((a) => a.key === key);
+      if (app?.isMinimized) return null;
+      return <React.Fragment key={key}>{window as React.ReactNode}</React.Fragment>;
+    })}
+  </>
+), [windows, windowApps]);
 
   return (
     <>
