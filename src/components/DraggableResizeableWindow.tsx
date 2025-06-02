@@ -9,8 +9,9 @@ import { DynamicConnectButton } from "@dynamic-labs/sdk-react-core";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 interface Props {
-  headerTitle: string;
+  headerTitle?: string;
   headerIcon?: string;
+  headerRender?: React.ReactNode;
   children: React.ReactNode;
   onClose?: () => void;
   offSetHeight?: number;
@@ -39,6 +40,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
   const {
     headerTitle,
     headerIcon,
+    headerRender,
     offSetHeight = 0,
     onClose,
     initialHeight = "90%",
@@ -55,7 +57,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
   const windowRef = useRef<HTMLDivElement>(null);
   const draggableRef = useRef<Draggable>(null);
   const { width, height } = useWindowSize();
-  const { closeWindow, bringWindowToFront } = useWindowsContext();
+  const { closeWindow, bringWindowToFront, minimizeWindow } = useWindowsContext();
   const { user } = useDynamicContext();
 
   const handleMaximize = () => {
@@ -181,56 +183,65 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
         id={props.windowsId}
       >
         <strong>
-          <WindowHeader
-            className="flex !items-center !justify-between !py-1 !px-2 !h-auto"
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              userSelect: "none",
-            }}
-            onDoubleClick={handleMaximize}
-          >
-            <div className="flex items-center gap-2">
-              {headerIcon && <img src={headerIcon} className="h-5"></img>}
-              <span className="!text-xl">{headerTitle}</span>
-            </div>
-            {showHeaderActions && (
-              <WindowButtons>
-                {onHelp && (
-                  <Button id="action" onClick={onHelp}>
+          {headerRender ? (
+            headerRender
+          ) : (
+            <WindowHeader
+              className="flex !items-center !justify-between !py-1 !px-2 !h-auto"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                userSelect: "none",
+              }}
+              onDoubleClick={handleMaximize}
+            >
+              <div className="flex items-center gap-2">
+                {headerIcon && <img src={headerIcon} className="h-5" />}
+                <span className="!text-xl">{headerTitle}</span>
+              </div>
+              {showHeaderActions && (
+                <WindowButtons>
+                  {onHelp && (
+                    <Button id="action" onClick={onHelp}>
+                      <img
+                        src="/images/icons/question.png"
+                        width="60%"
+                        height="60%"
+                      />
+                    </Button>
+                  )}
+                  {showMaximizeButton && (
+                    <Button id="action" onClick={handleMaximize}>
+                      <img
+                        src="/images/icons/maximize.png"
+                        width="60%"
+                        height="60%"
+                      />
+                    </Button>
+                  )}
+                  <Button id="action" onClick={() => minimizeWindow(props.windowsId)}>
                     <img
-                      src="/images/icons/question.png"
+                      src="/images/icons/minimize.png"
                       width="60%"
                       height="60%"
                     />
                   </Button>
-                )}
-                {showMaximizeButton && (
-                  <Button id="action" onClick={handleMaximize}>
-                    <img
-                      src="/images/icons/maximize.png"
-                      width="60%"
-                      height="60%"
-                    />
+                  <Button
+                    id="action"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      console.log("✖ Close button clicked for:", props.windowsId);
+                      onClose?.();
+                    }}
+                    className="pointer-events-auto"
+                  >
+                    <span className="close-icon" />
                   </Button>
-                )}
-                <Button
-  id="action"
-  onClick={(e) => {
-    e.stopPropagation();
-    console.log("✖ Close button clicked for:", props.windowsId);
-    onClose?.(); // optional chaining to prevent crashes
-  }}
-  className="pointer-events-auto"
->
-  <span className="close-icon" />
-</Button>
-
-
-              </WindowButtons>
-            )}
-          </WindowHeader>
+                </WindowButtons>
+              )}
+            </WindowHeader>
+          )}
         </strong>
 
         {toolbar}
