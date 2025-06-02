@@ -21,6 +21,8 @@ import FlunksTerminal from "windows/FlunksTerminal";
 import { WINDOW_IDS } from "fixed";
 import dynamic from "next/dynamic";
 import { useWindowsContext } from "contexts/WindowsContext";
+import Taskbar from "components/Taskbar";
+// import Taskbar from "components/Taskbar";
 
 const WebampPlayer = dynamic(() => import("components/WebampPlayer"), {
   ssr: false,
@@ -270,6 +272,7 @@ const Home: NextPage = () => {
       </Head>
       <MonitorScreenWrapper>
         <Desktop />
+        <Taskbar />
       </MonitorScreenWrapper>
     </>
   );
