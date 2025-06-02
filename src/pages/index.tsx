@@ -26,18 +26,6 @@ const WebampPlayer = dynamic(() => import("components/WebampPlayer"), {
   ssr: false,
 });
 
-<DraggableResizeableWindow
-  windowsId="webampplayer_window"
-  onClose={() => closeWindow("webampplayer_window")}
-  headerTitle="Radio"
-  initialWidth="480px"
-  initialHeight="370px"
-  headerIcon="/images/icons/radio.png"
->
-  <WebampPlayer />
-</DraggableResizeableWindow>
-
-
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
   const [complete, setComplete] = useState(false);
@@ -274,10 +262,4 @@ const Home: NextPage = () => {
     </>
   );
 };
-
-
-export default Home;
-function closeWindow(arg0: string): void {
-  throw new Error("Function not implemented.");
-}
 
