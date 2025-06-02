@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import styles from '../styles/map.module.css';
+import { useWindowsContext } from "contexts/WindowsContext";
+import TreehouseMain from "windows/Locations/TreehouseMain"; // you'll make this next
+import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
+
 
 interface Props {
   onClose: () => void;
@@ -8,6 +12,10 @@ interface Props {
 const Semester0Map: React.FC<Props> = ({ onClose }) => {
   console.log("🛠 Semester0Map rendered. onClose is:", onClose);
   const [hovered, setHovered] = useState<string | null>(null);
+
+  function openWindow(arg0: { key: string; window: React.JSX.Element; }): void {
+    throw new Error('Function not implemented.');
+  }
 
   return (
     <div className={styles["map-window"]}>
@@ -20,10 +28,27 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       {hovered && <div className={styles["map-overlay"]} />}
 
       <div
-        className={`${styles.icon} ${styles.treehouse}`}
-        onMouseEnter={() => setHovered('treehouse')}
-        onMouseLeave={() => setHovered(null)}
-      />
+  className={`${styles.icon} ${styles.treehouse}`}
+  onMouseEnter={() => setHovered('treehouse')}
+  onMouseLeave={() => setHovered(null)}
+  onClick={() =>
+    openWindow({
+      key: "treehouse_main",
+      window: (
+        <DraggableResizeableWindow
+          windowsId="treehouse_main"
+          headerTitle="Treehouse"
+          initialWidth="100%"
+          initialHeight="100%"
+          resizable={false}
+        >
+          <TreehouseMain />
+        </DraggableResizeableWindow>
+      ),
+    })
+  }
+/>
+
       <div
         className={`${styles.icon} ${styles.school}`}
         onMouseEnter={() => setHovered('school')}
