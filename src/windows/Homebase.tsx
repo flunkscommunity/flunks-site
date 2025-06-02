@@ -6,10 +6,10 @@ import Image from "next/image";
 import AppLoader from "components/AppLoader";
 
 
-import GeekRoom from "./Rooms/GeekRoom"; 
-import FreakRoom from "./Rooms/FreakRoom"; 
-import PrepRoom from "./Rooms/PrepRoom"; 
-import JockRoom from "./Rooms/JockRoom"; 
+import GeekRoom from "./rooms/GeekRoom"; 
+import FreakRoom from "./rooms/FreakRoom"; 
+import PrepRoom from "./rooms/PrepRoom"; 
+import JockRoom from "./rooms/JockRoom"; 
 
 
 const ControllerWrapper = styled.div`
