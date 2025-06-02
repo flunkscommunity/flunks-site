@@ -153,7 +153,6 @@ const Desktop = () => {
     })
   }
 />
-/{">"}
 
 <a
   href="https://twitter.com/Flunks_NFT"
