@@ -1,109 +1,67 @@
 import { useWindowsContext } from "contexts/WindowsContext";
-import DraggableResizeableWindow from "components/DraggableResizeableWindow";
-import { Button, WindowHeader } from "react95";
 
 const TreehouseMain = () => {
-  const {
-    openWindow,
-    closeWindow,
-    minimizeWindow,
-  } = useWindowsContext();
-
-  const windowId = "treehouse_main";
+  const { openWindow, closeWindow } = useWindowsContext();
 
   const openRoom = (roomKey: string, title: string, content: string) => {
     openWindow({
       key: roomKey,
       window: (
-        <DraggableResizeableWindow
-          windowsId={roomKey}
-          headerTitle={title}
-          initialWidth="420px"
-          initialHeight="300px"
-          onClose={() => closeWindow(roomKey)}
-        >
-          <div className="p-4 text-sm leading-relaxed">{content}</div>
-        </DraggableResizeableWindow>
+        <div className="p-4 text-sm leading-relaxed">
+          <h1 className="text-xl mb-2">{title}</h1>
+          <p>{content}</p>
+        </div>
       ),
     });
   };
 
   return (
-    <DraggableResizeableWindow
-      windowsId={windowId}
-      initialWidth="100%"
-      initialHeight="100%"
-      resizable={false}
-      headerRender={
-        <WindowHeader className="!flex !items-center !justify-between">
-          <div className="flex items-center gap-2">
-            <img
-              src="/images/icons/tree.png"
-              alt="Tree icon"
-              className="h-5 w-5"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none';
-              }}
-            />
-            <span className="text-base">Treehouse</span>
-          </div>
-          <div className="flex gap-1">
-            <Button
-              id="action"
-              onClick={() => minimizeWindow(windowId)}
-              style={{ width: 22, height: 22 }}
-            >
-              <span style={{ fontSize: "16px", lineHeight: "12px" }}>_</span>
-            </Button>
-            <Button
-              id="action"
-              onClick={() => closeWindow(windowId)}
-              style={{ width: 22, height: 22 }}
-            >
-              <span className="close-icon" />
-            </Button>
-          </div>
-        </WindowHeader>
-      }
+    <div
+      className="relative w-full h-full bg-cover bg-center"
+      style={{
+        backgroundImage: "url('/assets/locations/treehouse/daybg.png')", // make sure this exists
+      }}
     >
-      <div className="w-full h-full bg-[#2f2f2f] text-white p-6">
-        <h1 className="text-3xl mb-4">🌲 The Treehouse</h1>
-        <div className="grid grid-cols-2 gap-4">
-          <button
-            className="bg-gray-800 p-3 rounded hover:bg-gray-700"
-            onClick={() =>
-              openRoom("treehouse_loft", "Loft", "A creaky ladder leads to a dusty loft with old comic books.")
-            }
-          >
-            🪜 Loft
-          </button>
-          <button
-            className="bg-gray-800 p-3 rounded hover:bg-gray-700"
-            onClick={() =>
-              openRoom("treehouse_desk", "Work Desk", "The desk has a map with tacks, red yarn, and a walkie talkie.")
-            }
-          >
-            📻 Work Desk
-          </button>
-          <button
-            className="bg-gray-800 p-3 rounded hover:bg-gray-700"
-            onClick={() =>
-              openRoom("treehouse_trunk", "Old Trunk", "Inside is a flashlight, half a diary, and something locked...")
-            }
-          >
-            🧳 Trunk
-          </button>
-          <button
-            className="bg-gray-800 p-3 rounded hover:bg-gray-700"
-            onClick={() =>
-              openRoom("treehouse_window", "Secret Window", "You can peek out over the lake from here. Something glimmers.")
-            }
-          >
-            🪟 Window View
-          </button>
-        </div>
-      </div>
-    </DraggableResizeableWindow>
+      {/* Top Left - Loft */}
+      <button
+        onClick={() =>
+          openRoom("treehouse_loft", "Loft", "A creaky ladder leads to a dusty loft with old comic books.")
+        }
+        className="absolute top-4 left-4 bg-gray-800 text-white px-3 py-2 rounded hover:bg-gray-700"
+      >
+        🪜 Loft
+      </button>
+
+      {/* Top Right - Work Desk */}
+      <button
+        onClick={() =>
+          openRoom("treehouse_desk", "Work Desk", "The desk has a map with tacks, red yarn, and a walkie talkie.")
+        }
+        className="absolute top-4 right-4 bg-gray-800 text-white px-3 py-2 rounded hover:bg-gray-700"
+      >
+        📻 Work Desk
+      </button>
+
+      {/* Bottom Left - Trunk */}
+      <button
+        onClick={() =>
+          openRoom("treehouse_trunk", "Old Trunk", "Inside is a flashlight, half a diary, and something locked...")
+        }
+        className="absolute bottom-4 left-4 bg-gray-800 text-white px-3 py-2 rounded hover:bg-gray-700"
+      >
+        🧳 Trunk
+      </button>
+
+      {/* Bottom Right - Window View */}
+      <button
+        onClick={() =>
+          openRoom("treehouse_window", "Secret Window", "You can peek out over the lake from here. Something glimmers.")
+        }
+        className="absolute bottom-4 right-4 bg-gray-800 text-white px-3 py-2 rounded hover:bg-gray-700"
+      >
+        🪟 Window View
+      </button>
+    </div>
   );
 };
 
