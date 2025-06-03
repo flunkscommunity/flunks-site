@@ -20,7 +20,7 @@ const TreehouseMain = () => {
     <div
       className="relative w-full h-full bg-cover bg-center"
       style={{
-        backgroundImage: `url(${daybg.src})`,
+      backgroundImage: "url('/images/locations/treehouse/daybg.png')",
       }}
     >
       {/* Top Left - Loft */}
