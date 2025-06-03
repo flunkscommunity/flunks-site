@@ -11,7 +11,7 @@ interface Props {
 const Semester0Map: React.FC<Props> = ({ onClose }) => {
   console.log("🛠 Semester0Map rendered. onClose is:", onClose);
   const [hovered, setHovered] = useState<string | null>(null);
-const { openWindow } = useWindowsContext(); // ✅ ADD THIS
+const { openWindow, closeWindow } = useWindowsContext(); // ✅ ADD THIS
 
  
   return (
@@ -35,6 +35,7 @@ const { openWindow } = useWindowsContext(); // ✅ ADD THIS
         <DraggableResizeableWindow
           windowsId="treehouse_main"
           headerTitle="Treehouse"
+          onClose={() => closeWindow("treehouse_main")}
           initialWidth="100%"
           initialHeight="100%"
           resizable={false}
