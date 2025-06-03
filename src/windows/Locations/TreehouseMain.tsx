@@ -1,4 +1,5 @@
 import { useWindowsContext } from "contexts/WindowsContext";
+import daybg from "assets/locations/treehouse/daybg.png";
 
 const TreehouseMain = () => {
   const { openWindow, closeWindow } = useWindowsContext();
@@ -19,7 +20,7 @@ const TreehouseMain = () => {
     <div
       className="relative w-full h-full bg-cover bg-center"
       style={{
-        backgroundImage: "url('/assets/locations/treehouse/daybg.png')", // make sure this exists
+        backgroundImage: `url(${daybg.src})`,
       }}
     >
       {/* Top Left - Loft */}
