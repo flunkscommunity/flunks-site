@@ -38,9 +38,12 @@ const TreehouseMain = () => {
         <WindowHeader className="!flex !items-center !justify-between">
           <div className="flex items-center gap-2">
             <img
-              src="/images/icons/tree.png" // make sure this file exists!
+              src="/images/icons/tree.png"
               alt="Tree icon"
               className="h-5 w-5"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
             />
             <span className="text-base">Treehouse</span>
           </div>
