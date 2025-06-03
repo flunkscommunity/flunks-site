@@ -1,16 +1,26 @@
 import { useWindowsContext } from "contexts/WindowsContext";
+import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 
 const TreehouseMain = () => {
-  const { openWindow } = useWindowsContext();
+  const { openWindow, closeWindow } = useWindowsContext();
 
   const openRoom = (roomKey: string, title: string, content: string) => {
     openWindow({
       key: roomKey,
       window: (
-        <div className="p-4 text-sm leading-relaxed bg-[#1a1a1a] text-white w-full h-full">
-          <h1 className="text-xl mb-2">{title}</h1>
-          <p>{content}</p>
-        </div>
+        <DraggableResizeableWindow
+          windowsId={roomKey}
+          headerTitle={title}
+          onClose={() => closeWindow(roomKey)}
+          initialWidth="400px"
+          initialHeight="300px"
+          resizable={false}
+        >
+          <div className="p-4 text-sm leading-relaxed bg-[#1a1a1a] text-white w-full h-full">
+            <h1 className="text-xl mb-2">{title}</h1>
+            <p>{content}</p>
+          </div>
+        </DraggableResizeableWindow>
       ),
     });
   };
