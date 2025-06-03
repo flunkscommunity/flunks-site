@@ -8,15 +8,12 @@ import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 interface Props {
   onClose: () => void;
 }
-
 const Semester0Map: React.FC<Props> = ({ onClose }) => {
   console.log("🛠 Semester0Map rendered. onClose is:", onClose);
   const [hovered, setHovered] = useState<string | null>(null);
+const { openWindow } = useWindowsContext(); // ✅ ADD THIS
 
-  function openWindow(arg0: { key: string; window: React.JSX.Element; }): void {
-    throw new Error('Function not implemented.');
-  }
-
+ 
   return (
     <div className={styles["map-window"]}>
       <img
