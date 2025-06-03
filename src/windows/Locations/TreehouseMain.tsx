@@ -35,10 +35,16 @@ const TreehouseMain = () => {
       initialHeight="100%"
       resizable={false}
       headerRender={
-        <WindowHeader>
-          <img src="/images/icons/tree.png" className="h-4 mr-2" />
-          Treehouse
-          <span style={{ marginLeft: "auto", display: "flex", gap: 6 }}>
+        <WindowHeader className="!flex !items-center !justify-between">
+          <div className="flex items-center gap-2">
+            <img
+              src="/images/icons/tree.png" // make sure this file exists!
+              alt="Tree icon"
+              className="h-5 w-5"
+            />
+            <span className="text-base">Treehouse</span>
+          </div>
+          <div className="flex gap-1">
             <Button
               id="action"
               onClick={() => minimizeWindow(windowId)}
@@ -53,7 +59,7 @@ const TreehouseMain = () => {
             >
               <span className="close-icon" />
             </Button>
-          </span>
+          </div>
         </WindowHeader>
       }
     >
