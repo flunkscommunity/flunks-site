@@ -20,7 +20,7 @@ import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import FlunksTerminal from "windows/FlunksTerminal";
 import { WINDOW_IDS } from "fixed";
 import { useWindowsContext } from "contexts/WindowsContext";
-import BoomboxPlayer from "components/BoomboxPlayer";
+import RadioPlayer from "components/RadioPlayer";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -132,7 +132,7 @@ const windowsMemod = useMemo(() => (
                   initialHeight="370px"
                   headerIcon="/images/icons/radio.png"
                 >
-                  <BoomboxPlayer />
+                  <RadioPlayer />
                 </DraggableResizeableWindow>
               ),
             })

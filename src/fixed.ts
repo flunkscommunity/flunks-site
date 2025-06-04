@@ -1,4 +1,4 @@
-import BoomboxPlayer from "components/BoomboxPlayer";
+import RadioPlayer from "components/RadioPlayer";
 
 export { default as FLUNK_TRAITS } from "json/flunks-traits.json";
 export const WINDOW_IDS = {
@@ -66,7 +66,7 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appName: "Radio",
     appIcon: "/images/icons/radio.png",
     key: WINDOW_IDS.RADIO_PLAYER,
-    windowComponent: BoomboxPlayer,
+    windowComponent: RadioPlayer,
   },
   [WINDOW_IDS.TREEHOUSE_MAIN]: {
     appName: "Treehouse",
