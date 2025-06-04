@@ -1,4 +1,4 @@
-import WebampPlayer from "components/WebampPlayer";
+import BoomboxPlayer from "components/BoomboxPlayer";
 
 export { default as FLUNK_TRAITS } from "json/flunks-traits.json";
 export const WINDOW_IDS = {
@@ -18,7 +18,7 @@ export const WINDOW_IDS = {
   HOMEBASE: "Homebase",
   FREAK: "freak",
   SEMESTER_0: "semester0Map",
-  WEBAMPPLAYER: "webampplayer_window",
+  RADIO_PLAYER: "radio_player_window",
   TREEHOUSE_MAIN: "treehouse_main",
   TREEHOUSE_LOFT: "treehouse_loft",
   TREEHOUSE_DESK: "treehouse_desk",
@@ -62,11 +62,11 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appIcon: "/images/icons/semester0-icon.png", // ✅ match filename you use elsewhere
     key: WINDOW_IDS.SEMESTER_0,
   },
-  [WINDOW_IDS.WEBAMPPLAYER]: {
+  [WINDOW_IDS.RADIO_PLAYER]: {
     appName: "Radio",
     appIcon: "/images/icons/radio.png",
-    key: WINDOW_IDS.WEBAMPPLAYER,
-    windowComponent: WebampPlayer,
+    key: WINDOW_IDS.RADIO_PLAYER,
+    windowComponent: BoomboxPlayer,
   },
   [WINDOW_IDS.TREEHOUSE_MAIN]: {
     appName: "Treehouse",
