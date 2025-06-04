@@ -22,7 +22,6 @@ import { WINDOW_IDS } from "fixed";
 import { useWindowsContext } from "contexts/WindowsContext";
 
 import RadioPlayer from "components/RadioPlayer";
-import BoomboxPlayer from "components/BoomboxPlayer";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -136,7 +135,6 @@ const windowsMemod = useMemo(() => (
                 >
 
                   <RadioPlayer />
-                  <BoomboxPlayer />
                 </DraggableResizeableWindow>
               ),
             })
