@@ -53,7 +53,7 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     key: WINDOW_IDS.FLUNKS_HUB,
   },
   [WINDOW_IDS.SEMESTER_0]: {
-    appName: "Semester 0",
+    appName: "semester zero",
     appIcon: "/images/icons/semester0-icon.png", // ✅ match filename you use elsewhere
     key: WINDOW_IDS.SEMESTER_0,
   },

@@ -194,7 +194,7 @@ const windowsMemod = useMemo(() => (
         onDoubleClick={() => openWindow({ key: WINDOW_IDS.FLUNKS_HUB, window: <FlunksHub /> })} />
 
         <DesktopAppIcon
-          title="Semester 0"
+          title="semester zero"
           icon="/images/icons/semester0-icon.png"
           onDoubleClick={() => openWindow({
             key: WINDOW_IDS.SEMESTER_0,
@@ -207,7 +207,7 @@ const windowsMemod = useMemo(() => (
                 initialWidth="100%"
                 initialHeight="100%"
                 resizable={false}
-                headerTitle="Semester 0"
+                headerTitle="semester zero"
                 headerIcon="/images/icons/semester0-icon.png"
               >
                 <Semester0Map onClose={() => closeWindow(WINDOW_IDS.SEMESTER_0)} />
