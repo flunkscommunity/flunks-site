@@ -1,5 +1,6 @@
 import { useWindowsContext } from "contexts/WindowsContext";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
+import { WINDOW_IDS } from "fixed";
 
 const TreehouseMain = () => {
   const { openWindow, closeWindow } = useWindowsContext();
@@ -30,13 +31,17 @@ const TreehouseMain = () => {
       <img
         src="/images/locations/treehouse/daybg.png"
         alt="Treehouse Background"
-        className="absolute inset-0 w-full h-full object-contain z-0"
+        className="absolute inset-0 w-full h-full object-cover z-0"
       />
 
       {/* Top Left - Loft */}
       <button
         onClick={() =>
-          openRoom("treehouse_loft", "Loft", "A creaky ladder leads to a dusty loft with old comic books.")
+          openRoom(
+            WINDOW_IDS.TREEHOUSE_LOFT,
+            "Loft",
+            "A creaky ladder leads to a dusty loft with old comic books."
+          )
         }
         className="absolute top-4 left-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
       >
@@ -46,7 +51,11 @@ const TreehouseMain = () => {
       {/* Top Right - Work Desk */}
       <button
         onClick={() =>
-          openRoom("treehouse_desk", "Work Desk", "The desk has a map with tacks, red yarn, and a walkie talkie.")
+          openRoom(
+            WINDOW_IDS.TREEHOUSE_DESK,
+            "Work Desk",
+            "The desk has a map with tacks, red yarn, and a walkie talkie."
+          )
         }
         className="absolute top-4 right-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
       >
@@ -56,7 +65,11 @@ const TreehouseMain = () => {
       {/* Bottom Left - Trunk */}
       <button
         onClick={() =>
-          openRoom("treehouse_trunk", "Old Trunk", "Inside is a flashlight, half a diary, and something locked...")
+          openRoom(
+            WINDOW_IDS.TREEHOUSE_TRUNK,
+            "Old Trunk",
+            "Inside is a flashlight, half a diary, and something locked..."
+          )
         }
         className="absolute bottom-4 left-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
       >
@@ -66,7 +79,11 @@ const TreehouseMain = () => {
       {/* Bottom Right - Window View */}
       <button
         onClick={() =>
-          openRoom("treehouse_window", "Secret Window", "You can peek out over the lake from here. Something glimmers.")
+          openRoom(
+            WINDOW_IDS.TREEHOUSE_WINDOW,
+            "Secret Window",
+            "You can peek out over the lake from here. Something glimmers."
+          )
         }
         className="absolute bottom-4 right-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
       >

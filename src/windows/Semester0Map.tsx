@@ -3,6 +3,7 @@ import styles from '../styles/map.module.css';
 import { useWindowsContext } from "contexts/WindowsContext";
 import TreehouseMain from "windows/Locations/TreehouseMain"; // you'll make this next
 import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
+import { WINDOW_IDS } from "fixed";
 
 
 interface Props {
@@ -11,7 +12,7 @@ interface Props {
 const Semester0Map: React.FC<Props> = ({ onClose }) => {
   console.log("🛠 Semester0Map rendered. onClose is:", onClose);
   const [hovered, setHovered] = useState<string | null>(null);
-const { openWindow } = useWindowsContext(); // ✅ ADD THIS
+const { openWindow, closeWindow } = useWindowsContext(); // ✅ ADD THIS
 
  
   return (
@@ -30,11 +31,12 @@ const { openWindow } = useWindowsContext(); // ✅ ADD THIS
   onMouseLeave={() => setHovered(null)}
   onClick={() =>
     openWindow({
-      key: "treehouse_main",
+      key: WINDOW_IDS.TREEHOUSE_MAIN,
       window: (
         <DraggableResizeableWindow
-          windowsId="treehouse_main"
+          windowsId={WINDOW_IDS.TREEHOUSE_MAIN}
           headerTitle="Treehouse"
+          onClose={() => closeWindow(WINDOW_IDS.TREEHOUSE_MAIN)}
           initialWidth="100%"
           initialHeight="100%"
           resizable={false}
