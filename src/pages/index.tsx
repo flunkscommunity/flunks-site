@@ -19,12 +19,8 @@ import Semester0Map from "windows/Semester0Map";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import FlunksTerminal from "windows/FlunksTerminal";
 import { WINDOW_IDS } from "fixed";
-import dynamic from "next/dynamic";
 import { useWindowsContext } from "contexts/WindowsContext";
-
-const WebampPlayer = dynamic(() => import("components/WebampPlayer"), {
-  ssr: false,
-});
+import RadioPlayer from "components/RadioPlayer";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -71,7 +67,6 @@ const FullScreenLoader = () => {
 const Desktop = () => {
 const { windows, openWindow, closeWindow, windowApps } = useWindowsContext();
 const { showGettingStartedOnStartup } = useGettingStarted();
-const [showPlayer, setShowPlayer] = useState(false);
 
 useEffect(() => {
   if (showGettingStartedOnStartup) {
@@ -122,27 +117,27 @@ const windowsMemod = useMemo(() => (
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.ABOUT_US, window: <AboutUs /> })}
         />
 
-   <DesktopAppIcon
-  title="Radio"
-  icon="/images/icons/radio.png"
-  onDoubleClick={() =>
-    openWindow({
-      key: WINDOW_IDS.WEBAMPPLAYER,
-      window: (
-        <DraggableResizeableWindow
-          windowsId={WINDOW_IDS.WEBAMPPLAYER}
-          onClose={() => closeWindow(WINDOW_IDS.WEBAMPPLAYER)}
-          headerTitle="Radio"
-          initialWidth="480px"
-          initialHeight="370px"
-          headerIcon="/images/icons/radio.png"
-        >
-          <WebampPlayer />
-        </DraggableResizeableWindow>
-      ),
-    })
-  }
-/>
+        <DesktopAppIcon
+          title="Radio"
+          icon="/images/icons/radio.png"
+          onDoubleClick={() =>
+            openWindow({
+              key: WINDOW_IDS.RADIO_PLAYER,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.RADIO_PLAYER}
+                  onClose={() => closeWindow(WINDOW_IDS.RADIO_PLAYER)}
+                  headerTitle="Radio"
+                  initialWidth="480px"
+                  initialHeight="370px"
+                  headerIcon="/images/icons/radio.png"
+                >
+                  <RadioPlayer />
+                </DraggableResizeableWindow>
+              ),
+            })
+          }
+        />
 
 <a
   href="https://twitter.com/Flunks_NFT"
@@ -217,12 +212,7 @@ const windowsMemod = useMemo(() => (
         />
       </div>
 
-      {showPlayer && (
-        <div style={{ position: "fixed", bottom: 20, left: 20, zIndex: 9999 }}>
-          <button onClick={() => setShowPlayer(false)}>❌</button>
-          <WebampPlayer />
-        </div>
-      )}
+
 
       {windowsMemod}
     </>
