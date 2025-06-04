@@ -18,7 +18,12 @@ export const WINDOW_IDS = {
   HOMEBASE: "Homebase",
   FREAK: "freak",
   SEMESTER_0: "semester0Map",
-  WEBAMPPLAYER: "webampplayer_window"
+  WEBAMPPLAYER: "webampplayer_window",
+  TREEHOUSE_MAIN: "treehouse_main",
+  TREEHOUSE_LOFT: "treehouse_loft",
+  TREEHOUSE_DESK: "treehouse_desk",
+  TREEHOUSE_TRUNK: "treehouse_trunk",
+  TREEHOUSE_WINDOW: "treehouse_window",
 };
 
 export const WINDOW_APP_INFO_TO_WINDOW_ID = {
@@ -62,5 +67,30 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appIcon: "/images/icons/radio.png",
     key: WINDOW_IDS.WEBAMPPLAYER,
     windowComponent: WebampPlayer,
+  },
+  [WINDOW_IDS.TREEHOUSE_MAIN]: {
+    appName: "Treehouse",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.TREEHOUSE_MAIN,
+  },
+  [WINDOW_IDS.TREEHOUSE_LOFT]: {
+    appName: "Loft",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.TREEHOUSE_LOFT,
+  },
+  [WINDOW_IDS.TREEHOUSE_DESK]: {
+    appName: "Work Desk",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.TREEHOUSE_DESK,
+  },
+  [WINDOW_IDS.TREEHOUSE_TRUNK]: {
+    appName: "Old Trunk",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.TREEHOUSE_TRUNK,
+  },
+  [WINDOW_IDS.TREEHOUSE_WINDOW]: {
+    appName: "Window View",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.TREEHOUSE_WINDOW,
   },
 };
