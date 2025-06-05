@@ -24,6 +24,21 @@ export const WINDOW_IDS = {
   TREEHOUSE_DESK: "treehouse_desk",
   TREEHOUSE_TRUNK: "treehouse_trunk",
   TREEHOUSE_WINDOW: "treehouse_window",
+  ARCADE_MAIN: "arcade_main",
+  ARCADE_TOP_LEFT: "arcade_top_left",
+  ARCADE_TOP_RIGHT: "arcade_top_right",
+  ARCADE_BOTTOM_LEFT: "arcade_bottom_left",
+  ARCADE_BOTTOM_RIGHT: "arcade_bottom_right",
+  MOTEL_MAIN: "motel_main",
+  MOTEL_TOP_LEFT: "motel_top_left",
+  MOTEL_TOP_RIGHT: "motel_top_right",
+  MOTEL_BOTTOM_LEFT: "motel_bottom_left",
+  MOTEL_BOTTOM_RIGHT: "motel_bottom_right",
+  DINER_MAIN: "diner_main",
+  DINER_TOP_LEFT: "diner_top_left",
+  DINER_TOP_RIGHT: "diner_top_right",
+  DINER_BOTTOM_LEFT: "diner_bottom_left",
+  DINER_BOTTOM_RIGHT: "diner_bottom_right",
 };
 
 export const WINDOW_APP_INFO_TO_WINDOW_ID = {
@@ -92,5 +107,80 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appName: "Window View",
     appIcon: "/images/icons/tree.png",
     key: WINDOW_IDS.TREEHOUSE_WINDOW,
+  },
+  [WINDOW_IDS.ARCADE_MAIN]: {
+    appName: "Arcade",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.ARCADE_MAIN,
+  },
+  [WINDOW_IDS.ARCADE_TOP_LEFT]: {
+    appName: "Arcade TL",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.ARCADE_TOP_LEFT,
+  },
+  [WINDOW_IDS.ARCADE_TOP_RIGHT]: {
+    appName: "Arcade TR",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.ARCADE_TOP_RIGHT,
+  },
+  [WINDOW_IDS.ARCADE_BOTTOM_LEFT]: {
+    appName: "Arcade BL",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.ARCADE_BOTTOM_LEFT,
+  },
+  [WINDOW_IDS.ARCADE_BOTTOM_RIGHT]: {
+    appName: "Arcade BR",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.ARCADE_BOTTOM_RIGHT,
+  },
+  [WINDOW_IDS.MOTEL_MAIN]: {
+    appName: "Motel",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.MOTEL_MAIN,
+  },
+  [WINDOW_IDS.MOTEL_TOP_LEFT]: {
+    appName: "Motel TL",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.MOTEL_TOP_LEFT,
+  },
+  [WINDOW_IDS.MOTEL_TOP_RIGHT]: {
+    appName: "Motel TR",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.MOTEL_TOP_RIGHT,
+  },
+  [WINDOW_IDS.MOTEL_BOTTOM_LEFT]: {
+    appName: "Motel BL",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.MOTEL_BOTTOM_LEFT,
+  },
+  [WINDOW_IDS.MOTEL_BOTTOM_RIGHT]: {
+    appName: "Motel BR",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.MOTEL_BOTTOM_RIGHT,
+  },
+  [WINDOW_IDS.DINER_MAIN]: {
+    appName: "Diner",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.DINER_MAIN,
+  },
+  [WINDOW_IDS.DINER_TOP_LEFT]: {
+    appName: "Diner TL",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.DINER_TOP_LEFT,
+  },
+  [WINDOW_IDS.DINER_TOP_RIGHT]: {
+    appName: "Diner TR",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.DINER_TOP_RIGHT,
+  },
+  [WINDOW_IDS.DINER_BOTTOM_LEFT]: {
+    appName: "Diner BL",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.DINER_BOTTOM_LEFT,
+  },
+  [WINDOW_IDS.DINER_BOTTOM_RIGHT]: {
+    appName: "Diner BR",
+    appIcon: "/images/icons/tree.png",
+    key: WINDOW_IDS.DINER_BOTTOM_RIGHT,
   },
 };

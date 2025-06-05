@@ -21,6 +21,10 @@
   background-repeat: no-repeat;
   z-index: 10;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
 }
 
 /* Adjust these based on where the icons should appear on the map image */
@@ -34,6 +38,21 @@
   top: 43%;   /* Roughly aligned with y: 500 */
   left: 88%;  /* Roughly aligned with x: 1800 */
   background-image: url('/images/school-icon.png');
+}
+
+.arcade {
+  top: 25%;
+  left: 60%;
+}
+
+.motel {
+  top: 65%;
+  left: 75%;
+}
+
+.diner {
+  top: 55%;
+  left: 25%;
 }
 
 .map-overlay {
