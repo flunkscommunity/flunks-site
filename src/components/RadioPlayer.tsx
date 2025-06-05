@@ -1,4 +1,4 @@
-import { Window, WindowHeader, WindowContent, Button, Slider } from 'react95';
+import { WindowContent, Button, Slider } from 'react95';
 import { useRef, useState } from 'react';
 
 const tracks = [
@@ -62,8 +62,7 @@ const RadioPlayer = () => {
   };
 
   return (
-    <Window style={{ width: 340, padding: 10, background: '#e8f0ff' }}>
-      <WindowHeader>Radio</WindowHeader>
+    <div style={{ width: '100%', padding: 10, background: '#e8f0ff' }}>
       <WindowContent style={{ padding: '1rem', background: '#f4f8ff' }}>
         <div style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
           <b style={{ color: '#008000' }}>{tracks[trackIndex].title}</b>
@@ -80,7 +79,7 @@ const RadioPlayer = () => {
         </div>
         <audio ref={audioRef} src={tracks[trackIndex].src} />
       </WindowContent>
-    </Window>
+    </div>
   );
 };
 
