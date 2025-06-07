@@ -29,27 +29,29 @@ const { openWindow, closeWindow } = useWindowsContext(); // ✅ ADD THIS
       {hovered && <div className={styles["map-overlay"]} />}
 
       <div
-  className={`${styles.icon} ${styles.treehouse}`}
-  onMouseEnter={() => setHovered('treehouse')}
-  onMouseLeave={() => setHovered(null)}
-  onClick={() =>
-    openWindow({
-      key: WINDOW_IDS.TREEHOUSE_MAIN,
-      window: (
-        <DraggableResizeableWindow
-          windowsId={WINDOW_IDS.TREEHOUSE_MAIN}
-          headerTitle="Treehouse"
-          onClose={() => closeWindow(WINDOW_IDS.TREEHOUSE_MAIN)}
-          initialWidth="100%"
-          initialHeight="100%"
-          resizable={false}
-        >
-          <TreehouseMain />
-        </DraggableResizeableWindow>
-      ),
-    })
-  } 
-/>
+        className={`${styles.icon} ${styles.treehouse}`}
+        onMouseEnter={() => setHovered('treehouse')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() =>
+          openWindow({
+            key: WINDOW_IDS.TREEHOUSE_MAIN,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.TREEHOUSE_MAIN}
+                headerTitle="Treehouse"
+                onClose={() => closeWindow(WINDOW_IDS.TREEHOUSE_MAIN)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+              >
+                <TreehouseMain />
+              </DraggableResizeableWindow>
+            ),
+          })
+        }
+      >
+        🪵
+      </div>
 
       <div
         className={`${styles.icon} ${styles.arcade}`}
