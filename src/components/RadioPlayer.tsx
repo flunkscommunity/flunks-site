@@ -62,23 +62,67 @@ const RadioPlayer = () => {
   };
 
   return (
-    <div style={{ width: '100%', padding: 10, background: '#e8f0ff' }}>
-      <WindowContent style={{ padding: '1rem', background: '#f4f8ff' }}>
-        <div style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
-          <b style={{ color: '#008000' }}>{tracks[trackIndex].title}</b>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
-          <Button onClick={prevTrack}>⏮</Button>
-          <Button onClick={togglePlay}>{isPlaying ? '⏸' : '▶'}</Button>
-          <Button onClick={stop}>⏹</Button>
-          <Button onClick={nextTrack}>⏭</Button>
-        </div>
-        <div style={{ marginTop: '1rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.25rem' }}>Volume</label>
-          <Slider min={0} max={1} step={0.01} value={volume} onChange={handleVolume} />
-        </div>
-        <audio ref={audioRef} src={tracks[trackIndex].src} />
-      </WindowContent>
+    <div
+      style={{
+        width: '100%',
+        padding: 10,
+        background: '#fdf6ff',
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1rem',
+          padding: '1rem 2rem',
+          borderRadius: '12px',
+          background: '#fff8fb',
+          border: '4px solid #ffd6e7',
+        }}
+      >
+        <div
+          style={{
+            width: '70px',
+            height: '70px',
+            borderRadius: '50%',
+            background: '#d1e8ff',
+            border: '4px solid #a3c0e9',
+          }}
+        />
+        <WindowContent
+          style={{
+            padding: '1rem',
+            background: '#fceefd',
+            minWidth: '220px',
+          }}
+        >
+          <div style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
+            <b style={{ color: '#008080' }}>{tracks[trackIndex].title}</b>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
+            <Button onClick={prevTrack}>⏮</Button>
+            <Button onClick={togglePlay}>{isPlaying ? '⏸' : '▶'}</Button>
+            <Button onClick={stop}>⏹</Button>
+            <Button onClick={nextTrack}>⏭</Button>
+          </div>
+          <div style={{ marginTop: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: '0.25rem' }}>Volume</label>
+            <Slider min={0} max={1} step={0.01} value={volume} onChange={handleVolume} />
+          </div>
+          <audio ref={audioRef} src={tracks[trackIndex].src} />
+        </WindowContent>
+        <div
+          style={{
+            width: '70px',
+            height: '70px',
+            borderRadius: '50%',
+            background: '#d1e8ff',
+            border: '4px solid #a3c0e9',
+          }}
+        />
+      </div>
     </div>
   );
 };
