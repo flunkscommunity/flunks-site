@@ -60,7 +60,22 @@ const TEAM: {
     ),
     image: "/images/about-us/Nantucket.png",
   },
+{
+    name: "DOLO",
+    description: (
+      <span className="text-xl md:text-xl max-w-2xl text-pretty">
+        DOLO is the hall-passin’ drifter of Flunks—never tied down, always in the mix. With a background in digital marketing, writing, and UX, he turns ideas into moments that connect, land, and leave an impression.
+      </span>
+    ),
+    image: "/images/about-us/dolo.png",
+  },
+
+
+
 ];
+
+
+
 
 const OurTeam = () => {
   return (
