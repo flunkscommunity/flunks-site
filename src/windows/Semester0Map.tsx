@@ -8,6 +8,7 @@ import DinerMain from "windows/Locations/DinerMain";
 import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 import { WINDOW_IDS } from "fixed";
 import { Button } from 'react95';
+import SemesterZeroCSSLoader from "components/SemesterZeroCSSLoader";
 
 interface Props {
   onClose: () => void;
@@ -16,6 +17,7 @@ interface Props {
 const Semester0Map: React.FC<Props> = ({ onClose }) => {
   const [hovered, setHovered] = useState<string | null>(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { openWindow, closeWindow } = useWindowsContext();
 
   useEffect(() => {
@@ -29,10 +31,20 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 5000);
+    return () => clearTimeout(t);
+  }, []);
+
   const togglePause = () => setIsPaused(prev => !prev);
 
   return (
     <div className={styles["map-window"]}>
+      {loading && (
+        <div className={styles["loader-overlay"]}>
+          <SemesterZeroCSSLoader />
+        </div>
+      )}
       <img
         src="/images/flunks-map.png"
         className={styles["background-map"]}

@@ -92,3 +92,12 @@
   cursor: pointer;
   text-shadow: 1px 1px 3px black;
 }
+.loader-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+  z-index: 40;
+}
