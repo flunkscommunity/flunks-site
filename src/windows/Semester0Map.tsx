@@ -1,23 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../styles/map.module.css';
 import { useWindowsContext } from "contexts/WindowsContext";
-import TreehouseMain from "windows/Locations/TreehouseMain"; // you'll make this next
+import TreehouseMain from "windows/Locations/TreehouseMain";
 import ArcadeMain from "windows/Locations/ArcadeMain";
 import MotelMain from "windows/Locations/MotelMain";
 import DinerMain from "windows/Locations/DinerMain";
 import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 import { WINDOW_IDS } from "fixed";
-
+import { Button } from 'react95';
 
 interface Props {
   onClose: () => void;
 }
-const Semester0Map: React.FC<Props> = ({ onClose }) => {
-  console.log("🛠 Semester0Map rendered. onClose is:", onClose);
-  const [hovered, setHovered] = useState<string | null>(null);
-const { openWindow, closeWindow } = useWindowsContext(); // ✅ ADD THIS
 
- 
+const Semester0Map: React.FC<Props> = ({ onClose }) => {
+  const [hovered, setHovered] = useState<string | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const { openWindow, closeWindow } = useWindowsContext();
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        setIsPaused(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const togglePause = () => setIsPaused(prev => !prev);
+
   return (
     <div className={styles["map-window"]}>
       <img
@@ -145,6 +158,55 @@ const { openWindow, closeWindow } = useWindowsContext(); // ✅ ADD THIS
       )}
 
       <button className={styles["close-btn"]} onClick={onClose}>✖</button>
+
+      {/* Pause Overlay */}
+      {isPaused && (
+        <div
+          onClick={togglePause}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            height: '100vh',
+            width: '100vw',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+          }}
+        >
+          <img
+            src="/images/pause-placeholder.png"
+            alt="Paused"
+            style={{
+              maxWidth: '80%',
+              maxHeight: '80%',
+              borderRadius: '8px',
+              boxShadow: '0 0 20px black',
+              backgroundColor: '#fff',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+
+      {/* Pause Button for Mobile */}
+      <div style={{
+        position: 'fixed',
+        bottom: 20,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 10000,
+      }}>
+        <Button
+          onClick={togglePause}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#c0c0c0'}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
+        >
+          Pause
+        </Button>
+      </div>
     </div>
   );
 };
