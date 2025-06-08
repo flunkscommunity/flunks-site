@@ -177,17 +177,23 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           }}
         >
           <img
-            src="/images/pause-screen.png"
-            alt="Paused"
-            style={{
-              maxWidth: '80%',
-              maxHeight: '80%',
-              borderRadius: '8px',
-              boxShadow: '0 0 20px black',
-              backgroundColor: '#fff',
-            }}
-            onClick={(e) => e.stopPropagation()}
-          />
+  src="/images/pause.png"
+  alt="Paused"
+  style={{
+    maxWidth: '80%',
+    maxHeight: '80%',
+    borderRadius: '8px',
+    boxShadow: '0 0 20px black',
+    backgroundColor: '#fff',
+    WebkitMaskImage: 'radial-gradient(ellipse closest-side, black 60%, transparent 100%)',
+    maskImage: 'radial-gradient(ellipse closest-side, black 60%, transparent 100%)',
+    WebkitMaskRepeat: 'no-repeat',
+    maskRepeat: 'no-repeat',
+    WebkitMaskPosition: 'center',
+    maskPosition: 'center',
+  }}
+  onClick={(e) => e.stopPropagation()}
+/>
         </div>
       )}
 
