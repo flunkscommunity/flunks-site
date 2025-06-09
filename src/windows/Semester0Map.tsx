@@ -177,7 +177,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           }}
         >
           <img
-  src="/images/pause.png"
+  src="/images/pause-screen.png"
   alt="Paused"
   style={{
     maxWidth: '80%',
