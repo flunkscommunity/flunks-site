@@ -173,9 +173,6 @@ const windowsMemod = useMemo(() => (
           })}
         />
 
-        <DesktopAppIcon title="onlyflunks" icon="/images/icons/onlyflunks.png"
-        onDoubleClick={() => openWindow({ key: WINDOW_IDS.FLUNKS_HUB, window: <Onlyflunks /> })} />
-
         <DesktopAppIcon
           title="semester zero"
           icon="/images/icons/semester0-icon.png"
