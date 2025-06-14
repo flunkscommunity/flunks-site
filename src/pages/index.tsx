@@ -89,8 +89,8 @@ const windowsMemod = useMemo(() => (
     <>
       <div className="flex relative flex-col max-h-[calc(100vh-64px)] w-full flex-wrap items-start gap-4 content-start">
         <DesktopAppIcon
-          title="Flunkfolio"
-          icon="/images/icons/vault.png"
+          title="Onlyflunks"
+          icon="/images/icons/onlyflunks.png"
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.YOUR_STUDENTS, window: <YourStudents /> })}
         />
 

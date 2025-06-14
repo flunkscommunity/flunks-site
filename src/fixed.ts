@@ -12,7 +12,7 @@ export const WINDOW_IDS = {
   GUMBALL_MACHINE_HELP: "gumball-machine-help",
   PROJECT_JNR: "project-jnr",
   ABOUT_US: "about-us",
-  FLUNKFOLIO_ITEM: "flunkfolio-item-",
+  ONLYFLUNKS_ITEM: "onlyflunks-item-",
   FLUNK_E_MART: "flunk-e-mart",
   FLUNKS_HUB: "onlyflunks",
   HOMEBASE: "Homebase",
@@ -43,8 +43,8 @@ export const WINDOW_IDS = {
 
 export const WINDOW_APP_INFO_TO_WINDOW_ID = {
   [WINDOW_IDS.YOUR_STUDENTS]: {
-    appName: "Flunkfolio",
-    appIcon: "/images/icons/vault.png",
+    appName: "Onlyflunks",
+    appIcon: "/images/icons/onlyflunks.png",
     key: WINDOW_IDS.YOUR_STUDENTS,
   },
   [WINDOW_IDS.GUMBALL_MACHINE]: {
