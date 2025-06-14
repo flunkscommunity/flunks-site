@@ -8,24 +8,24 @@ interface Props {
   children: React.ReactNode;
 }
 
-const FlunkfolioItem: React.FC<Props> = (props) => {
+const OnlyflunksItem: React.FC<Props> = (props) => {
   const { templateId, title, children } = props;
   const { closeWindow } = useWindowsContext();
 
   return (
     <DraggableResizeableWindow
       onClose={() => {
-        closeWindow(`${WINDOW_IDS.FLUNKFOLIO_ITEM}${templateId}`);
+        closeWindow(`${WINDOW_IDS.ONLYFLUNKS_ITEM}${templateId}`);
       }}
-      windowsId={`${WINDOW_IDS.FLUNKFOLIO_ITEM}${templateId}`}
+      windowsId={`${WINDOW_IDS.ONLYFLUNKS_ITEM}${templateId}`}
       headerTitle={title}
       initialHeight="70%"
       initialWidth="auto"
-      headerIcon="/images/icons/vault.png"
+      headerIcon="/images/icons/onlyflunks.png"
     >
       {children}
     </DraggableResizeableWindow>
   );
 };
 
-export default FlunkfolioItem;
+export default OnlyflunksItem;

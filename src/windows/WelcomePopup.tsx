@@ -93,12 +93,12 @@ const WelcomePopup: React.FC = () => {
             </a>
             .
           </p>
-          <h2 className="text-xl font-bold mb-1">Flunkfolio v1</h2>
+          <h2 className="text-xl font-bold mb-1">Onlyflunks v1</h2>
           <p className="text-lg mb-6">
-            Flunkfolio streamlines and enhances the functionality of the
+            Onlyflunks streamlines and enhances the functionality of the
             previous Your Students and Lost and Found apps. While the Your
             Students app managed your entire inventory of Flunks and the Lost
-            and Found app handled your backpacks, Flunkfolio now integrates both
+            and Found app handled your backpacks, Onlyflunks now integrates both
             into a single, efficient platform. This new version allows you to
             view your Flunks in either their original or portrait format, track
             your total inventory count and gum reserves, and access detailed
@@ -107,10 +107,10 @@ const WelcomePopup: React.FC = () => {
             of your items.
             <br />
             <br />
-            Flunkfolio also displays linked items from Dapper as it now reads
+            Onlyflunks also displays linked items from Dapper as it now reads
             on-chain data directly, making it easier to manage all your assets
             in one place. Furthermore, backpack claiming and graduation are both
-            accessible within Flunkfolio, providing a comprehensive and
+            accessible within Onlyflunks, providing a comprehensive and
             streamlined experience.
           </p>
           <h2 className="text-xl font-bold mb-1">Website Overhaul</h2>
@@ -119,7 +119,7 @@ const WelcomePopup: React.FC = () => {
             to enhance your experience. Previously, access to the entire website
             was gated, requiring users to log in using Dapper Wallet. Now, the
             website is open to everyone, though certain features such as the
-            Gumball Machine and Flunkfolio require logging in with a
+            Gumball Machine and Onlyflunks require logging in with a
             non-custodial wallet.
             <br />
             <br />

@@ -33,7 +33,7 @@ import {
   CustomScrollArea,
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
-import FlunkfolioItem from "windows/FlunkfolioItem";
+import OnlyflunksItem from "windows/OnlyflunksItem";
 import { getWalletStakeInfo } from "web3/script-get-wallet-stake-info";
 import { getWalletInfoShallow } from "web3/script-get-wallet-items-shallow";
 import YourItemsGridHeader from "./Header/Header";
@@ -230,12 +230,12 @@ const ItemsGrid: React.FC = () => {
 
   const noItems = !memodCombinedItems?.length;
 
-  const handleOpenFlunkfolioItem = (nft: ObjectDetails) => {
+  const handleOpenOnlyflunksItem = (nft: ObjectDetails) => {
     console.log(nft);
     openWindow({
-      key: `${WINDOW_IDS.FLUNKFOLIO_ITEM}${nft.serialNumber}`,
+      key: `${WINDOW_IDS.ONLYFLUNKS_ITEM}${nft.serialNumber}`,
       window: (
-        <FlunkfolioItem
+        <OnlyflunksItem
           title={`${nft.collection === "Flunks" ? "Flunk" : "Backpack"} #${
             nft.serialNumber
           } - Full Details`}
@@ -267,7 +267,7 @@ const ItemsGrid: React.FC = () => {
               </ScrollViewWithBackground>
             </CustomStyledScrollView>
           )}
-        </FlunkfolioItem>
+        </OnlyflunksItem>
       ),
     });
   };
@@ -290,14 +290,14 @@ const ItemsGrid: React.FC = () => {
               <GridedView
                 // @ts-ignore
                 items={memodCombinedItems}
-                setActiveItem={handleOpenFlunkfolioItem}
+                setActiveItem={handleOpenOnlyflunksItem}
               />
             )}
             {viewType === "table" && (
               <TableView
                 // @ts-ignore
                 items={memodCombinedItems}
-                setActiveItem={handleOpenFlunkfolioItem}
+                setActiveItem={handleOpenOnlyflunksItem}
               />
             )}
             {currentDataPages?.length > 1 &&
