@@ -4,13 +4,11 @@ import CustomMonitor from "components/CustomMonitor";
 import DesktopAppIcon from "components/DesktopAppIcon";
 import React, { useEffect, useMemo, useState } from "react";
 import YourStudents from "windows/YourStudents";
-import GumballMachine from "windows/GumballMachine";
 import ProjectJnr from "windows/ProjectJnr";
 import AboutUs from "windows/AboutUs";
 import { ProgressBar } from "react95";
 import { useTheme } from "styled-components";
 import { animated, config, useSpring } from "@react-spring/web";
-import FlunkEMart from "windows/FlunkMart";
 import useGettingStarted from "store/useGettingStarted";
 import Welcome from "windows/Welcome";
 import Onlyflunks from "../windows/Onlyflunks";
@@ -95,21 +93,9 @@ const windowsMemod = useMemo(() => (
         />
 
         <DesktopAppIcon
-          title="Gumball Machine"
-          icon="/images/icons/gum-machine.png"
-          onDoubleClick={() => openWindow({ key: WINDOW_IDS.GUMBALL_MACHINE, window: <GumballMachine /> })}
-        />
-
-        <DesktopAppIcon
           title="Pocket Juniors"
           icon="/images/icons/pocket-juniors-50x50.png"
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.PROJECT_JNR, window: <ProjectJnr /> })}
-        />
-
-        <DesktopAppIcon
-          title="Flunk E Mart"
-          icon="/images/icons/flunk-e-mart.png"
-          onDoubleClick={() => openWindow({ key: WINDOW_IDS.FLUNK_E_MART, window: <FlunkEMart windowId={WINDOW_IDS.FLUNK_E_MART} /> })}
         />
 
         <DesktopAppIcon
