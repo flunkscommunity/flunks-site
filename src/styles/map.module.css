@@ -101,3 +101,17 @@
   background-color: #000;
   z-index: 40;
 }
+
+@media (max-width: 768px) {
+  .map-window {
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: calc(100vh * 16 / 9);
+  }
+
+  .background-map {
+    width: calc(100vh * 16 / 9);
+    height: 100vh;
+    object-fit: contain;
+  }
+}
