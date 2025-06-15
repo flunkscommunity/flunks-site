@@ -13,6 +13,7 @@
   "dependencies": {
     "@dynamic-labs/flow": "^3.9.13",
     "@dynamic-labs/sdk-react-core": "^3.8.1",
+    "@onflow/fcl": "^1.10.0",
     "@react-spring/web": "^9.7.3",
     "@react-three/drei": "^9.105.6",
     "@react-three/fiber": "^8.16.5",

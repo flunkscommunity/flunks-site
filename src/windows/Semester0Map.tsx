@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from '../styles/map.module.css';
 import { useWindowsContext } from "contexts/WindowsContext";
 import TreehouseMain from "windows/Locations/TreehouseMain";
+import TreehouseAccess from "../components/TreehouseAccess";
 import ArcadeMain from "windows/Locations/ArcadeMain";
 import MotelMain from "windows/Locations/MotelMain";
 import DinerMain from "windows/Locations/DinerMain";
@@ -57,25 +58,26 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         className={`${styles.icon} ${styles.treehouse}`}
         onMouseEnter={() => setHovered('treehouse')}
         onMouseLeave={() => setHovered(null)}
-        onClick={() =>
-          openWindow({
-            key: WINDOW_IDS.TREEHOUSE_MAIN,
-            window: (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.TREEHOUSE_MAIN}
-                headerTitle="Treehouse"
-                onClose={() => closeWindow(WINDOW_IDS.TREEHOUSE_MAIN)}
-                initialWidth="100%"
-                initialHeight="100%"
-                resizable={false}
-              >
-                <TreehouseMain />
-              </DraggableResizeableWindow>
-            ),
-          })
-        }
       >
-        🪵
+        <TreehouseAccess
+          onEnter={() =>
+            openWindow({
+              key: WINDOW_IDS.TREEHOUSE_MAIN,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.TREEHOUSE_MAIN}
+                  headerTitle="Treehouse"
+                  onClose={() => closeWindow(WINDOW_IDS.TREEHOUSE_MAIN)}
+                  initialWidth="100%"
+                  initialHeight="100%"
+                  resizable={false}
+                >
+                  <TreehouseMain />
+                </DraggableResizeableWindow>
+              ),
+            })
+          }
+        />
       </div>
 
       <div
