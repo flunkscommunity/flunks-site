@@ -18,6 +18,8 @@ import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import FlunksTerminal from "windows/FlunksTerminal";
 import { WINDOW_IDS } from "fixed";
 import { useWindowsContext } from "contexts/WindowsContext";
+import FlappyFlunkWindow from "windows/Games/FlappyFlunkWindow";
+
 
 import RadioPlayer from "components/RadioPlayer";
 
@@ -172,6 +174,29 @@ const windowsMemod = useMemo(() => (
             )
           })}
         />
+
+<DesktopAppIcon
+  title="Flappy Flunk"
+  icon="/images/icons/flappyflunk.png" // adjust path if needed
+  onDoubleClick={() =>
+    openWindow({
+      key: WINDOW_IDS.FLAPPY_FLUNK,
+      window: (
+        <DraggableResizeableWindow
+          windowsId={WINDOW_IDS.FLAPPY_FLUNK}
+          onClose={() => closeWindow(WINDOW_IDS.FLAPPY_FLUNK)}
+          headerTitle="Flappy Flunk"
+          initialWidth="480px"
+          initialHeight="640px"
+          headerIcon="/images/icons/flappyflunk.png"
+        >
+          <FlappyFlunkWindow />
+        </DraggableResizeableWindow>
+      ),
+    })
+  }
+/>
+
 
         <DesktopAppIcon
           title="semester zero"
