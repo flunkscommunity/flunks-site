@@ -12,12 +12,13 @@ interface ScoreRow {
 }
 
 const FlappyLeaderboardWindow: React.FC = () => {
-  const { data } = useSWR<{ scores: ScoreRow[] }>(
-    '/api/flappyflunk-leaderboard',
-    fetcher
-  );
+  const { data } = useSWR<ScoreRow[]>(
+  '/api/flappyflunk-leaderboard',
+  fetcher
+);
 
-  const scores = data?.scores || [];
+const scores = data || [];
+
 
   return (
     <Frame variant="well" className="p-2 h-full w-full overflow-auto">
