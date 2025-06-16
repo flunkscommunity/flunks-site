@@ -106,6 +106,8 @@
   .map-window {
     overflow-x: auto;
     overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
     width: calc(100vh * 16 / 9);
   }
 

@@ -153,6 +153,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
       bounds="parent"
       onStart={onStart}
       disabled={width < 768}
+      style={width < 768 ? { touchAction: 'pan-x' } : undefined}
       position={
         props.openCentered && !isMobile
           ? { x: width / 2 - 200, y: height / 2 - 200 }
