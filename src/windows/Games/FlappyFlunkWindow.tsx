@@ -1,11 +1,9 @@
-// src/windows/Games/FlappyFlunkWindow.tsx
-
 import React from 'react';
 
 const FlappyFlunkWindow: React.FC = () => {
   return (
     <iframe
-      src="/Games/FlappyBird/index.html"
+      src="/Games/FlappyFlunk/index.html"
       title="Flappy Flunk"
       style={{
         width: '100%',
