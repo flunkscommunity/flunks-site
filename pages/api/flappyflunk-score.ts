@@ -34,5 +34,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } catch (err) {
     console.error('🚨 Unexpected server error:', err);
     return res.status(500).json({ error: 'Unexpected server error' });
+
+    console.log("🧪 SUPABASE URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
+    console.log("🧪 SUPABASE KEY:", process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? '✅ Present' : '❌ MISSING');
+
   }
 }
