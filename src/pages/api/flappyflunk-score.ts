@@ -16,6 +16,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const { wallet, score } = req.body;
+  console.log("👾 Incoming body:", req.body);
+
 
   if (!wallet || typeof score !== 'number') {
     return res.status(400).json({ error: 'Invalid request payload' });
