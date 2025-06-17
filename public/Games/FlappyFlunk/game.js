@@ -18,6 +18,7 @@ scrn.addEventListener("click", () => {
       pipe.pipes = [];
       UI.score.curr = 0;
       SFX.played = false;
+      window.scoreSent = false;
       break;
   }
 });
@@ -281,6 +282,13 @@ const UI = {
           sctx.fillText(sc, scrn.width / 2 - 85, scrn.height / 2 + 15);
           sctx.strokeText(sc, scrn.width / 2 - 85, scrn.height / 2 + 15);
         }
+          if (!window.scoreSent) {
+  window.parent.postMessage(
+    { type: "FLAPPY_SCORE", score: this.score.curr },
+    "*"
+  );
+  window.scoreSent = true;
+}
 
         break;
     }
