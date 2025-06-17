@@ -26,10 +26,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { data, error } = await query;
 
-  if (error) {
-  console.error('Supabase SELECT error:', error); // ✅ ADD THIS
-  return res.status(500).json({ error: 'Failed to fetch leaderboard' });
+ if (error) {
+  console.error('🔥 Supabase SELECT error:', error); // ✅ add this
+  return res.status(500).json({ error: error.message });
 }
+
 
 
   return res.status(200).json({ scores: data });
