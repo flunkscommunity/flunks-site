@@ -12,7 +12,7 @@ import { animated, config, useSpring } from "@react-spring/web";
 import useGettingStarted from "store/useGettingStarted";
 import Welcome from "windows/Welcome";
 import Onlyflunks from "../windows/Onlyflunks";
-import Homebase from "windows/Homebase";
+import MyPlace from "windows/MyPlace";
 import Semester0Map from "windows/Semester0Map";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import FlunksTerminal from "windows/FlunksTerminal";
@@ -154,7 +154,7 @@ const windowsMemod = useMemo(() => (
           <DesktopAppIcon title="Market" icon="/images/icons/flowty.png" onDoubleClick={() => null} />
         </a>
 
-        <DesktopAppIcon title="Homebase" icon="/images/icons/homebase.png" onDoubleClick={() => openWindow({ key: WINDOW_IDS.HOMEBASE, window: <Homebase /> })} />
+        <DesktopAppIcon title="MyPlace" icon="/images/icons/myplace.png" onDoubleClick={() => openWindow({ key: WINDOW_IDS.MYPLACE, window: <MyPlace /> })} />
 
         <DesktopAppIcon
           title="Terminal"

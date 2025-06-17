@@ -15,7 +15,7 @@ export const WINDOW_IDS = {
   ONLYFLUNKS_ITEM: "onlyflunks-item-",
   FLUNK_E_MART: "flunk-e-mart",
   FLUNKS_HUB: "onlyflunks",
-  HOMEBASE: "Homebase",
+  MYPLACE: "myplace",
   FREAK: "freak",
   SEMESTER_0: "semester0Map",
   RADIO_PLAYER: "radio_player_window",
@@ -73,6 +73,11 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appName: "onlyflunks",
     appIcon: "/images/icons/onlyflunks.png",
     key: WINDOW_IDS.FLUNKS_HUB,
+  },
+  [WINDOW_IDS.MYPLACE]: {
+    appName: "MyPlace",
+    appIcon: "/images/icons/myplace.png",
+    key: WINDOW_IDS.MYPLACE,
   },
   [WINDOW_IDS.SEMESTER_0]: {
     appName: "semester zero",
