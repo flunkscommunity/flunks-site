@@ -12,7 +12,7 @@ import { animated, config, useSpring } from "@react-spring/web";
 import useGettingStarted from "store/useGettingStarted";
 import Welcome from "windows/Welcome";
 import Onlyflunks from "../windows/Onlyflunks";
-import MyPlace from "windows/MyPlace";
+import { useRouter } from "next/router";
 import Semester0Map from "windows/Semester0Map";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import FlunksTerminal from "windows/FlunksTerminal";
@@ -64,8 +64,9 @@ const FullScreenLoader = () => {
 };
 
 const Desktop = () => {
-const { windows, openWindow, closeWindow, windowApps } = useWindowsContext();
-const { showGettingStartedOnStartup } = useGettingStarted();
+  const router = useRouter();
+  const { windows, openWindow, closeWindow, windowApps } = useWindowsContext();
+  const { showGettingStartedOnStartup } = useGettingStarted();
 
 useEffect(() => {
   if (showGettingStartedOnStartup) {
@@ -152,7 +153,11 @@ const windowsMemod = useMemo(() => (
           <DesktopAppIcon title="Market" icon="/images/icons/flowty.png" onDoubleClick={() => null} />
         </a>
 
-        <DesktopAppIcon title="MyPlace" icon="/images/icons/myplace.png" onDoubleClick={() => openWindow({ key: WINDOW_IDS.MYPLACE, window: <MyPlace /> })} />
+        <DesktopAppIcon
+          title="MyPlace"
+          icon="/images/icons/myplace.png"
+          onDoubleClick={() => router.push('/select-your-flunk')}
+        />
 
         <DesktopAppIcon
           title="Terminal"
