@@ -1,4 +1,4 @@
-\// ✅ This is a valid API route
+// ✅ This is a valid API route
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 
