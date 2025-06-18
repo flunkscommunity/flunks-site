@@ -1,5 +1,3 @@
-// pages/api/flappyflunk-score.ts
-
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 
@@ -16,8 +14,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { wallet, score } = req.body;
 
-  console.log("📥 Incoming body:", req.body);
-
   if (!wallet || typeof score !== 'number') {
     return res.status(400).json({ error: 'Invalid request payload' });
   }
@@ -27,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     .insert([{ wallet, score }]);
 
   if (error) {
-    console.error("🔥 Supabase insert error:", error);
+    console.error('🔥 Supabase INSERT error:', error);
     return res.status(500).json({ error: error.message });
   }
 
