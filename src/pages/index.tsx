@@ -19,8 +19,6 @@ import FlunksTerminal from "windows/FlunksTerminal";
 import { WINDOW_IDS } from "fixed";
 import { useWindowsContext } from "contexts/WindowsContext";
 import FlappyFlunkWindow from "windows/Games/FlappyFlunkWindow";
-
-
 import RadioPlayer from "components/RadioPlayer";
 
 const FullScreenLoader = () => {
