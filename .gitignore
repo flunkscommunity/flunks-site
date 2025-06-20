@@ -42,3 +42,6 @@ yarn-error.log*
 # swagger
 /swagger/api-spec.json
 /src/generated
+# flow
+emulator-account.pkey
+imports
