@@ -38,7 +38,9 @@ const YourStudents: React.FC = () => {
     <AppLoader bgImage="/images/loading/onlyflunks.webp">
       <DraggableResizeableWindow
         offSetHeight={44}
-        headerTitle={`Onlyflunks - ${user?.username || "Not Logged In"}`}
+        headerTitle={`Onlyflunks - ${
+          user?.username || (user ? "Logged In" : "Not Logged In")
+        }`}
         authGuard={true}
         windowsId={WINDOW_IDS.YOUR_STUDENTS}
         onClose={() => {
