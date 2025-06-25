@@ -1,6 +1,7 @@
 import { useWindowsContext } from "contexts/WindowsContext";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { WINDOW_IDS } from "fixed";
+import FlunksTerminal from "windows/FlunksTerminal";
 
 const DinerMain = () => {
   const { openWindow, closeWindow } = useWindowsContext();
@@ -37,15 +38,24 @@ const DinerMain = () => {
       {/* Top Left */}
       <button
         onClick={() =>
-          openRoom(
-            WINDOW_IDS.DINER_TOP_LEFT,
-            "Counter",
-            "The smell of coffee lingers near the stools."
-          )
+          openWindow({
+            key: WINDOW_IDS.DINER_TOP_LEFT,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.DINER_TOP_LEFT}
+                headerTitle="Register"
+                onClose={() => closeWindow(WINDOW_IDS.DINER_TOP_LEFT)}
+                initialWidth="520px"
+                initialHeight="400px"
+              >
+                <FlunksTerminal onClose={() => closeWindow(WINDOW_IDS.DINER_TOP_LEFT)} />
+              </DraggableResizeableWindow>
+            ),
+          })
         }
         className="absolute top-4 left-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
       >
-        ☕ Counter
+        ☕ Register
       </button>
 
       {/* Top Right */}
