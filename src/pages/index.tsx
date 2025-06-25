@@ -12,14 +12,15 @@ import { animated, config, useSpring } from "@react-spring/web";
 import useGettingStarted from "store/useGettingStarted";
 import Welcome from "windows/Welcome";
 import Onlyflunks from "../windows/Onlyflunks";
-import Homebase from "windows/Homebase";
+import { useRouter } from "next/router";
 import Semester0Map from "windows/Semester0Map";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import FlunksTerminal from "windows/FlunksTerminal";
 import { WINDOW_IDS } from "fixed";
 import { useWindowsContext } from "contexts/WindowsContext";
-
+import FlappyFlunkWindow from "windows/Games/FlappyFlunkWindow";
 import RadioPlayer from "components/RadioPlayer";
+import BootScreen from "components/BootScreen";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -64,8 +65,9 @@ const FullScreenLoader = () => {
 };
 
 const Desktop = () => {
-const { windows, openWindow, closeWindow, windowApps } = useWindowsContext();
-const { showGettingStartedOnStartup } = useGettingStarted();
+  const router = useRouter();
+  const { windows, openWindow, closeWindow, windowApps } = useWindowsContext();
+  const { showGettingStartedOnStartup } = useGettingStarted();
 
 useEffect(() => {
   if (showGettingStartedOnStartup) {
@@ -152,7 +154,11 @@ const windowsMemod = useMemo(() => (
           <DesktopAppIcon title="Market" icon="/images/icons/flowty.png" onDoubleClick={() => null} />
         </a>
 
-        <DesktopAppIcon title="Homebase" icon="/images/icons/homebase.png" onDoubleClick={() => openWindow({ key: WINDOW_IDS.HOMEBASE, window: <Homebase /> })} />
+        <DesktopAppIcon
+          title="MyPlace"
+          icon="/images/icons/myplace.png"
+          onDoubleClick={() => router.push('/select-your-flunk')}
+        />
 
         <DesktopAppIcon
           title="Terminal"
@@ -172,6 +178,29 @@ const windowsMemod = useMemo(() => (
             )
           })}
         />
+
+<DesktopAppIcon
+  title="Flappy Flunk"
+  icon="/images/icons/flappyflunk.png" // adjust path if needed
+  onDoubleClick={() =>
+    openWindow({
+      key: WINDOW_IDS.FLAPPY_FLUNK,
+      window: (
+        <DraggableResizeableWindow
+          windowsId={WINDOW_IDS.FLAPPY_FLUNK}
+          onClose={() => closeWindow(WINDOW_IDS.FLAPPY_FLUNK)}
+          headerTitle="Flappy Flunk"
+          initialWidth="480px"
+          initialHeight="640px"
+          headerIcon="/images/icons/flappyflunk.png"
+        >
+          <FlappyFlunkWindow />
+        </DraggableResizeableWindow>
+      ),
+    })
+  }
+/>
+
 
         <DesktopAppIcon
           title="semester zero"
@@ -221,8 +250,24 @@ const MonitorScreenWrapper: React.FC<React.PropsWithChildren> = ({ children }) =
 
 const Home: NextPage = () => {
   const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => { setIsMounted(true); }, []);
+  const [bootComplete, setBootComplete] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   if (!isMounted) return null;
+
+  if (!bootComplete) {
+    return (
+      <>
+        <Head>
+          <title>Flunks</title>
+          <meta name="description" content="Welcome to the Flunks Highschool computer." />
+          <link rel="icon" href="/images/logos/os-logo.png" />
+        </Head>
+        <BootScreen onComplete={() => setBootComplete(true)} />
+      </>
+    );
+  }
 
   return (
     <>

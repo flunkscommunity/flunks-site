@@ -1,6 +1,6 @@
 import getBackpackClaimedData, {
   FormattedBackpackClaimData,
-} from "api/getBackpackClaimedData";
+} from "pages/api/getBackpackClaimedData";
 import React, { createContext, useContext } from "react";
 import useSWR from "swr";
 

@@ -15,7 +15,7 @@ export const WINDOW_IDS = {
   ONLYFLUNKS_ITEM: "onlyflunks-item-",
   FLUNK_E_MART: "flunk-e-mart",
   FLUNKS_HUB: "onlyflunks",
-  HOMEBASE: "Homebase",
+  MYPLACE: "myplace",
   FREAK: "freak",
   SEMESTER_0: "semester0Map",
   RADIO_PLAYER: "radio_player_window",
@@ -39,6 +39,8 @@ export const WINDOW_IDS = {
   DINER_TOP_RIGHT: "diner_top_right",
   DINER_BOTTOM_LEFT: "diner_bottom_left",
   DINER_BOTTOM_RIGHT: "diner_bottom_right",
+  FLAPPY_FLUNK: "flappy_flunk",
+  FLAPPY_FLUNK_LEADERBOARD: "flappy_flunk_leaderboard",
 };
 
 export const WINDOW_APP_INFO_TO_WINDOW_ID = {
@@ -71,6 +73,11 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appName: "onlyflunks",
     appIcon: "/images/icons/onlyflunks.png",
     key: WINDOW_IDS.FLUNKS_HUB,
+  },
+  [WINDOW_IDS.MYPLACE]: {
+    appName: "MyPlace",
+    appIcon: "/images/icons/myplace.png",
+    key: WINDOW_IDS.MYPLACE,
   },
   [WINDOW_IDS.SEMESTER_0]: {
     appName: "semester zero",
@@ -182,5 +189,15 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appName: "Diner BR",
     appIcon: "/images/icons/tree.png",
     key: WINDOW_IDS.DINER_BOTTOM_RIGHT,
+  },
+  [WINDOW_IDS.FLAPPY_FLUNK]: {
+    appName: "Flappy Flunk",
+    appIcon: "/images/icons/flappyflunk.png",
+    key: WINDOW_IDS.FLAPPY_FLUNK,
+  },
+  [WINDOW_IDS.FLAPPY_FLUNK_LEADERBOARD]: {
+    appName: "Flappy Leaderboard",
+    appIcon: "/images/icons/flappyflunk.png",
+    key: WINDOW_IDS.FLAPPY_FLUNK_LEADERBOARD,
   },
 };

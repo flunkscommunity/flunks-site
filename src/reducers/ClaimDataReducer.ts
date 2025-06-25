@@ -1,4 +1,4 @@
-import { FormattedBackpackClaimData } from "api/getBackpackClaimedData";
+import { FormattedBackpackClaimData } from "pages/api/getBackpackClaimedData";
 
 export interface ClaimDataReducerActions {
   type: "LOADING" | "REFRESHED";

@@ -1,0 +1,46 @@
+.bootWrapper {
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  color: #00ff00;
+  font-family: "Courier New", Courier, monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bootWindow {
+  border: 2px solid #00ff00;
+  box-shadow: 0 0 10px #00ff00;
+  padding: 20px;
+}
+
+.bootLog {
+  white-space: pre-wrap;
+  text-align: left;
+}
+
+.logoWrapper {
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes glow {
+  0% {
+    filter: drop-shadow(0 0 2px #00ff00);
+  }
+  50% {
+    filter: drop-shadow(0 0 10px #00ff00);
+  }
+  100% {
+    filter: drop-shadow(0 0 2px #00ff00);
+  }
+}
+
+.logoGlow {
+  animation: glow 2s ease-in-out infinite;
+}
