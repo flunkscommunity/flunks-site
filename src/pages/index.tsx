@@ -22,6 +22,7 @@ import FlappyFlunkWindow from "windows/Games/FlappyFlunkWindow";
 
 
 import RadioPlayer from "components/RadioPlayer";
+import BootScreen from "components/BootScreen";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -246,8 +247,24 @@ const MonitorScreenWrapper: React.FC<React.PropsWithChildren> = ({ children }) =
 
 const Home: NextPage = () => {
   const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => { setIsMounted(true); }, []);
+  const [bootComplete, setBootComplete] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   if (!isMounted) return null;
+
+  if (!bootComplete) {
+    return (
+      <>
+        <Head>
+          <title>Flunks</title>
+          <meta name="description" content="Welcome to the Flunks Highschool computer." />
+          <link rel="icon" href="/images/logos/os-logo.png" />
+        </Head>
+        <BootScreen onComplete={() => setBootComplete(true)} />
+      </>
+    );
+  }
 
   return (
     <>
