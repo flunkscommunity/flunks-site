@@ -16,65 +16,45 @@ const bootMessages = [
 const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
   const [index, setIndex] = useState(0);
   const [showLogo, setShowLogo] = useState(false);
-  const [audioPlayed, setAudioPlayed] = useState(false);
-  const [fadeOut, setFadeOut] = useState(false);
 
-  // Show boot messages one at a time
+  // Display boot messages one at a time
   useEffect(() => {
     if (index < bootMessages.length) {
       const t = setTimeout(() => setIndex((i) => i + 1), 900);
       return () => clearTimeout(t);
     } else {
-      const t = setTimeout(() => setShowLogo(true), 1000);
+      const t = setTimeout(() => setShowLogo(true), 500); // short pause before logo
       return () => clearTimeout(t);
     }
   }, [index]);
 
-  // Play boot audio + trigger fade out
+  // Show logo and close after 7 seconds total
   useEffect(() => {
-    if (showLogo && !audioPlayed) {
+    if (showLogo) {
       const audio = new Audio("/sounds/win95-boot.mp3");
       audio.play().catch(() => {});
-      setAudioPlayed(true);
 
       const t = setTimeout(() => {
-        setFadeOut(true);
-      }, 3000);
+        onComplete(); // End boot screen
+      }, 3000); // logo shows for ~3 seconds
       return () => clearTimeout(t);
     }
-  }, [showLogo, audioPlayed]);
+  }, [showLogo, onComplete]);
 
-  // Final onComplete after fade
-  useEffect(() => {
-    if (fadeOut) {
-      const t = setTimeout(() => {
-        onComplete();
-      }, 1000); // match fade-out duration
-      return () => clearTimeout(t);
-    }
-  }, [fadeOut, onComplete]);
-
-  // Show logo screen
   if (showLogo) {
     return (
-      <div
-        className={`${styles.logoWrapper} ${fadeOut ? styles.fadeOut : ''}`}
-        onAnimationEnd={() => fadeOut && onComplete()}
-      >
+      <div className={styles.logoWrapper}>
         <img
           src="/flunks-logo.png"
           alt="Flunks Logo"
-          className={styles.logoGlow}
+          className={styles.logoPulse}
         />
       </div>
     );
   }
 
-  // Show boot messages
   return (
-    <div
-      className={`${styles.bootWrapper} ${fadeOut ? styles.fadeOut : ''}`}
-    >
+    <div className={styles.bootWrapper}>
       <div className={styles.bootWindow}>
         <div className={styles.bootLog}>
           {bootMessages.slice(0, index).map((msg, i) => (
