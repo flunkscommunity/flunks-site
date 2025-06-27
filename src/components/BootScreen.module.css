@@ -7,6 +7,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1001;
 }
 
 .bootWindow {
@@ -27,6 +31,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1001;
 }
 
 @keyframes glow {
@@ -43,4 +51,17 @@
 
 .logoGlow {
   animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.fadeOut {
+  animation: fadeout 1s forwards;
 }
