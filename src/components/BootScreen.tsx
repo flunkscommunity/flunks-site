@@ -6,11 +6,10 @@ type BootScreenProps = {
 };
 
 const bootMessages = [
-  "Initializing Flunk OS v0.95…",
-  "Mounting Disk: flunkfolio.DAT…",
-  "Spinning Up Gumball Machine…",
-  "Connecting to Market Node…",
-  "Loading Discord Gateway…",
+  "Initializing Flunk OS v2.0…",
+  "Mounting Disk: onlyflunks.DAT…",
+  "Rolling up some fat doobies…",
+  "semester zero INCOMING…",
   "Boot Sequence Complete.",
 ];
 
@@ -31,7 +30,7 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
 
   useEffect(() => {
     if (showLogo && !audioPlayed) {
-      const audio = new Audio("/sounds/win95-boot.wav");
+      const audio = new Audio("/sounds/win95-boot.mp3");
       audio.play().catch(() => {});
       setAudioPlayed(true);
       const t = setTimeout(() => {
