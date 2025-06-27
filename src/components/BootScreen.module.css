@@ -1,9 +1,15 @@
 .logoWrapper {
+  position: fixed; /* stay on top */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999; /* ensure it's above your start bar */
+  background-color: black;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  background-color: black;
 }
 
 .logoPulse {
@@ -18,11 +24,17 @@
 }
 
 .bootWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background-color: black;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  background-color: black;
 }
 
 .bootWindow {
@@ -34,33 +46,4 @@
 
 .bootLog {
   white-space: pre-line;
-}
-
-@keyframes glow {
-  0% {
-    filter: drop-shadow(0 0 2px #00ff00);
-  }
-  50% {
-    filter: drop-shadow(0 0 10px #00ff00);
-  }
-  100% {
-    filter: drop-shadow(0 0 2px #00ff00);
-  }
-}
-
-.logoGlow {
-  animation: glow 2s ease-in-out infinite;
-}
-
-@keyframes fadeout {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-.fadeOut {
-  animation: fadeout 1s forwards;
 }
