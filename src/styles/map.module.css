@@ -2,9 +2,21 @@
   position: relative;
   width: 100%;
   height: 100vh;
-  overflow: hidden;
+  overflow: auto;
   background-color: black;
   font-family: sans-serif;
+  touch-action: none;
+  cursor: grab;
+}
+
+.dragging {
+  cursor: grabbing;
+}
+
+.map-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .background-map {
@@ -103,14 +115,12 @@
 }
 
 @media (max-width: 768px) {
-  .map-window {
-    overflow-x: auto;
-    overflow-y: hidden;
+  .map-inner {
     width: calc(100vh * 16 / 9);
   }
 
   .background-map {
-    width: calc(100vh * 16 / 9);
+    width: 100%;
     height: 100vh;
     object-fit: contain;
   }
