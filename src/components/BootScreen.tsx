@@ -53,6 +53,21 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
           alt="Flunks Logo"
           className={styles.logoGlow}
         />
+        
+  useEffect(() => {
+    if (fadeOut) {
+      const t = setTimeout(() => {
+        onComplete();
+      }, 1000); // match fade-out duration
+      return () => clearTimeout(t);
+    }
+  }, [fadeOut, onComplete]);
+
+  if (showLogo) {
+    return (
+      <div className={`${styles.logoWrapper} ${fadeOut ? styles.fadeOut : ''}`}>
+        <img src="/flunks-logo.png" alt="Flunks Logo" className={styles.logoGlow} />
+
       </div>
     );
   }
@@ -62,6 +77,9 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
       className={`${styles.bootWrapper} ${fadeOut ? styles.fadeOut : ''}`}
       onAnimationEnd={() => fadeOut && onComplete()}
     >
+      
+    <div className={`${styles.bootWrapper} ${fadeOut ? styles.fadeOut : ''}`}>
+
       <div className={styles.bootWindow}>
         <div className={styles.bootLog}>
           {bootMessages.slice(0, index).map((msg, i) => (
