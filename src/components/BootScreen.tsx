@@ -41,6 +41,19 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
     }
   }, [showLogo, audioPlayed]);
 
+
+  if (showLogo) {
+    return (
+      <div
+        className={`${styles.logoWrapper} ${fadeOut ? styles.fadeOut : ''}`}
+        onAnimationEnd={() => fadeOut && onComplete()}
+      >
+        <img
+          src="/flunks-logo.png"
+          alt="Flunks Logo"
+          className={styles.logoGlow}
+        />
+        
   useEffect(() => {
     if (fadeOut) {
       const t = setTimeout(() => {
@@ -54,12 +67,19 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
     return (
       <div className={`${styles.logoWrapper} ${fadeOut ? styles.fadeOut : ''}`}>
         <img src="/flunks-logo.png" alt="Flunks Logo" className={styles.logoGlow} />
+
       </div>
     );
   }
 
   return (
+    <div
+      className={`${styles.bootWrapper} ${fadeOut ? styles.fadeOut : ''}`}
+      onAnimationEnd={() => fadeOut && onComplete()}
+    >
+      
     <div className={`${styles.bootWrapper} ${fadeOut ? styles.fadeOut : ''}`}>
+
       <div className={styles.bootWindow}>
         <div className={styles.bootLog}>
           {bootMessages.slice(0, index).map((msg, i) => (
