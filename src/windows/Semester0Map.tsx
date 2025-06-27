@@ -91,13 +91,14 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           <SemesterZeroCSSLoader />
         </div>
       )}
-      <img
-        src="/images/flunks-map.png"
-        className={styles["background-map"]}
-        alt="Semester 0 Map"
-      />
+      <div className={styles["map-inner"]}>
+        <img
+          src="/images/flunks-map.png"
+          className={styles["background-map"]}
+          alt="Semester 0 Map"
+        />
 
-      {hovered && <div className={styles["map-overlay"]} />}
+        {hovered && <div className={styles["map-overlay"]} />}
 
       <div
         className={`${styles.icon} ${styles.treehouse}`}
@@ -216,6 +217,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       )}
 
       <button className={styles["close-btn"]} onClick={onClose}>✖</button>
+      </div>
 
       {/* Pause Overlay */}
       {isPaused && (
