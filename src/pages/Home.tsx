@@ -1,15 +1,8 @@
-import React, { useState } from "react";
-import BootScreen from "components/BootScreen";
+import React from "react";
 import DesktopMain from "components/DesktopMain";
 
 const Home: React.FC = () => {
-  const [booted, setBooted] = useState(false);
-
-  return booted ? (
-    <DesktopMain />
-  ) : (
-    <BootScreen onComplete={() => setBooted(true)} />
-  );
+  return <DesktopMain />;
 };
 
 export default Home;
