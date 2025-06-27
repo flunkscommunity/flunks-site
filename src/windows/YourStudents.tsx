@@ -6,13 +6,15 @@ import {
   useDynamicContext,
 } from "@dynamic-labs/sdk-react-core";
 import ItemsGrid from "components/YourItems/ItemsGrid";
-import AppLoader from "components/AppLoader";
+import BootScreen from "components/BootScreen";
+import { useState } from "react";
 import ErrorWindow from "./ErrorWindow";
 import { Button } from "react95";
 
 const YourStudents: React.FC = () => {
   const { user } = useDynamicContext();
   const { closeWindow, openWindow } = useWindowsContext();
+  const [bootComplete, setBootComplete] = useState(false);
 
   if (!user) {
     return (
@@ -34,25 +36,27 @@ const YourStudents: React.FC = () => {
     );
   }
 
+  if (!bootComplete) {
+    return <BootScreen onComplete={() => setBootComplete(true)} />;
+  }
+
   return (
-    <AppLoader bgImage="/images/loading/onlyflunks.webp">
-      <DraggableResizeableWindow
-        offSetHeight={44}
-        headerTitle={`Onlyflunks - ${
-          user?.username || (user ? "Logged In" : "Not Logged In")
-        }`}
-        authGuard={true}
-        windowsId={WINDOW_IDS.YOUR_STUDENTS}
-        onClose={() => {
-          closeWindow(WINDOW_IDS.YOUR_STUDENTS);
-        }}
-        initialHeight="60%"
-        initialWidth="60%"
-        headerIcon="/images/icons/onlyflunks.png"
-      >
-        <ItemsGrid />
-      </DraggableResizeableWindow>
-    </AppLoader>
+    <DraggableResizeableWindow
+      offSetHeight={44}
+      headerTitle={`Onlyflunks - ${
+        user?.username || (user ? "Logged In" : "Not Logged In")
+      }`}
+      authGuard={true}
+      windowsId={WINDOW_IDS.YOUR_STUDENTS}
+      onClose={() => {
+        closeWindow(WINDOW_IDS.YOUR_STUDENTS);
+      }}
+      initialHeight="60%"
+      initialWidth="60%"
+      headerIcon="/images/icons/onlyflunks.png"
+    >
+      <ItemsGrid />
+    </DraggableResizeableWindow>
   );
 };
 
