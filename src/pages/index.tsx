@@ -160,6 +160,12 @@ const windowsMemod = useMemo(() => (
         />
 
         <DesktopAppIcon
+          title="FHS"
+          icon="/images/icons/open-book.png"
+          onDoubleClick={() => router.push('/fhs-school')}
+        />
+
+        <DesktopAppIcon
           title="Terminal"
           icon="/images/icons/terminal.png"
           onDoubleClick={() => openWindow({
