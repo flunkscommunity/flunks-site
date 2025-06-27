@@ -107,6 +107,12 @@
     overflow-x: auto;
     overflow-y: hidden;
     width: calc(100vh * 16 / 9);
+    touch-action: none;
+    cursor: grab;
+  }
+
+  .dragging {
+    cursor: grabbing;
   }
 
   .background-map {
