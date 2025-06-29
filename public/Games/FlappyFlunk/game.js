@@ -332,7 +332,7 @@ function update() {
 }
 
 function draw() {
-  sctx.fillStyle = "#30c0df";
+  sctx.fillStyle = "#953584";
   sctx.fillRect(0, 0, scrn.width, scrn.height);
   bg.draw();
   pipe.draw();
