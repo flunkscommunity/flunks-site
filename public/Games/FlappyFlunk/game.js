@@ -332,11 +332,10 @@ function update() {
 }
 
 function draw() {
-  sctx.fillStyle = "#953584";
-  sctx.fillRect(0, 0, scrn.width, scrn.height);
+  // Clear the canvas instead of filling with a color
+  sctx.clearRect(0, 0, scrn.width, scrn.height);
   bg.draw();
   pipe.draw();
-
   bird.draw();
   gnd.draw();
   UI.draw();
