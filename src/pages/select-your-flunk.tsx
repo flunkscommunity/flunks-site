@@ -50,7 +50,14 @@ const SelectYourFlunk: React.FC = () => {
         SELECT YOUR FLUNK
       </h1>
 
-      <div style={{ display: "flex", gap: "1rem" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          width: "100%",
+          overflowX: "auto",
+        }}
+      >
         {characterSlots.map(({ clique, imageId, label }) => {
           const locked = !userHasTrait(clique);
           return (
