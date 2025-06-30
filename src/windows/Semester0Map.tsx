@@ -48,6 +48,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
     let startY = 0;
     let scrollLeft = 0;
     let scrollTop = 0;
+    let scrollLeft = 0;
+
 
     const start = (e: MouseEvent | TouchEvent) => {
       isDown = true;
@@ -55,6 +57,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       startY = 'touches' in e ? e.touches[0].clientY : e.clientY;
       scrollLeft = map.scrollLeft;
       scrollTop = map.scrollTop;
+      scrollLeft = map.scrollLeft;
+
       map.classList.add(styles['dragging']);
     };
 
@@ -64,6 +68,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       const y = 'touches' in e ? e.touches[0].clientY : e.clientY;
       map.scrollLeft = scrollLeft - (x - startX);
       map.scrollTop = scrollTop - (y - startY);
+      map.scrollLeft = scrollLeft - (x - startX);
     };
 
     const stop = () => {

@@ -16,34 +16,39 @@ const bootMessages = [
 const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
   const [index, setIndex] = useState(0);
   const [showLogo, setShowLogo] = useState(false);
-  const [audioPlayed, setAudioPlayed] = useState(false);
 
+  // Display boot messages one at a time
   useEffect(() => {
     if (index < bootMessages.length) {
       const t = setTimeout(() => setIndex((i) => i + 1), 900);
       return () => clearTimeout(t);
     } else {
-      const t = setTimeout(() => setShowLogo(true), 1000);
+      const t = setTimeout(() => setShowLogo(true), 500); // short pause before logo
       return () => clearTimeout(t);
     }
   }, [index]);
 
+  // Show logo and close after 7 seconds total
   useEffect(() => {
-    if (showLogo && !audioPlayed) {
+    if (showLogo) {
       const audio = new Audio("/sounds/win95-boot.mp3");
       audio.play().catch(() => {});
-      setAudioPlayed(true);
+
       const t = setTimeout(() => {
-        onComplete();
-      }, 3000);
+        onComplete(); // End boot screen
+      }, 3000); // logo shows for ~3 seconds
       return () => clearTimeout(t);
     }
-  }, [showLogo, audioPlayed, onComplete]);
+  }, [showLogo, onComplete]);
 
   if (showLogo) {
     return (
       <div className={styles.logoWrapper}>
-        <img src="/flunks-logo.png" alt="Flunks Logo" className={styles.logoGlow} />
+        <img
+          src="/flunks-logo.png"
+          alt="Flunks Logo"
+          className={styles.logoPulse}
+        />
       </div>
     );
   }

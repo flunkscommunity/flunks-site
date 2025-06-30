@@ -19,7 +19,7 @@ const SelectYourFlunk: React.FC = () => {
   return (
     <div
       style={{
-        backgroundImage: `url('/your-background-placeholder.png')`,
+        backgroundImage: `url('/icons/bgmyplace.png')`,
         backgroundSize: "cover",
         height: "100vh",
         display: "flex",
@@ -42,7 +42,7 @@ const SelectYourFlunk: React.FC = () => {
 
       <h1
         style={{
-          fontFamily: "Press Start 2P, sans-serif",
+          fontFamily: "Press Start 2P, w95fa",
           color: "#fff",
           marginBottom: "2rem",
         }}
@@ -50,7 +50,14 @@ const SelectYourFlunk: React.FC = () => {
         SELECT YOUR FLUNK
       </h1>
 
-      <div style={{ display: "flex", gap: "1rem" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          width: "100%",
+          overflowX: "auto",
+        }}
+      >
         {characterSlots.map(({ clique, imageId, label }) => {
           const locked = !userHasTrait(clique);
           return (
@@ -59,7 +66,7 @@ const SelectYourFlunk: React.FC = () => {
               variant="well"
               style={{
                 width: "150px",
-                height: "200px",
+                height: "500px",
                 position: "relative",
                 filter: locked ? "grayscale(100%)" : "none",
                 opacity: locked ? 0.5 : 1,
