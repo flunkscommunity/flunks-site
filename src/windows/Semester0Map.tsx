@@ -48,7 +48,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
     let startY = 0;
     let scrollLeft = 0;
     let scrollTop = 0;
-    let scrollLeft = 0;
 
 
     const start = (e: MouseEvent | TouchEvent) => {

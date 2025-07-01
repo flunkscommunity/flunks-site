@@ -73,10 +73,10 @@ const TEAM: {
     name: "Handy",
     description: (
       <span className="text-xl md:text-xl max-w-2xl text-pretty">
-        Handy is a multi-talented artist with a background in illustration and 3D modeling. He created the art assets for the Flunks Portraits collection, Pocket Juniors, Flunks 3D, and contributes to the broader Flunks ecosystem..
+        Handy is a multi-talented artist with a background in illustration and 3D modeling. He created the art assets for the Flunks Portraits collection, Pocket Juniors, Flunks 3D, and contributes to the broader Flunks ecosystem.
       </span>
     ),
-    image: "/images/about-us/Nantucket.png",
+    image: "/images/about-us/Handy.png",
   },
 
 
