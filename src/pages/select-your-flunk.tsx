@@ -19,7 +19,7 @@ const SelectYourFlunk: React.FC = () => {
   return (
     <div
       style={{
-        backgroundImage: `url('/icons/bgmyplace.png')`,
+        backgroundImage: `url('/images/icons/bgmyplace.png')`,
         backgroundSize: "cover",
         height: "100vh",
         display: "flex",
