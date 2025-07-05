@@ -86,7 +86,10 @@ const windowsMemod = useMemo(() => (
 
   return (
     <>
-      <div className="flex relative flex-col max-h-[calc(100vh-64px)] w-full flex-wrap items-start gap-4 content-start">
+      <div
+        className="flex relative flex-col w-full flex-wrap items-start gap-4 content-start overflow-y-auto"
+        style={{ maxHeight: "calc(100vh - 64px - var(--safe-area-inset-bottom))" }}
+      >
         <DesktopAppIcon
           title="OnlyFlunks"
           icon="/images/icons/onlyflunks.png"
