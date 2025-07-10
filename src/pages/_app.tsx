@@ -34,7 +34,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
             <DynamicContextProvider
               settings={{
                 environmentId: "379fb92a-c707-4bcb-bf51-37d9f64ff415",
-                walletConnectors: FlowWalletConnectors, // Remove the filter temporarily
+                walletConnectors: Array.isArray(FlowWalletConnectors)
+                  ? FlowWalletConnectors
+                  : [FlowWalletConnectors], // Wrap in array if needed
               }}
             >
               <PaginatedItemsProvider>
@@ -50,4 +52,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   );
 };
 
-export default MyApp;
+
+
+export default MyApp;export default MyApp;
