@@ -25,35 +25,51 @@ const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
 const MyApp: AppType = ({ Component, pageProps }) => {
   const memodGlobalStyles = React.useMemo(() => <GlobalStyles />, []);
 
-  // Fix: Call the function and instantiate the connector classes
+  // Enhanced debugging for wallet connectors
   const walletConnectors = React.useMemo(() => {
+    console.log('=== WALLET CONNECTOR DEBUG ===');
     console.log('FlowWalletConnectors type:', typeof FlowWalletConnectors);
+    console.log('FlowWalletConnectors:', FlowWalletConnectors);
     
     if (typeof FlowWalletConnectors === 'function') {
-      const connectorClasses = FlowWalletConnectors(); // Get the classes
-      console.log('Called FlowWalletConnectors():', connectorClasses);
-      
-      // Instantiate each connector class with 'new'
-      const instantiatedConnectors = connectorClasses.map((ConnectorClass: any) => {
-        try {
-          return new ConnectorClass();
-        } catch (error) {
-          console.error('Error instantiating connector:', error);
-          return null;
+      try {
+        const connectorClasses = FlowWalletConnectors();
+        console.log('connectorClasses:', connectorClasses);
+        console.log('connectorClasses isArray:', Array.isArray(connectorClasses));
+        console.log('connectorClasses length:', connectorClasses?.length);
+        
+        if (Array.isArray(connectorClasses) && connectorClasses.length > 0) {
+          const instantiatedConnectors = connectorClasses.map((ConnectorClass, index) => {
+            console.log(`Trying to instantiate connector ${index}:`, ConnectorClass);
+            try {
+              const instance = new ConnectorClass();
+              console.log(`Successfully instantiated connector ${index}:`, instance);
+              return instance;
+            } catch (error) {
+              console.error(`Error instantiating connector ${index}:`, error);
+              return null;
+            }
+          }).filter(Boolean);
+          
+          console.log('Final instantiated connectors:', instantiatedConnectors);
+          console.log('Final connectors length:', instantiatedConnectors.length);
+          return instantiatedConnectors;
+        } else {
+          console.error('connectorClasses is empty or not an array');
+          return [];
         }
-      }).filter(Boolean); // Remove any failed instantiations
-      
-      console.log('Instantiated connectors:', instantiatedConnectors);
-      return instantiatedConnectors;
+      } catch (error) {
+        console.error('Error calling FlowWalletConnectors():', error);
+        return [];
+      }
     }
     
-    if (Array.isArray(FlowWalletConnectors)) {
-      return FlowWalletConnectors;
-    }
-    
-    console.warn('FlowWalletConnectors is not in expected format');
+    console.warn('FlowWalletConnectors is not a function');
     return [];
   }, []);
+
+  console.log('FINAL walletConnectors being passed to Dynamic:', walletConnectors);
+  console.log('FINAL walletConnectors length:', walletConnectors.length);
 
   return (
     <>
