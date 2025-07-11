@@ -25,6 +25,29 @@ const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
 const MyApp: AppType = ({ Component, pageProps }) => {
   const memodGlobalStyles = React.useMemo(() => <GlobalStyles />, []);
 
+  // Debug and fix FlowWalletConnectors
+  const walletConnectors = React.useMemo(() => {
+    console.log('FlowWalletConnectors type:', typeof FlowWalletConnectors);
+    console.log('FlowWalletConnectors:', FlowWalletConnectors);
+    console.log('Is array:', Array.isArray(FlowWalletConnectors));
+    
+    // If it's already an array, use it
+    if (Array.isArray(FlowWalletConnectors)) {
+      return FlowWalletConnectors;
+    }
+    
+    // If it's an object with values that are functions, convert to array
+    if (FlowWalletConnectors && typeof FlowWalletConnectors === 'object') {
+      const connectors = Object.values(FlowWalletConnectors);
+      console.log('Object values:', connectors);
+      return connectors.filter(connector => typeof connector === 'function');
+    }
+    
+    // Fallback to empty array to prevent crashes
+    console.warn('FlowWalletConnectors is not in expected format, using empty array');
+    return [];
+  }, []);
+
   return (
     <>
       {memodGlobalStyles}
@@ -34,7 +57,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
             <DynamicContextProvider
               settings={{
                 environmentId: "379fb92a-c707-4bcb-bf51-37d9f64ff415",
-                walletConnectors: FlowWalletConnectors,
+                walletConnectors: walletConnectors,
               }}
             >
               <PaginatedItemsProvider>
