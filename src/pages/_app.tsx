@@ -10,6 +10,7 @@ import ClaimBackpackProvider from "contexts/BackpackClaimContext";
 import {
   DynamicContextProvider,
   DynamicUserProfile,
+  DynamicWidget,
 } from "@dynamic-labs/sdk-react-core";
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
 import useThemeSettings from "store/useThemeSettings";
@@ -25,21 +26,6 @@ const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
 const MyApp: AppType = ({ Component, pageProps }) => {
   const memodGlobalStyles = React.useMemo(() => <GlobalStyles />, []);
 
-  // Pass the connector classes directly, let Dynamic instantiate them
-  const walletConnectors = React.useMemo(() => {
-    console.log('FlowWalletConnectors type:', typeof FlowWalletConnectors);
-    
-    if (typeof FlowWalletConnectors === 'function') {
-      const connectorClasses = FlowWalletConnectors();
-      console.log('Returning connector classes for Dynamic to instantiate:', connectorClasses);
-      return connectorClasses; // Return the classes, don't instantiate them
-    }
-    
-    return [];
-  }, []);
-
-  console.log('Final walletConnectors (classes):', walletConnectors);
-
   return (
     <>
       {memodGlobalStyles}
@@ -48,8 +34,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           <ClaimBackpackProvider>
             <DynamicContextProvider
               settings={{
-                environmentId: "379fb92a-c707-4bcb-bf51-37d9f64ff415",
-                walletConnectors: walletConnectors, // Pass classes, not instances
+                environmentId: "4e1ca7d6-a9b6-4440-a87d-e44a4b110882", // New environment ID
+                walletConnectors: [FlowWalletConnectors], // Wrap in array, don't call as function
               }}
             >
               <PaginatedItemsProvider>
