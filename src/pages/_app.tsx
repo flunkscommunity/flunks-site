@@ -11,7 +11,6 @@ import {
   DynamicContextProvider,
   DynamicUserProfile,
 } from "@dynamic-labs/sdk-react-core";
-import { FlowWalletConnectors } from "@dynamic-labs/flow";
 import useThemeSettings from "store/useThemeSettings";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
@@ -34,9 +33,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
             <DynamicContextProvider
               settings={{
                 environmentId: "379fb92a-c707-4bcb-bf51-37d9f64ff415",
-                walletConnectors: Array.isArray(FlowWalletConnectors)
-                  ? FlowWalletConnectors
-                  : [FlowWalletConnectors], // Wrap in array if needed
+                walletConnectors: ["flowwallet"], // Just Flow Wallet
               }}
             >
               <PaginatedItemsProvider>
