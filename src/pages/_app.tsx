@@ -25,51 +25,20 @@ const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
 const MyApp: AppType = ({ Component, pageProps }) => {
   const memodGlobalStyles = React.useMemo(() => <GlobalStyles />, []);
 
-  // Enhanced debugging for wallet connectors
+  // Pass the connector classes directly, let Dynamic instantiate them
   const walletConnectors = React.useMemo(() => {
-    console.log('=== WALLET CONNECTOR DEBUG ===');
     console.log('FlowWalletConnectors type:', typeof FlowWalletConnectors);
-    console.log('FlowWalletConnectors:', FlowWalletConnectors);
     
     if (typeof FlowWalletConnectors === 'function') {
-      try {
-        const connectorClasses = FlowWalletConnectors();
-        console.log('connectorClasses:', connectorClasses);
-        console.log('connectorClasses isArray:', Array.isArray(connectorClasses));
-        console.log('connectorClasses length:', connectorClasses?.length);
-        
-        if (Array.isArray(connectorClasses) && connectorClasses.length > 0) {
-          const instantiatedConnectors = connectorClasses.map((ConnectorClass, index) => {
-            console.log(`Trying to instantiate connector ${index}:`, ConnectorClass);
-            try {
-              const instance = new ConnectorClass();
-              console.log(`Successfully instantiated connector ${index}:`, instance);
-              return instance;
-            } catch (error) {
-              console.error(`Error instantiating connector ${index}:`, error);
-              return null;
-            }
-          }).filter(Boolean);
-          
-          console.log('Final instantiated connectors:', instantiatedConnectors);
-          console.log('Final connectors length:', instantiatedConnectors.length);
-          return instantiatedConnectors;
-        } else {
-          console.error('connectorClasses is empty or not an array');
-          return [];
-        }
-      } catch (error) {
-        console.error('Error calling FlowWalletConnectors():', error);
-        return [];
-      }
+      const connectorClasses = FlowWalletConnectors();
+      console.log('Returning connector classes for Dynamic to instantiate:', connectorClasses);
+      return connectorClasses; // Return the classes, don't instantiate them
     }
     
-    console.warn('FlowWalletConnectors is not a function');
     return [];
   }, []);
 
-  console.log('FINAL walletConnectors being passed to Dynamic:', walletConnectors);
-  console.log('FINAL walletConnectors length:', walletConnectors.length);
+  console.log('Final walletConnectors (classes):', walletConnectors);
 
   return (
     <>
@@ -80,7 +49,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
             <DynamicContextProvider
               settings={{
                 environmentId: "379fb92a-c707-4bcb-bf51-37d9f64ff415",
-                walletConnectors: walletConnectors,
+                walletConnectors: walletConnectors, // Pass classes, not instances
               }}
             >
               <PaginatedItemsProvider>
