@@ -25,14 +25,26 @@ const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
 const MyApp: AppType = ({ Component, pageProps }) => {
   const memodGlobalStyles = React.useMemo(() => <GlobalStyles />, []);
 
-  // Fix: Call the function to get the wallet connectors
+  // Fix: Call the function and instantiate the connector classes
   const walletConnectors = React.useMemo(() => {
     console.log('FlowWalletConnectors type:', typeof FlowWalletConnectors);
     
     if (typeof FlowWalletConnectors === 'function') {
-      const connectors = FlowWalletConnectors(); // Call the function!
-      console.log('Called FlowWalletConnectors():', connectors);
-      return connectors;
+      const connectorClasses = FlowWalletConnectors(); // Get the classes
+      console.log('Called FlowWalletConnectors():', connectorClasses);
+      
+      // Instantiate each connector class with 'new'
+      const instantiatedConnectors = connectorClasses.map((ConnectorClass: any) => {
+        try {
+          return new ConnectorClass();
+        } catch (error) {
+          console.error('Error instantiating connector:', error);
+          return null;
+        }
+      }).filter(Boolean); // Remove any failed instantiations
+      
+      console.log('Instantiated connectors:', instantiatedConnectors);
+      return instantiatedConnectors;
     }
     
     if (Array.isArray(FlowWalletConnectors)) {
