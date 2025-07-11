@@ -25,26 +25,21 @@ const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
 const MyApp: AppType = ({ Component, pageProps }) => {
   const memodGlobalStyles = React.useMemo(() => <GlobalStyles />, []);
 
-  // Debug and fix FlowWalletConnectors
+  // Fix: Call the function to get the wallet connectors
   const walletConnectors = React.useMemo(() => {
     console.log('FlowWalletConnectors type:', typeof FlowWalletConnectors);
-    console.log('FlowWalletConnectors:', FlowWalletConnectors);
-    console.log('Is array:', Array.isArray(FlowWalletConnectors));
     
-    // If it's already an array, use it
+    if (typeof FlowWalletConnectors === 'function') {
+      const connectors = FlowWalletConnectors(); // Call the function!
+      console.log('Called FlowWalletConnectors():', connectors);
+      return connectors;
+    }
+    
     if (Array.isArray(FlowWalletConnectors)) {
       return FlowWalletConnectors;
     }
     
-    // If it's an object with values that are functions, convert to array
-    if (FlowWalletConnectors && typeof FlowWalletConnectors === 'object') {
-      const connectors = Object.values(FlowWalletConnectors);
-      console.log('Object values:', connectors);
-      return connectors.filter(connector => typeof connector === 'function');
-    }
-    
-    // Fallback to empty array to prevent crashes
-    console.warn('FlowWalletConnectors is not in expected format, using empty array');
+    console.warn('FlowWalletConnectors is not in expected format');
     return [];
   }, []);
 
