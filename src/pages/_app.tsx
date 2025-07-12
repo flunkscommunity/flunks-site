@@ -11,6 +11,7 @@ import {
   DynamicContextProvider,
   DynamicUserProfile,
   DynamicWidget,
+  useDynamicContext,
 } from "@dynamic-labs/sdk-react-core";
 import { SdkViewSectionType, SdkViewType } from "@dynamic-labs/sdk-api";
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
@@ -22,6 +23,22 @@ import { PaginatedItemsProvider } from "contexts/UserPaginatedItems";
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
   return <ThemeProvider theme={theme.theme}>{children}</ThemeProvider>;
+};
+
+// Debug component to log available wallet keys
+const WalletDebugger: React.FC = () => {
+  const { walletConnectors } = useDynamicContext();
+
+  React.useEffect(() => {
+    if (walletConnectors && walletConnectors.length > 0) {
+      console.log("=== AVAILABLE WALLETS ===");
+      walletConnectors.forEach((wallet) => {
+        console.log(`Key: "${wallet.key}", Name: "${wallet.name}"`);
+      });
+    }
+  }, [walletConnectors]);
+
+  return null;
 };
 
 const MyApp: AppType = ({ Component, pageProps }) => {
@@ -37,22 +54,10 @@ const MyApp: AppType = ({ Component, pageProps }) => {
               settings={{
                 environmentId: "4e1ca7d6-a9b6-4440-a87d-e44a4b110882",
                 walletConnectors: [FlowWalletConnectors],
-                overrides: {
-                  views: [
-                    {
-                      type: SdkViewType.Login,
-                      sections: [
-                        {
-                          type: SdkViewSectionType.Wallet,
-                          defaultItem: "flowwallet",
-                          items: ["flowwallet"], // Only show Flow Wallet
-                        },
-                      ],
-                    },
-                  ],
-                },
+                // Remove overrides temporarily to see all available wallets
               }}
             >
+              <WalletDebugger />
               <PaginatedItemsProvider>
                 <Component {...pageProps} />
                 <Analytics />
