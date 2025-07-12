@@ -44,8 +44,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       sections: [
                         {
                           type: SdkViewSectionType.Wallet,
-                          defaultItem: "lilico", // Use Lilico since it shows "Installed"
-                          items: ["lilico"], // Show only Lilico
+                          defaultItem: "flow-lilico", // Try with "flow-" prefix
+                          items: ["flow-lilico"], // Try with "flow-" prefix
                         },
                       ],
                     },
