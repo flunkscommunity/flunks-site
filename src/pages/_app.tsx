@@ -44,8 +44,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       sections: [
                         {
                           type: SdkViewSectionType.Wallet,
-                          defaultItem: "flow-lilico", // Try with "flow-" prefix
-                          items: ["flow-lilico"], // Try with "flow-" prefix
+                          defaultItem: "flowwallet", // Exact key from dashboard
+                          items: ["flowwallet"], // Show only Flow Wallet
                         },
                       ],
                     },
