@@ -12,6 +12,7 @@ import {
   DynamicUserProfile,
   DynamicWidget,
 } from "@dynamic-labs/sdk-react-core";
+import { SdkViewSectionType, SdkViewType } from "@dynamic-labs/sdk-api";
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
 import useThemeSettings from "store/useThemeSettings";
 import React from "react";
@@ -34,8 +35,22 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           <ClaimBackpackProvider>
             <DynamicContextProvider
               settings={{
-                environmentId: "4e1ca7d6-a9b6-4440-a87d-e44a4b110882", // New environment ID
-                walletConnectors: [FlowWalletConnectors], // Wrap in array, don't call as function
+                environmentId: "4e1ca7d6-a9b6-4440-a87d-e44a4b110882",
+                walletConnectors: [FlowWalletConnectors],
+                overrides: {
+                  views: [
+                    {
+                      type: SdkViewType.Login,
+                      sections: [
+                        {
+                          type: SdkViewSectionType.Wallet,
+                          defaultItem: "flowwallet",
+                          items: ["flowwallet"], // Only show Flow Wallet
+                        },
+                      ],
+                    },
+                  ],
+                },
               }}
             >
               <PaginatedItemsProvider>
