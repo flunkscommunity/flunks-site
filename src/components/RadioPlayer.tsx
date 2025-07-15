@@ -49,6 +49,28 @@ const RadioPlayer = () => {
     }
   };
 
+  // Helper function to get container style based on screen size
+  const getContainerStyle = () => {
+    if (isDesktop) {
+      return {
+        position: 'relative' as const,
+        width: '680px',  // Fixed width for desktop
+        height: '480px', // Fixed height for desktop
+        maxWidth: '100%',
+        maxHeight: '100%'
+      };
+    } else {
+      return {
+        position: 'relative' as const,
+        width: 'calc(680px * var(--scale))',
+        height: 'calc(480px * var(--scale))',
+        maxWidth: '100%',
+        maxHeight: '100%',
+        '--scale': '1'
+      } as React.CSSProperties;
+    }
+  };
+
   const selectStation = (stationIndex: number) => {
     setTrackIndex(stationIndex);
     if (audioRef.current) {
@@ -141,14 +163,7 @@ const RadioPlayer = () => {
         {/* Scalable Radio Container */}
         <div 
           className="radio-wrapper desktop-fixed"
-          style={{ 
-            position: 'relative',
-            width: 'calc(680px * var(--scale))',
-            height: 'calc(480px * var(--scale))',
-            maxWidth: '100%',
-            maxHeight: '100%',
-            '--scale': '1'
-          } as React.CSSProperties}
+          style={getContainerStyle()}
         >
         
         {/* Background Radio Image */}
