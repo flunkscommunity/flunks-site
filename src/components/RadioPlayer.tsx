@@ -121,11 +121,11 @@ const RadioPlayer = () => {
           alt="Radio Display Faceplate"
           style={{
             position: 'absolute',
-            top: 'calc(180px * var(--scale))',
-            left: '50%',
+            top: 'calc(220px * var(--scale))',
+            left: 'calc(50% + 30px)',
             transform: 'translate(-50%, -50%)',
-            width: 'calc(180px * var(--scale))',
-            height: 'calc(45px * var(--scale))',
+            width: 'calc(120px * var(--scale))',
+            height: 'calc(30px * var(--scale))',
             pointerEvents: 'none'
           }}
         />
@@ -133,11 +133,11 @@ const RadioPlayer = () => {
         {/* Station Display - System Font */}
         <div style={{
           position: 'absolute',
-          top: 'calc(180px * var(--scale))',
-          left: '50%',
+          top: 'calc(220px * var(--scale))',
+          left: 'calc(50% + 30px)',
           transform: 'translate(-50%, -50%)',
           color: '#00ff00', // Green LCD-style text
-          fontSize: 'calc(16px * var(--scale))',
+          fontSize: 'calc(11px * var(--scale))',
           fontFamily: 'monospace',
           fontWeight: 'bold',
           textAlign: 'center',
@@ -155,10 +155,10 @@ const RadioPlayer = () => {
           onClick={seekBack}
           style={{
             position: 'absolute',
-            top: 'calc(260px * var(--scale))',
-            left: 'calc(245px * var(--scale))',
-            width: 'calc(25px * var(--scale))',
-            height: 'calc(20px * var(--scale))',
+            top: 'calc(240px * var(--scale))',
+            left: 'calc(310px * var(--scale))',
+            width: 'calc(22px * var(--scale))',
+            height: 'calc(18px * var(--scale))',
             cursor: 'pointer',
             opacity: 0.8,
             transition: 'opacity 0.2s, transform 0.1s'
@@ -176,10 +176,10 @@ const RadioPlayer = () => {
           onClick={() => selectStation(0)}
           style={{
             position: 'absolute',
-            top: 'calc(260px * var(--scale))',
-            left: 'calc(285px * var(--scale))',
-            width: 'calc(20px * var(--scale))',
-            height: 'calc(20px * var(--scale))',
+            top: 'calc(240px * var(--scale))',
+            left: 'calc(340px * var(--scale))',
+            width: 'calc(18px * var(--scale))',
+            height: 'calc(18px * var(--scale))',
             cursor: 'pointer',
             opacity: trackIndex === 0 ? 1 : 0.7,
             transition: 'opacity 0.2s, transform 0.1s',
@@ -196,10 +196,10 @@ const RadioPlayer = () => {
           onClick={() => selectStation(1)}
           style={{
             position: 'absolute',
-            top: 'calc(260px * var(--scale))',
-            left: 'calc(315px * var(--scale))',
-            width: 'calc(20px * var(--scale))',
-            height: 'calc(20px * var(--scale))',
+            top: 'calc(240px * var(--scale))',
+            left: 'calc(365px * var(--scale))',
+            width: 'calc(18px * var(--scale))',
+            height: 'calc(18px * var(--scale))',
             cursor: 'pointer',
             opacity: trackIndex === 1 ? 1 : 0.7,
             transition: 'opacity 0.2s, transform 0.1s',
@@ -216,10 +216,10 @@ const RadioPlayer = () => {
           onClick={() => selectStation(2)}
           style={{
             position: 'absolute',
-            top: 'calc(260px * var(--scale))',
-            left: 'calc(345px * var(--scale))',
-            width: 'calc(20px * var(--scale))',
-            height: 'calc(20px * var(--scale))',
+            top: 'calc(240px * var(--scale))',
+            left: 'calc(390px * var(--scale))',
+            width: 'calc(18px * var(--scale))',
+            height: 'calc(18px * var(--scale))',
             cursor: 'pointer',
             opacity: trackIndex === 2 ? 1 : 0.7,
             transition: 'opacity 0.2s, transform 0.1s',
@@ -236,10 +236,10 @@ const RadioPlayer = () => {
           onClick={() => selectStation(3)}
           style={{
             position: 'absolute',
-            top: 'calc(260px * var(--scale))',
-            left: 'calc(375px * var(--scale))',
-            width: 'calc(20px * var(--scale))',
-            height: 'calc(20px * var(--scale))',
+            top: 'calc(240px * var(--scale))',
+            left: 'calc(415px * var(--scale))',
+            width: 'calc(18px * var(--scale))',
+            height: 'calc(18px * var(--scale))',
             cursor: 'pointer',
             opacity: trackIndex === 3 ? 1 : 0.7,
             transition: 'opacity 0.2s, transform 0.1s',
@@ -256,10 +256,10 @@ const RadioPlayer = () => {
           onClick={seekForward}
           style={{
             position: 'absolute',
-            top: 'calc(260px * var(--scale))',
-            left: 'calc(410px * var(--scale))',
-            width: 'calc(25px * var(--scale))',
-            height: 'calc(20px * var(--scale))',
+            top: 'calc(240px * var(--scale))',
+            left: 'calc(446px * var(--scale))',
+            width: 'calc(22px * var(--scale))',
+            height: 'calc(18px * var(--scale))',
             cursor: 'pointer',
             opacity: 0.8,
             transition: 'opacity 0.2s, transform 0.1s'
@@ -270,22 +270,26 @@ const RadioPlayer = () => {
           onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
         />
 
-        {/* Play/Pause Button Overlay - positioned over cassette play button */}
+        {/* Play/Pause Button Overlay - positioned above seek forward button */}
         <img 
-          src={isPlaying ? "/images/pause-button.png" : "/images/play-button.png"}
+          src="/images/play-button.png"
           alt={isPlaying ? "Pause" : "Play"}
           onClick={togglePlay}
           style={{
             position: 'absolute',
-            top: 'calc(330px * var(--scale))',
-            left: 'calc(285px * var(--scale))',
-            width: 'calc(30px * var(--scale))',
-            height: 'calc(25px * var(--scale))',
+            top: 'calc(210px * var(--scale))',
+            left: 'calc(450px * var(--scale))',
+            width: 'calc(25px * var(--scale))',
+            height: 'calc(22px * var(--scale))',
             cursor: 'pointer',
-            transition: 'transform 0.1s',
+            transition: 'transform 0.1s, opacity 0.2s',
+            opacity: isPlaying ? 0.9 : 0.7,
+            transform: isPlaying ? 'scale(1.1)' : 'scale(1)',
           }}
-          onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
-          onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          onMouseDown={(e) => e.currentTarget.style.transform = isPlaying ? 'scale(1.05)' : 'scale(0.95)'}
+          onMouseUp={(e) => e.currentTarget.style.transform = isPlaying ? 'scale(1.1)' : 'scale(1)'}
+          onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+          onMouseLeave={(e) => e.currentTarget.style.opacity = isPlaying ? '0.9' : '0.7'}
         />
 
         {/* Volume Slider */}
