@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import useWindowSize from '../hooks/useWindowSize';
 
 const tracks = [
   { src: '/audio/paradise.mp3', title: '87.9 FREN', frequency: '87.9', station: '1' },
@@ -12,6 +13,41 @@ const RadioPlayer = () => {
   const [trackIndex, setTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
+  const { width } = useWindowSize();
+  
+  // Determine if we should use fixed positioning (desktop) or scaled positioning (mobile/tablet)
+  const isDesktop = width >= 769;
+  
+  // Fixed positions for desktop
+  const buttonPositions = {
+    seekBack: { top: '240px', left: '313px', width: '22px', height: '18px' },
+    button1: { top: '240px', left: '345px', width: '18px', height: '18px' },
+    button2: { top: '240px', left: '370px', width: '18px', height: '18px' },
+    button3: { top: '240px', left: '395px', width: '18px', height: '18px' },
+    button4: { top: '240px', left: '420px', width: '18px', height: '18px' },
+    seekForward: { top: '240px', left: '446px', width: '22px', height: '18px' },
+    playButton: { top: '210px', left: '450px', width: '25px', height: '22px' }
+  };
+  
+  // Helper function to get button style based on screen size
+  const getButtonStyle = (buttonKey: keyof typeof buttonPositions) => {
+    const pos = buttonPositions[buttonKey];
+    if (isDesktop) {
+      return {
+        top: pos.top,
+        left: pos.left,
+        width: pos.width,
+        height: pos.height
+      };
+    } else {
+      return {
+        top: `calc(${pos.top} * var(--scale))`,
+        left: `calc(${pos.left} * var(--scale))`,
+        width: `calc(${pos.width} * var(--scale))`,
+        height: `calc(${pos.height} * var(--scale))`
+      };
+    }
+  };
 
   const selectStation = (stationIndex: number) => {
     setTrackIndex(stationIndex);
@@ -58,8 +94,20 @@ const RadioPlayer = () => {
           --scale: 1;
         }
 
-        /* Tablet */
-        @media (max-width: 1024px) {
+        /* Desktop and larger - Fixed positioning, no scaling */
+        @media (min-width: 769px) {
+          .radio-wrapper {
+            --scale: 1;
+          }
+          
+          /* Override scaling for button positions on desktop */
+          .desktop-fixed {
+            --scale: 1 !important;
+          }
+        }
+
+        /* Tablet and smaller - Responsive scaling */
+        @media (max-width: 768px) {
           .radio-wrapper {
             --scale: 0.8;
           }
@@ -92,7 +140,7 @@ const RadioPlayer = () => {
         
         {/* Scalable Radio Container */}
         <div 
-          className="radio-wrapper"
+          className="radio-wrapper desktop-fixed"
           style={{ 
             position: 'relative',
             width: 'calc(680px * var(--scale))',
@@ -122,7 +170,7 @@ const RadioPlayer = () => {
           style={{
             position: 'absolute',
             top: 'calc(220px * var(--scale))',
-            left: 'calc(50% + 30px)',
+            left: 'calc(50% + 45px)',
             transform: 'translate(-50%, -50%)',
             width: 'calc(120px * var(--scale))',
             height: 'calc(30px * var(--scale))',
@@ -134,7 +182,7 @@ const RadioPlayer = () => {
         <div style={{
           position: 'absolute',
           top: 'calc(220px * var(--scale))',
-          left: 'calc(50% + 30px)',
+          left: 'calc(50% + 45px)',
           transform: 'translate(-50%, -50%)',
           color: '#00ff00', // Green LCD-style text
           fontSize: 'calc(11px * var(--scale))',
@@ -155,10 +203,7 @@ const RadioPlayer = () => {
           onClick={seekBack}
           style={{
             position: 'absolute',
-            top: 'calc(240px * var(--scale))',
-            left: 'calc(310px * var(--scale))',
-            width: 'calc(22px * var(--scale))',
-            height: 'calc(18px * var(--scale))',
+            ...getButtonStyle('seekBack'),
             cursor: 'pointer',
             opacity: 0.8,
             transition: 'opacity 0.2s, transform 0.1s'
@@ -176,10 +221,7 @@ const RadioPlayer = () => {
           onClick={() => selectStation(0)}
           style={{
             position: 'absolute',
-            top: 'calc(240px * var(--scale))',
-            left: 'calc(340px * var(--scale))',
-            width: 'calc(18px * var(--scale))',
-            height: 'calc(18px * var(--scale))',
+            ...getButtonStyle('button1'),
             cursor: 'pointer',
             opacity: trackIndex === 0 ? 1 : 0.7,
             transition: 'opacity 0.2s, transform 0.1s',
@@ -196,10 +238,7 @@ const RadioPlayer = () => {
           onClick={() => selectStation(1)}
           style={{
             position: 'absolute',
-            top: 'calc(240px * var(--scale))',
-            left: 'calc(365px * var(--scale))',
-            width: 'calc(18px * var(--scale))',
-            height: 'calc(18px * var(--scale))',
+            ...getButtonStyle('button2'),
             cursor: 'pointer',
             opacity: trackIndex === 1 ? 1 : 0.7,
             transition: 'opacity 0.2s, transform 0.1s',
@@ -216,10 +255,7 @@ const RadioPlayer = () => {
           onClick={() => selectStation(2)}
           style={{
             position: 'absolute',
-            top: 'calc(240px * var(--scale))',
-            left: 'calc(390px * var(--scale))',
-            width: 'calc(18px * var(--scale))',
-            height: 'calc(18px * var(--scale))',
+            ...getButtonStyle('button3'),
             cursor: 'pointer',
             opacity: trackIndex === 2 ? 1 : 0.7,
             transition: 'opacity 0.2s, transform 0.1s',
@@ -236,10 +272,7 @@ const RadioPlayer = () => {
           onClick={() => selectStation(3)}
           style={{
             position: 'absolute',
-            top: 'calc(240px * var(--scale))',
-            left: 'calc(415px * var(--scale))',
-            width: 'calc(18px * var(--scale))',
-            height: 'calc(18px * var(--scale))',
+            ...getButtonStyle('button4'),
             cursor: 'pointer',
             opacity: trackIndex === 3 ? 1 : 0.7,
             transition: 'opacity 0.2s, transform 0.1s',
@@ -256,10 +289,7 @@ const RadioPlayer = () => {
           onClick={seekForward}
           style={{
             position: 'absolute',
-            top: 'calc(240px * var(--scale))',
-            left: 'calc(446px * var(--scale))',
-            width: 'calc(22px * var(--scale))',
-            height: 'calc(18px * var(--scale))',
+            ...getButtonStyle('seekForward'),
             cursor: 'pointer',
             opacity: 0.8,
             transition: 'opacity 0.2s, transform 0.1s'
@@ -277,10 +307,7 @@ const RadioPlayer = () => {
           onClick={togglePlay}
           style={{
             position: 'absolute',
-            top: 'calc(210px * var(--scale))',
-            left: 'calc(450px * var(--scale))',
-            width: 'calc(25px * var(--scale))',
-            height: 'calc(22px * var(--scale))',
+            ...getButtonStyle('playButton'),
             cursor: 'pointer',
             transition: 'transform 0.1s, opacity 0.2s',
             opacity: isPlaying ? 0.9 : 0.7,
