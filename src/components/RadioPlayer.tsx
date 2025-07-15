@@ -65,7 +65,7 @@ const RadioPlayer = () => {
         width: 'calc(680px * var(--scale))',
         height: 'calc(480px * var(--scale))',
         maxWidth: '95vw', // Ensure it fits in viewport width
-        maxHeight: '90vh', // Ensure it fits in viewport height
+        maxHeight: '85vh', // Reduced from 90vh to give more space
         '--scale': '1'
       } as React.CSSProperties;
     }
@@ -185,11 +185,11 @@ const RadioPlayer = () => {
           alt="Radio Display Faceplate"
           style={{
             position: 'absolute',
-            top: 'calc(220px * var(--scale))',
-            left: 'calc(50% + 45px)',
+            top: isDesktop ? '220px' : 'calc(220px * var(--scale))',
+            left: isDesktop ? 'calc(50% + 45px)' : 'calc(50% + 45px * var(--scale))',
             transform: 'translate(-50%, -50%)',
-            width: 'calc(120px * var(--scale))',
-            height: 'calc(30px * var(--scale))',
+            width: isDesktop ? '120px' : 'calc(120px * var(--scale))',
+            height: isDesktop ? '30px' : 'calc(30px * var(--scale))',
             pointerEvents: 'none'
           }}
         />
@@ -197,11 +197,11 @@ const RadioPlayer = () => {
         {/* Station Display - System Font */}
         <div style={{
           position: 'absolute',
-          top: 'calc(220px * var(--scale))',
-          left: 'calc(50% + 45px)',
+          top: isDesktop ? '220px' : 'calc(220px * var(--scale))',
+          left: isDesktop ? 'calc(50% + 45px)' : 'calc(50% + 45px * var(--scale))',
           transform: 'translate(-50%, -50%)',
           color: '#00ff00', // Green LCD-style text
-          fontSize: 'calc(11px * var(--scale))',
+          fontSize: isDesktop ? '11px' : 'calc(11px * var(--scale))',
           fontFamily: 'monospace',
           fontWeight: 'bold',
           textAlign: 'center',
@@ -338,17 +338,17 @@ const RadioPlayer = () => {
         {/* Volume Slider */}
         <div style={{
           position: 'absolute',
-          bottom: 'calc(20px * var(--scale))',
+          bottom: isDesktop ? '20px' : 'calc(20px * var(--scale))',
           left: '50%',
           transform: 'translateX(-50%)',
           background: 'rgba(0,0,0,0.8)',
           color: '#00ff00',
-          padding: 'calc(10px * var(--scale))',
-          borderRadius: 'calc(6px * var(--scale))',
+          padding: isDesktop ? '10px' : 'calc(10px * var(--scale))',
+          borderRadius: isDesktop ? '6px' : 'calc(6px * var(--scale))',
           display: 'flex',
           alignItems: 'center',
-          gap: 'calc(10px * var(--scale))',
-          fontSize: 'calc(14px * var(--scale))',
+          gap: isDesktop ? '10px' : 'calc(10px * var(--scale))',
+          fontSize: isDesktop ? '14px' : 'calc(14px * var(--scale))',
           fontFamily: 'monospace',
           fontWeight: 'bold'
         }}>
@@ -361,8 +361,8 @@ const RadioPlayer = () => {
             value={volume}
             onChange={handleVolume}
             style={{ 
-              width: 'calc(120px * var(--scale))',
-              height: 'calc(6px * var(--scale))'
+              width: isDesktop ? '120px' : 'calc(120px * var(--scale))',
+              height: isDesktop ? '6px' : 'calc(6px * var(--scale))'
             }}
           />
           <span>{Math.round(volume * 100)}%</span>
