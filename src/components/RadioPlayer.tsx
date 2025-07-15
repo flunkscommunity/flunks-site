@@ -52,23 +52,55 @@ const RadioPlayer = () => {
   };
 
   return (
-    <div style={{ 
-      width: '100%', 
-      height: '100vh',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#f0f0f0'
-    }}>
+    <>
+      <style jsx>{`
+        .radio-wrapper {
+          --scale: 1;
+        }
+
+        /* Tablet */
+        @media (max-width: 1024px) {
+          .radio-wrapper {
+            --scale: 0.8;
+          }
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+          .radio-wrapper {
+            --scale: 0.6;
+          }
+        }
+
+        /* Small mobile */
+        @media (max-width: 400px) {
+          .radio-wrapper {
+            --scale: 0.5;
+          }
+        }
+      `}</style>
       
-      {/* Main Radio Container */}
       <div style={{ 
-        position: 'relative',
-        width: '600px',
-        height: '400px',
-        maxWidth: '90vw',
-        maxHeight: '90vh'
+        width: '100%', 
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f0f0f0'
       }}>
+        
+        {/* Scalable Radio Container */}
+        <div 
+          className="radio-wrapper"
+          style={{ 
+            position: 'relative',
+            width: 'calc(600px * var(--scale))',
+            height: 'calc(400px * var(--scale))',
+            maxWidth: '95vw',
+            maxHeight: '95vh',
+            '--scale': '1'
+          } as React.CSSProperties}
+        >
         
         {/* Background Radio Image */}
         <img 
@@ -88,11 +120,11 @@ const RadioPlayer = () => {
           alt="Radio Display Faceplate"
           style={{
             position: 'absolute',
-            top: '35%',
+            top: 'calc(140px * var(--scale))',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: '180px',
-            height: '50px',
+            width: 'calc(180px * var(--scale))',
+            height: 'calc(50px * var(--scale))',
             pointerEvents: 'none'
           }}
         />
@@ -100,11 +132,11 @@ const RadioPlayer = () => {
         {/* Station Display - System Font */}
         <div style={{
           position: 'absolute',
-          top: '35%',
+          top: 'calc(140px * var(--scale))',
           left: '50%',
           transform: 'translate(-50%, -50%)',
           color: '#00ff00', // Green LCD-style text
-          fontSize: '18px',
+          fontSize: 'calc(18px * var(--scale))',
           fontFamily: 'monospace',
           fontWeight: 'bold',
           textAlign: 'center',
@@ -122,10 +154,10 @@ const RadioPlayer = () => {
           onClick={seekBack}
           style={{
             position: 'absolute',
-            top: '55%',
-            left: '25%', // Left of the preset buttons
-            width: '35px',
-            height: '30px',
+            top: 'calc(220px * var(--scale))',
+            left: 'calc(150px * var(--scale))',
+            width: 'calc(35px * var(--scale))',
+            height: 'calc(30px * var(--scale))',
             cursor: 'pointer',
             opacity: 0.8,
             transition: 'opacity 0.2s, transform 0.1s'
@@ -143,10 +175,10 @@ const RadioPlayer = () => {
           onClick={() => selectStation(0)}
           style={{
             position: 'absolute',
-            top: '55%',
-            left: '35%',
-            width: '40px',
-            height: '30px',
+            top: 'calc(220px * var(--scale))',
+            left: 'calc(210px * var(--scale))',
+            width: 'calc(40px * var(--scale))',
+            height: 'calc(30px * var(--scale))',
             cursor: 'pointer',
             opacity: trackIndex === 0 ? 1 : 0.7,
             transition: 'opacity 0.2s, transform 0.1s',
@@ -163,10 +195,10 @@ const RadioPlayer = () => {
           onClick={() => selectStation(1)}
           style={{
             position: 'absolute',
-            top: '55%',
-            left: '45%',
-            width: '40px',
-            height: '30px',
+            top: 'calc(220px * var(--scale))',
+            left: 'calc(270px * var(--scale))',
+            width: 'calc(40px * var(--scale))',
+            height: 'calc(30px * var(--scale))',
             cursor: 'pointer',
             opacity: trackIndex === 1 ? 1 : 0.7,
             transition: 'opacity 0.2s, transform 0.1s',
@@ -183,10 +215,10 @@ const RadioPlayer = () => {
           onClick={() => selectStation(2)}
           style={{
             position: 'absolute',
-            top: '55%',
-            left: '55%',
-            width: '40px',
-            height: '30px',
+            top: 'calc(220px * var(--scale))',
+            left: 'calc(330px * var(--scale))',
+            width: 'calc(40px * var(--scale))',
+            height: 'calc(30px * var(--scale))',
             cursor: 'pointer',
             opacity: trackIndex === 2 ? 1 : 0.7,
             transition: 'opacity 0.2s, transform 0.1s',
@@ -203,10 +235,10 @@ const RadioPlayer = () => {
           onClick={() => selectStation(3)}
           style={{
             position: 'absolute',
-            top: '55%',
-            left: '65%',
-            width: '40px',
-            height: '30px',
+            top: 'calc(220px * var(--scale))',
+            left: 'calc(390px * var(--scale))',
+            width: 'calc(40px * var(--scale))',
+            height: 'calc(30px * var(--scale))',
             cursor: 'pointer',
             opacity: trackIndex === 3 ? 1 : 0.7,
             transition: 'opacity 0.2s, transform 0.1s',
@@ -223,10 +255,10 @@ const RadioPlayer = () => {
           onClick={seekForward}
           style={{
             position: 'absolute',
-            top: '55%',
-            left: '75%', // Right of the preset buttons
-            width: '35px',
-            height: '30px',
+            top: 'calc(220px * var(--scale))',
+            left: 'calc(450px * var(--scale))',
+            width: 'calc(35px * var(--scale))',
+            height: 'calc(30px * var(--scale))',
             cursor: 'pointer',
             opacity: 0.8,
             transition: 'opacity 0.2s, transform 0.1s'
@@ -244,11 +276,11 @@ const RadioPlayer = () => {
           onClick={togglePlay}
           style={{
             position: 'absolute',
-            top: '75%',
+            top: 'calc(300px * var(--scale))',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: '50px',
-            height: '50px',
+            width: 'calc(50px * var(--scale))',
+            height: 'calc(50px * var(--scale))',
             cursor: 'pointer',
             transition: 'transform 0.1s',
           }}
@@ -259,17 +291,17 @@ const RadioPlayer = () => {
         {/* Volume Slider */}
         <div style={{
           position: 'absolute',
-          bottom: '10%',
+          bottom: 'calc(40px * var(--scale))',
           left: '50%',
           transform: 'translateX(-50%)',
           background: 'rgba(255,255,255,0.9)',
-          padding: '8px',
-          borderRadius: '4px',
+          padding: 'calc(8px * var(--scale))',
+          borderRadius: 'calc(4px * var(--scale))',
           display: 'flex',
           alignItems: 'center',
-          gap: '8px'
+          gap: 'calc(8px * var(--scale))'
         }}>
-          <span style={{ fontSize: '12px' }}>Volume:</span>
+          <span style={{ fontSize: 'calc(12px * var(--scale))' }}>Volume:</span>
           <input 
             type="range"
             min={0}
@@ -277,14 +309,16 @@ const RadioPlayer = () => {
             step={0.01}
             value={volume}
             onChange={handleVolume}
-            style={{ width: '100px' }}
+            style={{ width: 'calc(100px * var(--scale))' }}
           />
+        </div>
+
         </div>
 
       </div>
 
       <audio ref={audioRef} src={tracks[trackIndex].src} />
-    </div>
+    </>
   );
 };
 
