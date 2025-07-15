@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
 
 const tracks = [
-  { src: '/audio/paradise.mp3', title: 'Paradise', station: '1' },
-  { src: '/audio/station2.mp3', title: 'Chill Beats', station: '2' },
-  { src: '/audio/station3.mp3', title: 'Hip Hop', station: '3' },
-  { src: '/audio/station4.mp3', title: 'Jazz Lounge', station: '4' },
+  { src: '/audio/paradise.mp3', title: '87.9 FREN', frequency: '87.9', station: '1' },
+  { src: '/audio/station2.mp3', title: '97.5 WZRD', frequency: '97.5', station: '2' },
+  { src: '/audio/station3.mp3', title: '101.9 TEDY', frequency: '101.9', station: '3' },
+  { src: '/audio/station4.mp3', title: '104.1 FLNK', frequency: '104.1', station: '4' },
 ];
 
 const RadioPlayer = () => {
@@ -21,6 +21,16 @@ const RadioPlayer = () => {
         audioRef.current.play();
       }
     }
+  };
+
+  const seekBack = () => {
+    const newIndex = trackIndex === 0 ? tracks.length - 1 : trackIndex - 1;
+    selectStation(newIndex);
+  };
+
+  const seekForward = () => {
+    const newIndex = trackIndex === tracks.length - 1 ? 0 : trackIndex + 1;
+    selectStation(newIndex);
   };
 
   const togglePlay = () => {
@@ -54,10 +64,10 @@ const RadioPlayer = () => {
       {/* Main Radio Container */}
       <div style={{ 
         position: 'relative',
-        width: '600px', // Fixed width for consistent positioning
-        height: '400px', // Fixed height for consistent positioning
-        maxWidth: '90vw', // Responsive max width
-        maxHeight: '90vh' // Responsive max height
+        width: '600px',
+        height: '400px',
+        maxWidth: '90vw',
+        maxHeight: '90vh'
       }}>
         
         {/* Background Radio Image */}
@@ -67,38 +77,75 @@ const RadioPlayer = () => {
           style={{
             width: '100%',
             height: '100%',
-            objectFit: 'contain', // Maintains aspect ratio
+            objectFit: 'contain',
             display: 'block'
           }}
         />
 
-        {/* Station Display Overlay */}
+        {/* Display Faceplate Background */}
+        <img 
+          src="/images/display-faceplate.png"
+          alt="Radio Display Faceplate"
+          style={{
+            position: 'absolute',
+            top: '35%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '180px',
+            height: '50px',
+            pointerEvents: 'none'
+          }}
+        />
+
+        {/* Station Display - System Font */}
         <div style={{
           position: 'absolute',
-          top: '35%', // Adjust to match your radio's display area
+          top: '35%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          background: '#000',
-          color: '#00ff00',
-          padding: '4px 12px',
-          fontSize: '16px',
+          color: '#00ff00', // Green LCD-style text
+          fontSize: '18px',
           fontFamily: 'monospace',
-          border: '2px inset #333',
-          borderRadius: '4px'
+          fontWeight: 'bold',
+          textAlign: 'center',
+          pointerEvents: 'none',
+          textShadow: '0 0 8px #00ff00',
+          letterSpacing: '1px'
         }}>
           {tracks[trackIndex].title}
         </div>
 
-        {/* Button 1 Overlay */}
+        {/* Seek Back Button - Left of Button 1 */}
+        <img 
+          src="/images/seek-back.png"
+          alt="Previous Station"
+          onClick={seekBack}
+          style={{
+            position: 'absolute',
+            top: '55%',
+            left: '25%', // Left of the preset buttons
+            width: '35px',
+            height: '30px',
+            cursor: 'pointer',
+            opacity: 0.8,
+            transition: 'opacity 0.2s, transform 0.1s'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+          onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}
+          onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
+          onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
+        />
+
+        {/* Button 1 Overlay - 87.9 FREN */}
         <img 
           src="/images/button-1.png"
-          alt="Station 1"
+          alt="87.9 FREN"
           onClick={() => selectStation(0)}
           style={{
             position: 'absolute',
-            top: '55%', // Adjust these percentages to match your radio image
+            top: '55%',
             left: '35%',
-            width: '40px', // Actual button size
+            width: '40px',
             height: '30px',
             cursor: 'pointer',
             opacity: trackIndex === 0 ? 1 : 0.7,
@@ -109,10 +156,10 @@ const RadioPlayer = () => {
           onMouseLeave={(e) => e.currentTarget.style.opacity = trackIndex === 0 ? '1' : '0.7'}
         />
 
-        {/* Button 2 Overlay */}
+        {/* Button 2 Overlay - 97.5 WZRD */}
         <img 
           src="/images/button-2.png"
-          alt="Station 2"
+          alt="97.5 WZRD"
           onClick={() => selectStation(1)}
           style={{
             position: 'absolute',
@@ -129,10 +176,10 @@ const RadioPlayer = () => {
           onMouseLeave={(e) => e.currentTarget.style.opacity = trackIndex === 1 ? '1' : '0.7'}
         />
 
-        {/* Button 3 Overlay */}
+        {/* Button 3 Overlay - 101.9 TEDY */}
         <img 
           src="/images/button-3.png"
-          alt="Station 3"
+          alt="101.9 TEDY"
           onClick={() => selectStation(2)}
           style={{
             position: 'absolute',
@@ -149,10 +196,10 @@ const RadioPlayer = () => {
           onMouseLeave={(e) => e.currentTarget.style.opacity = trackIndex === 2 ? '1' : '0.7'}
         />
 
-        {/* Button 4 Overlay */}
+        {/* Button 4 Overlay - 104.1 FLNK */}
         <img 
           src="/images/button-4.png"
-          alt="Station 4"
+          alt="104.1 FLNK"
           onClick={() => selectStation(3)}
           style={{
             position: 'absolute',
@@ -167,6 +214,27 @@ const RadioPlayer = () => {
           }}
           onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
           onMouseLeave={(e) => e.currentTarget.style.opacity = trackIndex === 3 ? '1' : '0.7'}
+        />
+
+        {/* Seek Forward Button - Right of Button 4 */}
+        <img 
+          src="/images/seek-forward.png"
+          alt="Next Station"
+          onClick={seekForward}
+          style={{
+            position: 'absolute',
+            top: '55%',
+            left: '75%', // Right of the preset buttons
+            width: '35px',
+            height: '30px',
+            cursor: 'pointer',
+            opacity: 0.8,
+            transition: 'opacity 0.2s, transform 0.1s'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+          onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}
+          onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
+          onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
         />
 
         {/* Play/Pause Button Overlay */}
@@ -188,7 +256,7 @@ const RadioPlayer = () => {
           onMouseUp={(e) => e.currentTarget.style.transform = 'translate(-50%, -50%) scale(1)'}
         />
 
-        {/* Volume Slider (if needed) */}
+        {/* Volume Slider */}
         <div style={{
           position: 'absolute',
           bottom: '10%',
