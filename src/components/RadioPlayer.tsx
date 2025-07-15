@@ -64,8 +64,8 @@ const RadioPlayer = () => {
         position: 'relative' as const,
         width: 'calc(680px * var(--scale))',
         height: 'calc(480px * var(--scale))',
-        maxWidth: '100%',
-        maxHeight: '100%',
+        maxWidth: '95vw', // Ensure it fits in viewport width
+        maxHeight: '90vh', // Ensure it fits in viewport height
         '--scale': '1'
       } as React.CSSProperties;
     }
@@ -131,21 +131,21 @@ const RadioPlayer = () => {
         /* Tablet and smaller - Responsive scaling */
         @media (max-width: 768px) {
           .radio-wrapper {
-            --scale: 0.8;
+            --scale: 0.7;
           }
         }
 
         /* Mobile */
         @media (max-width: 600px) {
           .radio-wrapper {
-            --scale: 0.6;
+            --scale: 0.55;
           }
         }
 
         /* Small mobile */
         @media (max-width: 400px) {
           .radio-wrapper {
-            --scale: 0.5;
+            --scale: 0.45;
           }
         }
       `}</style>
@@ -157,7 +157,8 @@ const RadioPlayer = () => {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#f0f0f0',
-        padding: '10px'
+        padding: isDesktop ? '10px' : '5px',
+        overflow: 'hidden' // Prevent scrollbars on mobile
       }}>
         
         {/* Scalable Radio Container */}
