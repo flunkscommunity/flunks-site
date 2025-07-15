@@ -82,11 +82,12 @@ const RadioPlayer = () => {
       
       <div style={{ 
         width: '100%', 
-        height: '100vh',
+        height: '100%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f0f0f0'
+        backgroundColor: '#f0f0f0',
+        padding: '10px'
       }}>
         
         {/* Scalable Radio Container */}
@@ -94,10 +95,10 @@ const RadioPlayer = () => {
           className="radio-wrapper"
           style={{ 
             position: 'relative',
-            width: 'calc(600px * var(--scale))',
-            height: 'calc(400px * var(--scale))',
-            maxWidth: '95vw',
-            maxHeight: '95vh',
+            width: 'calc(680px * var(--scale))',
+            height: 'calc(480px * var(--scale))',
+            maxWidth: '100%',
+            maxHeight: '100%',
             '--scale': '1'
           } as React.CSSProperties}
         >
@@ -120,11 +121,11 @@ const RadioPlayer = () => {
           alt="Radio Display Faceplate"
           style={{
             position: 'absolute',
-            top: 'calc(140px * var(--scale))',
+            top: 'calc(160px * var(--scale))',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: 'calc(180px * var(--scale))',
-            height: 'calc(50px * var(--scale))',
+            width: 'calc(220px * var(--scale))',
+            height: 'calc(60px * var(--scale))',
             pointerEvents: 'none'
           }}
         />
@@ -132,11 +133,11 @@ const RadioPlayer = () => {
         {/* Station Display - System Font */}
         <div style={{
           position: 'absolute',
-          top: 'calc(140px * var(--scale))',
+          top: 'calc(160px * var(--scale))',
           left: '50%',
           transform: 'translate(-50%, -50%)',
           color: '#00ff00', // Green LCD-style text
-          fontSize: 'calc(18px * var(--scale))',
+          fontSize: 'calc(20px * var(--scale))',
           fontFamily: 'monospace',
           fontWeight: 'bold',
           textAlign: 'center',
@@ -154,10 +155,10 @@ const RadioPlayer = () => {
           onClick={seekBack}
           style={{
             position: 'absolute',
-            top: 'calc(220px * var(--scale))',
-            left: 'calc(150px * var(--scale))',
-            width: 'calc(35px * var(--scale))',
-            height: 'calc(30px * var(--scale))',
+            top: 'calc(280px * var(--scale))',
+            left: 'calc(180px * var(--scale))',
+            width: 'calc(40px * var(--scale))',
+            height: 'calc(35px * var(--scale))',
             cursor: 'pointer',
             opacity: 0.8,
             transition: 'opacity 0.2s, transform 0.1s'
@@ -175,10 +176,10 @@ const RadioPlayer = () => {
           onClick={() => selectStation(0)}
           style={{
             position: 'absolute',
-            top: 'calc(220px * var(--scale))',
-            left: 'calc(210px * var(--scale))',
-            width: 'calc(40px * var(--scale))',
-            height: 'calc(30px * var(--scale))',
+            top: 'calc(280px * var(--scale))',
+            left: 'calc(260px * var(--scale))',
+            width: 'calc(45px * var(--scale))',
+            height: 'calc(35px * var(--scale))',
             cursor: 'pointer',
             opacity: trackIndex === 0 ? 1 : 0.7,
             transition: 'opacity 0.2s, transform 0.1s',
@@ -195,10 +196,10 @@ const RadioPlayer = () => {
           onClick={() => selectStation(1)}
           style={{
             position: 'absolute',
-            top: 'calc(220px * var(--scale))',
-            left: 'calc(270px * var(--scale))',
-            width: 'calc(40px * var(--scale))',
-            height: 'calc(30px * var(--scale))',
+            top: 'calc(280px * var(--scale))',
+            left: 'calc(325px * var(--scale))',
+            width: 'calc(45px * var(--scale))',
+            height: 'calc(35px * var(--scale))',
             cursor: 'pointer',
             opacity: trackIndex === 1 ? 1 : 0.7,
             transition: 'opacity 0.2s, transform 0.1s',
@@ -215,10 +216,10 @@ const RadioPlayer = () => {
           onClick={() => selectStation(2)}
           style={{
             position: 'absolute',
-            top: 'calc(220px * var(--scale))',
-            left: 'calc(330px * var(--scale))',
-            width: 'calc(40px * var(--scale))',
-            height: 'calc(30px * var(--scale))',
+            top: 'calc(280px * var(--scale))',
+            left: 'calc(390px * var(--scale))',
+            width: 'calc(45px * var(--scale))',
+            height: 'calc(35px * var(--scale))',
             cursor: 'pointer',
             opacity: trackIndex === 2 ? 1 : 0.7,
             transition: 'opacity 0.2s, transform 0.1s',
@@ -235,10 +236,10 @@ const RadioPlayer = () => {
           onClick={() => selectStation(3)}
           style={{
             position: 'absolute',
-            top: 'calc(220px * var(--scale))',
-            left: 'calc(390px * var(--scale))',
-            width: 'calc(40px * var(--scale))',
-            height: 'calc(30px * var(--scale))',
+            top: 'calc(280px * var(--scale))',
+            left: 'calc(455px * var(--scale))',
+            width: 'calc(45px * var(--scale))',
+            height: 'calc(35px * var(--scale))',
             cursor: 'pointer',
             opacity: trackIndex === 3 ? 1 : 0.7,
             transition: 'opacity 0.2s, transform 0.1s',
@@ -255,10 +256,10 @@ const RadioPlayer = () => {
           onClick={seekForward}
           style={{
             position: 'absolute',
-            top: 'calc(220px * var(--scale))',
-            left: 'calc(450px * var(--scale))',
-            width: 'calc(35px * var(--scale))',
-            height: 'calc(30px * var(--scale))',
+            top: 'calc(280px * var(--scale))',
+            left: 'calc(540px * var(--scale))',
+            width: 'calc(40px * var(--scale))',
+            height: 'calc(35px * var(--scale))',
             cursor: 'pointer',
             opacity: 0.8,
             transition: 'opacity 0.2s, transform 0.1s'
@@ -276,11 +277,11 @@ const RadioPlayer = () => {
           onClick={togglePlay}
           style={{
             position: 'absolute',
-            top: 'calc(300px * var(--scale))',
+            top: 'calc(380px * var(--scale))',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: 'calc(50px * var(--scale))',
-            height: 'calc(50px * var(--scale))',
+            width: 'calc(60px * var(--scale))',
+            height: 'calc(60px * var(--scale))',
             cursor: 'pointer',
             transition: 'transform 0.1s',
           }}
@@ -291,17 +292,21 @@ const RadioPlayer = () => {
         {/* Volume Slider */}
         <div style={{
           position: 'absolute',
-          bottom: 'calc(40px * var(--scale))',
+          bottom: 'calc(20px * var(--scale))',
           left: '50%',
           transform: 'translateX(-50%)',
-          background: 'rgba(255,255,255,0.9)',
-          padding: 'calc(8px * var(--scale))',
-          borderRadius: 'calc(4px * var(--scale))',
+          background: 'rgba(0,0,0,0.8)',
+          color: '#00ff00',
+          padding: 'calc(10px * var(--scale))',
+          borderRadius: 'calc(6px * var(--scale))',
           display: 'flex',
           alignItems: 'center',
-          gap: 'calc(8px * var(--scale))'
+          gap: 'calc(10px * var(--scale))',
+          fontSize: 'calc(14px * var(--scale))',
+          fontFamily: 'monospace',
+          fontWeight: 'bold'
         }}>
-          <span style={{ fontSize: 'calc(12px * var(--scale))' }}>Volume:</span>
+          <span>VOL:</span>
           <input 
             type="range"
             min={0}
@@ -309,8 +314,12 @@ const RadioPlayer = () => {
             step={0.01}
             value={volume}
             onChange={handleVolume}
-            style={{ width: 'calc(100px * var(--scale))' }}
+            style={{ 
+              width: 'calc(120px * var(--scale))',
+              height: 'calc(6px * var(--scale))'
+            }}
           />
+          <span>{Math.round(volume * 100)}%</span>
         </div>
 
         </div>

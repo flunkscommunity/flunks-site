@@ -116,8 +116,8 @@ const windowsMemod = useMemo(() => (
                   windowsId={WINDOW_IDS.RADIO_PLAYER}
                   onClose={() => closeWindow(WINDOW_IDS.RADIO_PLAYER)}
                   headerTitle="Radio"
-                  initialWidth="480px"
-                  initialHeight="370px"
+                  initialWidth="720px"
+                  initialHeight="540px"
                   headerIcon="/images/icons/radio.png"
                 >
 
