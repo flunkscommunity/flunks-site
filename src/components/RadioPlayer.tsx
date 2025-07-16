@@ -18,15 +18,15 @@ const RadioPlayer = () => {
   // Determine if we should use fixed positioning (desktop) or scaled positioning (mobile/tablet)
   const isDesktop = width >= 769;
   
-  // Fixed positions for desktop - RESTORED to working positions
+  // Fixed positions for desktop - ACTUALLY RESTORED to working positions
   const buttonPositions = {
-    seekBack: { top: '240px', left: '315px', width: '22px', height: '18px' },
-    button1: { top: '240px', left: '337px', width: '18px', height: '18px' },
-    button2: { top: '240px', left: '362px', width: '18px', height: '18px' },
-    button3: { top: '240px', left: '385px', width: '18px', height: '18px' },
-    button4: { top: '240px', left: '406px', width: '18px', height: '18px' },
-    seekForward: { top: '240px', left: '445px', width: '22px', height: '18px' },
-    playButton: { top: '210px', left: '455px', width: '25px', height: '22px' }
+    seekBack: { top: '240px', left: '313px', width: '22px', height: '18px' },
+    button1: { top: '240px', left: '345px', width: '18px', height: '18px' },
+    button2: { top: '240px', left: '370px', width: '18px', height: '18px' },
+    button3: { top: '240px', left: '395px', width: '18px', height: '18px' },
+    button4: { top: '240px', left: '420px', width: '18px', height: '18px' },
+    seekForward: { top: '240px', left: '446px', width: '22px', height: '18px' },
+    playButton: { top: '210px', left: '435px', width: '25px', height: '22px' }
   };
   
   // Helper function to get button style based on screen size
