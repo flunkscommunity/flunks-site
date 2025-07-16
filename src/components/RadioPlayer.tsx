@@ -18,15 +18,15 @@ const RadioPlayer = () => {
   // Determine if we should use fixed positioning (desktop) or scaled positioning (mobile/tablet)
   const isDesktop = width >= 769;
   
-  // Fixed positions for desktop
+  // Fixed positions for desktop - adjusted to be more centered for better mobile scaling
   const buttonPositions = {
-    seekBack: { top: '240px', left: '313px', width: '22px', height: '18px' },
-    button1: { top: '240px', left: '345px', width: '18px', height: '18px' },
-    button2: { top: '240px', left: '370px', width: '18px', height: '18px' },
-    button3: { top: '240px', left: '395px', width: '18px', height: '18px' },
-    button4: { top: '240px', left: '420px', width: '18px', height: '18px' },
-    seekForward: { top: '240px', left: '446px', width: '22px', height: '18px' },
-    playButton: { top: '210px', left: '450px', width: '25px', height: '22px' }
+    seekBack: { top: '240px', left: '280px', width: '22px', height: '18px' },
+    button1: { top: '240px', left: '310px', width: '18px', height: '18px' },
+    button2: { top: '240px', left: '335px', width: '18px', height: '18px' },
+    button3: { top: '240px', left: '360px', width: '18px', height: '18px' },
+    button4: { top: '240px', left: '385px', width: '18px', height: '18px' },
+    seekForward: { top: '240px', left: '415px', width: '22px', height: '18px' },
+    playButton: { top: '210px', left: '420px', width: '25px', height: '22px' }
   };
   
   // Helper function to get button style based on screen size
@@ -131,21 +131,28 @@ const RadioPlayer = () => {
         /* Tablet and smaller - Responsive scaling */
         @media (max-width: 768px) {
           .radio-wrapper {
-            --scale: 0.7;
+            --scale: 0.65;
           }
         }
 
         /* Mobile */
         @media (max-width: 600px) {
           .radio-wrapper {
-            --scale: 0.55;
+            --scale: 0.5;
           }
         }
 
         /* Small mobile */
         @media (max-width: 400px) {
           .radio-wrapper {
-            --scale: 0.45;
+            --scale: 0.42;
+          }
+        }
+
+        /* Very small mobile */
+        @media (max-width: 350px) {
+          .radio-wrapper {
+            --scale: 0.38;
           }
         }
       `}</style>
@@ -185,8 +192,8 @@ const RadioPlayer = () => {
           alt="Radio Display Faceplate"
           style={{
             position: 'absolute',
-            top: isDesktop ? '220px' : 'calc(220px * var(--scale))',
-            left: isDesktop ? 'calc(50% + 45px)' : 'calc(50% + 45px * var(--scale))',
+            top: isDesktop ? '235px' : 'calc(235px * var(--scale))',
+            left: isDesktop ? 'calc(50% + 50px)' : 'calc(50% + 50px * var(--scale))',
             transform: 'translate(-50%, -50%)',
             width: isDesktop ? '120px' : 'calc(120px * var(--scale))',
             height: isDesktop ? '30px' : 'calc(30px * var(--scale))',
@@ -197,8 +204,8 @@ const RadioPlayer = () => {
         {/* Station Display - System Font */}
         <div style={{
           position: 'absolute',
-          top: isDesktop ? '220px' : 'calc(220px * var(--scale))',
-          left: isDesktop ? 'calc(50% + 45px)' : 'calc(50% + 45px * var(--scale))',
+          top: isDesktop ? '235px' : 'calc(235px * var(--scale))',
+          left: isDesktop ? 'calc(50% + 50px)' : 'calc(50% + 50px * var(--scale))',
           transform: 'translate(-50%, -50%)',
           color: '#00ff00', // Green LCD-style text
           fontSize: isDesktop ? '11px' : 'calc(11px * var(--scale))',
