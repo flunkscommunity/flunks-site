@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import useWindowSize from '../hooks/useWindowSize';
 
 const tracks = [
@@ -10,10 +10,32 @@ const tracks = [
 
 const RadioPlayer = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [trackIndex, setTrackIndex] = useState(0);
+  const [trackIndex, setTrackIndex] = useState(3); // Start with station 4 (index 3)
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const { width } = useWindowSize();
+  
+  // Autoplay station 4 on component mount
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.src = tracks[3].src; // Station 4 (104.1 FLNK)
+      audioRef.current.volume = volume;
+      
+      // Try to autoplay (modern browsers may block this)
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch((error) => {
+            // Autoplay was prevented - user will need to click play
+            console.log('Autoplay was prevented:', error);
+            setIsPlaying(false);
+          });
+      }
+    }
+  }, []);
   
   // Determine if we should use fixed positioning (desktop) or scaled positioning (mobile/tablet)
   const isDesktop = width >= 769;
