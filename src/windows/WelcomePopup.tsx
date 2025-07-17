@@ -30,17 +30,17 @@ const WelcomePopup: React.FC = () => {
           variant="field"
         >
           <div className="flex flex-col mb-10">
-            <h1 className="text-2xl font-bold mb-1">Flunks.io Changelog</h1>
+            <h1 className="text-2xl font-bold mb-1">Flunks.net Changelog</h1>
             <h2 className="text-lg">
               Posted{" "}
-              {formatRelative(new Date("2024-06-03T08:00:00.00Z"), new Date())}{" "}
+              {formatRelative(new Date("2025-07-04T08:00:00.00Z"), new Date())}{" "}
             </h2>
           </div>
 
           <h2 className="text-xl font-bold mb-1">Non-Custodial Wallets</h2>
           <p className="text-lg mb-6">
             Moving forward, you will need to log in with a non-custodial wallet
-            to use newer features like the Gumball Machine on the Flunks95
+            to use newer features like the Season Zero on the Flunks2.0
             website. Recommended non-custodial wallets include{" "}
             <a
               href="https://www.flow.com/flow-wallet"
@@ -71,34 +71,12 @@ const WelcomePopup: React.FC = () => {
             </a>
             .
           </p>
-          <h2 className="text-xl font-bold mb-1">Gumball Machine</h2>
+          <h2 className="text-xl font-bold mb-1">OnlyFlunks v1</h2>
           <p className="text-lg mb-6">
-            Check out the newly launched Gumball Machine. Stake your Flunks
-            items in the Gumball Machine to earn $GUM. Items can only be staked
-            if they’re in a non-custodial wallet such as{" "}
-            <a
-              href="https://lilico.app/"
-              target="_blank"
-              className="underline text-blue-500"
-            >
-              Lilico
-            </a>{" "}
-            and{" "}
-            <a
-              href="https://blocto.io/"
-              target="_blank"
-              className="underline text-blue-500"
-            >
-              Blocto
-            </a>
-            .
-          </p>
-          <h2 className="text-xl font-bold mb-1">Onlyflunks v1</h2>
-          <p className="text-lg mb-6">
-            Onlyflunks streamlines and enhances the functionality of the
+            OnlyFlunks streamlines and enhances the functionality of the
             previous Your Students and Lost and Found apps. While the Your
             Students app managed your entire inventory of Flunks and the Lost
-            and Found app handled your backpacks, Onlyflunks now integrates both
+            and Found app handled your backpacks, OnlyFlunks now integrates both
             into a single, efficient platform. This new version allows you to
             view your Flunks in either their original or portrait format, track
             your total inventory count and gum reserves, and access detailed
@@ -107,10 +85,10 @@ const WelcomePopup: React.FC = () => {
             of your items.
             <br />
             <br />
-            Onlyflunks also displays linked items from Dapper as it now reads
+            OnlyFlunks also displays linked items from Dapper as it now reads
             on-chain data directly, making it easier to manage all your assets
             in one place. Furthermore, backpack claiming and graduation are both
-            accessible within Onlyflunks, providing a comprehensive and
+            accessible within OnlyFlunks, providing a comprehensive and
             streamlined experience.
           </p>
           <h2 className="text-xl font-bold mb-1">Website Overhaul</h2>
@@ -119,12 +97,12 @@ const WelcomePopup: React.FC = () => {
             to enhance your experience. Previously, access to the entire website
             was gated, requiring users to log in using Dapper Wallet. Now, the
             website is open to everyone, though certain features such as the
-            Gumball Machine and Onlyflunks require logging in with a
+            Season Zero and OnlyFlunks require logging in with a
             non-custodial wallet.
             <br />
             <br />
             A new settings tab has been introduced, allowing you to customize
-            your Flunks95 experience. This includes setting your desired theme
+            your Flunks2.0 experience. This includes setting your desired theme
             and desktop background, as well as managing your user account. To
             help new users get acquainted, we've added a getting started window
             that displays key facts about Flunks. Additionally, the "What's New"

@@ -28,44 +28,30 @@ const Welcome: React.FC = () => {
   const icon = "/images/icons/did-you-know.png";
   const tips = [
     <p>
-      [1/5] Flunks are cute but mischievous high-schoolers wreaking havoc on
-      Flow
+      [1/4] Semester Zero is starting soon! Check the school calendar for
+      important dates and events. 
     </p>,
     <p>
-      [2/5] Flunks95 is where you'll be able to interact with anything Flunks
+      [2/4] Play around in the terminal. That's where you can enter codes you may... find. Think of it as a way to unlock things and win prizes
     </p>,
     <p>
-      [3/5] You'll need to create an account and login with a non-custodial
+      [3/4] You'll need to create an account and login with a non-custodial
       wallet like{" "}
       <Anchor href="https://wallet.flow.com/download" target="_blank">
         Flow
 
       </Anchor>{" "}
-      to have full access to Flunks95
+      to have full access to Flunks2.0
     </p>,
     <p>
-      [4/5] You can get Flunks items on marketplaces like{" "}
+      [4/4] You can get Flunks items on marketplaces like{" "}
       <Anchor
         target="_blank"
         href="https://www.flowty.io/collection/0x807c3d470888cc48/Flunks"
       >
         Flowty
-      </Anchor>
-    </p>,
-    <p>
-      [5/5] You can stake your Flunks items at the{" "}
-      <Anchor
-        onClick={() =>
-          openWindow({
-            key: WINDOW_IDS.GUMBALL_MACHINE,
-            window: <GumballMachine />,
-          })
-        }
-      >
-        Gumball Machine
-      </Anchor>{" "}
-      to earn $GUM
-    </p>,
+      </Anchor> AND ....... 
+    </p>
   ];
 
   return (
@@ -87,7 +73,7 @@ const Welcome: React.FC = () => {
         >
           <div className="p-4">
             <h1 className="lg:text-4xl text-3xl font-bold">
-              Welcome to Flunks95
+              Welcome to Flunks2.0
             </h1>
             <div className="lg:flex-row flex flex-col gap-6">
               <section className="basis-2/3 flex flex-col">
@@ -123,7 +109,7 @@ const Welcome: React.FC = () => {
               <Checkbox
                 onChange={handleCheckboxChange}
                 checked={showWelcome}
-                label="Show this Welcome Screen the next time you start Flunks95"
+                label="Show this Welcome Screen the next time you start Flunks2.0"
                 className="pt-2 lg:basis-2/3 order-last lg:order-none"
               />
               <Button
