@@ -44,13 +44,11 @@
 .treehouse {
   top: 85%;   /* Roughly aligned with y: 1125 scaled from your original */
   left: 39%;  /* Roughly aligned with x: 1250 scaled */
-  background-image: url('/images/treehouse-icon.png');
 }
 
 .school {
   top: 43%;   /* Roughly aligned with y: 500 */
   left: 88%;  /* Roughly aligned with x: 1800 */
-  background-image: url('/images/school-icon.png');
 }
 
 .arcade {
