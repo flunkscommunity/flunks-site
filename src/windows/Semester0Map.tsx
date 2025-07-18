@@ -5,6 +5,20 @@ import TreehouseMain from "windows/Locations/TreehouseMain";
 import ArcadeMain from "windows/Locations/ArcadeMain";
 import MotelMain from "windows/Locations/MotelMain";
 import DinerMain from "windows/Locations/DinerMain";
+// New location imports
+import JocksHouseMain from "windows/Locations/JocksHouseMain";
+import FreaksHouseMain from "windows/Locations/FreaksHouseMain";
+import GeeksHouseMain from "windows/Locations/GeeksHouseMain";
+import PrepsHouseMain from "windows/Locations/PrepsHouseMain";
+import FlunkFmMain from "windows/Locations/FlunkFmMain";
+import PoliceStationMain from "windows/Locations/PoliceStationMain";
+import FootballFieldMain from "windows/Locations/FootballFieldMain";
+import SnackShackMain from "windows/Locations/SnackShackMain";
+import FourThievesBarMain from "windows/Locations/FourThievesBarMain";
+import JunkyardMain from "windows/Locations/JunkyardMain";
+import LakeTreeMain from "windows/Locations/LakeTreeMain";
+import RugDoctorMain from "windows/Locations/RugDoctorMain";
+import ShedMain from "windows/Locations/ShedMain";
 import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 import { WINDOW_IDS } from "fixed";
 import { Button } from 'react95';
@@ -188,6 +202,332 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         onMouseLeave={() => setHovered(null)}
       />
 
+      {/* New locations */}
+      <div
+        className={`${styles.icon} ${styles['jocks-house']}`}
+        onMouseEnter={() => setHovered('jocks-house')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() =>
+          openWindow({
+            key: WINDOW_IDS.JOCKS_HOUSE_MAIN,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.JOCKS_HOUSE_MAIN}
+                headerTitle="Jock's House"
+                onClose={() => closeWindow(WINDOW_IDS.JOCKS_HOUSE_MAIN)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+              >
+                <JocksHouseMain />
+              </DraggableResizeableWindow>
+            ),
+          })
+        }
+      >
+        🏠
+      </div>
+
+      <div
+        className={`${styles.icon} ${styles['freaks-house']}`}
+        onMouseEnter={() => setHovered('freaks-house')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() =>
+          openWindow({
+            key: WINDOW_IDS.FREAKS_HOUSE_MAIN,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.FREAKS_HOUSE_MAIN}
+                headerTitle="Freak's House"
+                onClose={() => closeWindow(WINDOW_IDS.FREAKS_HOUSE_MAIN)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+              >
+                <FreaksHouseMain />
+              </DraggableResizeableWindow>
+            ),
+          })
+        }
+      >
+        🖤
+      </div>
+
+      <div
+        className={`${styles.icon} ${styles['geeks-house']}`}
+        onMouseEnter={() => setHovered('geeks-house')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() =>
+          openWindow({
+            key: WINDOW_IDS.GEEKS_HOUSE_MAIN,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.GEEKS_HOUSE_MAIN}
+                headerTitle="Geek's House"
+                onClose={() => closeWindow(WINDOW_IDS.GEEKS_HOUSE_MAIN)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+              >
+                <GeeksHouseMain />
+              </DraggableResizeableWindow>
+            ),
+          })
+        }
+      >
+        🤓
+      </div>
+
+      <div
+        className={`${styles.icon} ${styles['preps-house']}`}
+        onMouseEnter={() => setHovered('preps-house')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() =>
+          openWindow({
+            key: WINDOW_IDS.PREPS_HOUSE_MAIN,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.PREPS_HOUSE_MAIN}
+                headerTitle="Prep's House"
+                onClose={() => closeWindow(WINDOW_IDS.PREPS_HOUSE_MAIN)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+              >
+                <PrepsHouseMain />
+              </DraggableResizeableWindow>
+            ),
+          })
+        }
+      >
+        💅
+      </div>
+
+      <div
+        className={`${styles.icon} ${styles['flunk-fm']}`}
+        onMouseEnter={() => setHovered('flunk-fm')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() =>
+          openWindow({
+            key: WINDOW_IDS.FLUNK_FM_MAIN,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.FLUNK_FM_MAIN}
+                headerTitle="Flunk FM"
+                onClose={() => closeWindow(WINDOW_IDS.FLUNK_FM_MAIN)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+              >
+                <FlunkFmMain />
+              </DraggableResizeableWindow>
+            ),
+          })
+        }
+      >
+        📻
+      </div>
+
+      <div
+        className={`${styles.icon} ${styles.large} ${styles['police-station']}`}
+        onMouseEnter={() => setHovered('police-station')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() =>
+          openWindow({
+            key: WINDOW_IDS.POLICE_STATION_MAIN,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.POLICE_STATION_MAIN}
+                headerTitle="Police Station"
+                onClose={() => closeWindow(WINDOW_IDS.POLICE_STATION_MAIN)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+              >
+                <PoliceStationMain />
+              </DraggableResizeableWindow>
+            ),
+          })
+        }
+      >
+        👮
+      </div>
+
+      <div
+        className={`${styles.icon} ${styles.large} ${styles['football-field']}`}
+        onMouseEnter={() => setHovered('football-field')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() =>
+          openWindow({
+            key: WINDOW_IDS.FOOTBALL_FIELD_MAIN,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.FOOTBALL_FIELD_MAIN}
+                headerTitle="Football Field"
+                onClose={() => closeWindow(WINDOW_IDS.FOOTBALL_FIELD_MAIN)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+              >
+                <FootballFieldMain />
+              </DraggableResizeableWindow>
+            ),
+          })
+        }
+      >
+        🏈
+      </div>
+
+      <div
+        className={`${styles.icon} ${styles.small} ${styles['snack-shack']}`}
+        onMouseEnter={() => setHovered('snack-shack')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() =>
+          openWindow({
+            key: WINDOW_IDS.SNACK_SHACK_MAIN,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.SNACK_SHACK_MAIN}
+                headerTitle="Snack Shack"
+                onClose={() => closeWindow(WINDOW_IDS.SNACK_SHACK_MAIN)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+              >
+                <SnackShackMain />
+              </DraggableResizeableWindow>
+            ),
+          })
+        }
+      >
+        🍟
+      </div>
+
+      <div
+        className={`${styles.icon} ${styles['four-thieves-bar']}`}
+        onMouseEnter={() => setHovered('four-thieves-bar')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() =>
+          openWindow({
+            key: WINDOW_IDS.FOUR_THIEVES_BAR_MAIN,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_MAIN}
+                headerTitle="4 Thieves Bar"
+                onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_MAIN)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+              >
+                <FourThievesBarMain />
+              </DraggableResizeableWindow>
+            ),
+          })
+        }
+      >
+        🍺
+      </div>
+
+      <div
+        className={`${styles.icon} ${styles.junkyard}`}
+        onMouseEnter={() => setHovered('junkyard')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() =>
+          openWindow({
+            key: WINDOW_IDS.JUNKYARD_MAIN,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.JUNKYARD_MAIN}
+                headerTitle="Junkyard"
+                onClose={() => closeWindow(WINDOW_IDS.JUNKYARD_MAIN)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+              >
+                <JunkyardMain />
+              </DraggableResizeableWindow>
+            ),
+          })
+        }
+      >
+        🚗
+      </div>
+
+      <div
+        className={`${styles.icon} ${styles.small} ${styles['lake-tree']}`}
+        onMouseEnter={() => setHovered('lake-tree')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() =>
+          openWindow({
+            key: WINDOW_IDS.LAKE_TREE_MAIN,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.LAKE_TREE_MAIN}
+                headerTitle="Lake Tree"
+                onClose={() => closeWindow(WINDOW_IDS.LAKE_TREE_MAIN)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+              >
+                <LakeTreeMain />
+              </DraggableResizeableWindow>
+            ),
+          })
+        }
+      >
+        🌳
+      </div>
+
+      <div
+        className={`${styles.icon} ${styles.small} ${styles['rug-doctor']}`}
+        onMouseEnter={() => setHovered('rug-doctor')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() =>
+          openWindow({
+            key: WINDOW_IDS.RUG_DOCTOR_MAIN,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.RUG_DOCTOR_MAIN}
+                headerTitle="Rug Doctor"
+                onClose={() => closeWindow(WINDOW_IDS.RUG_DOCTOR_MAIN)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+              >
+                <RugDoctorMain />
+              </DraggableResizeableWindow>
+            ),
+          })
+        }
+      >
+        🧽
+      </div>
+
+      <div
+        className={`${styles.icon} ${styles.small} ${styles.shed}`}
+        onMouseEnter={() => setHovered('shed')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() =>
+          openWindow({
+            key: WINDOW_IDS.SHED_MAIN,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.SHED_MAIN}
+                headerTitle="Old Shed"
+                onClose={() => closeWindow(WINDOW_IDS.SHED_MAIN)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+              >
+                <ShedMain />
+              </DraggableResizeableWindow>
+            ),
+          })
+        }
+      >
+        🏚️
+      </div>
+
       {hovered && (
         <div className={styles["info-box"]}>
           {hovered === 'treehouse' && <>🪵 The secret treehouse where the real stories unfold.</>}
@@ -195,6 +535,19 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           {hovered === 'arcade' && <>🕹️ Old machines hum with half-lit screens.</>}
           {hovered === 'motel' && <>🏨 A low neon glow leaks from behind the curtains.</>}
           {hovered === 'diner' && <>🍔 The smell of fries cuts through the night air.</>}
+          {hovered === 'jocks-house' && <>🏠 Sports trophies and team spirit fill every room.</>}
+          {hovered === 'freaks-house' && <>🖤 Dark corners where outcasts find their voice.</>}
+          {hovered === 'geeks-house' && <>🤓 A laboratory of knowledge and innovation.</>}
+          {hovered === 'preps-house' && <>💅 Perfection and privilege behind manicured lawns.</>}
+          {hovered === 'flunk-fm' && <>📻 The voice of the town broadcasts from here.</>}
+          {hovered === 'police-station' && <>👮 Where authority meets the streets.</>}
+          {hovered === 'football-field' && <>🏈 Friday night lights and hometown pride.</>}
+          {hovered === 'snack-shack' && <>🍟 Quick bites for hungry students.</>}
+          {hovered === 'four-thieves-bar' && <>🍺 Where locals gather to forget their troubles.</>}
+          {hovered === 'junkyard' && <>🚗 Treasures hide among the rust and ruin.</>}
+          {hovered === 'lake-tree' && <>🌳 A peaceful spot where secrets are carved in bark.</>}
+          {hovered === 'rug-doctor' && <>🧽 Making the old look new again.</>}
+          {hovered === 'shed' && <>🏚️ Forgotten tools and dusty memories.</>}
         </div>
       )}
 

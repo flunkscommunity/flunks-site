@@ -38,6 +38,59 @@
   align-items: center;
   justify-content: center;
   font-size: 28px;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(2px);
+  border: 2px solid transparent;
+}
+
+.icon:hover {
+  transform: scale(1.2);
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  z-index: 15;
+}
+
+.icon:active {
+  transform: scale(1.1);
+}
+
+/* Size variations for different building types */
+.icon.large {
+  width: 80px;
+  height: 80px;
+  font-size: 32px;
+}
+
+.icon.small {
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+}
+
+.icon.xlarge {
+  width: 100px;
+  height: 100px;
+  font-size: 36px;
+}
+
+/* Subtle pulse animation for all icons */
+@keyframes iconPulse {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  }
+}
+
+.icon {
+  animation: iconPulse 2s ease-in-out infinite;
 }
 
 /* Adjust these based on where the icons should appear on the map image */
@@ -66,13 +119,88 @@
   left: 25%;
 }
 
+/* New map locations */
+.jocks-house {
+  top: 20%;
+  left: 15%;
+}
+
+.freaks-house {
+  top: 35%;
+  left: 10%;
+}
+
+.flunk-fm {
+  top: 45%;
+  left: 30%;
+}
+
+.geeks-house {
+  top: 30%;
+  left: 85%;
+}
+
+.junkyard {
+  top: 70%;
+  left: 15%;
+}
+
+.lake-tree {
+  top: 80%;
+  left: 50%;
+}
+
+.snack-shack {
+  top: 25%;
+  left: 40%;
+}
+
+.rug-doctor {
+  top: 40%;
+  left: 65%;
+}
+
+.four-thieves-bar {
+  top: 60%;
+  left: 40%;
+}
+
+.shed {
+  top: 50%;
+  left: 80%;
+}
+
+.police-station {
+  top: 15%;
+  left: 70%;
+}
+
+.preps-house {
+  top: 25%;
+  left: 75%;
+}
+
+.football-field {
+  top: 65%;
+  left: 85%;
+}
+
 .map-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   z-index: 5;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease-in-out;
+  backdrop-filter: blur(1px);
+}
+
+.map-overlay.dimmed {
+  opacity: 1;
+}
+
+.map-overlay.bright {
+  opacity: 0;
 }
 
 .info-box {
@@ -80,14 +208,30 @@
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: #fff;
-  color: #000;
-  padding: 10px 20px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(20, 20, 20, 0.9));
+  color: #fff;
+  padding: 15px 25px;
+  border-radius: 12px;
   z-index: 20;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   max-width: 90%;
   text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  animation: slideUp 0.3s ease-out;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 .close-btn {

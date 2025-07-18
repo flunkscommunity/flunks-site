@@ -41,6 +41,58 @@ export const WINDOW_IDS = {
   DINER_BOTTOM_RIGHT: "diner_bottom_right",
   FLAPPY_FLUNK: "flappy_flunk",
   FLAPPY_FLUNK_LEADERBOARD: "flappy_flunk_leaderboard",
+  
+  // New location main windows
+  JOCKS_HOUSE_MAIN: "jocks_house_main",
+  FREAKS_HOUSE_MAIN: "freaks_house_main",
+  FLUNK_FM_MAIN: "flunk_fm_main",
+  GEEKS_HOUSE_MAIN: "geeks_house_main",
+  JUNKYARD_MAIN: "junkyard_main",
+  LAKE_TREE_MAIN: "lake_tree_main",
+  SNACK_SHACK_MAIN: "snack_shack_main",
+  RUG_DOCTOR_MAIN: "rug_doctor_main",
+  FOUR_THIEVES_BAR_MAIN: "four_thieves_bar_main",
+  SHED_MAIN: "shed_main",
+  POLICE_STATION_MAIN: "police_station_main",
+  PREPS_HOUSE_MAIN: "preps_house_main",
+  FOOTBALL_FIELD_MAIN: "football_field_main",
+  
+  // Jock's House rooms
+  JOCKS_HOUSE_LIVING_ROOM: "jocks_house_living_room",
+  JOCKS_HOUSE_BEDROOM: "jocks_house_bedroom",
+  JOCKS_HOUSE_GARAGE: "jocks_house_garage",
+  JOCKS_HOUSE_KITCHEN: "jocks_house_kitchen",
+  
+  // Freak's House rooms
+  FREAKS_HOUSE_BEDROOM: "freaks_house_bedroom",
+  FREAKS_HOUSE_BASEMENT: "freaks_house_basement",
+  FREAKS_HOUSE_ATTIC: "freaks_house_attic",
+  FREAKS_HOUSE_KITCHEN: "freaks_house_kitchen",
+  
+  // Geek's House rooms
+  GEEKS_HOUSE_LAB: "geeks_house_lab",
+  GEEKS_HOUSE_COMPUTER_ROOM: "geeks_house_computer_room",
+  GEEKS_HOUSE_LIBRARY: "geeks_house_library",
+  GEEKS_HOUSE_WORKSHOP: "geeks_house_workshop",
+  
+  // Prep's House rooms
+  PREPS_HOUSE_SALON: "preps_house_salon",
+  PREPS_HOUSE_WALK_IN_CLOSET: "preps_house_walk_in_closet",
+  PREPS_HOUSE_STUDY: "preps_house_study",
+  PREPS_HOUSE_POOL_AREA: "preps_house_pool_area",
+  
+  // Other location sub-areas
+  FLUNK_FM_STUDIO: "flunk_fm_studio",
+  FLUNK_FM_BOOTH: "flunk_fm_booth",
+  FLUNK_FM_OFFICE: "flunk_fm_office",
+  
+  POLICE_STATION_FRONT_DESK: "police_station_front_desk",
+  POLICE_STATION_CELLS: "police_station_cells",
+  POLICE_STATION_EVIDENCE_ROOM: "police_station_evidence_room",
+  
+  FOOTBALL_FIELD_STANDS: "football_field_stands",
+  FOOTBALL_FIELD_LOCKER_ROOM: "football_field_locker_room",
+  FOOTBALL_FIELD_EQUIPMENT_SHED: "football_field_equipment_shed",
 };
 
 export const WINDOW_APP_INFO_TO_WINDOW_ID = {
