@@ -225,7 +225,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           })
         }
       >
-        🏠
       </div>
 
       <div
@@ -250,7 +249,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           })
         }
       >
-        🖤
       </div>
 
       <div
@@ -275,7 +273,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           })
         }
       >
-        🤓
       </div>
 
       <div
@@ -300,7 +297,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           })
         }
       >
-        💅
       </div>
 
       <div
@@ -325,7 +321,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           })
         }
       >
-        📻
       </div>
 
       <div
@@ -350,7 +345,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           })
         }
       >
-        👮
       </div>
 
       <div
@@ -375,7 +369,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           })
         }
       >
-        🏈
       </div>
 
       <div
@@ -400,7 +393,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           })
         }
       >
-        🍟
       </div>
 
       <div
@@ -425,7 +417,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           })
         }
       >
-        🍺
       </div>
 
       <div
@@ -450,7 +441,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           })
         }
       >
-        🚗
       </div>
 
       <div
@@ -475,7 +465,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           })
         }
       >
-        🌳
       </div>
 
       <div
@@ -500,7 +489,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           })
         }
       >
-        🧽
       </div>
 
       <div
@@ -525,7 +513,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           })
         }
       >
-        🏚️
       </div>
 
       {hovered && (
