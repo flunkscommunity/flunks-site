@@ -19,6 +19,9 @@ import JunkyardMain from "windows/Locations/JunkyardMain";
 import LakeTreeMain from "windows/Locations/LakeTreeMain";
 import RugDoctorMain from "windows/Locations/RugDoctorMain";
 import ShedMain from "windows/Locations/ShedMain";
+import SecretTreehouseMain from "windows/Locations/SecretTreehouseMain";
+import HighSchoolMain from "windows/Locations/HighSchoolMain";
+import ParadiseMotelMain from "windows/Locations/ParadiseMotelMain";
 import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 import { WINDOW_IDS } from "fixed";
 import { Button } from 'react95';
@@ -148,59 +151,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       >
       </div>
 
-      <div
-        className={`${styles.icon} ${styles.motel}`}
-        onMouseEnter={() => setHovered('motel')}
-        onMouseLeave={() => setHovered(null)}
-        onClick={() =>
-          openWindow({
-            key: WINDOW_IDS.MOTEL_MAIN,
-            window: (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.MOTEL_MAIN}
-                headerTitle="Motel"
-                onClose={() => closeWindow(WINDOW_IDS.MOTEL_MAIN)}
-                initialWidth="100%"
-                initialHeight="100%"
-                resizable={false}
-              >
-                <MotelMain />
-              </DraggableResizeableWindow>
-            ),
-          })
-        }
-      >
-      </div>
-
-      <div
-        className={`${styles.icon} ${styles.diner}`}
-        onMouseEnter={() => setHovered('diner')}
-        onMouseLeave={() => setHovered(null)}
-        onClick={() =>
-          openWindow({
-            key: WINDOW_IDS.DINER_MAIN,
-            window: (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.DINER_MAIN}
-                headerTitle="Diner"
-                onClose={() => closeWindow(WINDOW_IDS.DINER_MAIN)}
-                initialWidth="100%"
-                initialHeight="100%"
-                resizable={false}
-              >
-                <DinerMain />
-              </DraggableResizeableWindow>
-            ),
-          })
-        }
-      >
-      </div>
-
-      <div
-        className={`${styles.icon} ${styles.school}`}
-        onMouseEnter={() => setHovered('school')}
-        onMouseLeave={() => setHovered(null)}
-      />
+      {/* New locations */}
 
       {/* New locations */}
       <div
@@ -228,7 +179,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       </div>
 
       <div
-        className={`${styles.icon} ${styles['freaks-house']}`}
+        className={`${styles.icon} ${styles.large} ${styles['freaks-house']}`}
         onMouseEnter={() => setHovered('freaks-house')}
         onMouseLeave={() => setHovered(null)}
         onClick={() =>
@@ -252,7 +203,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       </div>
 
       <div
-        className={`${styles.icon} ${styles['geeks-house']}`}
+        className={`${styles.icon} ${styles.large} ${styles['geeks-house']}`}
         onMouseEnter={() => setHovered('geeks-house')}
         onMouseLeave={() => setHovered(null)}
         onClick={() =>
@@ -396,7 +347,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       </div>
 
       <div
-        className={`${styles.icon} ${styles['four-thieves-bar']}`}
+        className={`${styles.icon} ${styles.large} ${styles['four-thieves-bar']}`}
         onMouseEnter={() => setHovered('four-thieves-bar')}
         onMouseLeave={() => setHovered(null)}
         onClick={() =>
@@ -420,7 +371,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       </div>
 
       <div
-        className={`${styles.icon} ${styles.junkyard}`}
+        className={`${styles.icon} ${styles.large} ${styles.junkyard}`}
         onMouseEnter={() => setHovered('junkyard')}
         onMouseLeave={() => setHovered(null)}
         onClick={() =>
@@ -515,26 +466,97 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       >
       </div>
 
+      <div
+        className={`${styles.icon} ${styles.large} ${styles.treehouse}`}
+        onMouseEnter={() => setHovered('secret-treehouse')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() =>
+          openWindow({
+            key: WINDOW_IDS.SECRET_TREEHOUSE_MAIN,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.SECRET_TREEHOUSE_MAIN}
+                headerTitle="Secret Treehouse"
+                onClose={() => closeWindow(WINDOW_IDS.SECRET_TREEHOUSE_MAIN)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+              >
+                <SecretTreehouseMain />
+              </DraggableResizeableWindow>
+            ),
+          })
+        }
+      >
+      </div>
+
+      <div
+        className={`${styles.icon} ${styles.large} ${styles["high-school"]}`}
+        onMouseEnter={() => setHovered('high-school')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() =>
+          openWindow({
+            key: WINDOW_IDS.HIGH_SCHOOL_MAIN,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.HIGH_SCHOOL_MAIN}
+                headerTitle="High School"
+                onClose={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_MAIN)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+              >
+                <HighSchoolMain />
+              </DraggableResizeableWindow>
+            ),
+          })
+        }
+      >
+      </div>
+
+      <div
+        className={`${styles.icon} ${styles.large} ${styles["paradise-motel"]}`}
+        onMouseEnter={() => setHovered('paradise-motel')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() =>
+          openWindow({
+            key: WINDOW_IDS.PARADISE_MOTEL_MAIN,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.PARADISE_MOTEL_MAIN}
+                headerTitle="Paradise Motel"
+                onClose={() => closeWindow(WINDOW_IDS.PARADISE_MOTEL_MAIN)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+              >
+                <ParadiseMotelMain />
+              </DraggableResizeableWindow>
+            ),
+          })
+        }
+      >
+      </div>
+
       {hovered && (
         <div className={styles["info-box"]}>
-          {hovered === 'treehouse' && <>🪵 The secret treehouse where the real stories unfold.</>}
-          {hovered === 'school' && <>🏫 The high school – where it all begins (and ends).</>}
           {hovered === 'arcade' && <>🕹️ Old machines hum with half-lit screens.</>}
-          {hovered === 'motel' && <>🏨 A low neon glow leaks from behind the curtains.</>}
-          {hovered === 'diner' && <>🍔 The smell of fries cuts through the night air.</>}
           {hovered === 'jocks-house' && <>🏠 Sports trophies and team spirit fill every room.</>}
-          {hovered === 'freaks-house' && <>🖤 Dark corners where outcasts find their voice.</>}
+          {hovered === 'freaks-house' && <>🖤 Freak</>}
           {hovered === 'geeks-house' && <>🤓 A laboratory of knowledge and innovation.</>}
           {hovered === 'preps-house' && <>💅 Perfection and privilege behind manicured lawns.</>}
           {hovered === 'flunk-fm' && <>📻 The voice of the town broadcasts from here.</>}
           {hovered === 'police-station' && <>👮 Where authority meets the streets.</>}
           {hovered === 'football-field' && <>🏈 Friday night lights and hometown pride.</>}
           {hovered === 'snack-shack' && <>🍟 Quick bites for hungry students.</>}
-          {hovered === 'four-thieves-bar' && <>🍺 Where locals gather to forget their troubles.</>}
+          {hovered === 'four-thieves-bar' && <>🍺 The local watering hole where locals gather to forget their troubles.</>}
           {hovered === 'junkyard' && <>🚗 Treasures hide among the rust and ruin.</>}
           {hovered === 'lake-tree' && <>🌳 A peaceful spot where secrets are carved in bark.</>}
           {hovered === 'rug-doctor' && <>🧽 Making the old look new again.</>}
-          {hovered === 'shed' && <>🏚️ Forgotten tools and dusty memories.</>}
+          {hovered === 'shed' && <>🏚️ Once you go in, you're never the same.</>}
+          {hovered === 'secret-treehouse' && <>🌲 Hidden among the branches, mysteries await.</>}
+          {hovered === 'high-school' && <>🏫 Abandoned halls echo with the past.</>}
+          {hovered === 'paradise-motel' && <>🏨 A place where strange guests check in but never leave.</>}
         </div>
       )}
 
@@ -579,12 +601,11 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      {/* Pause Button for Mobile */}
+      {/* Pause Button */}
       <div style={{
         position: 'fixed',
-        bottom: 20,
-        left: '50%',
-        transform: 'translateX(-50%)',
+        top: 80,
+        left: 30,
         zIndex: 10000,
       }}>
         <Button

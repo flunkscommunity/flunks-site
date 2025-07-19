@@ -57,6 +57,31 @@ export const WINDOW_IDS = {
   PREPS_HOUSE_MAIN: "preps_house_main",
   FOOTBALL_FIELD_MAIN: "football_field_main",
   
+  // New locations
+  SECRET_TREEHOUSE_MAIN: "secret_treehouse_main",
+  HIGH_SCHOOL_MAIN: "high_school_main",
+  PARADISE_MOTEL_MAIN: "paradise_motel_main",
+  
+  // Secret Treehouse rooms
+  SECRET_TREEHOUSE_LOFT: "secret_treehouse_loft",
+  SECRET_TREEHOUSE_DESK: "secret_treehouse_desk", 
+  SECRET_TREEHOUSE_TRUNK: "secret_treehouse_trunk",
+  SECRET_TREEHOUSE_WINDOW: "secret_treehouse_window",
+  
+  // High School rooms
+  HIGH_SCHOOL_HALLWAY: "high_school_hallway",
+  HIGH_SCHOOL_CLASSROOM: "high_school_classroom",
+  HIGH_SCHOOL_CAFETERIA: "high_school_cafeteria",
+  HIGH_SCHOOL_GYMNASIUM: "high_school_gymnasium",
+  HIGH_SCHOOL_LIBRARY: "high_school_library",
+  HIGH_SCHOOL_OFFICE: "high_school_office",
+  
+  // Paradise Motel rooms
+  PARADISE_MOTEL_LOBBY: "paradise_motel_lobby",
+  PARADISE_MOTEL_ROOM_1: "paradise_motel_room_1",
+  PARADISE_MOTEL_ROOM_2: "paradise_motel_room_2",
+  PARADISE_MOTEL_POOL: "paradise_motel_pool",
+  
   // Jock's House rooms
   JOCKS_HOUSE_LIVING_ROOM: "jocks_house_living_room",
   JOCKS_HOUSE_BEDROOM: "jocks_house_bedroom",
