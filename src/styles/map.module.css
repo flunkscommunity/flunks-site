@@ -76,6 +76,169 @@
   font-size: 36px;
 }
 
+/* Enhanced hover effect with 3x expansion and side panel */
+.enhanced-hover-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 5%;
+  box-sizing: border-box;
+  pointer-events: none;
+  animation: fadeInOverlay 0.3s ease-out;
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+  }
+}
+
+.expanded-icon {
+  width: 300px;
+  height: 300px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  border: 6px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 
+    0 0 60px rgba(255, 255, 255, 0.8),
+    inset 0 0 30px rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 120px;
+  transition: all 0.3s ease;
+  animation: expandIcon 0.3s ease-out;
+  flex-shrink: 0;
+}
+
+@keyframes expandIcon {
+  from {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+    transform: scale(0.3);
+  }
+  to {
+    width: 300px;
+    height: 300px;
+    font-size: 120px;
+    transform: scale(1);
+  }
+}
+
+.location-preview {
+  width: 50%;
+  max-width: 600px;
+  height: 85%;
+  background: linear-gradient(135deg, rgba(20, 20, 30, 0.95), rgba(40, 40, 50, 0.95));
+  border-radius: 16px;
+  border: 3px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: slideInPanel 0.3s ease-out;
+}
+
+@keyframes slideInPanel {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.location-preview h2 {
+  color: white;
+  font-size: 32px;
+  margin-bottom: 20px;
+  text-align: center;
+  border-bottom: 3px solid rgba(255, 255, 255, 0.4);
+  padding-bottom: 15px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  background: linear-gradient(45deg, #fff, #ccc);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.location-preview-content {
+  flex: 1;
+  overflow-y: auto;
+  color: white;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.location-preview-content p {
+  margin-bottom: 24px;
+  color: #e0e0e0;
+  font-style: italic;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.location-preview-rooms {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.preview-room {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  border-radius: 12px;
+  padding: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.preview-room:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.preview-room h4 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.preview-room p {
+  margin: 0;
+  font-size: 14px;
+  color: #ccc;
+  font-style: normal;
+  line-height: 1.4;
+}
+
 /* Adjust these based on where the icons should appear on the map image */
 .treehouse {
   top: 74%;   

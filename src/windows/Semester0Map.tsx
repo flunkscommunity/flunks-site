@@ -33,10 +33,42 @@ interface Props {
 
 const Semester0Map: React.FC<Props> = ({ onClose }) => {
   const [hovered, setHovered] = useState<string | null>(null);
+  const [enhancedHover, setEnhancedHover] = useState<string | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [loading, setLoading] = useState(true);
   const { openWindow, closeWindow } = useWindowsContext();
   const mapRef = useRef<HTMLDivElement>(null);
+
+  // Location data for enhanced hover previews - ALL LOCATIONS
+  const locationData = {
+    'arcade': { title: "Arcade", description: "Old machines hum with half-lit screens. The sounds of vintage games echo through the dimly lit space.", icon: "🕹️", rooms: [{ name: "Main Floor", description: "Classic arcade cabinets line the walls" }, { name: "Prize Counter", description: "Dusty toys and forgotten treasures" }, { name: "Back Room", description: "Broken machines and spare parts" }, { name: "Office", description: "The manager's cluttered workspace" }] },
+    'jocks-house': { title: "Jock's House", description: "Sports trophies and team spirit fill every room. The smell of victory and competition lingers in the air.", icon: "🏠", rooms: [{ name: "Trophy Room", description: "Championships and glory on display" }, { name: "Home Gym", description: "Weights and training equipment" }, { name: "Team Lounge", description: "Where champions gather and plan" }, { name: "Garage", description: "Sports gear and team vehicles" }] },
+    'freaks-house': { title: "Freak's House", description: "A dark and mysterious dwelling where the outcasts gather. The walls are covered in band posters and strange artwork.", icon: "🖤", rooms: [{ name: "Dark Living Room", description: "Candles flicker in the shadows" }, { name: "Music Corner", description: "Heavy metal echoes through the air" }, { name: "Art Studio", description: "Strange paintings line the walls" }, { name: "Secret Basement", description: "What lurks below remains hidden" }] },
+    'geeks-house': { title: "Geek's House", description: "A laboratory of knowledge and innovation. Computer screens glow with endless possibilities.", icon: "🤓", rooms: [{ name: "Computer Lab", description: "Multiple screens displaying code and data" }, { name: "Workshop", description: "Electronics and gadgets being assembled" }, { name: "Library", description: "Technical manuals and sci-fi novels" }, { name: "Testing Room", description: "Experiments in progress" }] },
+    'preps-house': { title: "Prep's House", description: "Perfection and privilege behind manicured lawns. Every detail speaks of wealth and status.", icon: "💅", rooms: [{ name: "Grand Foyer", description: "Marble floors and crystal chandeliers" }, { name: "Study", description: "Leather-bound books and mahogany furniture" }, { name: "Walk-in Closet", description: "Designer clothes and luxury accessories" }, { name: "Private Suite", description: "Elegance and exclusivity" }] },
+    'flunk-fm': { title: "Flunk FM", description: "The voice of the town broadcasts from here. Radio waves carry secrets across the airwaves.", icon: "📻", rooms: [{ name: "Studio", description: "Microphones and mixing boards" }, { name: "Control Room", description: "Technical equipment and broadcast controls" }, { name: "Music Library", description: "Vinyl records and forgotten hits" }, { name: "DJ Booth", description: "Where the magic happens live on air" }] },
+    'police-station': { title: "Police Station", description: "Where authority meets the streets. Case files and evidence tell stories of justice and mystery.", icon: "👮", rooms: [{ name: "Front Desk", description: "First line of law and order" }, { name: "Investigation Room", description: "Where suspects are questioned" }, { name: "Evidence Locker", description: "Secrets locked away for safekeeping" }, { name: "Chief's Office", description: "Command center of local law enforcement" }] },
+    'football-field': { title: "Football Field", description: "Friday night lights and hometown pride. The field where legends are made and dreams are broken.", icon: "🏈", rooms: [{ name: "50-Yard Line", description: "The heart of game day glory" }, { name: "Locker Room", description: "Pre-game rituals and team talks" }, { name: "Press Box", description: "Bird's eye view of all the action" }, { name: "Equipment Shed", description: "Gear and maintenance supplies" }] },
+    'snack-shack': { title: "Snack Shack", description: "Quick bites for hungry students. The aroma of carnival food and teenage memories.", icon: "🍟", rooms: [{ name: "Counter", description: "Where orders are taken and friendships made" }, { name: "Kitchen", description: "Grease, heat, and comfort food" }, { name: "Storage", description: "Supplies and secret ingredients" }, { name: "Picnic Area", description: "Outdoor seating under string lights" }] },
+    'four-thieves-bar': { title: "Four Thieves Bar", description: "The local watering hole where secrets are shared over drinks and the jukebox plays forgotten tunes.", icon: "🍺", rooms: [{ name: "Main Bar", description: "Where the locals gather to forget" }, { name: "Pool Room", description: "Games and hushed conversations" }, { name: "Private Booth", description: "Deals are made in the shadows" }, { name: "Back Alley", description: "Where the real business happens" }] },
+    'junkyard': { title: "Junkyard", description: "Treasures hide among the rust and ruin. Every pile of scrap tells a story of the past.", icon: "🚗", rooms: [{ name: "Car Graveyard", description: "Rusted vehicles hold forgotten memories" }, { name: "Scrap Heap", description: "Metal treasures wait to be discovered" }, { name: "Office Shack", description: "The owner's domain filled with records" }, { name: "Hidden Bunker", description: "What secrets lie underground?" }] },
+    'lake-tree': { title: "Lake Tree", description: "A peaceful spot where secrets are carved in bark. The old tree has witnessed many stories.", icon: "🌳", rooms: [{ name: "Tree Base", description: "Carved initials and love letters" }, { name: "Rope Swing", description: "Summer fun and daring leaps" }, { name: "Picnic Spot", description: "Quiet conversations under shade" }, { name: "Hidden Hollow", description: "Secret meetings and whispered confessions" }] },
+    'rug-doctor': { title: "Rug Doctor", description: "Making the old look new again. Steam and suds wash away more than just stains.", icon: "🧽", rooms: [{ name: "Front Counter", description: "Customer service with a smile" }, { name: "Cleaning Bay", description: "Industrial machines and chemical solutions" }, { name: "Storage Room", description: "Cleaning supplies and equipment" }, { name: "Back Office", description: "Business records and appointment books" }] },
+    'shed': { title: "Old Shed", description: "Once you go in, you're never the same. Rusty tools and forgotten projects gather dust.", icon: "🏚️", rooms: [{ name: "Main Area", description: "Cluttered workspace with mysterious projects" }, { name: "Tool Wall", description: "Rusty implements of unknown purpose" }, { name: "Corner Pile", description: "Junk that might be treasure" }, { name: "Hidden Compartment", description: "What was someone trying to hide?" }] },
+    'secret-treehouse': { title: "Secret Treehouse", description: "Hidden among the branches, this treehouse holds mysteries and clues about the strange happenings around town.", icon: "🌲", rooms: [{ name: "Loft", description: "Dusty space with old comics and treasures" }, { name: "Work Desk", description: "Investigation station with maps and walkie talkie" }, { name: "Old Trunk", description: "Mysterious container with flashlight and diary" }, { name: "Secret Window", description: "Lake overlook with glimmering water below" }] },
+    'high-school': { title: "High School", description: "Abandoned halls echo with the past. Empty classrooms hold memories of youth and learning.", icon: "🏫", rooms: [{ name: "Hallway", description: "Lockers with mysterious graffiti" }, { name: "Classroom", description: "Abandoned desks with carved initials" }, { name: "Cafeteria", description: "Empty trays and lingering smells" }, { name: "Gymnasium", description: "Bent hoops and echoing memories" }] },
+    'paradise-motel': { title: "Paradise Motel", description: "A place where strange guests check in but never leave. The neon sign flickers with faded promises.", icon: "🏨", rooms: [{ name: "Lobby", description: "Flickering neon and strange guest book" }, { name: "Room 1", description: "Unmade bed with static TV" }, { name: "Room 2", description: "Mirror room reflecting something different" }, { name: "Pool Area", description: "Green water with mysterious rubber duck" }] }
+  };
+
+  const handleEnhancedHover = (locationKey: string) => {
+    setEnhancedHover(locationKey);
+    setHovered(locationKey);
+  };
+
+  const handleEnhancedLeave = () => {
+    setEnhancedHover(null);
+    setHovered(null);
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -129,8 +161,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.arcade}`}
-        onMouseEnter={() => setHovered('arcade')}
-        onMouseLeave={() => setHovered(null)}
+        onMouseEnter={() => handleEnhancedHover('arcade')}
+        onMouseLeave={handleEnhancedLeave}
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.ARCADE_MAIN,
@@ -156,8 +188,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       {/* New locations */}
       <div
         className={`${styles.icon} ${styles['jocks-house']}`}
-        onMouseEnter={() => setHovered('jocks-house')}
-        onMouseLeave={() => setHovered(null)}
+        onMouseEnter={() => handleEnhancedHover('jocks-house')}
+        onMouseLeave={handleEnhancedLeave}
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.JOCKS_HOUSE_MAIN,
@@ -180,8 +212,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles['freaks-house']}`}
-        onMouseEnter={() => setHovered('freaks-house')}
-        onMouseLeave={() => setHovered(null)}
+        onMouseEnter={() => handleEnhancedHover('freaks-house')}
+        onMouseLeave={handleEnhancedLeave}
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.FREAKS_HOUSE_MAIN,
@@ -204,8 +236,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles['geeks-house']}`}
-        onMouseEnter={() => setHovered('geeks-house')}
-        onMouseLeave={() => setHovered(null)}
+        onMouseEnter={() => handleEnhancedHover('geeks-house')}
+        onMouseLeave={handleEnhancedLeave}
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.GEEKS_HOUSE_MAIN,
@@ -228,8 +260,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles['preps-house']}`}
-        onMouseEnter={() => setHovered('preps-house')}
-        onMouseLeave={() => setHovered(null)}
+        onMouseEnter={() => handleEnhancedHover('preps-house')}
+        onMouseLeave={handleEnhancedLeave}
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.PREPS_HOUSE_MAIN,
@@ -252,8 +284,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles['flunk-fm']}`}
-        onMouseEnter={() => setHovered('flunk-fm')}
-        onMouseLeave={() => setHovered(null)}
+        onMouseEnter={() => handleEnhancedHover('flunk-fm')}
+        onMouseLeave={handleEnhancedLeave}
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.FLUNK_FM_MAIN,
@@ -276,8 +308,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles['police-station']}`}
-        onMouseEnter={() => setHovered('police-station')}
-        onMouseLeave={() => setHovered(null)}
+        onMouseEnter={() => handleEnhancedHover('police-station')}
+        onMouseLeave={handleEnhancedLeave}
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.POLICE_STATION_MAIN,
@@ -300,8 +332,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles['football-field']}`}
-        onMouseEnter={() => setHovered('football-field')}
-        onMouseLeave={() => setHovered(null)}
+        onMouseEnter={() => handleEnhancedHover('football-field')}
+        onMouseLeave={handleEnhancedLeave}
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.FOOTBALL_FIELD_MAIN,
@@ -324,8 +356,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.small} ${styles['snack-shack']}`}
-        onMouseEnter={() => setHovered('snack-shack')}
-        onMouseLeave={() => setHovered(null)}
+        onMouseEnter={() => handleEnhancedHover('snack-shack')}
+        onMouseLeave={handleEnhancedLeave}
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.SNACK_SHACK_MAIN,
@@ -348,8 +380,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles['four-thieves-bar']}`}
-        onMouseEnter={() => setHovered('four-thieves-bar')}
-        onMouseLeave={() => setHovered(null)}
+        onMouseEnter={() => handleEnhancedHover('four-thieves-bar')}
+        onMouseLeave={handleEnhancedLeave}
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.FOUR_THIEVES_BAR_MAIN,
@@ -372,8 +404,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles.junkyard}`}
-        onMouseEnter={() => setHovered('junkyard')}
-        onMouseLeave={() => setHovered(null)}
+        onMouseEnter={() => handleEnhancedHover('junkyard')}
+        onMouseLeave={handleEnhancedLeave}
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.JUNKYARD_MAIN,
@@ -396,8 +428,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.small} ${styles['lake-tree']}`}
-        onMouseEnter={() => setHovered('lake-tree')}
-        onMouseLeave={() => setHovered(null)}
+        onMouseEnter={() => handleEnhancedHover('lake-tree')}
+        onMouseLeave={handleEnhancedLeave}
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.LAKE_TREE_MAIN,
@@ -420,8 +452,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.small} ${styles['rug-doctor']}`}
-        onMouseEnter={() => setHovered('rug-doctor')}
-        onMouseLeave={() => setHovered(null)}
+        onMouseEnter={() => handleEnhancedHover('rug-doctor')}
+        onMouseLeave={handleEnhancedLeave}
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.RUG_DOCTOR_MAIN,
@@ -444,8 +476,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.small} ${styles.shed}`}
-        onMouseEnter={() => setHovered('shed')}
-        onMouseLeave={() => setHovered(null)}
+        onMouseEnter={() => handleEnhancedHover('shed')}
+        onMouseLeave={handleEnhancedLeave}
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.SHED_MAIN,
@@ -468,8 +500,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles.treehouse}`}
-        onMouseEnter={() => setHovered('secret-treehouse')}
-        onMouseLeave={() => setHovered(null)}
+        onMouseEnter={() => handleEnhancedHover('secret-treehouse')}
+        onMouseLeave={handleEnhancedLeave}
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.SECRET_TREEHOUSE_MAIN,
@@ -492,8 +524,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles["high-school"]}`}
-        onMouseEnter={() => setHovered('high-school')}
-        onMouseLeave={() => setHovered(null)}
+        onMouseEnter={() => handleEnhancedHover('high-school')}
+        onMouseLeave={handleEnhancedLeave}
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.HIGH_SCHOOL_MAIN,
@@ -516,8 +548,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles["paradise-motel"]}`}
-        onMouseEnter={() => setHovered('paradise-motel')}
-        onMouseLeave={() => setHovered(null)}
+        onMouseEnter={() => handleEnhancedHover('paradise-motel')}
+        onMouseLeave={handleEnhancedLeave}
         onClick={() =>
           openWindow({
             key: WINDOW_IDS.PARADISE_MOTEL_MAIN,
@@ -562,6 +594,35 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <button className={styles["close-btn"]} onClick={onClose}>✖</button>
       </div>
+
+      {/* Enhanced Hover Overlay */}
+      {enhancedHover && locationData[enhancedHover as keyof typeof locationData] && (
+        <div className={styles["enhanced-hover-overlay"]}>
+          <div 
+            className={styles["expanded-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/${enhancedHover}-icon.png)` 
+            }}
+          >
+            {locationData[enhancedHover as keyof typeof locationData].icon}
+          </div>
+          
+          <div className={styles["location-preview"]}>
+            <h2>{locationData[enhancedHover as keyof typeof locationData].title}</h2>
+            <div className={styles["location-preview-content"]}>
+              <p>{locationData[enhancedHover as keyof typeof locationData].description}</p>
+              <div className={styles["location-preview-rooms"]}>
+                {locationData[enhancedHover as keyof typeof locationData].rooms.map((room, index) => (
+                  <div key={index} className={styles["preview-room"]}>
+                    <h4>{room.name}</h4>
+                    <p>{room.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Pause Overlay */}
       {isPaused && (
