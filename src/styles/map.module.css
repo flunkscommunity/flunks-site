@@ -83,15 +83,18 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.8);
+  background: 
+    radial-gradient(circle at center, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.9) 100%),
+    linear-gradient(45deg, rgba(20, 20, 40, 0.8), rgba(10, 10, 20, 0.9));
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: space-around;
   padding: 5%;
   box-sizing: border-box;
-  pointer-events: none;
+  pointer-events: auto;
   animation: fadeInOverlay 0.3s ease-out;
+  backdrop-filter: blur(12px);
 }
 
 @keyframes fadeInOverlay {
@@ -112,19 +115,36 @@
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(6px);
-  border: 6px solid rgba(255, 255, 255, 0.8);
+  border: 6px solid rgba(255, 255, 255, 0.9);
   box-shadow: 
-    0 0 60px rgba(255, 255, 255, 0.8),
-    inset 0 0 30px rgba(255, 255, 255, 0.2);
+    0 0 80px rgba(255, 255, 255, 1),
+    0 0 120px rgba(255, 255, 255, 0.6),
+    inset 0 0 30px rgba(255, 255, 255, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 120px;
+  font-size: 0; /* Hide emoji when PNG is present */
   transition: all 0.3s ease;
   animation: expandIcon 0.3s ease-out;
   flex-shrink: 0;
+  position: relative;
+}
+
+/* Fallback emoji styling when PNG isn't available */
+.expanded-icon:not([style*="background-image"]) {
+  font-size: 120px;
+}
+
+/* PNG image overlay effect */
+.expanded-icon[style*="background-image"] {
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 0 100px rgba(255, 255, 255, 1),
+    0 0 150px rgba(255, 255, 255, 0.8),
+    0 0 200px rgba(255, 255, 255, 0.4),
+    inset 0 0 40px rgba(255, 255, 255, 0.4);
 }
 
 @keyframes expandIcon {
@@ -143,6 +163,7 @@
 }
 
 .location-preview {
+  position: relative;
   width: 50%;
   max-width: 600px;
   height: 85%;
@@ -158,6 +179,33 @@
     0 20px 40px rgba(0, 0, 0, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   animation: slideInPanel 0.3s ease-out;
+}
+
+.close-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+  z-index: 10;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: scale(1.1);
 }
 
 @keyframes slideInPanel {

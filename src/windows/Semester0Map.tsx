@@ -70,6 +70,24 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
     setHovered(null);
   };
 
+  const handleEnhancedClick = (locationKey: string, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent opening the location window
+    if (enhancedHover === locationKey) {
+      // If already showing this location, close it
+      setEnhancedHover(null);
+      setHovered(null);
+    } else {
+      // Show the enhanced preview
+      setEnhancedHover(locationKey);
+      setHovered(locationKey);
+    }
+  };
+
+  const handleEnhancedClose = () => {
+    setEnhancedHover(null);
+    setHovered(null);
+  };
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Space') {
@@ -161,9 +179,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.arcade}`}
-        onMouseEnter={() => handleEnhancedHover('arcade')}
-        onMouseLeave={handleEnhancedLeave}
-        onClick={() =>
+        onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.ARCADE_MAIN,
             window: (
@@ -180,6 +196,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             ),
           })
         }
+        onClick={(e) => handleEnhancedClick('arcade', e)}
+        onMouseEnter={() => setHovered('arcade')}
+        onMouseLeave={() => setHovered(null)}
       >
       </div>
 
@@ -188,9 +207,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       {/* New locations */}
       <div
         className={`${styles.icon} ${styles['jocks-house']}`}
-        onMouseEnter={() => handleEnhancedHover('jocks-house')}
-        onMouseLeave={handleEnhancedLeave}
-        onClick={() =>
+        onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.JOCKS_HOUSE_MAIN,
             window: (
@@ -207,14 +224,15 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             ),
           })
         }
+        onClick={(e) => handleEnhancedClick('jocks-house', e)}
+        onMouseEnter={() => setHovered('jocks-house')}
+        onMouseLeave={() => setHovered(null)}
       >
       </div>
 
       <div
         className={`${styles.icon} ${styles.large} ${styles['freaks-house']}`}
-        onMouseEnter={() => handleEnhancedHover('freaks-house')}
-        onMouseLeave={handleEnhancedLeave}
-        onClick={() =>
+        onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.FREAKS_HOUSE_MAIN,
             window: (
@@ -231,14 +249,15 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             ),
           })
         }
+        onClick={(e) => handleEnhancedClick('freaks-house', e)}
+        onMouseEnter={() => setHovered('freaks-house')}
+        onMouseLeave={() => setHovered(null)}
       >
       </div>
 
       <div
         className={`${styles.icon} ${styles.large} ${styles['geeks-house']}`}
-        onMouseEnter={() => handleEnhancedHover('geeks-house')}
-        onMouseLeave={handleEnhancedLeave}
-        onClick={() =>
+        onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.GEEKS_HOUSE_MAIN,
             window: (
@@ -255,14 +274,18 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             ),
           })
         }
+        onClick={(e) => handleEnhancedClick('geeks-house', e)}
+        onMouseEnter={() => setHovered('geeks-house')}
+        onMouseLeave={() => setHovered(null)}
       >
       </div>
 
       <div
         className={`${styles.icon} ${styles['preps-house']}`}
-        onMouseEnter={() => handleEnhancedHover('preps-house')}
-        onMouseLeave={handleEnhancedLeave}
-        onClick={() =>
+        onClick={(e) => handleEnhancedClick('preps-house', e)}
+        onMouseEnter={() => setHovered('preps-house')}
+        onMouseLeave={() => setHovered(null)}
+        onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.PREPS_HOUSE_MAIN,
             window: (
@@ -284,9 +307,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles['flunk-fm']}`}
-        onMouseEnter={() => handleEnhancedHover('flunk-fm')}
-        onMouseLeave={handleEnhancedLeave}
-        onClick={() =>
+        onClick={(e) => handleEnhancedClick('flunk-fm', e)}
+        onMouseEnter={() => setHovered('flunk-fm')}
+        onMouseLeave={() => setHovered(null)}
+        onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.FLUNK_FM_MAIN,
             window: (
@@ -308,9 +332,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles['police-station']}`}
-        onMouseEnter={() => handleEnhancedHover('police-station')}
-        onMouseLeave={handleEnhancedLeave}
-        onClick={() =>
+        onClick={(e) => handleEnhancedClick('police-station', e)}
+        onMouseEnter={() => setHovered('police-station')}
+        onMouseLeave={() => setHovered(null)}
+        onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.POLICE_STATION_MAIN,
             window: (
@@ -332,9 +357,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles['football-field']}`}
-        onMouseEnter={() => handleEnhancedHover('football-field')}
-        onMouseLeave={handleEnhancedLeave}
-        onClick={() =>
+        onClick={(e) => handleEnhancedClick('football-field', e)}
+        onMouseEnter={() => setHovered('football-field')}
+        onMouseLeave={() => setHovered(null)}
+        onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.FOOTBALL_FIELD_MAIN,
             window: (
@@ -356,9 +382,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.small} ${styles['snack-shack']}`}
-        onMouseEnter={() => handleEnhancedHover('snack-shack')}
-        onMouseLeave={handleEnhancedLeave}
-        onClick={() =>
+        onClick={(e) => handleEnhancedClick('snack-shack', e)}
+        onMouseEnter={() => setHovered('snack-shack')}
+        onMouseLeave={() => setHovered(null)}
+        onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.SNACK_SHACK_MAIN,
             window: (
@@ -380,9 +407,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles['four-thieves-bar']}`}
-        onMouseEnter={() => handleEnhancedHover('four-thieves-bar')}
-        onMouseLeave={handleEnhancedLeave}
-        onClick={() =>
+        onClick={(e) => handleEnhancedClick('four-thieves-bar', e)}
+        onMouseEnter={() => setHovered('four-thieves-bar')}
+        onMouseLeave={() => setHovered(null)}
+        onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.FOUR_THIEVES_BAR_MAIN,
             window: (
@@ -404,9 +432,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles.junkyard}`}
-        onMouseEnter={() => handleEnhancedHover('junkyard')}
-        onMouseLeave={handleEnhancedLeave}
-        onClick={() =>
+        onClick={(e) => handleEnhancedClick('junkyard', e)}
+        onMouseEnter={() => setHovered('junkyard')}
+        onMouseLeave={() => setHovered(null)}
+        onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.JUNKYARD_MAIN,
             window: (
@@ -428,9 +457,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.small} ${styles['lake-tree']}`}
-        onMouseEnter={() => handleEnhancedHover('lake-tree')}
-        onMouseLeave={handleEnhancedLeave}
-        onClick={() =>
+        onClick={(e) => handleEnhancedClick('lake-tree', e)}
+        onMouseEnter={() => setHovered('lake-tree')}
+        onMouseLeave={() => setHovered(null)}
+        onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.LAKE_TREE_MAIN,
             window: (
@@ -452,9 +482,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.small} ${styles['rug-doctor']}`}
-        onMouseEnter={() => handleEnhancedHover('rug-doctor')}
-        onMouseLeave={handleEnhancedLeave}
-        onClick={() =>
+        onClick={(e) => handleEnhancedClick('rug-doctor', e)}
+        onMouseEnter={() => setHovered('rug-doctor')}
+        onMouseLeave={() => setHovered(null)}
+        onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.RUG_DOCTOR_MAIN,
             window: (
@@ -476,9 +507,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.small} ${styles.shed}`}
-        onMouseEnter={() => handleEnhancedHover('shed')}
-        onMouseLeave={handleEnhancedLeave}
-        onClick={() =>
+        onClick={(e) => handleEnhancedClick('shed', e)}
+        onMouseEnter={() => setHovered('shed')}
+        onMouseLeave={() => setHovered(null)}
+        onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.SHED_MAIN,
             window: (
@@ -500,9 +532,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles.treehouse}`}
-        onMouseEnter={() => handleEnhancedHover('secret-treehouse')}
-        onMouseLeave={handleEnhancedLeave}
-        onClick={() =>
+        onClick={(e) => handleEnhancedClick('secret-treehouse', e)}
+        onMouseEnter={() => setHovered('secret-treehouse')}
+        onMouseLeave={() => setHovered(null)}
+        onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.SECRET_TREEHOUSE_MAIN,
             window: (
@@ -524,9 +557,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles["high-school"]}`}
-        onMouseEnter={() => handleEnhancedHover('high-school')}
-        onMouseLeave={handleEnhancedLeave}
-        onClick={() =>
+        onClick={(e) => handleEnhancedClick('high-school', e)}
+        onMouseEnter={() => setHovered('high-school')}
+        onMouseLeave={() => setHovered(null)}
+        onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.HIGH_SCHOOL_MAIN,
             window: (
@@ -548,9 +582,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles["paradise-motel"]}`}
-        onMouseEnter={() => handleEnhancedHover('paradise-motel')}
-        onMouseLeave={handleEnhancedLeave}
-        onClick={() =>
+        onClick={(e) => handleEnhancedClick('paradise-motel', e)}
+        onMouseEnter={() => setHovered('paradise-motel')}
+        onMouseLeave={() => setHovered(null)}
+        onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.PARADISE_MOTEL_MAIN,
             window: (
@@ -597,17 +632,31 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       {/* Enhanced Hover Overlay */}
       {enhancedHover && locationData[enhancedHover as keyof typeof locationData] && (
-        <div className={styles["enhanced-hover-overlay"]}>
+        <div 
+          className={styles["enhanced-hover-overlay"]}
+          onClick={handleEnhancedClose}
+        >
           <div 
             className={styles["expanded-icon"]}
             style={{ 
               backgroundImage: `url(/images/icons/${enhancedHover}-icon.png)` 
             }}
+            onClick={(e) => e.stopPropagation()}
           >
             {locationData[enhancedHover as keyof typeof locationData].icon}
           </div>
           
-          <div className={styles["location-preview"]}>
+          <div 
+            className={styles["location-preview"]}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              className={styles["close-button"]}
+              onClick={handleEnhancedClose}
+              aria-label="Close preview"
+            >
+              ×
+            </button>
             <h2>{locationData[enhancedHover as keyof typeof locationData].title}</h2>
             <div className={styles["location-preview-content"]}>
               <p>{locationData[enhancedHover as keyof typeof locationData].description}</p>
