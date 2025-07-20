@@ -1,11 +1,12 @@
-import Head from 'next/head';
-import { Button, Toolbar, Window, WindowContent, WindowHeader, Separator } from 'react95';
+import { Button, Toolbar, WindowContent, Separator } from 'react95';
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
 
-const FHSSchoolPage: React.FC = () => {
+interface Props {
+  onClose: () => void;
+}
+
+const FHSSchool: React.FC<Props> = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState('home');
-  const router = useRouter();
 
   const renderContent = () => {
     switch (activeTab) {
@@ -285,105 +286,66 @@ const FHSSchoolPage: React.FC = () => {
   };
 
   return (
-    <>
-      <Head>
-        <title>Flunks High School - Home of the [MASCOT]</title>
-      </Head>
-      <div 
-        className="flex flex-col items-center min-h-screen py-8 gap-4"
-        style={{
-          background: 'linear-gradient(45deg, #008080, #006666)',
-          backgroundImage: 'url([BACKGROUND_TEXTURE_PLACEHOLDER])'
-        }}
-      >
-        <Window className="w-full max-w-5xl">
-          <WindowHeader className="flex justify-between items-center">
-            <span>🏫 Flunks High School - Official Website</span>
-            <div className="flex gap-1">
-              <Button 
-                size="sm" 
-                style={{ 
-                  width: '20px', 
-                  height: '20px', 
-                  padding: '0',
-                  fontSize: '12px',
-                  minWidth: '20px'
-                }}
-                onClick={() => router.push('/')}
-                title="Minimize"
-              >
-                _
-              </Button>
-              <Button 
-                size="sm" 
-                style={{ 
-                  width: '20px', 
-                  height: '20px', 
-                  padding: '0',
-                  fontSize: '12px',
-                  minWidth: '20px'
-                }}
-                onClick={() => router.push('/')}
-                title="Close"
-              >
-                ×
-              </Button>
-            </div>
-          </WindowHeader>
-          <Toolbar className="flex gap-2 p-2">
-            <Button 
-              onClick={() => setActiveTab('home')}
-              style={{ 
-                backgroundColor: activeTab === 'home' ? '#c0c0c0' : undefined,
-                fontWeight: activeTab === 'home' ? 'bold' : undefined
-              }}
-            >
-              🏠 Home
-            </Button>
-            <Button 
-              onClick={() => setActiveTab('calendar')}
-              style={{ 
-                backgroundColor: activeTab === 'calendar' ? '#c0c0c0' : undefined,
-                fontWeight: activeTab === 'calendar' ? 'bold' : undefined
-              }}
-            >
-              📅 School Calendar
-            </Button>
-            <Button 
-              onClick={() => setActiveTab('staff')}
-              style={{ 
-                backgroundColor: activeTab === 'staff' ? '#c0c0c0' : undefined,
-                fontWeight: activeTab === 'staff' ? 'bold' : undefined
-              }}
-            >
-              👨‍🏫 Staff
-            </Button>
-            <Button 
-              onClick={() => setActiveTab('resources')}
-              style={{ 
-                backgroundColor: activeTab === 'resources' ? '#c0c0c0' : undefined,
-                fontWeight: activeTab === 'resources' ? 'bold' : undefined
-              }}
-            >
-              📚 Resources
-            </Button>
-            <Button 
-              onClick={() => setActiveTab('map')}
-              style={{ 
-                backgroundColor: activeTab === 'map' ? '#c0c0c0' : undefined,
-                fontWeight: activeTab === 'map' ? 'bold' : undefined
-              }}
-            >
-              🗺️ School Map
-            </Button>
-          </Toolbar>
-          <WindowContent style={{ maxHeight: '70vh', overflowY: 'auto' }}>
-            {renderContent()}
-          </WindowContent>
-        </Window>
-      </div>
-    </>
+    <div 
+      style={{
+        background: 'linear-gradient(45deg, #008080, #006666)',
+        backgroundImage: 'url([BACKGROUND_TEXTURE_PLACEHOLDER])',
+        height: '100%',
+        overflow: 'auto'
+      }}
+    >
+      <Toolbar className="flex gap-2 p-2">
+        <Button 
+          onClick={() => setActiveTab('home')}
+          style={{ 
+            backgroundColor: activeTab === 'home' ? '#c0c0c0' : undefined,
+            fontWeight: activeTab === 'home' ? 'bold' : undefined
+          }}
+        >
+          🏠 Home
+        </Button>
+        <Button 
+          onClick={() => setActiveTab('calendar')}
+          style={{ 
+            backgroundColor: activeTab === 'calendar' ? '#c0c0c0' : undefined,
+            fontWeight: activeTab === 'calendar' ? 'bold' : undefined
+          }}
+        >
+          📅 School Calendar
+        </Button>
+        <Button 
+          onClick={() => setActiveTab('staff')}
+          style={{ 
+            backgroundColor: activeTab === 'staff' ? '#c0c0c0' : undefined,
+            fontWeight: activeTab === 'staff' ? 'bold' : undefined
+          }}
+        >
+          👨‍🏫 Staff
+        </Button>
+        <Button 
+          onClick={() => setActiveTab('resources')}
+          style={{ 
+            backgroundColor: activeTab === 'resources' ? '#c0c0c0' : undefined,
+            fontWeight: activeTab === 'resources' ? 'bold' : undefined
+          }}
+        >
+          📚 Resources
+        </Button>
+        <Button 
+          onClick={() => setActiveTab('map')}
+          style={{ 
+            backgroundColor: activeTab === 'map' ? '#c0c0c0' : undefined,
+            fontWeight: activeTab === 'map' ? 'bold' : undefined
+          }}
+        >
+          🗺️ School Map
+        </Button>
+      </Toolbar>
+      <WindowContent style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+        {renderContent()}
+      </WindowContent>
+    </div>
   );
 };
 
-export default FHSSchoolPage;
+export default FHSSchool;

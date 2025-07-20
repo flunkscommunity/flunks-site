@@ -41,6 +41,7 @@ export const WINDOW_IDS = {
   DINER_BOTTOM_RIGHT: "diner_bottom_right",
   FLAPPY_FLUNK: "flappy_flunk",
   FLAPPY_FLUNK_LEADERBOARD: "flappy_flunk_leaderboard",
+  FHS_SCHOOL: "fhs_school",
   
   // New location main windows
   JOCKS_HOUSE_MAIN: "jocks_house_main",
@@ -166,6 +167,11 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appIcon: "/images/icons/radio.png",
     key: WINDOW_IDS.RADIO_PLAYER,
     windowComponent: RadioPlayer,
+  },
+  [WINDOW_IDS.FHS_SCHOOL]: {
+    appName: "FHS",
+    appIcon: "/images/icons/fhs.png",
+    key: WINDOW_IDS.FHS_SCHOOL,
   },
   [WINDOW_IDS.TREEHOUSE_MAIN]: {
     appName: "Treehouse",

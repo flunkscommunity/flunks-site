@@ -20,6 +20,7 @@ import { WINDOW_IDS } from "fixed";
 import { useWindowsContext } from "contexts/WindowsContext";
 import FlappyFlunkWindow from "windows/Games/FlappyFlunkWindow";
 import RadioPlayer from "components/RadioPlayer";
+import FHSSchool from "windows/FHSSchool";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -162,7 +163,22 @@ const windowsMemod = useMemo(() => (
         <DesktopAppIcon
           title="FHS"
           icon="/images/icons/fhs.png"
-          onDoubleClick={() => router.push('/fhs-school')}
+          onDoubleClick={() => openWindow({
+            key: WINDOW_IDS.FHS_SCHOOL,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.FHS_SCHOOL}
+                onClose={() => closeWindow(WINDOW_IDS.FHS_SCHOOL)}
+                initialWidth="100%"
+                initialHeight="100%"
+                resizable={false}
+                headerTitle="Flunks High School - Official Website"
+                headerIcon="/images/icons/fhs.png"
+              >
+                <FHSSchool onClose={() => closeWindow(WINDOW_IDS.FHS_SCHOOL)} />
+              </DraggableResizeableWindow>
+            ),
+          })}
         />
 
         <DesktopAppIcon
@@ -212,8 +228,6 @@ const windowsMemod = useMemo(() => (
           icon="/images/icons/semester0-icon.png"
           onDoubleClick={() => openWindow({
             key: WINDOW_IDS.SEMESTER_0,
-            label: "Semester 0",
-            icon: "/images/icons/semester0-icon.png",
             window: (
               <DraggableResizeableWindow
                 windowsId={WINDOW_IDS.SEMESTER_0}
