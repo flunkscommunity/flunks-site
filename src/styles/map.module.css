@@ -40,16 +40,16 @@
   font-size: 28px;
   transition: all 0.3s ease;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(2px);
+  background-color: transparent;
+  backdrop-filter: none;
   border: 2px solid transparent;
 }
 
 .icon:hover {
   transform: scale(1.2);
-  background-color: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
   z-index: 15;
 }
 
@@ -133,8 +133,138 @@
 }
 
 /* Fallback emoji styling when PNG isn't available */
-.expanded-icon:not([style*="background-image"]) {
+.expanded-icon:not([style*="backgroundImage"]) {
   font-size: 120px;
+}
+
+/* PNG icon specific styling */
+.png-icon {
+  font-size: 0 !important; /* Hide emoji completely when PNG class is present */
+}
+
+/* Hover PNG Preview - shows enlarged PNG on simple hover */
+.hover-png-preview {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 500;
+  pointer-events: none;
+}
+
+/* Individual positioning for each location */
+.hover-png-preview.treehouse {
+  top: 74%;
+  left: 23%;
+}
+
+.hover-png-preview.arcade {
+  top: 38%;
+  left: 46%;
+}
+
+.hover-png-preview.motel {
+  top: 60%;
+  left: 75%;
+}
+
+.hover-png-preview.diner {
+  top: 55%;
+  left: 25%;
+}
+
+.hover-png-preview.jocks-house {
+  top: 58%;
+  left: 15%;
+}
+
+.hover-png-preview.freaks-house {
+  top: 35%;
+  left: 26%;
+}
+
+.hover-png-preview.flunk-fm {
+  top: 31%;
+  left: 41%;
+}
+
+.hover-png-preview.geeks-house {
+  top: 17%;
+  left: 30%;
+}
+
+.hover-png-preview.junkyard {
+  top: 55%;
+  left: 84%;
+}
+
+.hover-png-preview.lake-tree {
+  top: 85%;
+  left: 53%;
+}
+
+.hover-png-preview.snack-shack {
+  top: 76%;
+  left: 45%;
+}
+
+.hover-png-preview.rug-doctor {
+  top: 45%;
+  left: 40%;
+}
+
+.hover-png-preview.four-thieves-bar {
+  top: 55%;
+  left: 44%;
+}
+
+.hover-png-preview.high-school {
+  top: 32%;
+  left: 66%;
+}
+
+.hover-png-preview.paradise-motel {
+  top: 18%;
+  left: 44%;
+}
+
+.hover-png-preview.shed {
+  top: 20%;
+  left: 68%;
+}
+
+.hover-png-preview.police-station {
+  top: 12%;
+  left: 54%;
+}
+
+.hover-png-preview.preps-house {
+  top: 30%;
+  left: 53%;
+}
+
+.hover-png-preview.football-field {
+  top: 25%;
+  left: 75%;
+}
+
+.hover-enlarged-icon {
+  width: 150px;
+  height: 150px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* Removed circular background styles */
+  animation: hoverPngAppear 0.2s ease-out;
+}
+
+@keyframes hoverPngAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* PNG image overlay effect */
@@ -477,5 +607,54 @@
     height: 100vh;
     
     object-fit: contain;
+  }
+}
+
+/* Opening animation styles */
+.opening-animation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.opening-school-icon {
+  background-image: url('/images/icons/semester0-icon.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: schoolIconEntrance 2s ease-in-out forwards;
+}
+
+@keyframes schoolIconEntrance {
+  0% {
+    width: 80px;
+    height: 80px;
+    opacity: 1;
+    transform: scale(1);
+  }
+  30% {
+    width: 120px;
+    height: 120px;
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  70% {
+    width: 200px;
+    height: 200px;
+    opacity: 0.9;
+    transform: scale(1.2);
+  }
+  100% {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+    transform: scale(1.3);
   }
 }

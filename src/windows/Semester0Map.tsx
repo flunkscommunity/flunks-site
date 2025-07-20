@@ -36,6 +36,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   const [enhancedHover, setEnhancedHover] = useState<string | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showOpeningAnimation, setShowOpeningAnimation] = useState(true);
   const { openWindow, closeWindow } = useWindowsContext();
   const mapRef = useRef<HTMLDivElement>(null);
 
@@ -72,14 +73,17 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
   const handleEnhancedClick = (locationKey: string, e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent opening the location window
+    console.log('Enhanced click triggered for:', locationKey); // Debug log
     if (enhancedHover === locationKey) {
       // If already showing this location, close it
       setEnhancedHover(null);
       setHovered(null);
+      console.log('Closing enhanced preview for:', locationKey); // Debug log
     } else {
       // Show the enhanced preview
       setEnhancedHover(locationKey);
       setHovered(locationKey);
+      console.log('Opening enhanced preview for:', locationKey); // Debug log
     }
   };
 
@@ -100,7 +104,11 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   }, []);
 
   useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 5000);
+    const t = setTimeout(() => {
+      setLoading(false);
+      // Hide opening animation after it completes
+      setTimeout(() => setShowOpeningAnimation(false), 2000);
+    }, 5000);
     return () => clearTimeout(t);
   }, []);
 
@@ -168,6 +176,14 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           <SemesterZeroCSSLoader />
         </div>
       )}
+      
+      {/* Opening animation for school icon */}
+      {showOpeningAnimation && !loading && (
+        <div className={styles["opening-animation-overlay"]}>
+          <div className={styles["opening-school-icon"]}></div>
+        </div>
+      )}
+      
       <div className={styles["map-inner"]}>
         <img
           src="/images/season-zero-map.png"
@@ -580,6 +596,212 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       >
       </div>
 
+      {/* Hover PNG Preview for High School */}
+      {hovered === 'high-school' && !enhancedHover && (
+        <div className={`${styles["hover-png-preview"]} ${styles["high-school"]}`}>
+          <div 
+            className={styles["hover-enlarged-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/high-school-icon.png)` 
+            }}
+          >
+          </div>
+        </div>
+      )}
+
+      {/* Hover PNG Previews for other locations */}
+      {hovered === 'arcade' && !enhancedHover && (
+        <div className={`${styles["hover-png-preview"]} ${styles["arcade"]}`}>
+          <div 
+            className={styles["hover-enlarged-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/arcade-icon.png)` 
+            }}
+          >
+          </div>
+        </div>
+      )}
+
+      {hovered === 'jocks-house' && !enhancedHover && (
+        <div className={`${styles["hover-png-preview"]} ${styles["jocks-house"]}`}>
+          <div 
+            className={styles["hover-enlarged-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/jocks-house-icon.png)` 
+            }}
+          >
+          </div>
+        </div>
+      )}
+
+      {hovered === 'freaks-house' && !enhancedHover && (
+        <div className={`${styles["hover-png-preview"]} ${styles["freaks-house"]}`}>
+          <div 
+            className={styles["hover-enlarged-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/freaks-house-icon.png)` 
+            }}
+          >
+          </div>
+        </div>
+      )}
+
+      {hovered === 'geeks-house' && !enhancedHover && (
+        <div className={`${styles["hover-png-preview"]} ${styles["geeks-house"]}`}>
+          <div 
+            className={styles["hover-enlarged-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/geeks-house-icon.png)` 
+            }}
+          >
+          </div>
+        </div>
+      )}
+
+      {hovered === 'preps-house' && !enhancedHover && (
+        <div className={`${styles["hover-png-preview"]} ${styles["preps-house"]}`}>
+          <div 
+            className={styles["hover-enlarged-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/preps-house-icon.png)` 
+            }}
+          >
+          </div>
+        </div>
+      )}
+
+      {hovered === 'flunk-fm' && !enhancedHover && (
+        <div className={`${styles["hover-png-preview"]} ${styles["flunk-fm"]}`}>
+          <div 
+            className={styles["hover-enlarged-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/flunk-fm-icon.png)` 
+            }}
+          >
+          </div>
+        </div>
+      )}
+
+      {hovered === 'police-station' && !enhancedHover && (
+        <div className={`${styles["hover-png-preview"]} ${styles["police-station"]}`}>
+          <div 
+            className={styles["hover-enlarged-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/police-station-icon.png)` 
+            }}
+          >
+          </div>
+        </div>
+      )}
+
+      {hovered === 'football-field' && !enhancedHover && (
+        <div className={`${styles["hover-png-preview"]} ${styles["football-field"]}`}>
+          <div 
+            className={styles["hover-enlarged-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/football-field-icon.png)` 
+            }}
+          >
+          </div>
+        </div>
+      )}
+
+      {hovered === 'snack-shack' && !enhancedHover && (
+        <div className={`${styles["hover-png-preview"]} ${styles["snack-shack"]}`}>
+          <div 
+            className={styles["hover-enlarged-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/snack-shack-icon.png)` 
+            }}
+          >
+          </div>
+        </div>
+      )}
+
+      {hovered === 'four-thieves-bar' && !enhancedHover && (
+        <div className={`${styles["hover-png-preview"]} ${styles["four-thieves-bar"]}`}>
+          <div 
+            className={styles["hover-enlarged-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/four-thieves-bar-icon.png)` 
+            }}
+          >
+          </div>
+        </div>
+      )}
+
+      {hovered === 'junkyard' && !enhancedHover && (
+        <div className={`${styles["hover-png-preview"]} ${styles["junkyard"]}`}>
+          <div 
+            className={styles["hover-enlarged-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/junkyard-icon.png)` 
+            }}
+          >
+          </div>
+        </div>
+      )}
+
+      {hovered === 'lake-tree' && !enhancedHover && (
+        <div className={`${styles["hover-png-preview"]} ${styles["lake-tree"]}`}>
+          <div 
+            className={styles["hover-enlarged-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/lake-tree-icon.png)` 
+            }}
+          >
+          </div>
+        </div>
+      )}
+
+      {hovered === 'rug-doctor' && !enhancedHover && (
+        <div className={`${styles["hover-png-preview"]} ${styles["rug-doctor"]}`}>
+          <div 
+            className={styles["hover-enlarged-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/rug-doctor-icon.png)` 
+            }}
+          >
+          </div>
+        </div>
+      )}
+
+      {hovered === 'shed' && !enhancedHover && (
+        <div className={`${styles["hover-png-preview"]} ${styles["shed"]}`}>
+          <div 
+            className={styles["hover-enlarged-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/shed-icon.png)` 
+            }}
+          >
+          </div>
+        </div>
+      )}
+
+      {hovered === 'secret-treehouse' && !enhancedHover && (
+        <div className={`${styles["hover-png-preview"]} ${styles["treehouse"]}`}>
+          <div 
+            className={styles["hover-enlarged-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/secret-treehouse-icon.png)` 
+            }}
+          >
+          </div>
+        </div>
+      )}
+
+      {hovered === 'paradise-motel' && !enhancedHover && (
+        <div className={`${styles["hover-png-preview"]} ${styles["paradise-motel"]}`}>
+          <div 
+            className={styles["hover-enlarged-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/paradise-motel-icon.png)` 
+            }}
+          >
+          </div>
+        </div>
+      )}
+
       <div
         className={`${styles.icon} ${styles.large} ${styles["paradise-motel"]}`}
         onClick={(e) => handleEnhancedClick('paradise-motel', e)}
@@ -637,13 +859,12 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           onClick={handleEnhancedClose}
         >
           <div 
-            className={styles["expanded-icon"]}
+            className={`${styles["expanded-icon"]} ${styles["png-icon"]}`}
             style={{ 
               backgroundImage: `url(/images/icons/${enhancedHover}-icon.png)` 
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            {locationData[enhancedHover as keyof typeof locationData].icon}
           </div>
           
           <div 
