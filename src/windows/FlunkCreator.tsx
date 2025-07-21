@@ -135,6 +135,32 @@ const FlunkCreator: React.FC = () => {
   const { closeWindow } = useWindowsContext();
   const canvasRef = useRef<HTMLDivElement>(null);
   
+  // Universal function to clean up trait names for display
+  const cleanTraitName = (name: string): string => {
+    return name
+      // Remove numbered prefixes like __0000_, _0001_, _0000s_0001_, etc.
+      .replace(/__?\d{4}s?_\d{4}_/g, '')
+      .replace(/__?\d{4}_/g, '')
+      .replace(/_\d{4}s_\d{4}_/g, '')
+      // Remove clique prefixes
+      .replace(/^(FREAK|GEEK|JOCK|PREP)_/, '')
+      // Remove category prefixes
+      .replace(/PIGMENT[^-]*-\s*/, '')
+      .replace(/PIGMENT\s*\([^)]+\)\s*-\s*/, '')
+      // Remove parenthetical clique references
+      .replace(/\([^)]*(?:FREAK|GEEK|JOCK|PREP)[^)]*\)/g, '')
+      // Remove version suffixes
+      .replace(/-V[123]$/g, '')
+      // Remove leading/trailing dashes and spaces
+      .replace(/^[-\s]+|[-\s]+$/g, '')
+      // Replace underscores and multiple dashes with spaces
+      .replace(/_+/g, ' ')
+      .replace(/-+/g, ' ')
+      // Clean up multiple spaces
+      .replace(/\s+/g, ' ')
+      .trim();
+  };
+  
   const [selectedTraits, setSelectedTraits] = useState<SelectedTraits>({
     pigment: 'none', // Base color - prioritized first
     backdrop: 'none',
@@ -399,17 +425,7 @@ const FlunkCreator: React.FC = () => {
                 🚫 No Base Color
               </TraitItem>
               {TRAIT_DATA.PIGMENT?.map((pigment) => {
-                // Clean up the pigment name for display
-                let displayName = pigment.name
-                  .replace(/PIGMENT.*?-\s*/, '')
-                  .replace(/\(.*?\)/g, '')
-                  .replace(/_/g, ' ')
-                  .replace(/FREAK\s*/, '')
-                  .replace(/GEEK\s*/, '')
-                  .replace(/JOCK\s*/, '')
-                  .replace(/PREP\s*/, '')
-                  .replace(/^\s*-\s*/, '')
-                  .trim();
+                const displayName = cleanTraitName(pigment.name);
                 
                 return (
                   <TraitItem
@@ -444,7 +460,7 @@ const FlunkCreator: React.FC = () => {
                   selected={selectedTraits.backdrop === backdrop.name}
                   onClick={() => selectTrait('backdrop', backdrop.name)}
                 >
-                  🌄 {backdrop.name}
+                  🌄 {cleanTraitName(backdrop.name)}
                 </TraitItem>
               ))}
             </TraitList>
@@ -469,7 +485,7 @@ const FlunkCreator: React.FC = () => {
                   selected={selectedTraits.torso === torso.name}
                   onClick={() => selectTrait('torso', torso.name)}
                 >
-                  👕 {torso.name}
+                  👕 {cleanTraitName(torso.name)}
                 </TraitItem>
               ))}
             </TraitList>
@@ -494,7 +510,7 @@ const FlunkCreator: React.FC = () => {
                   selected={selectedTraits.head === head.name}
                   onClick={() => selectTrait('head', head.name)}
                 >
-                  💇 {head.name}
+                  💇 {cleanTraitName(head.name)}
                 </TraitItem>
               ))}
             </TraitList>
@@ -519,36 +535,57 @@ const FlunkCreator: React.FC = () => {
                   selected={selectedTraits.face === face.name}
                   onClick={() => selectTrait('face', face.name)}
                 >
-                  😊 {face.name}
+                  😊 {cleanTraitName(face.name)}
                 </TraitItem>
               ))}
             </TraitList>
           </TraitSection>
 
           <TraitSection>
-            <TraitHeader onClick={() => toggleSection('details')}>
-              ✨ Details
-              <span>{expandedSections.details ? '▼' : '▶'}</span>
+            <TraitHeader onClick={() => toggleSection('eyebrows')}>
+              🤨 Eyebrows
+              <span>{expandedSections.eyebrows ? '▼' : '▶'}</span>
             </TraitHeader>
-            <TraitList expanded={expandedSections.details}>
+            <TraitList expanded={expandedSections.eyebrows}>
               <TraitItem
                 selected={selectedTraits.eyebrows === 'none'}
                 onClick={() => selectTrait('eyebrows', 'none')}
               >
-                🤨 Eyebrows
+                🚫 No Eyebrows
               </TraitItem>
+              {TRAIT_DATA.EYEBROWS?.map((eyebrow) => (
+                <TraitItem
+                  key={eyebrow.name}
+                  selected={selectedTraits.eyebrows === eyebrow.name}
+                  onClick={() => selectTrait('eyebrows', eyebrow.name)}
+                >
+                  🤨 {cleanTraitName(eyebrow.name)}
+                </TraitItem>
+              ))}
+            </TraitList>
+          </TraitSection>
+
+          <TraitSection>
+            <TraitHeader onClick={() => toggleSection('headOverlay')}>
+              🎩 Head Overlays
+              <span>{expandedSections.headOverlay ? '▼' : '▶'}</span>
+            </TraitHeader>
+            <TraitList expanded={expandedSections.headOverlay}>
               <TraitItem
                 selected={selectedTraits.headOverlay === 'none'}
                 onClick={() => selectTrait('headOverlay', 'none')}
               >
-                🎩 Head Overlay
+                🚫 No Overlay
               </TraitItem>
-              <TraitItem
-                selected={selectedTraits.pigment === 'none'}
-                onClick={() => selectTrait('pigment', 'none')}
-              >
-                🎨 Pigment
-              </TraitItem>
+              {TRAIT_DATA.HEAD_OVERLAYERS?.map((overlay) => (
+                <TraitItem
+                  key={overlay.name}
+                  selected={selectedTraits.headOverlay === overlay.name}
+                  onClick={() => selectTrait('headOverlay', overlay.name)}
+                >
+                  � {cleanTraitName(overlay.name)}
+                </TraitItem>
+              ))}
             </TraitList>
           </TraitSection>
         </TraitPanel>
