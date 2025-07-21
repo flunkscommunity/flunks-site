@@ -4,6 +4,7 @@ import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useWindowsContext } from 'contexts/WindowsContext';
 import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 import { WINDOW_IDS } from 'fixed';
+import { TRAIT_DATA } from '../data/traitData';
 import { 
   Window, 
   WindowHeader, 

@@ -43,7 +43,7 @@ export const WINDOW_IDS = {
   FLAPPY_FLUNK_LEADERBOARD: "flappy_flunk_leaderboard",
   FHS_SCHOOL: "fhs_school",
   FLUNKS_MESSENGER: "flunks_messenger",
-  JNRS_CREATOR: "jnrs_creator",
+  FLUNK_CREATOR: "flunk_creator",
   
   // New location main windows
   JOCKS_HOUSE_MAIN: "jocks_house_main",
@@ -290,9 +290,9 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appIcon: "/images/icons/discord.png",
     key: WINDOW_IDS.FLUNKS_MESSENGER,
   },
-  [WINDOW_IDS.JNRS_CREATOR]: {
-    appName: "JNRS Creator",
+  [WINDOW_IDS.FLUNK_CREATOR]: {
+    appName: "Flunk Creator",
     appIcon: "/images/icons/pocket-juniors.png",
-    key: WINDOW_IDS.JNRS_CREATOR,
+    key: WINDOW_IDS.FLUNK_CREATOR,
   },
 };

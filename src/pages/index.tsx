@@ -23,7 +23,7 @@ import RadioPlayer from "components/RadioPlayer";
 import FHSSchool from "windows/FHSSchool";
 import MyPlace from "windows/MyPlace";
 import FlunksMessenger from "windows/FlunksMessenger";
-import JNRSCreator from "windows/JNRSCreator";
+import FlunkCreator from "windows/FlunkCreator";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -187,11 +187,11 @@ const windowsMemod = useMemo(() => (
         />
 
         <DesktopAppIcon
-          title="JNRS Creator"
+          title="Flunk Creator"
           icon="/images/icons/pocket-juniors.png"
           onDoubleClick={() => openWindow({
-            key: WINDOW_IDS.JNRS_CREATOR,
-            window: <JNRSCreator />
+            key: WINDOW_IDS.FLUNK_CREATOR,
+            window: <FlunkCreator />
           })}
         />
 

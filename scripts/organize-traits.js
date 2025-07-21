@@ -4,19 +4,18 @@ const fs = require('fs');
 const path = require('path');
 
 // Paths
-const stagingDir = './public/images/jnr-traits/upload-staging';
+const stagingBaseDir = './public/images/jnr-traits/upload-staging';
 const targetDir = './public/images/jnr-traits/full-traits';
+
+// Clique folders
+const cliques = ['FREAKS', 'GEEKS', 'JOCKS', 'PREPS'];
 
 // Mapping of filename patterns to target directories
 const fileMapping = {
   // Direct folder matches
   'BACKDROP': 'BACKDROPS',
-  'EYEBROW': 'EYEBROWS',
+  'EYEBROW': 'EYEBROWS', 
   'FIX': 'FIXES',
-  'FREAK': 'FREAK',
-  'GEEK': 'GEEK', 
-  'JOCK': 'JOCK',
-  'PREP': 'PREP',
   'NUMBER': 'NUMBERS',
   'FACE': 'FACE',
   'HEAD': 'HEAD',
@@ -30,15 +29,25 @@ const fileMapping = {
   'ONEOFONE': '1OF1_S'
 };
 
-// Colors and patterns that might indicate specific folders
-const colorPatterns = [
-  'BLUE', 'RED', 'GREEN', 'YELLOW', 'PURPLE', 'ORANGE', 'BLACK', 'WHITE',
-  'CYAN', 'PINK', 'BROWN', 'GREY', 'GRAY', 'GOLD', 'SILVER'
-];
-
 const clothingPatterns = [
   'HOODY', 'HOODIE', 'VEST', 'TEE', 'SHIRT', 'JACKET', 'COAT', 'SWEATER',
-  'LEATHER', 'PUFFER', 'BUTTON', 'POLO', 'VARSITY', 'ARGYLE'
+  'LEATHER', 'PUFFER', 'BUTTON', 'POLO', 'VARSITY', 'ARGYLE', 'BLAZER',
+  'TANK', 'CROP', 'DRESS', 'SUIT', 'CARDIGAN'
+];
+
+const headPatterns = [
+  'HAIR', 'AFRO', 'BALD', 'BUZZ', 'MOHAWK', 'PONYTAIL', 'BRAIDS', 
+  'CURLY', 'STRAIGHT', 'WAVY', 'BANGS', 'FRINGE'
+];
+
+const facePatterns = [
+  'EYE', 'MOUTH', 'NOSE', 'SMILE', 'FROWN', 'WINK', 'BLUSH',
+  'FRECKLE', 'MOLE', 'SCAR', 'DIMPLE', 'ANGRY', 'ANNOYED', 'ANON',
+  'ASTONISHED', 'BRUISED', 'BUBBLEGUM', 'CIGGY', 'COOL', 'SHADES',
+  'CREEPY', 'CUTE', 'RASP', 'CYAN', 'DAZED', 'DIAM', 'GRILLZ',
+  'ETERNAL', 'SKULL', 'FANGS', 'FLIRTY', 'FROWNY', 'GOLD', 'GRILLZ',
+  'HEARTY', 'KISS', 'HOCKEY', 'IMPATIENT', 'QUIRKY', 'LOST', 'MAKEUP',
+  '3D-GLASSES', 'GLASSES'
 ];
 
 function determineTargetFolder(filename) {
@@ -58,23 +67,50 @@ function determineTargetFolder(filename) {
     }
   }
   
-  // Check for hair/head patterns
-  if (upperFilename.includes('HAIR') || upperFilename.includes('AFRO') || 
-      upperFilename.includes('BALD') || upperFilename.includes('BUZZ')) {
-    return 'HEAD';
+  // Check for hair/head patterns -> HEAD
+  for (const pattern of headPatterns) {
+    if (upperFilename.includes(pattern)) {
+      return 'HEAD';
+    }
   }
   
-  // Check for facial features
-  if (upperFilename.includes('EYE') || upperFilename.includes('MOUTH') || 
-      upperFilename.includes('NOSE') || upperFilename.includes('SMILE')) {
-    return 'FACE';
+  // Check for facial features -> FACE
+  for (const pattern of facePatterns) {
+    if (upperFilename.includes(pattern)) {
+      return 'FACE';
+    }
   }
   
   // Default based on filename patterns
   if (upperFilename.startsWith('_')) {
-    // Files starting with underscore might be numbered/special
+    // Files starting with underscore are likely numbered traits
     if (upperFilename.match(/_\d{4}_/)) {
-      return 'TORSO'; // Most numbered files seem to be clothing
+      // Try to determine from the content after the number
+      const afterNumber = upperFilename.split('_').slice(2).join('_');
+      
+      // Check clothing patterns in the latter part
+      for (const pattern of clothingPatterns) {
+        if (afterNumber.includes(pattern)) {
+          return 'TORSO';
+        }
+      }
+      
+      // Check head patterns
+      for (const pattern of headPatterns) {
+        if (afterNumber.includes(pattern)) {
+          return 'HEAD';
+        }
+      }
+      
+      // Check face patterns
+      for (const pattern of facePatterns) {
+        if (afterNumber.includes(pattern)) {
+          return 'FACE';
+        }
+      }
+      
+      // Default numbered files to TORSO (most common)
+      return 'TORSO';
     }
   }
   
@@ -88,28 +124,112 @@ function ensureDirectoryExists(dirPath) {
   }
 }
 
-function organizeFiles() {
-  console.log('🚀 Starting file organization...');
+function organizeCliqueFiles(clique) {
+  const cliqueStaging = path.join(stagingBaseDir, clique);
   
-  // Check if staging directory exists and has files
-  if (!fs.existsSync(stagingDir)) {
-    console.log('❌ Staging directory not found:', stagingDir);
-    return;
+  console.log(`\n🎯 Processing ${clique} files...`);
+  
+  if (!fs.existsSync(cliqueStaging)) {
+    console.log(`⚠️  ${clique} staging folder not found: ${cliqueStaging}`);
+    return { processed: 0, summary: {} };
   }
   
-  const files = fs.readdirSync(stagingDir);
+  const files = fs.readdirSync(cliqueStaging);
   const imageFiles = files.filter(file => 
     file.toLowerCase().match(/\.(png|jpg|jpeg|gif|webp)$/i)
   );
   
   if (imageFiles.length === 0) {
-    console.log('📂 No image files found in staging directory');
-    return;
+    console.log(`📂 No image files found in ${clique} folder`);
+    return { processed: 0, summary: {} };
   }
   
-  console.log(`📁 Found ${imageFiles.length} image files to organize`);
+  console.log(`📁 Found ${imageFiles.length} files in ${clique}`);
   
-  // Create a summary of where files will go
+  const summary = {};
+  const unorganized = [];
+  
+  imageFiles.forEach(file => {
+    const targetFolder = determineTargetFolder(file);
+    
+    if (targetFolder === 'MISC') {
+      unorganized.push(file);
+    } else {
+      // Instead of putting everything in clique folder, categorize properly
+      if (!summary[targetFolder]) {
+        summary[targetFolder] = [];
+      }
+      summary[targetFolder].push({ file, clique: clique.slice(0, -1) });
+    }
+  });
+  
+  // Move files to appropriate category folders (not clique folders)
+  Object.entries(summary).forEach(([categoryFolder, files]) => {
+    const targetFolderPath = path.join(targetDir, categoryFolder);
+    ensureDirectoryExists(targetFolderPath);
+    
+    files.forEach(({ file, clique }) => {
+      const sourcePath = path.join(cliqueStaging, file);
+      // Add clique prefix to filename to avoid conflicts
+      const prefixedFilename = `${clique}_${file}`;
+      const targetPath = path.join(targetFolderPath, prefixedFilename);
+      
+      try {
+        fs.renameSync(sourcePath, targetPath);
+        console.log(`✅ ${file} → ${categoryFolder}/${prefixedFilename}`);
+      } catch (error) {
+        console.log(`❌ Failed to move ${file}:`, error.message);
+      }
+    });
+  });
+  
+  // Handle unorganized files
+  if (unorganized.length > 0) {
+    const miscPath = path.join(targetDir, 'MISC', clique.slice(0, -1));
+    ensureDirectoryExists(miscPath);
+    
+    unorganized.forEach(file => {
+      const sourcePath = path.join(cliqueStaging, file);
+      const targetPath = path.join(miscPath, file);
+      
+      try {
+        fs.renameSync(sourcePath, targetPath);
+        console.log(`📋 ${file} → MISC/${clique.slice(0, -1)}/`);
+      } catch (error) {
+        console.log(`❌ Failed to move ${file}:`, error.message);
+      }
+    });
+  }
+  
+  return { 
+    processed: imageFiles.length, 
+    summary: Object.fromEntries(Object.entries(summary).map(([k, v]) => [k, v.length])),
+    unorganized: unorganized.length
+  };
+}
+
+function organizeSharedFiles() {
+  const sharedStaging = path.join(stagingBaseDir, 'SHARED');
+  
+  console.log(`\n🌐 Processing SHARED files...`);
+  
+  if (!fs.existsSync(sharedStaging)) {
+    console.log(`⚠️  SHARED staging folder not found: ${sharedStaging}`);
+    return { processed: 0, summary: {} };
+  }
+  
+  const files = fs.readdirSync(sharedStaging);
+  const imageFiles = files.filter(file => 
+    file.toLowerCase().match(/\.(png|jpg|jpeg|gif|webp)$/i)
+  );
+  
+  if (imageFiles.length === 0) {
+    console.log(`📂 No image files found in SHARED folder`);
+    return { processed: 0, summary: {} };
+  }
+  
+  console.log(`� Found ${imageFiles.length} shared files`);
+  
   const summary = {};
   const unorganized = [];
   
@@ -126,60 +246,86 @@ function organizeFiles() {
     }
   });
   
-  // Show summary
-  console.log('\n📊 Organization Summary:');
-  Object.entries(summary).forEach(([folder, files]) => {
-    console.log(`  ${folder}: ${files.length} files`);
-  });
-  
-  if (unorganized.length > 0) {
-    console.log(`  MISC (needs manual sorting): ${unorganized.length} files`);
-  }
-  
-  // Ask for confirmation (in a real scenario)
-  console.log('\n🔄 Organizing files...');
-  
-  // Create target directories and move files
+  // Move shared files to appropriate folders
   Object.entries(summary).forEach(([folder, files]) => {
     const targetFolderPath = path.join(targetDir, folder);
     ensureDirectoryExists(targetFolderPath);
     
     files.forEach(file => {
-      const sourcePath = path.join(stagingDir, file);
+      const sourcePath = path.join(sharedStaging, file);
       const targetPath = path.join(targetFolderPath, file);
       
       try {
         fs.renameSync(sourcePath, targetPath);
-        console.log(`✅ Moved ${file} → ${folder}/`);
+        console.log(`✅ ${file} → ${folder}/`);
       } catch (error) {
         console.log(`❌ Failed to move ${file}:`, error.message);
       }
     });
   });
   
-  // Handle unorganized files
+  // Handle unorganized shared files
   if (unorganized.length > 0) {
-    const miscPath = path.join(targetDir, 'MISC');
+    const miscPath = path.join(targetDir, 'MISC', 'SHARED');
     ensureDirectoryExists(miscPath);
     
     unorganized.forEach(file => {
-      const sourcePath = path.join(stagingDir, file);
+      const sourcePath = path.join(sharedStaging, file);
       const targetPath = path.join(miscPath, file);
       
       try {
         fs.renameSync(sourcePath, targetPath);
-        console.log(`📋 Moved ${file} → MISC/ (needs manual sorting)`);
+        console.log(`📋 ${file} → MISC/SHARED/`);
       } catch (error) {
         console.log(`❌ Failed to move ${file}:`, error.message);
       }
     });
   }
   
-  console.log('\n🎉 File organization complete!');
+  return { 
+    processed: imageFiles.length, 
+    summary: Object.fromEntries(Object.entries(summary).map(([k, v]) => [k, v.length])),
+    unorganized: unorganized.length
+  };
+}
+
+function organizeFiles() {
+  console.log('🚀 Starting clique-based file organization...');
+  
+  let totalProcessed = 0;
+  const allSummary = {};
+  
+  // Process each clique
+  cliques.forEach(clique => {
+    const result = organizeCliqueFiles(clique);
+    totalProcessed += result.processed;
+    
+    Object.entries(result.summary).forEach(([folder, count]) => {
+      if (!allSummary[folder]) allSummary[folder] = 0;
+      allSummary[folder] += count;
+    });
+  });
+  
+  // Process shared files
+  const sharedResult = organizeSharedFiles();
+  totalProcessed += sharedResult.processed;
+  
+  Object.entries(sharedResult.summary).forEach(([folder, count]) => {
+    if (!allSummary[folder]) allSummary[folder] = 0;
+    allSummary[folder] += count;
+  });
+  
+  console.log('\n📊 Final Organization Summary:');
+  Object.entries(allSummary).forEach(([folder, count]) => {
+    console.log(`  ${folder}: ${count} files`);
+  });
+  
+  console.log(`\n🎉 Organization complete! Processed ${totalProcessed} files total`);
   console.log('\n📋 Next steps:');
   console.log('1. Check the organized folders in:', targetDir);
-  console.log('2. Review any files in MISC/ folder for manual sorting');
-  console.log('3. The JNRS Creator app will automatically detect the new files');
+  console.log('2. Review any files in MISC/ subfolders for manual sorting');
+  console.log('3. Run: npm run generate-trait-data');
+  console.log('4. The JNRS Creator will automatically detect the new files');
 }
 
 // Run the organization

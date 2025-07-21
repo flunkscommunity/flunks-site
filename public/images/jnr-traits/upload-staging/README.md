@@ -1,11 +1,16 @@
-# JNRS Creator - Trait File Upload Guide
+# JNRS Creator - Clique-Based Trait Upload Guide
 
-## 🚀 Quick Upload Process
+## 🎯 Clique-Based Upload Process
 
-### 1. **Mass Upload Your Files**
-Just dump ALL your trait files into this folder:
+### 1. **Upload Files by Clique**
+Upload your trait files to the appropriate clique folders:
+
 ```
-/public/images/jnr-traits/upload-staging/
+📁 FREAKS/    - All FREAK clique trait files
+📁 GEEKS/     - All GEEK clique trait files  
+📁 JOCKS/     - All JOCK clique trait files
+📁 PREPS/     - All PREP clique trait files
+📁 SHARED/    - Universal traits (backdrops, shared accessories, etc.)
 ```
 
 ### 2. **Run the Organization Script**
@@ -14,73 +19,102 @@ npm run organize-traits
 ```
 
 This will automatically:
-- ✅ Sort files by name patterns into correct folders
-- ✅ Move TORSO files to TORSO folder
-- ✅ Move HEAD files to HEAD folder  
-- ✅ Move FACE files to FACE folder
-- ✅ Move clique files (GEEK, JOCK, PREP, FREAK) to respective folders
-- ✅ Handle special cases like HEAD_OVERLAYERS, BACKDROPS, etc.
-- ⚠️ Put unrecognized files in MISC folder for manual sorting
+- ✅ Process each clique separately (no naming conflicts!)
+- ✅ Sort TORSO files (_0001_BLUE-HOODY.png) by clothing patterns
+- ✅ Sort HEAD files by hair/head patterns
+- ✅ Sort FACE files by facial feature patterns  
+- ✅ Move clique-specific files to FREAK/, GEEK/, JOCK/, PREP/ folders
+- ✅ Move shared files to BACKDROPS/, EYEBROWS/, PIGMENT/, etc.
+- ⚠️ Put unrecognized files in MISC/[clique]/ for manual sorting
 
 ### 3. **Generate Trait Data**
 ```bash
 npm run generate-trait-data
 ```
 
-This will:
-- 🔍 Scan all organized folders
-- 📝 Generate a TypeScript file with all available traits
-- 🎨 Update the JNRS Creator with real trait options
-
 ### 4. **One Command Setup**
 ```bash
 npm run setup-traits
 ```
-Runs both scripts in sequence for complete automation!
 
-## 📁 Expected File Structure After Organization
+## 📁 Upload Locations
 
+### **Clique-Specific Traits:**
 ```
-/public/images/jnr-traits/full-traits/
-├── BACKDROPS/          # Background scenes
-├── TORSO/              # _0001_BLUE-HOODY.png, etc.
-├── HEAD/               # Hair and head shapes  
-├── FACE/               # Facial features
-├── EYEBROWS/           # Eyebrow styles
-├── HEAD_OVERLAYERS/    # Hats, glasses, etc.
-├── PIGMENT/            # Skin tones
-├── GEEK/               # Geek-specific traits
-├── JOCK/               # Jock-specific traits  
-├── PREP/               # Prep-specific traits
-├── FREAK/              # Freak-specific traits
+/upload-staging/FREAKS/     ← Dump all FREAK files here
+/upload-staging/GEEKS/      ← Dump all GEEK files here  
+/upload-staging/JOCKS/      ← Dump all JOCK files here
+/upload-staging/PREPS/      ← Dump all PREP files here
+```
+
+### **Shared Traits:**
+```
+/upload-staging/SHARED/     ← Backdrops, universal accessories, etc.
+```
+
+## 🔍 Smart File Recognition
+
+The script recognizes patterns within each clique:
+
+### **Clothing → TORSO:**
+- HOODY, VEST, TEE, LEATHER, PUFFER, BLAZER, etc.
+- Files like: `_0001_BLUE-HOODY.png`
+
+### **Hair/Head → HEAD:**  
+- HAIR, AFRO, BALD, BUZZ, MOHAWK, PONYTAIL, etc.
+- Files like: `_0023_CURLY-HAIR.png`
+
+### **Facial Features → FACE:**
+- EYE, MOUTH, NOSE, SMILE, FRECKLE, etc.
+- Files like: `_0045_BLUE-EYES.png`
+
+### **Special Cases:**
+- BACKDROP → BACKDROPS folder
+- EYEBROW → EYEBROWS folder
+- PIGMENT → PIGMENT folder
+- 1OF1 → 1OF1_S folder
+
+## 📊 Expected Results
+
+After organization:
+```
+/full-traits/
+├── FREAK/              # All FREAK-specific traits
+├── GEEK/               # All GEEK-specific traits  
+├── JOCK/               # All JOCK-specific traits
+├── PREP/               # All PREP-specific traits
+├── BACKDROPS/          # Shared backgrounds
+├── EYEBROWS/           # Shared eyebrow styles
+├── PIGMENT/            # Shared skin tones
+├── HEAD_OVERLAYERS/    # Shared hats, glasses
 ├── NUMBERS/            # Numbered elements
 ├── FIXES/              # Fix/overlay files
-├── 1OF1_S/             # One-of-one special traits
-└── MISC/               # Files that need manual sorting
+├── 1OF1_S/             # One-of-one specials
+└── MISC/               # Manual sorting needed
+    ├── FREAK/          # Unrecognized FREAK files
+    ├── GEEK/           # Unrecognized GEEK files
+    ├── JOCK/           # Unrecognized JOCK files
+    ├── PREP/           # Unrecognized PREP files
+    └── SHARED/         # Unrecognized shared files
 ```
 
-## 🎯 Smart File Recognition
+## 🎉 Benefits of Clique-Based Upload
 
-The script recognizes files by patterns:
-- **Clothing**: HOODY, VEST, TEE, LEATHER, PUFFER → TORSO
-- **Hair**: HAIR, AFRO, BALD, BUZZ → HEAD  
-- **Face**: EYE, MOUTH, NOSE, SMILE → FACE
-- **Cliques**: GEEK, JOCK, PREP, FREAK → respective folders
-- **Direct matches**: BACKDROP, EYEBROW, PIGMENT, etc.
+- ✅ **No naming conflicts** between cliques
+- ✅ **Cleaner organization** - files stay with their clique
+- ✅ **Better trait management** - easier to find specific clique traits
+- ✅ **Safer processing** - each clique processed independently
+- ✅ **Flexible uploads** - upload one clique at a time
 
-## 🔧 Manual Sorting
+## 🚀 Usage Steps
 
-If files end up in MISC folder:
-1. Look at the filename
-2. Move to appropriate folder manually
-3. Run `npm run generate-trait-data` again
+1. **Upload FREAKS files** to `/upload-staging/FREAKS/`
+2. **Upload GEEKS files** to `/upload-staging/GEEKS/`  
+3. **Upload JOCKS files** to `/upload-staging/JOCKS/`
+4. **Upload PREPS files** to `/upload-staging/PREPS/`
+5. **Upload shared files** to `/upload-staging/SHARED/`
+6. **Run:** `npm run setup-traits`
+7. **Check results** in the organized folders
+8. **Manual sort** any files in MISC/ subfolders
 
-## ✨ Result
-
-After running the scripts, your JNRS Creator will have:
-- 🎨 All your actual trait files available
-- 🖼️ Dropdown menus populated with real options
-- 🎭 Proper categorization and layering
-- 🚀 Thousands of possible combinations!
-
-Just upload your files and let the automation handle the rest! 🎉
+Much cleaner and safer! �
