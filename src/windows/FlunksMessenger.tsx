@@ -4,6 +4,7 @@ import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useWindowsContext } from 'contexts/WindowsContext';
 import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 import { WINDOW_IDS } from 'fixed';
+import { AI_AGENTS, getAgentResponse } from 'data/aiAgents';
 import { 
   Window, 
   WindowHeader, 
@@ -188,6 +189,7 @@ const FlunksMessenger: React.FC = () => {
   const [contacts] = useState<Contact[]>([
     { username: 'FlunkBot', online: true, isAI: true },
     { username: 'StudyBuddy', online: true, isAI: true },
+    { username: 'TownGossip', online: true, isAI: true },
     { username: 'CoolGeek92', online: true },
     { username: 'PrepQueen', online: false },
     { username: 'JockStar', online: true },
@@ -230,12 +232,13 @@ const FlunksMessenger: React.FC = () => {
       setCurrentMessage('');
 
       // Simulate AI response for AI contacts
-      if (selectedContact === 'FlunkBot') {
+      const contact = contacts.find(c => c.username === selectedContact);
+      if (contact?.isAI && AI_AGENTS[contact.username]) {
         setTimeout(() => {
           const aiResponse: Message = {
             id: (Date.now() + 1).toString(),
-            username: 'FlunkBot',
-            text: getAIResponse(currentMessage.trim()),
+            username: selectedContact,
+            text: getAgentResponse(selectedContact, currentMessage.trim()),
             timestamp: new Date(),
             isOwn: false
           };
@@ -245,17 +248,24 @@ const FlunksMessenger: React.FC = () => {
     }
   };
 
-  const getAIResponse = (userMessage: string): string => {
-    const responses = [
-      "That's really interesting! Tell me more! 🤔",
-      "I totally understand what you mean! 😊",
-      "Have you tried checking out the other areas in Flunks? 🎮",
-      "That reminds me of my favorite class in school! 📚",
-      "You should definitely explore more of the Flunks universe! ✨",
-      "I'm just a bot, but I think that's pretty cool! 🤖",
-      "Want to know a secret about the Flunks world? 👀"
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
+  const switchToContact = (contactName: string) => {
+    setSelectedContact(contactName);
+    
+    // If switching to an AI agent, show their greeting
+    if (AI_AGENTS[contactName] && messages.length > 0) {
+      const agent = AI_AGENTS[contactName];
+      const greeting = agent.conversationStarters[Math.floor(Math.random() * agent.conversationStarters.length)];
+      
+      const greetingMessage: Message = {
+        id: `greeting-${Date.now()}`,
+        username: contactName,
+        text: greeting,
+        timestamp: new Date(),
+        isOwn: false
+      };
+      
+      setMessages(prev => [...prev, greetingMessage]);
+    }
   };
 
   const addEmoji = (emoji: string) => {
@@ -337,7 +347,7 @@ const FlunksMessenger: React.FC = () => {
             <ContactItem
               key={contact.username}
               online={contact.online}
-              onClick={() => setSelectedContact(contact.username)}
+              onClick={() => switchToContact(contact.username)}
               style={{
                 backgroundColor: selectedContact === contact.username ? '#316ac5' : 'transparent',
                 color: selectedContact === contact.username ? 'white' : 'black'
