@@ -1,5 +1,5 @@
 // Auto-generated trait data
-// Last updated: 2025-07-21T14:30:53.719Z
+// Last updated: 2025-07-21T15:18:57.640Z
 
 export interface TraitFile {
   name: string;
@@ -12,2647 +12,6 @@ export interface TraitData {
 }
 
 export const TRAIT_DATA: TraitData = {
-  "BACKDROPS": [
-    {
-      "name": "BLANK",
-      "filename": "BLANK.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/BLANK.png"
-    },
-    {
-      "name": "BLUE-GRADIENT",
-      "filename": "BLUE-GRADIENT.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/BLUE-GRADIENT.png"
-    },
-    {
-      "name": "BLUE-SKY",
-      "filename": "BLUE-SKY.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/BLUE-SKY.png"
-    },
-    {
-      "name": "BLUE",
-      "filename": "BLUE.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/BLUE.png"
-    },
-    {
-      "name": "BULBHEADS",
-      "filename": "BULBHEADS.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/BULBHEADS.png"
-    },
-    {
-      "name": "CYAN-FLOCKS",
-      "filename": "CYAN-FLOCKS.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/CYAN-FLOCKS.png"
-    },
-    {
-      "name": "CYAN-GRADIENT",
-      "filename": "CYAN-GRADIENT.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/CYAN-GRADIENT.png"
-    },
-    {
-      "name": "CYAN-SMILEYS",
-      "filename": "CYAN-SMILEYS.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/CYAN-SMILEYS.png"
-    },
-    {
-      "name": "CYAN",
-      "filename": "CYAN.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/CYAN.png"
-    },
-    {
-      "name": "GOLDEN",
-      "filename": "GOLDEN.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/GOLDEN.png"
-    },
-    {
-      "name": "GREEN-GRADIENT",
-      "filename": "GREEN-GRADIENT.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/GREEN-GRADIENT.png"
-    },
-    {
-      "name": "GREEN",
-      "filename": "GREEN.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/GREEN.png"
-    },
-    {
-      "name": "NIGHT-TIME",
-      "filename": "NIGHT-TIME.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/NIGHT-TIME.png"
-    },
-    {
-      "name": "ORANGE-GRADIENT",
-      "filename": "ORANGE-GRADIENT.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/ORANGE-GRADIENT.png"
-    },
-    {
-      "name": "ORANGE",
-      "filename": "ORANGE.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/ORANGE.png"
-    },
-    {
-      "name": "PINK-SMILEYS",
-      "filename": "PINK-SMILEYS.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/PINK-SMILEYS.png"
-    },
-    {
-      "name": "PINK",
-      "filename": "PINK.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/PINK.png"
-    },
-    {
-      "name": "PIXEL-STATIC-SMILEYS",
-      "filename": "PIXEL-STATIC-SMILEYS.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/PIXEL-STATIC-SMILEYS.png"
-    },
-    {
-      "name": "PIXEL-STATIC",
-      "filename": "PIXEL-STATIC.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/PIXEL-STATIC.png"
-    },
-    {
-      "name": "PURPLE-GRADIENT",
-      "filename": "PURPLE-GRADIENT.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/PURPLE-GRADIENT.png"
-    },
-    {
-      "name": "PURPLE",
-      "filename": "PURPLE.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/PURPLE.png"
-    },
-    {
-      "name": "RAINBOW-FLOCKS",
-      "filename": "RAINBOW-FLOCKS.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/RAINBOW-FLOCKS.png"
-    },
-    {
-      "name": "RED-GRADIENT",
-      "filename": "RED-GRADIENT.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/RED-GRADIENT.png"
-    },
-    {
-      "name": "RED-SKY",
-      "filename": "RED-SKY.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/RED-SKY.png"
-    },
-    {
-      "name": "RED",
-      "filename": "RED.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/RED.png"
-    },
-    {
-      "name": "STARRY GALAXY BACKDROP V1",
-      "filename": "STARRY GALAXY BACKDROP V1.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/STARRY GALAXY BACKDROP V1.png"
-    },
-    {
-      "name": "VERY-DAPPER",
-      "filename": "VERY-DAPPER.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/VERY-DAPPER.png"
-    },
-    {
-      "name": "YELLOW-GRADIENT",
-      "filename": "YELLOW-GRADIENT.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/YELLOW-GRADIENT.png"
-    },
-    {
-      "name": "YELLOW",
-      "filename": "YELLOW.png",
-      "path": "/images/jnr-traits/full-traits/BACKDROPS/YELLOW.png"
-    }
-  ],
-  "EYEBROWS": [
-    {
-      "name": "_0000_EYEBROWS-1",
-      "filename": "_0000_EYEBROWS-1.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000_EYEBROWS-1.png"
-    },
-    {
-      "name": "_0000s_0000_EYEBROWS-1",
-      "filename": "_0000s_0000_EYEBROWS-1.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0000_EYEBROWS-1.png"
-    },
-    {
-      "name": "_0000s_0001_EYEBROWS-2",
-      "filename": "_0000s_0001_EYEBROWS-2.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0001_EYEBROWS-2.png"
-    },
-    {
-      "name": "_0000s_0002_EYEBROWS-3",
-      "filename": "_0000s_0002_EYEBROWS-3.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0002_EYEBROWS-3.png"
-    },
-    {
-      "name": "_0000s_0003_EYEBROWS-4",
-      "filename": "_0000s_0003_EYEBROWS-4.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0003_EYEBROWS-4.png"
-    },
-    {
-      "name": "_0000s_0004_EYEBROWS-5",
-      "filename": "_0000s_0004_EYEBROWS-5.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0004_EYEBROWS-5.png"
-    },
-    {
-      "name": "_0000s_0005_EYEBROWS-6",
-      "filename": "_0000s_0005_EYEBROWS-6.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0005_EYEBROWS-6.png"
-    },
-    {
-      "name": "_0000s_0006_EYEBROWS-7",
-      "filename": "_0000s_0006_EYEBROWS-7.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0006_EYEBROWS-7.png"
-    },
-    {
-      "name": "_0001_EYEBROWS-2",
-      "filename": "_0001_EYEBROWS-2.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001_EYEBROWS-2.png"
-    },
-    {
-      "name": "_0001s_0000_EYEBROWS-1",
-      "filename": "_0001s_0000_EYEBROWS-1.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0000_EYEBROWS-1.png"
-    },
-    {
-      "name": "_0001s_0001_EYEBROWS-2",
-      "filename": "_0001s_0001_EYEBROWS-2.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0001_EYEBROWS-2.png"
-    },
-    {
-      "name": "_0001s_0002_EYEBROWS-3",
-      "filename": "_0001s_0002_EYEBROWS-3.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0002_EYEBROWS-3.png"
-    },
-    {
-      "name": "_0001s_0003_EYEBROWS-4",
-      "filename": "_0001s_0003_EYEBROWS-4.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0003_EYEBROWS-4.png"
-    },
-    {
-      "name": "_0001s_0004_EYEBROWS-5",
-      "filename": "_0001s_0004_EYEBROWS-5.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0004_EYEBROWS-5.png"
-    },
-    {
-      "name": "_0001s_0005_EYEBROWS-6",
-      "filename": "_0001s_0005_EYEBROWS-6.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0005_EYEBROWS-6.png"
-    },
-    {
-      "name": "_0001s_0006_EYEBROWS-7",
-      "filename": "_0001s_0006_EYEBROWS-7.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0006_EYEBROWS-7.png"
-    },
-    {
-      "name": "_0002_EYEBROWS-3",
-      "filename": "_0002_EYEBROWS-3.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002_EYEBROWS-3.png"
-    },
-    {
-      "name": "_0002s_0000_EYEBROWS-1",
-      "filename": "_0002s_0000_EYEBROWS-1.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0000_EYEBROWS-1.png"
-    },
-    {
-      "name": "_0002s_0001_EYEBROWS-2",
-      "filename": "_0002s_0001_EYEBROWS-2.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0001_EYEBROWS-2.png"
-    },
-    {
-      "name": "_0002s_0002_EYEBROWS-3",
-      "filename": "_0002s_0002_EYEBROWS-3.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0002_EYEBROWS-3.png"
-    },
-    {
-      "name": "_0002s_0003_EYEBROWS-4",
-      "filename": "_0002s_0003_EYEBROWS-4.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0003_EYEBROWS-4.png"
-    },
-    {
-      "name": "_0002s_0004_EYEBROWS-5",
-      "filename": "_0002s_0004_EYEBROWS-5.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0004_EYEBROWS-5.png"
-    },
-    {
-      "name": "_0002s_0005_EYEBROWS-6",
-      "filename": "_0002s_0005_EYEBROWS-6.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0005_EYEBROWS-6.png"
-    },
-    {
-      "name": "_0002s_0006_EYEBROWS-7",
-      "filename": "_0002s_0006_EYEBROWS-7.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0006_EYEBROWS-7.png"
-    },
-    {
-      "name": "_0003_EYEBROWS-4",
-      "filename": "_0003_EYEBROWS-4.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003_EYEBROWS-4.png"
-    },
-    {
-      "name": "_0003s_0000_EYEBROWS-1",
-      "filename": "_0003s_0000_EYEBROWS-1.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0000_EYEBROWS-1.png"
-    },
-    {
-      "name": "_0003s_0001_EYEBROWS-2",
-      "filename": "_0003s_0001_EYEBROWS-2.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0001_EYEBROWS-2.png"
-    },
-    {
-      "name": "_0003s_0002_EYEBROWS-3",
-      "filename": "_0003s_0002_EYEBROWS-3.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0002_EYEBROWS-3.png"
-    },
-    {
-      "name": "_0003s_0003_EYEBROWS-4",
-      "filename": "_0003s_0003_EYEBROWS-4.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0003_EYEBROWS-4.png"
-    },
-    {
-      "name": "_0003s_0004_EYEBROWS-5",
-      "filename": "_0003s_0004_EYEBROWS-5.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0004_EYEBROWS-5.png"
-    },
-    {
-      "name": "_0003s_0005_EYEBROWS-6",
-      "filename": "_0003s_0005_EYEBROWS-6.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0005_EYEBROWS-6.png"
-    },
-    {
-      "name": "_0003s_0006_EYEBROWS-7",
-      "filename": "_0003s_0006_EYEBROWS-7.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0006_EYEBROWS-7.png"
-    },
-    {
-      "name": "_0004_EYEBROWS-5",
-      "filename": "_0004_EYEBROWS-5.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004_EYEBROWS-5.png"
-    },
-    {
-      "name": "_0004s_0000_EYEBROWS-1",
-      "filename": "_0004s_0000_EYEBROWS-1.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0000_EYEBROWS-1.png"
-    },
-    {
-      "name": "_0004s_0001_EYEBROWS-2",
-      "filename": "_0004s_0001_EYEBROWS-2.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0001_EYEBROWS-2.png"
-    },
-    {
-      "name": "_0004s_0002_EYEBROWS-3",
-      "filename": "_0004s_0002_EYEBROWS-3.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0002_EYEBROWS-3.png"
-    },
-    {
-      "name": "_0004s_0003_EYEBROWS-4",
-      "filename": "_0004s_0003_EYEBROWS-4.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0003_EYEBROWS-4.png"
-    },
-    {
-      "name": "_0004s_0004_EYEBROWS-5",
-      "filename": "_0004s_0004_EYEBROWS-5.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0004_EYEBROWS-5.png"
-    },
-    {
-      "name": "_0004s_0005_EYEBROWS-6",
-      "filename": "_0004s_0005_EYEBROWS-6.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0005_EYEBROWS-6.png"
-    },
-    {
-      "name": "_0004s_0006_EYEBROWS-7",
-      "filename": "_0004s_0006_EYEBROWS-7.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0006_EYEBROWS-7.png"
-    },
-    {
-      "name": "_0005_EYEBROWS-6",
-      "filename": "_0005_EYEBROWS-6.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005_EYEBROWS-6.png"
-    },
-    {
-      "name": "_0005s_0000_EYEBROWS-1",
-      "filename": "_0005s_0000_EYEBROWS-1.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0000_EYEBROWS-1.png"
-    },
-    {
-      "name": "_0005s_0001_EYEBROWS-2",
-      "filename": "_0005s_0001_EYEBROWS-2.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0001_EYEBROWS-2.png"
-    },
-    {
-      "name": "_0005s_0002_EYEBROWS-3",
-      "filename": "_0005s_0002_EYEBROWS-3.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0002_EYEBROWS-3.png"
-    },
-    {
-      "name": "_0005s_0003_EYEBROWS-4",
-      "filename": "_0005s_0003_EYEBROWS-4.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0003_EYEBROWS-4.png"
-    },
-    {
-      "name": "_0005s_0004_EYEBROWS-5",
-      "filename": "_0005s_0004_EYEBROWS-5.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0004_EYEBROWS-5.png"
-    },
-    {
-      "name": "_0005s_0005_EYEBROWS-6",
-      "filename": "_0005s_0005_EYEBROWS-6.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0005_EYEBROWS-6.png"
-    },
-    {
-      "name": "_0005s_0006_EYEBROWS-7",
-      "filename": "_0005s_0006_EYEBROWS-7.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0006_EYEBROWS-7.png"
-    },
-    {
-      "name": "_0006_EYEBROWS-7",
-      "filename": "_0006_EYEBROWS-7.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006_EYEBROWS-7.png"
-    },
-    {
-      "name": "_0006s_0000_EYEBROWS-1",
-      "filename": "_0006s_0000_EYEBROWS-1.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0000_EYEBROWS-1.png"
-    },
-    {
-      "name": "_0006s_0001_EYEBROWS-2",
-      "filename": "_0006s_0001_EYEBROWS-2.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0001_EYEBROWS-2.png"
-    },
-    {
-      "name": "_0006s_0002_EYEBROWS-3",
-      "filename": "_0006s_0002_EYEBROWS-3.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0002_EYEBROWS-3.png"
-    },
-    {
-      "name": "_0006s_0003_EYEBROWS-4",
-      "filename": "_0006s_0003_EYEBROWS-4.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0003_EYEBROWS-4.png"
-    },
-    {
-      "name": "_0006s_0004_EYEBROWS-5",
-      "filename": "_0006s_0004_EYEBROWS-5.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0004_EYEBROWS-5.png"
-    },
-    {
-      "name": "_0006s_0005_EYEBROWS-6",
-      "filename": "_0006s_0005_EYEBROWS-6.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0005_EYEBROWS-6.png"
-    },
-    {
-      "name": "_0006s_0006_EYEBROWS-7",
-      "filename": "_0006s_0006_EYEBROWS-7.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0006_EYEBROWS-7.png"
-    },
-    {
-      "name": "_0007s_0000_EYEBROWS-1",
-      "filename": "_0007s_0000_EYEBROWS-1.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0000_EYEBROWS-1.png"
-    },
-    {
-      "name": "_0007s_0001_EYEBROWS-2",
-      "filename": "_0007s_0001_EYEBROWS-2.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0001_EYEBROWS-2.png"
-    },
-    {
-      "name": "_0007s_0002_EYEBROWS-3",
-      "filename": "_0007s_0002_EYEBROWS-3.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0002_EYEBROWS-3.png"
-    },
-    {
-      "name": "_0007s_0003_EYEBROWS-4",
-      "filename": "_0007s_0003_EYEBROWS-4.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0003_EYEBROWS-4.png"
-    },
-    {
-      "name": "_0007s_0004_EYEBROWS-5",
-      "filename": "_0007s_0004_EYEBROWS-5.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0004_EYEBROWS-5.png"
-    },
-    {
-      "name": "_0007s_0005_EYEBROWS-6",
-      "filename": "_0007s_0005_EYEBROWS-6.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0005_EYEBROWS-6.png"
-    },
-    {
-      "name": "_0007s_0006_EYEBROWS-7",
-      "filename": "_0007s_0006_EYEBROWS-7.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0006_EYEBROWS-7.png"
-    },
-    {
-      "name": "_0008s_0000_EYEBROWS-1",
-      "filename": "_0008s_0000_EYEBROWS-1.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0000_EYEBROWS-1.png"
-    },
-    {
-      "name": "_0008s_0001_EYEBROWS-2",
-      "filename": "_0008s_0001_EYEBROWS-2.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0001_EYEBROWS-2.png"
-    },
-    {
-      "name": "_0008s_0002_EYEBROWS-3",
-      "filename": "_0008s_0002_EYEBROWS-3.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0002_EYEBROWS-3.png"
-    },
-    {
-      "name": "_0008s_0003_EYEBROWS-4",
-      "filename": "_0008s_0003_EYEBROWS-4.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0003_EYEBROWS-4.png"
-    },
-    {
-      "name": "_0008s_0004_EYEBROWS-5",
-      "filename": "_0008s_0004_EYEBROWS-5.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0004_EYEBROWS-5.png"
-    },
-    {
-      "name": "_0008s_0005_EYEBROWS-6",
-      "filename": "_0008s_0005_EYEBROWS-6.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0005_EYEBROWS-6.png"
-    },
-    {
-      "name": "_0008s_0006_EYEBROWS-7",
-      "filename": "_0008s_0006_EYEBROWS-7.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0006_EYEBROWS-7.png"
-    },
-    {
-      "name": "_0009s_0000_EYEBROWS-1",
-      "filename": "_0009s_0000_EYEBROWS-1.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0000_EYEBROWS-1.png"
-    },
-    {
-      "name": "_0009s_0001_EYEBROWS-2",
-      "filename": "_0009s_0001_EYEBROWS-2.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0001_EYEBROWS-2.png"
-    },
-    {
-      "name": "_0009s_0002_EYEBROWS-3",
-      "filename": "_0009s_0002_EYEBROWS-3.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0002_EYEBROWS-3.png"
-    },
-    {
-      "name": "_0009s_0003_EYEBROWS-4",
-      "filename": "_0009s_0003_EYEBROWS-4.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0003_EYEBROWS-4.png"
-    },
-    {
-      "name": "_0009s_0004_EYEBROWS-5",
-      "filename": "_0009s_0004_EYEBROWS-5.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0004_EYEBROWS-5.png"
-    },
-    {
-      "name": "_0009s_0005_EYEBROWS-6",
-      "filename": "_0009s_0005_EYEBROWS-6.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0005_EYEBROWS-6.png"
-    },
-    {
-      "name": "_0009s_0006_EYEBROWS-7",
-      "filename": "_0009s_0006_EYEBROWS-7.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0006_EYEBROWS-7.png"
-    },
-    {
-      "name": "_0010s_0000_EYEBROWS-1",
-      "filename": "_0010s_0000_EYEBROWS-1.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0000_EYEBROWS-1.png"
-    },
-    {
-      "name": "_0010s_0001_EYEBROWS-2",
-      "filename": "_0010s_0001_EYEBROWS-2.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0001_EYEBROWS-2.png"
-    },
-    {
-      "name": "_0010s_0002_EYEBROWS-3",
-      "filename": "_0010s_0002_EYEBROWS-3.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0002_EYEBROWS-3.png"
-    },
-    {
-      "name": "_0010s_0003_EYEBROWS-4",
-      "filename": "_0010s_0003_EYEBROWS-4.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0003_EYEBROWS-4.png"
-    },
-    {
-      "name": "_0010s_0004_EYEBROWS-5",
-      "filename": "_0010s_0004_EYEBROWS-5.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0004_EYEBROWS-5.png"
-    },
-    {
-      "name": "_0010s_0005_EYEBROWS-6",
-      "filename": "_0010s_0005_EYEBROWS-6.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0005_EYEBROWS-6.png"
-    },
-    {
-      "name": "_0010s_0006_EYEBROWS-7",
-      "filename": "_0010s_0006_EYEBROWS-7.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0006_EYEBROWS-7.png"
-    },
-    {
-      "name": "_0011s_0000_EYEBROWS-1",
-      "filename": "_0011s_0000_EYEBROWS-1.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0000_EYEBROWS-1.png"
-    },
-    {
-      "name": "_0011s_0001_EYEBROWS-2",
-      "filename": "_0011s_0001_EYEBROWS-2.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0001_EYEBROWS-2.png"
-    },
-    {
-      "name": "_0011s_0002_EYEBROWS-3",
-      "filename": "_0011s_0002_EYEBROWS-3.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0002_EYEBROWS-3.png"
-    },
-    {
-      "name": "_0011s_0003_EYEBROWS-4",
-      "filename": "_0011s_0003_EYEBROWS-4.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0003_EYEBROWS-4.png"
-    },
-    {
-      "name": "_0011s_0004_EYEBROWS-5",
-      "filename": "_0011s_0004_EYEBROWS-5.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0004_EYEBROWS-5.png"
-    },
-    {
-      "name": "_0011s_0005_EYEBROWS-6",
-      "filename": "_0011s_0005_EYEBROWS-6.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0005_EYEBROWS-6.png"
-    },
-    {
-      "name": "_0011s_0006_EYEBROWS-7",
-      "filename": "_0011s_0006_EYEBROWS-7.png",
-      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0006_EYEBROWS-7.png"
-    }
-  ],
-  "FIXES": [],
-  "FREAK": [],
-  "GEEK": [],
-  "JOCK": [],
-  "PREP": [],
-  "NUMBERS": [],
-  "FACE": [
-    {
-      "name": "CYAN FLOCKS",
-      "filename": "CYAN FLOCKS.png",
-      "path": "/images/jnr-traits/full-traits/FACE/CYAN FLOCKS.png"
-    },
-    {
-      "name": "CYAN GRADIENT",
-      "filename": "CYAN GRADIENT.png",
-      "path": "/images/jnr-traits/full-traits/FACE/CYAN GRADIENT.png"
-    },
-    {
-      "name": "CYAN SMILEYS",
-      "filename": "CYAN SMILEYS.png",
-      "path": "/images/jnr-traits/full-traits/FACE/CYAN SMILEYS.png"
-    },
-    {
-      "name": "CYAN",
-      "filename": "CYAN.png",
-      "path": "/images/jnr-traits/full-traits/FACE/CYAN.png"
-    },
-    {
-      "name": "FREAK_I_M-QUIRKY",
-      "filename": "FREAK_I_M-QUIRKY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK_I_M-QUIRKY.png"
-    },
-    {
-      "name": "FREAK_LOST",
-      "filename": "FREAK_LOST.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK_LOST.png"
-    },
-    {
-      "name": "FREAK_POTTER-RASP",
-      "filename": "FREAK_POTTER-RASP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK_POTTER-RASP.png"
-    },
-    {
-      "name": "FREAK_SMILEY",
-      "filename": "FREAK_SMILEY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK_SMILEY.png"
-    },
-    {
-      "name": "FREAK__0000_3D-GLASSES",
-      "filename": "FREAK__0000_3D-GLASSES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0000_3D-GLASSES.png"
-    },
-    {
-      "name": "FREAK__0001_ANGRY",
-      "filename": "FREAK__0001_ANGRY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0001_ANGRY.png"
-    },
-    {
-      "name": "FREAK__0002_ANNOYED",
-      "filename": "FREAK__0002_ANNOYED.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0002_ANNOYED.png"
-    },
-    {
-      "name": "FREAK__0003_ANON",
-      "filename": "FREAK__0003_ANON.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0003_ANON.png"
-    },
-    {
-      "name": "FREAK__0004_ASTONISHED",
-      "filename": "FREAK__0004_ASTONISHED.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0004_ASTONISHED.png"
-    },
-    {
-      "name": "FREAK__0005_BRUISED",
-      "filename": "FREAK__0005_BRUISED.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0005_BRUISED.png"
-    },
-    {
-      "name": "FREAK__0006_BUBBLEGUM",
-      "filename": "FREAK__0006_BUBBLEGUM.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0006_BUBBLEGUM.png"
-    },
-    {
-      "name": "FREAK__0007_CIGGY",
-      "filename": "FREAK__0007_CIGGY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0007_CIGGY.png"
-    },
-    {
-      "name": "FREAK__0008_COOL-DARK-SHADES",
-      "filename": "FREAK__0008_COOL-DARK-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0008_COOL-DARK-SHADES.png"
-    },
-    {
-      "name": "FREAK__0009_COOL-RED-SHADES",
-      "filename": "FREAK__0009_COOL-RED-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0009_COOL-RED-SHADES.png"
-    },
-    {
-      "name": "FREAK__0010_CREEPY",
-      "filename": "FREAK__0010_CREEPY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0010_CREEPY.png"
-    },
-    {
-      "name": "FREAK__0011_CUTE-RASP",
-      "filename": "FREAK__0011_CUTE-RASP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0011_CUTE-RASP.png"
-    },
-    {
-      "name": "FREAK__0012_CYAN-SHADES",
-      "filename": "FREAK__0012_CYAN-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0012_CYAN-SHADES.png"
-    },
-    {
-      "name": "FREAK__0013_CYAN-BANDANA",
-      "filename": "FREAK__0013_CYAN-BANDANA.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0013_CYAN-BANDANA.png"
-    },
-    {
-      "name": "FREAK__0013_DAZED",
-      "filename": "FREAK__0013_DAZED.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0013_DAZED.png"
-    },
-    {
-      "name": "FREAK__0014_CYAN-CAP",
-      "filename": "FREAK__0014_CYAN-CAP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0014_CYAN-CAP.png"
-    },
-    {
-      "name": "FREAK__0014_DIAMOND-GRILLZ",
-      "filename": "FREAK__0014_DIAMOND-GRILLZ.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0014_DIAMOND-GRILLZ.png"
-    },
-    {
-      "name": "FREAK__0015_CYAN-FRO",
-      "filename": "FREAK__0015_CYAN-FRO.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0015_CYAN-FRO.png"
-    },
-    {
-      "name": "FREAK__0015_ETERNAL-SKULL",
-      "filename": "FREAK__0015_ETERNAL-SKULL.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0015_ETERNAL-SKULL.png"
-    },
-    {
-      "name": "FREAK__0016_FANGS",
-      "filename": "FREAK__0016_FANGS.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0016_FANGS.png"
-    },
-    {
-      "name": "FREAK__0017_FLIRTY",
-      "filename": "FREAK__0017_FLIRTY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0017_FLIRTY.png"
-    },
-    {
-      "name": "FREAK__0018_FROWNY",
-      "filename": "FREAK__0018_FROWNY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0018_FROWNY.png"
-    },
-    {
-      "name": "FREAK__0019_GOLD-GRILLZ",
-      "filename": "FREAK__0019_GOLD-GRILLZ.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0019_GOLD-GRILLZ.png"
-    },
-    {
-      "name": "FREAK__0020_HEARTY-KISS",
-      "filename": "FREAK__0020_HEARTY-KISS.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0020_HEARTY-KISS.png"
-    },
-    {
-      "name": "FREAK__0021_ETERNAL-BUCKET",
-      "filename": "FREAK__0021_ETERNAL-BUCKET.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0021_ETERNAL-BUCKET.png"
-    },
-    {
-      "name": "FREAK__0021_HEARTY-SMILE",
-      "filename": "FREAK__0021_HEARTY-SMILE.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0021_HEARTY-SMILE.png"
-    },
-    {
-      "name": "FREAK__0022_HOCKEY-SMILE",
-      "filename": "FREAK__0022_HOCKEY-SMILE.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0022_HOCKEY-SMILE.png"
-    },
-    {
-      "name": "FREAK__0023_IMPATIENT",
-      "filename": "FREAK__0023_IMPATIENT.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0023_IMPATIENT.png"
-    },
-    {
-      "name": "FREAK__0024_I_M-QUIRKY",
-      "filename": "FREAK__0024_I_M-QUIRKY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0024_I_M-QUIRKY.png"
-    },
-    {
-      "name": "FREAK__0025_LOST",
-      "filename": "FREAK__0025_LOST.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0025_LOST.png"
-    },
-    {
-      "name": "FREAK__0026_MAKEUP",
-      "filename": "FREAK__0026_MAKEUP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0026_MAKEUP.png"
-    },
-    {
-      "name": "FREAK__0029_ORANGE-SHADES",
-      "filename": "FREAK__0029_ORANGE-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0029_ORANGE-SHADES.png"
-    },
-    {
-      "name": "FREAK__0033_GOLDEN-BUCKET-(FREAK)",
-      "filename": "FREAK__0033_GOLDEN-BUCKET-(FREAK).png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0033_GOLDEN-BUCKET-(FREAK).png"
-    },
-    {
-      "name": "FREAK__0033_POTTER-RASP",
-      "filename": "FREAK__0033_POTTER-RASP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0033_POTTER-RASP.png"
-    },
-    {
-      "name": "FREAK__0035_PURPLE-SHADES",
-      "filename": "FREAK__0035_PURPLE-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0035_PURPLE-SHADES.png"
-    },
-    {
-      "name": "FREAK__0038_SMILEY",
-      "filename": "FREAK__0038_SMILEY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0038_SMILEY.png"
-    },
-    {
-      "name": "FREAK__0039_STRESSED-CIGGY",
-      "filename": "FREAK__0039_STRESSED-CIGGY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0039_STRESSED-CIGGY.png"
-    },
-    {
-      "name": "FREAK__0040_PINK-SCARF",
-      "filename": "FREAK__0040_PINK-SCARF.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0040_PINK-SCARF.png"
-    },
-    {
-      "name": "FREAK__0049_PURPLE-SCARF",
-      "filename": "FREAK__0049_PURPLE-SCARF.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0049_PURPLE-SCARF.png"
-    },
-    {
-      "name": "FREAK__0060_RED-SCARF",
-      "filename": "FREAK__0060_RED-SCARF.png",
-      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0060_RED-SCARF.png"
-    },
-    {
-      "name": "GEEK_CYAN",
-      "filename": "GEEK_CYAN.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK_CYAN.png"
-    },
-    {
-      "name": "GEEK_ETERNAL",
-      "filename": "GEEK_ETERNAL.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK_ETERNAL.png"
-    },
-    {
-      "name": "GEEK_GOLDEN-FAMILY",
-      "filename": "GEEK_GOLDEN-FAMILY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK_GOLDEN-FAMILY.png"
-    },
-    {
-      "name": "GEEK__0000_3D-GLASSES",
-      "filename": "GEEK__0000_3D-GLASSES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0000_3D-GLASSES.png"
-    },
-    {
-      "name": "GEEK__0001_ANGRY",
-      "filename": "GEEK__0001_ANGRY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0001_ANGRY.png"
-    },
-    {
-      "name": "GEEK__0002_ANNOYED",
-      "filename": "GEEK__0002_ANNOYED.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0002_ANNOYED.png"
-    },
-    {
-      "name": "GEEK__0003_ANON",
-      "filename": "GEEK__0003_ANON.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0003_ANON.png"
-    },
-    {
-      "name": "GEEK__0004_ASTONISHED",
-      "filename": "GEEK__0004_ASTONISHED.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0004_ASTONISHED.png"
-    },
-    {
-      "name": "GEEK__0005_BRUISED",
-      "filename": "GEEK__0005_BRUISED.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0005_BRUISED.png"
-    },
-    {
-      "name": "GEEK__0006_BUBBLEGUM",
-      "filename": "GEEK__0006_BUBBLEGUM.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0006_BUBBLEGUM.png"
-    },
-    {
-      "name": "GEEK__0007_CIGGY",
-      "filename": "GEEK__0007_CIGGY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0007_CIGGY.png"
-    },
-    {
-      "name": "GEEK__0008_COOL-DARK-SHADES",
-      "filename": "GEEK__0008_COOL-DARK-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0008_COOL-DARK-SHADES.png"
-    },
-    {
-      "name": "GEEK__0009_COOL-RED-SHADES",
-      "filename": "GEEK__0009_COOL-RED-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0009_COOL-RED-SHADES.png"
-    },
-    {
-      "name": "GEEK__0010_CREEPY",
-      "filename": "GEEK__0010_CREEPY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0010_CREEPY.png"
-    },
-    {
-      "name": "GEEK__0011_CUTE-RASP",
-      "filename": "GEEK__0011_CUTE-RASP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0011_CUTE-RASP.png"
-    },
-    {
-      "name": "GEEK__0012_CYAN-SHADES",
-      "filename": "GEEK__0012_CYAN-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0012_CYAN-SHADES.png"
-    },
-    {
-      "name": "GEEK__0013_DAZED",
-      "filename": "GEEK__0013_DAZED.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0013_DAZED.png"
-    },
-    {
-      "name": "GEEK__0014_CYAN-BANDANA",
-      "filename": "GEEK__0014_CYAN-BANDANA.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0014_CYAN-BANDANA.png"
-    },
-    {
-      "name": "GEEK__0014_DIAMOND-GRILLZ",
-      "filename": "GEEK__0014_DIAMOND-GRILLZ.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0014_DIAMOND-GRILLZ.png"
-    },
-    {
-      "name": "GEEK__0015_CYAN-CAP",
-      "filename": "GEEK__0015_CYAN-CAP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0015_CYAN-CAP.png"
-    },
-    {
-      "name": "GEEK__0015_ETERNAL-SKULL",
-      "filename": "GEEK__0015_ETERNAL-SKULL.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0015_ETERNAL-SKULL.png"
-    },
-    {
-      "name": "GEEK__0016_CYAN-FRO",
-      "filename": "GEEK__0016_CYAN-FRO.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0016_CYAN-FRO.png"
-    },
-    {
-      "name": "GEEK__0016_FANGS",
-      "filename": "GEEK__0016_FANGS.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0016_FANGS.png"
-    },
-    {
-      "name": "GEEK__0017_FLIRTY",
-      "filename": "GEEK__0017_FLIRTY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0017_FLIRTY.png"
-    },
-    {
-      "name": "GEEK__0018_FROWNY",
-      "filename": "GEEK__0018_FROWNY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0018_FROWNY.png"
-    },
-    {
-      "name": "GEEK__0019_GOLD-GRILLZ",
-      "filename": "GEEK__0019_GOLD-GRILLZ.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0019_GOLD-GRILLZ.png"
-    },
-    {
-      "name": "GEEK__0020_HEARTY-KISS",
-      "filename": "GEEK__0020_HEARTY-KISS.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0020_HEARTY-KISS.png"
-    },
-    {
-      "name": "GEEK__0021_HEARTY-SMILE",
-      "filename": "GEEK__0021_HEARTY-SMILE.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0021_HEARTY-SMILE.png"
-    },
-    {
-      "name": "GEEK__0022_ETERNAL-BUCKET",
-      "filename": "GEEK__0022_ETERNAL-BUCKET.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0022_ETERNAL-BUCKET.png"
-    },
-    {
-      "name": "GEEK__0022_HOCKEY-SMILE",
-      "filename": "GEEK__0022_HOCKEY-SMILE.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0022_HOCKEY-SMILE.png"
-    },
-    {
-      "name": "GEEK__0023_GOLDEN-ZIPUP",
-      "filename": "GEEK__0023_GOLDEN-ZIPUP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0023_GOLDEN-ZIPUP.png"
-    },
-    {
-      "name": "GEEK__0023_IMPATIENT",
-      "filename": "GEEK__0023_IMPATIENT.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0023_IMPATIENT.png"
-    },
-    {
-      "name": "GEEK__0024_I_M-QUIRKY",
-      "filename": "GEEK__0024_I_M-QUIRKY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0024_I_M-QUIRKY.png"
-    },
-    {
-      "name": "GEEK__0025_LOST",
-      "filename": "GEEK__0025_LOST.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0025_LOST.png"
-    },
-    {
-      "name": "GEEK__0026_MAKEUP",
-      "filename": "GEEK__0026_MAKEUP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0026_MAKEUP.png"
-    },
-    {
-      "name": "GEEK__0029_ORANGE-SHADES",
-      "filename": "GEEK__0029_ORANGE-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0029_ORANGE-SHADES.png"
-    },
-    {
-      "name": "GEEK__0033_POTTER-RASP",
-      "filename": "GEEK__0033_POTTER-RASP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0033_POTTER-RASP.png"
-    },
-    {
-      "name": "GEEK__0034_GOLDEN-SPACE-BUNS",
-      "filename": "GEEK__0034_GOLDEN-SPACE-BUNS.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0034_GOLDEN-SPACE-BUNS.png"
-    },
-    {
-      "name": "GEEK__0035_PURPLE-SHADES",
-      "filename": "GEEK__0035_PURPLE-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0035_PURPLE-SHADES.png"
-    },
-    {
-      "name": "GEEK__0038_SMILEY",
-      "filename": "GEEK__0038_SMILEY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0038_SMILEY.png"
-    },
-    {
-      "name": "GEEK__0039_STRESSED-CIGGY",
-      "filename": "GEEK__0039_STRESSED-CIGGY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0039_STRESSED-CIGGY.png"
-    },
-    {
-      "name": "GEEK__0040_PINK-SCARF",
-      "filename": "GEEK__0040_PINK-SCARF.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0040_PINK-SCARF.png"
-    },
-    {
-      "name": "GEEK__0049_PURPLE-SCARF",
-      "filename": "GEEK__0049_PURPLE-SCARF.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0049_PURPLE-SCARF.png"
-    },
-    {
-      "name": "GEEK__0060_RED-SCARF",
-      "filename": "GEEK__0060_RED-SCARF.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0060_RED-SCARF.png"
-    },
-    {
-      "name": "GOLDEN",
-      "filename": "GOLDEN.png",
-      "path": "/images/jnr-traits/full-traits/FACE/GOLDEN.png"
-    },
-    {
-      "name": "JOCK_CYAN-BANDANA",
-      "filename": "JOCK_CYAN-BANDANA.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK_CYAN-BANDANA.png"
-    },
-    {
-      "name": "JOCK_JOCK_0000s_0014_CYAN-CAP",
-      "filename": "JOCK_JOCK_0000s_0014_CYAN-CAP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK_JOCK_0000s_0014_CYAN-CAP.png"
-    },
-    {
-      "name": "JOCK_JOCK_0000s_0015_CYAN-FRO",
-      "filename": "JOCK_JOCK_0000s_0015_CYAN-FRO.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK_JOCK_0000s_0015_CYAN-FRO.png"
-    },
-    {
-      "name": "JOCK_JOCK_0000s_0021_ETERNAL-BUCKET",
-      "filename": "JOCK_JOCK_0000s_0021_ETERNAL-BUCKET.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK_JOCK_0000s_0021_ETERNAL-BUCKET.png"
-    },
-    {
-      "name": "JOCK_JOCK_0000s_0033_GOLDEN-RALLY",
-      "filename": "JOCK_JOCK_0000s_0033_GOLDEN-RALLY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK_JOCK_0000s_0033_GOLDEN-RALLY.png"
-    },
-    {
-      "name": "JOCK__0000s_0000_3D-GLASSES",
-      "filename": "JOCK__0000s_0000_3D-GLASSES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0000_3D-GLASSES.png"
-    },
-    {
-      "name": "JOCK__0000s_0001_ANGRY",
-      "filename": "JOCK__0000s_0001_ANGRY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0001_ANGRY.png"
-    },
-    {
-      "name": "JOCK__0000s_0002_ANNOYED",
-      "filename": "JOCK__0000s_0002_ANNOYED.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0002_ANNOYED.png"
-    },
-    {
-      "name": "JOCK__0000s_0003_ANON",
-      "filename": "JOCK__0000s_0003_ANON.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0003_ANON.png"
-    },
-    {
-      "name": "JOCK__0000s_0004_ASTONISHED",
-      "filename": "JOCK__0000s_0004_ASTONISHED.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0004_ASTONISHED.png"
-    },
-    {
-      "name": "JOCK__0000s_0005_BRUISED",
-      "filename": "JOCK__0000s_0005_BRUISED.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0005_BRUISED.png"
-    },
-    {
-      "name": "JOCK__0000s_0006_BUBBLEGUM",
-      "filename": "JOCK__0000s_0006_BUBBLEGUM.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0006_BUBBLEGUM.png"
-    },
-    {
-      "name": "JOCK__0000s_0007_CIGGY",
-      "filename": "JOCK__0000s_0007_CIGGY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0007_CIGGY.png"
-    },
-    {
-      "name": "JOCK__0000s_0008_COOL-DARK-SHADES",
-      "filename": "JOCK__0000s_0008_COOL-DARK-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0008_COOL-DARK-SHADES.png"
-    },
-    {
-      "name": "JOCK__0000s_0009_COOL-RED-SHADES",
-      "filename": "JOCK__0000s_0009_COOL-RED-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0009_COOL-RED-SHADES.png"
-    },
-    {
-      "name": "JOCK__0000s_0010_CREEPY V2",
-      "filename": "JOCK__0000s_0010_CREEPY V2.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0010_CREEPY V2.png"
-    },
-    {
-      "name": "JOCK__0000s_0010_CREEPY",
-      "filename": "JOCK__0000s_0010_CREEPY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0010_CREEPY.png"
-    },
-    {
-      "name": "JOCK__0000s_0011_CUTE-RASP",
-      "filename": "JOCK__0000s_0011_CUTE-RASP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0011_CUTE-RASP.png"
-    },
-    {
-      "name": "JOCK__0000s_0012_CYAN-SHADES",
-      "filename": "JOCK__0000s_0012_CYAN-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0012_CYAN-SHADES.png"
-    },
-    {
-      "name": "JOCK__0000s_0013_DAZED",
-      "filename": "JOCK__0000s_0013_DAZED.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0013_DAZED.png"
-    },
-    {
-      "name": "JOCK__0000s_0014_DIAMOND-GRILLZ",
-      "filename": "JOCK__0000s_0014_DIAMOND-GRILLZ.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0014_DIAMOND-GRILLZ.png"
-    },
-    {
-      "name": "JOCK__0000s_0015_ETERNAL-SKULL",
-      "filename": "JOCK__0000s_0015_ETERNAL-SKULL.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0015_ETERNAL-SKULL.png"
-    },
-    {
-      "name": "JOCK__0000s_0016_FANGS",
-      "filename": "JOCK__0000s_0016_FANGS.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0016_FANGS.png"
-    },
-    {
-      "name": "JOCK__0000s_0017_FLIRTY",
-      "filename": "JOCK__0000s_0017_FLIRTY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0017_FLIRTY.png"
-    },
-    {
-      "name": "JOCK__0000s_0018_FROWNY",
-      "filename": "JOCK__0000s_0018_FROWNY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0018_FROWNY.png"
-    },
-    {
-      "name": "JOCK__0000s_0019_GOLD-GRILLZ",
-      "filename": "JOCK__0000s_0019_GOLD-GRILLZ.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0019_GOLD-GRILLZ.png"
-    },
-    {
-      "name": "JOCK__0000s_0020_HEARTY-KISS",
-      "filename": "JOCK__0000s_0020_HEARTY-KISS.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0020_HEARTY-KISS.png"
-    },
-    {
-      "name": "JOCK__0000s_0021_HEARTY-SMILE",
-      "filename": "JOCK__0000s_0021_HEARTY-SMILE.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0021_HEARTY-SMILE.png"
-    },
-    {
-      "name": "JOCK__0000s_0022_HOCKEY-SMILE",
-      "filename": "JOCK__0000s_0022_HOCKEY-SMILE.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0022_HOCKEY-SMILE.png"
-    },
-    {
-      "name": "JOCK__0000s_0023_IMPATIENT",
-      "filename": "JOCK__0000s_0023_IMPATIENT.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0023_IMPATIENT.png"
-    },
-    {
-      "name": "JOCK__0000s_0024_I_M-QUIRKY",
-      "filename": "JOCK__0000s_0024_I_M-QUIRKY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0024_I_M-QUIRKY.png"
-    },
-    {
-      "name": "JOCK__0000s_0025_LOST",
-      "filename": "JOCK__0000s_0025_LOST.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0025_LOST.png"
-    },
-    {
-      "name": "JOCK__0000s_0026_MAKEUP",
-      "filename": "JOCK__0000s_0026_MAKEUP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0026_MAKEUP.png"
-    },
-    {
-      "name": "JOCK__0000s_0029_ORANGE-SHADES",
-      "filename": "JOCK__0000s_0029_ORANGE-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0029_ORANGE-SHADES.png"
-    },
-    {
-      "name": "JOCK__0000s_0033_POTTER-RASP",
-      "filename": "JOCK__0000s_0033_POTTER-RASP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0033_POTTER-RASP.png"
-    },
-    {
-      "name": "JOCK__0000s_0035_PURPLE-SHADES",
-      "filename": "JOCK__0000s_0035_PURPLE-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0035_PURPLE-SHADES.png"
-    },
-    {
-      "name": "JOCK__0000s_0038_SMILEY",
-      "filename": "JOCK__0000s_0038_SMILEY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0038_SMILEY.png"
-    },
-    {
-      "name": "JOCK__0000s_0039_STRESSED-CIGGY",
-      "filename": "JOCK__0000s_0039_STRESSED-CIGGY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0039_STRESSED-CIGGY.png"
-    },
-    {
-      "name": "JOCK__0000s_0041_PINK-SCARF",
-      "filename": "JOCK__0000s_0041_PINK-SCARF.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0041_PINK-SCARF.png"
-    },
-    {
-      "name": "JOCK__0000s_0050_PURPLE-SCARF",
-      "filename": "JOCK__0000s_0050_PURPLE-SCARF.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0050_PURPLE-SCARF.png"
-    },
-    {
-      "name": "JOCK__0000s_0061_RED-SCARF",
-      "filename": "JOCK__0000s_0061_RED-SCARF.png",
-      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0061_RED-SCARF.png"
-    },
-    {
-      "name": "PINK SMILEYS",
-      "filename": "PINK SMILEYS.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PINK SMILEYS.png"
-    },
-    {
-      "name": "PIXEL STATIC SMILEYS V4",
-      "filename": "PIXEL STATIC SMILEYS V4.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PIXEL STATIC SMILEYS V4.png"
-    },
-    {
-      "name": "PIXEL STATIC SMILEYS V6",
-      "filename": "PIXEL STATIC SMILEYS V6.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PIXEL STATIC SMILEYS V6.png"
-    },
-    {
-      "name": "PIXEL STATIC SMILEYS V7",
-      "filename": "PIXEL STATIC SMILEYS V7.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PIXEL STATIC SMILEYS V7.png"
-    },
-    {
-      "name": "PIXEL STATIC SMILEYS",
-      "filename": "PIXEL STATIC SMILEYS.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PIXEL STATIC SMILEYS.png"
-    },
-    {
-      "name": "PREP_CYAN",
-      "filename": "PREP_CYAN.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP_CYAN.png"
-    },
-    {
-      "name": "PREP_ETERNAL",
-      "filename": "PREP_ETERNAL.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP_ETERNAL.png"
-    },
-    {
-      "name": "PREP_GOLDEN-FAMILY",
-      "filename": "PREP_GOLDEN-FAMILY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP_GOLDEN-FAMILY.png"
-    },
-    {
-      "name": "PREP__0000_3D-GLASSES",
-      "filename": "PREP__0000_3D-GLASSES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0000_3D-GLASSES.png"
-    },
-    {
-      "name": "PREP__0001_ANGRY",
-      "filename": "PREP__0001_ANGRY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0001_ANGRY.png"
-    },
-    {
-      "name": "PREP__0002_ANNOYED",
-      "filename": "PREP__0002_ANNOYED.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0002_ANNOYED.png"
-    },
-    {
-      "name": "PREP__0003_ANON",
-      "filename": "PREP__0003_ANON.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0003_ANON.png"
-    },
-    {
-      "name": "PREP__0004_ASTONISHED",
-      "filename": "PREP__0004_ASTONISHED.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0004_ASTONISHED.png"
-    },
-    {
-      "name": "PREP__0005_BRUISED",
-      "filename": "PREP__0005_BRUISED.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0005_BRUISED.png"
-    },
-    {
-      "name": "PREP__0006_BUBBLEGUM",
-      "filename": "PREP__0006_BUBBLEGUM.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0006_BUBBLEGUM.png"
-    },
-    {
-      "name": "PREP__0007_CIGGY",
-      "filename": "PREP__0007_CIGGY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0007_CIGGY.png"
-    },
-    {
-      "name": "PREP__0008_COOL-DARK-SHADES",
-      "filename": "PREP__0008_COOL-DARK-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0008_COOL-DARK-SHADES.png"
-    },
-    {
-      "name": "PREP__0009_COOL-RED-SHADES",
-      "filename": "PREP__0009_COOL-RED-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0009_COOL-RED-SHADES.png"
-    },
-    {
-      "name": "PREP__0010_CREEPY",
-      "filename": "PREP__0010_CREEPY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0010_CREEPY.png"
-    },
-    {
-      "name": "PREP__0011_CUTE-RASP",
-      "filename": "PREP__0011_CUTE-RASP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0011_CUTE-RASP.png"
-    },
-    {
-      "name": "PREP__0012_CYAN-SHADES",
-      "filename": "PREP__0012_CYAN-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0012_CYAN-SHADES.png"
-    },
-    {
-      "name": "PREP__0013_DAZED",
-      "filename": "PREP__0013_DAZED.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0013_DAZED.png"
-    },
-    {
-      "name": "PREP__0014_CYAN-BANDANA",
-      "filename": "PREP__0014_CYAN-BANDANA.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0014_CYAN-BANDANA.png"
-    },
-    {
-      "name": "PREP__0014_DIAMOND-GRILLZ",
-      "filename": "PREP__0014_DIAMOND-GRILLZ.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0014_DIAMOND-GRILLZ.png"
-    },
-    {
-      "name": "PREP__0015_CYAN-CAP",
-      "filename": "PREP__0015_CYAN-CAP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0015_CYAN-CAP.png"
-    },
-    {
-      "name": "PREP__0015_ETERNAL-SKULL",
-      "filename": "PREP__0015_ETERNAL-SKULL.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0015_ETERNAL-SKULL.png"
-    },
-    {
-      "name": "PREP__0016_CYAN-FRO",
-      "filename": "PREP__0016_CYAN-FRO.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0016_CYAN-FRO.png"
-    },
-    {
-      "name": "PREP__0016_FANGS",
-      "filename": "PREP__0016_FANGS.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0016_FANGS.png"
-    },
-    {
-      "name": "PREP__0017_FLIRTY",
-      "filename": "PREP__0017_FLIRTY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0017_FLIRTY.png"
-    },
-    {
-      "name": "PREP__0018_FROWNY",
-      "filename": "PREP__0018_FROWNY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0018_FROWNY.png"
-    },
-    {
-      "name": "PREP__0019_GOLD-GRILLZ",
-      "filename": "PREP__0019_GOLD-GRILLZ.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0019_GOLD-GRILLZ.png"
-    },
-    {
-      "name": "PREP__0020_HEARTY-KISS",
-      "filename": "PREP__0020_HEARTY-KISS.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0020_HEARTY-KISS.png"
-    },
-    {
-      "name": "PREP__0021_HEARTY-SMILE",
-      "filename": "PREP__0021_HEARTY-SMILE.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0021_HEARTY-SMILE.png"
-    },
-    {
-      "name": "PREP__0022_ETERNAL-BUCKET",
-      "filename": "PREP__0022_ETERNAL-BUCKET.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0022_ETERNAL-BUCKET.png"
-    },
-    {
-      "name": "PREP__0022_HOCKEY-SMILE",
-      "filename": "PREP__0022_HOCKEY-SMILE.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0022_HOCKEY-SMILE.png"
-    },
-    {
-      "name": "PREP__0023_IMPATIENT",
-      "filename": "PREP__0023_IMPATIENT.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0023_IMPATIENT.png"
-    },
-    {
-      "name": "PREP__0024_GOLDEN-SCARF",
-      "filename": "PREP__0024_GOLDEN-SCARF.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0024_GOLDEN-SCARF.png"
-    },
-    {
-      "name": "PREP__0024_I_M-QUIRKY",
-      "filename": "PREP__0024_I_M-QUIRKY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0024_I_M-QUIRKY.png"
-    },
-    {
-      "name": "PREP__0025_LOST",
-      "filename": "PREP__0025_LOST.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0025_LOST.png"
-    },
-    {
-      "name": "PREP__0026_MAKEUP",
-      "filename": "PREP__0026_MAKEUP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0026_MAKEUP.png"
-    },
-    {
-      "name": "PREP__0029_ORANGE-SHADES",
-      "filename": "PREP__0029_ORANGE-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0029_ORANGE-SHADES.png"
-    },
-    {
-      "name": "PREP__0033_POTTER-RASP",
-      "filename": "PREP__0033_POTTER-RASP.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0033_POTTER-RASP.png"
-    },
-    {
-      "name": "PREP__0035_GOLDEN-FRO",
-      "filename": "PREP__0035_GOLDEN-FRO.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0035_GOLDEN-FRO.png"
-    },
-    {
-      "name": "PREP__0035_PURPLE-SHADES",
-      "filename": "PREP__0035_PURPLE-SHADES.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0035_PURPLE-SHADES.png"
-    },
-    {
-      "name": "PREP__0038_SMILEY",
-      "filename": "PREP__0038_SMILEY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0038_SMILEY.png"
-    },
-    {
-      "name": "PREP__0039_STRESSED-CIGGY",
-      "filename": "PREP__0039_STRESSED-CIGGY.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0039_STRESSED-CIGGY.png"
-    },
-    {
-      "name": "PREP__0042_PINK-SCARF",
-      "filename": "PREP__0042_PINK-SCARF.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0042_PINK-SCARF.png"
-    },
-    {
-      "name": "PREP__0051_PURPLE-SCARF",
-      "filename": "PREP__0051_PURPLE-SCARF.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0051_PURPLE-SCARF.png"
-    },
-    {
-      "name": "PREP__0062_RED-SCARF",
-      "filename": "PREP__0062_RED-SCARF.png",
-      "path": "/images/jnr-traits/full-traits/FACE/PREP__0062_RED-SCARF.png"
-    }
-  ],
-  "HEAD": [
-    {
-      "name": "BULBHEADS TEST FLUNK 01 (#2938)",
-      "filename": "BULBHEADS TEST FLUNK 01 (#2938).png",
-      "path": "/images/jnr-traits/full-traits/HEAD/BULBHEADS TEST FLUNK 01 (#2938).png"
-    },
-    {
-      "name": "BULBHEADS",
-      "filename": "BULBHEADS.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/BULBHEADS.png"
-    },
-    {
-      "name": "FREAK__0000_BLUE-HEADPHONES-OVERLAYER",
-      "filename": "FREAK__0000_BLUE-HEADPHONES-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0000_BLUE-HEADPHONES-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0000_BLUE-HEADPHONES",
-      "filename": "FREAK__0000_BLUE-HEADPHONES.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0000_BLUE-HEADPHONES.png"
-    },
-    {
-      "name": "FREAK__0019_DARK-HEADBAND",
-      "filename": "FREAK__0019_DARK-HEADBAND.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0019_DARK-HEADBAND.png"
-    },
-    {
-      "name": "FREAK__0021_PURPLE-HEADPHONES-OVERLAYER",
-      "filename": "FREAK__0021_PURPLE-HEADPHONES-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0021_PURPLE-HEADPHONES-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0022_ETERNALLY-BALD",
-      "filename": "FREAK__0022_ETERNALLY-BALD.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0022_ETERNALLY-BALD.png"
-    },
-    {
-      "name": "FREAK__0028_YELLOW-HEADPHONES-OVERLAYER",
-      "filename": "FREAK__0028_YELLOW-HEADPHONES-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0028_YELLOW-HEADPHONES-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0040_LIGHT-HEADBAND",
-      "filename": "FREAK__0040_LIGHT-HEADBAND.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0040_LIGHT-HEADBAND.png"
-    },
-    {
-      "name": "FREAK__0065_PURPLE-HEADBAND",
-      "filename": "FREAK__0065_PURPLE-HEADBAND.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0065_PURPLE-HEADBAND.png"
-    },
-    {
-      "name": "FREAK__0066_PURPLE-HEADPHONES",
-      "filename": "FREAK__0066_PURPLE-HEADPHONES.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0066_PURPLE-HEADPHONES.png"
-    },
-    {
-      "name": "FREAK__0079_RED-HEADBAND",
-      "filename": "FREAK__0079_RED-HEADBAND.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0079_RED-HEADBAND.png"
-    },
-    {
-      "name": "FREAK__0092_YELLOW-HEADPHONES",
-      "filename": "FREAK__0092_YELLOW-HEADPHONES.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0092_YELLOW-HEADPHONES.png"
-    },
-    {
-      "name": "GEEK__0000_BLUE-HEADPHONES-OVERLAYER",
-      "filename": "GEEK__0000_BLUE-HEADPHONES-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0000_BLUE-HEADPHONES-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0000_BLUE-HEADPHONES",
-      "filename": "GEEK__0000_BLUE-HEADPHONES.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0000_BLUE-HEADPHONES.png"
-    },
-    {
-      "name": "GEEK__0020_DARK-HEADBAND",
-      "filename": "GEEK__0020_DARK-HEADBAND.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0020_DARK-HEADBAND.png"
-    },
-    {
-      "name": "GEEK__0022_PURPLE-HEADPHONES-OVERLAYER",
-      "filename": "GEEK__0022_PURPLE-HEADPHONES-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0022_PURPLE-HEADPHONES-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0023_ETERNALLY-BALD",
-      "filename": "GEEK__0023_ETERNALLY-BALD.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0023_ETERNALLY-BALD.png"
-    },
-    {
-      "name": "GEEK__0025_CURLY-HAIR",
-      "filename": "GEEK__0025_CURLY-HAIR.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0025_CURLY-HAIR.png"
-    },
-    {
-      "name": "GEEK__0029_YELLOW-HEADPHONES-OVERLAYER",
-      "filename": "GEEK__0029_YELLOW-HEADPHONES-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0029_YELLOW-HEADPHONES-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0041_LIGHT-HEADBAND",
-      "filename": "GEEK__0041_LIGHT-HEADBAND.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0041_LIGHT-HEADBAND.png"
-    },
-    {
-      "name": "GEEK__0066_PURPLE-HEADBAND",
-      "filename": "GEEK__0066_PURPLE-HEADBAND.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0066_PURPLE-HEADBAND.png"
-    },
-    {
-      "name": "GEEK__0067_PURPLE-HEADPHONES",
-      "filename": "GEEK__0067_PURPLE-HEADPHONES.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0067_PURPLE-HEADPHONES.png"
-    },
-    {
-      "name": "GEEK__0080_RED-HEADBAND",
-      "filename": "GEEK__0080_RED-HEADBAND.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0080_RED-HEADBAND.png"
-    },
-    {
-      "name": "GEEK__0093_YELLOW-HEADPHONES",
-      "filename": "GEEK__0093_YELLOW-HEADPHONES.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0093_YELLOW-HEADPHONES.png"
-    },
-    {
-      "name": "JOCK_JOCK_0000s_0000_BLUE-HEADPHONES",
-      "filename": "JOCK_JOCK_0000s_0000_BLUE-HEADPHONES.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_JOCK_0000s_0000_BLUE-HEADPHONES.png"
-    },
-    {
-      "name": "JOCK_JOCK_0000s_0019_DARK-HEADBAND",
-      "filename": "JOCK_JOCK_0000s_0019_DARK-HEADBAND.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_JOCK_0000s_0019_DARK-HEADBAND.png"
-    },
-    {
-      "name": "JOCK_JOCK_0000s_0022_ETERNALLY-BALD",
-      "filename": "JOCK_JOCK_0000s_0022_ETERNALLY-BALD.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_JOCK_0000s_0022_ETERNALLY-BALD.png"
-    },
-    {
-      "name": "JOCK_JOCK_0000s_0040_LIGHT-HEADBAND",
-      "filename": "JOCK_JOCK_0000s_0040_LIGHT-HEADBAND.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_JOCK_0000s_0040_LIGHT-HEADBAND.png"
-    },
-    {
-      "name": "JOCK_JOCK_0000s_0065_PURPLE-HEADBAND",
-      "filename": "JOCK_JOCK_0000s_0065_PURPLE-HEADBAND.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_JOCK_0000s_0065_PURPLE-HEADBAND.png"
-    },
-    {
-      "name": "JOCK_JOCK_0000s_0066_PURPLE-HEADPHONES",
-      "filename": "JOCK_JOCK_0000s_0066_PURPLE-HEADPHONES.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_JOCK_0000s_0066_PURPLE-HEADPHONES.png"
-    },
-    {
-      "name": "JOCK_JOCK_0000s_0079_RED-HEADBAND",
-      "filename": "JOCK_JOCK_0000s_0079_RED-HEADBAND.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_JOCK_0000s_0079_RED-HEADBAND.png"
-    },
-    {
-      "name": "JOCK_JOCK_0000s_0092_YELLOW-HEADPHONES",
-      "filename": "JOCK_JOCK_0000s_0092_YELLOW-HEADPHONES.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_JOCK_0000s_0092_YELLOW-HEADPHONES.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0000_BLUE-HEADPHONES-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0000_BLUE-HEADPHONES-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_Untitled-1_0000_BLUE-HEADPHONES-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0022_PURPLE-HEADPHONES-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0022_PURPLE-HEADPHONES-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_Untitled-1_0022_PURPLE-HEADPHONES-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0029_YELLOW-HEADPHONES-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0029_YELLOW-HEADPHONES-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_Untitled-1_0029_YELLOW-HEADPHONES-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0000_BLUE-HEADPHONES-OVERLAYER",
-      "filename": "PREP__0000_BLUE-HEADPHONES-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0000_BLUE-HEADPHONES-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0000_BLUE-HEADPHONES",
-      "filename": "PREP__0000_BLUE-HEADPHONES.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0000_BLUE-HEADPHONES.png"
-    },
-    {
-      "name": "PREP__0020_DARK-HEADBAND",
-      "filename": "PREP__0020_DARK-HEADBAND.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0020_DARK-HEADBAND.png"
-    },
-    {
-      "name": "PREP__0023_ETERNALLY-BALD",
-      "filename": "PREP__0023_ETERNALLY-BALD.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0023_ETERNALLY-BALD.png"
-    },
-    {
-      "name": "PREP__0029_PURPLE-HEADPHONES-OVERLAYER",
-      "filename": "PREP__0029_PURPLE-HEADPHONES-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0029_PURPLE-HEADPHONES-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0040_YELLOW-HEADPHONES-OVERLAYER",
-      "filename": "PREP__0040_YELLOW-HEADPHONES-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0040_YELLOW-HEADPHONES-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0042_LIGHT-HEADBAND",
-      "filename": "PREP__0042_LIGHT-HEADBAND.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0042_LIGHT-HEADBAND.png"
-    },
-    {
-      "name": "PREP__0067_PURPLE-HEADBAND",
-      "filename": "PREP__0067_PURPLE-HEADBAND.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0067_PURPLE-HEADBAND.png"
-    },
-    {
-      "name": "PREP__0068_PURPLE-HEADPHONES",
-      "filename": "PREP__0068_PURPLE-HEADPHONES.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0068_PURPLE-HEADPHONES.png"
-    },
-    {
-      "name": "PREP__0081_RED-HEADBAND",
-      "filename": "PREP__0081_RED-HEADBAND.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0081_RED-HEADBAND.png"
-    },
-    {
-      "name": "PREP__0094_YELLOW-HEADPHONES",
-      "filename": "PREP__0094_YELLOW-HEADPHONES.png",
-      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0094_YELLOW-HEADPHONES.png"
-    }
-  ],
-  "HEAD_OVERLAYERS": [
-    {
-      "name": "FREAK_BLACK-CAT-OVERLAYER(FREAK)",
-      "filename": "FREAK_BLACK-CAT-OVERLAYER(FREAK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK_BLACK-CAT-OVERLAYER(FREAK).png"
-    },
-    {
-      "name": "FREAK_GOATED-COSTUME-BLUE-OVERLAYER(FREAK)",
-      "filename": "FREAK_GOATED-COSTUME-BLUE-OVERLAYER(FREAK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK_GOATED-COSTUME-BLUE-OVERLAYER(FREAK).png"
-    },
-    {
-      "name": "FREAK_GOATED-COSTUME-GREEN-OVERLAYER(FREAK)",
-      "filename": "FREAK_GOATED-COSTUME-GREEN-OVERLAYER(FREAK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK_GOATED-COSTUME-GREEN-OVERLAYER(FREAK).png"
-    },
-    {
-      "name": "FREAK_GOATED-COSTUME-PURPLE-OVERLAYER(FREAK)",
-      "filename": "FREAK_GOATED-COSTUME-PURPLE-OVERLAYER(FREAK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK_GOATED-COSTUME-PURPLE-OVERLAYER(FREAK).png"
-    },
-    {
-      "name": "FREAK_GOATED-COSTUME-RED-OVERLAYER(FREAK)",
-      "filename": "FREAK_GOATED-COSTUME-RED-OVERLAYER(FREAK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK_GOATED-COSTUME-RED-OVERLAYER(FREAK).png"
-    },
-    {
-      "name": "FREAK_WHITE-CAT-OVERLAYER(FREAK)",
-      "filename": "FREAK_WHITE-CAT-OVERLAYER(FREAK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK_WHITE-CAT-OVERLAYER(FREAK).png"
-    },
-    {
-      "name": "FREAK__0000_FLUNK-FREN-YELLOW-OVERLAYER(FREAK)",
-      "filename": "FREAK__0000_FLUNK-FREN-YELLOW-OVERLAYER(FREAK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0000_FLUNK-FREN-YELLOW-OVERLAYER(FREAK).png"
-    },
-    {
-      "name": "FREAK__0001_BLUE-FRO-OVERLAYER",
-      "filename": "FREAK__0001_BLUE-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0001_BLUE-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0001_FLUNK-FREN-PURPLE-OVERLAYER(FREAK)",
-      "filename": "FREAK__0001_FLUNK-FREN-PURPLE-OVERLAYER(FREAK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0001_FLUNK-FREN-PURPLE-OVERLAYER(FREAK).png"
-    },
-    {
-      "name": "FREAK__0002_BLUE-TEDDY-OVERLAYER",
-      "filename": "FREAK__0002_BLUE-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0002_BLUE-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0002_FLUNK-FREN-ORANGE-OVERLAYER(FREAK)",
-      "filename": "FREAK__0002_FLUNK-FREN-ORANGE-OVERLAYER(FREAK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0002_FLUNK-FREN-ORANGE-OVERLAYER(FREAK).png"
-    },
-    {
-      "name": "FREAK__0003_COW-BUCKET-OVERLAYER",
-      "filename": "FREAK__0003_COW-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0003_COW-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0003_CYAN-FRO-OVERLAYER",
-      "filename": "FREAK__0003_CYAN-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0003_CYAN-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0003_FLUNK-FREN-GREEN-OVERLAYER(FREAK)",
-      "filename": "FREAK__0003_FLUNK-FREN-GREEN-OVERLAYER(FREAK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0003_FLUNK-FREN-GREEN-OVERLAYER(FREAK).png"
-    },
-    {
-      "name": "FREAK__0004_DARK-BOB-OVERLAYER",
-      "filename": "FREAK__0004_DARK-BOB-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0004_DARK-BOB-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0004_FLUNK-FREN-BLUE-OVERLAYER(FREAK)",
-      "filename": "FREAK__0004_FLUNK-FREN-BLUE-OVERLAYER(FREAK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0004_FLUNK-FREN-BLUE-OVERLAYER(FREAK).png"
-    },
-    {
-      "name": "FREAK__0005_DARK-FRO-OVERLAYER",
-      "filename": "FREAK__0005_DARK-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0005_DARK-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0006_FLUNKTOPIE-BLUE-OVERLAYER",
-      "filename": "FREAK__0006_FLUNKTOPIE-BLUE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0006_FLUNKTOPIE-BLUE-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0007_FLUNKTOPIE-GREEN-OVERLAYER",
-      "filename": "FREAK__0007_FLUNKTOPIE-GREEN-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0007_FLUNKTOPIE-GREEN-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0008_FLUNKTOPIE-PINK-OVERLAYER",
-      "filename": "FREAK__0008_FLUNKTOPIE-PINK-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0008_FLUNKTOPIE-PINK-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0009_FLUNKTOPIE-RED-OVERLAYER",
-      "filename": "FREAK__0009_FLUNKTOPIE-RED-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0009_FLUNKTOPIE-RED-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0010_FLUNKTOPIE-YELLOW-OVERLAYER",
-      "filename": "FREAK__0010_FLUNKTOPIE-YELLOW-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0010_FLUNKTOPIE-YELLOW-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0011_GOOBZ-ZIP-ZAPPER-OVERLAYER",
-      "filename": "FREAK__0011_GOOBZ-ZIP-ZAPPER-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0011_GOOBZ-ZIP-ZAPPER-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0012_GREEN-MUFFS-OVERLAYER",
-      "filename": "FREAK__0012_GREEN-MUFFS-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0012_GREEN-MUFFS-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0013_LIGHT-TEDDY-OVERLAYER",
-      "filename": "FREAK__0013_LIGHT-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0013_LIGHT-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0014_ORANGE-MUFFS-OVERLAYER",
-      "filename": "FREAK__0014_ORANGE-MUFFS-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0014_ORANGE-MUFFS-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0015_PINK-FRO-OVERLAYER",
-      "filename": "FREAK__0015_PINK-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0015_PINK-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0016_PINK-MUFFS-OVERLAYER",
-      "filename": "FREAK__0016_PINK-MUFFS-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0016_PINK-MUFFS-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0017_PINK-TEDDY-OVERLAYER",
-      "filename": "FREAK__0017_PINK-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0017_PINK-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0018_PURPLE-BEANIE-OVERLAYER",
-      "filename": "FREAK__0018_PURPLE-BEANIE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0018_PURPLE-BEANIE-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0019_PURPLE-BOB-OVERLAYER",
-      "filename": "FREAK__0019_PURPLE-BOB-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0019_PURPLE-BOB-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0020_PURPLE-BUCKET-OVERLAYER",
-      "filename": "FREAK__0020_PURPLE-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0020_PURPLE-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0022_RED-BOB-OVERLAYER",
-      "filename": "FREAK__0022_RED-BOB-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0022_RED-BOB-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0023_RED-FRO-OVERLAYER",
-      "filename": "FREAK__0023_RED-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0023_RED-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0024_RED-TEDDY-OVERLAYER",
-      "filename": "FREAK__0024_RED-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0024_RED-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0025_SNOWCONE-BEANIE-OVERLAYER",
-      "filename": "FREAK__0025_SNOWCONE-BEANIE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0025_SNOWCONE-BEANIE-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0026_SNOWCONE-BUCKET-LONG-OVERLAYER",
-      "filename": "FREAK__0026_SNOWCONE-BUCKET-LONG-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0026_SNOWCONE-BUCKET-LONG-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0027_SUNSET-BEANIE-OVERLAYER",
-      "filename": "FREAK__0027_SUNSET-BEANIE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0027_SUNSET-BEANIE-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0029_YELLOW-BOB-OVERLAYER",
-      "filename": "FREAK__0029_YELLOW-BOB-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0029_YELLOW-BOB-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0030_YELLOW-BUCKET-OVERLAYER",
-      "filename": "FREAK__0030_YELLOW-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0030_YELLOW-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "FREAK__0031_YELLOW-TEDDY-OVERLAYER",
-      "filename": "FREAK__0031_YELLOW-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0031_YELLOW-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK_BLACK-CAT-OVERLAYER(GEEK)",
-      "filename": "GEEK_BLACK-CAT-OVERLAYER(GEEK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK_BLACK-CAT-OVERLAYER(GEEK).png"
-    },
-    {
-      "name": "GEEK_WHITE-CAT-OVERLAYER(GEEK)",
-      "filename": "GEEK_WHITE-CAT-OVERLAYER(GEEK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK_WHITE-CAT-OVERLAYER(GEEK).png"
-    },
-    {
-      "name": "GEEK__0000_GOATED-COSTUME-BLUE-OVERLAYER",
-      "filename": "GEEK__0000_GOATED-COSTUME-BLUE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0000_GOATED-COSTUME-BLUE-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0001_BLUE-FRO-OVERLAYER",
-      "filename": "GEEK__0001_BLUE-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0001_BLUE-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0002_BLUE-TEDDY-OVERLAYER",
-      "filename": "GEEK__0002_BLUE-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0002_BLUE-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0002_GOATED-COSTUME-GREEN-OVERLAYER",
-      "filename": "GEEK__0002_GOATED-COSTUME-GREEN-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0002_GOATED-COSTUME-GREEN-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0003_COW-BUCKET-OVERLAYER",
-      "filename": "GEEK__0003_COW-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0003_COW-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0004_CYAN-FRO-OVERLAYER",
-      "filename": "GEEK__0004_CYAN-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0004_CYAN-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0004_GOATED-COSTUME-PURPLE-OVERLAYER",
-      "filename": "GEEK__0004_GOATED-COSTUME-PURPLE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0004_GOATED-COSTUME-PURPLE-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0005_DARK-BOB-OVERLAYER",
-      "filename": "GEEK__0005_DARK-BOB-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0005_DARK-BOB-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0005_FLUNK-FREN-GREEN-OVERLAYER",
-      "filename": "GEEK__0005_FLUNK-FREN-GREEN-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0005_FLUNK-FREN-GREEN-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0006_DARK-FRO-OVERLAYER",
-      "filename": "GEEK__0006_DARK-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0006_DARK-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0006_FLUNK-FREN-YELLOW-OVERLAYER",
-      "filename": "GEEK__0006_FLUNK-FREN-YELLOW-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0006_FLUNK-FREN-YELLOW-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0006_GOATED-COSTUME-RED-OVERLAYER",
-      "filename": "GEEK__0006_GOATED-COSTUME-RED-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0006_GOATED-COSTUME-RED-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0007_FLUNK-FREN-PURPLE-OVERLAYER",
-      "filename": "GEEK__0007_FLUNK-FREN-PURPLE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0007_FLUNK-FREN-PURPLE-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0007_FLUNKTOPIE-BLUE-OVERLAYER",
-      "filename": "GEEK__0007_FLUNKTOPIE-BLUE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0007_FLUNKTOPIE-BLUE-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0008_FLUNK-FREN-ORANGE-OVERLAYER",
-      "filename": "GEEK__0008_FLUNK-FREN-ORANGE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0008_FLUNK-FREN-ORANGE-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0008_FLUNKTOPIE-GREEN-OVERLAYER",
-      "filename": "GEEK__0008_FLUNKTOPIE-GREEN-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0008_FLUNKTOPIE-GREEN-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0009_FLUNK-FREN-BLUE-OVERLAYER",
-      "filename": "GEEK__0009_FLUNK-FREN-BLUE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0009_FLUNK-FREN-BLUE-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0009_FLUNKTOPIE-PINK-OVERLAYER",
-      "filename": "GEEK__0009_FLUNKTOPIE-PINK-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0009_FLUNKTOPIE-PINK-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0010_FLUNKTOPIE-RED-OVERLAYER",
-      "filename": "GEEK__0010_FLUNKTOPIE-RED-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0010_FLUNKTOPIE-RED-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0011_FLUNKTOPIE-YELLOW-OVERLAYER",
-      "filename": "GEEK__0011_FLUNKTOPIE-YELLOW-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0011_FLUNKTOPIE-YELLOW-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0012_GOOBZ-ZIP-ZAPPER-OVERLAYER",
-      "filename": "GEEK__0012_GOOBZ-ZIP-ZAPPER-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0012_GOOBZ-ZIP-ZAPPER-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0013_GREEN-MUFFS-OVERLAYER",
-      "filename": "GEEK__0013_GREEN-MUFFS-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0013_GREEN-MUFFS-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0014_LIGHT-TEDDY-OVERLAYER",
-      "filename": "GEEK__0014_LIGHT-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0014_LIGHT-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0015_ORANGE-MUFFS-OVERLAYER",
-      "filename": "GEEK__0015_ORANGE-MUFFS-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0015_ORANGE-MUFFS-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0016_PINK-FRO-OVERLAYER",
-      "filename": "GEEK__0016_PINK-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0016_PINK-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0017_PINK-MUFFS-OVERLAYER",
-      "filename": "GEEK__0017_PINK-MUFFS-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0017_PINK-MUFFS-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0018_PINK-TEDDY-OVERLAYER",
-      "filename": "GEEK__0018_PINK-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0018_PINK-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0019_PURPLE-BEANIE-OVERLAYER",
-      "filename": "GEEK__0019_PURPLE-BEANIE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0019_PURPLE-BEANIE-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0020_PURPLE-BOB-OVERLAYER",
-      "filename": "GEEK__0020_PURPLE-BOB-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0020_PURPLE-BOB-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0021_PURPLE-BUCKET-OVERLAYER",
-      "filename": "GEEK__0021_PURPLE-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0021_PURPLE-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0023_RED-BOB-OVERLAYER",
-      "filename": "GEEK__0023_RED-BOB-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0023_RED-BOB-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0024_RED-FRO-OVERLAYER",
-      "filename": "GEEK__0024_RED-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0024_RED-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0025_RED-TEDDY-OVERLAYER",
-      "filename": "GEEK__0025_RED-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0025_RED-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0026_SNOWCONE-BEANIE-OVERLAYER",
-      "filename": "GEEK__0026_SNOWCONE-BEANIE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0026_SNOWCONE-BEANIE-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0027_SNOWCONE-BUCKET-LONG-OVERLAYER",
-      "filename": "GEEK__0027_SNOWCONE-BUCKET-LONG-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0027_SNOWCONE-BUCKET-LONG-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0028_SUNSET-BEANIE-OVERLAYER",
-      "filename": "GEEK__0028_SUNSET-BEANIE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0028_SUNSET-BEANIE-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0030_YELLOW-BOB-OVERLAYER",
-      "filename": "GEEK__0030_YELLOW-BOB-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0030_YELLOW-BOB-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0031_YELLOW-BUCKET-OVERLAYER",
-      "filename": "GEEK__0031_YELLOW-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0031_YELLOW-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "GEEK__0032_YELLOW-TEDDY-OVERLAYER",
-      "filename": "GEEK__0032_YELLOW-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0032_YELLOW-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_BLACK-CAT-OVERLAYER-(JOCK)",
-      "filename": "JOCK_BLACK-CAT-OVERLAYER-(JOCK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_BLACK-CAT-OVERLAYER-(JOCK).png"
-    },
-    {
-      "name": "JOCK_FLUNK-FREN-BLUE-OVERLAYER(JOCK)",
-      "filename": "JOCK_FLUNK-FREN-BLUE-OVERLAYER(JOCK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_FLUNK-FREN-BLUE-OVERLAYER(JOCK).png"
-    },
-    {
-      "name": "JOCK_FLUNK-FREN-GREEN-OVERLAYER(JOCK)",
-      "filename": "JOCK_FLUNK-FREN-GREEN-OVERLAYER(JOCK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_FLUNK-FREN-GREEN-OVERLAYER(JOCK).png"
-    },
-    {
-      "name": "JOCK_FLUNK-FREN-ORANGE-OVERLAYER(JOCK)",
-      "filename": "JOCK_FLUNK-FREN-ORANGE-OVERLAYER(JOCK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_FLUNK-FREN-ORANGE-OVERLAYER(JOCK).png"
-    },
-    {
-      "name": "JOCK_FLUNK-FREN-PURPLE-OVERLAYER(JOCK)",
-      "filename": "JOCK_FLUNK-FREN-PURPLE-OVERLAYER(JOCK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_FLUNK-FREN-PURPLE-OVERLAYER(JOCK).png"
-    },
-    {
-      "name": "JOCK_FLUNK-FREN-YELLOW-OVERLAYER(JOCK)",
-      "filename": "JOCK_FLUNK-FREN-YELLOW-OVERLAYER(JOCK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_FLUNK-FREN-YELLOW-OVERLAYER(JOCK).png"
-    },
-    {
-      "name": "JOCK_GOATED-COSTUME-BLUE-OVERLAYER(JOCK)",
-      "filename": "JOCK_GOATED-COSTUME-BLUE-OVERLAYER(JOCK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_GOATED-COSTUME-BLUE-OVERLAYER(JOCK).png"
-    },
-    {
-      "name": "JOCK_GOATED-COSTUME-GREEN-OVERLAYER(JOCK)",
-      "filename": "JOCK_GOATED-COSTUME-GREEN-OVERLAYER(JOCK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_GOATED-COSTUME-GREEN-OVERLAYER(JOCK).png"
-    },
-    {
-      "name": "JOCK_GOATED-COSTUME-PURPLE-OVERLAYER(JOCK)",
-      "filename": "JOCK_GOATED-COSTUME-PURPLE-OVERLAYER(JOCK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_GOATED-COSTUME-PURPLE-OVERLAYER(JOCK).png"
-    },
-    {
-      "name": "JOCK_GOATED-COSTUME-RED-OVERLAYER(JOCK)",
-      "filename": "JOCK_GOATED-COSTUME-RED-OVERLAYER(JOCK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_GOATED-COSTUME-RED-OVERLAYER(JOCK).png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0001_BLUE-FRO-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0001_BLUE-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0001_BLUE-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0002_BLUE-TEDDY-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0002_BLUE-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0002_BLUE-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0003_COW-BUCKET-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0003_COW-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0003_COW-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0004_CYAN-FRO-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0004_CYAN-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0004_CYAN-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0005_DARK-BOB-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0005_DARK-BOB-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0005_DARK-BOB-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0006_DARK-FRO-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0006_DARK-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0006_DARK-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0007_FLUNKTOPIE-BLUE-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0007_FLUNKTOPIE-BLUE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0007_FLUNKTOPIE-BLUE-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0008_FLUNKTOPIE-GREEN-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0008_FLUNKTOPIE-GREEN-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0008_FLUNKTOPIE-GREEN-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0009_FLUNKTOPIE-PINK-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0009_FLUNKTOPIE-PINK-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0009_FLUNKTOPIE-PINK-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0010_FLUNKTOPIE-RED-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0010_FLUNKTOPIE-RED-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0010_FLUNKTOPIE-RED-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0011_FLUNKTOPIE-YELLOW-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0011_FLUNKTOPIE-YELLOW-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0011_FLUNKTOPIE-YELLOW-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0012_GOOBZ-ZIP-ZAPPER-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0012_GOOBZ-ZIP-ZAPPER-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0012_GOOBZ-ZIP-ZAPPER-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0013_GREEN-MUFFS-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0013_GREEN-MUFFS-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0013_GREEN-MUFFS-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0014_LIGHT-TEDDY-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0014_LIGHT-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0014_LIGHT-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0015_ORANGE-MUFFS-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0015_ORANGE-MUFFS-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0015_ORANGE-MUFFS-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0016_PINK-FRO-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0016_PINK-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0016_PINK-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0017_PINK-MUFFS-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0017_PINK-MUFFS-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0017_PINK-MUFFS-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0018_PINK-TEDDY-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0018_PINK-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0018_PINK-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0019_PURPLE-BEANIE-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0019_PURPLE-BEANIE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0019_PURPLE-BEANIE-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0020_PURPLE-BOB-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0020_PURPLE-BOB-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0020_PURPLE-BOB-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0021_PURPLE-BUCKET-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0021_PURPLE-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0021_PURPLE-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0023_RED-BOB-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0023_RED-BOB-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0023_RED-BOB-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0024_RED-FRO-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0024_RED-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0024_RED-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0025_RED-TEDDY-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0025_RED-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0025_RED-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0026_SNOWCONE-BEANIE-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0026_SNOWCONE-BEANIE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0026_SNOWCONE-BEANIE-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0027_SNOWCONE-BUCKET-LONG-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0027_SNOWCONE-BUCKET-LONG-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0027_SNOWCONE-BUCKET-LONG-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0028_SUNSET-BEANIE-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0028_SUNSET-BEANIE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0028_SUNSET-BEANIE-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0030_YELLOW-BOB-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0030_YELLOW-BOB-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0030_YELLOW-BOB-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0031_YELLOW-BUCKET-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0031_YELLOW-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0031_YELLOW-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_Untitled-1_0032_YELLOW-TEDDY-OVERLAYER",
-      "filename": "JOCK_Untitled-1_0032_YELLOW-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0032_YELLOW-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "JOCK_WHITE-CAT-OVERLAYER-(JOCK)",
-      "filename": "JOCK_WHITE-CAT-OVERLAYER-(JOCK).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_WHITE-CAT-OVERLAYER-(JOCK).png"
-    },
-    {
-      "name": "PREP_BLACK-CAT-OVERLAYER(PREP)",
-      "filename": "PREP_BLACK-CAT-OVERLAYER(PREP).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP_BLACK-CAT-OVERLAYER(PREP).png"
-    },
-    {
-      "name": "PREP_WHITE-CAT-OVERLAYER(PREP)",
-      "filename": "PREP_WHITE-CAT-OVERLAYER(PREP).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP_WHITE-CAT-OVERLAYER(PREP).png"
-    },
-    {
-      "name": "PREP__0000_FLUNK-FREN-GREEN-OVERLAYER",
-      "filename": "PREP__0000_FLUNK-FREN-GREEN-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0000_FLUNK-FREN-GREEN-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0000_GOATED-COSTUME-BLUE-OVERLAYER(PREP)",
-      "filename": "PREP__0000_GOATED-COSTUME-BLUE-OVERLAYER(PREP).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0000_GOATED-COSTUME-BLUE-OVERLAYER(PREP).png"
-    },
-    {
-      "name": "PREP__0001_BLUE-FRO-OVERLAYER",
-      "filename": "PREP__0001_BLUE-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0001_BLUE-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0001_FLUNK-FREN-YELLOW-OVERLAYER",
-      "filename": "PREP__0001_FLUNK-FREN-YELLOW-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0001_FLUNK-FREN-YELLOW-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0002_BLUE-TEDDY-OVERLAYER",
-      "filename": "PREP__0002_BLUE-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0002_BLUE-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0002_FLUNK-FREN-PURPLE-OVERLAYER",
-      "filename": "PREP__0002_FLUNK-FREN-PURPLE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0002_FLUNK-FREN-PURPLE-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0002_GOATED-COSTUME-GREEN-OVERLAYER(PREP)",
-      "filename": "PREP__0002_GOATED-COSTUME-GREEN-OVERLAYER(PREP).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0002_GOATED-COSTUME-GREEN-OVERLAYER(PREP).png"
-    },
-    {
-      "name": "PREP__0003_COW-BUCKET-OVERLAYER",
-      "filename": "PREP__0003_COW-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0003_COW-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0003_FLUNK-FREN-ORANGE-OVERLAYER",
-      "filename": "PREP__0003_FLUNK-FREN-ORANGE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0003_FLUNK-FREN-ORANGE-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0004_CYAN-FRO-OVERLAYER",
-      "filename": "PREP__0004_CYAN-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0004_CYAN-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0004_FLUNK-FREN-BLUE-OVERLAYER",
-      "filename": "PREP__0004_FLUNK-FREN-BLUE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0004_FLUNK-FREN-BLUE-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0004_GOATED-COSTUME-PURPLE-OVERLAYER(PREP)",
-      "filename": "PREP__0004_GOATED-COSTUME-PURPLE-OVERLAYER(PREP).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0004_GOATED-COSTUME-PURPLE-OVERLAYER(PREP).png"
-    },
-    {
-      "name": "PREP__0005_DARK-BOB-OVERLAYER",
-      "filename": "PREP__0005_DARK-BOB-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0005_DARK-BOB-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0006_DARK-FRO-OVERLAYER",
-      "filename": "PREP__0006_DARK-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0006_DARK-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0006_GOATED-COSTUME-RED-OVERLAYER(PREP)",
-      "filename": "PREP__0006_GOATED-COSTUME-RED-OVERLAYER(PREP).png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0006_GOATED-COSTUME-RED-OVERLAYER(PREP).png"
-    },
-    {
-      "name": "PREP__0007_DARK-SPACEBUNS-OVERLAYER",
-      "filename": "PREP__0007_DARK-SPACEBUNS-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0007_DARK-SPACEBUNS-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0008_ETERNAL-BUCKET-OVERLAYER",
-      "filename": "PREP__0008_ETERNAL-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0008_ETERNAL-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0009_FLUNKTOPIE-BLUE-OVERLAYER",
-      "filename": "PREP__0009_FLUNKTOPIE-BLUE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0009_FLUNKTOPIE-BLUE-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0010_FLUNKTOPIE-GREEN-OVERLAYER",
-      "filename": "PREP__0010_FLUNKTOPIE-GREEN-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0010_FLUNKTOPIE-GREEN-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0011_FLUNKTOPIE-PINK-OVERLAYER",
-      "filename": "PREP__0011_FLUNKTOPIE-PINK-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0011_FLUNKTOPIE-PINK-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0012_FLUNKTOPIE-RED-OVERLAYER",
-      "filename": "PREP__0012_FLUNKTOPIE-RED-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0012_FLUNKTOPIE-RED-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0013_FLUNKTOPIE-YELLOW-OVERLAYER",
-      "filename": "PREP__0013_FLUNKTOPIE-YELLOW-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0013_FLUNKTOPIE-YELLOW-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0014_GOOBZ-ZIP-ZAPPER-OVERLAYER",
-      "filename": "PREP__0014_GOOBZ-ZIP-ZAPPER-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0014_GOOBZ-ZIP-ZAPPER-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0015_GOLDEN-FRO-OVERLAYER",
-      "filename": "PREP__0015_GOLDEN-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0015_GOLDEN-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0016_GREEN-MUFFS-OVERLAYER",
-      "filename": "PREP__0016_GREEN-MUFFS-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0016_GREEN-MUFFS-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0017_GREEN-SPACEBUNS-OVERLAYER",
-      "filename": "PREP__0017_GREEN-SPACEBUNS-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0017_GREEN-SPACEBUNS-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0018_LIGHT-BUCKET-OVERLAYER",
-      "filename": "PREP__0018_LIGHT-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0018_LIGHT-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0019_LIGHT-TEDDY-OVERLAYER",
-      "filename": "PREP__0019_LIGHT-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0019_LIGHT-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0020_ORANGE-MUFFS-OVERLAYER",
-      "filename": "PREP__0020_ORANGE-MUFFS-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0020_ORANGE-MUFFS-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0021_PINK-BUCKET-OVERLAYER",
-      "filename": "PREP__0021_PINK-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0021_PINK-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0022_PINK-FRO-OVERLAYER",
-      "filename": "PREP__0022_PINK-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0022_PINK-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0023_PINK-MUFFS-OVERLAYER",
-      "filename": "PREP__0023_PINK-MUFFS-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0023_PINK-MUFFS-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0024_PINK-SPACEBUNS-OVERLAYER",
-      "filename": "PREP__0024_PINK-SPACEBUNS-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0024_PINK-SPACEBUNS-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0025_PINK-TEDDY-OVERLAYER",
-      "filename": "PREP__0025_PINK-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0025_PINK-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0026_PURPLE-BEANIE-OVERLAYER",
-      "filename": "PREP__0026_PURPLE-BEANIE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0026_PURPLE-BEANIE-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0027_PURPLE-BOB-OVERLAYER",
-      "filename": "PREP__0027_PURPLE-BOB-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0027_PURPLE-BOB-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0028_PURPLE-BUCKET-OVERLAYER",
-      "filename": "PREP__0028_PURPLE-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0028_PURPLE-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0030_PURPLE-SPACEBUNS-OVERLAYER",
-      "filename": "PREP__0030_PURPLE-SPACEBUNS-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0030_PURPLE-SPACEBUNS-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0031_RAINBOW-BUCKET-OVERLAYER",
-      "filename": "PREP__0031_RAINBOW-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0031_RAINBOW-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0032_RED-BOB-OVERLAYER",
-      "filename": "PREP__0032_RED-BOB-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0032_RED-BOB-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0033_RED-BUCKET-OVERLAYER",
-      "filename": "PREP__0033_RED-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0033_RED-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0034_RED-FRO-OVERLAYER",
-      "filename": "PREP__0034_RED-FRO-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0034_RED-FRO-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0035_RED-TEDDY-OVERLAYER",
-      "filename": "PREP__0035_RED-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0035_RED-TEDDY-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0036_SNOWCONE-BEANIE-OVERLAYER",
-      "filename": "PREP__0036_SNOWCONE-BEANIE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0036_SNOWCONE-BEANIE-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0037_SNOWCONE-BUCKET-OVERLAYER",
-      "filename": "PREP__0037_SNOWCONE-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0037_SNOWCONE-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0038_SNOWCONE-BUCKET-LONG-OVERLAYER",
-      "filename": "PREP__0038_SNOWCONE-BUCKET-LONG-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0038_SNOWCONE-BUCKET-LONG-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0039_SUNSET-BEANIE-OVERLAYER",
-      "filename": "PREP__0039_SUNSET-BEANIE-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0039_SUNSET-BEANIE-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0041_YELLOW-BOB-OVERLAYER",
-      "filename": "PREP__0041_YELLOW-BOB-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0041_YELLOW-BOB-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0042_YELLOW-BUCKET-OVERLAYER",
-      "filename": "PREP__0042_YELLOW-BUCKET-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0042_YELLOW-BUCKET-OVERLAYER.png"
-    },
-    {
-      "name": "PREP__0043_YELLOW-TEDDY-OVERLAYER",
-      "filename": "PREP__0043_YELLOW-TEDDY-OVERLAYER.png",
-      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0043_YELLOW-TEDDY-OVERLAYER.png"
-    }
-  ],
   "PIGMENT": [
     {
       "name": "FREAK_PIGMENT-(FREAK)---GOLDEN-FAMILY",
@@ -2843,6 +202,153 @@ export const TRAIT_DATA: TraitData = {
       "name": "JOCK_PIGMENT (JOCK) - YELLOW",
       "filename": "JOCK_PIGMENT (JOCK) - YELLOW.png",
       "path": "/images/jnr-traits/full-traits/PIGMENT/JOCK_PIGMENT (JOCK) - YELLOW.png"
+    }
+  ],
+  "BACKDROPS": [
+    {
+      "name": "BLANK",
+      "filename": "BLANK.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/BLANK.png"
+    },
+    {
+      "name": "BLUE-GRADIENT",
+      "filename": "BLUE-GRADIENT.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/BLUE-GRADIENT.png"
+    },
+    {
+      "name": "BLUE-SKY",
+      "filename": "BLUE-SKY.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/BLUE-SKY.png"
+    },
+    {
+      "name": "BLUE",
+      "filename": "BLUE.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/BLUE.png"
+    },
+    {
+      "name": "BULBHEADS",
+      "filename": "BULBHEADS.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/BULBHEADS.png"
+    },
+    {
+      "name": "CYAN-FLOCKS",
+      "filename": "CYAN-FLOCKS.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/CYAN-FLOCKS.png"
+    },
+    {
+      "name": "CYAN-GRADIENT",
+      "filename": "CYAN-GRADIENT.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/CYAN-GRADIENT.png"
+    },
+    {
+      "name": "CYAN-SMILEYS",
+      "filename": "CYAN-SMILEYS.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/CYAN-SMILEYS.png"
+    },
+    {
+      "name": "CYAN",
+      "filename": "CYAN.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/CYAN.png"
+    },
+    {
+      "name": "GOLDEN",
+      "filename": "GOLDEN.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/GOLDEN.png"
+    },
+    {
+      "name": "GREEN-GRADIENT",
+      "filename": "GREEN-GRADIENT.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/GREEN-GRADIENT.png"
+    },
+    {
+      "name": "GREEN",
+      "filename": "GREEN.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/GREEN.png"
+    },
+    {
+      "name": "NIGHT-TIME",
+      "filename": "NIGHT-TIME.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/NIGHT-TIME.png"
+    },
+    {
+      "name": "ORANGE-GRADIENT",
+      "filename": "ORANGE-GRADIENT.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/ORANGE-GRADIENT.png"
+    },
+    {
+      "name": "ORANGE",
+      "filename": "ORANGE.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/ORANGE.png"
+    },
+    {
+      "name": "PINK-SMILEYS",
+      "filename": "PINK-SMILEYS.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/PINK-SMILEYS.png"
+    },
+    {
+      "name": "PINK",
+      "filename": "PINK.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/PINK.png"
+    },
+    {
+      "name": "PIXEL-STATIC-SMILEYS",
+      "filename": "PIXEL-STATIC-SMILEYS.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/PIXEL-STATIC-SMILEYS.png"
+    },
+    {
+      "name": "PIXEL-STATIC",
+      "filename": "PIXEL-STATIC.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/PIXEL-STATIC.png"
+    },
+    {
+      "name": "PURPLE-GRADIENT",
+      "filename": "PURPLE-GRADIENT.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/PURPLE-GRADIENT.png"
+    },
+    {
+      "name": "PURPLE",
+      "filename": "PURPLE.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/PURPLE.png"
+    },
+    {
+      "name": "RAINBOW-FLOCKS",
+      "filename": "RAINBOW-FLOCKS.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/RAINBOW-FLOCKS.png"
+    },
+    {
+      "name": "RED-GRADIENT",
+      "filename": "RED-GRADIENT.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/RED-GRADIENT.png"
+    },
+    {
+      "name": "RED-SKY",
+      "filename": "RED-SKY.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/RED-SKY.png"
+    },
+    {
+      "name": "RED",
+      "filename": "RED.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/RED.png"
+    },
+    {
+      "name": "STARRY GALAXY BACKDROP V1",
+      "filename": "STARRY GALAXY BACKDROP V1.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/STARRY GALAXY BACKDROP V1.png"
+    },
+    {
+      "name": "VERY-DAPPER",
+      "filename": "VERY-DAPPER.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/VERY-DAPPER.png"
+    },
+    {
+      "name": "YELLOW-GRADIENT",
+      "filename": "YELLOW-GRADIENT.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/YELLOW-GRADIENT.png"
+    },
+    {
+      "name": "YELLOW",
+      "filename": "YELLOW.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/YELLOW.png"
     }
   ],
   "TORSO": [
@@ -6002,6 +3508,2500 @@ export const TRAIT_DATA: TraitData = {
       "path": "/images/jnr-traits/full-traits/TORSO/PREP__0100_YELLOW-TEDDY.png"
     }
   ],
+  "HEAD": [
+    {
+      "name": "BULBHEADS TEST FLUNK 01 (#2938)",
+      "filename": "BULBHEADS TEST FLUNK 01 (#2938).png",
+      "path": "/images/jnr-traits/full-traits/HEAD/BULBHEADS TEST FLUNK 01 (#2938).png"
+    },
+    {
+      "name": "BULBHEADS",
+      "filename": "BULBHEADS.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/BULBHEADS.png"
+    },
+    {
+      "name": "FREAK__0000_BLUE-HEADPHONES-OVERLAYER",
+      "filename": "FREAK__0000_BLUE-HEADPHONES-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0000_BLUE-HEADPHONES-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0000_BLUE-HEADPHONES",
+      "filename": "FREAK__0000_BLUE-HEADPHONES.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0000_BLUE-HEADPHONES.png"
+    },
+    {
+      "name": "FREAK__0019_DARK-HEADBAND",
+      "filename": "FREAK__0019_DARK-HEADBAND.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0019_DARK-HEADBAND.png"
+    },
+    {
+      "name": "FREAK__0021_PURPLE-HEADPHONES-OVERLAYER",
+      "filename": "FREAK__0021_PURPLE-HEADPHONES-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0021_PURPLE-HEADPHONES-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0022_ETERNALLY-BALD",
+      "filename": "FREAK__0022_ETERNALLY-BALD.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0022_ETERNALLY-BALD.png"
+    },
+    {
+      "name": "FREAK__0028_YELLOW-HEADPHONES-OVERLAYER",
+      "filename": "FREAK__0028_YELLOW-HEADPHONES-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0028_YELLOW-HEADPHONES-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0040_LIGHT-HEADBAND",
+      "filename": "FREAK__0040_LIGHT-HEADBAND.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0040_LIGHT-HEADBAND.png"
+    },
+    {
+      "name": "FREAK__0065_PURPLE-HEADBAND",
+      "filename": "FREAK__0065_PURPLE-HEADBAND.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0065_PURPLE-HEADBAND.png"
+    },
+    {
+      "name": "FREAK__0066_PURPLE-HEADPHONES",
+      "filename": "FREAK__0066_PURPLE-HEADPHONES.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0066_PURPLE-HEADPHONES.png"
+    },
+    {
+      "name": "FREAK__0079_RED-HEADBAND",
+      "filename": "FREAK__0079_RED-HEADBAND.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0079_RED-HEADBAND.png"
+    },
+    {
+      "name": "FREAK__0092_YELLOW-HEADPHONES",
+      "filename": "FREAK__0092_YELLOW-HEADPHONES.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/FREAK__0092_YELLOW-HEADPHONES.png"
+    },
+    {
+      "name": "GEEK__0000_BLUE-HEADPHONES-OVERLAYER",
+      "filename": "GEEK__0000_BLUE-HEADPHONES-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0000_BLUE-HEADPHONES-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0000_BLUE-HEADPHONES",
+      "filename": "GEEK__0000_BLUE-HEADPHONES.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0000_BLUE-HEADPHONES.png"
+    },
+    {
+      "name": "GEEK__0020_DARK-HEADBAND",
+      "filename": "GEEK__0020_DARK-HEADBAND.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0020_DARK-HEADBAND.png"
+    },
+    {
+      "name": "GEEK__0022_PURPLE-HEADPHONES-OVERLAYER",
+      "filename": "GEEK__0022_PURPLE-HEADPHONES-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0022_PURPLE-HEADPHONES-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0023_ETERNALLY-BALD",
+      "filename": "GEEK__0023_ETERNALLY-BALD.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0023_ETERNALLY-BALD.png"
+    },
+    {
+      "name": "GEEK__0025_CURLY-HAIR",
+      "filename": "GEEK__0025_CURLY-HAIR.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0025_CURLY-HAIR.png"
+    },
+    {
+      "name": "GEEK__0029_YELLOW-HEADPHONES-OVERLAYER",
+      "filename": "GEEK__0029_YELLOW-HEADPHONES-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0029_YELLOW-HEADPHONES-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0041_LIGHT-HEADBAND",
+      "filename": "GEEK__0041_LIGHT-HEADBAND.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0041_LIGHT-HEADBAND.png"
+    },
+    {
+      "name": "GEEK__0066_PURPLE-HEADBAND",
+      "filename": "GEEK__0066_PURPLE-HEADBAND.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0066_PURPLE-HEADBAND.png"
+    },
+    {
+      "name": "GEEK__0067_PURPLE-HEADPHONES",
+      "filename": "GEEK__0067_PURPLE-HEADPHONES.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0067_PURPLE-HEADPHONES.png"
+    },
+    {
+      "name": "GEEK__0080_RED-HEADBAND",
+      "filename": "GEEK__0080_RED-HEADBAND.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0080_RED-HEADBAND.png"
+    },
+    {
+      "name": "GEEK__0093_YELLOW-HEADPHONES",
+      "filename": "GEEK__0093_YELLOW-HEADPHONES.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/GEEK__0093_YELLOW-HEADPHONES.png"
+    },
+    {
+      "name": "JOCK_JOCK_0000s_0000_BLUE-HEADPHONES",
+      "filename": "JOCK_JOCK_0000s_0000_BLUE-HEADPHONES.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_JOCK_0000s_0000_BLUE-HEADPHONES.png"
+    },
+    {
+      "name": "JOCK_JOCK_0000s_0019_DARK-HEADBAND",
+      "filename": "JOCK_JOCK_0000s_0019_DARK-HEADBAND.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_JOCK_0000s_0019_DARK-HEADBAND.png"
+    },
+    {
+      "name": "JOCK_JOCK_0000s_0022_ETERNALLY-BALD",
+      "filename": "JOCK_JOCK_0000s_0022_ETERNALLY-BALD.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_JOCK_0000s_0022_ETERNALLY-BALD.png"
+    },
+    {
+      "name": "JOCK_JOCK_0000s_0040_LIGHT-HEADBAND",
+      "filename": "JOCK_JOCK_0000s_0040_LIGHT-HEADBAND.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_JOCK_0000s_0040_LIGHT-HEADBAND.png"
+    },
+    {
+      "name": "JOCK_JOCK_0000s_0065_PURPLE-HEADBAND",
+      "filename": "JOCK_JOCK_0000s_0065_PURPLE-HEADBAND.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_JOCK_0000s_0065_PURPLE-HEADBAND.png"
+    },
+    {
+      "name": "JOCK_JOCK_0000s_0066_PURPLE-HEADPHONES",
+      "filename": "JOCK_JOCK_0000s_0066_PURPLE-HEADPHONES.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_JOCK_0000s_0066_PURPLE-HEADPHONES.png"
+    },
+    {
+      "name": "JOCK_JOCK_0000s_0079_RED-HEADBAND",
+      "filename": "JOCK_JOCK_0000s_0079_RED-HEADBAND.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_JOCK_0000s_0079_RED-HEADBAND.png"
+    },
+    {
+      "name": "JOCK_JOCK_0000s_0092_YELLOW-HEADPHONES",
+      "filename": "JOCK_JOCK_0000s_0092_YELLOW-HEADPHONES.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_JOCK_0000s_0092_YELLOW-HEADPHONES.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0000_BLUE-HEADPHONES-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0000_BLUE-HEADPHONES-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_Untitled-1_0000_BLUE-HEADPHONES-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0022_PURPLE-HEADPHONES-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0022_PURPLE-HEADPHONES-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_Untitled-1_0022_PURPLE-HEADPHONES-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0029_YELLOW-HEADPHONES-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0029_YELLOW-HEADPHONES-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/JOCK_Untitled-1_0029_YELLOW-HEADPHONES-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0000_BLUE-HEADPHONES-OVERLAYER",
+      "filename": "PREP__0000_BLUE-HEADPHONES-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0000_BLUE-HEADPHONES-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0000_BLUE-HEADPHONES",
+      "filename": "PREP__0000_BLUE-HEADPHONES.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0000_BLUE-HEADPHONES.png"
+    },
+    {
+      "name": "PREP__0020_DARK-HEADBAND",
+      "filename": "PREP__0020_DARK-HEADBAND.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0020_DARK-HEADBAND.png"
+    },
+    {
+      "name": "PREP__0023_ETERNALLY-BALD",
+      "filename": "PREP__0023_ETERNALLY-BALD.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0023_ETERNALLY-BALD.png"
+    },
+    {
+      "name": "PREP__0029_PURPLE-HEADPHONES-OVERLAYER",
+      "filename": "PREP__0029_PURPLE-HEADPHONES-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0029_PURPLE-HEADPHONES-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0040_YELLOW-HEADPHONES-OVERLAYER",
+      "filename": "PREP__0040_YELLOW-HEADPHONES-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0040_YELLOW-HEADPHONES-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0042_LIGHT-HEADBAND",
+      "filename": "PREP__0042_LIGHT-HEADBAND.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0042_LIGHT-HEADBAND.png"
+    },
+    {
+      "name": "PREP__0067_PURPLE-HEADBAND",
+      "filename": "PREP__0067_PURPLE-HEADBAND.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0067_PURPLE-HEADBAND.png"
+    },
+    {
+      "name": "PREP__0068_PURPLE-HEADPHONES",
+      "filename": "PREP__0068_PURPLE-HEADPHONES.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0068_PURPLE-HEADPHONES.png"
+    },
+    {
+      "name": "PREP__0081_RED-HEADBAND",
+      "filename": "PREP__0081_RED-HEADBAND.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0081_RED-HEADBAND.png"
+    },
+    {
+      "name": "PREP__0094_YELLOW-HEADPHONES",
+      "filename": "PREP__0094_YELLOW-HEADPHONES.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/PREP__0094_YELLOW-HEADPHONES.png"
+    }
+  ],
+  "FACE": [
+    {
+      "name": "CYAN FLOCKS",
+      "filename": "CYAN FLOCKS.png",
+      "path": "/images/jnr-traits/full-traits/FACE/CYAN FLOCKS.png"
+    },
+    {
+      "name": "CYAN GRADIENT",
+      "filename": "CYAN GRADIENT.png",
+      "path": "/images/jnr-traits/full-traits/FACE/CYAN GRADIENT.png"
+    },
+    {
+      "name": "CYAN SMILEYS",
+      "filename": "CYAN SMILEYS.png",
+      "path": "/images/jnr-traits/full-traits/FACE/CYAN SMILEYS.png"
+    },
+    {
+      "name": "CYAN",
+      "filename": "CYAN.png",
+      "path": "/images/jnr-traits/full-traits/FACE/CYAN.png"
+    },
+    {
+      "name": "FREAK_I_M-QUIRKY",
+      "filename": "FREAK_I_M-QUIRKY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK_I_M-QUIRKY.png"
+    },
+    {
+      "name": "FREAK_LOST",
+      "filename": "FREAK_LOST.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK_LOST.png"
+    },
+    {
+      "name": "FREAK_POTTER-RASP",
+      "filename": "FREAK_POTTER-RASP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK_POTTER-RASP.png"
+    },
+    {
+      "name": "FREAK_SMILEY",
+      "filename": "FREAK_SMILEY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK_SMILEY.png"
+    },
+    {
+      "name": "FREAK__0000_3D-GLASSES",
+      "filename": "FREAK__0000_3D-GLASSES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0000_3D-GLASSES.png"
+    },
+    {
+      "name": "FREAK__0001_ANGRY",
+      "filename": "FREAK__0001_ANGRY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0001_ANGRY.png"
+    },
+    {
+      "name": "FREAK__0002_ANNOYED",
+      "filename": "FREAK__0002_ANNOYED.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0002_ANNOYED.png"
+    },
+    {
+      "name": "FREAK__0003_ANON",
+      "filename": "FREAK__0003_ANON.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0003_ANON.png"
+    },
+    {
+      "name": "FREAK__0004_ASTONISHED",
+      "filename": "FREAK__0004_ASTONISHED.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0004_ASTONISHED.png"
+    },
+    {
+      "name": "FREAK__0005_BRUISED",
+      "filename": "FREAK__0005_BRUISED.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0005_BRUISED.png"
+    },
+    {
+      "name": "FREAK__0006_BUBBLEGUM",
+      "filename": "FREAK__0006_BUBBLEGUM.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0006_BUBBLEGUM.png"
+    },
+    {
+      "name": "FREAK__0007_CIGGY",
+      "filename": "FREAK__0007_CIGGY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0007_CIGGY.png"
+    },
+    {
+      "name": "FREAK__0008_COOL-DARK-SHADES",
+      "filename": "FREAK__0008_COOL-DARK-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0008_COOL-DARK-SHADES.png"
+    },
+    {
+      "name": "FREAK__0009_COOL-RED-SHADES",
+      "filename": "FREAK__0009_COOL-RED-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0009_COOL-RED-SHADES.png"
+    },
+    {
+      "name": "FREAK__0010_CREEPY",
+      "filename": "FREAK__0010_CREEPY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0010_CREEPY.png"
+    },
+    {
+      "name": "FREAK__0011_CUTE-RASP",
+      "filename": "FREAK__0011_CUTE-RASP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0011_CUTE-RASP.png"
+    },
+    {
+      "name": "FREAK__0012_CYAN-SHADES",
+      "filename": "FREAK__0012_CYAN-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0012_CYAN-SHADES.png"
+    },
+    {
+      "name": "FREAK__0013_CYAN-BANDANA",
+      "filename": "FREAK__0013_CYAN-BANDANA.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0013_CYAN-BANDANA.png"
+    },
+    {
+      "name": "FREAK__0013_DAZED",
+      "filename": "FREAK__0013_DAZED.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0013_DAZED.png"
+    },
+    {
+      "name": "FREAK__0014_CYAN-CAP",
+      "filename": "FREAK__0014_CYAN-CAP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0014_CYAN-CAP.png"
+    },
+    {
+      "name": "FREAK__0014_DIAMOND-GRILLZ",
+      "filename": "FREAK__0014_DIAMOND-GRILLZ.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0014_DIAMOND-GRILLZ.png"
+    },
+    {
+      "name": "FREAK__0015_CYAN-FRO",
+      "filename": "FREAK__0015_CYAN-FRO.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0015_CYAN-FRO.png"
+    },
+    {
+      "name": "FREAK__0015_ETERNAL-SKULL",
+      "filename": "FREAK__0015_ETERNAL-SKULL.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0015_ETERNAL-SKULL.png"
+    },
+    {
+      "name": "FREAK__0016_FANGS",
+      "filename": "FREAK__0016_FANGS.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0016_FANGS.png"
+    },
+    {
+      "name": "FREAK__0017_FLIRTY",
+      "filename": "FREAK__0017_FLIRTY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0017_FLIRTY.png"
+    },
+    {
+      "name": "FREAK__0018_FROWNY",
+      "filename": "FREAK__0018_FROWNY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0018_FROWNY.png"
+    },
+    {
+      "name": "FREAK__0019_GOLD-GRILLZ",
+      "filename": "FREAK__0019_GOLD-GRILLZ.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0019_GOLD-GRILLZ.png"
+    },
+    {
+      "name": "FREAK__0020_HEARTY-KISS",
+      "filename": "FREAK__0020_HEARTY-KISS.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0020_HEARTY-KISS.png"
+    },
+    {
+      "name": "FREAK__0021_ETERNAL-BUCKET",
+      "filename": "FREAK__0021_ETERNAL-BUCKET.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0021_ETERNAL-BUCKET.png"
+    },
+    {
+      "name": "FREAK__0021_HEARTY-SMILE",
+      "filename": "FREAK__0021_HEARTY-SMILE.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0021_HEARTY-SMILE.png"
+    },
+    {
+      "name": "FREAK__0022_HOCKEY-SMILE",
+      "filename": "FREAK__0022_HOCKEY-SMILE.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0022_HOCKEY-SMILE.png"
+    },
+    {
+      "name": "FREAK__0023_IMPATIENT",
+      "filename": "FREAK__0023_IMPATIENT.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0023_IMPATIENT.png"
+    },
+    {
+      "name": "FREAK__0024_I_M-QUIRKY",
+      "filename": "FREAK__0024_I_M-QUIRKY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0024_I_M-QUIRKY.png"
+    },
+    {
+      "name": "FREAK__0025_LOST",
+      "filename": "FREAK__0025_LOST.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0025_LOST.png"
+    },
+    {
+      "name": "FREAK__0026_MAKEUP",
+      "filename": "FREAK__0026_MAKEUP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0026_MAKEUP.png"
+    },
+    {
+      "name": "FREAK__0029_ORANGE-SHADES",
+      "filename": "FREAK__0029_ORANGE-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0029_ORANGE-SHADES.png"
+    },
+    {
+      "name": "FREAK__0033_GOLDEN-BUCKET-(FREAK)",
+      "filename": "FREAK__0033_GOLDEN-BUCKET-(FREAK).png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0033_GOLDEN-BUCKET-(FREAK).png"
+    },
+    {
+      "name": "FREAK__0033_POTTER-RASP",
+      "filename": "FREAK__0033_POTTER-RASP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0033_POTTER-RASP.png"
+    },
+    {
+      "name": "FREAK__0035_PURPLE-SHADES",
+      "filename": "FREAK__0035_PURPLE-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0035_PURPLE-SHADES.png"
+    },
+    {
+      "name": "FREAK__0038_SMILEY",
+      "filename": "FREAK__0038_SMILEY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0038_SMILEY.png"
+    },
+    {
+      "name": "FREAK__0039_STRESSED-CIGGY",
+      "filename": "FREAK__0039_STRESSED-CIGGY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0039_STRESSED-CIGGY.png"
+    },
+    {
+      "name": "FREAK__0040_PINK-SCARF",
+      "filename": "FREAK__0040_PINK-SCARF.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0040_PINK-SCARF.png"
+    },
+    {
+      "name": "FREAK__0049_PURPLE-SCARF",
+      "filename": "FREAK__0049_PURPLE-SCARF.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0049_PURPLE-SCARF.png"
+    },
+    {
+      "name": "FREAK__0060_RED-SCARF",
+      "filename": "FREAK__0060_RED-SCARF.png",
+      "path": "/images/jnr-traits/full-traits/FACE/FREAK__0060_RED-SCARF.png"
+    },
+    {
+      "name": "GEEK_CYAN",
+      "filename": "GEEK_CYAN.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK_CYAN.png"
+    },
+    {
+      "name": "GEEK_ETERNAL",
+      "filename": "GEEK_ETERNAL.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK_ETERNAL.png"
+    },
+    {
+      "name": "GEEK_GOLDEN-FAMILY",
+      "filename": "GEEK_GOLDEN-FAMILY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK_GOLDEN-FAMILY.png"
+    },
+    {
+      "name": "GEEK__0000_3D-GLASSES",
+      "filename": "GEEK__0000_3D-GLASSES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0000_3D-GLASSES.png"
+    },
+    {
+      "name": "GEEK__0001_ANGRY",
+      "filename": "GEEK__0001_ANGRY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0001_ANGRY.png"
+    },
+    {
+      "name": "GEEK__0002_ANNOYED",
+      "filename": "GEEK__0002_ANNOYED.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0002_ANNOYED.png"
+    },
+    {
+      "name": "GEEK__0003_ANON",
+      "filename": "GEEK__0003_ANON.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0003_ANON.png"
+    },
+    {
+      "name": "GEEK__0004_ASTONISHED",
+      "filename": "GEEK__0004_ASTONISHED.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0004_ASTONISHED.png"
+    },
+    {
+      "name": "GEEK__0005_BRUISED",
+      "filename": "GEEK__0005_BRUISED.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0005_BRUISED.png"
+    },
+    {
+      "name": "GEEK__0006_BUBBLEGUM",
+      "filename": "GEEK__0006_BUBBLEGUM.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0006_BUBBLEGUM.png"
+    },
+    {
+      "name": "GEEK__0007_CIGGY",
+      "filename": "GEEK__0007_CIGGY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0007_CIGGY.png"
+    },
+    {
+      "name": "GEEK__0008_COOL-DARK-SHADES",
+      "filename": "GEEK__0008_COOL-DARK-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0008_COOL-DARK-SHADES.png"
+    },
+    {
+      "name": "GEEK__0009_COOL-RED-SHADES",
+      "filename": "GEEK__0009_COOL-RED-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0009_COOL-RED-SHADES.png"
+    },
+    {
+      "name": "GEEK__0010_CREEPY",
+      "filename": "GEEK__0010_CREEPY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0010_CREEPY.png"
+    },
+    {
+      "name": "GEEK__0011_CUTE-RASP",
+      "filename": "GEEK__0011_CUTE-RASP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0011_CUTE-RASP.png"
+    },
+    {
+      "name": "GEEK__0012_CYAN-SHADES",
+      "filename": "GEEK__0012_CYAN-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0012_CYAN-SHADES.png"
+    },
+    {
+      "name": "GEEK__0013_DAZED",
+      "filename": "GEEK__0013_DAZED.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0013_DAZED.png"
+    },
+    {
+      "name": "GEEK__0014_CYAN-BANDANA",
+      "filename": "GEEK__0014_CYAN-BANDANA.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0014_CYAN-BANDANA.png"
+    },
+    {
+      "name": "GEEK__0014_DIAMOND-GRILLZ",
+      "filename": "GEEK__0014_DIAMOND-GRILLZ.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0014_DIAMOND-GRILLZ.png"
+    },
+    {
+      "name": "GEEK__0015_CYAN-CAP",
+      "filename": "GEEK__0015_CYAN-CAP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0015_CYAN-CAP.png"
+    },
+    {
+      "name": "GEEK__0015_ETERNAL-SKULL",
+      "filename": "GEEK__0015_ETERNAL-SKULL.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0015_ETERNAL-SKULL.png"
+    },
+    {
+      "name": "GEEK__0016_CYAN-FRO",
+      "filename": "GEEK__0016_CYAN-FRO.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0016_CYAN-FRO.png"
+    },
+    {
+      "name": "GEEK__0016_FANGS",
+      "filename": "GEEK__0016_FANGS.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0016_FANGS.png"
+    },
+    {
+      "name": "GEEK__0017_FLIRTY",
+      "filename": "GEEK__0017_FLIRTY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0017_FLIRTY.png"
+    },
+    {
+      "name": "GEEK__0018_FROWNY",
+      "filename": "GEEK__0018_FROWNY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0018_FROWNY.png"
+    },
+    {
+      "name": "GEEK__0019_GOLD-GRILLZ",
+      "filename": "GEEK__0019_GOLD-GRILLZ.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0019_GOLD-GRILLZ.png"
+    },
+    {
+      "name": "GEEK__0020_HEARTY-KISS",
+      "filename": "GEEK__0020_HEARTY-KISS.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0020_HEARTY-KISS.png"
+    },
+    {
+      "name": "GEEK__0021_HEARTY-SMILE",
+      "filename": "GEEK__0021_HEARTY-SMILE.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0021_HEARTY-SMILE.png"
+    },
+    {
+      "name": "GEEK__0022_ETERNAL-BUCKET",
+      "filename": "GEEK__0022_ETERNAL-BUCKET.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0022_ETERNAL-BUCKET.png"
+    },
+    {
+      "name": "GEEK__0022_HOCKEY-SMILE",
+      "filename": "GEEK__0022_HOCKEY-SMILE.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0022_HOCKEY-SMILE.png"
+    },
+    {
+      "name": "GEEK__0023_GOLDEN-ZIPUP",
+      "filename": "GEEK__0023_GOLDEN-ZIPUP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0023_GOLDEN-ZIPUP.png"
+    },
+    {
+      "name": "GEEK__0023_IMPATIENT",
+      "filename": "GEEK__0023_IMPATIENT.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0023_IMPATIENT.png"
+    },
+    {
+      "name": "GEEK__0024_I_M-QUIRKY",
+      "filename": "GEEK__0024_I_M-QUIRKY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0024_I_M-QUIRKY.png"
+    },
+    {
+      "name": "GEEK__0025_LOST",
+      "filename": "GEEK__0025_LOST.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0025_LOST.png"
+    },
+    {
+      "name": "GEEK__0026_MAKEUP",
+      "filename": "GEEK__0026_MAKEUP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0026_MAKEUP.png"
+    },
+    {
+      "name": "GEEK__0029_ORANGE-SHADES",
+      "filename": "GEEK__0029_ORANGE-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0029_ORANGE-SHADES.png"
+    },
+    {
+      "name": "GEEK__0033_POTTER-RASP",
+      "filename": "GEEK__0033_POTTER-RASP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0033_POTTER-RASP.png"
+    },
+    {
+      "name": "GEEK__0034_GOLDEN-SPACE-BUNS",
+      "filename": "GEEK__0034_GOLDEN-SPACE-BUNS.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0034_GOLDEN-SPACE-BUNS.png"
+    },
+    {
+      "name": "GEEK__0035_PURPLE-SHADES",
+      "filename": "GEEK__0035_PURPLE-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0035_PURPLE-SHADES.png"
+    },
+    {
+      "name": "GEEK__0038_SMILEY",
+      "filename": "GEEK__0038_SMILEY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0038_SMILEY.png"
+    },
+    {
+      "name": "GEEK__0039_STRESSED-CIGGY",
+      "filename": "GEEK__0039_STRESSED-CIGGY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0039_STRESSED-CIGGY.png"
+    },
+    {
+      "name": "GEEK__0040_PINK-SCARF",
+      "filename": "GEEK__0040_PINK-SCARF.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0040_PINK-SCARF.png"
+    },
+    {
+      "name": "GEEK__0049_PURPLE-SCARF",
+      "filename": "GEEK__0049_PURPLE-SCARF.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0049_PURPLE-SCARF.png"
+    },
+    {
+      "name": "GEEK__0060_RED-SCARF",
+      "filename": "GEEK__0060_RED-SCARF.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GEEK__0060_RED-SCARF.png"
+    },
+    {
+      "name": "GOLDEN",
+      "filename": "GOLDEN.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GOLDEN.png"
+    },
+    {
+      "name": "JOCK_CYAN-BANDANA",
+      "filename": "JOCK_CYAN-BANDANA.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK_CYAN-BANDANA.png"
+    },
+    {
+      "name": "JOCK_JOCK_0000s_0014_CYAN-CAP",
+      "filename": "JOCK_JOCK_0000s_0014_CYAN-CAP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK_JOCK_0000s_0014_CYAN-CAP.png"
+    },
+    {
+      "name": "JOCK_JOCK_0000s_0015_CYAN-FRO",
+      "filename": "JOCK_JOCK_0000s_0015_CYAN-FRO.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK_JOCK_0000s_0015_CYAN-FRO.png"
+    },
+    {
+      "name": "JOCK_JOCK_0000s_0021_ETERNAL-BUCKET",
+      "filename": "JOCK_JOCK_0000s_0021_ETERNAL-BUCKET.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK_JOCK_0000s_0021_ETERNAL-BUCKET.png"
+    },
+    {
+      "name": "JOCK_JOCK_0000s_0033_GOLDEN-RALLY",
+      "filename": "JOCK_JOCK_0000s_0033_GOLDEN-RALLY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK_JOCK_0000s_0033_GOLDEN-RALLY.png"
+    },
+    {
+      "name": "JOCK__0000s_0000_3D-GLASSES",
+      "filename": "JOCK__0000s_0000_3D-GLASSES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0000_3D-GLASSES.png"
+    },
+    {
+      "name": "JOCK__0000s_0001_ANGRY",
+      "filename": "JOCK__0000s_0001_ANGRY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0001_ANGRY.png"
+    },
+    {
+      "name": "JOCK__0000s_0002_ANNOYED",
+      "filename": "JOCK__0000s_0002_ANNOYED.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0002_ANNOYED.png"
+    },
+    {
+      "name": "JOCK__0000s_0003_ANON",
+      "filename": "JOCK__0000s_0003_ANON.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0003_ANON.png"
+    },
+    {
+      "name": "JOCK__0000s_0004_ASTONISHED",
+      "filename": "JOCK__0000s_0004_ASTONISHED.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0004_ASTONISHED.png"
+    },
+    {
+      "name": "JOCK__0000s_0005_BRUISED",
+      "filename": "JOCK__0000s_0005_BRUISED.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0005_BRUISED.png"
+    },
+    {
+      "name": "JOCK__0000s_0006_BUBBLEGUM",
+      "filename": "JOCK__0000s_0006_BUBBLEGUM.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0006_BUBBLEGUM.png"
+    },
+    {
+      "name": "JOCK__0000s_0007_CIGGY",
+      "filename": "JOCK__0000s_0007_CIGGY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0007_CIGGY.png"
+    },
+    {
+      "name": "JOCK__0000s_0008_COOL-DARK-SHADES",
+      "filename": "JOCK__0000s_0008_COOL-DARK-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0008_COOL-DARK-SHADES.png"
+    },
+    {
+      "name": "JOCK__0000s_0009_COOL-RED-SHADES",
+      "filename": "JOCK__0000s_0009_COOL-RED-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0009_COOL-RED-SHADES.png"
+    },
+    {
+      "name": "JOCK__0000s_0010_CREEPY V2",
+      "filename": "JOCK__0000s_0010_CREEPY V2.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0010_CREEPY V2.png"
+    },
+    {
+      "name": "JOCK__0000s_0010_CREEPY",
+      "filename": "JOCK__0000s_0010_CREEPY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0010_CREEPY.png"
+    },
+    {
+      "name": "JOCK__0000s_0011_CUTE-RASP",
+      "filename": "JOCK__0000s_0011_CUTE-RASP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0011_CUTE-RASP.png"
+    },
+    {
+      "name": "JOCK__0000s_0012_CYAN-SHADES",
+      "filename": "JOCK__0000s_0012_CYAN-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0012_CYAN-SHADES.png"
+    },
+    {
+      "name": "JOCK__0000s_0013_DAZED",
+      "filename": "JOCK__0000s_0013_DAZED.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0013_DAZED.png"
+    },
+    {
+      "name": "JOCK__0000s_0014_DIAMOND-GRILLZ",
+      "filename": "JOCK__0000s_0014_DIAMOND-GRILLZ.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0014_DIAMOND-GRILLZ.png"
+    },
+    {
+      "name": "JOCK__0000s_0015_ETERNAL-SKULL",
+      "filename": "JOCK__0000s_0015_ETERNAL-SKULL.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0015_ETERNAL-SKULL.png"
+    },
+    {
+      "name": "JOCK__0000s_0016_FANGS",
+      "filename": "JOCK__0000s_0016_FANGS.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0016_FANGS.png"
+    },
+    {
+      "name": "JOCK__0000s_0017_FLIRTY",
+      "filename": "JOCK__0000s_0017_FLIRTY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0017_FLIRTY.png"
+    },
+    {
+      "name": "JOCK__0000s_0018_FROWNY",
+      "filename": "JOCK__0000s_0018_FROWNY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0018_FROWNY.png"
+    },
+    {
+      "name": "JOCK__0000s_0019_GOLD-GRILLZ",
+      "filename": "JOCK__0000s_0019_GOLD-GRILLZ.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0019_GOLD-GRILLZ.png"
+    },
+    {
+      "name": "JOCK__0000s_0020_HEARTY-KISS",
+      "filename": "JOCK__0000s_0020_HEARTY-KISS.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0020_HEARTY-KISS.png"
+    },
+    {
+      "name": "JOCK__0000s_0021_HEARTY-SMILE",
+      "filename": "JOCK__0000s_0021_HEARTY-SMILE.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0021_HEARTY-SMILE.png"
+    },
+    {
+      "name": "JOCK__0000s_0022_HOCKEY-SMILE",
+      "filename": "JOCK__0000s_0022_HOCKEY-SMILE.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0022_HOCKEY-SMILE.png"
+    },
+    {
+      "name": "JOCK__0000s_0023_IMPATIENT",
+      "filename": "JOCK__0000s_0023_IMPATIENT.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0023_IMPATIENT.png"
+    },
+    {
+      "name": "JOCK__0000s_0024_I_M-QUIRKY",
+      "filename": "JOCK__0000s_0024_I_M-QUIRKY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0024_I_M-QUIRKY.png"
+    },
+    {
+      "name": "JOCK__0000s_0025_LOST",
+      "filename": "JOCK__0000s_0025_LOST.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0025_LOST.png"
+    },
+    {
+      "name": "JOCK__0000s_0026_MAKEUP",
+      "filename": "JOCK__0000s_0026_MAKEUP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0026_MAKEUP.png"
+    },
+    {
+      "name": "JOCK__0000s_0029_ORANGE-SHADES",
+      "filename": "JOCK__0000s_0029_ORANGE-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0029_ORANGE-SHADES.png"
+    },
+    {
+      "name": "JOCK__0000s_0033_POTTER-RASP",
+      "filename": "JOCK__0000s_0033_POTTER-RASP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0033_POTTER-RASP.png"
+    },
+    {
+      "name": "JOCK__0000s_0035_PURPLE-SHADES",
+      "filename": "JOCK__0000s_0035_PURPLE-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0035_PURPLE-SHADES.png"
+    },
+    {
+      "name": "JOCK__0000s_0038_SMILEY",
+      "filename": "JOCK__0000s_0038_SMILEY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0038_SMILEY.png"
+    },
+    {
+      "name": "JOCK__0000s_0039_STRESSED-CIGGY",
+      "filename": "JOCK__0000s_0039_STRESSED-CIGGY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0039_STRESSED-CIGGY.png"
+    },
+    {
+      "name": "JOCK__0000s_0041_PINK-SCARF",
+      "filename": "JOCK__0000s_0041_PINK-SCARF.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0041_PINK-SCARF.png"
+    },
+    {
+      "name": "JOCK__0000s_0050_PURPLE-SCARF",
+      "filename": "JOCK__0000s_0050_PURPLE-SCARF.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0050_PURPLE-SCARF.png"
+    },
+    {
+      "name": "JOCK__0000s_0061_RED-SCARF",
+      "filename": "JOCK__0000s_0061_RED-SCARF.png",
+      "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0061_RED-SCARF.png"
+    },
+    {
+      "name": "PINK SMILEYS",
+      "filename": "PINK SMILEYS.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PINK SMILEYS.png"
+    },
+    {
+      "name": "PIXEL STATIC SMILEYS V4",
+      "filename": "PIXEL STATIC SMILEYS V4.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PIXEL STATIC SMILEYS V4.png"
+    },
+    {
+      "name": "PIXEL STATIC SMILEYS V6",
+      "filename": "PIXEL STATIC SMILEYS V6.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PIXEL STATIC SMILEYS V6.png"
+    },
+    {
+      "name": "PIXEL STATIC SMILEYS V7",
+      "filename": "PIXEL STATIC SMILEYS V7.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PIXEL STATIC SMILEYS V7.png"
+    },
+    {
+      "name": "PIXEL STATIC SMILEYS",
+      "filename": "PIXEL STATIC SMILEYS.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PIXEL STATIC SMILEYS.png"
+    },
+    {
+      "name": "PREP_CYAN",
+      "filename": "PREP_CYAN.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP_CYAN.png"
+    },
+    {
+      "name": "PREP_ETERNAL",
+      "filename": "PREP_ETERNAL.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP_ETERNAL.png"
+    },
+    {
+      "name": "PREP_GOLDEN-FAMILY",
+      "filename": "PREP_GOLDEN-FAMILY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP_GOLDEN-FAMILY.png"
+    },
+    {
+      "name": "PREP__0000_3D-GLASSES",
+      "filename": "PREP__0000_3D-GLASSES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0000_3D-GLASSES.png"
+    },
+    {
+      "name": "PREP__0001_ANGRY",
+      "filename": "PREP__0001_ANGRY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0001_ANGRY.png"
+    },
+    {
+      "name": "PREP__0002_ANNOYED",
+      "filename": "PREP__0002_ANNOYED.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0002_ANNOYED.png"
+    },
+    {
+      "name": "PREP__0003_ANON",
+      "filename": "PREP__0003_ANON.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0003_ANON.png"
+    },
+    {
+      "name": "PREP__0004_ASTONISHED",
+      "filename": "PREP__0004_ASTONISHED.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0004_ASTONISHED.png"
+    },
+    {
+      "name": "PREP__0005_BRUISED",
+      "filename": "PREP__0005_BRUISED.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0005_BRUISED.png"
+    },
+    {
+      "name": "PREP__0006_BUBBLEGUM",
+      "filename": "PREP__0006_BUBBLEGUM.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0006_BUBBLEGUM.png"
+    },
+    {
+      "name": "PREP__0007_CIGGY",
+      "filename": "PREP__0007_CIGGY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0007_CIGGY.png"
+    },
+    {
+      "name": "PREP__0008_COOL-DARK-SHADES",
+      "filename": "PREP__0008_COOL-DARK-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0008_COOL-DARK-SHADES.png"
+    },
+    {
+      "name": "PREP__0009_COOL-RED-SHADES",
+      "filename": "PREP__0009_COOL-RED-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0009_COOL-RED-SHADES.png"
+    },
+    {
+      "name": "PREP__0010_CREEPY",
+      "filename": "PREP__0010_CREEPY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0010_CREEPY.png"
+    },
+    {
+      "name": "PREP__0011_CUTE-RASP",
+      "filename": "PREP__0011_CUTE-RASP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0011_CUTE-RASP.png"
+    },
+    {
+      "name": "PREP__0012_CYAN-SHADES",
+      "filename": "PREP__0012_CYAN-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0012_CYAN-SHADES.png"
+    },
+    {
+      "name": "PREP__0013_DAZED",
+      "filename": "PREP__0013_DAZED.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0013_DAZED.png"
+    },
+    {
+      "name": "PREP__0014_CYAN-BANDANA",
+      "filename": "PREP__0014_CYAN-BANDANA.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0014_CYAN-BANDANA.png"
+    },
+    {
+      "name": "PREP__0014_DIAMOND-GRILLZ",
+      "filename": "PREP__0014_DIAMOND-GRILLZ.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0014_DIAMOND-GRILLZ.png"
+    },
+    {
+      "name": "PREP__0015_CYAN-CAP",
+      "filename": "PREP__0015_CYAN-CAP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0015_CYAN-CAP.png"
+    },
+    {
+      "name": "PREP__0015_ETERNAL-SKULL",
+      "filename": "PREP__0015_ETERNAL-SKULL.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0015_ETERNAL-SKULL.png"
+    },
+    {
+      "name": "PREP__0016_CYAN-FRO",
+      "filename": "PREP__0016_CYAN-FRO.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0016_CYAN-FRO.png"
+    },
+    {
+      "name": "PREP__0016_FANGS",
+      "filename": "PREP__0016_FANGS.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0016_FANGS.png"
+    },
+    {
+      "name": "PREP__0017_FLIRTY",
+      "filename": "PREP__0017_FLIRTY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0017_FLIRTY.png"
+    },
+    {
+      "name": "PREP__0018_FROWNY",
+      "filename": "PREP__0018_FROWNY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0018_FROWNY.png"
+    },
+    {
+      "name": "PREP__0019_GOLD-GRILLZ",
+      "filename": "PREP__0019_GOLD-GRILLZ.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0019_GOLD-GRILLZ.png"
+    },
+    {
+      "name": "PREP__0020_HEARTY-KISS",
+      "filename": "PREP__0020_HEARTY-KISS.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0020_HEARTY-KISS.png"
+    },
+    {
+      "name": "PREP__0021_HEARTY-SMILE",
+      "filename": "PREP__0021_HEARTY-SMILE.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0021_HEARTY-SMILE.png"
+    },
+    {
+      "name": "PREP__0022_ETERNAL-BUCKET",
+      "filename": "PREP__0022_ETERNAL-BUCKET.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0022_ETERNAL-BUCKET.png"
+    },
+    {
+      "name": "PREP__0022_HOCKEY-SMILE",
+      "filename": "PREP__0022_HOCKEY-SMILE.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0022_HOCKEY-SMILE.png"
+    },
+    {
+      "name": "PREP__0023_IMPATIENT",
+      "filename": "PREP__0023_IMPATIENT.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0023_IMPATIENT.png"
+    },
+    {
+      "name": "PREP__0024_GOLDEN-SCARF",
+      "filename": "PREP__0024_GOLDEN-SCARF.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0024_GOLDEN-SCARF.png"
+    },
+    {
+      "name": "PREP__0024_I_M-QUIRKY",
+      "filename": "PREP__0024_I_M-QUIRKY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0024_I_M-QUIRKY.png"
+    },
+    {
+      "name": "PREP__0025_LOST",
+      "filename": "PREP__0025_LOST.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0025_LOST.png"
+    },
+    {
+      "name": "PREP__0026_MAKEUP",
+      "filename": "PREP__0026_MAKEUP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0026_MAKEUP.png"
+    },
+    {
+      "name": "PREP__0029_ORANGE-SHADES",
+      "filename": "PREP__0029_ORANGE-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0029_ORANGE-SHADES.png"
+    },
+    {
+      "name": "PREP__0033_POTTER-RASP",
+      "filename": "PREP__0033_POTTER-RASP.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0033_POTTER-RASP.png"
+    },
+    {
+      "name": "PREP__0035_GOLDEN-FRO",
+      "filename": "PREP__0035_GOLDEN-FRO.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0035_GOLDEN-FRO.png"
+    },
+    {
+      "name": "PREP__0035_PURPLE-SHADES",
+      "filename": "PREP__0035_PURPLE-SHADES.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0035_PURPLE-SHADES.png"
+    },
+    {
+      "name": "PREP__0038_SMILEY",
+      "filename": "PREP__0038_SMILEY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0038_SMILEY.png"
+    },
+    {
+      "name": "PREP__0039_STRESSED-CIGGY",
+      "filename": "PREP__0039_STRESSED-CIGGY.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0039_STRESSED-CIGGY.png"
+    },
+    {
+      "name": "PREP__0042_PINK-SCARF",
+      "filename": "PREP__0042_PINK-SCARF.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0042_PINK-SCARF.png"
+    },
+    {
+      "name": "PREP__0051_PURPLE-SCARF",
+      "filename": "PREP__0051_PURPLE-SCARF.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0051_PURPLE-SCARF.png"
+    },
+    {
+      "name": "PREP__0062_RED-SCARF",
+      "filename": "PREP__0062_RED-SCARF.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PREP__0062_RED-SCARF.png"
+    }
+  ],
+  "EYEBROWS": [
+    {
+      "name": "_0000_EYEBROWS-1",
+      "filename": "_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0000s_0000_EYEBROWS-1",
+      "filename": "_0000s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0000s_0001_EYEBROWS-2",
+      "filename": "_0000s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0000s_0002_EYEBROWS-3",
+      "filename": "_0000s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0000s_0003_EYEBROWS-4",
+      "filename": "_0000s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0000s_0004_EYEBROWS-5",
+      "filename": "_0000s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0000s_0005_EYEBROWS-6",
+      "filename": "_0000s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0000s_0006_EYEBROWS-7",
+      "filename": "_0000s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0001_EYEBROWS-2",
+      "filename": "_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0001s_0000_EYEBROWS-1",
+      "filename": "_0001s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0001s_0001_EYEBROWS-2",
+      "filename": "_0001s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0001s_0002_EYEBROWS-3",
+      "filename": "_0001s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0001s_0003_EYEBROWS-4",
+      "filename": "_0001s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0001s_0004_EYEBROWS-5",
+      "filename": "_0001s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0001s_0005_EYEBROWS-6",
+      "filename": "_0001s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0001s_0006_EYEBROWS-7",
+      "filename": "_0001s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0002_EYEBROWS-3",
+      "filename": "_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0002s_0000_EYEBROWS-1",
+      "filename": "_0002s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0002s_0001_EYEBROWS-2",
+      "filename": "_0002s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0002s_0002_EYEBROWS-3",
+      "filename": "_0002s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0002s_0003_EYEBROWS-4",
+      "filename": "_0002s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0002s_0004_EYEBROWS-5",
+      "filename": "_0002s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0002s_0005_EYEBROWS-6",
+      "filename": "_0002s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0002s_0006_EYEBROWS-7",
+      "filename": "_0002s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0003_EYEBROWS-4",
+      "filename": "_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0003s_0000_EYEBROWS-1",
+      "filename": "_0003s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0003s_0001_EYEBROWS-2",
+      "filename": "_0003s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0003s_0002_EYEBROWS-3",
+      "filename": "_0003s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0003s_0003_EYEBROWS-4",
+      "filename": "_0003s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0003s_0004_EYEBROWS-5",
+      "filename": "_0003s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0003s_0005_EYEBROWS-6",
+      "filename": "_0003s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0003s_0006_EYEBROWS-7",
+      "filename": "_0003s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0004_EYEBROWS-5",
+      "filename": "_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0004s_0000_EYEBROWS-1",
+      "filename": "_0004s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0004s_0001_EYEBROWS-2",
+      "filename": "_0004s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0004s_0002_EYEBROWS-3",
+      "filename": "_0004s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0004s_0003_EYEBROWS-4",
+      "filename": "_0004s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0004s_0004_EYEBROWS-5",
+      "filename": "_0004s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0004s_0005_EYEBROWS-6",
+      "filename": "_0004s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0004s_0006_EYEBROWS-7",
+      "filename": "_0004s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0005_EYEBROWS-6",
+      "filename": "_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0005s_0000_EYEBROWS-1",
+      "filename": "_0005s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0005s_0001_EYEBROWS-2",
+      "filename": "_0005s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0005s_0002_EYEBROWS-3",
+      "filename": "_0005s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0005s_0003_EYEBROWS-4",
+      "filename": "_0005s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0005s_0004_EYEBROWS-5",
+      "filename": "_0005s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0005s_0005_EYEBROWS-6",
+      "filename": "_0005s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0005s_0006_EYEBROWS-7",
+      "filename": "_0005s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0006_EYEBROWS-7",
+      "filename": "_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0006s_0000_EYEBROWS-1",
+      "filename": "_0006s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0006s_0001_EYEBROWS-2",
+      "filename": "_0006s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0006s_0002_EYEBROWS-3",
+      "filename": "_0006s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0006s_0003_EYEBROWS-4",
+      "filename": "_0006s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0006s_0004_EYEBROWS-5",
+      "filename": "_0006s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0006s_0005_EYEBROWS-6",
+      "filename": "_0006s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0006s_0006_EYEBROWS-7",
+      "filename": "_0006s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0007s_0000_EYEBROWS-1",
+      "filename": "_0007s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0007s_0001_EYEBROWS-2",
+      "filename": "_0007s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0007s_0002_EYEBROWS-3",
+      "filename": "_0007s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0007s_0003_EYEBROWS-4",
+      "filename": "_0007s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0007s_0004_EYEBROWS-5",
+      "filename": "_0007s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0007s_0005_EYEBROWS-6",
+      "filename": "_0007s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0007s_0006_EYEBROWS-7",
+      "filename": "_0007s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0008s_0000_EYEBROWS-1",
+      "filename": "_0008s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0008s_0001_EYEBROWS-2",
+      "filename": "_0008s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0008s_0002_EYEBROWS-3",
+      "filename": "_0008s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0008s_0003_EYEBROWS-4",
+      "filename": "_0008s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0008s_0004_EYEBROWS-5",
+      "filename": "_0008s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0008s_0005_EYEBROWS-6",
+      "filename": "_0008s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0008s_0006_EYEBROWS-7",
+      "filename": "_0008s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0009s_0000_EYEBROWS-1",
+      "filename": "_0009s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0009s_0001_EYEBROWS-2",
+      "filename": "_0009s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0009s_0002_EYEBROWS-3",
+      "filename": "_0009s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0009s_0003_EYEBROWS-4",
+      "filename": "_0009s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0009s_0004_EYEBROWS-5",
+      "filename": "_0009s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0009s_0005_EYEBROWS-6",
+      "filename": "_0009s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0009s_0006_EYEBROWS-7",
+      "filename": "_0009s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0010s_0000_EYEBROWS-1",
+      "filename": "_0010s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0010s_0001_EYEBROWS-2",
+      "filename": "_0010s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0010s_0002_EYEBROWS-3",
+      "filename": "_0010s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0010s_0003_EYEBROWS-4",
+      "filename": "_0010s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0010s_0004_EYEBROWS-5",
+      "filename": "_0010s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0010s_0005_EYEBROWS-6",
+      "filename": "_0010s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0010s_0006_EYEBROWS-7",
+      "filename": "_0010s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0011s_0000_EYEBROWS-1",
+      "filename": "_0011s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0011s_0001_EYEBROWS-2",
+      "filename": "_0011s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0011s_0002_EYEBROWS-3",
+      "filename": "_0011s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0011s_0003_EYEBROWS-4",
+      "filename": "_0011s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0011s_0004_EYEBROWS-5",
+      "filename": "_0011s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0011s_0005_EYEBROWS-6",
+      "filename": "_0011s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0011s_0006_EYEBROWS-7",
+      "filename": "_0011s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0006_EYEBROWS-7.png"
+    }
+  ],
+  "HEAD_OVERLAYERS": [
+    {
+      "name": "FREAK_BLACK-CAT-OVERLAYER(FREAK)",
+      "filename": "FREAK_BLACK-CAT-OVERLAYER(FREAK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK_BLACK-CAT-OVERLAYER(FREAK).png"
+    },
+    {
+      "name": "FREAK_GOATED-COSTUME-BLUE-OVERLAYER(FREAK)",
+      "filename": "FREAK_GOATED-COSTUME-BLUE-OVERLAYER(FREAK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK_GOATED-COSTUME-BLUE-OVERLAYER(FREAK).png"
+    },
+    {
+      "name": "FREAK_GOATED-COSTUME-GREEN-OVERLAYER(FREAK)",
+      "filename": "FREAK_GOATED-COSTUME-GREEN-OVERLAYER(FREAK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK_GOATED-COSTUME-GREEN-OVERLAYER(FREAK).png"
+    },
+    {
+      "name": "FREAK_GOATED-COSTUME-PURPLE-OVERLAYER(FREAK)",
+      "filename": "FREAK_GOATED-COSTUME-PURPLE-OVERLAYER(FREAK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK_GOATED-COSTUME-PURPLE-OVERLAYER(FREAK).png"
+    },
+    {
+      "name": "FREAK_GOATED-COSTUME-RED-OVERLAYER(FREAK)",
+      "filename": "FREAK_GOATED-COSTUME-RED-OVERLAYER(FREAK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK_GOATED-COSTUME-RED-OVERLAYER(FREAK).png"
+    },
+    {
+      "name": "FREAK_WHITE-CAT-OVERLAYER(FREAK)",
+      "filename": "FREAK_WHITE-CAT-OVERLAYER(FREAK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK_WHITE-CAT-OVERLAYER(FREAK).png"
+    },
+    {
+      "name": "FREAK__0000_FLUNK-FREN-YELLOW-OVERLAYER(FREAK)",
+      "filename": "FREAK__0000_FLUNK-FREN-YELLOW-OVERLAYER(FREAK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0000_FLUNK-FREN-YELLOW-OVERLAYER(FREAK).png"
+    },
+    {
+      "name": "FREAK__0001_BLUE-FRO-OVERLAYER",
+      "filename": "FREAK__0001_BLUE-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0001_BLUE-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0001_FLUNK-FREN-PURPLE-OVERLAYER(FREAK)",
+      "filename": "FREAK__0001_FLUNK-FREN-PURPLE-OVERLAYER(FREAK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0001_FLUNK-FREN-PURPLE-OVERLAYER(FREAK).png"
+    },
+    {
+      "name": "FREAK__0002_BLUE-TEDDY-OVERLAYER",
+      "filename": "FREAK__0002_BLUE-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0002_BLUE-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0002_FLUNK-FREN-ORANGE-OVERLAYER(FREAK)",
+      "filename": "FREAK__0002_FLUNK-FREN-ORANGE-OVERLAYER(FREAK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0002_FLUNK-FREN-ORANGE-OVERLAYER(FREAK).png"
+    },
+    {
+      "name": "FREAK__0003_COW-BUCKET-OVERLAYER",
+      "filename": "FREAK__0003_COW-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0003_COW-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0003_CYAN-FRO-OVERLAYER",
+      "filename": "FREAK__0003_CYAN-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0003_CYAN-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0003_FLUNK-FREN-GREEN-OVERLAYER(FREAK)",
+      "filename": "FREAK__0003_FLUNK-FREN-GREEN-OVERLAYER(FREAK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0003_FLUNK-FREN-GREEN-OVERLAYER(FREAK).png"
+    },
+    {
+      "name": "FREAK__0004_DARK-BOB-OVERLAYER",
+      "filename": "FREAK__0004_DARK-BOB-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0004_DARK-BOB-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0004_FLUNK-FREN-BLUE-OVERLAYER(FREAK)",
+      "filename": "FREAK__0004_FLUNK-FREN-BLUE-OVERLAYER(FREAK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0004_FLUNK-FREN-BLUE-OVERLAYER(FREAK).png"
+    },
+    {
+      "name": "FREAK__0005_DARK-FRO-OVERLAYER",
+      "filename": "FREAK__0005_DARK-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0005_DARK-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0006_FLUNKTOPIE-BLUE-OVERLAYER",
+      "filename": "FREAK__0006_FLUNKTOPIE-BLUE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0006_FLUNKTOPIE-BLUE-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0007_FLUNKTOPIE-GREEN-OVERLAYER",
+      "filename": "FREAK__0007_FLUNKTOPIE-GREEN-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0007_FLUNKTOPIE-GREEN-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0008_FLUNKTOPIE-PINK-OVERLAYER",
+      "filename": "FREAK__0008_FLUNKTOPIE-PINK-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0008_FLUNKTOPIE-PINK-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0009_FLUNKTOPIE-RED-OVERLAYER",
+      "filename": "FREAK__0009_FLUNKTOPIE-RED-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0009_FLUNKTOPIE-RED-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0010_FLUNKTOPIE-YELLOW-OVERLAYER",
+      "filename": "FREAK__0010_FLUNKTOPIE-YELLOW-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0010_FLUNKTOPIE-YELLOW-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0011_GOOBZ-ZIP-ZAPPER-OVERLAYER",
+      "filename": "FREAK__0011_GOOBZ-ZIP-ZAPPER-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0011_GOOBZ-ZIP-ZAPPER-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0012_GREEN-MUFFS-OVERLAYER",
+      "filename": "FREAK__0012_GREEN-MUFFS-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0012_GREEN-MUFFS-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0013_LIGHT-TEDDY-OVERLAYER",
+      "filename": "FREAK__0013_LIGHT-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0013_LIGHT-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0014_ORANGE-MUFFS-OVERLAYER",
+      "filename": "FREAK__0014_ORANGE-MUFFS-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0014_ORANGE-MUFFS-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0015_PINK-FRO-OVERLAYER",
+      "filename": "FREAK__0015_PINK-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0015_PINK-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0016_PINK-MUFFS-OVERLAYER",
+      "filename": "FREAK__0016_PINK-MUFFS-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0016_PINK-MUFFS-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0017_PINK-TEDDY-OVERLAYER",
+      "filename": "FREAK__0017_PINK-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0017_PINK-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0018_PURPLE-BEANIE-OVERLAYER",
+      "filename": "FREAK__0018_PURPLE-BEANIE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0018_PURPLE-BEANIE-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0019_PURPLE-BOB-OVERLAYER",
+      "filename": "FREAK__0019_PURPLE-BOB-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0019_PURPLE-BOB-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0020_PURPLE-BUCKET-OVERLAYER",
+      "filename": "FREAK__0020_PURPLE-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0020_PURPLE-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0022_RED-BOB-OVERLAYER",
+      "filename": "FREAK__0022_RED-BOB-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0022_RED-BOB-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0023_RED-FRO-OVERLAYER",
+      "filename": "FREAK__0023_RED-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0023_RED-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0024_RED-TEDDY-OVERLAYER",
+      "filename": "FREAK__0024_RED-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0024_RED-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0025_SNOWCONE-BEANIE-OVERLAYER",
+      "filename": "FREAK__0025_SNOWCONE-BEANIE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0025_SNOWCONE-BEANIE-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0026_SNOWCONE-BUCKET-LONG-OVERLAYER",
+      "filename": "FREAK__0026_SNOWCONE-BUCKET-LONG-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0026_SNOWCONE-BUCKET-LONG-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0027_SUNSET-BEANIE-OVERLAYER",
+      "filename": "FREAK__0027_SUNSET-BEANIE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0027_SUNSET-BEANIE-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0029_YELLOW-BOB-OVERLAYER",
+      "filename": "FREAK__0029_YELLOW-BOB-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0029_YELLOW-BOB-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0030_YELLOW-BUCKET-OVERLAYER",
+      "filename": "FREAK__0030_YELLOW-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0030_YELLOW-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "FREAK__0031_YELLOW-TEDDY-OVERLAYER",
+      "filename": "FREAK__0031_YELLOW-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/FREAK__0031_YELLOW-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK_BLACK-CAT-OVERLAYER(GEEK)",
+      "filename": "GEEK_BLACK-CAT-OVERLAYER(GEEK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK_BLACK-CAT-OVERLAYER(GEEK).png"
+    },
+    {
+      "name": "GEEK_WHITE-CAT-OVERLAYER(GEEK)",
+      "filename": "GEEK_WHITE-CAT-OVERLAYER(GEEK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK_WHITE-CAT-OVERLAYER(GEEK).png"
+    },
+    {
+      "name": "GEEK__0000_GOATED-COSTUME-BLUE-OVERLAYER",
+      "filename": "GEEK__0000_GOATED-COSTUME-BLUE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0000_GOATED-COSTUME-BLUE-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0001_BLUE-FRO-OVERLAYER",
+      "filename": "GEEK__0001_BLUE-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0001_BLUE-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0002_BLUE-TEDDY-OVERLAYER",
+      "filename": "GEEK__0002_BLUE-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0002_BLUE-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0002_GOATED-COSTUME-GREEN-OVERLAYER",
+      "filename": "GEEK__0002_GOATED-COSTUME-GREEN-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0002_GOATED-COSTUME-GREEN-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0003_COW-BUCKET-OVERLAYER",
+      "filename": "GEEK__0003_COW-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0003_COW-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0004_CYAN-FRO-OVERLAYER",
+      "filename": "GEEK__0004_CYAN-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0004_CYAN-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0004_GOATED-COSTUME-PURPLE-OVERLAYER",
+      "filename": "GEEK__0004_GOATED-COSTUME-PURPLE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0004_GOATED-COSTUME-PURPLE-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0005_DARK-BOB-OVERLAYER",
+      "filename": "GEEK__0005_DARK-BOB-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0005_DARK-BOB-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0005_FLUNK-FREN-GREEN-OVERLAYER",
+      "filename": "GEEK__0005_FLUNK-FREN-GREEN-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0005_FLUNK-FREN-GREEN-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0006_DARK-FRO-OVERLAYER",
+      "filename": "GEEK__0006_DARK-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0006_DARK-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0006_FLUNK-FREN-YELLOW-OVERLAYER",
+      "filename": "GEEK__0006_FLUNK-FREN-YELLOW-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0006_FLUNK-FREN-YELLOW-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0006_GOATED-COSTUME-RED-OVERLAYER",
+      "filename": "GEEK__0006_GOATED-COSTUME-RED-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0006_GOATED-COSTUME-RED-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0007_FLUNK-FREN-PURPLE-OVERLAYER",
+      "filename": "GEEK__0007_FLUNK-FREN-PURPLE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0007_FLUNK-FREN-PURPLE-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0007_FLUNKTOPIE-BLUE-OVERLAYER",
+      "filename": "GEEK__0007_FLUNKTOPIE-BLUE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0007_FLUNKTOPIE-BLUE-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0008_FLUNK-FREN-ORANGE-OVERLAYER",
+      "filename": "GEEK__0008_FLUNK-FREN-ORANGE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0008_FLUNK-FREN-ORANGE-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0008_FLUNKTOPIE-GREEN-OVERLAYER",
+      "filename": "GEEK__0008_FLUNKTOPIE-GREEN-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0008_FLUNKTOPIE-GREEN-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0009_FLUNK-FREN-BLUE-OVERLAYER",
+      "filename": "GEEK__0009_FLUNK-FREN-BLUE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0009_FLUNK-FREN-BLUE-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0009_FLUNKTOPIE-PINK-OVERLAYER",
+      "filename": "GEEK__0009_FLUNKTOPIE-PINK-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0009_FLUNKTOPIE-PINK-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0010_FLUNKTOPIE-RED-OVERLAYER",
+      "filename": "GEEK__0010_FLUNKTOPIE-RED-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0010_FLUNKTOPIE-RED-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0011_FLUNKTOPIE-YELLOW-OVERLAYER",
+      "filename": "GEEK__0011_FLUNKTOPIE-YELLOW-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0011_FLUNKTOPIE-YELLOW-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0012_GOOBZ-ZIP-ZAPPER-OVERLAYER",
+      "filename": "GEEK__0012_GOOBZ-ZIP-ZAPPER-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0012_GOOBZ-ZIP-ZAPPER-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0013_GREEN-MUFFS-OVERLAYER",
+      "filename": "GEEK__0013_GREEN-MUFFS-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0013_GREEN-MUFFS-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0014_LIGHT-TEDDY-OVERLAYER",
+      "filename": "GEEK__0014_LIGHT-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0014_LIGHT-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0015_ORANGE-MUFFS-OVERLAYER",
+      "filename": "GEEK__0015_ORANGE-MUFFS-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0015_ORANGE-MUFFS-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0016_PINK-FRO-OVERLAYER",
+      "filename": "GEEK__0016_PINK-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0016_PINK-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0017_PINK-MUFFS-OVERLAYER",
+      "filename": "GEEK__0017_PINK-MUFFS-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0017_PINK-MUFFS-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0018_PINK-TEDDY-OVERLAYER",
+      "filename": "GEEK__0018_PINK-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0018_PINK-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0019_PURPLE-BEANIE-OVERLAYER",
+      "filename": "GEEK__0019_PURPLE-BEANIE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0019_PURPLE-BEANIE-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0020_PURPLE-BOB-OVERLAYER",
+      "filename": "GEEK__0020_PURPLE-BOB-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0020_PURPLE-BOB-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0021_PURPLE-BUCKET-OVERLAYER",
+      "filename": "GEEK__0021_PURPLE-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0021_PURPLE-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0023_RED-BOB-OVERLAYER",
+      "filename": "GEEK__0023_RED-BOB-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0023_RED-BOB-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0024_RED-FRO-OVERLAYER",
+      "filename": "GEEK__0024_RED-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0024_RED-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0025_RED-TEDDY-OVERLAYER",
+      "filename": "GEEK__0025_RED-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0025_RED-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0026_SNOWCONE-BEANIE-OVERLAYER",
+      "filename": "GEEK__0026_SNOWCONE-BEANIE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0026_SNOWCONE-BEANIE-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0027_SNOWCONE-BUCKET-LONG-OVERLAYER",
+      "filename": "GEEK__0027_SNOWCONE-BUCKET-LONG-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0027_SNOWCONE-BUCKET-LONG-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0028_SUNSET-BEANIE-OVERLAYER",
+      "filename": "GEEK__0028_SUNSET-BEANIE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0028_SUNSET-BEANIE-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0030_YELLOW-BOB-OVERLAYER",
+      "filename": "GEEK__0030_YELLOW-BOB-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0030_YELLOW-BOB-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0031_YELLOW-BUCKET-OVERLAYER",
+      "filename": "GEEK__0031_YELLOW-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0031_YELLOW-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "GEEK__0032_YELLOW-TEDDY-OVERLAYER",
+      "filename": "GEEK__0032_YELLOW-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/GEEK__0032_YELLOW-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_BLACK-CAT-OVERLAYER-(JOCK)",
+      "filename": "JOCK_BLACK-CAT-OVERLAYER-(JOCK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_BLACK-CAT-OVERLAYER-(JOCK).png"
+    },
+    {
+      "name": "JOCK_FLUNK-FREN-BLUE-OVERLAYER(JOCK)",
+      "filename": "JOCK_FLUNK-FREN-BLUE-OVERLAYER(JOCK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_FLUNK-FREN-BLUE-OVERLAYER(JOCK).png"
+    },
+    {
+      "name": "JOCK_FLUNK-FREN-GREEN-OVERLAYER(JOCK)",
+      "filename": "JOCK_FLUNK-FREN-GREEN-OVERLAYER(JOCK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_FLUNK-FREN-GREEN-OVERLAYER(JOCK).png"
+    },
+    {
+      "name": "JOCK_FLUNK-FREN-ORANGE-OVERLAYER(JOCK)",
+      "filename": "JOCK_FLUNK-FREN-ORANGE-OVERLAYER(JOCK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_FLUNK-FREN-ORANGE-OVERLAYER(JOCK).png"
+    },
+    {
+      "name": "JOCK_FLUNK-FREN-PURPLE-OVERLAYER(JOCK)",
+      "filename": "JOCK_FLUNK-FREN-PURPLE-OVERLAYER(JOCK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_FLUNK-FREN-PURPLE-OVERLAYER(JOCK).png"
+    },
+    {
+      "name": "JOCK_FLUNK-FREN-YELLOW-OVERLAYER(JOCK)",
+      "filename": "JOCK_FLUNK-FREN-YELLOW-OVERLAYER(JOCK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_FLUNK-FREN-YELLOW-OVERLAYER(JOCK).png"
+    },
+    {
+      "name": "JOCK_GOATED-COSTUME-BLUE-OVERLAYER(JOCK)",
+      "filename": "JOCK_GOATED-COSTUME-BLUE-OVERLAYER(JOCK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_GOATED-COSTUME-BLUE-OVERLAYER(JOCK).png"
+    },
+    {
+      "name": "JOCK_GOATED-COSTUME-GREEN-OVERLAYER(JOCK)",
+      "filename": "JOCK_GOATED-COSTUME-GREEN-OVERLAYER(JOCK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_GOATED-COSTUME-GREEN-OVERLAYER(JOCK).png"
+    },
+    {
+      "name": "JOCK_GOATED-COSTUME-PURPLE-OVERLAYER(JOCK)",
+      "filename": "JOCK_GOATED-COSTUME-PURPLE-OVERLAYER(JOCK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_GOATED-COSTUME-PURPLE-OVERLAYER(JOCK).png"
+    },
+    {
+      "name": "JOCK_GOATED-COSTUME-RED-OVERLAYER(JOCK)",
+      "filename": "JOCK_GOATED-COSTUME-RED-OVERLAYER(JOCK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_GOATED-COSTUME-RED-OVERLAYER(JOCK).png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0001_BLUE-FRO-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0001_BLUE-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0001_BLUE-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0002_BLUE-TEDDY-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0002_BLUE-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0002_BLUE-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0003_COW-BUCKET-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0003_COW-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0003_COW-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0004_CYAN-FRO-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0004_CYAN-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0004_CYAN-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0005_DARK-BOB-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0005_DARK-BOB-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0005_DARK-BOB-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0006_DARK-FRO-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0006_DARK-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0006_DARK-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0007_FLUNKTOPIE-BLUE-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0007_FLUNKTOPIE-BLUE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0007_FLUNKTOPIE-BLUE-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0008_FLUNKTOPIE-GREEN-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0008_FLUNKTOPIE-GREEN-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0008_FLUNKTOPIE-GREEN-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0009_FLUNKTOPIE-PINK-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0009_FLUNKTOPIE-PINK-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0009_FLUNKTOPIE-PINK-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0010_FLUNKTOPIE-RED-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0010_FLUNKTOPIE-RED-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0010_FLUNKTOPIE-RED-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0011_FLUNKTOPIE-YELLOW-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0011_FLUNKTOPIE-YELLOW-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0011_FLUNKTOPIE-YELLOW-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0012_GOOBZ-ZIP-ZAPPER-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0012_GOOBZ-ZIP-ZAPPER-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0012_GOOBZ-ZIP-ZAPPER-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0013_GREEN-MUFFS-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0013_GREEN-MUFFS-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0013_GREEN-MUFFS-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0014_LIGHT-TEDDY-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0014_LIGHT-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0014_LIGHT-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0015_ORANGE-MUFFS-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0015_ORANGE-MUFFS-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0015_ORANGE-MUFFS-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0016_PINK-FRO-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0016_PINK-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0016_PINK-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0017_PINK-MUFFS-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0017_PINK-MUFFS-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0017_PINK-MUFFS-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0018_PINK-TEDDY-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0018_PINK-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0018_PINK-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0019_PURPLE-BEANIE-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0019_PURPLE-BEANIE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0019_PURPLE-BEANIE-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0020_PURPLE-BOB-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0020_PURPLE-BOB-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0020_PURPLE-BOB-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0021_PURPLE-BUCKET-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0021_PURPLE-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0021_PURPLE-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0023_RED-BOB-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0023_RED-BOB-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0023_RED-BOB-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0024_RED-FRO-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0024_RED-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0024_RED-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0025_RED-TEDDY-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0025_RED-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0025_RED-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0026_SNOWCONE-BEANIE-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0026_SNOWCONE-BEANIE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0026_SNOWCONE-BEANIE-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0027_SNOWCONE-BUCKET-LONG-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0027_SNOWCONE-BUCKET-LONG-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0027_SNOWCONE-BUCKET-LONG-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0028_SUNSET-BEANIE-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0028_SUNSET-BEANIE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0028_SUNSET-BEANIE-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0030_YELLOW-BOB-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0030_YELLOW-BOB-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0030_YELLOW-BOB-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0031_YELLOW-BUCKET-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0031_YELLOW-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0031_YELLOW-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_Untitled-1_0032_YELLOW-TEDDY-OVERLAYER",
+      "filename": "JOCK_Untitled-1_0032_YELLOW-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_Untitled-1_0032_YELLOW-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "JOCK_WHITE-CAT-OVERLAYER-(JOCK)",
+      "filename": "JOCK_WHITE-CAT-OVERLAYER-(JOCK).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/JOCK_WHITE-CAT-OVERLAYER-(JOCK).png"
+    },
+    {
+      "name": "PREP_BLACK-CAT-OVERLAYER(PREP)",
+      "filename": "PREP_BLACK-CAT-OVERLAYER(PREP).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP_BLACK-CAT-OVERLAYER(PREP).png"
+    },
+    {
+      "name": "PREP_WHITE-CAT-OVERLAYER(PREP)",
+      "filename": "PREP_WHITE-CAT-OVERLAYER(PREP).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP_WHITE-CAT-OVERLAYER(PREP).png"
+    },
+    {
+      "name": "PREP__0000_FLUNK-FREN-GREEN-OVERLAYER",
+      "filename": "PREP__0000_FLUNK-FREN-GREEN-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0000_FLUNK-FREN-GREEN-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0000_GOATED-COSTUME-BLUE-OVERLAYER(PREP)",
+      "filename": "PREP__0000_GOATED-COSTUME-BLUE-OVERLAYER(PREP).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0000_GOATED-COSTUME-BLUE-OVERLAYER(PREP).png"
+    },
+    {
+      "name": "PREP__0001_BLUE-FRO-OVERLAYER",
+      "filename": "PREP__0001_BLUE-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0001_BLUE-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0001_FLUNK-FREN-YELLOW-OVERLAYER",
+      "filename": "PREP__0001_FLUNK-FREN-YELLOW-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0001_FLUNK-FREN-YELLOW-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0002_BLUE-TEDDY-OVERLAYER",
+      "filename": "PREP__0002_BLUE-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0002_BLUE-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0002_FLUNK-FREN-PURPLE-OVERLAYER",
+      "filename": "PREP__0002_FLUNK-FREN-PURPLE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0002_FLUNK-FREN-PURPLE-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0002_GOATED-COSTUME-GREEN-OVERLAYER(PREP)",
+      "filename": "PREP__0002_GOATED-COSTUME-GREEN-OVERLAYER(PREP).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0002_GOATED-COSTUME-GREEN-OVERLAYER(PREP).png"
+    },
+    {
+      "name": "PREP__0003_COW-BUCKET-OVERLAYER",
+      "filename": "PREP__0003_COW-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0003_COW-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0003_FLUNK-FREN-ORANGE-OVERLAYER",
+      "filename": "PREP__0003_FLUNK-FREN-ORANGE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0003_FLUNK-FREN-ORANGE-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0004_CYAN-FRO-OVERLAYER",
+      "filename": "PREP__0004_CYAN-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0004_CYAN-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0004_FLUNK-FREN-BLUE-OVERLAYER",
+      "filename": "PREP__0004_FLUNK-FREN-BLUE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0004_FLUNK-FREN-BLUE-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0004_GOATED-COSTUME-PURPLE-OVERLAYER(PREP)",
+      "filename": "PREP__0004_GOATED-COSTUME-PURPLE-OVERLAYER(PREP).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0004_GOATED-COSTUME-PURPLE-OVERLAYER(PREP).png"
+    },
+    {
+      "name": "PREP__0005_DARK-BOB-OVERLAYER",
+      "filename": "PREP__0005_DARK-BOB-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0005_DARK-BOB-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0006_DARK-FRO-OVERLAYER",
+      "filename": "PREP__0006_DARK-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0006_DARK-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0006_GOATED-COSTUME-RED-OVERLAYER(PREP)",
+      "filename": "PREP__0006_GOATED-COSTUME-RED-OVERLAYER(PREP).png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0006_GOATED-COSTUME-RED-OVERLAYER(PREP).png"
+    },
+    {
+      "name": "PREP__0007_DARK-SPACEBUNS-OVERLAYER",
+      "filename": "PREP__0007_DARK-SPACEBUNS-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0007_DARK-SPACEBUNS-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0008_ETERNAL-BUCKET-OVERLAYER",
+      "filename": "PREP__0008_ETERNAL-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0008_ETERNAL-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0009_FLUNKTOPIE-BLUE-OVERLAYER",
+      "filename": "PREP__0009_FLUNKTOPIE-BLUE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0009_FLUNKTOPIE-BLUE-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0010_FLUNKTOPIE-GREEN-OVERLAYER",
+      "filename": "PREP__0010_FLUNKTOPIE-GREEN-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0010_FLUNKTOPIE-GREEN-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0011_FLUNKTOPIE-PINK-OVERLAYER",
+      "filename": "PREP__0011_FLUNKTOPIE-PINK-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0011_FLUNKTOPIE-PINK-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0012_FLUNKTOPIE-RED-OVERLAYER",
+      "filename": "PREP__0012_FLUNKTOPIE-RED-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0012_FLUNKTOPIE-RED-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0013_FLUNKTOPIE-YELLOW-OVERLAYER",
+      "filename": "PREP__0013_FLUNKTOPIE-YELLOW-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0013_FLUNKTOPIE-YELLOW-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0014_GOOBZ-ZIP-ZAPPER-OVERLAYER",
+      "filename": "PREP__0014_GOOBZ-ZIP-ZAPPER-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0014_GOOBZ-ZIP-ZAPPER-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0015_GOLDEN-FRO-OVERLAYER",
+      "filename": "PREP__0015_GOLDEN-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0015_GOLDEN-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0016_GREEN-MUFFS-OVERLAYER",
+      "filename": "PREP__0016_GREEN-MUFFS-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0016_GREEN-MUFFS-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0017_GREEN-SPACEBUNS-OVERLAYER",
+      "filename": "PREP__0017_GREEN-SPACEBUNS-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0017_GREEN-SPACEBUNS-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0018_LIGHT-BUCKET-OVERLAYER",
+      "filename": "PREP__0018_LIGHT-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0018_LIGHT-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0019_LIGHT-TEDDY-OVERLAYER",
+      "filename": "PREP__0019_LIGHT-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0019_LIGHT-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0020_ORANGE-MUFFS-OVERLAYER",
+      "filename": "PREP__0020_ORANGE-MUFFS-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0020_ORANGE-MUFFS-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0021_PINK-BUCKET-OVERLAYER",
+      "filename": "PREP__0021_PINK-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0021_PINK-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0022_PINK-FRO-OVERLAYER",
+      "filename": "PREP__0022_PINK-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0022_PINK-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0023_PINK-MUFFS-OVERLAYER",
+      "filename": "PREP__0023_PINK-MUFFS-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0023_PINK-MUFFS-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0024_PINK-SPACEBUNS-OVERLAYER",
+      "filename": "PREP__0024_PINK-SPACEBUNS-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0024_PINK-SPACEBUNS-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0025_PINK-TEDDY-OVERLAYER",
+      "filename": "PREP__0025_PINK-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0025_PINK-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0026_PURPLE-BEANIE-OVERLAYER",
+      "filename": "PREP__0026_PURPLE-BEANIE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0026_PURPLE-BEANIE-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0027_PURPLE-BOB-OVERLAYER",
+      "filename": "PREP__0027_PURPLE-BOB-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0027_PURPLE-BOB-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0028_PURPLE-BUCKET-OVERLAYER",
+      "filename": "PREP__0028_PURPLE-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0028_PURPLE-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0030_PURPLE-SPACEBUNS-OVERLAYER",
+      "filename": "PREP__0030_PURPLE-SPACEBUNS-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0030_PURPLE-SPACEBUNS-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0031_RAINBOW-BUCKET-OVERLAYER",
+      "filename": "PREP__0031_RAINBOW-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0031_RAINBOW-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0032_RED-BOB-OVERLAYER",
+      "filename": "PREP__0032_RED-BOB-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0032_RED-BOB-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0033_RED-BUCKET-OVERLAYER",
+      "filename": "PREP__0033_RED-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0033_RED-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0034_RED-FRO-OVERLAYER",
+      "filename": "PREP__0034_RED-FRO-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0034_RED-FRO-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0035_RED-TEDDY-OVERLAYER",
+      "filename": "PREP__0035_RED-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0035_RED-TEDDY-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0036_SNOWCONE-BEANIE-OVERLAYER",
+      "filename": "PREP__0036_SNOWCONE-BEANIE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0036_SNOWCONE-BEANIE-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0037_SNOWCONE-BUCKET-OVERLAYER",
+      "filename": "PREP__0037_SNOWCONE-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0037_SNOWCONE-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0038_SNOWCONE-BUCKET-LONG-OVERLAYER",
+      "filename": "PREP__0038_SNOWCONE-BUCKET-LONG-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0038_SNOWCONE-BUCKET-LONG-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0039_SUNSET-BEANIE-OVERLAYER",
+      "filename": "PREP__0039_SUNSET-BEANIE-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0039_SUNSET-BEANIE-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0041_YELLOW-BOB-OVERLAYER",
+      "filename": "PREP__0041_YELLOW-BOB-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0041_YELLOW-BOB-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0042_YELLOW-BUCKET-OVERLAYER",
+      "filename": "PREP__0042_YELLOW-BUCKET-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0042_YELLOW-BUCKET-OVERLAYER.png"
+    },
+    {
+      "name": "PREP__0043_YELLOW-TEDDY-OVERLAYER",
+      "filename": "PREP__0043_YELLOW-TEDDY-OVERLAYER.png",
+      "path": "/images/jnr-traits/full-traits/HEAD_OVERLAYERS/PREP__0043_YELLOW-TEDDY-OVERLAYER.png"
+    }
+  ],
+  "FIXES": [],
+  "FREAK": [],
+  "GEEK": [],
+  "JOCK": [],
+  "PREP": [],
+  "NUMBERS": [],
   "1OF1_S": []
 };
 

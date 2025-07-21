@@ -9,19 +9,19 @@ function generateTraitData() {
   const outputFile = './src/data/traitData.ts';
   
   const traitData = {
+    PIGMENT: [], // Base color - prioritized first
     BACKDROPS: [],
+    TORSO: [],
+    HEAD: [],
+    FACE: [],
     EYEBROWS: [],
+    HEAD_OVERLAYERS: [],
     FIXES: [],
     FREAK: [],
     GEEK: [],
     JOCK: [],
     PREP: [],
     NUMBERS: [],
-    FACE: [],
-    HEAD: [],
-    HEAD_OVERLAYERS: [],
-    PIGMENT: [],
-    TORSO: [],
     '1OF1_S': []
   };
   

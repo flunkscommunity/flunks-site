@@ -136,23 +136,23 @@ const FlunkCreator: React.FC = () => {
   const canvasRef = useRef<HTMLDivElement>(null);
   
   const [selectedTraits, setSelectedTraits] = useState<SelectedTraits>({
+    pigment: 'none', // Base color - prioritized first
     backdrop: 'none',
-    clique: 'GEEK',
     torso: 'none',
     head: 'none',
     face: 'none',
     eyebrows: 'none',
-    headOverlay: 'none',
-    pigment: 'none'
+    headOverlay: 'none'
   });
   
   const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({
+    pigment: true, // Start with pigment expanded
     backdrop: false,
-    clique: true,
     torso: false,
     head: false,
     face: false,
-    details: false
+    eyebrows: false,
+    headOverlay: false
   });
   
   const [flunkName, setFlunkName] = useState('My Custom Flunk');
@@ -251,6 +251,24 @@ const FlunkCreator: React.FC = () => {
       }
     }
 
+    // Pigment layer (base character color)
+    if (selectedTraits.pigment && selectedTraits.pigment !== 'none') {
+      const pigmentPath = getImagePath('pigment', selectedTraits.pigment);
+      if (pigmentPath) {
+        layers.push(
+          <LayeredImage
+            key="pigment"
+            src={pigmentPath}
+            alt="Base Color"
+            style={{ zIndex: 10 }}
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = 'none';
+            }}
+          />
+        );
+      }
+    }
+
     // Torso layer
     if (selectedTraits.torso && selectedTraits.torso !== 'none') {
       const torsoPath = getImagePath('torso', selectedTraits.torso);
@@ -314,30 +332,31 @@ const FlunkCreator: React.FC = () => {
   };
 
   const randomizeFlunk = () => {
-    const cliques = ['GEEK', 'JOCK', 'PREP', 'FREAK'];
+    // Randomly select a pigment/base color first
+    const pigments = TRAIT_DATA.PIGMENT || [];
+    const randomPigment = pigments.length > 0 ? pigments[Math.floor(Math.random() * pigments.length)].name : 'none';
+    
     const newTraits: SelectedTraits = {
+      pigment: randomPigment, // Base color selection
       backdrop: Math.random() > 0.5 ? 'none' : 'none', // Will be updated when files uploaded
-      clique: cliques[Math.floor(Math.random() * cliques.length)],
       torso: 'none', // Will be randomized when files uploaded
       head: 'none', // Will be randomized when files uploaded  
       face: 'none', // Will be randomized when files uploaded
       eyebrows: 'none',
-      headOverlay: 'none',
-      pigment: 'none'
+      headOverlay: 'none'
     };
     setSelectedTraits(newTraits);
   };
 
   const resetFlunk = () => {
     setSelectedTraits({
+      pigment: 'none', // Base color selection
       backdrop: 'none',
-      clique: 'GEEK',
       torso: 'none',
       head: 'none',
       face: 'none',
       eyebrows: 'none',
-      headOverlay: 'none',
-      pigment: 'none'
+      headOverlay: 'none'
     });
     setFlunkName('My Custom Flunk');
   };
@@ -358,9 +377,57 @@ const FlunkCreator: React.FC = () => {
             🎨 Customize Your Flunk
           </div>
           
+          {/* PIGMENT/BASE COLOR - PRIORITIZED FIRST */}
+          <TraitSection>
+            <TraitHeader 
+              onClick={() => toggleSection('pigment')}
+              style={{ 
+                background: 'linear-gradient(90deg, #ff6b35, #f7931e)',
+                border: '2px solid #e55100',
+                fontWeight: 'bold'
+              }}
+            >
+              🎨 Base Color (Start Here!)
+              <span>{expandedSections.pigment ? '▼' : '▶'}</span>
+            </TraitHeader>
+            <TraitList expanded={expandedSections.pigment}>
+              <TraitItem
+                selected={selectedTraits.pigment === 'none'}
+                onClick={() => selectTrait('pigment', 'none')}
+                style={{ background: selectedTraits.pigment === 'none' ? '#ffe0b3' : 'transparent' }}
+              >
+                🚫 No Base Color
+              </TraitItem>
+              {TRAIT_DATA.PIGMENT?.map((pigment) => {
+                // Clean up the pigment name for display
+                let displayName = pigment.name
+                  .replace(/PIGMENT.*?-\s*/, '')
+                  .replace(/\(.*?\)/g, '')
+                  .replace(/_/g, ' ')
+                  .replace(/FREAK\s*/, '')
+                  .replace(/GEEK\s*/, '')
+                  .replace(/JOCK\s*/, '')
+                  .replace(/PREP\s*/, '')
+                  .replace(/^\s*-\s*/, '')
+                  .trim();
+                
+                return (
+                  <TraitItem
+                    key={pigment.name}
+                    selected={selectedTraits.pigment === pigment.name}
+                    onClick={() => selectTrait('pigment', pigment.name)}
+                    style={{ background: selectedTraits.pigment === pigment.name ? '#ffe0b3' : 'transparent' }}
+                  >
+                    🎨 {displayName}
+                  </TraitItem>
+                );
+              })}
+            </TraitList>
+          </TraitSection>
+
           <TraitSection>
             <TraitHeader onClick={() => toggleSection('backdrop')}>
-              �️ Backdrop
+              🌄 Backdrop
               <span>{expandedSections.backdrop ? '▼' : '▶'}</span>
             </TraitHeader>
             <TraitList expanded={expandedSections.backdrop}>
@@ -378,30 +445,6 @@ const FlunkCreator: React.FC = () => {
                   onClick={() => selectTrait('backdrop', backdrop.name)}
                 >
                   🌄 {backdrop.name}
-                </TraitItem>
-              ))}
-            </TraitList>
-          </TraitSection>
-
-          <TraitSection>
-            <TraitHeader onClick={() => toggleSection('clique')}>
-              👥 Clique
-              <span>{expandedSections.clique ? '▼' : '▶'}</span>
-            </TraitHeader>
-            <TraitList expanded={expandedSections.clique}>
-              {['GEEK', 'JOCK', 'PREP', 'FREAK'].map((clique) => (
-                <TraitItem
-                  key={clique}
-                  selected={selectedTraits.clique === clique}
-                  onClick={() => selectTrait('clique', clique)}
-                >
-                  <span style={{ fontSize: '14px' }}>
-                    {clique === 'GEEK' && '🤓'}
-                    {clique === 'JOCK' && '💪'}
-                    {clique === 'PREP' && '�'}
-                    {clique === 'FREAK' && '🎭'}
-                  </span>
-                  {clique}
                 </TraitItem>
               ))}
             </TraitList>
@@ -543,8 +586,8 @@ const FlunkCreator: React.FC = () => {
             textAlign: 'center',
             maxWidth: '400px'
           }}>
-            Create your custom Flunk by mixing and matching traits! Choose a clique, select torso and head styles, 
-            add facial features, and customize with overlays. Upload your trait files to unlock all options.
+            Create your custom Flunk by mixing and matching traits! Start with a base color (pigment), 
+            add torso and head styles, facial features, eyebrows, and customize with overlays.
           </div>
         </PreviewFrame>
       </AppContainer>
