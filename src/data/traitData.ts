@@ -1,5 +1,5 @@
 // Auto-generated trait data
-// Last updated: 2025-07-21T12:45:31.378Z
+// Last updated: 2025-07-21T14:30:53.719Z
 
 export interface TraitFile {
   name: string;
@@ -139,6 +139,11 @@ export const TRAIT_DATA: TraitData = {
       "path": "/images/jnr-traits/full-traits/BACKDROPS/RED.png"
     },
     {
+      "name": "STARRY GALAXY BACKDROP V1",
+      "filename": "STARRY GALAXY BACKDROP V1.png",
+      "path": "/images/jnr-traits/full-traits/BACKDROPS/STARRY GALAXY BACKDROP V1.png"
+    },
+    {
       "name": "VERY-DAPPER",
       "filename": "VERY-DAPPER.png",
       "path": "/images/jnr-traits/full-traits/BACKDROPS/VERY-DAPPER.png"
@@ -154,7 +159,463 @@ export const TRAIT_DATA: TraitData = {
       "path": "/images/jnr-traits/full-traits/BACKDROPS/YELLOW.png"
     }
   ],
-  "EYEBROWS": [],
+  "EYEBROWS": [
+    {
+      "name": "_0000_EYEBROWS-1",
+      "filename": "_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0000s_0000_EYEBROWS-1",
+      "filename": "_0000s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0000s_0001_EYEBROWS-2",
+      "filename": "_0000s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0000s_0002_EYEBROWS-3",
+      "filename": "_0000s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0000s_0003_EYEBROWS-4",
+      "filename": "_0000s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0000s_0004_EYEBROWS-5",
+      "filename": "_0000s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0000s_0005_EYEBROWS-6",
+      "filename": "_0000s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0000s_0006_EYEBROWS-7",
+      "filename": "_0000s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0000s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0001_EYEBROWS-2",
+      "filename": "_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0001s_0000_EYEBROWS-1",
+      "filename": "_0001s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0001s_0001_EYEBROWS-2",
+      "filename": "_0001s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0001s_0002_EYEBROWS-3",
+      "filename": "_0001s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0001s_0003_EYEBROWS-4",
+      "filename": "_0001s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0001s_0004_EYEBROWS-5",
+      "filename": "_0001s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0001s_0005_EYEBROWS-6",
+      "filename": "_0001s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0001s_0006_EYEBROWS-7",
+      "filename": "_0001s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0001s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0002_EYEBROWS-3",
+      "filename": "_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0002s_0000_EYEBROWS-1",
+      "filename": "_0002s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0002s_0001_EYEBROWS-2",
+      "filename": "_0002s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0002s_0002_EYEBROWS-3",
+      "filename": "_0002s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0002s_0003_EYEBROWS-4",
+      "filename": "_0002s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0002s_0004_EYEBROWS-5",
+      "filename": "_0002s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0002s_0005_EYEBROWS-6",
+      "filename": "_0002s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0002s_0006_EYEBROWS-7",
+      "filename": "_0002s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0002s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0003_EYEBROWS-4",
+      "filename": "_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0003s_0000_EYEBROWS-1",
+      "filename": "_0003s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0003s_0001_EYEBROWS-2",
+      "filename": "_0003s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0003s_0002_EYEBROWS-3",
+      "filename": "_0003s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0003s_0003_EYEBROWS-4",
+      "filename": "_0003s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0003s_0004_EYEBROWS-5",
+      "filename": "_0003s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0003s_0005_EYEBROWS-6",
+      "filename": "_0003s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0003s_0006_EYEBROWS-7",
+      "filename": "_0003s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0003s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0004_EYEBROWS-5",
+      "filename": "_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0004s_0000_EYEBROWS-1",
+      "filename": "_0004s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0004s_0001_EYEBROWS-2",
+      "filename": "_0004s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0004s_0002_EYEBROWS-3",
+      "filename": "_0004s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0004s_0003_EYEBROWS-4",
+      "filename": "_0004s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0004s_0004_EYEBROWS-5",
+      "filename": "_0004s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0004s_0005_EYEBROWS-6",
+      "filename": "_0004s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0004s_0006_EYEBROWS-7",
+      "filename": "_0004s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0004s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0005_EYEBROWS-6",
+      "filename": "_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0005s_0000_EYEBROWS-1",
+      "filename": "_0005s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0005s_0001_EYEBROWS-2",
+      "filename": "_0005s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0005s_0002_EYEBROWS-3",
+      "filename": "_0005s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0005s_0003_EYEBROWS-4",
+      "filename": "_0005s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0005s_0004_EYEBROWS-5",
+      "filename": "_0005s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0005s_0005_EYEBROWS-6",
+      "filename": "_0005s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0005s_0006_EYEBROWS-7",
+      "filename": "_0005s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0005s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0006_EYEBROWS-7",
+      "filename": "_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0006s_0000_EYEBROWS-1",
+      "filename": "_0006s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0006s_0001_EYEBROWS-2",
+      "filename": "_0006s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0006s_0002_EYEBROWS-3",
+      "filename": "_0006s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0006s_0003_EYEBROWS-4",
+      "filename": "_0006s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0006s_0004_EYEBROWS-5",
+      "filename": "_0006s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0006s_0005_EYEBROWS-6",
+      "filename": "_0006s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0006s_0006_EYEBROWS-7",
+      "filename": "_0006s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0006s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0007s_0000_EYEBROWS-1",
+      "filename": "_0007s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0007s_0001_EYEBROWS-2",
+      "filename": "_0007s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0007s_0002_EYEBROWS-3",
+      "filename": "_0007s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0007s_0003_EYEBROWS-4",
+      "filename": "_0007s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0007s_0004_EYEBROWS-5",
+      "filename": "_0007s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0007s_0005_EYEBROWS-6",
+      "filename": "_0007s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0007s_0006_EYEBROWS-7",
+      "filename": "_0007s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0007s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0008s_0000_EYEBROWS-1",
+      "filename": "_0008s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0008s_0001_EYEBROWS-2",
+      "filename": "_0008s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0008s_0002_EYEBROWS-3",
+      "filename": "_0008s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0008s_0003_EYEBROWS-4",
+      "filename": "_0008s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0008s_0004_EYEBROWS-5",
+      "filename": "_0008s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0008s_0005_EYEBROWS-6",
+      "filename": "_0008s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0008s_0006_EYEBROWS-7",
+      "filename": "_0008s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0008s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0009s_0000_EYEBROWS-1",
+      "filename": "_0009s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0009s_0001_EYEBROWS-2",
+      "filename": "_0009s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0009s_0002_EYEBROWS-3",
+      "filename": "_0009s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0009s_0003_EYEBROWS-4",
+      "filename": "_0009s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0009s_0004_EYEBROWS-5",
+      "filename": "_0009s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0009s_0005_EYEBROWS-6",
+      "filename": "_0009s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0009s_0006_EYEBROWS-7",
+      "filename": "_0009s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0009s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0010s_0000_EYEBROWS-1",
+      "filename": "_0010s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0010s_0001_EYEBROWS-2",
+      "filename": "_0010s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0010s_0002_EYEBROWS-3",
+      "filename": "_0010s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0010s_0003_EYEBROWS-4",
+      "filename": "_0010s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0010s_0004_EYEBROWS-5",
+      "filename": "_0010s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0010s_0005_EYEBROWS-6",
+      "filename": "_0010s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0010s_0006_EYEBROWS-7",
+      "filename": "_0010s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0010s_0006_EYEBROWS-7.png"
+    },
+    {
+      "name": "_0011s_0000_EYEBROWS-1",
+      "filename": "_0011s_0000_EYEBROWS-1.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0000_EYEBROWS-1.png"
+    },
+    {
+      "name": "_0011s_0001_EYEBROWS-2",
+      "filename": "_0011s_0001_EYEBROWS-2.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0001_EYEBROWS-2.png"
+    },
+    {
+      "name": "_0011s_0002_EYEBROWS-3",
+      "filename": "_0011s_0002_EYEBROWS-3.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0002_EYEBROWS-3.png"
+    },
+    {
+      "name": "_0011s_0003_EYEBROWS-4",
+      "filename": "_0011s_0003_EYEBROWS-4.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0003_EYEBROWS-4.png"
+    },
+    {
+      "name": "_0011s_0004_EYEBROWS-5",
+      "filename": "_0011s_0004_EYEBROWS-5.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0004_EYEBROWS-5.png"
+    },
+    {
+      "name": "_0011s_0005_EYEBROWS-6",
+      "filename": "_0011s_0005_EYEBROWS-6.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0005_EYEBROWS-6.png"
+    },
+    {
+      "name": "_0011s_0006_EYEBROWS-7",
+      "filename": "_0011s_0006_EYEBROWS-7.png",
+      "path": "/images/jnr-traits/full-traits/EYEBROWS/_0011s_0006_EYEBROWS-7.png"
+    }
+  ],
   "FIXES": [],
   "FREAK": [],
   "GEEK": [],
@@ -162,6 +623,26 @@ export const TRAIT_DATA: TraitData = {
   "PREP": [],
   "NUMBERS": [],
   "FACE": [
+    {
+      "name": "CYAN FLOCKS",
+      "filename": "CYAN FLOCKS.png",
+      "path": "/images/jnr-traits/full-traits/FACE/CYAN FLOCKS.png"
+    },
+    {
+      "name": "CYAN GRADIENT",
+      "filename": "CYAN GRADIENT.png",
+      "path": "/images/jnr-traits/full-traits/FACE/CYAN GRADIENT.png"
+    },
+    {
+      "name": "CYAN SMILEYS",
+      "filename": "CYAN SMILEYS.png",
+      "path": "/images/jnr-traits/full-traits/FACE/CYAN SMILEYS.png"
+    },
+    {
+      "name": "CYAN",
+      "filename": "CYAN.png",
+      "path": "/images/jnr-traits/full-traits/FACE/CYAN.png"
+    },
     {
       "name": "FREAK_I_M-QUIRKY",
       "filename": "FREAK_I_M-QUIRKY.png",
@@ -603,6 +1084,11 @@ export const TRAIT_DATA: TraitData = {
       "path": "/images/jnr-traits/full-traits/FACE/GEEK__0060_RED-SCARF.png"
     },
     {
+      "name": "GOLDEN",
+      "filename": "GOLDEN.png",
+      "path": "/images/jnr-traits/full-traits/FACE/GOLDEN.png"
+    },
+    {
       "name": "JOCK_CYAN-BANDANA",
       "filename": "JOCK_CYAN-BANDANA.png",
       "path": "/images/jnr-traits/full-traits/FACE/JOCK_CYAN-BANDANA.png"
@@ -806,6 +1292,31 @@ export const TRAIT_DATA: TraitData = {
       "name": "JOCK__0000s_0061_RED-SCARF",
       "filename": "JOCK__0000s_0061_RED-SCARF.png",
       "path": "/images/jnr-traits/full-traits/FACE/JOCK__0000s_0061_RED-SCARF.png"
+    },
+    {
+      "name": "PINK SMILEYS",
+      "filename": "PINK SMILEYS.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PINK SMILEYS.png"
+    },
+    {
+      "name": "PIXEL STATIC SMILEYS V4",
+      "filename": "PIXEL STATIC SMILEYS V4.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PIXEL STATIC SMILEYS V4.png"
+    },
+    {
+      "name": "PIXEL STATIC SMILEYS V6",
+      "filename": "PIXEL STATIC SMILEYS V6.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PIXEL STATIC SMILEYS V6.png"
+    },
+    {
+      "name": "PIXEL STATIC SMILEYS V7",
+      "filename": "PIXEL STATIC SMILEYS V7.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PIXEL STATIC SMILEYS V7.png"
+    },
+    {
+      "name": "PIXEL STATIC SMILEYS",
+      "filename": "PIXEL STATIC SMILEYS.png",
+      "path": "/images/jnr-traits/full-traits/FACE/PIXEL STATIC SMILEYS.png"
     },
     {
       "name": "PREP_CYAN",
@@ -1029,6 +1540,16 @@ export const TRAIT_DATA: TraitData = {
     }
   ],
   "HEAD": [
+    {
+      "name": "BULBHEADS TEST FLUNK 01 (#2938)",
+      "filename": "BULBHEADS TEST FLUNK 01 (#2938).png",
+      "path": "/images/jnr-traits/full-traits/HEAD/BULBHEADS TEST FLUNK 01 (#2938).png"
+    },
+    {
+      "name": "BULBHEADS",
+      "filename": "BULBHEADS.png",
+      "path": "/images/jnr-traits/full-traits/HEAD/BULBHEADS.png"
+    },
     {
       "name": "FREAK__0000_BLUE-HEADPHONES-OVERLAYER",
       "filename": "FREAK__0000_BLUE-HEADPHONES-OVERLAYER.png",
