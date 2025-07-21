@@ -21,6 +21,8 @@ import { useWindowsContext } from "contexts/WindowsContext";
 import FlappyFlunkWindow from "windows/Games/FlappyFlunkWindow";
 import RadioPlayer from "components/RadioPlayer";
 import FHSSchool from "windows/FHSSchool";
+import MyPlace from "windows/MyPlace";
+import FlunksMessenger from "windows/FlunksMessenger";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -157,7 +159,30 @@ const windowsMemod = useMemo(() => (
         <DesktopAppIcon
           title="MyPlace"
           icon="/images/icons/myplace.png"
-          onDoubleClick={() => router.push('/select-your-flunk')}
+          onDoubleClick={() => openWindow({
+            key: WINDOW_IDS.MYPLACE,
+            window: <MyPlace />
+          })}
+        />
+
+        <DesktopAppIcon
+          title="Messenger"
+          icon="/images/icons/discord.png"
+          onDoubleClick={() => openWindow({
+            key: WINDOW_IDS.FLUNKS_MESSENGER,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.FLUNKS_MESSENGER}
+                onClose={() => closeWindow(WINDOW_IDS.FLUNKS_MESSENGER)}
+                initialWidth="600px"
+                initialHeight="500px"
+                headerTitle="Flunks Messenger"
+                headerIcon="/images/icons/discord.png"
+              >
+                <FlunksMessenger />
+              </DraggableResizeableWindow>
+            )
+          })}
         />
 
         <DesktopAppIcon
