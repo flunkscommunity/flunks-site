@@ -179,14 +179,17 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
       default: // home
         return (
           <div className="p-4 space-y-4">
-            {/* Hero Section with Background Placeholder */}
+            {/* Hero Section with Jazz-inspired Background */}
             <div 
-              className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-6 border-4 border-gray-400 text-center"
+              className="text-white p-6 border-4 border-gray-400 text-center relative overflow-hidden"
               style={{
-                backgroundImage: 'url([BACKGROUND_PLACEHOLDER])',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundBlendMode: 'overlay'
+                background: `
+                  radial-gradient(ellipse at top left, rgba(255, 215, 0, 0.3) 0%, transparent 50%),
+                  radial-gradient(ellipse at top right, rgba(138, 43, 226, 0.3) 0%, transparent 50%),
+                  radial-gradient(ellipse at bottom, rgba(255, 69, 0, 0.3) 0%, transparent 50%),
+                  linear-gradient(45deg, #2c1810 0%, #8B4513 30%, #4B0082 60%, #FF4500 100%)
+                `,
+                boxShadow: 'inset 0 0 50px rgba(0,0,0,0.3)'
               }}
             >
               <h1 className="text-3xl font-bold mb-2">🏫 FLUNKS HIGH SCHOOL</h1>
@@ -288,10 +291,15 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
   return (
     <div 
       style={{
-        background: 'linear-gradient(45deg, #008080, #006666)',
-        backgroundImage: 'url([BACKGROUND_TEXTURE_PLACEHOLDER])',
+        background: `
+          radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+          radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+          radial-gradient(circle at 40% 40%, rgba(120, 219, 226, 0.2) 0%, transparent 50%),
+          linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #7209b7 100%)
+        `,
         height: '100%',
-        overflow: 'auto'
+        overflow: 'auto',
+        position: 'relative'
       }}
     >
       <Toolbar className="flex gap-2 p-2">
