@@ -7,6 +7,125 @@ interface Props {
 
 const FHSSchool: React.FC<Props> = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState('home');
+  const [selectedMonth, setSelectedMonth] = useState('August');
+
+  const renderCalendarForMonth = (month: string) => {
+    const monthData = {
+      August: {
+        title: 'August 2024',
+        color: 'orange',
+        borderColor: 'border-orange-500',
+        bgColor: 'bg-orange-100',
+        textColor: 'text-orange-700',
+        events: [
+          { day: 5, label: 'First Day of School', color: 'bg-yellow-400' },
+          { day: 15, label: 'Back to School Night', color: 'bg-pink-400' },
+          { day: 26, label: 'Student Orientation', color: 'bg-blue-400' }
+        ]
+      },
+      September: {
+        title: 'September 2024',
+        color: 'green',
+        borderColor: 'border-green-500',
+        bgColor: 'bg-green-100',
+        textColor: 'text-green-700',
+        events: [
+          { day: 15, label: 'Homecoming Dance', color: 'bg-purple-400' },
+          { day: 20, label: 'Football vs. Riverside', color: 'bg-red-400' },
+          { day: 30, label: 'Picture Day', color: 'bg-blue-400' }
+        ]
+      },
+      October: {
+        title: 'October 2024',
+        color: 'orange',
+        borderColor: 'border-orange-500',
+        bgColor: 'bg-orange-100',
+        textColor: 'text-orange-700',
+        events: [
+          { day: 1, label: 'Parent-Teacher Conferences', color: 'bg-yellow-400' },
+          { day: 15, label: 'Fall Break Begins', color: 'bg-green-400' },
+          { day: 31, label: 'Halloween Dance', color: 'bg-purple-400' }
+        ]
+      },
+      November: {
+        title: 'November 2024',
+        color: 'amber',
+        borderColor: 'border-amber-600',
+        bgColor: 'bg-amber-100',
+        textColor: 'text-amber-800',
+        events: [
+          { day: 5, label: 'Academic Awards', color: 'bg-yellow-400' },
+          { day: 11, label: 'Veterans Day - No School', color: 'bg-red-400' },
+          { day: 25, label: 'Thanksgiving Break', color: 'bg-orange-400' }
+        ]
+      },
+      December: {
+        title: 'December 2024',
+        color: 'red',
+        borderColor: 'border-red-500',
+        bgColor: 'bg-red-100',
+        textColor: 'text-red-700',
+        events: [
+          { day: 10, label: 'Winter Concert', color: 'bg-blue-400' },
+          { day: 20, label: 'Winter Break Begins', color: 'bg-green-400' },
+          { day: 25, label: 'Christmas Day', color: 'bg-red-500' }
+        ]
+      }
+    };
+
+    const currentMonth = monthData[month as keyof typeof monthData];
+    if (!currentMonth) return null;
+
+    return (
+      <div className={`bg-white border-4 ${currentMonth.borderColor} rounded-lg p-4 shadow-lg`}>
+        <h3 className={`text-center font-bold text-xl mb-4 ${currentMonth.textColor}`}>{currentMonth.title}</h3>
+        
+        {/* Days of week header */}
+        <div className="grid grid-cols-7 gap-1 mb-2">
+          {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(day => (
+            <div key={day} className={`text-center font-bold text-sm p-2 ${currentMonth.bgColor} rounded`}>
+              {day}
+            </div>
+          ))}
+        </div>
+        
+        {/* Calendar days - simplified for demo */}
+        <div className="grid grid-cols-7 gap-1">
+          {Array.from({ length: 35 }, (_, i) => {
+            const dayNum = i - 3; // Adjust start day
+            const isValidDay = dayNum > 0 && dayNum <= 31;
+            const hasEvent = currentMonth.events.find(event => event.day === dayNum);
+            
+            return (
+              <div
+                key={i}
+                className={`text-center p-2 rounded border font-bold ${
+                  isValidDay 
+                    ? hasEvent 
+                      ? `${hasEvent.color} ${currentMonth.textColor}` 
+                      : `bg-white ${currentMonth.textColor}`
+                    : 'bg-gray-100 text-gray-400'
+                }`}
+              >
+                {isValidDay ? dayNum : ''}
+              </div>
+            );
+          })}
+        </div>
+        
+        {/* Events legend for this month */}
+        <div className="mt-4 space-y-1">
+          <h4 className="font-bold text-sm">Events this month:</h4>
+          {currentMonth.events.map((event, idx) => (
+            <div key={idx} className="flex items-center gap-2 text-sm">
+              <div className={`w-3 h-3 ${event.color} rounded`}></div>
+              <span><strong>{event.day}:</strong> {event.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -14,20 +133,132 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
         return (
           <div className="p-4 space-y-4">
             <h2 className="text-xl font-bold mb-4">📅 School Calendar</h2>
-            <div className="bg-white border-2 border-gray-400 p-3">
-              <h3 className="font-bold text-lg mb-2">Upcoming Events:</h3>
-              <ul className="space-y-2">
-                <li>• <strong>Sept 15:</strong> Homecoming Dance</li>
-                <li>• <strong>Sept 20:</strong> Football vs. Riverside High</li>
-                <li>• <strong>Oct 1:</strong> Parent-Teacher Conferences</li>
-                <li>• <strong>Oct 15:</strong> Fall Break Begins</li>
-                <li>• <strong>Nov 5:</strong> Academic Awards Ceremony</li>
-                <li>• <strong>Dec 20:</strong> Winter Break Begins</li>
-              </ul>
+            
+            {/* Clickable Month Headers */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+              {/* August */}
+              <button
+                onClick={() => setSelectedMonth('August')}
+                className={`text-center p-3 rounded-xl border-4 text-white font-bold text-lg shadow-lg transition-all hover:scale-105 ${
+                  selectedMonth === 'August' ? 'ring-4 ring-yellow-300' : ''
+                }`}
+                style={{
+                  background: 'linear-gradient(45deg, #FF8C00, #FFD700)',
+                  borderColor: '#FF6347',
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+                }}
+              >
+                🌻 August 🌻
+              </button>
+              
+              {/* September */}
+              <button
+                onClick={() => setSelectedMonth('September')}
+                className={`text-center p-3 rounded-xl border-4 text-white font-bold text-lg shadow-lg transition-all hover:scale-105 ${
+                  selectedMonth === 'September' ? 'ring-4 ring-green-300' : ''
+                }`}
+                style={{
+                  background: 'linear-gradient(45deg, #32CD32, #98FB98)',
+                  borderColor: '#228B22',
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+                }}
+              >
+                🍂 September 🍂
+              </button>
+              
+              {/* October */}
+              <button
+                onClick={() => setSelectedMonth('October')}
+                className={`text-center p-3 rounded-xl border-4 text-white font-bold text-lg shadow-lg transition-all hover:scale-105 ${
+                  selectedMonth === 'October' ? 'ring-4 ring-orange-300' : ''
+                }`}
+                style={{
+                  background: 'linear-gradient(45deg, #FF4500, #FFA500)',
+                  borderColor: '#FF6347',
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+                }}
+              >
+                🎃 October 🎃
+              </button>
+              
+              {/* November */}
+              <button
+                onClick={() => setSelectedMonth('November')}
+                className={`text-center p-3 rounded-xl border-4 text-white font-bold text-lg shadow-lg transition-all hover:scale-105 ${
+                  selectedMonth === 'November' ? 'ring-4 ring-amber-300' : ''
+                }`}
+                style={{
+                  background: 'linear-gradient(45deg, #8B4513, #D2691E)',
+                  borderColor: '#A0522D',
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+                }}
+              >
+                🍁 November 🍁
+              </button>
+              
+              {/* December */}
+              <button
+                onClick={() => setSelectedMonth('December')}
+                className={`text-center p-3 rounded-xl border-4 text-white font-bold text-lg shadow-lg transition-all hover:scale-105 ${
+                  selectedMonth === 'December' ? 'ring-4 ring-red-300' : ''
+                }`}
+                style={{
+                  background: 'linear-gradient(45deg, #B22222, #32CD32)',
+                  borderColor: '#DC143C',
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+                }}
+              >
+                ❄️ December ❄️
+              </button>
             </div>
-            <div className="bg-yellow-100 border-2 border-yellow-400 p-3">
-              <h3 className="font-bold">🏈 Sports Schedule:</h3>
-              <p>Check the gymnasium bulletin board for updated game times!</p>
+
+            {/* Selected Month Calendar */}
+            {renderCalendarForMonth(selectedMonth)}
+
+            <div className="bg-white border-2 border-gray-400 p-3 rounded-lg mt-4">
+              <h3 className="font-bold text-lg mb-2">📚 All Upcoming School Events:</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-semibold text-orange-600">🌻 August Events:</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• 5th: First Day of School</li>
+                    <li>• 15th: Back to School Night</li>
+                    <li>• 26th: Student Orientation</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-green-600">🍂 September Events:</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• 15th: Homecoming Dance</li>
+                    <li>• 20th: Football vs. Riverside</li>
+                    <li>• 30th: Picture Day</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-orange-600">🎃 October Events:</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• 1st: Parent-Teacher Conferences</li>
+                    <li>• 15th: Fall Break Begins</li>
+                    <li>• 31st: Halloween Dance</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-amber-600">🍁 November Events:</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>• 5th: Academic Awards</li>
+                    <li>• 11th: Veterans Day - No School</li>
+                    <li>• 25th: Thanksgiving Break</li>
+                  </ul>
+                </div>
+              </div>
+              <div className="mt-4">
+                <h4 className="font-semibold text-red-600">❄️ December Events:</h4>
+                <ul className="text-sm space-y-1">
+                  <li>• 10th: Winter Concert</li>
+                  <li>• 20th: Winter Break Begins</li>
+                  <li>• 25th: Christmas Day</li>
+                </ul>
+              </div>
             </div>
           </div>
         );
@@ -179,17 +410,13 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
       default: // home
         return (
           <div className="p-4 space-y-4">
-            {/* Hero Section with Jazz-inspired Background */}
+            {/* Hero Section with Complementary Gradient */}
             <div 
               className="text-white p-6 border-4 border-gray-400 text-center relative overflow-hidden"
               style={{
-                background: `
-                  radial-gradient(ellipse at top left, rgba(255, 215, 0, 0.3) 0%, transparent 50%),
-                  radial-gradient(ellipse at top right, rgba(138, 43, 226, 0.3) 0%, transparent 50%),
-                  radial-gradient(ellipse at bottom, rgba(255, 69, 0, 0.3) 0%, transparent 50%),
-                  linear-gradient(45deg, #2c1810 0%, #8B4513 30%, #4B0082 60%, #FF4500 100%)
-                `,
-                boxShadow: 'inset 0 0 50px rgba(0,0,0,0.3)'
+                background: `linear-gradient(135deg, rgba(139, 90, 150, 0.9) 0%, rgba(155, 111, 163, 0.8) 25%, rgba(168, 132, 176, 0.7) 50%, rgba(181, 153, 189, 0.6) 75%, rgba(194, 174, 202, 0.5) 100%)`,
+                backdropFilter: 'blur(10px)',
+                boxShadow: 'inset 0 0 30px rgba(0,0,0,0.2), 0 8px 32px rgba(0,0,0,0.3)'
               }}
             >
               <h1 className="text-3xl font-bold mb-2">🏫 FLUNKS HIGH SCHOOL</h1>
@@ -291,12 +518,7 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
   return (
     <div 
       style={{
-        background: `
-          radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-          radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-          radial-gradient(circle at 40% 40%, rgba(120, 219, 226, 0.2) 0%, transparent 50%),
-          linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #7209b7 100%)
-        `,
+        background: `linear-gradient(180deg, #8B5A96 0%, #9B6FA3 15%, #A884B0 30%, #B599BD 45%, #C2AECA 60%, #CFC3D7 75%, #DCD8E4 85%, #E9D5D1 92%, #F5D2BE 96%, #FFCFAB 100%)`,
         height: '100%',
         overflow: 'auto',
         position: 'relative'

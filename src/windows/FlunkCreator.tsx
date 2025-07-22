@@ -403,7 +403,9 @@ const FlunkCreator: React.FC = () => {
             🎨 Customize Your Flunk
           </div>
           
-          {/* PIGMENT/BASE COLOR - PRIORITIZED FIRST */}
+          {/* PIGMENT FIRST - MAKES MOST SENSE FOR USER WORKFLOW */}
+          
+          {/* 1. PIGMENT/BASE COLOR - BACK TO FIRST POSITION */}
           <TraitSection>
             <TraitHeader 
               onClick={() => toggleSection('pigment')}
@@ -413,7 +415,7 @@ const FlunkCreator: React.FC = () => {
                 fontWeight: 'bold'
               }}
             >
-              🎨 Base Color (Start Here!)
+              🎨 Pigment (Start Here!)
               <span>{expandedSections.pigment ? '▼' : '▶'}</span>
             </TraitHeader>
             <TraitList expanded={expandedSections.pigment}>
@@ -438,6 +440,56 @@ const FlunkCreator: React.FC = () => {
                   </TraitItem>
                 );
               })}
+            </TraitList>
+          </TraitSection>
+
+          {/* 2. BACKDROP - SECOND POSITION */}
+          <TraitSection>
+            <TraitHeader onClick={() => toggleSection('backdrop')}>
+              🌄 Backdrop
+              <span>{expandedSections.backdrop ? '▼' : '▶'}</span>
+            </TraitHeader>
+            <TraitList expanded={expandedSections.backdrop}>
+              <TraitItem
+                selected={selectedTraits.backdrop === 'none'}
+                onClick={() => selectTrait('backdrop', 'none')}
+              >
+                🚫 No Backdrop
+              </TraitItem>
+              {TRAIT_DATA.BACKDROPS?.map((backdrop) => (
+                <TraitItem
+                  key={backdrop.name}
+                  selected={selectedTraits.backdrop === backdrop.name}
+                  onClick={() => selectTrait('backdrop', backdrop.name)}
+                >
+                  🌄 {cleanTraitName(backdrop.name)}
+                </TraitItem>
+              ))}
+            </TraitList>
+          </TraitSection>
+
+          {/* 3. FACE - THIRD POSITION */}
+          <TraitSection>
+            <TraitHeader onClick={() => toggleSection('face')}>
+              😊 Face
+              <span>{expandedSections.face ? '▼' : '▶'}</span>
+            </TraitHeader>
+            <TraitList expanded={expandedSections.face}>
+              <TraitItem
+                selected={selectedTraits.face === 'none'}
+                onClick={() => selectTrait('face', 'none')}
+              >
+                🚫 Default
+              </TraitItem>
+              {TRAIT_DATA.FACE?.map((face) => (
+                <TraitItem
+                  key={face.name}
+                  selected={selectedTraits.face === face.name}
+                  onClick={() => selectTrait('face', face.name)}
+                >
+                  😊 {cleanTraitName(face.name)}
+                </TraitItem>
+              ))}
             </TraitList>
           </TraitSection>
 
