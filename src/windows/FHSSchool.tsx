@@ -332,13 +332,13 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                   </ul>
                 </div>
                 <div>
-                  <strong>🏃‍♂️ Sports Teams:</strong>
+                  <strong>🚀 Astros Sports Teams:</strong>
                   <ul className="ml-4 mt-1">
-                    <li>• Football (Fall)</li>
-                    <li>• Basketball (Winter)</li>
-                    <li>• Baseball/Softball (Spring)</li>
-                    <li>• Track & Field</li>
-                    <li>• Volleyball</li>
+                    <li>• Astros Football (Fall)</li>
+                    <li>• Astros Basketball (Winter)</li>
+                    <li>• Astros Baseball/Softball (Spring)</li>
+                    <li>• Astros Track & Field</li>
+                    <li>• Astros Volleyball</li>
                   </ul>
                 </div>
               </div>
@@ -410,7 +410,7 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
       default: // home
         return (
           <div className="p-4 space-y-4">
-            {/* Hero Section with Complementary Gradient */}
+            {/* Hero Section with Complementary Gradient and 8-bit Mascot */}
             <div 
               className="text-white p-6 border-4 border-gray-400 text-center relative overflow-hidden"
               style={{
@@ -419,8 +419,53 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                 boxShadow: 'inset 0 0 30px rgba(0,0,0,0.2), 0 8px 32px rgba(0,0,0,0.3)'
               }}
             >
+              {/* 8-bit Astro Mascot */}
+              <div className="flex justify-center mb-4">
+                <div 
+                  className="relative"
+                  style={{
+                    width: '80px',
+                    height: '80px',
+                    imageRendering: 'pixelated',
+                    background: `
+                      conic-gradient(from 0deg at 50% 50%, 
+                        #ff69b4 0deg 36deg,
+                        #000 36deg 72deg,
+                        #ffeaa7 72deg 108deg,
+                        #ff69b4 108deg 144deg,
+                        #000 144deg 180deg,
+                        #ff69b4 180deg 216deg,
+                        #000 216deg 252deg,
+                        #ffeaa7 252deg 288deg,
+                        #ff69b4 288deg 324deg,
+                        #000 324deg 360deg
+                      )
+                    `,
+                    borderRadius: '50%',
+                    border: '3px solid #000',
+                    boxShadow: '0 0 10px rgba(255, 105, 180, 0.5)'
+                  }}
+                >
+                  {/* Helmet reflection */}
+                  <div 
+                    className="absolute top-2 left-2 w-4 h-4 bg-white opacity-60 rounded-full"
+                    style={{ imageRendering: 'pixelated' }}
+                  ></div>
+                  {/* Face inside helmet */}
+                  <div 
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-yellow-200 rounded-full border border-black"
+                    style={{ imageRendering: 'pixelated' }}
+                  >
+                    {/* Eyes */}
+                    <div className="absolute top-2 left-1 w-1 h-1 bg-black rounded-full"></div>
+                    <div className="absolute top-2 right-1 w-1 h-1 bg-black rounded-full"></div>
+                    {/* Mouth */}
+                    <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-1 bg-pink-400 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
               <h1 className="text-3xl font-bold mb-2">🏫 FLUNKS HIGH SCHOOL</h1>
-              <p className="text-xl">Home of the [MASCOT PLACEHOLDER]</p>
+              <p className="text-xl">Home of the Astros 🚀</p>
               <p className="text-lg mt-2">Excellence in Education Since 1985</p>
             </div>
 
@@ -429,6 +474,14 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
               <h2 className="text-xl font-bold mb-3 text-red-600">📢 Latest News & Announcements</h2>
               
               <div className="space-y-3">
+                <div className="border-l-4 border-purple-500 pl-3">
+                  <h3 className="font-bold">🚀 Meet Our Mascot: The Astro!</h3>
+                  <p className="text-sm">Our pink space-suited astronaut represents the Flunks High spirit of reaching for the stars! Go Astros!</p>
+                  <span className="text-xs text-gray-600">Posted: August 1, 1999</span>
+                </div>
+                
+                <Separator />
+                
                 <div className="border-l-4 border-blue-500 pl-3">
                   <h3 className="font-bold">🎉 Welcome Back Students!</h3>
                   <p className="text-sm">The new school year is off to a great start! Don't forget to pick up your student handbooks from the main office.</p>

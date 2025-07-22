@@ -189,7 +189,7 @@ const FHSSchoolPage: React.FC = () => {
               }}
             >
               <h1 className="text-3xl font-bold mb-2">🏫 FLUNKS HIGH SCHOOL</h1>
-              <p className="text-xl">Home of the [MASCOT PLACEHOLDER]</p>
+              <p className="text-xl">Home of the Astros 🚀</p>
               <p className="text-lg mt-2">Excellence in Education Since 1985</p>
             </div>
 
@@ -287,7 +287,7 @@ const FHSSchoolPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Flunks High School - Home of the [MASCOT]</title>
+        <title>Flunks High School - Home of the Astros</title>
       </Head>
       <div 
         className="flex flex-col items-center min-h-screen py-8 gap-4"
