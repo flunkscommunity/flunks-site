@@ -1,0 +1,52 @@
+{
+  "generated": "2025-07-22T20:23:20.135Z",
+  "stations": [
+    {
+      "src": "/audio/paradise.mp3",
+      "title": "87.9 FREN",
+      "frequency": "87.9",
+      "station": "FREN",
+      "genre": "Alternative/Indie",
+      "description": "The Fren Zone - Alternative, Indie & Underground Music",
+      "trackCount": 0,
+      "tracks": []
+    },
+    {
+      "src": "/audio/paradise.mp3",
+      "title": "97.5 WZRD",
+      "frequency": "97.5",
+      "station": "WZRD",
+      "genre": "Electronic/Synthwave",
+      "description": "The Wizard - Electronic, Synthwave & Digital Magic",
+      "trackCount": 0,
+      "tracks": []
+    },
+    {
+      "src": "/audio/paradise.mp3",
+      "title": "101.9 TEDY",
+      "frequency": "101.9",
+      "station": "TEDY",
+      "genre": "Classical/Study",
+      "description": "The Study Station - Classical, Jazz & Focus Music",
+      "trackCount": 0,
+      "tracks": []
+    },
+    {
+      "src": "/audio/stations/104.1-FLNK/paradise.mp3",
+      "title": "104.1 FLNK",
+      "frequency": "104.1",
+      "station": "FLNK",
+      "genre": "Pop/Rock/Hits",
+      "description": "Flunk Hits - Pop, Rock & Chart-Topping Hits",
+      "trackCount": 1,
+      "tracks": [
+        {
+          "src": "/audio/stations/104.1-FLNK/paradise.mp3",
+          "title": "paradise",
+          "artist": "Unknown Artist",
+          "filename": "paradise.mp3"
+        }
+      ]
+    }
+  ]
+}

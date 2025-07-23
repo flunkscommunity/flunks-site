@@ -2,10 +2,10 @@ import { useRef, useState, useEffect } from 'react';
 import useWindowSize from '../hooks/useWindowSize';
 
 const tracks = [
-  { src: '/audio/paradise.mp3', title: '87.9 FREN', frequency: '87.9', station: '1' },
-  { src: '/audio/station2.mp3', title: '97.5 WZRD', frequency: '97.5', station: '2' },
-  { src: '/audio/station3.mp3', title: '101.9 TEDY', frequency: '101.9', station: '3' },
-  { src: '/audio/station4.mp3', title: '104.1 FLNK', frequency: '104.1', station: '4' },
+  { src: '/audio/paradise.mp3', title: '87.9 FREN', frequency: '87.9', station: 'FREN' },
+  { src: '/audio/paradise.mp3', title: '97.5 WZRD', frequency: '97.5', station: 'WZRD' },
+  { src: '/audio/paradise.mp3', title: '101.9 TEDY', frequency: '101.9', station: 'TEDY' },
+  { src: '/audio/stations/104.1-FLNK/paradise.mp3', title: '104.1 FLNK', frequency: '104.1', station: 'FLNK' }
 ];
 
 const RadioPlayer = () => {
