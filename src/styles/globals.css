@@ -18,6 +18,70 @@ body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  cursor: url('/images/cursors/default.png'), auto;
+}
+
+/* 90s-Style Custom Cursors */
+a, button, [role="button"] {
+  cursor: url('/images/cursors/pointer.png'), pointer;
+}
+
+input, textarea {
+  cursor: url('/images/cursors/text.png'), text;
+}
+
+.cursor-wait {
+  cursor: url('/images/cursors/wait.png'), wait;
+}
+
+.cursor-help {
+  cursor: url('/images/cursors/help.png'), help;
+}
+
+.cursor-grab {
+  cursor: url('/images/cursors/grab.png'), grab;
+}
+
+.cursor-grabbing {
+  cursor: url('/images/cursors/grabbing.png'), grabbing;
+}
+
+/* Fun CSS-Only Cursor Effects */
+.cursor-crosshair {
+  cursor: crosshair;
+}
+
+.cursor-move {
+  cursor: move;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+.cursor-zoom-in {
+  cursor: zoom-in;
+}
+
+.cursor-zoom-out {
+  cursor: zoom-out;
+}
+
+/* Retro terminal cursor effect */
+.terminal-cursor {
+  cursor: text;
+  background: rgba(0, 255, 0, 0.1);
+}
+
+.terminal-cursor::after {
+  content: '█';
+  color: lime;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
 
 @font-face {
