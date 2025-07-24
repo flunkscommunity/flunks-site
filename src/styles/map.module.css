@@ -47,10 +47,7 @@
 
 .icon:hover {
   transform: scale(1.2);
-  background-color: transparent;
-  border-color: transparent;
-  box-shadow: none;
-  z-index: 15;
+  cursor: pointer;
 }
 
 .icon:active {

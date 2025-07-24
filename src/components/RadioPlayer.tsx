@@ -223,10 +223,10 @@ const RadioPlayer = () => {
             src="/images/seek-back.png"
             alt="Previous Station"
             onClick={seekBack}
+            className="cursor-win95-pointer"
             style={{
               position: 'absolute',
               ...getButtonStyle('seekBack'),
-              cursor: 'pointer',
               opacity: 0.8,
               transition: 'opacity 0.2s, transform 0.1s'
             }}
@@ -238,10 +238,10 @@ const RadioPlayer = () => {
             src="/images/button-1.png"
             alt="87.9 FREN"
             onClick={() => selectStation(0)}
+            className="cursor-win95-pointer"
             style={{
               position: 'absolute',
               ...getButtonStyle('button1'),
-              cursor: 'pointer',
               opacity: trackIndex === 0 ? 1 : 0.7,
               transform: trackIndex === 0 ? 'scale(1.1)' : 'scale(1)'
             }}
@@ -251,10 +251,10 @@ const RadioPlayer = () => {
             src="/images/button-2.png"
             alt="97.5 WZRD"
             onClick={() => selectStation(1)}
+            className="cursor-win95-pointer"
             style={{
               position: 'absolute',
               ...getButtonStyle('button2'),
-              cursor: 'pointer',
               opacity: trackIndex === 1 ? 1 : 0.7,
               transform: trackIndex === 1 ? 'scale(1.1)' : 'scale(1)'
             }}
@@ -264,10 +264,10 @@ const RadioPlayer = () => {
             src="/images/button-3.png"
             alt="101.9 TEDY"
             onClick={() => selectStation(2)}
+            className="cursor-win95-pointer"
             style={{
               position: 'absolute',
               ...getButtonStyle('button3'),
-              cursor: 'pointer',
               opacity: trackIndex === 2 ? 1 : 0.7,
               transform: trackIndex === 2 ? 'scale(1.1)' : 'scale(1)'
             }}
@@ -277,10 +277,10 @@ const RadioPlayer = () => {
             src="/images/button-4.png"
             alt="104.1 FLNK"
             onClick={() => selectStation(3)}
+            className="cursor-win95-pointer"
             style={{
               position: 'absolute',
               ...getButtonStyle('button4'),
-              cursor: 'pointer',
               opacity: trackIndex === 3 ? 1 : 0.7,
               transform: trackIndex === 3 ? 'scale(1.1)' : 'scale(1)'
             }}
@@ -290,10 +290,10 @@ const RadioPlayer = () => {
             src="/images/seek-forward.png"
             alt="Next Station"
             onClick={seekForward}
+            className="cursor-win95-pointer"
             style={{
               position: 'absolute',
               ...getButtonStyle('seekForward'),
-              cursor: 'pointer',
               opacity: 0.8
             }}
           />
@@ -302,10 +302,10 @@ const RadioPlayer = () => {
             src="/images/play-button.png"
             alt={isPlaying ? "Pause" : "Play"}
             onClick={togglePlay}
+            className="cursor-win95-pointer"
             style={{
               position: 'absolute',
               ...getButtonStyle('playButton'),
-              cursor: 'pointer',
               opacity: isPlaying ? 0.9 : 0.7,
               transform: isPlaying ? 'scale(1.1)' : 'scale(1)'
             }}

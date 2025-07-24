@@ -166,7 +166,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     >
       <Window
         ref={windowRef}
-        className={`${windowClassName} !flex !flex-col`}
+        className={`${windowClassName} !flex !flex-col cursor-win95-default`}
         style={{
           position: "absolute",
           resize: resizable ? "both" : "none",
@@ -187,7 +187,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
             headerRender
           ) : (
             <WindowHeader
-              className="flex !items-center !justify-between !py-1 !px-2 !h-auto"
+              className="flex !items-center !justify-between !py-1 !px-2 !h-auto cursor-win95-move"
               style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -203,7 +203,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
               {showHeaderActions && (
                 <WindowButtons>
                   {onHelp && (
-                    <Button id="action" onClick={onHelp}>
+                    <Button id="action" onClick={onHelp} className="cursor-win95-help">
                       <img
                         src="/images/icons/question.png"
                         width="60%"
@@ -212,7 +212,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
                     </Button>
                   )}
                   {showMaximizeButton && (
-                    <Button id="action" onClick={handleMaximize}>
+                    <Button id="action" onClick={handleMaximize} className="cursor-win95-pointer">
                       <img
                         src="/images/icons/maximize.png"
                         width="60%"
@@ -220,7 +220,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
                       />
                     </Button>
                   )}
-                  <Button id="action" onClick={() => minimizeWindow(props.windowsId)}>
+                  <Button id="action" onClick={() => minimizeWindow(props.windowsId)} className="cursor-win95-pointer">
                     <img
                       src="/images/icons/minimize.png"
                       width="60%"
@@ -234,7 +234,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
                       console.log("✖ Close button clicked for:", props.windowsId);
                       onClose?.();
                     }}
-                    className="pointer-events-auto"
+                    className="pointer-events-auto cursor-win95-pointer"
                   >
                     <span className="close-icon" />
                   </Button>

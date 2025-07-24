@@ -67,6 +67,158 @@ input, textarea {
   cursor: zoom-out;
 }
 
+/* Mickey Mouse Style Hand Cursors! 🐭 */
+.cursor-mickey-hand {
+  cursor: pointer;
+  /* Classic Mickey glove pointing finger */
+  cursor: url('/images/cursors/mickey-hand.svg'), pointer;
+}
+
+.cursor-retro-hand {
+  cursor: pointer;
+  /* White cartoon glove style */
+  cursor: url('/images/cursors/retro-hand.svg'), pointer;
+}
+
+.cursor-cartoon-point {
+  cursor: pointer;
+  /* Animated cartoon pointing hand */
+  cursor: url('/images/cursors/retro-hand.svg'), pointer;
+}
+
+/* Windows 95 Style Cursors - Classic and Perfect Size! */
+.cursor-win95-default {
+  cursor: default;
+}
+
+.cursor-win95-pointer {
+  cursor: pointer;
+}
+
+.cursor-win95-move {
+  cursor: move;
+}
+
+.cursor-win95-not-allowed {
+  cursor: not-allowed;
+}
+
+.cursor-win95-text {
+  cursor: text;
+}
+
+.cursor-win95-grab {
+  cursor: grab;
+}
+
+.cursor-win95-grabbing {
+  cursor: grabbing;
+}
+
+.cursor-win95-wait {
+  cursor: wait;
+}
+
+.cursor-win95-help {
+  cursor: help;
+}
+
+.cursor-win95-crosshair {
+  cursor: crosshair;
+}
+
+.cursor-win95-zoom-in {
+  cursor: zoom-in;
+}
+
+.cursor-win95-zoom-out {
+  cursor: zoom-out;
+}
+
+.cursor-win95-resize-n {
+  cursor: n-resize;
+}
+
+.cursor-win95-resize-s {
+  cursor: s-resize;
+}
+
+.cursor-win95-resize-e {
+  cursor: e-resize;
+}
+
+.cursor-win95-resize-w {
+  cursor: w-resize;
+}
+
+.cursor-win95-resize-ne {
+  cursor: ne-resize;
+}
+
+.cursor-win95-resize-nw {
+  cursor: nw-resize;
+}
+
+.cursor-win95-resize-se {
+  cursor: se-resize;
+}
+
+.cursor-win95-resize-sw {
+  cursor: sw-resize;
+}
+
+/* Apply Win95 cursors to common elements */
+button, .cursor-win95-pointer, [role="button"] {
+  cursor: pointer !important;
+}
+
+input[type="text"], input[type="email"], input[type="password"], textarea, .cursor-win95-text {
+  cursor: text !important;
+}
+
+.draggable, .cursor-win95-move, [draggable="true"] {
+  cursor: move !important;
+}
+
+.cursor-win95-move:active, .dragging {
+  cursor: grabbing !important;
+}
+
+.disabled, [disabled], .cursor-win95-not-allowed {
+  cursor: not-allowed !important;
+}
+
+.resizable, .cursor-win95-grab {
+  cursor: grab !important;
+}
+
+.resizable:active, .cursor-win95-grabbing {
+  cursor: grabbing !important;
+}
+
+/* Map component cursors */
+.map-window {
+  cursor: grab !important;
+}
+
+.map-window.dragging {
+  cursor: grabbing !important;
+}
+
+/* Window resize handles */
+.window-resize-handle {
+  cursor: nw-resize !important;
+}
+
+/* Scrollbar cursors */
+*::-webkit-scrollbar-thumb {
+  cursor: pointer !important;
+}
+
+*::-webkit-scrollbar-button {
+  cursor: pointer !important;
+}
+
 /* Retro terminal cursor effect */
 .terminal-cursor {
   cursor: text;

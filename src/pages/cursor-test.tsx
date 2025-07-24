@@ -151,6 +151,190 @@ const CursorTest = () => {
           <p>Input fields show text cursor</p>
         </div>
 
+        {/* Mickey Mouse Hand */}
+        <div className="cursor-mickey-hand" style={{ 
+          padding: '20px', 
+          border: '2px solid #ffeb3b', 
+          borderRadius: '8px',
+          backgroundColor: '#fff9c4'
+        }}>
+          <h3>🐭 Mickey Hand</h3>
+          <p>Classic white cartoon glove pointer!</p>
+        </div>
+
+        {/* Retro Hand */}
+        <div className="cursor-retro-hand" style={{ 
+          padding: '20px', 
+          border: '2px solid #ff5722', 
+          borderRadius: '8px',
+          backgroundColor: '#ffccbc'
+        }}>
+          <h3>👋 Retro Hand</h3>
+          <p>Old-school pointing hand cursor</p>
+        </div>
+
+        {/* Cartoon Point */}
+        <div className="cursor-cartoon-point" style={{ 
+          padding: '20px', 
+          border: '2px solid #9c27b0', 
+          borderRadius: '8px',
+          backgroundColor: '#f3e5f5'
+        }}>
+          <h3>👆 Cartoon Point</h3>
+          <p>Animated cartoon pointing finger</p>
+        </div>
+
+      </div>
+
+      {/* Windows 95 Classic Cursors Section */}
+      <div style={{ marginTop: '40px' }}>
+        <h2 style={{ marginBottom: '20px', color: '#333' }}>
+          �️ Windows 95 Classic Cursors
+        </h2>
+        <p style={{ marginBottom: '20px', color: '#666' }}>
+          Built-in browser cursors with that authentic 90s feel!
+        </p>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
+          
+          {/* Win95 Default */}
+          <div className="cursor-win95-default" style={{ 
+            padding: '20px', 
+            border: '3px solid #c0c0c0', 
+            borderRadius: '0px',
+            backgroundColor: '#c0c0c0',
+            borderStyle: 'outset'
+          }}>
+            <h3>�️ Default</h3>
+            <p>Standard navigation cursor</p>
+          </div>
+
+          {/* Win95 Pointer */}
+          <div className="cursor-win95-pointer" style={{ 
+            padding: '20px', 
+            border: '3px solid #c0c0c0', 
+            borderRadius: '0px',
+            backgroundColor: '#c0c0c0',
+            borderStyle: 'outset'
+          }}>
+            <h3>👆 Pointer</h3>
+            <p>Clickable elements</p>
+          </div>
+
+          {/* Win95 Move */}
+          <div className="cursor-win95-move" style={{ 
+            padding: '20px', 
+            border: '3px solid #c0c0c0', 
+            borderRadius: '0px',
+            backgroundColor: '#c0c0c0',
+            borderStyle: 'outset'
+          }}>
+            <h3>✋ Move</h3>
+            <p>Drag and drop</p>
+          </div>
+
+          {/* Win95 Not Allowed */}
+          <div className="cursor-win95-not-allowed" style={{ 
+            padding: '20px', 
+            border: '3px solid #c0c0c0', 
+            borderRadius: '0px',
+            backgroundColor: '#c0c0c0',
+            borderStyle: 'outset'
+          }}>
+            <h3>🚫 Not Allowed</h3>
+            <p>Disabled areas</p>
+          </div>
+
+          {/* Win95 Text */}
+          <div className="cursor-win95-text" style={{ 
+            padding: '20px', 
+            border: '3px solid #c0c0c0', 
+            borderRadius: '0px',
+            backgroundColor: '#c0c0c0',
+            borderStyle: 'outset'
+          }}>
+            <h3>📝 Text</h3>
+            <input type="text" placeholder="Type here..." style={{ 
+              width: '100%', 
+              padding: '8px',
+              marginTop: '10px',
+              border: '2px inset #c0c0c0'
+            }} />
+          </div>
+
+          {/* Win95 Grab */}
+          <div className="cursor-win95-grab" style={{ 
+            padding: '20px', 
+            border: '3px solid #c0c0c0', 
+            borderRadius: '0px',
+            backgroundColor: '#c0c0c0',
+            borderStyle: 'outset'
+          }}>
+            <h3>🤏 Grab</h3>
+            <p>Grabbing elements</p>
+          </div>
+
+          {/* Win95 Wait */}
+          <div className="cursor-win95-wait" style={{ 
+            padding: '20px', 
+            border: '3px solid #c0c0c0', 
+            borderRadius: '0px',
+            backgroundColor: '#c0c0c0',
+            borderStyle: 'outset'
+          }}>
+            <h3>⏳ Wait</h3>
+            <p>Loading/processing</p>
+          </div>
+
+          {/* Win95 Help */}
+          <div className="cursor-win95-help" style={{ 
+            padding: '20px', 
+            border: '3px solid #c0c0c0', 
+            borderRadius: '0px',
+            backgroundColor: '#c0c0c0',
+            borderStyle: 'outset'
+          }}>
+            <h3>❓ Help</h3>
+            <p>Help and info</p>
+          </div>
+
+          {/* Win95 Crosshair */}
+          <div className="cursor-win95-crosshair" style={{ 
+            padding: '20px', 
+            border: '3px solid #c0c0c0', 
+            borderRadius: '0px',
+            backgroundColor: '#c0c0c0',
+            borderStyle: 'outset'
+          }}>
+            <h3>🎯 Crosshair</h3>
+            <p>Precision targeting</p>
+          </div>
+
+          {/* Win95 Zoom In */}
+          <div className="cursor-win95-zoom-in" style={{ 
+            padding: '20px', 
+            border: '3px solid #c0c0c0', 
+            borderRadius: '0px',
+            backgroundColor: '#c0c0c0',
+            borderStyle: 'outset'
+          }}>
+            <h3>🔍 Zoom In</h3>
+            <p>Magnify content</p>
+          </div>
+
+          {/* Win95 Resize */}
+          <div className="cursor-win95-resize-nw" style={{ 
+            padding: '20px', 
+            border: '3px solid #c0c0c0', 
+            borderRadius: '0px',
+            backgroundColor: '#c0c0c0',
+            borderStyle: 'outset'
+          }}>
+            <h3>↖️ Resize</h3>
+            <p>Window resizing</p>
+          </div>
+
+        </div>
       </div>
 
       <div style={{ marginTop: '40px', padding: '20px', backgroundColor: '#f0f0f0', borderRadius: '8px' }}>
