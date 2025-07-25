@@ -44,6 +44,7 @@ export const WINDOW_IDS = {
   FHS_SCHOOL: "fhs_school",
   FLUNKS_MESSENGER: "flunks_messenger",
   FLUNK_CREATOR: "flunk_creator",
+  USER_PROFILE: "user_profile",
   
   // New location main windows
   JOCKS_HOUSE_MAIN: "jocks_house_main",

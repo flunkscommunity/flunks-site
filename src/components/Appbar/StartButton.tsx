@@ -3,6 +3,7 @@ import {
   useDynamicContext,
 } from "@dynamic-labs/sdk-react-core";
 import { useWindowsContext } from "contexts/WindowsContext";
+import { useTrialMode } from "contexts/TrialModeContext";
 import { WINDOW_IDS } from "fixed";
 import useIsMounted from "hooks/useIsMounted";
 import React from "react";
@@ -12,6 +13,7 @@ import AboutUs from "windows/AboutUs";
 import GumballMachine from "windows/GumballMachine";
 import ProjectJnr from "windows/ProjectJnr";
 import Settings from "windows/Settings";
+import UserProfile from "windows/UserProfile";
 import Welcome from "windows/Welcome";
 import YourStudents from "windows/YourStudents";
 
@@ -25,7 +27,34 @@ const CustomMenuListItem = styled(MenuListItem)`
 
 const AuthButton = () => {
   const { user, setShowDynamicUserProfile } = useDynamicContext();
+  const { isTrialMode, mockWallet, connectTrialWallet } = useTrialMode();
 
+  // If in trial mode, show trial wallet info
+  if (isTrialMode) {
+    if (mockWallet) {
+      return (
+        <CustomMenuListItem
+          onClick={() => setShowDynamicUserProfile(true)}
+          className="!text-xl"
+        >
+          <img src="/images/icons/user.png" width="32px" height="32px" />
+          Trial Wallet Connected
+        </CustomMenuListItem>
+      );
+    } else {
+      return (
+        <CustomMenuListItem
+          onClick={connectTrialWallet}
+          className="!text-xl"
+        >
+          <img src="/images/icons/logout.png" width="32px" height="32px" />
+          Connect Trial Wallet
+        </CustomMenuListItem>
+      );
+    }
+  }
+
+  // Regular auth flow
   if (user) {
     return (
       <CustomMenuListItem
@@ -163,6 +192,19 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
         >
           <img src="/images/icons/settings.png" width="32px" height="32px" />
           Settings
+        </CustomMenuListItem>
+        <CustomMenuListItem
+          onClick={() => {
+            openWindow({
+              key: WINDOW_IDS.USER_PROFILE,
+              window: <UserProfile />,
+            });
+            props.closeStartMenu();
+          }}
+          className="!text-xl"
+        >
+          <img src="/images/icons/user.png" width="32px" height="32px" />
+          My Profile
         </CustomMenuListItem>
         <Separator />
         <AuthButton />

@@ -18,6 +18,8 @@ import useThemeSettings from "store/useThemeSettings";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { PaginatedItemsProvider } from "contexts/UserPaginatedItems";
+import { UserProfileProvider } from "contexts/UserProfileContext";
+import { TrialModeProvider } from "contexts/TrialModeContext";
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -31,36 +33,40 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     <>
       {memodGlobalStyles}
       <ThemeWrapper>
-        <WindowsProvider>
-          <ClaimBackpackProvider>
-            <DynamicContextProvider
-              settings={{
-                environmentId: "4e1ca7d6-a9b6-4440-a87d-e44a4b110882",
-                walletConnectors: [FlowWalletConnectors],
-                overrides: {
-                  views: [
-                    {
-                      type: SdkViewType.Login,
-                      sections: [
-                        {
-                          type: SdkViewSectionType.Wallet,
-                          defaultItem: "flowwallet", // Exact key from dashboard
-                          items: ["flowwallet"], // Show only Flow Wallet
-                        },
-                      ],
-                    },
-                  ],
-                },
-              }}
-            >
-              <PaginatedItemsProvider>
-                <Component {...pageProps} />
-                <Analytics />
-                <DynamicUserProfile />
-              </PaginatedItemsProvider>
-            </DynamicContextProvider>
-          </ClaimBackpackProvider>
-        </WindowsProvider>
+        <TrialModeProvider>
+          <WindowsProvider>
+            <ClaimBackpackProvider>
+              <DynamicContextProvider
+                settings={{
+                  environmentId: "4e1ca7d6-a9b6-4440-a87d-e44a4b110882",
+                  walletConnectors: [FlowWalletConnectors],
+                  overrides: {
+                    views: [
+                      {
+                        type: SdkViewType.Login,
+                        sections: [
+                          {
+                            type: SdkViewSectionType.Wallet,
+                            defaultItem: "flowwallet", // Exact key from dashboard
+                            items: ["flowwallet"], // Show only Flow Wallet
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                }}
+              >
+                <UserProfileProvider>
+                  <PaginatedItemsProvider>
+                    <Component {...pageProps} />
+                    <Analytics />
+                    <DynamicUserProfile />
+                  </PaginatedItemsProvider>
+                </UserProfileProvider>
+              </DynamicContextProvider>
+            </ClaimBackpackProvider>
+          </WindowsProvider>
+        </TrialModeProvider>
       </ThemeWrapper>
     </>
   );
