@@ -28,6 +28,7 @@ interface UserProfileContextType {
   updateProfile: (data: Omit<UserProfileData, 'wallet_address'>) => Promise<boolean>;
   checkUsername: (username: string) => Promise<{ available: boolean; reason: string }>;
   refreshProfile: () => Promise<void>;
+  clearProfile: () => void;
 }
 
 const UserProfileContext = createContext<UserProfileContextType | null>(null);
@@ -265,6 +266,18 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
     await fetchProfile();
   };
 
+  // Clear profile data (useful for trial mode restart)
+  const clearProfile = () => {
+    setProfile(null);
+    setLoading(false);
+    setError(null);
+    
+    // Clear trial profile data from localStorage if in trial mode
+    if (isTrialMode && walletAddress) {
+      localStorage.removeItem(`trial-profile-${walletAddress}`);
+    }
+  };
+
   // Load profile when wallet changes
   useEffect(() => {
     fetchProfile();
@@ -279,6 +292,7 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
     updateProfile,
     checkUsername,
     refreshProfile,
+    clearProfile,
   };
 
   return (

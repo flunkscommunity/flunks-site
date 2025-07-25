@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Frame } from 'react95';
 import { useTrialMode } from 'contexts/TrialModeContext';
+import { useUserProfile } from 'contexts/UserProfileContext';
 import styled from 'styled-components';
 
 const TrialBanner = styled(Frame)`
@@ -62,7 +63,40 @@ const TrialActions = styled.div`
 `;
 
 const TrialModeBanner: React.FC = () => {
-  const { isTrialMode, setTrialMode, mockWallet, connectTrialWallet, disconnectTrialWallet } = useTrialMode();
+  const { isTrialMode, setTrialMode, mockWallet, connectTrialWallet, disconnectTrialWallet, restartTrialMode } = useTrialMode();
+  const { clearProfile } = useUserProfile();
+
+  const handleRestart = () => {
+    // Clear profile context first
+    clearProfile();
+    
+    // Clear all trial-related data from localStorage
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('trial-profile-')) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach(key => localStorage.removeItem(key));
+    
+    // Clear all trial-related data from sessionStorage
+    sessionStorage.removeItem('trial-wallet');
+    sessionStorage.removeItem('trial-user');
+    sessionStorage.removeItem('trial-mode-dismissed');
+    sessionStorage.removeItem('trial-welcome-shown');
+    sessionStorage.removeItem('trial-mode-enabled');
+    sessionStorage.removeItem('user-profile');
+    
+    // Clear any other profile-related data
+    localStorage.removeItem('user-profile');
+    
+    // Restart trial mode
+    restartTrialMode();
+    
+    // Reload the page to ensure completely clean state
+    window.location.reload();
+  };
 
   if (!isTrialMode) return null;
 
@@ -111,6 +145,19 @@ const TrialModeBanner: React.FC = () => {
               🔌 Disconnect
             </Button>
           )}
+          
+          <Button
+            onClick={handleRestart}
+            style={{
+              background: '#4CAF50',
+              color: '#fff',
+              border: '2px solid #45a049',
+              fontWeight: 'bold',
+              fontSize: '12px'
+            }}
+          >
+            🔄 Restart Trial
+          </Button>
           
           <Button
             onClick={() => setTrialMode(false)}

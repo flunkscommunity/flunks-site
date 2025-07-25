@@ -112,9 +112,28 @@ export const TrialModeProvider: React.FC<TrialModeProviderProps> = ({ children }
   };
 
   const restartTrialMode = () => {
-    // Clear dismissal flag and restart trial mode
+    // Clear ALL trial-related data
     sessionStorage.removeItem('trial-mode-dismissed');
     sessionStorage.removeItem('trial-welcome-shown');
+    sessionStorage.removeItem('trial-wallet');
+    sessionStorage.removeItem('trial-user');
+    sessionStorage.removeItem('trial-mode-enabled');
+    
+    // Clear all trial profile data from localStorage
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('trial-profile-')) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach(key => localStorage.removeItem(key));
+    
+    // Reset state
+    setMockWallet(null);
+    setMockUser(null);
+    
+    // Restart trial mode fresh
     setIsTrialMode(true);
     connectTrialWallet();
   };
