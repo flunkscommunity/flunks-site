@@ -155,12 +155,13 @@ const ConnectWalletPrompt = styled.div`
 
 const AstroLogo = styled.img`
   width: 64px;
-  height: 64px;
+  height: 80px;
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
   filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
   animation: float 3s ease-in-out infinite;
+  object-fit: contain;
   
   @keyframes float {
     0%, 100% { transform: translateY(0px); }
@@ -441,23 +442,23 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
     setIsSubmitting(true);
     
     try {
-      // Move to success page first
-      setCurrentStep('success');
-      
-      // Wait a moment for the transition, then submit
+      // Show confirmation screen for 2 seconds
       setTimeout(async () => {
+        // Process the profile submission
         const success = isEditMode 
           ? await updateProfile(formData)
           : await createProfile(formData);
 
         if (success) {
-          // Wait another moment to show success, then complete
-          setTimeout(() => {
-            onComplete();
-          }, 5000); // Show success page for 10 seconds total
+          // Move to success screen
+          setCurrentStep('success');
+          setIsSubmitting(false);
+        } else {
+          // Handle submission failure
+          setValidationMessage('Failed to save profile. Please try again.');
+          setIsSubmitting(false);
         }
-        setIsSubmitting(false);
-      }, 1000); // Brief delay before processing
+      }, 2000);
       
     } catch (error) {
       setValidationMessage('Failed to save profile. Please try again.');
@@ -488,7 +489,8 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
     </UsernameContainer>
   );
 
-  const renderSuccessScreen = () => (
+  const renderSuccessScreen = () => {
+    return (
     <UsernameContainer>
       <AstroLogo src="/images/icons/astro-mascot.png" alt="Flunks Astronaut" />
       <div style={{
@@ -576,50 +578,9 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
       </div>
     </UsernameContainer>
   );
+  };
 
   const config = stepConfig[currentStep];
-
-  const BackgroundSwitcher = () => (
-    <div style={{
-      position: 'absolute',
-      top: '10px',
-      right: '10px',
-      background: 'rgba(0,0,0,0.8)',
-      border: '2px solid #666',
-      borderRadius: '4px',
-      padding: '8px',
-      zIndex: 1000
-    }}>
-      <div style={{ 
-        fontSize: '10px', 
-        color: '#ccc', 
-        marginBottom: '4px',
-        textAlign: 'center'
-      }}>
-        🎨 Background
-      </div>
-      <select
-        value={backgroundPattern}
-        onChange={(e) => setBackgroundPattern(e.target.value as keyof typeof backgroundPatterns)}
-        style={{
-          background: '#333',
-          color: '#fff',
-          border: '1px solid #666',
-          fontSize: '10px',
-          padding: '2px 4px',
-          fontFamily: 'Courier New, monospace'
-        }}
-      >
-        <option value="gradient">🌅 Gradient</option>
-        <option value="diagonal">📐 Diagonal</option>
-        <option value="dots">⚪ Dots</option>
-        <option value="checkerboard">🏁 Checker</option>
-        <option value="hexagon">⬡ Hexagon</option>
-        <option value="crosshatch">❌ Cross</option>
-        <option value="circuit">🔌 Circuit</option>
-      </select>
-    </div>
-  );
 
   const WalletConnectionPrompt = () => (
     <ConnectWalletPrompt>
@@ -661,7 +622,6 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
 
   return (
     <RPGContainer $backgroundPattern={backgroundPattern}>
-      <BackgroundSwitcher />
       <CharacterSprite />
       
       <DialogueBox variant="window">

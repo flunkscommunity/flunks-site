@@ -34,6 +34,9 @@ switch (input.toLowerCase()) {
   case 'flunks':
     response = 'Flunks is a 90s-inspired digital universe full of secrets.';
     break;
+  case 'wtf':
+    response = '🎉 SURPRISE! WE JUST STOLE ALL YOUR NFTS!!! jk, you\'re entered into a FLOW giveaway! Keep exploring for more secrets...';
+    break;
   case 'clear':
     setHistory([]);
     setInput('');

@@ -2,8 +2,6 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import CustomMonitor from "components/CustomMonitor";
 import DesktopAppIcon from "components/DesktopAppIcon";
-import TrialModeBanner from "components/TrialMode/TrialModeBanner";
-import TrialWelcomePopup from "components/TrialMode/TrialWelcomePopup";
 import { useTrialMode } from "contexts/TrialModeContext";
 import React, { useEffect, useMemo, useState } from "react";
 import YourStudents from "windows/YourStudents";
@@ -27,6 +25,7 @@ import FHSSchool from "windows/FHSSchool";
 import MyPlace from "windows/MyPlace";
 import FlunksMessenger from "windows/FlunksMessenger";
 import FlunkCreator from "windows/FlunkCreator";
+import UserProfile from "windows/UserProfile";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -110,6 +109,12 @@ const windowsMemod = useMemo(() => (
           title="About Us"
           icon="/images/icons/about-us.png"
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.ABOUT_US, window: <AboutUs /> })}
+        />
+
+        <DesktopAppIcon
+          title="My Profile"
+          icon="/images/icons/user.png"
+          onDoubleClick={() => openWindow({ key: WINDOW_IDS.USER_PROFILE, window: <UserProfile /> })}
         />
 
         <DesktopAppIcon
@@ -363,8 +368,6 @@ const Home: NextPage = () => {
         </div>
       )}
       
-      <TrialModeBanner />
-      <TrialWelcomePopup />
       <MonitorScreenWrapper>
         <Desktop />
       </MonitorScreenWrapper>

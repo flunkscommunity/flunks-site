@@ -28,14 +28,14 @@ const Welcome: React.FC = () => {
   const icon = "/images/icons/did-you-know.png";
   const tips = [
     <p>
-      [1/4] Semester Zero is starting soon! Check the school calendar for
+      [1/6] Semester Zero is starting soon! Check the school calendar for
       important dates and events. 
     </p>,
     <p>
-      [2/4] Play around in the terminal. That's where you can enter codes you may... find. Think of it as a way to unlock things and win prizes
+      [2/6] Play around in the terminal. That's where you can enter codes you may... find. Think of it as a way to unlock things and win prizes
     </p>,
     <p>
-      [3/4] You'll need to create an account and login with a non-custodial
+      [3/6] You'll need to create an account and login with a non-custodial
       wallet like{" "}
       <Anchor href="https://wallet.flow.com/download" target="_blank">
         Flow
@@ -44,13 +44,19 @@ const Welcome: React.FC = () => {
       to have full access to Flunks2.0
     </p>,
     <p>
-      [4/4] You can get Flunks items on marketplaces like{" "}
+      [4/6] You can get Flunks items on marketplaces like{" "}
       <Anchor
         target="_blank"
         href="https://www.flowty.io/collection/0x807c3d470888cc48/Flunks"
       >
         Flowty
       </Anchor> AND ....... 
+    </p>,
+    <p>
+      [5/6] Don't forget to create your profile! Click on the "My Profile" desktop icon to set up your username, link your Discord, and connect with the community.
+    </p>,
+    <p>
+      [6/6] Thanks for making it this far... enter the code <strong>WTF</strong> in the terminal for a surprise!
     </p>
   ];
 
