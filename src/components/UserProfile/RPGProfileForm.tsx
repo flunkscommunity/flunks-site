@@ -4,6 +4,7 @@ import { useUserProfile } from 'contexts/UserProfileContext';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useTrialMode } from 'contexts/TrialModeContext';
 import styled from 'styled-components';
+import { trackProfileActivation, generateSessionId, PROFILE_STEPS } from 'utils/activityTracking';
 
 // Background pattern definitions
 const backgroundPatterns = {
@@ -440,20 +441,60 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
+    const sessionId = generateSessionId();
+    const walletAddress = isTrialMode 
+      ? typeof mockWallet === 'string' ? mockWallet : mockWallet?.address
+      : primaryWallet?.address;
     
     try {
       // Show confirmation screen for 2 seconds
       setTimeout(async () => {
+        // Track profile activation start
+        await trackProfileActivation(
+          walletAddress || null,
+          isEditMode ? PROFILE_STEPS.PROFILE_UPDATE_STARTED : PROFILE_STEPS.PROFILE_CREATION_STARTED,
+          { 
+            form_data: formData,
+            edit_mode: isEditMode,
+            step: currentStep 
+          },
+          sessionId
+        );
+
         // Process the profile submission
         const success = isEditMode 
           ? await updateProfile(formData)
           : await createProfile(formData);
 
         if (success) {
+          // Track successful profile completion
+          await trackProfileActivation(
+            walletAddress || null,
+            isEditMode ? PROFILE_STEPS.PROFILE_UPDATED : PROFILE_STEPS.PROFILE_CREATED,
+            { 
+              username: formData.username,
+              discord_id: formData.discord_id,
+              has_discord: !!formData.discord_id,
+              completion_time: Date.now() - parseInt(sessionId.split('_')[1])
+            },
+            sessionId
+          );
+
           // Move to success screen
           setCurrentStep('success');
           setIsSubmitting(false);
         } else {
+          // Track profile submission failure
+          await trackProfileActivation(
+            walletAddress || null,
+            isEditMode ? PROFILE_STEPS.PROFILE_UPDATE_FAILED : PROFILE_STEPS.PROFILE_CREATION_FAILED,
+            { 
+              form_data: formData,
+              error: 'submission_failed'
+            },
+            sessionId
+          );
+
           // Handle submission failure
           setValidationMessage('Failed to save profile. Please try again.');
           setIsSubmitting(false);
@@ -461,6 +502,17 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
       }, 2000);
       
     } catch (error) {
+      // Track profile submission error
+      await trackProfileActivation(
+        walletAddress || null,
+        isEditMode ? PROFILE_STEPS.PROFILE_UPDATE_ERROR : PROFILE_STEPS.PROFILE_CREATION_ERROR,
+        { 
+          error: error instanceof Error ? error.message : 'unknown_error',
+          form_data: formData
+        },
+        sessionId
+      );
+
       setValidationMessage('Failed to save profile. Please try again.');
       setIsSubmitting(false);
     }

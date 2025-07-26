@@ -6,55 +6,87 @@ import {
   TextField,
   Button
 } from 'react95';
+import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
+import { trackTerminalActivity, generateSessionId, COMMAND_TYPES } from 'utils/activityTracking';
 
 const errorSound = typeof Audio !== "undefined" ? new Audio('/sounds/incorrect.mp3') : null;
 const successSound = typeof Audio !== "undefined" ? new Audio('/sounds/correct.mp3') : null;
+
 const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
+  const { user } = useDynamicContext();
   const [history, setHistory] = useState<string[]>([]);
   const [input, setInput] = useState('');
   const terminalEndRef = useRef<HTMLDivElement>(null);
+  const [sessionId] = useState(() => generateSessionId());
 
   useEffect(() => {
     terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [history]);
 
-  const handleCommand = () => {
+  const handleCommand = async () => {
     const newHistory = [...history, `> ${input}`];
     let response = '';
+    let validCommand = true;
+    let commandType = 'unknown';
 
-let validCommand = true;
+    const command = input.toLowerCase();
 
-switch (input.toLowerCase()) {
-  case 'help':
-    response = 'Available commands: help, whoami, flunks, clear';
-    break;
-  case 'whoami':
-    response = 'You are a misfit of Flunks High.';
-    break;
-  case 'flunks':
-    response = 'Flunks is a 90s-inspired digital universe full of secrets.';
-    break;
-  case 'wtf':
-    response = '🎉 SURPRISE! WE JUST STOLE ALL YOUR NFTS!!! jk, you\'re entered into a FLOW giveaway! Keep exploring for more secrets...';
-    break;
-  case 'clear':
-    setHistory([]);
-    setInput('');
-    return;
-  default:
-    response = 'Command not recognized. Type "help" to see available commands.';
-    validCommand = false;
-    if (errorSound) {
-      errorSound.currentTime = 0;
-      errorSound.play();
+    switch (command) {
+      case 'help':
+        response = 'Available commands: help, whoami, flunks, clear';
+        commandType = COMMAND_TYPES.SYSTEM;
+        break;
+      case 'whoami':
+        response = 'You are a misfit of Flunks High.';
+        commandType = COMMAND_TYPES.SYSTEM;
+        break;
+      case 'flunks':
+        response = 'Flunks is a 90s-inspired digital universe full of secrets.';
+        commandType = COMMAND_TYPES.SYSTEM;
+        break;
+      case 'wtf':
+        response = '🎉 SURPRISE! You found the secret code! Welcome to the inner circle of Flunks High. Keep exploring for more secrets...';
+        commandType = COMMAND_TYPES.CODE;
+        break;
+      case 'clear':
+        setHistory([]);
+        setInput('');
+        commandType = COMMAND_TYPES.SYSTEM;
+        // Track clear command
+        await trackTerminalActivity(
+          user?.verifiedCredentials?.[0]?.address || null,
+          input,
+          commandType,
+          'Terminal cleared',
+          true,
+          sessionId
+        );
+        return;
+      default:
+        response = 'Command not recognized. Type "help" to see available commands.';
+        validCommand = false;
+        commandType = COMMAND_TYPES.UNKNOWN;
+        if (errorSound) {
+          errorSound.currentTime = 0;
+          errorSound.play();
+        }
+        break;
     }
-    break;
-}
 
-if (validCommand && successSound) {
-  successSound.currentTime = 0;
-  successSound.play();
-}
+    // Track terminal activity
+    await trackTerminalActivity(
+      user?.verifiedCredentials?.[0]?.address || null,
+      input,
+      commandType,
+      response,
+      validCommand,
+      sessionId
+    );
+
+    if (validCommand && successSound) {
+      successSound.currentTime = 0;
+      successSound.play();
+    }
 
     setHistory([...newHistory, response]);
     setInput('');
