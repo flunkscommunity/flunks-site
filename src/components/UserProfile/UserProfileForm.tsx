@@ -39,7 +39,10 @@ const UserProfileForm: React.FC<UserProfileFormProps> = ({
     return (
       <RPGProfileForm
         onComplete={() => {
-          onClose?.();
+          // Add a small delay to let users see the success screen
+          setTimeout(() => {
+            onClose?.();
+          }, 3000); // 3 second delay to enjoy the rainbow success screen
         }}
         onCancel={onClose}
       />
