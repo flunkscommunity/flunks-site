@@ -126,7 +126,7 @@ export const WINDOW_IDS = {
 
 export const WINDOW_APP_INFO_TO_WINDOW_ID = {
   [WINDOW_IDS.YOUR_STUDENTS]: {
-    appName: "Onlyflunks",
+    appName: "OnlyFlunks",
     appIcon: "/images/icons/onlyflunks.png",
     key: WINDOW_IDS.YOUR_STUDENTS,
   },
@@ -151,7 +151,7 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     key: WINDOW_IDS.ABOUT_US,
   },
   [WINDOW_IDS.FLUNKS_HUB]: {
-    appName: "onlyflunks",
+    appName: "OnlyFlunks",
     appIcon: "/images/icons/onlyflunks.png",
     key: WINDOW_IDS.FLUNKS_HUB,
   },

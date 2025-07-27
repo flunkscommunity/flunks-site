@@ -15,11 +15,16 @@ import {
 import { SdkViewSectionType, SdkViewType } from "@dynamic-labs/sdk-api";
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
 import useThemeSettings from "store/useThemeSettings";
+
+// Create custom Flow connectors excluding Blocto
+const customFlowConnectors = (props: any) => {
+  const allConnectors = FlowWalletConnectors(props);
+  return allConnectors.filter((connector: any) => connector.name !== 'Blocto');
+};
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { PaginatedItemsProvider } from "contexts/UserPaginatedItems";
 import { UserProfileProvider } from "contexts/UserProfileContext";
-import { TrialModeProvider } from "contexts/TrialModeContext";
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -33,40 +38,37 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     <>
       {memodGlobalStyles}
       <ThemeWrapper>
-        <TrialModeProvider>
-          <WindowsProvider>
-            <ClaimBackpackProvider>
-              <DynamicContextProvider
-                settings={{
-                  environmentId: "4e1ca7d6-a9b6-4440-a87d-e44a4b110882",
-                  walletConnectors: [FlowWalletConnectors],
-                  overrides: {
-                    views: [
-                      {
-                        type: SdkViewType.Login,
-                        sections: [
-                          {
-                            type: SdkViewSectionType.Wallet,
-                            defaultItem: "flowwallet", // Exact key from dashboard
-                            items: ["flowwallet"], // Show only Flow Wallet
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                }}
-              >
-                <UserProfileProvider>
-                  <PaginatedItemsProvider>
-                    <Component {...pageProps} />
-                    <Analytics />
-                    <DynamicUserProfile />
-                  </PaginatedItemsProvider>
-                </UserProfileProvider>
-              </DynamicContextProvider>
-            </ClaimBackpackProvider>
-          </WindowsProvider>
-        </TrialModeProvider>
+        <WindowsProvider>
+          <ClaimBackpackProvider>
+            <DynamicContextProvider
+              settings={{
+                environmentId: "4e1ca7d6-a9b6-4440-a87d-e44a4b110882",
+                walletConnectors: [customFlowConnectors],
+                overrides: {
+                  views: [
+                    {
+                      type: SdkViewType.Login,
+                      sections: [
+                        {
+                          type: SdkViewSectionType.Wallet,
+                          defaultItem: "flowwallet", // Lilico wallet
+                        },
+                      ],
+                    },
+                  ],
+                },
+              }}
+            >
+              <UserProfileProvider>
+                <PaginatedItemsProvider>
+                  <Component {...pageProps} />
+                  <Analytics />
+                  <DynamicUserProfile />
+                </PaginatedItemsProvider>
+              </UserProfileProvider>
+            </DynamicContextProvider>
+          </ClaimBackpackProvider>
+        </WindowsProvider>
       </ThemeWrapper>
     </>
   );

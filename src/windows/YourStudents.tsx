@@ -43,7 +43,7 @@ const YourStudents: React.FC = () => {
   return (
     <DraggableResizeableWindow
       offSetHeight={44}
-      headerTitle={`Onlyflunks - ${
+      headerTitle={`OnlyFlunks - ${
         user?.username || (user ? "Logged In" : "Not Logged In")
       }`}
       authGuard={true}

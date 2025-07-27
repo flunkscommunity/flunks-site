@@ -1,7 +1,7 @@
 // Activity Tracking Utilities for Supabase Integration
 // This file contains centralized tracking functions for user activities
 
-import { supabase } from '../lib/supabase';
+import { supabase, hasValidSupabaseConfig } from '../lib/supabase';
 
 export interface ProfileActivationData {
   wallet_address: string | null;
@@ -46,11 +46,15 @@ export const trackProfileActivation = async (
     // Log to console for development
     console.log('Profile Activation Tracked:', data);
     
-    // Save to Supabase database
-    const { error } = await supabase.from('profile_activations').insert(data);
-    if (error) {
-      console.error('Supabase error:', error);
-      throw error;
+    // Save to Supabase database only if configured
+    if (hasValidSupabaseConfig && supabase) {
+      const { error } = await supabase.from('profile_activations').insert(data);
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+    } else {
+      console.log('Supabase not configured - tracking locally only');
     }
     
   } catch (error) {
@@ -89,11 +93,15 @@ export const trackTerminalActivity = async (
     // Log to console for development
     console.log('Terminal Activity Tracked:', data);
     
-    // Save to Supabase database
-    const { error } = await supabase.from('terminal_activities').insert(data);
-    if (error) {
-      console.error('Supabase error:', error);
-      throw error;
+    // Save to Supabase database only if configured
+    if (hasValidSupabaseConfig && supabase) {
+      const { error } = await supabase.from('terminal_activities').insert(data);
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+    } else {
+      console.log('Supabase not configured - tracking locally only');
     }
     
   } catch (error) {

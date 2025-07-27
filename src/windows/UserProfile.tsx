@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 import { useUserProfile } from 'contexts/UserProfileContext';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
-import { useTrialMode } from 'contexts/TrialModeContext';
 import { useWindowsContext } from 'contexts/WindowsContext';
 import UserProfileForm from 'components/UserProfile/UserProfileForm';
 import UserProfileDisplay from 'components/UserProfile/UserProfileDisplay';
@@ -11,7 +10,6 @@ import { WINDOW_IDS } from 'fixed';
 
 const UserProfileWindow: React.FC = () => {
   const { primaryWallet } = useDynamicContext();
-  const { isTrialMode, mockWallet } = useTrialMode();
   const { closeWindow } = useWindowsContext();
   const { profile, loading, hasProfile } = useUserProfile();
   const [isEditing, setIsEditing] = useState(false);
@@ -21,10 +19,7 @@ const UserProfileWindow: React.FC = () => {
     closeWindow(WINDOW_IDS.USER_PROFILE);
   };
 
-  // In trial mode, use mock wallet, otherwise use primary wallet
-  const hasWallet = isTrialMode ? mockWallet : primaryWallet;
-
-  if (!hasWallet) {
+  if (!primaryWallet) {
     return (
       <DraggableResizeableWindow
         windowsId={WINDOW_IDS.USER_PROFILE}
@@ -39,10 +34,7 @@ const UserProfileWindow: React.FC = () => {
             <div className="space-y-4">
               <div className="text-lg">🔒 Wallet Required</div>
               <div className="text-sm">
-                {isTrialMode 
-                  ? "Please connect trial wallet to access profile features"
-                  : "Please connect your wallet to access profile features"
-                }
+                Please connect your wallet to access profile features
               </div>
             </div>
           </Frame>

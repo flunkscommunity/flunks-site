@@ -2,7 +2,6 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import CustomMonitor from "components/CustomMonitor";
 import DesktopAppIcon from "components/DesktopAppIcon";
-import { useTrialMode } from "contexts/TrialModeContext";
 import React, { useEffect, useMemo, useState } from "react";
 import YourStudents from "windows/YourStudents";
 import ProjectJnr from "windows/ProjectJnr";
@@ -311,28 +310,11 @@ const MonitorScreenWrapper: React.FC<React.PropsWithChildren> = ({ children }) =
 );
 
 const Home: NextPage = () => {
-  const { isTrialMode, restartTrialMode } = useTrialMode();
-  const [showRestartButton, setShowRestartButton] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
-
-  // Check if trial mode was dismissed and show restart option
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const isDismissed = sessionStorage.getItem('trial-mode-dismissed');
-      const isLocalhost = window.location.hostname === 'localhost' || 
-                          window.location.hostname === '127.0.0.1';
-      
-      if (isDismissed && isLocalhost && !isTrialMode) {
-        setShowRestartButton(true);
-      } else {
-        setShowRestartButton(false);
-      }
-    }
-  }, [isTrialMode]);
 
   if (!isMounted) return null;
 
@@ -343,30 +325,6 @@ const Home: NextPage = () => {
         <meta name="description" content="Welcome to the Flunks Highschool computer." />
         <link rel="icon" href="/images/logos/os-logo.png" />
       </Head>
-      
-      {/* Trial Mode Restart Button */}
-      {showRestartButton && (
-        <div style={{
-          position: 'fixed',
-          top: '10px',
-          right: '10px',
-          zIndex: 9999,
-          backgroundColor: '#c0c0c0',
-          border: '2px outset #c0c0c0',
-          padding: '8px 12px',
-          fontSize: '12px',
-          fontFamily: 'ms_sans_serif',
-          cursor: 'pointer',
-          boxShadow: '2px 2px 4px rgba(0,0,0,0.3)'
-        }}
-        onClick={() => {
-          restartTrialMode();
-          setShowRestartButton(false);
-        }}
-        >
-          🎮 Restart Trial Mode
-        </div>
-      )}
       
       <MonitorScreenWrapper>
         <Desktop />

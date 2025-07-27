@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Button, Frame } from 'react95';
 import { useUserProfile } from 'contexts/UserProfileContext';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
-import { useTrialMode } from 'contexts/TrialModeContext';
 import styled from 'styled-components';
 import { trackProfileActivation, generateSessionId, PROFILE_STEPS } from 'utils/activityTracking';
 
@@ -245,7 +244,6 @@ type FormStep = 'username' | 'discord' | 'email' | 'confirm' | 'success';
 
 const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel }) => {
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
-  const { isTrialMode, mockWallet } = useTrialMode();
   const { createProfile, updateProfile, checkUsername, profile } = useUserProfile();
   
   const [currentStep, setCurrentStep] = useState<FormStep>('username');
@@ -260,8 +258,8 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
   const [validationMessage, setValidationMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Get the active wallet (trial or real)
-  const activeWallet = isTrialMode ? mockWallet : primaryWallet;
+  // Get the active wallet
+  const activeWallet = primaryWallet;
   const hasWallet = !!activeWallet;
 
   const isEditMode = !!profile;
@@ -442,9 +440,7 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
   const handleSubmit = async () => {
     setIsSubmitting(true);
     const sessionId = generateSessionId();
-    const walletAddress = isTrialMode 
-      ? typeof mockWallet === 'string' ? mockWallet : mockWallet?.address
-      : primaryWallet?.address;
+    const walletAddress = primaryWallet?.address;
     
     try {
       // Show confirmation screen for 2 seconds

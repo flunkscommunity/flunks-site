@@ -128,7 +128,10 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     return initialHeight;
   }, [height]);
 
-  if (authGuard && !user) {
+  // Check if user is authenticated 
+  const isAuthenticated = !!user;
+
+  if (authGuard && !isAuthenticated) {
     return (
       <ErrorWindow
         title="Error Starting Program"

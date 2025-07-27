@@ -54,7 +54,11 @@ export const TrialModeProvider: React.FC<TrialModeProviderProps> = ({ children }
       window.parent !== window
     );
 
-    if (isSimpleBrowser && !sessionStorage.getItem('trial-mode-dismissed')) {
+    // Check for trial mode URL parameter
+    const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    const trialParam = urlParams?.get('trial');
+    
+    if (trialParam === 'true' || (isSimpleBrowser && !sessionStorage.getItem('trial-mode-dismissed'))) {
       setIsTrialMode(true);
     }
 
@@ -65,6 +69,12 @@ export const TrialModeProvider: React.FC<TrialModeProviderProps> = ({ children }
         sessionStorage.removeItem('trial-welcome-shown');
         setIsTrialMode(true);
         console.log('🎮 Trial mode restarted!');
+      };
+      
+      // Add function to force enable trial mode
+      (window as any).enableTrialMode = () => {
+        setIsTrialMode(true);
+        console.log('🎮 Trial mode enabled!');
       };
     }
   }, []);

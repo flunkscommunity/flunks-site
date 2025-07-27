@@ -39,7 +39,10 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const { primaryWallet } = useDynamicContext();
+  
+  // Use real wallet only - no trial mode
   const walletAddress = primaryWallet?.address || null;
+  
   const [tokenDataPages, setTokenDataPages] = useState<{
     flunks: string[][];
     backpack: string[][];
@@ -57,7 +60,7 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
   console.log(flunksMetadata);
 
   const { data: tokenData } = useSWR(
-    primaryWallet?.address ? ["allData", walletAddress, resetCacheKey] : null,
+    walletAddress ? ["allData", walletAddress, resetCacheKey] : null,
     (key, address) => getOwnerTokenIdsWhale(address),
     {
       revalidateOnFocus: false,
@@ -96,7 +99,17 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
     }
   );
 
+  // Clear data when no wallet is connected
+  useEffect(() => {
+    if (!walletAddress) {
+      setFlunksMetadata([]);
+      setBackpacksMetadata([]);
+      setTokenDataPages({ flunks: [], backpack: [] });
+    }
+  }, [walletAddress]);
+
   const displayedItems = useMemo(() => {
+    // Use real blockchain data
     if (filter === "flunks") {
       return flunksMetadata[currentPage] || [];
     } else {

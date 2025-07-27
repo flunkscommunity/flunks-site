@@ -45,7 +45,7 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
         commandType = COMMAND_TYPES.SYSTEM;
         break;
       case 'wtf':
-        response = '🎉 SURPRISE! You found the secret code! Welcome to the inner circle of Flunks High. Keep exploring for more secrets...';
+        response = "surprise, we just stole all your NFT's! jk, you're entered into a drawing for FLOW.";
         commandType = COMMAND_TYPES.CODE;
         break;
       case 'clear':

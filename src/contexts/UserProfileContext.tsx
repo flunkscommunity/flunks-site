@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
-import { useTrialMode } from './TrialModeContext';
 
 export interface UserProfile {
   id: number;
@@ -47,13 +46,12 @@ interface UserProfileProviderProps {
 
 export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ children }) => {
   const { primaryWallet } = useDynamicContext();
-  const { isTrialMode, mockWallet } = useTrialMode();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Use trial wallet if in trial mode, otherwise use real wallet
-  const walletAddress = isTrialMode ? mockWallet?.address : primaryWallet?.address;
+  // Use real wallet only
+  const walletAddress = primaryWallet?.address;
 
   // Fetch user profile when wallet connects
   const fetchProfile = async () => {
@@ -66,18 +64,25 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
     setError(null);
 
     try {
-      if (isTrialMode) {
-        // Trial mode: use localStorage
-        const trialProfile = localStorage.getItem(`trial-profile-${walletAddress}`);
-        if (trialProfile) {
-          setProfile(JSON.parse(trialProfile));
+      // Check if Supabase is configured
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseKey || supabaseUrl === 'placeholder_url' || supabaseKey === 'placeholder_key') {
+        // If Supabase isn't configured, check localStorage
+        console.warn('Supabase not configured, checking localStorage for profile');
+        
+        const storedProfile = localStorage.getItem(`flunks_profile_${walletAddress}`);
+        if (storedProfile) {
+          const profileData = JSON.parse(storedProfile);
+          setProfile(profileData);
         } else {
           setProfile(null);
         }
         return;
       }
 
-      // Real mode: use API
+      // Use API when Supabase is properly configured
       const response = await fetch(`/api/get-user-profile?wallet=${walletAddress}`);
       
       if (response.status === 404) {
@@ -95,10 +100,20 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
 
     } catch (err) {
       console.error('Error fetching profile:', err);
-      if (!isTrialMode) {
+      
+      // Fallback to localStorage if API fails
+      try {
+        const storedProfile = localStorage.getItem(`flunks_profile_${walletAddress}`);
+        if (storedProfile) {
+          const profileData = JSON.parse(storedProfile);
+          setProfile(profileData);
+        } else {
+          setProfile(null);
+        }
+      } catch (localError) {
         setError(err instanceof Error ? err.message : 'Failed to fetch profile');
+        setProfile(null);
       }
-      setProfile(null);
     } finally {
       setLoading(false);
     }
@@ -115,24 +130,29 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
     setError(null);
 
     try {
-      if (isTrialMode) {
-        // Trial mode: use localStorage
-        const trialProfile: UserProfile = {
-          id: Date.now(),
+      // Check if Supabase is configured
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseKey || supabaseUrl === 'placeholder_url' || supabaseKey === 'placeholder_key') {
+        // If Supabase isn't configured, store profile locally
+        console.warn('Supabase not configured, storing profile locally');
+        
+        const profileData: UserProfile = {
+          id: Date.now(), // Use timestamp as temporary ID
           wallet_address: walletAddress,
-          username: data.username,
-          discord_id: data.discord_id,
-          email: data.email,
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
+          ...data,
         };
         
-        localStorage.setItem(`trial-profile-${walletAddress}`, JSON.stringify(trialProfile));
-        setProfile(trialProfile);
+        // Store in localStorage as fallback
+        localStorage.setItem(`flunks_profile_${walletAddress}`, JSON.stringify(profileData));
+        setProfile(profileData);
         return true;
       }
 
-      // Real mode: use API
+      // Use API when Supabase is properly configured
       const response = await fetch('/api/user-profile', {
         method: 'POST',
         headers: {
@@ -155,8 +175,23 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
 
     } catch (err) {
       console.error('Error creating profile:', err);
-      setError(err instanceof Error ? err.message : 'Failed to create profile');
-      return false;
+      
+      // Fallback to localStorage if API fails
+      try {
+        const profileData: UserProfile = {
+          id: Date.now(), // Use timestamp as temporary ID
+          wallet_address: walletAddress,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          ...data,
+        };
+        localStorage.setItem(`flunks_profile_${walletAddress}`, JSON.stringify(profileData));
+        setProfile(profileData);
+        return true;
+      } catch (localError) {
+        setError(err instanceof Error ? err.message : 'Failed to create profile');
+        return false;
+      }
     } finally {
       setLoading(false);
     }
@@ -173,22 +208,29 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
     setError(null);
 
     try {
-      if (isTrialMode) {
-        // Trial mode: update localStorage
+      // Check if Supabase is configured
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseKey || supabaseUrl === 'placeholder_url' || supabaseKey === 'placeholder_key') {
+        // If Supabase isn't configured, update profile locally
+        console.warn('Supabase not configured, updating profile locally');
+        
         const updatedProfile: UserProfile = {
-          ...profile!,
-          username: data.username,
-          discord_id: data.discord_id,
-          email: data.email,
-          updated_at: new Date().toISOString()
+          id: profile?.id || Date.now(),
+          wallet_address: walletAddress,
+          created_at: profile?.created_at || new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          ...data,
         };
         
-        localStorage.setItem(`trial-profile-${walletAddress}`, JSON.stringify(updatedProfile));
+        // Store in localStorage as fallback
+        localStorage.setItem(`flunks_profile_${walletAddress}`, JSON.stringify(updatedProfile));
         setProfile(updatedProfile);
         return true;
       }
 
-      // Real mode: use API
+      // Use API when Supabase is properly configured
       const response = await fetch('/api/user-profile', {
         method: 'POST',
         headers: {
@@ -211,8 +253,23 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
 
     } catch (err) {
       console.error('Error updating profile:', err);
-      setError(err instanceof Error ? err.message : 'Failed to update profile');
-      return false;
+      
+      // Fallback to localStorage if API fails
+      try {
+        const updatedProfile: UserProfile = {
+          id: profile?.id || Date.now(),
+          wallet_address: walletAddress,
+          created_at: profile?.created_at || new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          ...data,
+        };
+        localStorage.setItem(`flunks_profile_${walletAddress}`, JSON.stringify(updatedProfile));
+        setProfile(updatedProfile);
+        return true;
+      } catch (localError) {
+        setError(err instanceof Error ? err.message : 'Failed to update profile');
+        return false;
+      }
     } finally {
       setLoading(false);
     }
@@ -221,30 +278,37 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
   // Check username availability
   const checkUsername = async (username: string): Promise<{ available: boolean; reason: string }> => {
     try {
-      if (isTrialMode) {
-        // Trial mode: simple validation
-        if (username.length < 3) {
-          return { available: false, reason: 'Username must be at least 3 characters' };
+      // Check if Supabase is configured
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseKey || supabaseUrl === 'placeholder_url' || supabaseKey === 'placeholder_key') {
+        // If Supabase isn't configured, just do basic validation and allow the username
+        console.warn('Supabase not configured, skipping database username check');
+        
+        // Basic validation only
+        if (username.length < 3 || username.length > 32) {
+          return {
+            available: false,
+            reason: 'Username must be between 3 and 32 characters'
+          };
         }
+
         if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
-          return { available: false, reason: 'Only letters, numbers, hyphens, and underscores allowed' };
+          return {
+            available: false,
+            reason: 'Username can only contain letters, numbers, hyphens, and underscores'
+          };
         }
-        
-        // Check if it's the current user's username
-        if (profile?.username === username) {
-          return { available: true, reason: 'Current username' };
-        }
-        
-        // Simulate checking against "taken" usernames for demo
-        const takenUsernames = ['admin', 'flunks', 'test', 'demo', 'user', 'player1'];
-        if (takenUsernames.includes(username.toLowerCase())) {
-          return { available: false, reason: 'Username already taken (demo)' };
-        }
-        
-        return { available: true, reason: 'Username is available' };
+
+        // Allow any valid username when database isn't available
+        return {
+          available: true,
+          reason: 'Username is available'
+        };
       }
 
-      // Real mode: use API
+      // Use API when Supabase is properly configured
       const response = await fetch(`/api/check-username?username=${encodeURIComponent(username)}`);
       
       if (!response.ok) {
@@ -254,6 +318,15 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
       return await response.json();
     } catch (err) {
       console.error('Error checking username:', err);
+      
+      // Fallback to basic validation if API fails
+      if (username.length >= 3 && username.length <= 32 && /^[a-zA-Z0-9_-]+$/.test(username)) {
+        return {
+          available: true,
+          reason: 'Username validation passed (database unavailable)'
+        };
+      }
+      
       return {
         available: false,
         reason: 'Failed to check username availability'
@@ -271,11 +344,6 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
     setProfile(null);
     setLoading(false);
     setError(null);
-    
-    // Clear trial profile data from localStorage if in trial mode
-    if (isTrialMode && walletAddress) {
-      localStorage.removeItem(`trial-profile-${walletAddress}`);
-    }
   };
 
   // Load profile when wallet changes

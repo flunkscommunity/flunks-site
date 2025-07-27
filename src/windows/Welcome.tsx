@@ -4,7 +4,8 @@ import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
 import { Button, Frame, Checkbox, Separator, Anchor } from "react95";
-import GumballMachine from "./GumballMachine";
+// TODO: GUM functionality temporarily disabled - keep import for future re-implementation
+// import GumballMachine from "./GumballMachine";
 import WelcomePopup from "./WelcomePopup";
 import useGettingStarted from "store/useGettingStarted";
 

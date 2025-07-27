@@ -25,10 +25,11 @@ import FlunkItem from "./FlunkItem";
 import BackpackItem from "./BackpackItem";
 import { InfoItem } from "components/Settings/UserInformation";
 import Marquee from "react-fast-marquee";
-import { getGumBalance } from "web3/script-get-gum-balance";
+// TODO: GUM functionality temporarily disabled - keep imports for future re-implementation
+// import { getGumBalance } from "web3/script-get-gum-balance";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
-import GumballMachine from "windows/GumballMachine";
+// import GumballMachine from "windows/GumballMachine";
 import {
   CustomScrollArea,
   CustomStyledScrollView,
@@ -43,19 +44,281 @@ import { ObjectDetails } from "contexts/StakingContext";
 
 const CustomImage = styled.img`
   background-color: ${({ theme }) => theme.borderLight};
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+`;
+
+// Retro 8-bit grid styling
+const RetroGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  padding: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  background: 
+    linear-gradient(45deg, #001122 25%, transparent 25%), 
+    linear-gradient(-45deg, #001122 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, #001122 75%), 
+    linear-gradient(-45deg, transparent 75%, #001122 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+`;
+
+const RetroItemFrame = styled(Frame)`
+  background: linear-gradient(135deg, #000080 0%, #000040 50%, #000020 100%) !important;
+  border: 2px solid #00ffff !important;
+  box-shadow: 
+    inset 0 0 0 1px #0088aa,
+    0 0 10px #00ffff33,
+    0 0 20px #00ffff11 !important;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 255, 255, 0.05) 2px,
+        rgba(0, 255, 255, 0.05) 4px
+      );
+    pointer-events: none;
+    z-index: 1;
+  }
+`;
+
+const RetroImageFrame = styled(Frame)`
+  background: #000000 !important;
+  border: 2px solid #ff00ff !important;
+  box-shadow: 
+    inset 0 0 0 1px #880088,
+    0 0 5px #ff00ff33 !important;
+`;
+
+const RetroButton = styled(Button)`
+  background: #800080 !important;
+  border: 2px solid #ff00ff !important;
+  color: #ffffff !important;
+  font-family: 'Cooper Black', 'Arial Black', 'Helvetica', 'Courier New', monospace !important;
+  font-weight: bold !important;
+  text-shadow: 0 0 3px #ff00ff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 4px 8px !important;
+  
+  &:hover {
+    background: #400040 !important;
+    box-shadow: 0 0 8px #ff00ff !important;
+  }
+  
+  & > * {
+    width: 100% !important;
+    text-align: center !important;
+  }
+`;
+
+const RetroText = styled.span`
+  font-family: 'Cooper Black', 'Arial Black', 'Helvetica', 'Courier New', monospace;
+  color: #ff00ff;
+  text-shadow: 
+    /* Dark outline for contrast */
+    -1px -1px 0 #000000,
+    1px -1px 0 #000000,
+    -1px 1px 0 #000000,
+    1px 1px 0 #000000,
+    0 -1px 0 #000000,
+    0 1px 0 #000000,
+    -1px 0 0 #000000,
+    1px 0 0 #000000,
+    /* Glow effect */
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 15px currentColor;
+  font-weight: bold;
+  animation: neonCycle 8s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  
+  @keyframes neonCycle {
+    0% { 
+      color: #ff00ff; 
+      text-shadow: 
+        -1px -1px 0 #000000,
+        1px -1px 0 #000000,
+        -1px 1px 0 #000000,
+        1px 1px 0 #000000,
+        0 -1px 0 #000000,
+        0 1px 0 #000000,
+        -1px 0 0 #000000,
+        1px 0 0 #000000,
+        0 0 5px #ff00ff,
+        0 0 10px #ff00ff,
+        0 0 15px #ff00ff;
+    }
+    16.6% { 
+      color: #00ffff; 
+      text-shadow: 
+        -1px -1px 0 #000000,
+        1px -1px 0 #000000,
+        -1px 1px 0 #000000,
+        1px 1px 0 #000000,
+        0 -1px 0 #000000,
+        0 1px 0 #000000,
+        -1px 0 0 #000000,
+        1px 0 0 #000000,
+        0 0 5px #00ffff,
+        0 0 10px #00ffff,
+        0 0 15px #00ffff;
+    }
+    33.3% { 
+      color: #ffff00; 
+      text-shadow: 
+        -1px -1px 0 #000000,
+        1px -1px 0 #000000,
+        -1px 1px 0 #000000,
+        1px 1px 0 #000000,
+        0 -1px 0 #000000,
+        0 1px 0 #000000,
+        -1px 0 0 #000000,
+        1px 0 0 #000000,
+        0 0 5px #ffff00,
+        0 0 10px #ffff00,
+        0 0 15px #ffff00;
+    }
+    50% { 
+      color: #ff6600; 
+      text-shadow: 
+        -1px -1px 0 #000000,
+        1px -1px 0 #000000,
+        -1px 1px 0 #000000,
+        1px 1px 0 #000000,
+        0 -1px 0 #000000,
+        0 1px 0 #000000,
+        -1px 0 0 #000000,
+        1px 0 0 #000000,
+        0 0 5px #ff6600,
+        0 0 10px #ff6600,
+        0 0 15px #ff6600;
+    }
+    66.6% { 
+      color: #00ff00; 
+      text-shadow: 
+        -1px -1px 0 #000000,
+        1px -1px 0 #000000,
+        -1px 1px 0 #000000,
+        1px 1px 0 #000000,
+        0 -1px 0 #000000,
+        0 1px 0 #000000,
+        -1px 0 0 #000000,
+        1px 0 0 #000000,
+        0 0 5px #00ff00,
+        0 0 10px #00ff00,
+        0 0 15px #00ff00;
+    }
+    83.3% { 
+      color: #ff0099; 
+      text-shadow: 
+        -1px -1px 0 #000000,
+        1px -1px 0 #000000,
+        -1px 1px 0 #000000,
+        1px 1px 0 #000000,
+        0 -1px 0 #000000,
+        0 1px 0 #000000,
+        -1px 0 0 #000000,
+        1px 0 0 #000000,
+        0 0 5px #ff0099,
+        0 0 10px #ff0099,
+        0 0 15px #ff0099;
+    }
+    100% { 
+      color: #ff00ff; 
+      text-shadow: 
+        -1px -1px 0 #000000,
+        1px -1px 0 #000000,
+        -1px 1px 0 #000000,
+        1px 1px 0 #000000,
+        0 -1px 0 #000000,
+        0 1px 0 #000000,
+        -1px 0 0 #000000,
+        1px 0 0 #000000,
+        0 0 5px #ff00ff,
+        0 0 10px #ff00ff,
+        0 0 15px #ff00ff;
+    }
+  }
 `;
 
 const ScrollViewWithBackground = styled(CustomScrollArea)`
-  background-image: linear-gradient(
-      ${({ theme }) => theme.borderLightest}3F 1px,
-      transparent 1px
+  background: 
+    /* Arcade carpet speckle pattern */
+    radial-gradient(circle at 15% 25%, #ff00ff55 1px, transparent 1px),
+    radial-gradient(circle at 85% 75%, #00ffff55 1px, transparent 1px),
+    radial-gradient(circle at 45% 85%, #ffff0055 1px, transparent 1px),
+    radial-gradient(circle at 75% 15%, #ff660055 1px, transparent 1px),
+    radial-gradient(circle at 25% 55%, #00ff0055 1px, transparent 1px),
+    radial-gradient(circle at 65% 45%, #ff009955 1px, transparent 1px),
+    
+    /* Larger speckles for more texture */
+    radial-gradient(circle at 35% 15%, #ff00ff33 2px, transparent 2px),
+    radial-gradient(circle at 85% 35%, #00ffff33 2px, transparent 2px),
+    radial-gradient(circle at 15% 75%, #ffff0033 2px, transparent 2px),
+    radial-gradient(circle at 55% 65%, #ff660033 2px, transparent 2px),
+    
+    /* Subtle geometric pattern overlay */
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 8px,
+      rgba(255, 0, 255, 0.08) 8px,
+      rgba(255, 0, 255, 0.08) 10px
     ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 12px,
+      rgba(0, 255, 255, 0.06) 12px,
+      rgba(0, 255, 255, 0.06) 14px
+    ),
+    
+    /* Base carpet color - deep black with slight texture */
     linear-gradient(
-      to right,
-      ${({ theme }) => theme.borderLightest}3F 1px,
-      ${({ theme }) => theme.material} 1px
+      135deg,
+      #000000 0%,
+      #0a0a0a 25%,
+      #000000 50%,
+      #050505 75%,
+      #000000 100%
     );
-  background-size: 20px 20px;
+  
+  background-size: 
+    40px 40px,  /* Small speckles */
+    60px 60px,
+    35px 35px,
+    55px 55px,
+    45px 45px,
+    50px 50px,
+    80px 80px,  /* Larger speckles */
+    70px 70px,
+    90px 90px,
+    65px 65px,
+    30px 30px,  /* Geometric patterns */
+    25px 25px,
+    100% 100%;  /* Base color */
+  
   position: relative;
   display: flex;
   flex-direction: column;
@@ -64,49 +327,42 @@ const ScrollViewWithBackground = styled(CustomScrollArea)`
 const GridedView: React.FC<{
   items: NftItem[];
   setActiveItem: (nft: NftItem) => void;
-}> = ({ items, setActiveItem }) => {
+  pixelMode: boolean;
+}> = ({ items, setActiveItem, pixelMode }) => {
   return (
-    <div className="grid grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))]">
+    <RetroGrid>
       {items.map((nft: NftItem) => (
-        <Frame variant="window" className="p-2">
-          <Frame variant="field" className="relative !flex !flex-col">
+        <RetroItemFrame key={nft.tokenID} variant="window" className="p-2">
+          <RetroImageFrame variant="field" className="relative !flex !flex-col">
             <Frame variant="well" className="!w-full !h-full">
               <CustomImage
-                src={nft.MetadataViewsDisplay.thumbnail.url}
+                src={pixelMode ? nft.pixelUrl || nft.MetadataViewsDisplay.thumbnail.url : nft.MetadataViewsDisplay.thumbnail.url}
                 className="min-w-full min-h-full"
               />
             </Frame>
-            <div className="backdrop-blur-xl bottom-0 left-0flex flex-col w-full items-start gap-2">
-              <div className="flex w-full items-center">
-                <Frame
-                  variant="well"
-                  className="col-span-9 flex-grow items-center px-2 py-1"
-                >
-                  <div className="text-xl flex items-center justify-between">
-                    <span>
-                      {nft.collection === "Flunks" ? "Flunk" : "Backpack"}
-                    </span>
-                    <span>#{nft.serialNumber}</span>
-                  </div>
-                </Frame>
-                <Frame
-                  variant="well"
-                  className="col-span-3 !flex items-end justify-end"
-                >
-                  <Button
-                    onClick={() => setActiveItem(nft)}
-                    variant="raised"
-                    className="text-xl"
-                  >
-                    Full Details
-                  </Button>
-                </Frame>
-              </div>
+            <div className="bottom-0 left-0 flex flex-col w-full items-center gap-1 pt-2">
+              <Frame
+                variant="well"
+                className="w-full flex items-center justify-between px-2 py-1"
+                style={{ background: '#000040', border: '1px solid #00ffff' }}
+              >
+                <RetroText className="text-sm">
+                  {nft.collection === "Flunks" ? "Flunk" : "Backpack"}
+                </RetroText>
+                <RetroText className="text-sm">#{nft.serialNumber}</RetroText>
+              </Frame>
+              <RetroButton
+                onClick={() => setActiveItem(nft)}
+                variant="raised"
+                className="w-full text-xs py-1"
+              >
+                <RetroText>FULL DETAILS</RetroText>
+              </RetroButton>
             </div>
-          </Frame>
-        </Frame>
+          </RetroImageFrame>
+        </RetroItemFrame>
       ))}
-    </div>
+    </RetroGrid>
   );
 };
 
@@ -167,7 +423,8 @@ export interface NftItem {
 const TableView: React.FC<{
   items: NftItem[];
   setActiveItem: (nft: NftItem) => void;
-}> = ({ items, setActiveItem }) => {
+  pixelMode: boolean;
+}> = ({ items, setActiveItem, pixelMode }) => {
   return (
     <div className="grid grid-cols-[repeat(auto-fill,_minmax(240px,_1fr))]">
       {items.map((nft: NftItem) => (
@@ -179,7 +436,7 @@ const TableView: React.FC<{
         >
           <Frame variant="field" className="h-full flex-shrink-0">
             <img
-              src={nft.MetadataViewsDisplay.thumbnail.url}
+              src={pixelMode ? nft.pixelUrl || nft.MetadataViewsDisplay.thumbnail.url : nft.MetadataViewsDisplay.thumbnail.url}
               className="h-full max-h-[40px]"
             />
           </Frame>
@@ -217,6 +474,7 @@ const ItemsGrid: React.FC = () => {
   const scrollViewRef = React.useRef<HTMLDivElement>(null);
   const [activeItem, setActiveItem] =
     useState<MarketplaceIndividualNftDto | null>(null);
+  const [pixelMode, setPixelMode] = useState<boolean>(false);
 
   const { displayedItems, currentPage, setPage, viewType, currentDataPages } =
     usePaginatedItems();
@@ -274,7 +532,7 @@ const ItemsGrid: React.FC = () => {
 
   return (
     <div className="!w-full !h-full max-w-full max-h-full flex flex-col">
-      <YourItemsGridHeader />
+      <YourItemsGridHeader pixelMode={pixelMode} setPixelMode={setPixelMode} />
 
       {noItems && <NoItemsMessage />}
       {!activeItem && !noItems && (
@@ -290,14 +548,16 @@ const ItemsGrid: React.FC = () => {
               <GridedView
                 // @ts-ignore
                 items={memodCombinedItems}
-                setActiveItem={handleOpenOnlyflunksItem}
+                setActiveItem={(nft) => handleOpenOnlyflunksItem(nft as ObjectDetails)}
+                pixelMode={pixelMode}
               />
             )}
             {viewType === "table" && (
               <TableView
                 // @ts-ignore
                 items={memodCombinedItems}
-                setActiveItem={handleOpenOnlyflunksItem}
+                setActiveItem={(nft) => handleOpenOnlyflunksItem(nft as ObjectDetails)}
+                pixelMode={pixelMode}
               />
             )}
             {currentDataPages?.length > 1 &&
