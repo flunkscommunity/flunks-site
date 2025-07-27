@@ -5,6 +5,7 @@ import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useWindowsContext } from 'contexts/WindowsContext';
 import UserProfileForm from 'components/UserProfile/UserProfileForm';
 import UserProfileDisplay from 'components/UserProfile/UserProfileDisplay';
+import RPGProfileDisplay from 'components/UserProfile/RPGProfileDisplay';
 import { Button, Frame, Checkbox } from 'react95';
 import { WINDOW_IDS } from 'fixed';
 
@@ -67,16 +68,14 @@ const UserProfileWindow: React.FC = () => {
       <div className="h-full overflow-auto">
         {showForm ? (
           <div>
-            {/* Style Toggle */}
-            {!useRPGStyle && (
-              <div className="p-4 border-b">
-                <Checkbox
-                  checked={useRPGStyle}
-                  onChange={(e) => setUseRPGStyle(e.target.checked)}
-                  label="🎮 Use Retro RPG Style"
-                />
-              </div>
-            )}
+            {/* Style Toggle - Always show */}
+            <div className="p-4 border-b bg-gray-100">
+              <Checkbox
+                checked={useRPGStyle}
+                onChange={(e) => setUseRPGStyle(e.target.checked)}
+                label="🎮 Use Epic RPG Style"
+              />
+            </div>
             
             <UserProfileForm
               onClose={hasProfile ? handleFormClose : handleClose}
@@ -85,10 +84,23 @@ const UserProfileWindow: React.FC = () => {
             />
           </div>
         ) : (
-          <div className="p-4">
-            <UserProfileDisplay
-              onEdit={handleEditClick}
-            />
+          <div className="h-full">
+            {/* Style Toggle */}
+            <div className="p-4 border-b bg-gray-100">
+              <Checkbox
+                checked={useRPGStyle}
+                onChange={(e) => setUseRPGStyle(e.target.checked)}
+                label="🎮 Use Epic RPG Style"
+              />
+            </div>
+            
+            {useRPGStyle ? (
+              <RPGProfileDisplay onEdit={handleEditClick} />
+            ) : (
+              <div className="p-4">
+                <UserProfileDisplay onEdit={handleEditClick} />
+              </div>
+            )}
           </div>
         )}
       </div>
