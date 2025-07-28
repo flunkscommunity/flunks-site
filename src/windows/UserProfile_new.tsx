@@ -24,16 +24,16 @@ const UserProfileWindow: React.FC = () => {
     return (
       <DraggableResizeableWindow
         windowsId={WINDOW_IDS.USER_PROFILE}
-        headerTitle="👤 My Profile"
+        headerTitle="🎮 Flunks Academy"
         onClose={handleClose}
-        initialWidth="700px"
-        initialHeight="550px"
-        headerIcon="/flunks-logo.png"
+        initialWidth="600px"
+        initialHeight="480px"
+        headerIcon="/images/icons/user.png"
       >
         <div 
           className="h-full flex flex-col items-center justify-center relative overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #ffd3a5 100%)',
+            background: 'linear-gradient(180deg, #000428 0%, #004e92 100%)',
             fontFamily: 'monospace',
             color: '#fff'
           }}
@@ -71,6 +71,17 @@ const UserProfileWindow: React.FC = () => {
               >
                 FLUNKS
               </div>
+              <div 
+                className="text-2xl font-bold tracking-widest"
+                style={{
+                  fontFamily: 'monospace',
+                  textShadow: '2px 2px 0 #333',
+                  color: '#ff6b6b',
+                  letterSpacing: '0.2em'
+                }}
+              >
+                ACADEMY
+              </div>
             </div>
 
             {/* Subtitle */}
@@ -86,30 +97,18 @@ const UserProfileWindow: React.FC = () => {
             </div>
 
             {/* Spacer */}
-            <div className="h-8"></div>
+            <div className="h-12"></div>
 
             {/* Blinking "CONNECT WALLET" text */}
             <div 
-              className="text-2xl font-bold cursor-pointer px-6 py-3 mx-auto max-w-xs"
+              className="text-2xl font-bold cursor-pointer"
               onClick={() => setShowAuthFlow(true)}
               style={{
                 fontFamily: 'monospace',
                 color: '#ffd93d',
                 textShadow: '2px 2px 0 #ff6b6b',
                 letterSpacing: '0.15em',
-                animation: 'blink 1.5s infinite',
-                border: '3px solid #ffd93d',
-                borderRadius: '8px',
-                background: 'rgba(0,0,0,0.3)',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.background = 'rgba(255,217,61,0.2)';
-                e.currentTarget.style.transform = 'scale(1.05)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.background = 'rgba(0,0,0,0.3)';
-                e.currentTarget.style.transform = 'scale(1)';
+                animation: 'blink 1.5s infinite'
               }}
             >
               CONNECT WALLET
@@ -171,7 +170,7 @@ const UserProfileWindow: React.FC = () => {
       onClose={handleClose}
       initialWidth="700px"
       initialHeight="650px"
-      headerIcon="/flunks-logo.png"
+      headerIcon="/images/icons/user.png"
       resizable
     >
       <div className="h-full overflow-auto">

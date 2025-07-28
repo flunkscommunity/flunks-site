@@ -75,7 +75,7 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
             FLUNKS
           </FlunksLogoText>
           <NintyFiveLogoText className="font-light tracking-widest">
-            95
+            2.0
           </NintyFiveLogoText>
         </div>
       </SideLogoContainer>
@@ -176,7 +176,7 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
           }}
           className="!text-xl"
         >
-          <img src="/images/icons/user.png" width="32px" height="32px" />
+          <img src="/flunks-logo.png" width="32px" height="32px" />
           My Profile
         </CustomMenuListItem>
         <Separator />

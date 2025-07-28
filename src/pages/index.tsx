@@ -112,7 +112,7 @@ const windowsMemod = useMemo(() => (
 
         <DesktopAppIcon
           title="My Profile"
-          icon="/images/icons/user.png"
+          icon="/flunks-logo.png"
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.USER_PROFILE, window: <UserProfile /> })}
         />
 
