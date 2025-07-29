@@ -173,7 +173,7 @@ const windowsMemod = useMemo(() => (
         {/* 6. Radio */}
         <DesktopAppIcon
           title="Radio"
-          icon="/images/icons/radio.png"
+          icon="/images/icons/boom-box.png"
           onDoubleClick={() =>
             openWindow({
               key: WINDOW_IDS.RADIO_PLAYER,
@@ -184,7 +184,7 @@ const windowsMemod = useMemo(() => (
                   headerTitle="Radio"
                   initialWidth="720px"
                   initialHeight="540px"
-                  headerIcon="/images/icons/radio.png"
+                  headerIcon="/images/icons/boom-box.png"
                   resizable={false}
                 >
                   <RadioPlayer />

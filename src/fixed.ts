@@ -167,7 +167,7 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
   },
   [WINDOW_IDS.RADIO_PLAYER]: {
     appName: "Radio",
-    appIcon: "/images/icons/radio.png",
+    appIcon: "/images/icons/boom-box.png",
     key: WINDOW_IDS.RADIO_PLAYER,
     windowComponent: RadioPlayer,
   },
