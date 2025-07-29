@@ -91,37 +91,20 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
           className="!text-xl"
         >
           <img src="/images/icons/onlyflunks.png" width="32px" height="32px" />
-          Onlyflunks
+          OnlyFlunks
         </CustomMenuListItem>
         <CustomMenuListItem
           onClick={() => {
             openWindow({
-              key: WINDOW_IDS.GUMBALL_MACHINE,
-              window: <GumballMachine />,
+              key: WINDOW_IDS.USER_PROFILE,
+              window: <UserProfile />,
             });
             props.closeStartMenu();
           }}
           className="!text-xl"
         >
-          <img src="/images/icons/gum-machine.png" width="32px" height="32px" />
-          Gumball Machine
-        </CustomMenuListItem>
-        <CustomMenuListItem
-          onClick={() => {
-            openWindow({
-              key: WINDOW_IDS.PROJECT_JNR,
-              window: <ProjectJnr />,
-            });
-            props.closeStartMenu();
-          }}
-          className="!text-xl"
-        >
-          <img
-            src="/images/icons/pocket-juniors-50x50.png"
-            width="32px"
-            height="32px"
-          />
-          Pocket Juniors
+          <img src="/flunks-logo.png" width="32px" height="32px" />
+          My Profile
         </CustomMenuListItem>
         <CustomMenuListItem
           onClick={() => {
@@ -139,23 +122,6 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
         <CustomMenuListItem
           onClick={() => {
             openWindow({
-              key: WINDOW_IDS.WELCOME,
-              window: <Welcome />,
-            });
-            props.closeStartMenu();
-          }}
-          className="!text-xl"
-        >
-          <img
-            src="/images/icons/getting_started.png"
-            width="32px"
-            height="32px"
-          />
-          Getting Started
-        </CustomMenuListItem>
-        <CustomMenuListItem
-          onClick={() => {
-            openWindow({
               key: WINDOW_IDS.SETTINGS,
               window: <Settings />,
             });
@@ -165,19 +131,6 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
         >
           <img src="/images/icons/settings.png" width="32px" height="32px" />
           Settings
-        </CustomMenuListItem>
-        <CustomMenuListItem
-          onClick={() => {
-            openWindow({
-              key: WINDOW_IDS.USER_PROFILE,
-              window: <UserProfile />,
-            });
-            props.closeStartMenu();
-          }}
-          className="!text-xl"
-        >
-          <img src="/flunks-logo.png" width="32px" height="32px" />
-          My Profile
         </CustomMenuListItem>
         <Separator />
         <AuthButton />

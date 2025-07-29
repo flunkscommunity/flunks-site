@@ -92,116 +92,41 @@ const windowsMemod = useMemo(() => (
   return (
     <>
       <div className="flex relative flex-col max-h-[calc(100vh-64px)] w-full flex-wrap items-start gap-4 content-start">
+        {/* 1. OnlyFlunks */}
         <DesktopAppIcon
           title="OnlyFlunks"
           icon="/images/icons/onlyflunks.png"
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.YOUR_STUDENTS, window: <YourStudents /> })}
         />
 
-        <DesktopAppIcon
-          title="Pocket Juniors"
-          icon="/images/icons/pocket-juniors-50x50.png"
-          onDoubleClick={() => openWindow({ key: WINDOW_IDS.PROJECT_JNR, window: <ProjectJnr /> })}
-        />
-
-        <DesktopAppIcon
-          title="About Us"
-          icon="/images/icons/about-us.png"
-          onDoubleClick={() => openWindow({ key: WINDOW_IDS.ABOUT_US, window: <AboutUs /> })}
-        />
-
+        {/* 2. My Profile */}
         <DesktopAppIcon
           title="My Profile"
           icon="/flunks-logo.png"
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.USER_PROFILE, window: <UserProfile /> })}
         />
 
+        {/* 3. Terminal */}
         <DesktopAppIcon
-          title="Radio"
-          icon="/images/icons/radio.png"
-          onDoubleClick={() =>
-            openWindow({
-              key: WINDOW_IDS.RADIO_PLAYER,
-              window: (
-                <DraggableResizeableWindow
-                  windowsId={WINDOW_IDS.RADIO_PLAYER}
-                  onClose={() => closeWindow(WINDOW_IDS.RADIO_PLAYER)}
-                  headerTitle="Radio"
-                  initialWidth="720px"
-                  initialHeight="540px"
-                  headerIcon="/images/icons/radio.png"
-                >
-
-                  <RadioPlayer />
-                </DraggableResizeableWindow>
-              ),
-            })
-          }
-        />
-
-<a
-  href="https://twitter.com/Flunks_NFT"
-  target="_blank"
-  rel="noreferrer noopener"
-  style={{ textDecoration: "none" }}
->
-  <DesktopAppIcon
-    title="X"
-    icon="/images/icons/x.png"
-    onDoubleClick={() => null}
-  />
-</a>
-
-        <a href="https://discord.gg/flunks" target="_blank" rel="noreferrer noopener">
-          <DesktopAppIcon
-            title="Discord"
-            icon="/images/icons/discord.png"
-            onDoubleClick={() => window.open("https://discord.gg/wuukvhHhS3", "_blank")}
-          />
-        </a>
-
-        <a href="https://www.flowty.io/collection/0x807c3d470888cc48/Flunks" target="_blank" rel="noreferrer noopener">
-          <DesktopAppIcon title="Market" icon="/images/icons/flowty.png" onDoubleClick={() => null} />
-        </a>
-
-        <DesktopAppIcon
-          title="MyPlace"
-          icon="/images/icons/myplace.png"
+          title="Terminal"
+          icon="/images/icons/newterminal.png"
           onDoubleClick={() => openWindow({
-            key: WINDOW_IDS.MYPLACE,
-            window: <MyPlace />
-          })}
-        />
-
-        <DesktopAppIcon
-          title="Messenger"
-          icon="/images/icons/discord.png"
-          onDoubleClick={() => openWindow({
-            key: WINDOW_IDS.FLUNKS_MESSENGER,
+            key: 'flunks_terminal',
             window: (
               <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.FLUNKS_MESSENGER}
-                onClose={() => closeWindow(WINDOW_IDS.FLUNKS_MESSENGER)}
-                initialWidth="600px"
-                initialHeight="500px"
-                headerTitle="Flunks Messenger"
-                headerIcon="/images/icons/discord.png"
+                windowsId="flunks_terminal"
+                onClose={() => closeWindow('flunks_terminal')}
+                headerTitle="Flunks Terminal"
+                initialWidth="520px"
+                initialHeight="400px"
               >
-                <FlunksMessenger />
+                <FlunksTerminal onClose={() => closeWindow('flunks_terminal')} />
               </DraggableResizeableWindow>
             )
           })}
         />
 
-        <DesktopAppIcon
-          title="Flunk Creator"
-          icon="/images/icons/pocket-juniors.png"
-          onDoubleClick={() => openWindow({
-            key: WINDOW_IDS.FLUNK_CREATOR,
-            window: <FlunkCreator />
-          })}
-        />
-
+        {/* 4. FHS */}
         <DesktopAppIcon
           title="FHS"
           icon="/images/icons/fhs.png"
@@ -223,48 +148,7 @@ const windowsMemod = useMemo(() => (
           })}
         />
 
-        <DesktopAppIcon
-          title="Terminal"
-          icon="/images/icons/newterminal.png"
-          onDoubleClick={() => openWindow({
-            key: 'flunks_terminal',
-            window: (
-              <DraggableResizeableWindow
-                windowsId="flunks_terminal"
-                onClose={() => closeWindow('flunks_terminal')}
-                headerTitle="Flunks Terminal"
-                initialWidth="520px"
-                initialHeight="400px"
-              >
-                <FlunksTerminal onClose={() => closeWindow('flunks_terminal')} />
-              </DraggableResizeableWindow>
-            )
-          })}
-        />
-
-<DesktopAppIcon
-  title="Flappy Flunk"
-  icon="/images/icons/flappyflunk.png" // adjust path if needed
-  onDoubleClick={() =>
-    openWindow({
-      key: WINDOW_IDS.FLAPPY_FLUNK,
-      window: (
-        <DraggableResizeableWindow
-          windowsId={WINDOW_IDS.FLAPPY_FLUNK}
-          onClose={() => closeWindow(WINDOW_IDS.FLAPPY_FLUNK)}
-          headerTitle="Flappy Flunk"
-          initialWidth="480px"
-          initialHeight="640px"
-          headerIcon="/images/icons/flappyflunk.png"
-        >
-          <FlappyFlunkWindow />
-        </DraggableResizeableWindow>
-      ),
-    })
-  }
-/>
-
-
+        {/* 5. Semester Zero */}
         <DesktopAppIcon
           title="semester zero"
           icon="/images/icons/semester0-icon.png"
@@ -284,6 +168,136 @@ const windowsMemod = useMemo(() => (
               </DraggableResizeableWindow>
             ),
           })}
+        />
+
+        {/* 6. Radio */}
+        <DesktopAppIcon
+          title="Radio"
+          icon="/images/icons/radio.png"
+          onDoubleClick={() =>
+            openWindow({
+              key: WINDOW_IDS.RADIO_PLAYER,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.RADIO_PLAYER}
+                  onClose={() => closeWindow(WINDOW_IDS.RADIO_PLAYER)}
+                  headerTitle="Radio"
+                  initialWidth="720px"
+                  initialHeight="540px"
+                  headerIcon="/images/icons/radio.png"
+                  resizable={false}
+                >
+                  <RadioPlayer />
+                </DraggableResizeableWindow>
+              ),
+            })
+          }
+        />
+
+        {/* 7. Messenger */}
+        <DesktopAppIcon
+          title="Messenger"
+          icon="/images/icons/discord.png"
+          onDoubleClick={() => openWindow({
+            key: WINDOW_IDS.FLUNKS_MESSENGER,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.FLUNKS_MESSENGER}
+                onClose={() => closeWindow(WINDOW_IDS.FLUNKS_MESSENGER)}
+                initialWidth="600px"
+                initialHeight="500px"
+                headerTitle="Flunks Messenger"
+                headerIcon="/images/icons/discord.png"
+              >
+                <FlunksMessenger />
+              </DraggableResizeableWindow>
+            )
+          })}
+        />
+
+        {/* 8. X */}
+        <a
+          href="https://twitter.com/Flunks_NFT"
+          target="_blank"
+          rel="noreferrer noopener"
+          style={{ textDecoration: "none" }}
+        >
+          <DesktopAppIcon
+            title="X"
+            icon="/images/icons/x.png"
+            onDoubleClick={() => null}
+          />
+        </a>
+
+        {/* 9. Discord */}
+        <a href="https://discord.gg/flunks" target="_blank" rel="noreferrer noopener">
+          <DesktopAppIcon
+            title="Discord"
+            icon="/images/icons/discord.png"
+            onDoubleClick={() => window.open("https://discord.gg/wuukvhHhS3", "_blank")}
+          />
+        </a>
+
+        {/* 10. Market */}
+        <a href="https://www.flowty.io/collection/0x807c3d470888cc48/Flunks" target="_blank" rel="noreferrer noopener">
+          <DesktopAppIcon title="Market" icon="/images/icons/flowty.png" onDoubleClick={() => null} />
+        </a>
+
+        {/* 11. MyPlace */}
+        <DesktopAppIcon
+          title="MyPlace"
+          icon="/images/icons/myplace.png"
+          onDoubleClick={() => openWindow({
+            key: WINDOW_IDS.MYPLACE,
+            window: <MyPlace />
+          })}
+        />
+
+        {/* 12. Pocket Juniors */}
+        <DesktopAppIcon
+          title="Pocket Juniors"
+          icon="/images/icons/pocket-juniors-50x50.png"
+          onDoubleClick={() => openWindow({ key: WINDOW_IDS.PROJECT_JNR, window: <ProjectJnr /> })}
+        />
+
+        {/* 13. Flunk Creator */}
+        <DesktopAppIcon
+          title="Flunk Creator"
+          icon="/images/icons/pocket-juniors.png"
+          onDoubleClick={() => openWindow({
+            key: WINDOW_IDS.FLUNK_CREATOR,
+            window: <FlunkCreator />
+          })}
+        />
+
+        {/* 14. Flappy Flunk */}
+        <DesktopAppIcon
+          title="Flappy Flunk"
+          icon="/images/icons/flappyflunk.png"
+          onDoubleClick={() =>
+            openWindow({
+              key: WINDOW_IDS.FLAPPY_FLUNK,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.FLAPPY_FLUNK}
+                  onClose={() => closeWindow(WINDOW_IDS.FLAPPY_FLUNK)}
+                  headerTitle="Flappy Flunk"
+                  initialWidth="480px"
+                  initialHeight="640px"
+                  headerIcon="/images/icons/flappyflunk.png"
+                >
+                  <FlappyFlunkWindow />
+                </DraggableResizeableWindow>
+              ),
+            })
+          }
+        />
+
+        {/* 15. About Us */}
+        <DesktopAppIcon
+          title="About Us"
+          icon="/images/icons/about-us.png"
+          onDoubleClick={() => openWindow({ key: WINDOW_IDS.ABOUT_US, window: <AboutUs /> })}
         />
       </div>
 
