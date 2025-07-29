@@ -194,10 +194,10 @@ const windowsMemod = useMemo(() => (
           }
         />
 
-        {/* 7. Messenger */}
+        {/* 7. Chat Rooms */}
         <DesktopAppIcon
-          title="Messenger"
-          icon="/images/icons/discord.png"
+          title="Chat Rooms"
+          icon="/images/icons/chat-rooms.png"
           onDoubleClick={() => openWindow({
             key: WINDOW_IDS.FLUNKS_MESSENGER,
             window: (
@@ -206,8 +206,8 @@ const windowsMemod = useMemo(() => (
                 onClose={() => closeWindow(WINDOW_IDS.FLUNKS_MESSENGER)}
                 initialWidth="600px"
                 initialHeight="500px"
-                headerTitle="Flunks Messenger"
-                headerIcon="/images/icons/discord.png"
+                headerTitle="Chat Rooms"
+                headerIcon="/images/icons/chat-rooms.png"
               >
                 <FlunksMessenger />
               </DraggableResizeableWindow>

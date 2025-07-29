@@ -158,7 +158,18 @@ const RadioPlayer = () => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: '#f0f0f0',
+          background: `
+            radial-gradient(circle at 20% 20%, rgba(200, 200, 255, 0.15) 0%, transparent 25%),
+            radial-gradient(circle at 80% 60%, rgba(255, 200, 255, 0.1) 0%, transparent 25%),
+            radial-gradient(circle at 40% 90%, rgba(200, 255, 200, 0.1) 0%, transparent 25%),
+            linear-gradient(45deg, #e8e8e8 25%, transparent 25%),
+            linear-gradient(-45deg, #e8e8e8 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #e5e5e5 75%),
+            linear-gradient(-45deg, transparent 75%, #e5e5e5 75%)
+          `,
+          backgroundSize: '200px 200px, 150px 150px, 180px 180px, 8px 8px, 8px 8px, 8px 8px, 8px 8px',
+          backgroundPosition: '0 0, 50px 30px, 100px 80px, 0 0, 0 4px, 4px -4px, -4px 0px',
+          backgroundColor: '#f2f2f2',
           padding: '10px'
         }}>
           

@@ -287,8 +287,8 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     key: WINDOW_IDS.FLAPPY_FLUNK_LEADERBOARD,
   },
   [WINDOW_IDS.FLUNKS_MESSENGER]: {
-    appName: "Flunks Messenger",
-    appIcon: "/images/icons/discord.png",
+    appName: "Chat Rooms",
+    appIcon: "/images/icons/chat-rooms.png",
     key: WINDOW_IDS.FLUNKS_MESSENGER,
   },
   [WINDOW_IDS.FLUNK_CREATOR]: {
