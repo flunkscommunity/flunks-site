@@ -115,15 +115,11 @@ const WindowsProvider: React.FC<ProviderProps> = (props) => {
   };
 
 const minimizeWindow = (windowKey: string) => {
-  console.log("🔽 minimizeWindow called with:", windowKey);
-  setWindowApps((apps) => {
-    console.log("Current apps before minimize:", apps.map(app => ({key: app.key, isMinimized: app.isMinimized})));
-    const updated = apps.map((app) =>
+  setWindowApps((apps) =>
+    apps.map((app) =>
       app.key === windowKey ? { ...app, isMinimized: true } : app
-    );
-    console.log("Updated apps after minimize:", updated.map(app => ({key: app.key, isMinimized: app.isMinimized})));
-    return updated;
-  });
+    )
+  );
 };
 
 const restoreWindow = (windowKey: string) => {

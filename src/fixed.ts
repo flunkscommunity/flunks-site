@@ -297,4 +297,14 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appIcon: "/images/icons/pocket-juniors.png",
     key: WINDOW_IDS.FLUNK_CREATOR,
   },
+  [WINDOW_IDS.TERMINAL]: {
+    appName: "Terminal",
+    appIcon: "/images/icons/newterminal.png",
+    key: WINDOW_IDS.TERMINAL,
+  },
+  [WINDOW_IDS.USER_PROFILE]: {
+    appName: "My Profile",
+    appIcon: "/flunks-logo.png",
+    key: WINDOW_IDS.USER_PROFILE,
+  },
 };
