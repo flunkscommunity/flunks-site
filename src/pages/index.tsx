@@ -111,16 +111,16 @@ const windowsMemod = useMemo(() => (
           title="Terminal"
           icon="/images/icons/newterminal.png"
           onDoubleClick={() => openWindow({
-            key: 'flunks_terminal',
+            key: WINDOW_IDS.TERMINAL,
             window: (
               <DraggableResizeableWindow
-                windowsId="flunks_terminal"
-                onClose={() => closeWindow('flunks_terminal')}
+                windowsId={WINDOW_IDS.TERMINAL}
+                onClose={() => closeWindow(WINDOW_IDS.TERMINAL)}
                 headerTitle="Flunks Terminal"
                 initialWidth="520px"
                 initialHeight="400px"
               >
-                <FlunksTerminal onClose={() => closeWindow('flunks_terminal')} />
+                <FlunksTerminal onClose={() => closeWindow(WINDOW_IDS.TERMINAL)} />
               </DraggableResizeableWindow>
             )
           })}

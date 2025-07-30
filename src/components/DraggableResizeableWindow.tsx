@@ -57,8 +57,13 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
   const windowRef = useRef<HTMLDivElement>(null);
   const draggableRef = useRef<Draggable>(null);
   const { width, height } = useWindowSize();
-  const { closeWindow, bringWindowToFront, minimizeWindow } = useWindowsContext();
+  const { closeWindow, bringWindowToFront, minimizeWindow, windowApps } = useWindowsContext();
   const { user } = useDynamicContext();
+
+  // Check if this window is minimized
+  const isMinimized = windowApps.find(app => app.key === props.windowsId)?.isMinimized || false;
+  
+  console.log(`Window ${props.windowsId}: isMinimized=${isMinimized}, windowApps=`, windowApps.map(app => ({key: app.key, isMinimized: app.isMinimized})));
 
   const handleMaximize = () => {
     if (!resizable) return;
@@ -149,6 +154,11 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     );
   }
 
+  // Don't render if window is minimized
+  if (isMinimized) {
+    return null;
+  }
+
   return (
     <Draggable
       ref={draggableRef}
@@ -223,7 +233,10 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
                       />
                     </Button>
                   )}
-                  <Button id="action" onClick={() => minimizeWindow(props.windowsId)} className="cursor-win95-pointer">
+                  <Button id="action" onClick={() => {
+                    console.log("🔽 Minimize button clicked for:", props.windowsId);
+                    minimizeWindow(props.windowsId);
+                  }} className="cursor-win95-pointer">
                     <img
                       src="/images/icons/minimize.png"
                       width="60%"
