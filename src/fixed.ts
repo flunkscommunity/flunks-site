@@ -46,6 +46,9 @@ export const WINDOW_IDS = {
   FLUNK_CREATOR: "flunk_creator",
   USER_PROFILE: "user_profile",
   TERMINAL: "terminal",
+  CLIQUE_ACCESS: "clique_access",
+  GAME_MANUAL: "game-manual",
+  MEME_MANAGER: "meme-manager",
   
   // New location main windows
   JOCKS_HOUSE_MAIN: "jocks_house_main",
@@ -306,5 +309,20 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appName: "My Profile",
     appIcon: "/flunks-logo.png",
     key: WINDOW_IDS.USER_PROFILE,
+  },
+  [WINDOW_IDS.CLIQUE_ACCESS]: {
+    appName: "Clique Access",
+    appIcon: "/images/icons/high-school-icon.png",
+    key: WINDOW_IDS.CLIQUE_ACCESS,
+  },
+  [WINDOW_IDS.GAME_MANUAL]: {
+    appName: "Game Manual",
+    appIcon: "/images/icons/high-school-icon.png",
+    key: WINDOW_IDS.GAME_MANUAL,
+  },
+  [WINDOW_IDS.MEME_MANAGER]: {
+    appName: "Meme Manager",
+    appIcon: "/images/icons/high-school-icon.png",
+    key: WINDOW_IDS.MEME_MANAGER,
   },
 };

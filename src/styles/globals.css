@@ -18,7 +18,7 @@ body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  cursor: url('/images/cursors/default.png'), auto;
+  cursor: default;
 }
 
 /* 90s-Style Custom Cursors */
@@ -170,6 +170,19 @@ input, textarea {
 /* Apply Win95 cursors to common elements */
 button, .cursor-win95-pointer, [role="button"] {
   cursor: pointer !important;
+}
+
+/* Ensure React95 buttons work properly */
+button[class*="react95"] {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  user-select: none !important;
+}
+
+/* Fix any button display issues */
+button {
+  display: inline-block !important;
+  position: relative !important;
 }
 
 input[type="text"], input[type="email"], input[type="password"], textarea, .cursor-win95-text {

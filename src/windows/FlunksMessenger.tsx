@@ -302,6 +302,7 @@ const FlunksMessenger: React.FC = () => {
     { username: '🤖 FlunkBot Room', online: true, isAI: true, agentId: 'FlunkBot' },
     { username: '📚 StudyBuddy Room', online: true, isAI: true, agentId: 'StudyBuddy' },
     { username: '☕ Town Gossip Room', online: true, isAI: true, agentId: 'TownGossip' },
+    { username: '🏈 SportsCenter 90s', online: true, isAI: true, agentId: 'SportsCenter90s' },
     { username: '💬 General Chat', online: true, isAI: false },
     { username: '🎮 Gaming Lounge', online: true, isAI: false },
     { username: '🏫 Study Hall', online: true, isAI: false },

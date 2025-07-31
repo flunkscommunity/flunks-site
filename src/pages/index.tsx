@@ -25,6 +25,8 @@ import MyPlace from "windows/MyPlace";
 import FlunksMessenger from "windows/FlunksMessenger";
 import FlunkCreator from "windows/FlunkCreator";
 import UserProfile from "windows/UserProfile";
+import GameManualWindow from "windows/GameManualWindow";
+import MemeManagerWindow from "windows/MemeManagerWindow";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -170,6 +172,16 @@ const windowsMemod = useMemo(() => (
           })}
         />
 
+        {/* 5.5. Game Manual */}
+        <DesktopAppIcon
+          title="Game Manual"
+          icon="/images/icons/high-school-icon.png"
+          onDoubleClick={() => openWindow({
+            key: WINDOW_IDS.GAME_MANUAL,
+            window: <GameManualWindow />
+          })}
+        />
+
         {/* 6. Radio */}
         <DesktopAppIcon
           title="Radio"
@@ -194,7 +206,17 @@ const windowsMemod = useMemo(() => (
           }
         />
 
-        {/* 7. Chat Rooms */}
+        {/* 7. Meme Manager */}
+        <DesktopAppIcon
+          title="Meme Manager"
+          icon="/images/icons/attack-64x64.png"
+          onDoubleClick={() => openWindow({
+            key: WINDOW_IDS.MEME_MANAGER,
+            window: <MemeManagerWindow onClose={() => closeWindow(WINDOW_IDS.MEME_MANAGER)} />
+          })}
+        />
+
+        {/* 8. Chat Rooms */}
         <DesktopAppIcon
           title="Chat Rooms"
           icon="/images/icons/chat-rooms.png"

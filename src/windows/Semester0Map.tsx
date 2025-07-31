@@ -26,6 +26,9 @@ import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 import { WINDOW_IDS } from "fixed";
 import { Button } from 'react95';
 import SemesterZeroCSSLoader from "components/SemesterZeroCSSLoader";
+import { useCliqueAccess, CliqueType } from 'hooks/useCliqueAccess';
+import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
+import ErrorWindow from 'windows/ErrorWindow';
 
 interface Props {
   onClose: () => void;
@@ -39,6 +42,61 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   const [showOpeningAnimation, setShowOpeningAnimation] = useState(true);
   const { openWindow, closeWindow } = useWindowsContext();
   const mapRef = useRef<HTMLDivElement>(null);
+  
+  // Clique access hooks
+  const { hasAccess } = useCliqueAccess();
+  const { user } = useDynamicContext();
+
+  // Helper function to check clique access and handle unauthorized attempts
+  const handleCliqueHouseAccess = (clique: CliqueType, windowId: string, component: JSX.Element, houseName: string) => {
+    if (!user) {
+      // Show connect wallet prompt
+      openWindow({
+        key: WINDOW_IDS.ERROR,
+        window: (
+          <ErrorWindow
+            title="Access Denied"
+            message="You need to connect your wallet to access clique houses."
+            actions={
+              <Button onClick={() => closeWindow(WINDOW_IDS.ERROR)}>
+                Close
+              </Button>
+            }
+            windowId={WINDOW_IDS.ERROR}
+            onClose={() => closeWindow(WINDOW_IDS.ERROR)}
+          />
+        ),
+      });
+      return;
+    }
+
+    if (!hasAccess(clique)) {
+      // Show access denied message
+      openWindow({
+        key: WINDOW_IDS.ERROR,
+        window: (
+          <ErrorWindow
+            title="Access Denied"
+            message={`You need to own a ${clique} NFT to access the ${houseName}. Only members of this clique can enter!`}
+            actions={
+              <Button onClick={() => closeWindow(WINDOW_IDS.ERROR)}>
+                Close
+              </Button>
+            }
+            windowId={WINDOW_IDS.ERROR}
+            onClose={() => closeWindow(WINDOW_IDS.ERROR)}
+          />
+        ),
+      });
+      return;
+    }
+
+    // User has access, open the window
+    openWindow({
+      key: windowId,
+      window: component,
+    });
+  };
 
   // Location data for enhanced hover previews - ALL LOCATIONS
   const locationData = {
@@ -224,9 +282,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       <div
         className={`${styles.icon} ${styles['jocks-house']}`}
         onDoubleClick={() =>
-          openWindow({
-            key: WINDOW_IDS.JOCKS_HOUSE_MAIN,
-            window: (
+          handleCliqueHouseAccess(
+            'JOCK',
+            WINDOW_IDS.JOCKS_HOUSE_MAIN,
+            (
               <DraggableResizeableWindow
                 windowsId={WINDOW_IDS.JOCKS_HOUSE_MAIN}
                 headerTitle="Jock's House"
@@ -238,7 +297,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                 <JocksHouseMain />
               </DraggableResizeableWindow>
             ),
-          })
+            "Jock's House"
+          )
         }
         onClick={(e) => handleEnhancedClick('jocks-house', e)}
         onMouseEnter={() => setHovered('jocks-house')}
@@ -249,9 +309,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       <div
         className={`${styles.icon} ${styles.large} ${styles['freaks-house']}`}
         onDoubleClick={() =>
-          openWindow({
-            key: WINDOW_IDS.FREAKS_HOUSE_MAIN,
-            window: (
+          handleCliqueHouseAccess(
+            'FREAK',
+            WINDOW_IDS.FREAKS_HOUSE_MAIN,
+            (
               <DraggableResizeableWindow
                 windowsId={WINDOW_IDS.FREAKS_HOUSE_MAIN}
                 headerTitle="Freak's House"
@@ -263,7 +324,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                 <FreaksHouseMain />
               </DraggableResizeableWindow>
             ),
-          })
+            "Freak's House"
+          )
         }
         onClick={(e) => handleEnhancedClick('freaks-house', e)}
         onMouseEnter={() => setHovered('freaks-house')}
@@ -274,9 +336,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       <div
         className={`${styles.icon} ${styles.large} ${styles['geeks-house']}`}
         onDoubleClick={() =>
-          openWindow({
-            key: WINDOW_IDS.GEEKS_HOUSE_MAIN,
-            window: (
+          handleCliqueHouseAccess(
+            'GEEK',
+            WINDOW_IDS.GEEKS_HOUSE_MAIN,
+            (
               <DraggableResizeableWindow
                 windowsId={WINDOW_IDS.GEEKS_HOUSE_MAIN}
                 headerTitle="Geek's House"
@@ -288,7 +351,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                 <GeeksHouseMain />
               </DraggableResizeableWindow>
             ),
-          })
+            "Geek's House"
+          )
         }
         onClick={(e) => handleEnhancedClick('geeks-house', e)}
         onMouseEnter={() => setHovered('geeks-house')}
@@ -302,9 +366,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         onMouseEnter={() => setHovered('preps-house')}
         onMouseLeave={() => setHovered(null)}
         onDoubleClick={() =>
-          openWindow({
-            key: WINDOW_IDS.PREPS_HOUSE_MAIN,
-            window: (
+          handleCliqueHouseAccess(
+            'PREP',
+            WINDOW_IDS.PREPS_HOUSE_MAIN,
+            (
               <DraggableResizeableWindow
                 windowsId={WINDOW_IDS.PREPS_HOUSE_MAIN}
                 headerTitle="Prep's House"
@@ -316,7 +381,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                 <PrepsHouseMain />
               </DraggableResizeableWindow>
             ),
-          })
+            "Prep's House"
+          )
         }
       >
       </div>
