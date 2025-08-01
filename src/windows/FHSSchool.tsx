@@ -268,16 +268,108 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
           <div className="p-4 space-y-4">
             <h2 className="text-xl font-bold mb-4">👨‍🏫 Faculty & Staff</h2>
             
+            {/* Our Team Section */}
+            <div className="bg-white border-2 border-gray-400 p-4">
+              <h3 className="font-bold text-xl mb-4">🌟 Our Team</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Skeremy */}
+                <div className="border border-gray-300 p-4 rounded">
+                  <div className="flex items-start gap-3">
+                    <div className="w-20 h-20 border border-gray-400 rounded flex-shrink-0 overflow-hidden">
+                      <img 
+                        src="/images/about-us/skeremy.png" 
+                        alt="Skeremy"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg">Skeremy</h4>
+                      <p className="text-sm text-gray-700 mt-2">
+                        Skeremy is the purveyor of vibes in the Flunks universe. He leads the creative 
+                        direction behind the scenes and has a background in graphic design, drugs 
+                        and nostalgia.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Nantucket */}
+                <div className="border border-gray-300 p-4 rounded">
+                  <div className="flex items-start gap-3">
+                    <div className="w-20 h-20 border border-gray-400 rounded flex-shrink-0 overflow-hidden">
+                      <img 
+                        src="/images/about-us/Nantucket.png" 
+                        alt="Nantucket"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg">Nantucket</h4>
+                      <p className="text-sm text-gray-700 mt-2">
+                        Nanny is the one and only glue-sniffin' wanderer of Flunks and the greater 
+                        Web3 realm. With a background in programming and shenanigans, he's 
+                        going to keep the gears greased and the train on the tracks.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* DOLO */}
+                <div className="border border-gray-300 p-4 rounded">
+                  <div className="flex items-start gap-3">
+                    <div className="w-20 h-20 border border-gray-400 rounded flex-shrink-0 overflow-hidden">
+                      <img 
+                        src="/images/about-us/dolo.png" 
+                        alt="DOLO"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg">DOLO</h4>
+                      <p className="text-sm text-gray-700 mt-2">
+                        DOLO is the hall-passin' drifter of Flunks—never tied down, always in 
+                        the mix. With a background in digital marketing, writing, and UX, he turns 
+                        ideas into moments that connect, land, and leave an impression.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Handy */}
+                <div className="border border-gray-300 p-4 rounded">
+                  <div className="flex items-start gap-3">
+                    <div className="w-20 h-20 border border-gray-400 rounded flex-shrink-0 overflow-hidden">
+                      <img 
+                        src="/images/about-us/Handy.png" 
+                        alt="Handy"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg">Handy</h4>
+                      <p className="text-sm text-gray-700 mt-2">
+                        Handy is a multi-talented artist with a background in illustration and 3D 
+                        modeling. He created the art assets for the Flunks Portraits collection, Pocket 
+                        Juniors, Flunks 3D, and contributes to the broader Flunks ecosystem.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Traditional School Administration */}
             <div className="bg-white border-2 border-gray-400 p-3">
-              <h3 className="font-bold text-lg mb-3">Administration:</h3>
+              <h3 className="font-bold text-lg mb-3">🏫 School Administration:</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div className="border border-gray-300 p-2">
-                  <strong>Principal:</strong> Dr. [PLACEHOLDER NAME]<br/>
+                  <strong>Principal:</strong> Dr. [PRINCIPAL_NAME]<br/>
                   <em>Office: Room 101</em><br/>
                   <em>Ext: 1001</em>
                 </div>
                 <div className="border border-gray-300 p-2">
-                  <strong>Vice Principal:</strong> Mrs. [PLACEHOLDER NAME]<br/>
+                  <strong>Vice Principal:</strong> Mrs. [VP_NAME]<br/>
                   <em>Office: Room 102</em><br/>
                   <em>Ext: 1002</em>
                 </div>
@@ -285,14 +377,14 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
             </div>
 
             <div className="bg-white border-2 border-gray-400 p-3">
-              <h3 className="font-bold text-lg mb-3">Department Heads:</h3>
+              <h3 className="font-bold text-lg mb-3">📚 Department Heads:</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-                <div>• <strong>Mathematics:</strong> Mr. [PLACEHOLDER]</div>
-                <div>• <strong>English:</strong> Ms. [PLACEHOLDER]</div>
-                <div>• <strong>Science:</strong> Dr. [PLACEHOLDER]</div>
-                <div>• <strong>History:</strong> Mrs. [PLACEHOLDER]</div>
-                <div>• <strong>Physical Education:</strong> Coach [PLACEHOLDER]</div>
-                <div>• <strong>Arts:</strong> Ms. [PLACEHOLDER]</div>
+                <div>• <strong>Mathematics:</strong> Mr. Calculator</div>
+                <div>• <strong>English:</strong> Ms. Shakespeare</div>
+                <div>• <strong>Science:</strong> Dr. Beaker</div>
+                <div>• <strong>History:</strong> Mrs. Timeline</div>
+                <div>• <strong>Physical Education:</strong> Coach Athletic</div>
+                <div>• <strong>Arts:</strong> Ms. Creative</div>
               </div>
             </div>
 
