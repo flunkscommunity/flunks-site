@@ -1,10 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  Window,
-  WindowHeader,
-  WindowContent,
-  TextField,
-  Button
+  TextField
 } from 'react95';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { trackTerminalActivity, generateSessionId, COMMAND_TYPES } from 'utils/activityTracking';
@@ -93,61 +89,50 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
   };
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
-      <Window style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <WindowHeader className="window-title">
-          <span>flunks-terminal.exe</span>
-          <Button onClick={onClose} style={{ float: 'right' }}>
-            <span style={{ fontWeight: 'bold' }}>×</span>
-          </Button>
-        </WindowHeader>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: 1,
+        padding: 8,
+        height: '100%',
+        minHeight: 0
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: 'black',
+          color: 'lime',
+          fontFamily: 'monospace',
+          flexGrow: 1,
+          overflowY: 'auto',
+          padding: '10px',
+          marginBottom: '10px',
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
+        {history.map((line, i) => (
+          <div key={i}>{line}</div>
+        ))}
+        <div ref={terminalEndRef} />
+      </div>
 
-        <WindowContent
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
-            padding: 8,
-            height: '100%',
-            minHeight: 0
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: 'black',
-              color: 'lime',
-              fontFamily: 'monospace',
-              flexGrow: 1,
-              overflowY: 'auto',
-              padding: '10px',
-              marginBottom: '10px',
-              display: 'flex',
-              flexDirection: 'column'
-            }}
-          >
-            {history.map((line, i) => (
-              <div key={i}>{line}</div>
-            ))}
-            <div ref={terminalEndRef} />
-          </div>
-
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleCommand();
-            }}
-            style={{ margin: 0 }}
-          >
-            <TextField
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              fullWidth
-            />
-          </form>
-        </WindowContent>
-      </Window>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleCommand();
+        }}
+        style={{ margin: 0 }}
+      >
+        <TextField
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          fullWidth
+        />
+      </form>
     </div>
   );
-};
+  };
 
-export default FlunksTerminal;
+  export default FlunksTerminal;

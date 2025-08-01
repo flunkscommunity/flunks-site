@@ -42,7 +42,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           <ClaimBackpackProvider>
             <DynamicContextProvider
               settings={{
-                environmentId: "4e1ca7d6-a9b6-4440-a87d-e44a4b110882",
+                environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID || "53a9e7ed-47cf-468c-b43e-44e8fcec1b13",
                 walletConnectors: [customFlowConnectors],
                 overrides: {
                   views: [

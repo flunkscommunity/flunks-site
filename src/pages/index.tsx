@@ -119,6 +119,7 @@ const windowsMemod = useMemo(() => (
                 windowsId={WINDOW_IDS.TERMINAL}
                 onClose={() => closeWindow(WINDOW_IDS.TERMINAL)}
                 headerTitle="Flunks Terminal"
+                headerIcon="/images/icons/newterminal.png"
                 initialWidth="520px"
                 initialHeight="400px"
               >

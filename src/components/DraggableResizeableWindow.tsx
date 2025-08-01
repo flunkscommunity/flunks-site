@@ -34,6 +34,11 @@ const WindowButtons = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 4px;
+  
+  button[id="action"] {
+    margin: 0 !important;
+    vertical-align: top !important;
+  }
 `;
 
 const DraggableResizeableWindow: React.FC<Props> = (props) => {
@@ -219,6 +224,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
                         src="/images/icons/question.png"
                         width="60%"
                         height="60%"
+                        style={{ display: 'block', margin: 'auto' }}
                       />
                     </Button>
                   )}
@@ -228,6 +234,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
                         src="/images/icons/maximize.png"
                         width="60%"
                         height="60%"
+                        style={{ display: 'block', margin: 'auto' }}
                       />
                     </Button>
                   )}
@@ -236,6 +243,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
                       src="/images/icons/minimize.png"
                       width="60%"
                       height="60%"
+                      style={{ display: 'block', margin: 'auto' }}
                     />
                   </Button>
                   <Button

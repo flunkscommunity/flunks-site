@@ -6,6 +6,44 @@ import { WINDOW_IDS } from '../fixed';
 import * as htmlToImage from 'html-to-image';
 import { memeGenerator, MEME_TEMPLATES } from '../utils/memeGenerator';
 
+// Force button styles to ensure they work
+const StyledButton = styled(Button)`
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  user-select: none !important;
+  
+  &:hover {
+    cursor: pointer !important;
+  }
+  
+  &:disabled {
+    cursor: not-allowed !important;
+  }
+`;
+
+// Native button for testing
+const NativeButton = styled.button`
+  padding: 8px 16px;
+  background: #c0c0c0;
+  border: 2px outset #c0c0c0;
+  font-family: 'MS Sans Serif', sans-serif;
+  cursor: pointer;
+  font-size: 12px;
+  
+  &:hover {
+    background: #d0d0d0;
+  }
+  
+  &:active {
+    border: 2px inset #c0c0c0;
+  }
+  
+  &:disabled {
+    background: #a0a0a0;
+    cursor: not-allowed;
+  }
+`;
+
 const MemeContainer = styled.div`
   display: flex;
   height: 600px;
@@ -281,14 +319,20 @@ const MemeManagerWindow: React.FC<MemeManagerWindowProps> = ({ onClose }) => {
     
     try {
       // Use the enhanced meme generator
-      const generatedText = selectedTemplate 
-        ? await memeGenerator.generateWithAI(memePrompt, selectedTemplate)
-        : await memeGenerator.generateWithAI(memePrompt);
+      let generatedText;
+      if (selectedTemplate) {
+        console.log('Using template:', selectedTemplate);
+        generatedText = await memeGenerator.generateWithAI(memePrompt, selectedTemplate);
+      } else {
+        console.log('Using auto-detect');
+        generatedText = memeGenerator.processPrompt(memePrompt);
+      }
       
       console.log('Generated text:', generatedText);
       
       // Split text into lines and create text elements
       const lines = generatedText.split('\n').filter(line => line.trim());
+      console.log('Split into lines:', lines);
       
       // Clear existing text elements first
       setTextElements([]);
@@ -300,7 +344,7 @@ const MemeManagerWindow: React.FC<MemeManagerWindowProps> = ({ onClose }) => {
             id: Date.now() + index * 100,
             text: line.trim(),
             x: 50,
-            y: 15 + (index * (60 / lines.length)), // Smart spacing based on number of lines
+            y: 15 + (index * (60 / Math.max(lines.length - 1, 1))), // Smart spacing based on number of lines
             fontSize: Math.max(24, 40 - (lines.length * 2)), // Smaller font for more lines
             color: currentColor,
             fontFamily: currentFont,
@@ -308,8 +352,13 @@ const MemeManagerWindow: React.FC<MemeManagerWindowProps> = ({ onClose }) => {
             strokeColor: currentStrokeColor,
           };
           
+          console.log('Adding text element:', newElement);
+          
           setTimeout(() => {
-            setTextElements(prev => [...prev, newElement]);
+            setTextElements(prev => {
+              console.log('Current text elements:', prev);
+              return [...prev, newElement];
+            });
           }, index * 150);
         }
       });
@@ -317,7 +366,9 @@ const MemeManagerWindow: React.FC<MemeManagerWindowProps> = ({ onClose }) => {
     } catch (error) {
       console.error('Error generating meme text:', error);
       // Fallback to simple generation
-      const fallbackText = memeGenerator.processPrompt(memePrompt);
+      const fallbackText = `WHEN ${memePrompt.toUpperCase()}`;
+      console.log('Using fallback text:', fallbackText);
+      
       const newElement: TextElement = {
         id: Date.now(),
         text: fallbackText,
@@ -469,19 +520,43 @@ const MemeManagerWindow: React.FC<MemeManagerWindowProps> = ({ onClose }) => {
                 />
               </div>
               <div style={{ display: 'flex', gap: '4px', marginBottom: '8px' }}>
-                <Button 
-                  onClick={generateMemeText}
-                  disabled={!memePrompt.trim() || isGeneratingText}
-                  style={{ flex: 1 }}
+                <NativeButton 
+                  onClick={() => {
+                    console.log('Generate button clicked - prompt:', memePrompt);
+                    console.log('Prompt trimmed:', memePrompt.trim());
+                    console.log('Is generating:', isGeneratingText);
+                    if (!memePrompt.trim()) {
+                      console.log('Setting default prompt for testing');
+                      setMemePrompt('When you realize');
+                      return;
+                    }
+                    generateMemeText();
+                  }}
+                  disabled={isGeneratingText}
+                  style={{ 
+                    flex: 1
+                  }}
                 >
                   {isGeneratingText ? '🤖 Generating...' : '✨ Generate Meme Text'}
-                </Button>
-                <Button
-                  onClick={() => setMemePrompt(memeGenerator.getRandomMemeIdea())}
-                  style={{ width: '80px' }}
+                </NativeButton>
+                <NativeButton
+                  onClick={() => {
+                    console.log('Random button clicked');
+                    try {
+                      const randomIdea = memeGenerator.getRandomMemeIdea();
+                      console.log('Random idea:', randomIdea);
+                      setMemePrompt(randomIdea);
+                    } catch (error) {
+                      console.error('Error getting random idea:', error);
+                      setMemePrompt('When you realize');
+                    }
+                  }}
+                  style={{ 
+                    width: '80px'
+                  }}
                 >
                   🎲 Random
-                </Button>
+                </NativeButton>
               </div>
             </ControlSection>
             
