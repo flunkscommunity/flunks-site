@@ -427,10 +427,26 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                   className="w-20 h-24"
                   style={{
                     imageRendering: 'pixelated',
-                    filter: 'drop-shadow(0 0 10px rgba(255, 105, 180, 0.5))'
+                    filter: 'drop-shadow(0 0 10px rgba(255, 105, 180, 0.5))',
+                    animation: 'floatLeftRight 4s ease-in-out infinite'
                   }}
                 />
               </div>
+              
+              {/* CSS Animation Styles */}
+              <style jsx>{`
+                @keyframes floatLeftRight {
+                  0% {
+                    transform: translateX(-15px);
+                  }
+                  50% {
+                    transform: translateX(15px);
+                  }
+                  100% {
+                    transform: translateX(-15px);
+                  }
+                }
+              `}</style>
               <h1 className="text-3xl font-bold mb-2">🏫 FLUNKS HIGH SCHOOL</h1>
               <p className="text-xl">Home of the Astros 🚀</p>
               <p className="text-lg mt-2">Excellence in Education Since 1985</p>
@@ -544,12 +560,16 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
         position: 'relative'
       }}
     >
-      <Toolbar className="flex gap-2 p-2">
+      <Toolbar className="flex gap-4 p-4 justify-center">
         <Button 
           onClick={() => setActiveTab('home')}
           style={{ 
             backgroundColor: activeTab === 'home' ? '#c0c0c0' : undefined,
-            fontWeight: activeTab === 'home' ? 'bold' : undefined
+            fontWeight: activeTab === 'home' ? 'bold' : undefined,
+            padding: '12px 20px',
+            fontSize: '16px',
+            minWidth: '140px',
+            height: '48px'
           }}
         >
           🏠 Home
@@ -558,7 +578,11 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
           onClick={() => setActiveTab('calendar')}
           style={{ 
             backgroundColor: activeTab === 'calendar' ? '#c0c0c0' : undefined,
-            fontWeight: activeTab === 'calendar' ? 'bold' : undefined
+            fontWeight: activeTab === 'calendar' ? 'bold' : undefined,
+            padding: '12px 20px',
+            fontSize: '16px',
+            minWidth: '180px',
+            height: '48px'
           }}
         >
           📅 School Calendar
@@ -567,7 +591,11 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
           onClick={() => setActiveTab('staff')}
           style={{ 
             backgroundColor: activeTab === 'staff' ? '#c0c0c0' : undefined,
-            fontWeight: activeTab === 'staff' ? 'bold' : undefined
+            fontWeight: activeTab === 'staff' ? 'bold' : undefined,
+            padding: '12px 20px',
+            fontSize: '16px',
+            minWidth: '140px',
+            height: '48px'
           }}
         >
           👨‍🏫 Staff
@@ -576,7 +604,11 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
           onClick={() => setActiveTab('resources')}
           style={{ 
             backgroundColor: activeTab === 'resources' ? '#c0c0c0' : undefined,
-            fontWeight: activeTab === 'resources' ? 'bold' : undefined
+            fontWeight: activeTab === 'resources' ? 'bold' : undefined,
+            padding: '12px 20px',
+            fontSize: '16px',
+            minWidth: '160px',
+            height: '48px'
           }}
         >
           📚 Resources
@@ -585,13 +617,17 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
           onClick={() => setActiveTab('map')}
           style={{ 
             backgroundColor: activeTab === 'map' ? '#c0c0c0' : undefined,
-            fontWeight: activeTab === 'map' ? 'bold' : undefined
+            fontWeight: activeTab === 'map' ? 'bold' : undefined,
+            padding: '12px 20px',
+            fontSize: '16px',
+            minWidth: '160px',
+            height: '48px'
           }}
         >
           🗺️ School Map
         </Button>
       </Toolbar>
-      <WindowContent style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+      <WindowContent style={{ height: '100%', overflowY: 'auto' }}>
         {renderContent()}
       </WindowContent>
     </div>

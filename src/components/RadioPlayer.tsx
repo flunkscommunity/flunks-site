@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import useWindowSize from '../hooks/useWindowSize';
+import { useAudio } from '../contexts/AudioContext';
 
 const tracks = [
   { src: '/audio/paradise.mp3', title: '87.9 FREN', frequency: '87.9', station: 'FREN' },
@@ -14,12 +15,16 @@ const RadioPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const { width } = useWindowSize();
+  const { isMuted, globalVolume } = useAudio();
   
   // Autoplay station 4 on component mount
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.src = tracks[3].src; // Station 4 (104.1 FLNK)
-      audioRef.current.volume = volume;
+      audioRef.current.volume = isMuted ? 0 : volume;
+      
+      // Store original volume for the audio context
+      audioRef.current.dataset.originalVolume = volume.toString();
       
       // Try to autoplay (modern browsers may block this)
       const playPromise = audioRef.current.play();
@@ -36,6 +41,17 @@ const RadioPlayer = () => {
       }
     }
   }, []);
+
+  // Update audio volume when global mute state or volume changes
+  useEffect(() => {
+    if (audioRef.current) {
+      if (isMuted) {
+        audioRef.current.volume = 0;
+      } else {
+        audioRef.current.volume = volume;
+      }
+    }
+  }, [isMuted, volume]);
   
   // Determine if we should use fixed positioning (desktop) or scaled positioning (mobile/tablet)
   const isDesktop = width >= 769;
@@ -127,7 +143,12 @@ const RadioPlayer = () => {
     const newVolume = parseFloat(e.target.value);
     setVolume(newVolume);
     if (audioRef.current) {
-      audioRef.current.volume = newVolume;
+      // Store original volume for global audio context
+      audioRef.current.dataset.originalVolume = newVolume.toString();
+      // Only set volume if not muted
+      if (!isMuted) {
+        audioRef.current.volume = newVolume;
+      }
     }
   };
 
