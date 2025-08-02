@@ -1,50 +1,113 @@
 {
-  "generated": "2025-07-22T20:23:20.135Z",
+  "generated": "2025-08-02T16:47:52.914Z",
   "stations": [
     {
-      "src": "/audio/paradise.mp3",
+      "src": "/audio/stations/87.9-FREN/radio_static.mp3",
       "title": "87.9 FREN",
       "frequency": "87.9",
       "station": "FREN",
       "genre": "Alternative/Indie",
       "description": "The Fren Zone - Alternative, Indie & Underground Music",
-      "trackCount": 0,
-      "tracks": []
+      "trackCount": 1,
+      "tracks": [
+        {
+          "src": "/audio/stations/87.9-FREN/radio_static.mp3",
+          "title": "Static",
+          "artist": "Radio",
+          "filename": "radio_static.mp3"
+        }
+      ]
     },
     {
-      "src": "/audio/paradise.mp3",
+      "src": "/audio/stations/97.5-WZRD/2.mp3",
       "title": "97.5 WZRD",
       "frequency": "97.5",
       "station": "WZRD",
       "genre": "Electronic/Synthwave",
       "description": "The Wizard - Electronic, Synthwave & Digital Magic",
-      "trackCount": 0,
-      "tracks": []
+      "trackCount": 4,
+      "tracks": [
+        {
+          "src": "/audio/stations/97.5-WZRD/2.mp3",
+          "title": "2",
+          "artist": "Unknown Artist",
+          "filename": "2.mp3"
+        },
+        {
+          "src": "/audio/stations/97.5-WZRD/arcade.mp3",
+          "title": "arcade",
+          "artist": "Unknown Artist",
+          "filename": "arcade.mp3"
+        },
+        {
+          "src": "/audio/stations/97.5-WZRD/chill.mp3",
+          "title": "chill",
+          "artist": "Unknown Artist",
+          "filename": "chill.mp3"
+        },
+        {
+          "src": "/audio/stations/97.5-WZRD/starter.mp3",
+          "title": "starter",
+          "artist": "Unknown Artist",
+          "filename": "starter.mp3"
+        }
+      ]
     },
     {
-      "src": "/audio/paradise.mp3",
+      "src": "/audio/stations/101.9-TEDY/Lose_Yourself_From_8_Mile_8_Bit_Remix_Cover_Version_[Tribute_to_Eminem]_-_8_Bit_Universe_128k_kaizo[cc].mp3",
       "title": "101.9 TEDY",
       "frequency": "101.9",
       "station": "TEDY",
       "genre": "Classical/Study",
       "description": "The Study Station - Classical, Jazz & Focus Music",
-      "trackCount": 0,
-      "tracks": []
+      "trackCount": 2,
+      "tracks": [
+        {
+          "src": "/audio/stations/101.9-TEDY/Lose_Yourself_From_8_Mile_8_Bit_Remix_Cover_Version_[Tribute_to_Eminem]_-_8_Bit_Universe_128k_kaizo[cc].mp3",
+          "title": "Yourself",
+          "artist": "Lose",
+          "filename": "Lose_Yourself_From_8_Mile_8_Bit_Remix_Cover_Version_[Tribute_to_Eminem]_-_8_Bit_Universe_128k_kaizo[cc].mp3"
+        },
+        {
+          "src": "/audio/stations/101.9-TEDY/X_Gon_Give_It_To_Ya_Deadpool_Trailer_Theme_[Tribute_to_DMX_Deadpool]_-_8_Bit_Universe_128k_kaizo[cc].mp3",
+          "title": "Gon",
+          "artist": "X",
+          "filename": "X_Gon_Give_It_To_Ya_Deadpool_Trailer_Theme_[Tribute_to_DMX_Deadpool]_-_8_Bit_Universe_128k_kaizo[cc].mp3"
+        }
+      ]
     },
     {
-      "src": "/audio/stations/104.1-FLNK/paradise.mp3",
+      "src": "/audio/stations/104.1-FLNK/boywonder.mp3",
       "title": "104.1 FLNK",
       "frequency": "104.1",
       "station": "FLNK",
       "genre": "Pop/Rock/Hits",
       "description": "Flunk Hits - Pop, Rock & Chart-Topping Hits",
-      "trackCount": 1,
+      "trackCount": 4,
       "tracks": [
         {
-          "src": "/audio/stations/104.1-FLNK/paradise.mp3",
-          "title": "paradise",
+          "src": "/audio/stations/104.1-FLNK/boywonder.mp3",
+          "title": "boywonder",
           "artist": "Unknown Artist",
-          "filename": "paradise.mp3"
+          "filename": "boywonder.mp3"
+        },
+        {
+          "src": "/audio/stations/104.1-FLNK/immortal.mp3",
+          "title": "immortal",
+          "artist": "Unknown Artist",
+          "filename": "immortal.mp3"
+        },
+        {
+          "src": "/audio/stations/104.1-FLNK/skeremy-semesterzero.mp3",
+          "title": "skeremy-semesterzero",
+          "artist": "Unknown Artist",
+          "filename": "skeremy-semesterzero.mp3"
+        },
+        {
+          "src": "/audio/stations/104.1-FLNK/wttj.mp3",
+          "title": "wttj",
+          "artist": "Unknown Artist",
+          "filename": "wttj.mp3"
         }
       ]
     }

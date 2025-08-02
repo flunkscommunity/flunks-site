@@ -3,44 +3,79 @@ import useWindowSize from '../hooks/useWindowSize';
 import { useAudio } from '../contexts/AudioContext';
 
 const tracks = [
-  { src: '/audio/paradise.mp3', title: '87.9 FREN', frequency: '87.9', station: 'FREN' },
-  { src: '/audio/paradise.mp3', title: '97.5 WZRD', frequency: '97.5', station: 'WZRD' },
-  { src: '/audio/paradise.mp3', title: '101.9 TEDY', frequency: '101.9', station: 'TEDY' },
-  { src: '/audio/stations/104.1-FLNK/paradise.mp3', title: '104.1 FLNK', frequency: '104.1', station: 'FLNK' }
+  { src: '/audio/stations/87.9-FREN/radio_static.mp3', title: '87.9 FREN', frequency: '87.9', station: 'FREN' },
+  { src: '/audio/stations/97.5-WZRD/2.mp3', title: '97.5 WZRD', frequency: '97.5', station: 'WZRD' },
+  { src: '/audio/stations/101.9-TEDY/Lose_Yourself_From_8_Mile_8_Bit_Remix_Cover_Version_[Tribute_to_Eminem]_-_8_Bit_Universe_128k_kaizo[cc].mp3', title: '101.9 TEDY', frequency: '101.9', station: 'TEDY' },
+  { src: '/audio/stations/104.1-FLNK/boywonder.mp3', title: '104.1 FLNK', frequency: '104.1', station: 'FLNK' }
 ];
+
+// Station data with multiple tracks per station (loaded from manifest)
+interface Track {
+  src: string;
+  title: string;
+  artist: string;
+  filename: string;
+}
+
+interface StationData {
+  tracks: Track[];
+  frequency: string;
+  title: string;
+  station: string;
+}
 
 const RadioPlayer = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [trackIndex, setTrackIndex] = useState(3); // Start with station 4 (index 3)
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
+  const [stationData, setStationData] = useState<StationData[]>([]);
+  const [currentTrackInStation, setCurrentTrackInStation] = useState<number[]>([0, 0, 0, 0]); // Track index for each station
   const { width } = useWindowSize();
   const { isMuted, globalVolume } = useAudio();
   
+  // Load station data with all tracks
+  useEffect(() => {
+    const loadStationData = async () => {
+      try {
+        const response = await fetch('/audio/stations/stations-manifest.json');
+        const manifest = await response.json();
+        setStationData(manifest.stations);
+      } catch (error) {
+        console.error('Failed to load station data:', error);
+      }
+    };
+    loadStationData();
+  }, []);
+
   // Autoplay station 4 on component mount
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.src = tracks[3].src; // Station 4 (104.1 FLNK)
-      audioRef.current.volume = isMuted ? 0 : volume;
-      
-      // Store original volume for the audio context
-      audioRef.current.dataset.originalVolume = volume.toString();
-      
-      // Try to autoplay (modern browsers may block this)
-      const playPromise = audioRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            setIsPlaying(true);
-          })
-          .catch((error) => {
-            // Autoplay was prevented - user will need to click play
-            console.log('Autoplay was prevented:', error);
-            setIsPlaying(false);
-          });
+    if (audioRef.current && stationData.length > 0) {
+      const currentStation = stationData[3]; // Station 4 (index 3)
+      const currentSongIndex = currentTrackInStation[3];
+      if (currentStation && currentStation.tracks[currentSongIndex]) {
+        audioRef.current.src = currentStation.tracks[currentSongIndex].src;
+        audioRef.current.volume = isMuted ? 0 : volume;
+        
+        // Store original volume for the audio context
+        audioRef.current.dataset.originalVolume = volume.toString();
+        
+        // Try to autoplay (modern browsers may block this)
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              setIsPlaying(true);
+            })
+            .catch((error) => {
+              // Autoplay was prevented - user will need to click play
+              console.log('Autoplay was prevented:', error);
+              setIsPlaying(false);
+            });
+        }
       }
     }
-  }, []);
+  }, [stationData]);
 
   // Update audio volume when global mute state or volume changes
   useEffect(() => {
@@ -64,7 +99,9 @@ const RadioPlayer = () => {
     button3: { top: '240px', left: '395px', width: '18px', height: '18px' },
     button4: { top: '240px', left: '420px', width: '18px', height: '18px' },
     seekForward: { top: '240px', left: '446px', width: '22px', height: '18px' },
-    playButton: { top: '210px', left: '435px', width: '25px', height: '22px' }
+    playButton: { top: '210px', left: '435px', width: '25px', height: '22px' },
+    rewind: { top: '320px', left: '363px', width: '40px', height: '20px' },
+    fastForward: { top: '320px', left: '417px', width: '60px', height: '20px' }
   };
   
   // Helper function to get button style based on screen size
@@ -111,10 +148,40 @@ const RadioPlayer = () => {
 
   const selectStation = (stationIndex: number) => {
     setTrackIndex(stationIndex);
-    if (audioRef.current) {
+    if (audioRef.current && stationData.length > 0) {
+      const station = stationData[stationIndex];
+      const songIndex = currentTrackInStation[stationIndex];
+      if (station && station.tracks[songIndex]) {
+        audioRef.current.src = station.tracks[songIndex].src;
+        
+        // Auto-start playing when switching stations
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              setIsPlaying(true);
+            })
+            .catch((error) => {
+              console.log('Autoplay prevented:', error);
+              // Try again after a brief delay
+              setTimeout(() => {
+                if (audioRef.current) {
+                  audioRef.current.play()
+                    .then(() => setIsPlaying(true))
+                    .catch(() => setIsPlaying(false));
+                }
+              }, 100);
+            });
+        }
+      }
+    } else if (audioRef.current) {
+      // Fallback to original tracks if station data not loaded yet
       audioRef.current.src = tracks[stationIndex].src;
-      if (isPlaying) {
-        audioRef.current.play();
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => setIsPlaying(true))
+          .catch(() => setIsPlaying(false));
       }
     }
   };
@@ -127,6 +194,84 @@ const RadioPlayer = () => {
   const seekForward = () => {
     const newIndex = trackIndex === tracks.length - 1 ? 0 : trackIndex + 1;
     selectStation(newIndex);
+  };
+
+  // Skip to previous track within current station
+  const rewindTrack = () => {
+    if (stationData.length > 0) {
+      const station = stationData[trackIndex];
+      if (station && station.tracks.length > 0) {
+        const newTrackIndices = [...currentTrackInStation];
+        const currentSongIndex = newTrackIndices[trackIndex];
+        const newSongIndex = currentSongIndex === 0 ? station.tracks.length - 1 : currentSongIndex - 1;
+        newTrackIndices[trackIndex] = newSongIndex;
+        setCurrentTrackInStation(newTrackIndices);
+        
+        if (audioRef.current) {
+          audioRef.current.src = station.tracks[newSongIndex].src;
+          
+          // Small delay to ensure audio source is loaded, then auto-play
+          setTimeout(() => {
+            if (audioRef.current) {
+              const playPromise = audioRef.current.play();
+              if (playPromise !== undefined) {
+                playPromise
+                  .then(() => {
+                    console.log('REW autoplay successful');
+                    setIsPlaying(true);
+                  })
+                  .catch((error) => {
+                    console.log('REW autoplay prevented:', error);
+                    setIsPlaying(false);
+                  });
+              } else {
+                // Fallback for older browsers
+                setIsPlaying(true);
+              }
+            }
+          }, 100);
+        }
+      }
+    }
+  };
+
+  // Skip to next track within current station
+  const fastForwardTrack = () => {
+    if (stationData.length > 0) {
+      const station = stationData[trackIndex];
+      if (station && station.tracks.length > 0) {
+        const newTrackIndices = [...currentTrackInStation];
+        const currentSongIndex = newTrackIndices[trackIndex];
+        const newSongIndex = currentSongIndex === station.tracks.length - 1 ? 0 : currentSongIndex + 1;
+        newTrackIndices[trackIndex] = newSongIndex;
+        setCurrentTrackInStation(newTrackIndices);
+        
+        if (audioRef.current) {
+          audioRef.current.src = station.tracks[newSongIndex].src;
+          
+          // Small delay to ensure audio source is loaded, then auto-play
+          setTimeout(() => {
+            if (audioRef.current) {
+              const playPromise = audioRef.current.play();
+              if (playPromise !== undefined) {
+                playPromise
+                  .then(() => {
+                    console.log('FFWD autoplay successful');
+                    setIsPlaying(true);
+                  })
+                  .catch((error) => {
+                    console.log('FFWD autoplay prevented:', error);
+                    setIsPlaying(false);
+                  });
+              } else {
+                // Fallback for older browsers
+                setIsPlaying(true);
+              }
+            }
+          }, 100);
+        }
+      }
+    }
   };
 
   const togglePlay = () => {
@@ -343,6 +488,34 @@ const RadioPlayer = () => {
             }}
           />
 
+          {/* REW Button - Invisible clickable area over the REW text */}
+          <div
+            onClick={rewindTrack}
+            className="cursor-win95-pointer"
+            style={{
+              position: 'absolute',
+              ...getButtonStyle('rewind'),
+              backgroundColor: 'transparent',
+              opacity: 0.8,
+              zIndex: 10
+            }}
+            title="Previous Track"
+          />
+
+          {/* F.FWD Button - Invisible clickable area over the F.FWD text */}
+          <div
+            onClick={fastForwardTrack}
+            className="cursor-win95-pointer"
+            style={{
+              position: 'absolute',
+              ...getButtonStyle('fastForward'),
+              backgroundColor: 'transparent',
+              opacity: 0.8,
+              zIndex: 10
+            }}
+            title="Next Track"
+          />
+
           </div>
         </div>
       ) : (
@@ -393,6 +566,16 @@ const RadioPlayer = () => {
               cursor: 'pointer'
             }}>⏮️ PREV</button>
             
+            <button onClick={rewindTrack} style={{
+              background: '#444',
+              color: 'white',
+              border: '2px solid #666',
+              borderRadius: '8px',
+              padding: '15px 20px',
+              fontSize: '16px',
+              cursor: 'pointer'
+            }}>⏪ REW</button>
+            
             <button onClick={togglePlay} style={{
               background: isPlaying ? '#ff4444' : '#44ff44',
               color: 'white',
@@ -402,6 +585,16 @@ const RadioPlayer = () => {
               fontSize: '16px',
               cursor: 'pointer'
             }}>{isPlaying ? '⏸️ PAUSE' : '▶️ PLAY'}</button>
+            
+            <button onClick={fastForwardTrack} style={{
+              background: '#444',
+              color: 'white',
+              border: '2px solid #666',
+              borderRadius: '8px',
+              padding: '15px 20px',
+              fontSize: '16px',
+              cursor: 'pointer'
+            }}>⏩ F.FWD</button>
             
             <button onClick={seekForward} style={{
               background: '#333',
@@ -471,7 +664,13 @@ const RadioPlayer = () => {
         </div>
       )}
 
-      <audio ref={audioRef} src={tracks[trackIndex].src} />
+      <audio 
+        ref={audioRef} 
+        src={stationData.length > 0 && stationData[trackIndex] ? 
+          stationData[trackIndex].tracks[currentTrackInStation[trackIndex]]?.src : 
+          tracks[trackIndex].src
+        } 
+      />
     </>
   );
 };
