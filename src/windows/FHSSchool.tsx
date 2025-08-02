@@ -557,23 +557,23 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                 <div className="border-l-4 border-blue-500 pl-3">
                   <h3 className="font-bold">🎉 Welcome Back Students!</h3>
                   <p className="text-sm">The new school year is off to a great start! Don't forget to pick up your student handbooks from the main office.</p>
-                  <span className="text-xs text-gray-600">Posted: September 1, 1999</span>
+                  <span className="text-xs text-gray-600">Posted: August 27, 1998</span>
                 </div>
                 
                 <Separator />
                 
                 <div className="border-l-4 border-green-500 pl-3">
-                  <h3 className="font-bold">🏆 Football Team Wins Big!</h3>
-                  <p className="text-sm">Congratulations to our varsity football team for their 28-14 victory over Central High last Friday night!</p>
-                  <span className="text-xs text-gray-600">Posted: September 10, 1999</span>
+                  <h3 className="font-bold">💾 Web3 Innovation at Flunks!</h3>
+                  <p className="text-sm">Flunks is a web3 brand that blends high school nostalgia with the excitement of NFTs and modern technology.</p>
+                  <span className="text-xs text-gray-600">Posted: August 15, 1998</span>
                 </div>
                 
                 <Separator />
                 
                 <div className="border-l-4 border-purple-500 pl-3">
-                  <h3 className="font-bold">📚 New Computer Lab Opens</h3>
-                  <p className="text-sm">Check out our brand new computer lab featuring 20 state-of-the-art Pentium computers with internet access!</p>
-                  <span className="text-xs text-gray-600">Posted: August 25, 1999</span>
+                  <h3 className="font-bold">💻 Laser Focused Community Leadership</h3>
+                  <p className="text-sm">Founded in 2022 by web3 enthusiasts, Flunks has weathered the storm and is now run by a devoted team with a specific vision for the brand.</p>
+                  <span className="text-xs text-gray-600">Posted: August 15, 1998</span>
                 </div>
               </div>
             </div>
