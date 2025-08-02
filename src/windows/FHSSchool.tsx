@@ -1,5 +1,6 @@
 import { Button, Toolbar, WindowContent, Separator } from 'react95';
 import React, { useState } from 'react';
+import CrowdSimulator from 'components/CrowdSimulator';
 
 interface Props {
   onClose: () => void;
@@ -268,15 +269,20 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
           <div className="p-4 space-y-4">
             <h2 className="text-xl font-bold mb-4">👨‍🏫 Faculty & Staff</h2>
             
-            {/* Our Team Section */}
-            <div className="bg-white border-2 border-gray-400 p-4">
-              <h3 className="font-bold text-xl mb-4">🌟 Our Team</h3>
+            {/* School Board Section */}
+            <div className="bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 border-4 border-purple-500 p-6 shadow-lg">
+              <h3 className="font-black text-3xl mb-6 text-center text-purple-800" style={{
+                textShadow: '3px 3px 0px #ff00ff, 6px 6px 0px #00ffff',
+                fontFamily: 'Impact, Arial Black, sans-serif'
+              }}>
+                🌟 SCHOOL BOARD 🌟
+              </h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Skeremy */}
-                <div className="border border-gray-300 p-4 rounded">
-                  <div className="flex items-start gap-3">
-                    <div className="w-20 h-20 border border-gray-400 rounded flex-shrink-0 overflow-hidden">
+                <div className="bg-gradient-to-r from-yellow-300 to-orange-300 border-4 border-red-500 p-6 rounded-lg shadow-xl transform hover:scale-105 transition-transform">
+                  <div className="flex items-start gap-6">
+                    <div className="w-40 h-40 border-4 border-blue-600 rounded-lg flex-shrink-0 overflow-hidden shadow-lg">
                       <img 
                         src="/images/about-us/skeremy.png" 
                         alt="Skeremy"
@@ -284,8 +290,13 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                       />
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-bold text-lg">Skeremy</h4>
-                      <p className="text-sm text-gray-700 mt-2">
+                      <h4 className="font-black text-3xl text-red-700 mb-3" style={{
+                        textShadow: '2px 2px 0px #ffff00, 4px 4px 0px #ff00ff',
+                        fontFamily: 'Impact, Arial Black, sans-serif'
+                      }}>
+                        SKEREMY
+                      </h4>
+                      <p className="text-lg text-gray-900 font-bold leading-relaxed">
                         Skeremy is the purveyor of vibes in the Flunks universe. He leads the creative 
                         direction behind the scenes and has a background in graphic design, drugs 
                         and nostalgia.
@@ -295,9 +306,9 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                 </div>
 
                 {/* Nantucket */}
-                <div className="border border-gray-300 p-4 rounded">
-                  <div className="flex items-start gap-3">
-                    <div className="w-20 h-20 border border-gray-400 rounded flex-shrink-0 overflow-hidden">
+                <div className="bg-gradient-to-r from-green-300 to-teal-300 border-4 border-purple-500 p-6 rounded-lg shadow-xl transform hover:scale-105 transition-transform">
+                  <div className="flex items-start gap-6">
+                    <div className="w-40 h-40 border-4 border-pink-600 rounded-lg flex-shrink-0 overflow-hidden shadow-lg">
                       <img 
                         src="/images/about-us/Nantucket.png" 
                         alt="Nantucket"
@@ -305,8 +316,13 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                       />
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-bold text-lg">Nantucket</h4>
-                      <p className="text-sm text-gray-700 mt-2">
+                      <h4 className="font-black text-3xl text-purple-700 mb-3" style={{
+                        textShadow: '2px 2px 0px #00ff00, 4px 4px 0px #ff0066',
+                        fontFamily: 'Impact, Arial Black, sans-serif'
+                      }}>
+                        NANTUCKET
+                      </h4>
+                      <p className="text-lg text-gray-900 font-bold leading-relaxed">
                         Nanny is the one and only glue-sniffin' wanderer of Flunks and the greater 
                         Web3 realm. With a background in programming and shenanigans, he's 
                         going to keep the gears greased and the train on the tracks.
@@ -316,9 +332,9 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                 </div>
 
                 {/* DOLO */}
-                <div className="border border-gray-300 p-4 rounded">
-                  <div className="flex items-start gap-3">
-                    <div className="w-20 h-20 border border-gray-400 rounded flex-shrink-0 overflow-hidden">
+                <div className="bg-gradient-to-r from-blue-300 to-indigo-300 border-4 border-orange-500 p-6 rounded-lg shadow-xl transform hover:scale-105 transition-transform">
+                  <div className="flex items-start gap-6">
+                    <div className="w-40 h-40 border-4 border-green-600 rounded-lg flex-shrink-0 overflow-hidden shadow-lg">
                       <img 
                         src="/images/about-us/dolo.png" 
                         alt="DOLO"
@@ -326,8 +342,13 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                       />
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-bold text-lg">DOLO</h4>
-                      <p className="text-sm text-gray-700 mt-2">
+                      <h4 className="font-black text-3xl text-orange-700 mb-3" style={{
+                        textShadow: '2px 2px 0px #0066ff, 4px 4px 0px #ffff00',
+                        fontFamily: 'Impact, Arial Black, sans-serif'
+                      }}>
+                        DOLO
+                      </h4>
+                      <p className="text-lg text-gray-900 font-bold leading-relaxed">
                         DOLO is the hall-passin' drifter of Flunks—never tied down, always in 
                         the mix. With a background in digital marketing, writing, and UX, he turns 
                         ideas into moments that connect, land, and leave an impression.
@@ -337,9 +358,9 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                 </div>
 
                 {/* Handy */}
-                <div className="border border-gray-300 p-4 rounded">
-                  <div className="flex items-start gap-3">
-                    <div className="w-20 h-20 border border-gray-400 rounded flex-shrink-0 overflow-hidden">
+                <div className="bg-gradient-to-r from-pink-300 to-rose-300 border-4 border-cyan-500 p-6 rounded-lg shadow-xl transform hover:scale-105 transition-transform">
+                  <div className="flex items-start gap-6">
+                    <div className="w-40 h-40 border-4 border-yellow-600 rounded-lg flex-shrink-0 overflow-hidden shadow-lg">
                       <img 
                         src="/images/about-us/Handy.png" 
                         alt="Handy"
@@ -347,8 +368,13 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                       />
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-bold text-lg">Handy</h4>
-                      <p className="text-sm text-gray-700 mt-2">
+                      <h4 className="font-black text-3xl text-cyan-700 mb-3" style={{
+                        textShadow: '2px 2px 0px #ff6600, 4px 4px 0px #00ff99',
+                        fontFamily: 'Impact, Arial Black, sans-serif'
+                      }}>
+                        HANDY
+                      </h4>
+                      <p className="text-lg text-gray-900 font-bold leading-relaxed">
                         Handy is a multi-talented artist with a background in illustration and 3D 
                         modeling. He created the art assets for the Flunks Portraits collection, Pocket 
                         Juniors, Flunks 3D, and contributes to the broader Flunks ecosystem.
@@ -356,35 +382,6 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Traditional School Administration */}
-            <div className="bg-white border-2 border-gray-400 p-3">
-              <h3 className="font-bold text-lg mb-3">🏫 School Administration:</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="border border-gray-300 p-2">
-                  <strong>Principal:</strong> Dr. [PRINCIPAL_NAME]<br/>
-                  <em>Office: Room 101</em><br/>
-                  <em>Ext: 1001</em>
-                </div>
-                <div className="border border-gray-300 p-2">
-                  <strong>Vice Principal:</strong> Mrs. [VP_NAME]<br/>
-                  <em>Office: Room 102</em><br/>
-                  <em>Ext: 1002</em>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white border-2 border-gray-400 p-3">
-              <h3 className="font-bold text-lg mb-3">📚 Department Heads:</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-                <div>• <strong>Mathematics:</strong> Mr. Calculator</div>
-                <div>• <strong>English:</strong> Ms. Shakespeare</div>
-                <div>• <strong>Science:</strong> Dr. Beaker</div>
-                <div>• <strong>History:</strong> Mrs. Timeline</div>
-                <div>• <strong>Physical Education:</strong> Coach Athletic</div>
-                <div>• <strong>Arts:</strong> Ms. Creative</div>
               </div>
             </div>
 
@@ -614,22 +611,19 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
               </div>
             </div>
 
-            {/* Principal's Message */}
+            {/* School Community Characters */}
             <div className="bg-white border-2 border-gray-400 p-4">
-              <h2 className="text-xl font-bold mb-3">💼 Message from Principal [PRINCIPAL_NAME_PLACEHOLDER]</h2>
-              <div className="flex gap-4">
-                <div className="bg-gray-200 border border-gray-400 w-24 h-24 flex items-center justify-center text-xs text-center">
-                  [PRINCIPAL<br/>PHOTO<br/>PLACEHOLDER]
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm leading-relaxed">
-                    "Welcome to Flunks High School! We are committed to providing our students with the best education possible 
-                    in a safe and nurturing environment. Our dedicated faculty and staff work tirelessly to help each student 
-                    reach their full potential. We encourage all students to get involved in our many extracurricular activities 
-                    and take advantage of the opportunities available here at FHS."
-                  </p>
-                  <p className="text-right text-sm mt-2 italic">- Principal [PRINCIPAL_NAME_PLACEHOLDER]</p>
-                </div>
+              <h2 className="text-xl font-bold mb-3">🎓 Our School Community</h2>
+              <p className="text-sm mb-3 text-gray-700">
+                Meet the vibrant students and staff that make Flunks High School special! 
+                Watch them move around our virtual campus below.
+              </p>
+              <div className="relative bg-gradient-to-b from-blue-100 to-green-100 border-2 border-gray-300 rounded overflow-hidden">
+                <CrowdSimulator
+                  spriteSheetUrl="/images/Footer-Crowd.webp"
+                  rows={8}
+                  cols={2}
+                />
               </div>
             </div>
 
