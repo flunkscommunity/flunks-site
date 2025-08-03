@@ -1,5 +1,5 @@
 {
-  "generated": "2025-08-02T16:47:52.914Z",
+  "generated": "2025-08-02T22:11:30.021Z",
   "stations": [
     {
       "src": "/audio/stations/87.9-FREN/radio_static.mp3",
@@ -54,25 +54,31 @@
       ]
     },
     {
-      "src": "/audio/stations/101.9-TEDY/Lose_Yourself_From_8_Mile_8_Bit_Remix_Cover_Version_[Tribute_to_Eminem]_-_8_Bit_Universe_128k_kaizo[cc].mp3",
+      "src": "/audio/stations/101.9-TEDY/roofroof.mp3",
       "title": "101.9 TEDY",
       "frequency": "101.9",
       "station": "TEDY",
       "genre": "Classical/Study",
       "description": "The Study Station - Classical, Jazz & Focus Music",
-      "trackCount": 2,
+      "trackCount": 3,
       "tracks": [
         {
-          "src": "/audio/stations/101.9-TEDY/Lose_Yourself_From_8_Mile_8_Bit_Remix_Cover_Version_[Tribute_to_Eminem]_-_8_Bit_Universe_128k_kaizo[cc].mp3",
-          "title": "Yourself",
-          "artist": "Lose",
-          "filename": "Lose_Yourself_From_8_Mile_8_Bit_Remix_Cover_Version_[Tribute_to_Eminem]_-_8_Bit_Universe_128k_kaizo[cc].mp3"
+          "src": "/audio/stations/101.9-TEDY/roofroof.mp3",
+          "title": "roofroof",
+          "artist": "Unknown Artist",
+          "filename": "roofroof.mp3"
         },
         {
-          "src": "/audio/stations/101.9-TEDY/X_Gon_Give_It_To_Ya_Deadpool_Trailer_Theme_[Tribute_to_DMX_Deadpool]_-_8_Bit_Universe_128k_kaizo[cc].mp3",
-          "title": "Gon",
-          "artist": "X",
-          "filename": "X_Gon_Give_It_To_Ya_Deadpool_Trailer_Theme_[Tribute_to_DMX_Deadpool]_-_8_Bit_Universe_128k_kaizo[cc].mp3"
+          "src": "/audio/stations/101.9-TEDY/shortnoodles.mp3",
+          "title": "shortnoodles",
+          "artist": "Unknown Artist",
+          "filename": "shortnoodles.mp3"
+        },
+        {
+          "src": "/audio/stations/101.9-TEDY/virginiawest.mp3",
+          "title": "virginiawest",
+          "artist": "Unknown Artist",
+          "filename": "virginiawest.mp3"
         }
       ]
     },

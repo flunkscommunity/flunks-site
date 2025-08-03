@@ -18,6 +18,7 @@ import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import FlunksTerminal from "windows/FlunksTerminal";
 import { WINDOW_IDS } from "fixed";
 import { useWindowsContext } from "contexts/WindowsContext";
+import AccessGate from "components/AccessGate";
 import FlappyFlunkWindow from "windows/Games/FlappyFlunkWindow";
 import RadioPlayer from "components/RadioPlayer";
 import FHSSchool from "windows/FHSSchool";
@@ -85,7 +86,19 @@ const windowsMemod = useMemo(() => (
   <>
     {Object.entries(windows).map(([key, window]) => {
       const app = windowApps.find((a) => a.key === key);
-      if (app?.isMinimized) return null;
+      
+      // Special handling for radio - keep it mounted but hidden when minimized
+      if (app?.isMinimized) {
+        if (key === WINDOW_IDS.RADIO_PLAYER) {
+          return (
+            <div key={key} style={{ display: 'none' }}>
+              {window as React.ReactNode}
+            </div>
+          );
+        }
+        return null;
+      }
+      
       return <React.Fragment key={key}>{window as React.ReactNode}</React.Fragment>;
     })}
   </>
@@ -348,12 +361,44 @@ const MonitorScreenWrapper: React.FC<React.PropsWithChildren> = ({ children }) =
 
 const Home: NextPage = () => {
   const [isMounted, setIsMounted] = useState(false);
+  const [hasAccess, setHasAccess] = useState(false);
+  const [checkingAccess, setCheckingAccess] = useState(true);
 
   useEffect(() => {
     setIsMounted(true);
+    
+    // Check if user already has access
+    const accessGranted = sessionStorage.getItem('flunks-access-granted');
+    const isLocalhost = typeof window !== 'undefined' && 
+      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+    
+    // Allow access for localhost development or if access was previously granted
+    if (accessGranted === 'true' || isLocalhost || process.env.NODE_ENV === 'development') {
+      setHasAccess(true);
+    }
+    
+    setCheckingAccess(false);
   }, []);
 
-  if (!isMounted) return null;
+  const handleAccessGranted = () => {
+    setHasAccess(true);
+  };
+
+  if (!isMounted || checkingAccess) return null;
+
+  // Show access gate if user doesn't have access
+  if (!hasAccess) {
+    return (
+      <>
+        <Head>
+          <title>Flunks High School - Access Required</title>
+          <meta name="description" content="Flunks High School - Beta Access Required" />
+          <link rel="icon" href="/images/logos/os-logo.png" />
+        </Head>
+        <AccessGate onAccessGranted={handleAccessGranted} />
+      </>
+    );
+  }
 
   return (
     <>

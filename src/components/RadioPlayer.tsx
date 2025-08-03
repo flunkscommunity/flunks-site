@@ -1,58 +1,41 @@
 import { useRef, useState, useEffect } from 'react';
 import useWindowSize from '../hooks/useWindowSize';
 import { useAudio } from '../contexts/AudioContext';
+import { useRadio } from '../contexts/RadioContext';
 
 const tracks = [
   { src: '/audio/stations/87.9-FREN/radio_static.mp3', title: '87.9 FREN', frequency: '87.9', station: 'FREN' },
   { src: '/audio/stations/97.5-WZRD/2.mp3', title: '97.5 WZRD', frequency: '97.5', station: 'WZRD' },
-  { src: '/audio/stations/101.9-TEDY/Lose_Yourself_From_8_Mile_8_Bit_Remix_Cover_Version_[Tribute_to_Eminem]_-_8_Bit_Universe_128k_kaizo[cc].mp3', title: '101.9 TEDY', frequency: '101.9', station: 'TEDY' },
+  { src: '/audio/stations/101.9-TEDY/roofroof.mp3', title: '101.9 TEDY', frequency: '101.9', station: 'TEDY' },
   { src: '/audio/stations/104.1-FLNK/boywonder.mp3', title: '104.1 FLNK', frequency: '104.1', station: 'FLNK' }
 ];
 
-// Station data with multiple tracks per station (loaded from manifest)
-interface Track {
-  src: string;
-  title: string;
-  artist: string;
-  filename: string;
-}
-
-interface StationData {
-  tracks: Track[];
-  frequency: string;
-  title: string;
-  station: string;
-}
-
 const RadioPlayer = () => {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [trackIndex, setTrackIndex] = useState(3); // Start with station 4 (index 3)
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.5);
-  const [stationData, setStationData] = useState<StationData[]>([]);
-  const [currentTrackInStation, setCurrentTrackInStation] = useState<number[]>([0, 0, 0, 0]); // Track index for each station
+  // Use radio context instead of local state
+  const {
+    audioRef,
+    trackIndex,
+    setTrackIndex,
+    isPlaying,
+    setIsPlaying,
+    volume,
+    setVolume,
+    stationData,
+    setStationData,
+    currentTrackInStation,
+    setCurrentTrackInStation,
+    fastForwardTrack,
+    rewindTrack
+  } = useRadio();
+  
   const { width } = useWindowSize();
   const { isMuted, globalVolume } = useAudio();
   
-  // Load station data with all tracks
-  useEffect(() => {
-    const loadStationData = async () => {
-      try {
-        const response = await fetch('/audio/stations/stations-manifest.json');
-        const manifest = await response.json();
-        setStationData(manifest.stations);
-      } catch (error) {
-        console.error('Failed to load station data:', error);
-      }
-    };
-    loadStationData();
-  }, []);
-
-  // Autoplay station 4 on component mount
+  // Autoplay current station on component mount when station data is available
   useEffect(() => {
     if (audioRef.current && stationData.length > 0) {
-      const currentStation = stationData[3]; // Station 4 (index 3)
-      const currentSongIndex = currentTrackInStation[3];
+      const currentStation = stationData[trackIndex]; // Use random starting station
+      const currentSongIndex = currentTrackInStation[trackIndex];
       if (currentStation && currentStation.tracks[currentSongIndex]) {
         audioRef.current.src = currentStation.tracks[currentSongIndex].src;
         audioRef.current.volume = isMuted ? 0 : volume;
@@ -75,7 +58,7 @@ const RadioPlayer = () => {
         }
       }
     }
-  }, [stationData]);
+  }, [stationData, trackIndex, currentTrackInStation, isMuted, volume]);
 
   // Update audio volume when global mute state or volume changes
   useEffect(() => {
@@ -147,42 +130,78 @@ const RadioPlayer = () => {
   };
 
   const selectStation = (stationIndex: number) => {
+    console.log(`Selecting station ${stationIndex}:`, tracks[stationIndex]?.title);
     setTrackIndex(stationIndex);
+    
     if (audioRef.current && stationData.length > 0) {
       const station = stationData[stationIndex];
       const songIndex = currentTrackInStation[stationIndex];
+      console.log(`Station data for ${stationIndex}:`, station);
+      console.log(`Song index for station ${stationIndex}:`, songIndex);
+      
       if (station && station.tracks[songIndex]) {
-        audioRef.current.src = station.tracks[songIndex].src;
+        const newTrack = station.tracks[songIndex];
+        console.log(`Loading track:`, newTrack);
+        audioRef.current.src = newTrack.src;
         
-        // Auto-start playing when switching stations
-        const playPromise = audioRef.current.play();
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => {
+        // Small delay to ensure audio source is loaded, then auto-start playing
+        setTimeout(() => {
+          if (audioRef.current) {
+            const playPromise = audioRef.current.play();
+            if (playPromise !== undefined) {
+              playPromise
+                .then(() => {
+                  console.log(`Station ${tracks[stationIndex]?.title} autoplay successful`);
+                  setIsPlaying(true);
+                })
+                .catch((error) => {
+                  console.log(`Station ${tracks[stationIndex]?.title} autoplay prevented:`, error);
+                  // Try again after a brief delay
+                  setTimeout(() => {
+                    if (audioRef.current) {
+                      audioRef.current.play()
+                        .then(() => {
+                          console.log(`Station ${tracks[stationIndex]?.title} autoplay retry successful`);
+                          setIsPlaying(true);
+                        })
+                        .catch(() => {
+                          console.log(`Station ${tracks[stationIndex]?.title} autoplay retry failed`);
+                          setIsPlaying(false);
+                        });
+                    }
+                  }, 200);
+                });
+            } else {
+              // Fallback for older browsers
+              console.log(`Station ${tracks[stationIndex]?.title} using fallback play`);
               setIsPlaying(true);
-            })
-            .catch((error) => {
-              console.log('Autoplay prevented:', error);
-              // Try again after a brief delay
-              setTimeout(() => {
-                if (audioRef.current) {
-                  audioRef.current.play()
-                    .then(() => setIsPlaying(true))
-                    .catch(() => setIsPlaying(false));
-                }
-              }, 100);
-            });
-        }
+            }
+          }
+        }, 100);
+      } else {
+        console.log(`No track found for station ${stationIndex}, song index ${songIndex}`);
       }
     } else if (audioRef.current) {
       // Fallback to original tracks if station data not loaded yet
+      console.log(`Using fallback track for station ${stationIndex}`);
       audioRef.current.src = tracks[stationIndex].src;
-      const playPromise = audioRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => setIsPlaying(true))
-          .catch(() => setIsPlaying(false));
-      }
+      
+      setTimeout(() => {
+        if (audioRef.current) {
+          const playPromise = audioRef.current.play();
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                console.log(`Fallback station ${tracks[stationIndex]?.title} autoplay successful`);
+                setIsPlaying(true);
+              })
+              .catch(() => {
+                console.log(`Fallback station ${tracks[stationIndex]?.title} autoplay failed`);
+                setIsPlaying(false);
+              });
+          }
+        }
+      }, 100);
     }
   };
 
@@ -194,84 +213,6 @@ const RadioPlayer = () => {
   const seekForward = () => {
     const newIndex = trackIndex === tracks.length - 1 ? 0 : trackIndex + 1;
     selectStation(newIndex);
-  };
-
-  // Skip to previous track within current station
-  const rewindTrack = () => {
-    if (stationData.length > 0) {
-      const station = stationData[trackIndex];
-      if (station && station.tracks.length > 0) {
-        const newTrackIndices = [...currentTrackInStation];
-        const currentSongIndex = newTrackIndices[trackIndex];
-        const newSongIndex = currentSongIndex === 0 ? station.tracks.length - 1 : currentSongIndex - 1;
-        newTrackIndices[trackIndex] = newSongIndex;
-        setCurrentTrackInStation(newTrackIndices);
-        
-        if (audioRef.current) {
-          audioRef.current.src = station.tracks[newSongIndex].src;
-          
-          // Small delay to ensure audio source is loaded, then auto-play
-          setTimeout(() => {
-            if (audioRef.current) {
-              const playPromise = audioRef.current.play();
-              if (playPromise !== undefined) {
-                playPromise
-                  .then(() => {
-                    console.log('REW autoplay successful');
-                    setIsPlaying(true);
-                  })
-                  .catch((error) => {
-                    console.log('REW autoplay prevented:', error);
-                    setIsPlaying(false);
-                  });
-              } else {
-                // Fallback for older browsers
-                setIsPlaying(true);
-              }
-            }
-          }, 100);
-        }
-      }
-    }
-  };
-
-  // Skip to next track within current station
-  const fastForwardTrack = () => {
-    if (stationData.length > 0) {
-      const station = stationData[trackIndex];
-      if (station && station.tracks.length > 0) {
-        const newTrackIndices = [...currentTrackInStation];
-        const currentSongIndex = newTrackIndices[trackIndex];
-        const newSongIndex = currentSongIndex === station.tracks.length - 1 ? 0 : currentSongIndex + 1;
-        newTrackIndices[trackIndex] = newSongIndex;
-        setCurrentTrackInStation(newTrackIndices);
-        
-        if (audioRef.current) {
-          audioRef.current.src = station.tracks[newSongIndex].src;
-          
-          // Small delay to ensure audio source is loaded, then auto-play
-          setTimeout(() => {
-            if (audioRef.current) {
-              const playPromise = audioRef.current.play();
-              if (playPromise !== undefined) {
-                playPromise
-                  .then(() => {
-                    console.log('FFWD autoplay successful');
-                    setIsPlaying(true);
-                  })
-                  .catch((error) => {
-                    console.log('FFWD autoplay prevented:', error);
-                    setIsPlaying(false);
-                  });
-              } else {
-                // Fallback for older browsers
-                setIsPlaying(true);
-              }
-            }
-          }, 100);
-        }
-      }
-    }
   };
 
   const togglePlay = () => {
@@ -669,7 +610,21 @@ const RadioPlayer = () => {
         src={stationData.length > 0 && stationData[trackIndex] ? 
           stationData[trackIndex].tracks[currentTrackInStation[trackIndex]]?.src : 
           tracks[trackIndex].src
-        } 
+        }
+        preload="auto"
+        controls={false}
+        style={{ display: 'none' }}
+        // These attributes ensure the audio continues playing when minimized
+        onPlay={() => console.log('🎵 Radio playing')}
+        onPause={() => console.log('⏸️ Radio paused')}
+        onEnded={() => {
+          console.log('🔄 Track ended, playing next track');
+          // Auto-advance to next track when current track ends
+          fastForwardTrack();
+        }}
+        onError={(e) => console.error('🚫 Audio error:', e)}
+        onLoadStart={() => console.log('📡 Loading audio...')}
+        onCanPlay={() => console.log('✅ Audio ready to play')}
       />
     </>
   );

@@ -3,6 +3,7 @@ import useWindowSize from "hooks/useWindowSize";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { Button, Window, WindowContent, WindowHeader } from "react95";
+import { WINDOW_IDS } from "fixed";
 import styled from "styled-components";
 import ErrorWindow from "windows/ErrorWindow";
 import { DynamicConnectButton } from "@dynamic-labs/sdk-react-core";
@@ -157,8 +158,16 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     );
   }
 
-  // Don't render if window is minimized
+  // Handle minimized windows - special case for radio player to keep audio playing
   if (isMinimized) {
+    if (props.windowsId === WINDOW_IDS.RADIO_PLAYER) {
+      // Render radio player hidden but still mounted to keep audio playing
+      return (
+        <div style={{ display: 'none' }}>
+          {children}
+        </div>
+      );
+    }
     return null;
   }
 

@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "fetch:openApiSpec": "node ./swagger/fetchApiSpec.ts",
+    "generate:api": "npm run fetch:openApiSpec && orval --config ./orval.config.js",
+    "organize-traits": "node ./scripts/organize-traits.js",
+    "generate-trait-data": "node ./scripts/generate-trait-data.js",
+    "setup-traits": "npm run organize-traits && npm run generate-trait-data",
+    "setup-radio-stations": "node ./scripts/setup-radio-stations.js",
+    "deploy:build": "npm run build",
+    "deploy:vercel": "vercel --prod",
+    "deploy:preview": "vercel",
+    "check:access": "node ./scripts/check-access-codes.js"
+  }
+}
