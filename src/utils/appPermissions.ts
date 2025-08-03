@@ -22,7 +22,7 @@ export const APP_PERMISSIONS: AppPermission[] = [
     description: 'View your NFT collection'
   },
   {
-    id: 'profile',
+    id: 'my-profile',
     title: 'My Profile',
     requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
     description: 'Manage your profile'
@@ -34,22 +34,16 @@ export const APP_PERMISSIONS: AppPermission[] = [
     description: 'Listen to Flunks FM'
   },
   {
-    id: 'semester0',
-    title: 'Semester Zero',
+    id: 'chat-rooms',
+    title: 'Chat Rooms',
     requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
-    description: 'Explore the virtual campus'
+    description: 'Join community chat rooms'
   },
   {
     id: 'about',
     title: 'About Us',
     requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
     description: 'Learn about Flunks'
-  },
-  {
-    id: 'manual',
-    title: 'Game Manual',
-    requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
-    description: 'How to use the platform'
   },
   
   // Beta and Admin only
@@ -60,27 +54,51 @@ export const APP_PERMISSIONS: AppPermission[] = [
     description: 'Advanced terminal access'
   },
   {
-    id: 'myplace',
-    title: 'MyPlace',
-    requiredLevel: ['ADMIN', 'BETA'],
-    description: 'Social networking features'
-  },
-  {
-    id: 'flappyflunk',
-    title: 'Flappy Flunk',
-    requiredLevel: ['ADMIN', 'BETA'],
-    description: 'Play Flappy Flunk game'
-  },
-  {
     id: 'clique-access',
     title: 'Clique Access',
     requiredLevel: ['ADMIN', 'BETA'],
     description: 'Check NFT-based access rights'
   },
-  
-  // Admin only - Developer/Management tools
   {
-    id: 'project-jnr',
+    id: 'fhs-school',
+    title: 'FHS School',
+    requiredLevel: ['ADMIN', 'BETA'],
+    description: 'School administration portal'
+  },
+  
+  // Admin only - Developer/Management tools and restricted features
+  {
+    id: 'semester-zero',
+    title: 'Semester Zero',
+    requiredLevel: ['ADMIN'],
+    description: 'Explore the virtual campus'
+  },
+  {
+    id: 'game-manual',
+    title: 'Game Manual',
+    requiredLevel: ['ADMIN'],
+    description: 'How to use the platform'
+  },
+  {
+    id: 'meme-manager',
+    title: 'Meme Manager',
+    requiredLevel: ['ADMIN'],
+    description: 'Manage memes and content'
+  },
+  {
+    id: 'myplace',
+    title: 'MyPlace',
+    requiredLevel: ['ADMIN'],
+    description: 'Social networking features'
+  },
+  {
+    id: 'flappyflunk',
+    title: 'Flappy Flunk',
+    requiredLevel: ['ADMIN'],
+    description: 'Play Flappy Flunk game'
+  },
+  {
+    id: 'pocket-juniors',
     title: 'Pocket Juniors',
     requiredLevel: ['ADMIN'],
     description: 'Project Junior management'
@@ -97,19 +115,19 @@ export const APP_PERMISSIONS: AppPermission[] = [
     requiredLevel: ['ADMIN'],
     description: 'Graduation system management'
   },
-  {
-    id: 'fhs-school',
-    title: 'FHS School',
-    requiredLevel: ['ADMIN'],
-    description: 'School administration portal'
-  },
   
-  // External links - available to all but might want to control
+  // External links - available to all
   {
     id: 'discord',
     title: 'Discord',
     requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
     description: 'Join our Discord server'
+  },
+  {
+    id: 'x-twitter',
+    title: 'X (Twitter)',
+    requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
+    description: 'Follow us on X'
   },
   {
     id: 'market',

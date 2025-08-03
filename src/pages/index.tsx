@@ -148,7 +148,8 @@ const windowsMemod = useMemo(() => (
         />
 
         {/* 4. FHS */}
-        <DesktopAppIcon
+        <ConditionalAppIcon
+          appId="fhs-school"
           title="FHS"
           icon="/images/icons/fhs.png"
           onDoubleClick={() => openWindow({
@@ -204,7 +205,8 @@ const windowsMemod = useMemo(() => (
         />
 
         {/* 6. Radio */}
-        <DesktopAppIcon
+        <ConditionalAppIcon
+          appId="radio"
           title="Radio"
           icon="/images/icons/boom-box.png"
           onDoubleClick={() =>
@@ -267,7 +269,8 @@ const windowsMemod = useMemo(() => (
           rel="noreferrer noopener"
           style={{ textDecoration: "none" }}
         >
-          <DesktopAppIcon
+          <ConditionalAppIcon
+            appId="x-twitter"
             title="X"
             icon="/images/icons/x.png"
             onDoubleClick={() => null}
@@ -276,7 +279,8 @@ const windowsMemod = useMemo(() => (
 
         {/* 9. Discord */}
         <a href="https://discord.gg/flunks" target="_blank" rel="noreferrer noopener">
-          <DesktopAppIcon
+          <ConditionalAppIcon
+            appId="discord"
             title="Discord"
             icon="/images/icons/discord.png"
             onDoubleClick={() => window.open("https://discord.gg/wuukvhHhS3", "_blank")}
@@ -285,11 +289,17 @@ const windowsMemod = useMemo(() => (
 
         {/* 10. Market */}
         <a href="https://www.flowty.io/collection/0x807c3d470888cc48/Flunks" target="_blank" rel="noreferrer noopener">
-          <DesktopAppIcon title="Market" icon="/images/icons/flowty.png" onDoubleClick={() => null} />
+          <ConditionalAppIcon 
+            appId="market"
+            title="Market" 
+            icon="/images/icons/flowty.png" 
+            onDoubleClick={() => null} 
+          />
         </a>
 
         {/* 11. MyPlace */}
-        <DesktopAppIcon
+        <ConditionalAppIcon
+          appId="myplace"
           title="MyPlace"
           icon="/images/icons/myplace.png"
           onDoubleClick={() => openWindow({
@@ -318,7 +328,8 @@ const windowsMemod = useMemo(() => (
         />
 
         {/* 14. Flappy Flunk */}
-        <DesktopAppIcon
+        <ConditionalAppIcon
+          appId="flappyflunk"
           title="Flappy Flunk"
           icon="/images/icons/flappyflunk.png"
           onDoubleClick={() =>
@@ -341,7 +352,8 @@ const windowsMemod = useMemo(() => (
         />
 
         {/* 15. About Us */}
-        <DesktopAppIcon
+        <ConditionalAppIcon
+          appId="about"
           title="About Us"
           icon="/images/icons/about-us.png"
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.ABOUT_US, window: <AboutUs /> })}
@@ -404,7 +416,7 @@ const Home: NextPage = () => {
         <Head>
           <title>Flunks High School - Access Required</title>
           <meta name="description" content="Flunks High School - Beta Access Required" />
-          <link rel="icon" href="/images/logos/os-logo.png" />
+          <link rel="icon" href="/flunks-logo.png" />
         </Head>
         <AccessGate onAccessGranted={handleAccessGranted} />
       </>
@@ -416,7 +428,7 @@ const Home: NextPage = () => {
       <Head>
         <title>Flunks</title>
         <meta name="description" content="Welcome to the Flunks Highschool computer." />
-        <link rel="icon" href="/images/logos/os-logo.png" />
+        <link rel="icon" href="/flunks-logo.png" />
       </Head>
       
       <MonitorScreenWrapper>

@@ -642,7 +642,6 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
       style={{
         background: `linear-gradient(180deg, #8B5A96 0%, #9B6FA3 15%, #A884B0 30%, #B599BD 45%, #C2AECA 60%, #CFC3D7 75%, #DCD8E4 85%, #E9D5D1 92%, #F5D2BE 96%, #FFCFAB 100%)`,
         height: '100%',
-        overflow: 'auto',
         position: 'relative'
       }}
     >
