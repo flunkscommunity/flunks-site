@@ -5,12 +5,28 @@ import styled from 'styled-components';
 const GateContainer = styled.div`
   position: fixed;
   inset: 0;
-  background: linear-gradient(45deg, #008080, #006666);
+  background: #000;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
   font-family: 'MS Sans Serif', sans-serif;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      linear-gradient(90deg, transparent 0px, transparent 18px, #00ff00 18px, #00ff00 20px, transparent 20px, transparent 40px),
+      linear-gradient(0deg, transparent 0px, transparent 18px, #00ff00 18px, #00ff00 20px, transparent 20px, transparent 40px),
+      linear-gradient(45deg, transparent 0px, transparent 28px, #ff00ff 28px, #ff00ff 30px, transparent 30px, transparent 60px),
+      linear-gradient(-45deg, transparent 0px, transparent 28px, #ffff00 28px, #ffff00 30px, transparent 30px, transparent 60px);
+    background-size: 40px 40px, 40px 40px, 60px 60px, 60px 60px;
+    animation: pipes 20s linear infinite;
+    opacity: 0.3;
+    z-index: -1;
+  }
 `;
 
 const GateWindow = styled(Window)`
@@ -88,7 +104,6 @@ const AccessGate: React.FC<AccessGateProps> = ({ onAccessGranted }) => {
                     width: '80px', 
                     height: '96px',
                     imageRendering: 'pixelated',
-                    filter: 'drop-shadow(0 0 10px rgba(255, 105, 180, 0.5))',
                     animation: 'floatLeftRight 4s ease-in-out infinite'
                   }}
                 />
@@ -105,6 +120,24 @@ const AccessGate: React.FC<AccessGateProps> = ({ onAccessGranted }) => {
                   }
                   100% {
                     transform: translateX(-15px);
+                  }
+                }
+                
+                @keyframes pipes {
+                  0% {
+                    transform: translate(0, 0);
+                  }
+                  25% {
+                    transform: translate(-20px, -20px);
+                  }
+                  50% {
+                    transform: translate(-40px, 0);
+                  }
+                  75% {
+                    transform: translate(-20px, 20px);
+                  }
+                  100% {
+                    transform: translate(0, 0);
                   }
                 }
               `}</style>
