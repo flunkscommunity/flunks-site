@@ -80,11 +80,35 @@ const AccessGate: React.FC<AccessGateProps> = ({ onAccessGranted }) => {
         <WindowContent>
           <div style={{ padding: '20px', textAlign: 'center' }}>
             <div style={{ marginBottom: '20px' }}>
-              <img 
-                src="/flunks-logo.png" 
-                alt="Flunks Logo" 
-                style={{ width: '80px', height: '80px', marginBottom: '15px' }}
-              />
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '15px' }}>
+                <img 
+                  src="/images/icons/astro-mascot.png" 
+                  alt="Astro Mascot" 
+                  style={{ 
+                    width: '80px', 
+                    height: '96px',
+                    imageRendering: 'pixelated',
+                    filter: 'drop-shadow(0 0 10px rgba(255, 105, 180, 0.5))',
+                    animation: 'floatLeftRight 4s ease-in-out infinite'
+                  }}
+                />
+              </div>
+              
+              {/* CSS Animation Styles */}
+              <style jsx>{`
+                @keyframes floatLeftRight {
+                  0% {
+                    transform: translateX(-15px);
+                  }
+                  50% {
+                    transform: translateX(15px);
+                  }
+                  100% {
+                    transform: translateX(-15px);
+                  }
+                }
+              `}</style>
+              
               <h2 style={{ margin: '0 0 10px 0', fontSize: '24px' }}>
                 Welcome to Flunks High School
               </h2>
