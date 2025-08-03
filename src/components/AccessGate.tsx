@@ -24,6 +24,12 @@ const AccessCode = {
   COMMUNITY: 'HIGHSCHOOL95'
 };
 
+const AccessLevel = {
+  ADMIN: 'ADMIN',
+  BETA: 'BETA', 
+  COMMUNITY: 'COMMUNITY'
+};
+
 interface AccessGateProps {
   onAccessGranted: () => void;
 }
@@ -43,9 +49,20 @@ const AccessGate: React.FC<AccessGateProps> = ({ onAccessGranted }) => {
 
     const upperCode = code.toUpperCase();
     if (Object.values(AccessCode).includes(upperCode as any)) {
+      // Determine access level
+      let accessLevel;
+      if (upperCode === AccessCode.ADMIN) {
+        accessLevel = AccessLevel.ADMIN;
+      } else if (upperCode === AccessCode.BETA) {
+        accessLevel = AccessLevel.BETA;
+      } else if (upperCode === AccessCode.COMMUNITY) {
+        accessLevel = AccessLevel.COMMUNITY;
+      }
+
       // Store access in session
       sessionStorage.setItem('flunks-access-granted', 'true');
-      sessionStorage.setItem('flunks-access-level', upperCode);
+      sessionStorage.setItem('flunks-access-level', accessLevel);
+      sessionStorage.setItem('flunks-access-code', upperCode);
       onAccessGranted();
     } else {
       setError('Invalid access code. Please contact the Flunks team for access.');

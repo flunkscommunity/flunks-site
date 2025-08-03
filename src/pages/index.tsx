@@ -28,6 +28,8 @@ import FlunkCreator from "windows/FlunkCreator";
 import UserProfile from "windows/UserProfile";
 import GameManualWindow from "windows/GameManualWindow";
 import MemeManagerWindow from "windows/MemeManagerWindow";
+import AccessLevelStatus from "components/AccessLevelStatus";
+import ConditionalAppIcon from "components/ConditionalAppIcon";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -108,21 +110,24 @@ const windowsMemod = useMemo(() => (
     <>
       <div className="flex relative flex-col max-h-[calc(100vh-64px)] w-full flex-wrap items-start gap-4 content-start">
         {/* 1. OnlyFlunks */}
-        <DesktopAppIcon
+        <ConditionalAppIcon
+          appId="onlyflunks"
           title="OnlyFlunks"
           icon="/images/icons/onlyflunks.png"
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.YOUR_STUDENTS, window: <YourStudents /> })}
         />
 
         {/* 2. My Profile */}
-        <DesktopAppIcon
+        <ConditionalAppIcon
+          appId="my-profile"
           title="My Profile"
           icon="/flunks-logo.png"
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.USER_PROFILE, window: <UserProfile /> })}
         />
 
         {/* 3. Terminal */}
-        <DesktopAppIcon
+        <ConditionalAppIcon
+          appId="terminal"
           title="Terminal"
           icon="/images/icons/newterminal.png"
           onDoubleClick={() => openWindow({
@@ -165,7 +170,8 @@ const windowsMemod = useMemo(() => (
         />
 
         {/* 5. Semester Zero */}
-        <DesktopAppIcon
+        <ConditionalAppIcon
+          appId="semester-zero"
           title="semester zero"
           icon="/images/icons/semester0-icon.png"
           onDoubleClick={() => openWindow({
@@ -187,7 +193,8 @@ const windowsMemod = useMemo(() => (
         />
 
         {/* 5.5. Game Manual */}
-        <DesktopAppIcon
+        <ConditionalAppIcon
+          appId="game-manual"
           title="Game Manual"
           icon="/images/icons/high-school-icon.png"
           onDoubleClick={() => openWindow({
@@ -221,7 +228,8 @@ const windowsMemod = useMemo(() => (
         />
 
         {/* 7. Meme Manager */}
-        <DesktopAppIcon
+        <ConditionalAppIcon
+          appId="meme-manager"
           title="Meme Manager"
           icon="/images/icons/attack-64x64.png"
           onDoubleClick={() => openWindow({
@@ -231,7 +239,8 @@ const windowsMemod = useMemo(() => (
         />
 
         {/* 8. Chat Rooms */}
-        <DesktopAppIcon
+        <ConditionalAppIcon
+          appId="chat-rooms"
           title="Chat Rooms"
           icon="/images/icons/chat-rooms.png"
           onDoubleClick={() => openWindow({
@@ -290,14 +299,16 @@ const windowsMemod = useMemo(() => (
         />
 
         {/* 12. Pocket Juniors */}
-        <DesktopAppIcon
+        <ConditionalAppIcon
+          appId="pocket-juniors"
           title="Pocket Juniors"
           icon="/images/icons/pocket-juniors-50x50.png"
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.PROJECT_JNR, window: <ProjectJnr /> })}
         />
 
         {/* 13. Flunk Creator */}
-        <DesktopAppIcon
+        <ConditionalAppIcon
+          appId="flunk-creator"
           title="Flunk Creator"
           icon="/images/icons/pocket-juniors.png"
           onDoubleClick={() => openWindow({
@@ -409,6 +420,7 @@ const Home: NextPage = () => {
       </Head>
       
       <MonitorScreenWrapper>
+        <AccessLevelStatus />
         <Desktop />
       </MonitorScreenWrapper>
     </>
