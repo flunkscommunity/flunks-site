@@ -15,12 +15,6 @@ import {
 import { SdkViewSectionType, SdkViewType } from "@dynamic-labs/sdk-api";
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
 import useThemeSettings from "store/useThemeSettings";
-
-// Create custom Flow connectors excluding Blocto
-const customFlowConnectors = (props: any) => {
-  const allConnectors = FlowWalletConnectors(props);
-  return allConnectors.filter((connector: any) => connector.name !== 'Blocto');
-};
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { PaginatedItemsProvider } from "contexts/UserPaginatedItems";
@@ -46,8 +40,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
               <ClaimBackpackProvider>
                 <DynamicContextProvider
                   settings={{
-                    environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID || "53a9e7ed-47cf-468c-b43e-44e8fcec1b13",
-                    walletConnectors: [customFlowConnectors],
+                    environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID || "53675303-5e80-4fe5-88a4-e6caae677432",
+                    walletConnectors: [FlowWalletConnectors],
                     overrides: {
                       views: [
                         {
