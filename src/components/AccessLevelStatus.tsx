@@ -6,7 +6,8 @@ import { getUserAccessLevel, getAccessLevelInfo } from 'utils/appPermissions';
 const StatusContainer = styled.div`
   position: fixed;
   top: 10px;
-  right: 10px;
+  left: 50%;
+  transform: translateX(-50%); /* Center horizontally */
   z-index: 1000;
 `;
 

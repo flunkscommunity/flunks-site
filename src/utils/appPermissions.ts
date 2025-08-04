@@ -46,23 +46,23 @@ export const APP_PERMISSIONS: AppPermission[] = [
     description: 'Learn about Flunks'
   },
   
-  // Beta and Admin only
+  // Beta and Admin only - Now includes COMMUNITY users
   {
     id: 'terminal',
     title: 'Terminal',
-    requiredLevel: ['ADMIN', 'BETA'],
+    requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
     description: 'Advanced terminal access'
   },
   {
     id: 'clique-access',
     title: 'Clique Access',
-    requiredLevel: ['ADMIN', 'BETA'],
+    requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
     description: 'Check NFT-based access rights'
   },
   {
     id: 'fhs-school',
     title: 'FHS School',
-    requiredLevel: ['ADMIN', 'BETA'],
+    requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
     description: 'School administration portal'
   },
   
@@ -76,7 +76,7 @@ export const APP_PERMISSIONS: AppPermission[] = [
   {
     id: 'game-manual',
     title: 'Game Manual',
-    requiredLevel: ['ADMIN'],
+    requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
     description: 'How to use the platform'
   },
   {
@@ -88,13 +88,13 @@ export const APP_PERMISSIONS: AppPermission[] = [
   {
     id: 'myplace',
     title: 'MyPlace',
-    requiredLevel: ['ADMIN'],
+    requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
     description: 'Social networking features'
   },
   {
     id: 'flappyflunk',
     title: 'Flappy Flunk',
-    requiredLevel: ['ADMIN'],
+    requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
     description: 'Play Flappy Flunk game'
   },
   {

@@ -346,7 +346,7 @@ const RPGProfileDisplay: React.FC<RPGProfileDisplayProps> = ({ onEdit }) => {
 
   return (
     <RPGContainer>
-      <Title>🎓 Flunks High Character Profile 🎓</Title>
+      <Title>🎓 Flunks Profile 🎓</Title>
       
       <CharacterFrame variant="well">
         {/* Character Name */}

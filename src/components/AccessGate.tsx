@@ -86,7 +86,7 @@ const AccessGate: React.FC<AccessGateProps> = ({ onAccessGranted }) => {
       } else if (upperCode === AccessCode.BETA) {
         accessLevel = AccessLevel.BETA;
       } else if (upperCode === AccessCode.COMMUNITY) {
-        accessLevel = AccessLevel.COMMUNITY;
+        accessLevel = AccessLevel.BETA; // Give COMMUNITY users the same access as BETA
       }
 
       // Store access in session
