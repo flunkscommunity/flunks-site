@@ -18,18 +18,34 @@ const GateContainer = styled.div`
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url(${BACKGROUND_CONFIG.imageUrl});
-    background-size: 120% auto; /* Make image larger than screen */
-    background-repeat: no-repeat;
-    background-position: 0% center;
-    animation: ${BACKGROUND_CONFIG.enableScrolling ? `slowPanBackground 30s ease-in-out infinite alternate` : 'none'};
+    /* Pixel art sunset gradient background */
+    background: linear-gradient(180deg, 
+      #2D1B69 0%,     /* Deep purple sky top */
+      #4A2C7D 15%,    /* Purple */
+      #663399 30%,    /* Medium purple */
+      #8B4B9C 45%,    /* Purple-pink transition */
+      #B85BB8 60%,    /* Pink-purple */
+      #E66BA3 75%,    /* Pink */
+      #FF8B66 85%,    /* Orange-pink */
+      #FFAA44 95%,    /* Golden orange */
+      #FFD700 100%    /* Golden yellow horizon */
+    );
+    
+    /* Add subtle pixel-like noise pattern overlay */
+    background-image: 
+      radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 1px, transparent 2px),
+      radial-gradient(circle at 75% 75%, rgba(255,255,255,0.08) 1px, transparent 2px),
+      radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 1px, transparent 2px);
+    background-size: 20px 20px, 30px 30px, 40px 40px;
+    
     opacity: ${BACKGROUND_CONFIG.opacity};
     z-index: -1;
     
-    /* Fallback in case image doesn't load */
-    background-color: #003300;
+    /* Fallback color */
+    background-color: #4A2C7D;
   }
   
+  /* Remove the old animation */
   @keyframes slowPanBackground {
     0% {
       background-position: 0% center;
