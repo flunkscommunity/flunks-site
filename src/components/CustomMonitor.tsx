@@ -1,5 +1,5 @@
 import { useWindowsContext } from "contexts/WindowsContext";
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect, useRef } from "react";
 import { AppBar, Button, ScrollViewProps, TextInput, Toolbar } from "react95";
 import styled from "styled-components";
 import Appbar from "./Appbar/Appbar";
@@ -141,11 +141,29 @@ const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
     scrollingTileSize = 50,
     ...otherProps 
   }, ref) => {
-    const { backgroundColor, backgroundImage, oldMonitorMode } =
+    const { backgroundColor, backgroundImage, oldMonitorMode, desktopBackground, desktopBackgroundType } =
       useThemeSettings();
+    const backgroundRef = useRef<HTMLDivElement>(null);
 
+    // Use desktop background for main desktop, fallback to regular background for other screens
+    const isMainDesktop = showBottomBar; // Main desktop has the bottom bar/taskbar
     const finalBackgroundImage = customBackgroundImage || backgroundImage;
     const shouldUseScrollingBackground = enableScrollingBackground && finalBackgroundImage;
+
+    // Apply desktop pattern styles using useEffect
+    useEffect(() => {
+      if (isMainDesktop && desktopBackgroundType === 'pattern' && backgroundRef.current) {
+        const bgElement = backgroundRef.current;
+        // Clear existing styles
+        bgElement.style.backgroundImage = '';
+        bgElement.style.backgroundColor = '';
+        // Apply pattern styles by parsing the CSS string
+        const tempDiv = document.createElement('div');
+        tempDiv.style.cssText = desktopBackground;
+        bgElement.style.background = tempDiv.style.background;
+        bgElement.style.backgroundColor = tempDiv.style.backgroundColor;
+      }
+    }, [isMainDesktop, desktopBackgroundType, desktopBackground]);
 
     return (
       <Wrapper ref={ref} {...otherProps}>
@@ -157,13 +175,19 @@ const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
               }`}
             >
               <Background
+                ref={backgroundRef}
                 style={{
                   ...backgroundStyles,
-                  backgroundColor: shouldUseScrollingBackground ? 'transparent' : backgroundColor,
-                  backgroundImage: shouldUseScrollingBackground ? 'none' : `url(${finalBackgroundImage})`,
-                  backgroundSize: shouldUseScrollingBackground ? 'auto' : "cover",
-                  backgroundPosition: shouldUseScrollingBackground ? 'auto' : "center",
-                  backgroundRepeat: shouldUseScrollingBackground ? 'auto' : "no-repeat",
+                  ...(isMainDesktop && desktopBackgroundType === 'pattern' ? {
+                    // Desktop pattern will be applied via useEffect
+                  } : {
+                    // Use regular image background
+                    backgroundColor: shouldUseScrollingBackground ? 'transparent' : backgroundColor,
+                    backgroundImage: shouldUseScrollingBackground ? 'none' : `url(${finalBackgroundImage})`,
+                    backgroundSize: shouldUseScrollingBackground ? 'auto' : "cover",
+                    backgroundPosition: shouldUseScrollingBackground ? 'auto' : "center",
+                    backgroundRepeat: shouldUseScrollingBackground ? 'auto' : "no-repeat",
+                  })
                 }}
               >
                 {shouldUseScrollingBackground && (

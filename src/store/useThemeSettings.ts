@@ -8,6 +8,10 @@ interface useThemeSettings {
   setBackgroundColor: (arg: string) => void;
   backgroundImage: string;
   setBackgroundImage: (arg: string) => void;
+  desktopBackground: string;
+  setDesktopBackground: (arg: string) => void;
+  desktopBackgroundType: 'image' | 'pattern' | 'gradient';
+  setDesktopBackgroundType: (arg: 'image' | 'pattern' | 'gradient') => void;
   oldMonitorMode: boolean;
   setOldMonitorMode: (arg: boolean) => void;
   theme: {
@@ -29,6 +33,21 @@ const useThemeSettings = create<useThemeSettings>()(
           "https://storage.googleapis.com/flunks_public/desktop-backgrounds/posterized.webp",
         setBackgroundImage: (backgroundImage: string) =>
           set((state) => ({ backgroundImage })),
+        // Desktop background settings (separate from login background)
+        desktopBackground: `
+          background: linear-gradient(45deg, #008080 25%, transparent 25%), 
+                      linear-gradient(-45deg, #008080 25%, transparent 25%), 
+                      linear-gradient(45deg, transparent 75%, #4FD0D0 75%), 
+                      linear-gradient(-45deg, transparent 75%, #4FD0D0 75%);
+          background-size: 20px 20px;
+          background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+          background-color: #C0C0C0;
+        `,
+        setDesktopBackground: (desktopBackground: string) =>
+          set((state) => ({ desktopBackground })),
+        desktopBackgroundType: 'pattern' as 'pattern',
+        setDesktopBackgroundType: (desktopBackgroundType: 'image' | 'pattern' | 'gradient') =>
+          set((state) => ({ desktopBackgroundType })),
         oldMonitorMode: false,
         setOldMonitorMode: (oldMonitorMode: boolean) =>
           set((state) => ({ oldMonitorMode })),

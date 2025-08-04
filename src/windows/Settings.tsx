@@ -23,6 +23,7 @@ import {
   CustomScrollArea,
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
+import { DESKTOP_BACKGROUNDS } from "config/desktopBackgroundConfig";
 
 const AVOIDED_THEMES = [
   "aiee",
@@ -50,6 +51,10 @@ const Settings: React.FC = () => {
     backgroundColor,
     setBackgroundColor,
     setBackgroundImage,
+    desktopBackground,
+    desktopBackgroundType,
+    setDesktopBackground,
+    setDesktopBackgroundType,
     oldMonitorMode,
     setOldMonitorMode,
     theme,
@@ -109,9 +114,10 @@ const Settings: React.FC = () => {
       headerIcon="/images/icons/settings.png"
     >
       <Tabs value={activeTab} onChange={setActiveTab}>
-        <Tab value={0}>Background</Tab>
-        <Tab value={1}>System</Tab>
-        <Tab value={2}>User</Tab>
+        <Tab value={0}>Login Screen</Tab>
+        <Tab value={1}>Desktop</Tab>
+        <Tab value={2}>System</Tab>
+        <Tab value={3}>User</Tab>
       </Tabs>
       <TabBody className="!h-full overflow-auto">
         <CustomScrollArea>
@@ -168,6 +174,56 @@ const Settings: React.FC = () => {
             </div>
           )}
           {activeTab === 1 && (
+            <div className="flex flex-col gap-4 items-start max-w-[600px] mx-auto">
+              <div className="mx-auto">
+                <Monitor
+                  backgroundStyles={{
+                    ...(desktopBackgroundType === 'image' ? {
+                      backgroundImage: `url(${desktopBackground})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    } : {
+                      background: desktopBackgroundType === 'pattern' ? 
+                        desktopBackground.replace(/background:/g, '').replace(/;/g, '') : 
+                        undefined
+                    }),
+                    imageRendering: "crisp-edges",
+                  }}
+                />
+              </div>
+              
+              <GroupBox
+                label={"Desktop Background (Windows 95 Style)"}
+                className="flex items-center gap-4 w-full flex-col"
+              >
+                <div className="grid grid-cols-2 gap-4 w-full">
+                  {DESKTOP_BACKGROUNDS.map((bg, index) => (
+                    <Button
+                      key={index}
+                      onClick={() => {
+                        setDesktopBackground(bg.value);
+                        setDesktopBackgroundType(bg.type);
+                      }}
+                      active={desktopBackground === bg.value}
+                      className="!h-auto !p-2 flex-col gap-2"
+                    >
+                      <img
+                        src={bg.preview}
+                        alt={bg.name}
+                        className="w-full h-16 object-cover"
+                        style={{ imageRendering: "pixelated" }}
+                      />
+                      <div className="text-xs text-center">
+                        <div className="font-bold">{bg.name}</div>
+                        <div className="text-xs opacity-75">{bg.description}</div>
+                      </div>
+                    </Button>
+                  ))}
+                </div>
+              </GroupBox>
+            </div>
+          )}
+          {activeTab === 2 && (
             <div className="flex flex-col gap-4">
               <GroupBox
                 label={"Vintage Settings"}
@@ -200,7 +256,7 @@ const Settings: React.FC = () => {
               </GroupBox>
             </div>
           )}
-          {activeTab === 2 && (
+          {activeTab === 3 && (
             <CustomStyledScrollView className="w-full h-full flex flex-col !p-0">
               <CustomScrollArea>
                 <UserInformation />

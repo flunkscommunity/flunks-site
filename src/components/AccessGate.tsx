@@ -19,9 +19,10 @@ const GateContainer = styled.div`
     position: absolute;
     inset: 0;
     background-image: url(${BACKGROUND_CONFIG.imageUrl});
-    background-size: ${BACKGROUND_CONFIG.tileSize}% ${BACKGROUND_CONFIG.tileSize}%;
-    background-repeat: repeat;
-    animation: ${BACKGROUND_CONFIG.enableScrolling ? `crawlBackground ${BACKGROUND_CONFIG.speed}s linear infinite` : 'none'};
+    background-size: 120% auto; /* Make image larger than screen */
+    background-repeat: no-repeat;
+    background-position: 0% center;
+    animation: ${BACKGROUND_CONFIG.enableScrolling ? `slowPanBackground 30s ease-in-out infinite alternate` : 'none'};
     opacity: ${BACKGROUND_CONFIG.opacity};
     z-index: -1;
     
@@ -29,12 +30,12 @@ const GateContainer = styled.div`
     background-color: #003300;
   }
   
-  @keyframes crawlBackground {
+  @keyframes slowPanBackground {
     0% {
-      transform: translate(0, 0);
+      background-position: 0% center;
     }
     100% {
-      transform: translate(-100%, -100%);
+      background-position: 100% center;
     }
   }
 `;
