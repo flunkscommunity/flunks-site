@@ -1,6 +1,138 @@
-import { Button, Toolbar, WindowContent, Separator } from 'react95';
+import { Button, Toolbar, WindowContent, Separator, Frame } from 'react95';
 import React, { useState } from 'react';
 import CrowdSimulator from 'components/CrowdSimulator';
+import Marquee from "react-fast-marquee";
+import { FrameWithBackground } from '../components/AboutUs/FrameWithBackground';
+
+const Product = ({
+  title,
+  description,
+  images,
+  direction,
+}: {
+  title: string;
+  description: React.ReactNode;
+  images: string[];
+  direction: "left" | "right";
+}) => {
+  return (
+    <div className="w-full flex flex-col gap-3">
+      <div className="px-4 lg:px-20">
+        <div className="max-w-[1440px] mx-auto w-full flex flex-col">
+          <span className="text-2xl md:text-4xl font-bold max-w-2xl text-pretty mb-2">
+            {title}
+          </span>
+          {description}
+        </div>
+      </div>
+      <FrameWithBackground
+        className="!py-4 overflow-hidden mt-2"
+        variant="well"
+      >
+        <Marquee pauseOnClick autoFill direction={direction}>
+          {images.map((image, index) => (
+            <Frame key={index} className="!p-2 ml-4 !pb-1">
+              <Frame
+                variant="well"
+                className="!p-0 w-[150px] h-[150px] lg:w-[375px] lg:h-[375px] overflow-hidden"
+              >
+                <img
+                  src={image}
+                  alt="Flunk"
+                  className="w-[150px] h-[150px] lg:w-[375px] lg:h-[375px] object-cover bg-gray-200 select-none pointer-events-none"
+                  style={{
+                    imageRendering: "auto",
+                  }}
+                />
+              </Frame>
+            </Frame>
+          ))}
+        </Marquee>
+      </FrameWithBackground>
+    </div>
+  );
+};
+
+const PRODUCTS: {
+  title: string;
+  description: React.ReactNode;
+  images: string[];
+  direction: "left" | "right";
+}[] = [
+  {
+    title: "Flunk Originals",
+    description: (
+      <span className="text-xl md:text-xl max-w-2xl text-pretty">
+        Flunk Originals is a collection of 10K unique pixel art characters. Each
+        Flunk is composed of seven layers of traits: Backdrop, Face, Torso,
+        Pigment, Superlative, Clique, and Head. With over 1 million possible
+        combinations, every Flunk is one-of-a-kind and programmatically
+        generated.
+      </span>
+    ),
+    images: [
+      "/images/about-us/fp-1.avif",
+      "/images/about-us/fp-2.avif",
+      "/images/about-us/fp-3.avif",
+      "/images/about-us/fp-4.avif",
+      "/images/about-us/fp-5.avif",
+      "/images/about-us/fp-6.avif",
+      "/images/about-us/fp-7.avif",
+      "/images/about-us/fp-8.avif",
+      "/images/about-us/fp-9.avif",
+      "/images/about-us/fp-10.avif",
+    ],
+    direction: "left",
+  },
+  {
+    title: "Backpacks",
+    description: (
+      <span className="text-xl md:text-xl max-w-2xl text-pretty">
+        Backpacks are utility items for Flunk holders. Each backpack comes with
+        special abilities and traits that enhance your Flunk's capabilities in
+        the metaverse. Collect different backpacks to unlock new features and
+        experiences.
+      </span>
+    ),
+    images: [
+      "/images/about-us/bp-1.avif",
+      "/images/about-us/bp-2.avif",
+      "/images/about-us/bp-3.avif",
+      "/images/about-us/bp-4.avif",
+      "/images/about-us/bp-5.avif",
+      "/images/about-us/bp-6.avif",
+      "/images/about-us/bp-7.avif",
+      "/images/about-us/bp-8.avif",
+      "/images/about-us/bp-9.avif",
+      "/images/about-us/bp-10.avif",
+    ],
+    direction: "right",
+  },
+  {
+    title: "Flunk Portraits",
+    description: (
+      <span className="text-xl md:text-xl max-w-2xl text-pretty">
+        Flunk Portraits are premium 2D artwork featuring detailed
+        interpretations of popular Flunk characters. These high-quality digital
+        art pieces showcase the creativity and artistry behind the Flunk
+        universe.
+      </span>
+    ),
+    images: [
+      "/images/about-us/f2d-1.avif",
+      "/images/about-us/f2d-2.avif",
+      "/images/about-us/f2d-3.avif",
+      "/images/about-us/f2d-4.avif",
+      "/images/about-us/f2d-5.avif",
+      "/images/about-us/f2d-6.avif",
+      "/images/about-us/f2d-7.avif",
+      "/images/about-us/f2d-8.avif",
+      "/images/about-us/f2d-9.avif",
+      "/images/about-us/f2d-10.avif",
+    ],
+    direction: "left",
+  },
+];
 
 interface Props {
   onClose: () => void;
@@ -13,62 +145,62 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
   const renderCalendarForMonth = (month: string) => {
     const monthData = {
       August: {
-        title: 'August 2024',
+        title: 'August 2025',
         color: 'orange',
         borderColor: 'border-orange-500',
         bgColor: 'bg-orange-100',
         textColor: 'text-orange-700',
         events: [
-          { day: 5, label: 'First Day of School', color: 'bg-yellow-400' },
-          { day: 15, label: 'Back to School Night', color: 'bg-pink-400' },
-          { day: 26, label: 'Student Orientation', color: 'bg-blue-400' }
+          { day: 28, label: 'First Day of School', color: 'bg-yellow-400' },
+          { day: 30, label: 'First Arcade Challenge Begins', color: 'bg-purple-400' }
         ]
       },
       September: {
-        title: 'September 2024',
+        title: 'September 2025',
         color: 'green',
         borderColor: 'border-green-500',
         bgColor: 'bg-green-100',
         textColor: 'text-green-700',
         events: [
-          { day: 15, label: 'Homecoming Dance', color: 'bg-purple-400' },
-          { day: 20, label: 'Football vs. Riverside', color: 'bg-red-400' },
-          { day: 30, label: 'Picture Day', color: 'bg-blue-400' }
+          { day: 1, label: 'Labor Day', color: 'bg-red-400' },
+          { day: 12, label: 'Picture Day', color: 'bg-blue-400' },
+          { day: 20, label: 'Homecoming', color: 'bg-pink-400' },
+          { day: 27, label: '2nd Arcade Challenge Begins', color: 'bg-purple-400' }
         ]
       },
       October: {
-        title: 'October 2024',
+        title: 'October 2025',
         color: 'orange',
         borderColor: 'border-orange-500',
         bgColor: 'bg-orange-100',
         textColor: 'text-orange-700',
         events: [
-          { day: 1, label: 'Parent-Teacher Conferences', color: 'bg-yellow-400' },
-          { day: 15, label: 'Fall Break Begins', color: 'bg-green-400' },
-          { day: 31, label: 'Halloween Dance', color: 'bg-purple-400' }
+          { day: 13, label: 'Columbus Day', color: 'bg-red-400' },
+          { day: 25, label: '3rd Arcade Challenge Begins', color: 'bg-purple-400' },
+          { day: 31, label: 'Halloween', color: 'bg-purple-400' }
         ]
       },
       November: {
-        title: 'November 2024',
+        title: 'November 2025',
         color: 'amber',
         borderColor: 'border-amber-600',
         bgColor: 'bg-amber-100',
         textColor: 'text-amber-800',
         events: [
-          { day: 5, label: 'Academic Awards', color: 'bg-yellow-400' },
           { day: 11, label: 'Veterans Day - No School', color: 'bg-red-400' },
-          { day: 25, label: 'Thanksgiving Break', color: 'bg-orange-400' }
+          { day: 22, label: '4th Arcade Challenge Begins', color: 'bg-purple-400' },
+          { day: 27, label: 'Thanksgiving Break Begins', color: 'bg-orange-400' }
         ]
       },
       December: {
-        title: 'December 2024',
+        title: 'December 2025',
         color: 'red',
         borderColor: 'border-red-500',
         bgColor: 'bg-red-100',
         textColor: 'text-red-700',
         events: [
-          { day: 10, label: 'Winter Concert', color: 'bg-blue-400' },
-          { day: 20, label: 'Winter Break Begins', color: 'bg-green-400' },
+          { day: 1, label: 'Back from Thanksgiving', color: 'bg-green-400' },
+          { day: 19, label: 'Winter Break Begins', color: 'bg-green-400' },
           { day: 25, label: 'Christmas Day', color: 'bg-red-500' }
         ]
       }
@@ -90,28 +222,45 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
           ))}
         </div>
         
-        {/* Calendar days - simplified for demo */}
+        {/* Calendar days */}
         <div className="grid grid-cols-7 gap-1">
-          {Array.from({ length: 35 }, (_, i) => {
-            const dayNum = i - 3; // Adjust start day
-            const isValidDay = dayNum > 0 && dayNum <= 31;
-            const hasEvent = currentMonth.events.find(event => event.day === dayNum);
+          {(() => {
+            // Get the first day of the month and number of days
+            const getCalendarData = (month: string) => {
+              const year = 2025;
+              const monthMap: { [key: string]: number } = {
+                'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
+              };
+              const monthNum = monthMap[month];
+              const firstDay = new Date(year, monthNum, 1).getDay(); // 0 = Sunday
+              const daysInMonth = new Date(year, monthNum + 1, 0).getDate();
+              return { firstDay, daysInMonth };
+            };
+
+            const { firstDay, daysInMonth } = getCalendarData(month);
+            const totalCells = 42; // 6 rows × 7 days
             
-            return (
-              <div
-                key={i}
-                className={`text-center p-2 rounded border font-bold ${
-                  isValidDay 
-                    ? hasEvent 
-                      ? `${hasEvent.color} ${currentMonth.textColor}` 
-                      : `bg-white ${currentMonth.textColor}`
-                    : 'bg-gray-100 text-gray-400'
-                }`}
-              >
-                {isValidDay ? dayNum : ''}
-              </div>
-            );
-          })}
+            return Array.from({ length: totalCells }, (_, i) => {
+              const dayNum = i - firstDay + 1;
+              const isValidDay = dayNum > 0 && dayNum <= daysInMonth;
+              const hasEvent = currentMonth.events.find(event => event.day === dayNum);
+              
+              return (
+                <div
+                  key={i}
+                  className={`text-center p-2 rounded border font-bold ${
+                    isValidDay 
+                      ? hasEvent 
+                        ? `${hasEvent.color} ${currentMonth.textColor}` 
+                        : `bg-white ${currentMonth.textColor}`
+                      : 'bg-gray-100 text-gray-400'
+                  }`}
+                >
+                  {isValidDay ? dayNum : ''}
+                </div>
+              );
+            });
+          })()}
         </div>
         
         {/* Events legend for this month */}
@@ -222,41 +371,41 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                 <div>
                   <h4 className="font-semibold text-orange-600">🌻 August Events:</h4>
                   <ul className="text-sm space-y-1">
-                    <li>• 5th: First Day of School</li>
-                    <li>• 15th: Back to School Night</li>
-                    <li>• 26th: Student Orientation</li>
+                    <li>• 28th: First Day of School</li>
+                    <li>• 30th: First Arcade Challenge Begins</li>
                   </ul>
                 </div>
                 <div>
                   <h4 className="font-semibold text-green-600">🍂 September Events:</h4>
                   <ul className="text-sm space-y-1">
-                    <li>• 15th: Homecoming Dance</li>
-                    <li>• 20th: Football vs. Riverside</li>
-                    <li>• 30th: Picture Day</li>
+                    <li>• 1st: Labor Day</li>
+                    <li>• 12th: Picture Day</li>
+                    <li>• 20th: Homecoming</li>
+                    <li>• 27th: 2nd Arcade Challenge Begins</li>
                   </ul>
                 </div>
                 <div>
                   <h4 className="font-semibold text-orange-600">🎃 October Events:</h4>
                   <ul className="text-sm space-y-1">
-                    <li>• 1st: Parent-Teacher Conferences</li>
-                    <li>• 15th: Fall Break Begins</li>
-                    <li>• 31st: Halloween Dance</li>
+                    <li>• 13th: Columbus Day</li>
+                    <li>• 25th: 3rd Arcade Challenge Begins</li>
+                    <li>• 31st: Halloween</li>
                   </ul>
                 </div>
                 <div>
                   <h4 className="font-semibold text-amber-600">🍁 November Events:</h4>
                   <ul className="text-sm space-y-1">
-                    <li>• 5th: Academic Awards</li>
                     <li>• 11th: Veterans Day - No School</li>
-                    <li>• 25th: Thanksgiving Break</li>
+                    <li>• 22nd: 4th Arcade Challenge Begins</li>
+                    <li>• 27th: Thanksgiving Break Begins</li>
                   </ul>
                 </div>
               </div>
               <div className="mt-4">
                 <h4 className="font-semibold text-red-600">❄️ December Events:</h4>
                 <ul className="text-sm space-y-1">
-                  <li>• 10th: Winter Concert</li>
-                  <li>• 20th: Winter Break Begins</li>
+                  <li>• 1st: Back from Thanksgiving</li>
+                  <li>• 19th: Winter Break Begins</li>
                   <li>• 25th: Christmas Day</li>
                 </ul>
               </div>
@@ -394,54 +543,18 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
       
       case 'resources':
         return (
-          <div className="p-4 space-y-4">
-            <h2 className="text-xl font-bold mb-4">📚 Student Resources</h2>
+          <div className="p-4 space-y-6">
+            <h2 className="text-xl font-bold mb-4">🎨 Flunk Art Galleries</h2>
             
-            <div className="bg-white border-2 border-gray-400 p-3">
-              <h3 className="font-bold text-lg mb-3">📖 Academic Resources:</h3>
-              <ul className="space-y-2">
-                <li>• <strong>Library Hours:</strong> Mon-Fri 7:00 AM - 6:00 PM</li>
-                <li>• <strong>Computer Lab:</strong> Available during study hall</li>
-                <li>• <strong>Tutoring Center:</strong> Room 205, after school</li>
-                <li>• <strong>Guidance Counselors:</strong> Available by appointment</li>
-              </ul>
-            </div>
-
-            <div className="bg-white border-2 border-gray-400 p-3">
-              <h3 className="font-bold text-lg mb-3">🎓 Student Life:</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div>
-                  <strong>🏆 Clubs & Activities:</strong>
-                  <ul className="ml-4 mt-1">
-                    <li>• Student Government</li>
-                    <li>• Drama Club</li>
-                    <li>• Chess Club</li>
-                    <li>• Yearbook Committee</li>
-                    <li>• Science Olympiad</li>
-                  </ul>
-                </div>
-                <div>
-                  <strong>🚀 Astros Sports Teams:</strong>
-                  <ul className="ml-4 mt-1">
-                    <li>• Astros Football (Fall)</li>
-                    <li>• Astros Basketball (Winter)</li>
-                    <li>• Astros Baseball/Softball (Spring)</li>
-                    <li>• Astros Track & Field</li>
-                    <li>• Astros Volleyball</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-green-100 border-2 border-green-400 p-3">
-              <h3 className="font-bold">📋 Important Forms:</h3>
-              <p>Pick up forms at the main office or guidance counselor</p>
-              <ul className="mt-2">
-                <li>• Class Schedule Changes</li>
-                <li>• College Application Information</li>
-                <li>• Field Trip Permission Slips</li>
-              </ul>
-            </div>
+            {PRODUCTS.map((product, index) => (
+              <Product
+                key={index}
+                title={product.title}
+                description={product.description}
+                images={product.images}
+                direction={product.direction}
+              />
+            ))}
           </div>
         );
       

@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Button, Frame, Window, WindowContent, WindowHeader } from 'react95';
 import styled from 'styled-components';
 import { BACKGROUND_CONFIG } from 'config/backgroundConfig';
+import useThemeSettings from 'store/useThemeSettings';
 
-const GateContainer = styled.div`
+const GateContainer = styled.div<{ backgroundImage?: string }>`
   position: fixed;
   inset: 0;
   background: #000;
@@ -18,25 +19,34 @@ const GateContainer = styled.div`
     content: '';
     position: absolute;
     inset: 0;
-    /* Pixel art sunset gradient background */
-    background: linear-gradient(180deg, 
-      #2D1B69 0%,     /* Deep purple sky top */
-      #4A2C7D 15%,    /* Purple */
-      #663399 30%,    /* Medium purple */
-      #8B4B9C 45%,    /* Purple-pink transition */
-      #B85BB8 60%,    /* Pink-purple */
-      #E66BA3 75%,    /* Pink */
-      #FF8B66 85%,    /* Orange-pink */
-      #FFAA44 95%,    /* Golden orange */
-      #FFD700 100%    /* Golden yellow horizon */
-    );
     
-    /* Add subtle pixel-like noise pattern overlay */
-    background-image: 
-      radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 1px, transparent 2px),
-      radial-gradient(circle at 75% 75%, rgba(255,255,255,0.08) 1px, transparent 2px),
-      radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 1px, transparent 2px);
-    background-size: 20px 20px, 30px 30px, 40px 40px;
+    /* Use background image if provided, otherwise fallback to gradient */
+    background: ${props => props.backgroundImage 
+      ? `url(${props.backgroundImage})`
+      : `linear-gradient(180deg, 
+          #2D1B69 0%,     /* Deep purple sky top */
+          #4A2C7D 15%,    /* Purple */
+          #663399 30%,    /* Medium purple */
+          #8B4B9C 45%,    /* Purple-pink transition */
+          #B85BB8 60%,    /* Pink-purple */
+          #E66BA3 75%,    /* Pink */
+          #FF8B66 85%,    /* Orange-pink */
+          #FFAA44 95%,    /* Golden orange */
+          #FFD700 100%    /* Golden yellow horizon */
+        )`};
+    
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    /* Add subtle pixel-like noise pattern overlay only if using gradient */
+    ${props => !props.backgroundImage && `
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 1px, transparent 2px),
+        radial-gradient(circle at 75% 75%, rgba(255,255,255,0.08) 1px, transparent 2px),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 1px, transparent 2px);
+      background-size: 20px 20px, 30px 30px, 40px 40px;
+    `}
     
     opacity: ${BACKGROUND_CONFIG.opacity};
     z-index: -1;
@@ -84,6 +94,7 @@ const AccessGate: React.FC<AccessGateProps> = ({ onAccessGranted }) => {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const { backgroundImage } = useThemeSettings();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,7 +129,7 @@ const AccessGate: React.FC<AccessGateProps> = ({ onAccessGranted }) => {
   };
 
   return (
-    <GateContainer>
+    <GateContainer backgroundImage={backgroundImage}>
       <GateWindow>
         <WindowHeader>
           <span>🏫 Flunks High School - Access Required</span>
