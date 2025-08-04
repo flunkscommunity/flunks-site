@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Frame, Window, WindowContent, WindowHeader } from 'react95';
 import styled from 'styled-components';
+import { BACKGROUND_CONFIG } from 'config/backgroundConfig';
 
 const GateContainer = styled.div`
   position: fixed;
@@ -17,15 +18,24 @@ const GateContainer = styled.div`
     content: '';
     position: absolute;
     inset: 0;
-    background: 
-      linear-gradient(90deg, transparent 0px, transparent 18px, #00ff00 18px, #00ff00 20px, transparent 20px, transparent 40px),
-      linear-gradient(0deg, transparent 0px, transparent 18px, #00ff00 18px, #00ff00 20px, transparent 20px, transparent 40px),
-      linear-gradient(45deg, transparent 0px, transparent 28px, #ff00ff 28px, #ff00ff 30px, transparent 30px, transparent 60px),
-      linear-gradient(-45deg, transparent 0px, transparent 28px, #ffff00 28px, #ffff00 30px, transparent 30px, transparent 60px);
-    background-size: 40px 40px, 40px 40px, 60px 60px, 60px 60px;
-    animation: pipes 20s linear infinite;
-    opacity: 0.3;
+    background-image: url(${BACKGROUND_CONFIG.imageUrl});
+    background-size: ${BACKGROUND_CONFIG.tileSize}% ${BACKGROUND_CONFIG.tileSize}%;
+    background-repeat: repeat;
+    animation: ${BACKGROUND_CONFIG.enableScrolling ? `crawlBackground ${BACKGROUND_CONFIG.speed}s linear infinite` : 'none'};
+    opacity: ${BACKGROUND_CONFIG.opacity};
     z-index: -1;
+    
+    /* Fallback in case image doesn't load */
+    background-color: #003300;
+  }
+  
+  @keyframes crawlBackground {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(-100%, -100%);
+    }
   }
 `;
 
@@ -49,6 +59,9 @@ const AccessLevel = {
 interface AccessGateProps {
   onAccessGranted: () => void;
 }
+
+// Debug: Log the configuration being used
+console.log('AccessGate Background Config:', BACKGROUND_CONFIG);
 
 const AccessGate: React.FC<AccessGateProps> = ({ onAccessGranted }) => {
   const [code, setCode] = useState('');
@@ -120,24 +133,6 @@ const AccessGate: React.FC<AccessGateProps> = ({ onAccessGranted }) => {
                   }
                   100% {
                     transform: translateX(-15px);
-                  }
-                }
-                
-                @keyframes pipes {
-                  0% {
-                    transform: translate(0, 0);
-                  }
-                  25% {
-                    transform: translate(-20px, -20px);
-                  }
-                  50% {
-                    transform: translate(-40px, 0);
-                  }
-                  75% {
-                    transform: translate(-20px, 20px);
-                  }
-                  100% {
-                    transform: translate(0, 0);
                   }
                 }
               `}</style>

@@ -23,15 +23,15 @@ export const BACKGROUND_CONFIG = {
   
   // Animation speed (higher number = slower animation)
   // Recommended: 15-60 seconds
-  speed: 30,
+  speed: 5, // Temporarily faster for testing
   
   // Background opacity (0 = invisible, 1 = fully opaque)
   // Recommended: 0.6-1.0 for good visibility
-  opacity: 0.8,
+  opacity: 1.0, // Temporarily full opacity for testing
   
   // Tile size (how big each repeated image appears)
   // 25 = small tiles, 50 = medium, 100 = large
-  tileSize: 50
+  tileSize: 25 // Temporarily smaller tiles for testing
 };
 
 // Quick presets for common effects
