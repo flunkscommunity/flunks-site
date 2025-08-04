@@ -20,39 +20,17 @@ const GateContainer = styled.div<{ backgroundImage?: string }>`
     position: absolute;
     inset: 0;
     
-    /* Use background image if provided, otherwise fallback to gradient */
-    background: ${props => props.backgroundImage 
-      ? `url(${props.backgroundImage})`
-      : `linear-gradient(180deg, 
-          #2D1B69 0%,     /* Deep purple sky top */
-          #4A2C7D 15%,    /* Purple */
-          #663399 30%,    /* Medium purple */
-          #8B4B9C 45%,    /* Purple-pink transition */
-          #B85BB8 60%,    /* Pink-purple */
-          #E66BA3 75%,    /* Pink */
-          #FF8B66 85%,    /* Orange-pink */
-          #FFAA44 95%,    /* Golden orange */
-          #FFD700 100%    /* Golden yellow horizon */
-        )`};
-    
+    /* Use your pretty my-background.png file */
+    background: url('/images/my-background.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     
-    /* Add subtle pixel-like noise pattern overlay only if using gradient */
-    ${props => !props.backgroundImage && `
-      background-image: 
-        radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 1px, transparent 2px),
-        radial-gradient(circle at 75% 75%, rgba(255,255,255,0.08) 1px, transparent 2px),
-        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 1px, transparent 2px);
-      background-size: 20px 20px, 30px 30px, 40px 40px;
-    `}
+    /* Fallback to clouds if image doesn't load */
+    background-color: #87CEEB;
     
     opacity: ${BACKGROUND_CONFIG.opacity};
     z-index: -1;
-    
-    /* Fallback color */
-    background-color: #4A2C7D;
   }
   
   /* Remove the old animation */
@@ -95,6 +73,9 @@ const AccessGate: React.FC<AccessGateProps> = ({ onAccessGranted }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { backgroundImage } = useThemeSettings();
+
+  // Debug logging
+  console.log('AccessGate backgroundImage:', backgroundImage);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
