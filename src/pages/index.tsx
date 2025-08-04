@@ -30,6 +30,7 @@ import GameManualWindow from "windows/GameManualWindow";
 import MemeManagerWindow from "windows/MemeManagerWindow";
 import AccessLevelStatus from "components/AccessLevelStatus";
 import ConditionalAppIcon from "components/ConditionalAppIcon";
+import { BACKGROUND_CONFIG } from "config/backgroundConfig";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -377,6 +378,12 @@ const MonitorScreenWrapper: React.FC<React.PropsWithChildren> = ({ children }) =
       display: "flex",
     }}
     showBottomBar
+    enableScrollingBackground={BACKGROUND_CONFIG.enableScrolling}
+    customBackgroundImage={BACKGROUND_CONFIG.imageUrl}
+    scrollingPattern={BACKGROUND_CONFIG.pattern}
+    scrollingSpeed={BACKGROUND_CONFIG.speed}
+    scrollingOpacity={BACKGROUND_CONFIG.opacity}
+    scrollingTileSize={BACKGROUND_CONFIG.tileSize}
   >
     {children}
   </CustomMonitor>

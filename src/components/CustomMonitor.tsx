@@ -4,6 +4,7 @@ import { AppBar, Button, ScrollViewProps, TextInput, Toolbar } from "react95";
 import styled from "styled-components";
 import Appbar from "./Appbar/Appbar";
 import useThemeSettings from "store/useThemeSettings";
+import ScrollingBackground, { ScrollingPattern } from "./ScrollingBackground";
 
 export const StyledScrollView = styled.div<Pick<ScrollViewProps, "shadow">>`
   position: relative;
@@ -38,6 +39,12 @@ type MonitorProps = {
   backgroundStyles?: React.CSSProperties;
   children?: React.ReactNode;
   showBottomBar?: boolean;
+  customBackgroundImage?: string;
+  enableScrollingBackground?: boolean;
+  scrollingPattern?: ScrollingPattern;
+  scrollingSpeed?: number;
+  scrollingOpacity?: number;
+  scrollingTileSize?: number;
 };
 
 const Wrapper = styled.div`
@@ -122,9 +129,23 @@ const MonitorScreenContainer = styled.div`
 `;
 
 const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
-  ({ backgroundStyles, children, showBottomBar, ...otherProps }, ref) => {
+  ({ 
+    backgroundStyles, 
+    children, 
+    showBottomBar, 
+    customBackgroundImage, 
+    enableScrollingBackground = false,
+    scrollingPattern = 'diagonal',
+    scrollingSpeed = 20,
+    scrollingOpacity = 1,
+    scrollingTileSize = 50,
+    ...otherProps 
+  }, ref) => {
     const { backgroundColor, backgroundImage, oldMonitorMode } =
       useThemeSettings();
+
+    const finalBackgroundImage = customBackgroundImage || backgroundImage;
+    const shouldUseScrollingBackground = enableScrollingBackground && finalBackgroundImage;
 
     return (
       <Wrapper ref={ref} {...otherProps}>
@@ -138,13 +159,22 @@ const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
               <Background
                 style={{
                   ...backgroundStyles,
-                  backgroundColor,
-                  backgroundImage: `url(${backgroundImage})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  backgroundRepeat: "no-repeat",
+                  backgroundColor: shouldUseScrollingBackground ? 'transparent' : backgroundColor,
+                  backgroundImage: shouldUseScrollingBackground ? 'none' : `url(${finalBackgroundImage})`,
+                  backgroundSize: shouldUseScrollingBackground ? 'auto' : "cover",
+                  backgroundPosition: shouldUseScrollingBackground ? 'auto' : "center",
+                  backgroundRepeat: shouldUseScrollingBackground ? 'auto' : "no-repeat",
                 }}
               >
+                {shouldUseScrollingBackground && (
+                  <ScrollingBackground 
+                    backgroundImage={finalBackgroundImage}
+                    pattern={scrollingPattern}
+                    speed={scrollingSpeed}
+                    opacity={scrollingOpacity}
+                    tileSize={scrollingTileSize}
+                  />
+                )}
                 <MonitorScreenContainer>{children}</MonitorScreenContainer>
 
                 {showBottomBar && <Appbar />}
