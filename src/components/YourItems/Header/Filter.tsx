@@ -52,9 +52,10 @@ const YourItemsGridFilter = () => {
           active={!isDisabled && viewType === "grid"}
           size="lg"
           className="group"
+          title="Grid View - Show items in a grid layout"
         >
           <img
-            src="/images/icons/large-view.png"
+            src="/images/icons/grid-view.png"
             className="h-full w-full group-disabled:opacity-50"
           />
         </Button>
@@ -64,9 +65,10 @@ const YourItemsGridFilter = () => {
           active={!isDisabled && viewType === "table"}
           size="lg"
           className="group"
+          title="List View - Show items in a list layout"
         >
           <img
-            src="/images/icons/grid-view.png"
+            src="/images/icons/large-view.png"
             className="h-full w-full group-disabled:opacity-50"
           />
         </Button>

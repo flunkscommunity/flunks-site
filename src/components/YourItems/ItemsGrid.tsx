@@ -1,5 +1,5 @@
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
-import { MarketplaceIndividualNftDto } from "generated/models";
+// import { MarketplaceIndividualNftDto } from "generated/models";
 import React, { use, useEffect, useMemo, useState } from "react";
 import {
   Button,
@@ -44,15 +44,20 @@ import { ObjectDetails } from "contexts/StakingContext";
 
 const CustomImage = styled.img`
   background-color: ${({ theme }) => theme.borderLight};
-  image-rendering: pixelated;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: crisp-edges;
+  image-rendering: ${props => props.className?.includes('pixelated') ? 'pixelated' : 'auto'};
+  image-rendering: ${props => props.className?.includes('pixelated') ? '-moz-crisp-edges' : 'auto'};
+  image-rendering: ${props => props.className?.includes('pixelated') ? 'crisp-edges' : 'auto'};
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: scale(1.02);
+  }
 `;
 
-// Retro 8-bit grid styling
+// Retro 8-bit grid styling - Fixed responsive layout
 const RetroGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
   padding: 16px;
   width: 100%;
@@ -64,6 +69,22 @@ const RetroGrid = styled.div`
     linear-gradient(-45deg, transparent 75%, #001122 75%);
   background-size: 20px 20px;
   background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+  
+  @media (max-width: 800px) {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    padding: 12px;
+  }
+  
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+    padding: 8px;
+  }
 `;
 
 const RetroItemFrame = styled(Frame)`
@@ -76,6 +97,9 @@ const RetroItemFrame = styled(Frame)`
   position: relative;
   width: 100%;
   min-width: 0;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
   
   &::before {
     content: '';
@@ -103,6 +127,10 @@ const RetroImageFrame = styled(Frame)`
   box-shadow: 
     inset 0 0 0 1px #880088,
     0 0 5px #ff00ff33 !important;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 `;
 
 const RetroButton = styled(Button)`
@@ -329,27 +357,49 @@ const GridedView: React.FC<{
   setActiveItem: (nft: NftItem) => void;
   pixelMode: boolean;
 }> = ({ items, setActiveItem, pixelMode }) => {
+  console.log('GridedView rendering with items:', items?.length || 0);
+  
+  if (!items || items.length === 0) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        height: '200px',
+        color: '#00ffff',
+        fontFamily: 'monospace'
+      }}>
+        No items to display in grid view
+      </div>
+    );
+  }
+  
   return (
     <RetroGrid>
       {items.map((nft: NftItem) => (
         <RetroItemFrame key={nft.tokenID} variant="window" className="p-2">
-          <RetroImageFrame variant="field" className="relative !flex !flex-col">
-            <Frame variant="well" className="!w-full !h-full">
+          <RetroImageFrame variant="field" className="relative !flex !flex-col flex-1">
+            <Frame variant="well" className="!w-full !flex-1 !flex !items-center !justify-center overflow-hidden">
               <CustomImage
                 src={pixelMode ? nft.pixelUrl || nft.MetadataViewsDisplay.thumbnail.url : nft.MetadataViewsDisplay.thumbnail.url}
-                className="min-w-full min-h-full"
+                className="w-full h-full object-contain max-h-[150px]"
+                alt={`${nft.collection} #${nft.serialNumber}`}
+                onError={(e) => {
+                  // Fallback to main thumbnail if pixel version fails
+                  e.currentTarget.src = nft.MetadataViewsDisplay.thumbnail.url;
+                }}
               />
             </Frame>
-            <div className="bottom-0 left-0 flex flex-col w-full items-center gap-1 pt-2">
+            <div className="w-full flex flex-col items-center gap-1 pt-2 z-10 relative">
               <Frame
                 variant="well"
                 className="w-full flex items-center justify-between px-2 py-1"
                 style={{ background: '#000040', border: '1px solid #00ffff' }}
               >
-                <RetroText className="text-sm">
+                <RetroText className="text-xs">
                   {nft.collection === "Flunks" ? "Flunk" : "Backpack"}
                 </RetroText>
-                <RetroText className="text-sm">#{nft.serialNumber}</RetroText>
+                <RetroText className="text-xs">#{nft.serialNumber}</RetroText>
               </Frame>
               <RetroButton
                 onClick={() => setActiveItem(nft)}
@@ -473,7 +523,7 @@ const ItemsGrid: React.FC = () => {
   const { openWindow } = useWindowsContext();
   const scrollViewRef = React.useRef<HTMLDivElement>(null);
   const [activeItem, setActiveItem] =
-    useState<MarketplaceIndividualNftDto | null>(null);
+    useState<any | null>(null);
   const [pixelMode, setPixelMode] = useState<boolean>(false);
 
   const { displayedItems, currentPage, setPage, viewType, currentDataPages } =
@@ -546,17 +596,17 @@ const ItemsGrid: React.FC = () => {
           <ScrollViewWithBackground>
             {viewType === "grid" && (
               <GridedView
-                // @ts-ignore
+                // @ts-ignore - Type conversion handled in component
                 items={memodCombinedItems}
-                setActiveItem={(nft) => handleOpenOnlyflunksItem(nft as ObjectDetails)}
+                setActiveItem={(nft) => handleOpenOnlyflunksItem(nft as unknown as ObjectDetails)}
                 pixelMode={pixelMode}
               />
             )}
             {viewType === "table" && (
               <TableView
-                // @ts-ignore
+                // @ts-ignore - Type conversion handled in component
                 items={memodCombinedItems}
-                setActiveItem={(nft) => handleOpenOnlyflunksItem(nft as ObjectDetails)}
+                setActiveItem={(nft) => handleOpenOnlyflunksItem(nft as unknown as ObjectDetails)}
                 pixelMode={pixelMode}
               />
             )}
