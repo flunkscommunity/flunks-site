@@ -42,6 +42,18 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                   settings={{
                     environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID || "53675303-5e80-4fe5-88a4-e6caae677432",
                     walletConnectors: [FlowWalletConnectors],
+                    walletsFilter: (wallets) => {
+                      // Ensure Lilico (Flow Wallet), Blocto, and Dapper are all available on all devices
+                      // Filter to include specific Flow wallets we want
+                      const flowWallets = wallets.filter(wallet => 
+                        wallet.key === 'flowwallet' || // Lilico/Flow Wallet
+                        wallet.key === 'blocto' ||     // Blocto
+                        wallet.key === 'dapper'       // Dapper
+                      );
+                      
+                      // If no specific Flow wallets found, return all (fallback)
+                      return flowWallets.length > 0 ? flowWallets : wallets;
+                    },
                     overrides: {
                       views: [
                         {
