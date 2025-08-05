@@ -23,7 +23,6 @@ import {
   CustomScrollArea,
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
-import { DESKTOP_BACKGROUNDS } from "config/desktopBackgroundConfig";
 
 const AVOIDED_THEMES = [
   "aiee",
@@ -47,10 +46,6 @@ const Settings: React.FC = () => {
   const { closeWindow } = useWindowsContext();
   const { setShowDynamicUserProfile } = useDynamicContext();
   const {
-    backgroundImage,
-    backgroundColor,
-    setBackgroundColor,
-    setBackgroundImage,
     desktopBackground,
     desktopBackgroundType,
     setDesktopBackground,
@@ -60,7 +55,6 @@ const Settings: React.FC = () => {
     theme,
     setTheme,
   } = useThemeSettings();
-  const [backgroundUrl, setBackgroundUrl] = useState<string>(backgroundImage);
 
   const themeSelectOptions = Object.keys(index)
     .map((key, i) => ({
@@ -71,20 +65,24 @@ const Settings: React.FC = () => {
 
   const backgroundSelectOptions = [
     {
-      label: "Campus Map",
-      url: "https://storage.googleapis.com/flunks_public/rebrand/map-poster.jpg",
-    },
-    {
-      label: "Windows XP Flunk",
-      url: "https://storage.googleapis.com/flunks_public/desktop-backgrounds/posterized.webp",
-    },
-    {
-      label: "Flunks 95 Setup",
-      url: "https://storage.googleapis.com/flunks_public/desktop-backgrounds/flunksbg.webp",
+      label: "My Background",
+      url: "/images/my-background.png",
     },
     {
       label: "Flunks 95 Startup",
       url: "https://storage.googleapis.com/flunks_public/desktop-backgrounds/bootup.webp",
+    },
+    {
+      label: "Blue Sky",
+      url: "/images/backdrops/BLUE-SKY.png",
+    },
+    {
+      label: "Night Time",
+      url: "/images/backdrops/NIGHT-TIME.png",
+    },
+    {
+      label: "Very Dapper",
+      url: "/images/backdrops/VERY-DAPPER.png",
     },
   ];
 
@@ -92,8 +90,8 @@ const Settings: React.FC = () => {
 
   const debouncedSetBackgroundStyle = debounce(
     (e: ChangeEvent<HTMLInputElement>) => {
-      setBackgroundImage("");
-      setBackgroundColor(e.target.value);
+      setDesktopBackground(`background-color: ${e.target.value};`);
+      setDesktopBackgroundType('pattern'); // Use pattern type for solid colors
     },
     100
   );
@@ -114,116 +112,79 @@ const Settings: React.FC = () => {
       headerIcon="/images/icons/settings.png"
     >
       <Tabs value={activeTab} onChange={setActiveTab}>
-        <Tab value={0}>Login Screen</Tab>
-        <Tab value={1}>Desktop</Tab>
-        <Tab value={2}>System</Tab>
-        <Tab value={3}>User</Tab>
+        <Tab value={0}>Desktop</Tab>
+        <Tab value={1}>System</Tab>
+        <Tab value={2}>User</Tab>
       </Tabs>
       <TabBody className="!h-full overflow-auto">
         <CustomScrollArea>
           {activeTab === 0 && (
-            <div className="flex flex-col gap-2 items-start max-w-[600px] mx-auto">
-              <div className="mx-auto ">
-                <Monitor
-                  backgroundStyles={{
-                    backgroundColor,
-                    backgroundImage: `url(${backgroundImage})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    imageRendering: "crisp-edges",
-                  }}
-                />
-              </div>
-              <GroupBox
-                label={"Background"}
-                className="flex items-center gap-4 w-full flex-col"
-              >
-                <div className="flex flex-col w-full h-full flex-grow-0">
-                  <CustomStyledScrollView>
-                    <CustomScrollArea className="flex flex-row gap-2 ">
-                      {backgroundSelectOptions.map((option) => (
-                        <Button
-                          onClick={() => {
-                            setBackgroundImage(option.url);
-                          }}
-                          active={backgroundImage === option.url}
-                          className="!h-full !p-1 flex-shrink-0"
-                        >
-                          <img
-                            src={option.url}
-                            alt="background"
-                            className="w-[124px] aspect-video"
-                          />
-                        </Button>
-                      ))}
-                    </CustomScrollArea>
-                  </CustomStyledScrollView>
-                </div>
-
-                <div className="flex gap-4 items-center w-full justify-between">
-                  <div className="flex flex-col items-start ">
-                    <span className="text-lg font-black">Background Color</span>
-                    <span className="text-sm">Replaces current background</span>
-                  </div>
-                  <ColorInput
-                    onChange={debouncedSetBackgroundStyle}
-                    defaultValue={backgroundColor}
+            <div className="flex flex-col gap-4 items-start max-w-[600px] mx-auto">
+              
+              {/* Desktop Background Section */}
+              <div className="w-full">
+                <div className="mx-auto mb-4">
+                  <Monitor
+                    backgroundStyles={{
+                      ...(desktopBackgroundType === 'image' ? {
+                        backgroundImage: `url(${desktopBackground})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      } : {
+                        background: desktopBackgroundType === 'pattern' || desktopBackgroundType === 'gradient' ? 
+                          desktopBackground.replace(/background:/g, '').replace(/;/g, '') : 
+                          undefined
+                      }),
+                      imageRendering: "crisp-edges",
+                    }}
                   />
                 </div>
-              </GroupBox>
+                <GroupBox
+                  label={"Desktop Background"}
+                  className="flex items-center gap-4 w-full flex-col"
+                >
+                  <div className="flex flex-col w-full h-full flex-grow-0">
+                    <div className="mb-4">
+                      <span className="text-sm font-bold mb-2 block">Images</span>
+                      <CustomStyledScrollView>
+                        <CustomScrollArea className="flex flex-row gap-2 ">
+                          {backgroundSelectOptions.map((option) => (
+                            <Button
+                              key={option.url}
+                              onClick={() => {
+                                setDesktopBackground(option.url);
+                                setDesktopBackgroundType('image');
+                              }}
+                              active={desktopBackground === option.url && desktopBackgroundType === 'image'}
+                              className="!h-full !p-1 flex-shrink-0"
+                            >
+                              <img
+                                src={option.url}
+                                alt="background"
+                                className="w-[124px] aspect-video"
+                              />
+                            </Button>
+                          ))}
+                        </CustomScrollArea>
+                      </CustomStyledScrollView>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4 items-center w-full justify-between">
+                    <div className="flex flex-col items-start ">
+                      <span className="text-lg font-black">Background Color</span>
+                      <span className="text-sm">Replaces current background</span>
+                    </div>
+                    <ColorInput
+                      onChange={debouncedSetBackgroundStyle}
+                      defaultValue="#C0C0C0"
+                    />
+                  </div>
+                </GroupBox>
+              </div>
             </div>
           )}
           {activeTab === 1 && (
-            <div className="flex flex-col gap-4 items-start max-w-[600px] mx-auto">
-              <div className="mx-auto">
-                <Monitor
-                  backgroundStyles={{
-                    ...(desktopBackgroundType === 'image' ? {
-                      backgroundImage: `url(${desktopBackground})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    } : {
-                      background: desktopBackgroundType === 'pattern' ? 
-                        desktopBackground.replace(/background:/g, '').replace(/;/g, '') : 
-                        undefined
-                    }),
-                    imageRendering: "crisp-edges",
-                  }}
-                />
-              </div>
-              
-              <GroupBox
-                label={"Desktop Background (Windows 95 Style)"}
-                className="flex items-center gap-4 w-full flex-col"
-              >
-                <div className="grid grid-cols-2 gap-4 w-full">
-                  {DESKTOP_BACKGROUNDS.map((bg, index) => (
-                    <Button
-                      key={index}
-                      onClick={() => {
-                        setDesktopBackground(bg.value);
-                        setDesktopBackgroundType(bg.type);
-                      }}
-                      active={desktopBackground === bg.value}
-                      className="!h-auto !p-2 flex-col gap-2"
-                    >
-                      <img
-                        src={bg.preview}
-                        alt={bg.name}
-                        className="w-full h-16 object-cover"
-                        style={{ imageRendering: "pixelated" }}
-                      />
-                      <div className="text-xs text-center">
-                        <div className="font-bold">{bg.name}</div>
-                        <div className="text-xs opacity-75">{bg.description}</div>
-                      </div>
-                    </Button>
-                  ))}
-                </div>
-              </GroupBox>
-            </div>
-          )}
-          {activeTab === 2 && (
             <div className="flex flex-col gap-4">
               <GroupBox
                 label={"Vintage Settings"}
@@ -256,12 +217,10 @@ const Settings: React.FC = () => {
               </GroupBox>
             </div>
           )}
-          {activeTab === 3 && (
-            <CustomStyledScrollView className="w-full h-full flex flex-col !p-0">
-              <CustomScrollArea>
-                <UserInformation />
-              </CustomScrollArea>
-            </CustomStyledScrollView>
+          {activeTab === 2 && (
+            <div className="flex flex-col gap-4 items-start max-w-[600px] mx-auto">
+              <UserInformation />
+            </div>
           )}
         </CustomScrollArea>
       </TabBody>

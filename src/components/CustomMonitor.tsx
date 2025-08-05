@@ -180,6 +180,13 @@ const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
                   ...backgroundStyles,
                   ...(isMainDesktop && desktopBackgroundType === 'pattern' ? {
                     // Desktop pattern will be applied via useEffect
+                  } : isMainDesktop && desktopBackgroundType === 'image' ? {
+                    // Use desktop image background
+                    backgroundColor: shouldUseScrollingBackground ? 'transparent' : 'transparent',
+                    backgroundImage: shouldUseScrollingBackground ? 'none' : `url(${desktopBackground})`,
+                    backgroundSize: shouldUseScrollingBackground ? 'auto' : "cover",
+                    backgroundPosition: shouldUseScrollingBackground ? 'auto' : "center",
+                    backgroundRepeat: shouldUseScrollingBackground ? 'auto' : "no-repeat",
                   } : {
                     // Use regular image background
                     backgroundColor: shouldUseScrollingBackground ? 'transparent' : backgroundColor,
@@ -192,7 +199,7 @@ const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
               >
                 {shouldUseScrollingBackground && (
                   <ScrollingBackground 
-                    backgroundImage={finalBackgroundImage}
+                    backgroundImage={isMainDesktop && desktopBackgroundType === 'image' ? desktopBackground : finalBackgroundImage}
                     pattern={scrollingPattern}
                     speed={scrollingSpeed}
                     opacity={scrollingOpacity}

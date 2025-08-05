@@ -31,6 +31,7 @@ import MemeManagerWindow from "windows/MemeManagerWindow";
 import AccessLevelStatus from "components/AccessLevelStatus";
 import ConditionalAppIcon from "components/ConditionalAppIcon";
 import { BACKGROUND_CONFIG } from "config/backgroundConfig";
+import useThemeSettings from "store/useThemeSettings";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -360,26 +361,33 @@ const windowsMemod = useMemo(() => (
   );
 };
 
-const MonitorScreenWrapper: React.FC<React.PropsWithChildren> = ({ children }) => (
-  <CustomMonitor
-    backgroundStyles={{
-      overflow: "hidden",
-      width: "100%",
-      height: "100%",
-      position: "relative",
-      display: "flex",
-    }}
-    showBottomBar
-    enableScrollingBackground={BACKGROUND_CONFIG.enableScrolling}
-    customBackgroundImage={BACKGROUND_CONFIG.imageUrl}
-    scrollingPattern={BACKGROUND_CONFIG.pattern}
-    scrollingSpeed={BACKGROUND_CONFIG.speed}
-    scrollingOpacity={BACKGROUND_CONFIG.opacity}
-    scrollingTileSize={BACKGROUND_CONFIG.tileSize}
-  >
-    {children}
-  </CustomMonitor>
-);
+const MonitorScreenWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const { desktopBackground, desktopBackgroundType } = useThemeSettings();
+  
+  // Debug logging
+  console.log('Desktop Background Settings:', { desktopBackground, desktopBackgroundType });
+  
+  return (
+    <CustomMonitor
+      backgroundStyles={{
+        overflow: "hidden",
+        width: "100%",
+        height: "100%",
+        position: "relative",
+        display: "flex",
+      }}
+      showBottomBar
+      enableScrollingBackground={BACKGROUND_CONFIG.enableScrolling}
+      customBackgroundImage={desktopBackgroundType === 'image' ? desktopBackground : BACKGROUND_CONFIG.imageUrl}
+      scrollingPattern={BACKGROUND_CONFIG.pattern}
+      scrollingSpeed={BACKGROUND_CONFIG.speed}
+      scrollingOpacity={BACKGROUND_CONFIG.opacity}
+      scrollingTileSize={BACKGROUND_CONFIG.tileSize}
+    >
+      {children}
+    </CustomMonitor>
+  );
+};
 
 const Home: NextPage = () => {
   const [isMounted, setIsMounted] = useState(false);

@@ -34,18 +34,10 @@ const useThemeSettings = create<useThemeSettings>()(
         setBackgroundImage: (backgroundImage: string) =>
           set((state) => ({ backgroundImage })),
         // Desktop background settings (separate from login background)
-        desktopBackground: `
-          background: linear-gradient(45deg, #008080 25%, transparent 25%), 
-                      linear-gradient(-45deg, #008080 25%, transparent 25%), 
-                      linear-gradient(45deg, transparent 75%, #4FD0D0 75%), 
-                      linear-gradient(-45deg, transparent 75%, #4FD0D0 75%);
-          background-size: 20px 20px;
-          background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-          background-color: #C0C0C0;
-        `,
+        desktopBackground: "https://storage.googleapis.com/flunks_public/desktop-backgrounds/posterized.webp",
         setDesktopBackground: (desktopBackground: string) =>
           set((state) => ({ desktopBackground })),
-        desktopBackgroundType: 'pattern' as 'pattern',
+        desktopBackgroundType: 'image' as 'image',
         setDesktopBackgroundType: (desktopBackgroundType: 'image' | 'pattern' | 'gradient') =>
           set((state) => ({ desktopBackgroundType })),
         oldMonitorMode: false,

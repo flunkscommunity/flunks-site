@@ -42,7 +42,7 @@ export const InfoItem: React.FC<{
 };
 
 const UserInformation = () => {
-  const { user, primaryWallet, setShowDynamicUserProfile, isAuthenticated } =
+  const { user, primaryWallet, setShowDynamicUserProfile } =
     useDynamicContext();
   const { isInitialized, initializeCollection, isLoading, error, setError } =
     useInitCollection(primaryWallet?.address);
@@ -80,24 +80,19 @@ const UserInformation = () => {
   }, [error]);
 
   return (
-    <div className="!mx-2 lg:!mx-5 lg:!mt-4 !mt-2 !mb-3">
-      {!isAuthenticated && (
-        <div className="w-full h-full flex items-center justify-center">
-          <DynamicConnectButton buttonClassName="w-full mt-10">
-            <Button className="!w-full !text-xl min-w-[200px] gap-2">
+    <div className="w-full">
+      {!user && (
+        <div className="w-full flex items-center justify-center py-8">
+          <DynamicConnectButton buttonClassName="w-full">
+            <Button className="!w-full !text-xl min-w-[200px] gap-2 flex items-center justify-center">
               <img src="/images/icons/logout.png" width="32px" height="32px" />
-              Sign In
+              Click above to sign in!
             </Button>
           </DynamicConnectButton>
         </div>
       )}
-      {!user && isAuthenticated && (
-        <div className="w-full h-full flex items-center justify-center">
-          <Hourglass />
-        </div>
-      )}
       {user && (
-        <div className="flex flex-col gap-y-3 pb-4">
+        <div className="flex flex-col gap-y-3 pb-4 px-4">
           <InfoItem label="Username" value={user.username} />
           <InfoItem label="Email" value={user.email} />
           <InfoItem label="Connected Wallet" value={primaryWallet.address} />

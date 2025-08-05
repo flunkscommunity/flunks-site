@@ -10,7 +10,7 @@ export const BACKGROUND_CONFIG = {
   // imageUrl: "https://i.imgur.com/your-image.jpg", // Replace with your image
   
   // Enable/disable scrolling animation
-  enableScrolling: true,
+  enableScrolling: false,
   
   // Scrolling pattern options:
   // 'diagonal' - Moves diagonally across screen (like matrix rain)
@@ -19,7 +19,7 @@ export const BACKGROUND_CONFIG = {
   // 'matrix' - Complex matrix-style movement
   // 'crawl' - Slow crawling effect like current green grid
   // 'none' - No animation (static background)
-  pattern: "crawl" as const,
+  pattern: "none" as const,
   
   // Animation speed (higher number = slower animation)
   // Recommended: 15-60 seconds
@@ -27,7 +27,7 @@ export const BACKGROUND_CONFIG = {
   
   // Background opacity (0 = invisible, 1 = fully opaque)
   // Recommended: 0.6-1.0 for good visibility
-  opacity: 1.0, // Temporarily full opacity for testing
+  opacity: 1.0, // Full opacity to match AccessGate
   
   // Tile size (how big each repeated image appears)
   // 25 = small tiles, 50 = medium, 100 = large
