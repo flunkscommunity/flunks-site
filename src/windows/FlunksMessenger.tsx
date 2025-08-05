@@ -245,6 +245,7 @@ const FlunksMessenger: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedContact, setSelectedContact] = useState<string>('💬 General Chat');
   const [isTyping, setIsTyping] = useState(false);
+  const [isAiTyping, setIsAiTyping] = useState(false);
   const [soundsEnabled, setSoundsEnabled] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -361,8 +362,8 @@ const FlunksMessenger: React.FC = () => {
       // Handle AI response for AI rooms
       const room = chatRooms.find(r => r.username === selectedContact);
       if (room?.isAI && room.agentId) {
-        // Show typing indicator
-        setTimeout(() => setIsTyping(true), 500);
+        // Show AI typing indicator
+        setTimeout(() => setIsAiTyping(true), 500);
         
         try {
           // Get AI response using the new AI chat hook
@@ -370,7 +371,7 @@ const FlunksMessenger: React.FC = () => {
           const aiResponse = await sendToAI(userMessage, room.agentId, username, messages);
           console.log('🤖 AI Response received:', aiResponse);
           
-          setIsTyping(false);
+          setIsAiTyping(false);
           
           if (aiResponse) {
             if (soundsEnabled) sounds.messageReceive(); // Play receive sound for AI response
@@ -402,7 +403,7 @@ const FlunksMessenger: React.FC = () => {
           }
         } catch (error) {
           console.error('🚨 AI Response Error:', error);
-          setIsTyping(false);
+          setIsAiTyping(false);
           
           // Fallback to simple response
           setTimeout(() => {
@@ -618,6 +619,13 @@ const FlunksMessenger: React.FC = () => {
             <MessageBubble isSystem={true}>
               <div className="message-text" style={{ fontStyle: 'italic', color: '#666' }}>
                 You are typing...
+              </div>
+            </MessageBubble>
+          )}
+          {isAiTyping && (
+            <MessageBubble isSystem={true}>
+              <div className="message-text" style={{ fontStyle: 'italic', color: '#666' }}>
+                {selectedContact} is typing...
               </div>
             </MessageBubble>
           )}
