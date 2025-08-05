@@ -351,14 +351,6 @@ const windowsMemod = useMemo(() => (
             })
           }
         />
-
-        {/* 15. About Us */}
-        <ConditionalAppIcon
-          appId="about"
-          title="About Us"
-          icon="/images/icons/about-us.png"
-          onDoubleClick={() => openWindow({ key: WINDOW_IDS.ABOUT_US, window: <AboutUs /> })}
-        />
       </div>
 
 

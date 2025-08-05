@@ -109,19 +109,6 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
         <CustomMenuListItem
           onClick={() => {
             openWindow({
-              key: WINDOW_IDS.ABOUT_US,
-              window: <AboutUs />,
-            });
-            props.closeStartMenu();
-          }}
-          className="!text-xl"
-        >
-          <img src="/images/icons/about-us.png" width="32px" height="32px" />
-          About Us
-        </CustomMenuListItem>
-        <CustomMenuListItem
-          onClick={() => {
-            openWindow({
               key: WINDOW_IDS.SETTINGS,
               window: <Settings />,
             });
