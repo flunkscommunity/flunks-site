@@ -38,8 +38,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const agent = AI_AGENTS[agentId as keyof typeof AI_AGENTS];
     
-    // Check if OpenAI API key is configured
-    if (!process.env.OPENAI_API_KEY) {
+    // Debug: Check if API key is loaded
+    console.log('🔍 API Key Debug:', {
+      exists: !!process.env.OPENAI_API_KEY,
+      length: process.env.OPENAI_API_KEY?.length,
+      prefix: process.env.OPENAI_API_KEY?.substring(0, 8),
+      fullCheck: process.env.OPENAI_API_KEY?.trim() !== '',
+      nodeEnv: process.env.NODE_ENV
+    });
+    
+    // Check if OpenAI API key is configured (with better validation)
+    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY.trim() === '') {
       // Return a mock response if no API key is configured
       const mockResponses = {
         FlunkBot: [

@@ -575,6 +575,22 @@ const FlunksMessenger: React.FC = () => {
           )}
           <Button
             size="sm"
+            onClick={() => {
+              setMessages([]);
+              console.log('🔄 Chat cleared');
+            }}
+            style={{ 
+              marginRight: '8px',
+              fontSize: '10px',
+              padding: '2px 6px',
+              background: '#ff9900'
+            }}
+            title="Clear Chat"
+          >
+            🔄
+          </Button>
+          <Button
+            size="sm"
             onClick={() => setSoundsEnabled(!soundsEnabled)}
             style={{ 
               marginLeft: 'auto', 

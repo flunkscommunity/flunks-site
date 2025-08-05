@@ -33,7 +33,7 @@
     "lodash": "^4.17.21",
     "modern-screenshot": "^4.4.39",
     "next": "^14.2.18",
-    "openai": "^5.11.0",
+    "openai": "^5.12.0",
     "postprocessing": "^6.35.4",
     "react": "^18",
     "react-confetti": "^6.1.0",
