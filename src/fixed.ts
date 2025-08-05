@@ -49,6 +49,8 @@ export const WINDOW_IDS = {
   CLIQUE_ACCESS: "clique_access",
   GAME_MANUAL: "game-manual",
   MEME_MANAGER: "meme-manager",
+  BROWSER: "browser",
+  DEV_PREVIEW: "dev-preview",
   
   // New location main windows
   JOCKS_HOUSE_MAIN: "jocks_house_main",

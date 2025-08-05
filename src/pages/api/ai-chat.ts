@@ -42,13 +42,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.log('🔍 API Key Debug:', {
       exists: !!process.env.OPENAI_API_KEY,
       length: process.env.OPENAI_API_KEY?.length,
-      prefix: process.env.OPENAI_API_KEY?.substring(0, 8),
-      fullCheck: process.env.OPENAI_API_KEY?.trim() !== '',
+      prefix: process.env.OPENAI_API_KEY?.substring(0, 12),
+      hasContent: process.env.OPENAI_API_KEY?.trim() !== '',
       nodeEnv: process.env.NODE_ENV
     });
-    
+
     // Check if OpenAI API key is configured (with better validation)
-    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY.trim() === '') {
+    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY.trim() === '' || process.env.OPENAI_API_KEY.includes('your_openai_api_key_here')) {
       // Return a mock response if no API key is configured
       const mockResponses = {
         FlunkBot: [
@@ -67,9 +67,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           "Heyyy! ☕ Your girl needs her full AI capabilities to serve the hottest takes and 90s nostalgia! 📼"
         ],
         SportsCenter90s: [
-          "YO! 🏈 Coach Thunder here! I'm PUMPED to talk sports but I need my full AI game plan activated first! Let's get that API configured! 💪",
-          "SPORTS FANS! ⚡ Coach Thunder reporting for duty! I'm in training mode - need that OpenAI API to unleash my full athletic wisdom! 🏆",
-          "GET READY TO RUMBLE! 🥊 Coach Thunder here, but I'm warming up in demo mode. Get that API key and let's GOOO! 🔥"
+          "YO! 🏈 Coach Thunder here! BOOYAH! Let's talk some 90s sports! Jordan averaged 33.4 PPG in playoffs - that's CLUTCH DNA! 💪",
+          "THIS JUST IN! ⚡ Coach Thunder reporting! The 90s were LEGENDARY! Magic vs MJ in '91 Finals? Jordan dropped 31.2 PPG for the SWEEP! 🏆",
+          "SPORTS FANS! 🔥 Coach Thunder ready to drop some knowledge! Ken Griffey Jr.'s swing was pure ART - 630 career homers of absolute BEAUTY! ⚾",
+          "UNBELIEVABLE! 🎯 Coach Thunder here with the HOT TAKES! The '96 Bulls went 72-10, but their playoff run was 87-13 overall! DOMINANCE! �",
+          "FROM THE VAULT! 📊 Coach Thunder with the stats that matter! Wayne Gretzky had 2,857 career points - The Great One indeed! 🏒"
         ]
       };
 

@@ -15,6 +15,8 @@ import Settings from "windows/Settings";
 import UserProfile from "windows/UserProfile";
 import Welcome from "windows/Welcome";
 import YourStudents from "windows/YourStudents";
+import SimpleBrowser from "windows/SimpleBrowser";
+import DevPreview from "windows/DevPreview";
 
 const CustomMenuListItem = styled(MenuListItem)`
   display: flex;

@@ -28,6 +28,8 @@ import FlunkCreator from "windows/FlunkCreator";
 import UserProfile from "windows/UserProfile";
 import GameManualWindow from "windows/GameManualWindow";
 import MemeManagerWindow from "windows/MemeManagerWindow";
+import SimpleBrowser from "windows/SimpleBrowser";
+import DevPreview from "windows/DevPreview";
 import AccessLevelStatus from "components/AccessLevelStatus";
 import ConditionalAppIcon from "components/ConditionalAppIcon";
 import { BACKGROUND_CONFIG } from "config/backgroundConfig";
@@ -322,7 +324,7 @@ const windowsMemod = useMemo(() => (
         <ConditionalAppIcon
           appId="flunk-creator"
           title="Flunk Creator"
-          icon="/images/icons/pocket-juniors.png"
+          icon="/images/icons/experiment-3d.png"
           onDoubleClick={() => openWindow({
             key: WINDOW_IDS.FLUNK_CREATOR,
             window: <FlunkCreator />
