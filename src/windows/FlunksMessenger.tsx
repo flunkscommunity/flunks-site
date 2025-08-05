@@ -6,6 +6,7 @@ import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 import { WINDOW_IDS } from 'fixed';
 import { AI_AGENTS, getAgentResponse } from 'data/aiAgents';
 import useMessengerSounds from 'hooks/useMessengerSounds';
+import useAIChat from 'hooks/useAIChat';
 import { 
   Window, 
   WindowHeader, 
@@ -216,6 +217,7 @@ interface Message {
   timestamp: Date;
   isOwn: boolean;
   isSystem?: boolean;
+  isAI?: boolean;
 }
 
 interface Contact {
@@ -235,6 +237,7 @@ const FlunksMessenger: React.FC = () => {
   const { user } = useDynamicContext();
   const { closeWindow } = useWindowsContext();
   const sounds = useMessengerSounds();
+  const { sendToAI, isLoading: aiLoading } = useAIChat();
   const [username, setUsername] = useState('');
   const [tempUsername, setTempUsername] = useState('');
   const [demoMode, setDemoMode] = useState(false);
@@ -337,15 +340,16 @@ const FlunksMessenger: React.FC = () => {
     }
   };
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (currentMessage.trim() && username) {
       // Play send sound
       if (soundsEnabled) sounds.messageSend();
       
+      const userMessage = currentMessage.trim();
       const newMessage: Message = {
         id: Date.now().toString(),
         username: username,
-        text: currentMessage.trim(),
+        text: userMessage,
         timestamp: new Date(),
         isOwn: true
       };
@@ -354,20 +358,49 @@ const FlunksMessenger: React.FC = () => {
       setCurrentMessage('');
       setIsTyping(false);
 
-      // Simulate AI response for AI rooms
+      // Handle AI response for AI rooms
       const room = chatRooms.find(r => r.username === selectedContact);
-      if (room?.isAI && room.agentId && AI_AGENTS[room.agentId]) {
-        setTimeout(() => {
-          if (soundsEnabled) sounds.messageReceive(); // Play receive sound for AI response
-          const aiResponse: Message = {
-            id: (Date.now() + 1).toString(),
-            username: room.agentId,
-            text: getAgentResponse(room.agentId, currentMessage.trim()),
-            timestamp: new Date(),
-            isOwn: false
-          };
-          setMessages(prev => [...prev, aiResponse]);
-        }, 1000 + Math.random() * 2000);
+      if (room?.isAI && room.agentId) {
+        // Show typing indicator
+        setTimeout(() => setIsTyping(true), 500);
+        
+        try {
+          // Get AI response using the new AI chat hook
+          const aiResponse = await sendToAI(userMessage, room.agentId, username, messages);
+          
+          setIsTyping(false);
+          
+          if (aiResponse) {
+            if (soundsEnabled) sounds.messageReceive(); // Play receive sound for AI response
+            
+            const aiMessage: Message = {
+              id: (Date.now() + 1).toString(),
+              username: aiResponse.agent,
+              text: aiResponse.response,
+              timestamp: new Date(),
+              isOwn: false,
+              isAI: true
+            };
+            
+            setMessages(prev => [...prev, aiMessage]);
+          }
+        } catch (error) {
+          console.error('AI Response Error:', error);
+          setIsTyping(false);
+          
+          // Fallback to simple response
+          setTimeout(() => {
+            if (soundsEnabled) sounds.messageReceive();
+            const fallbackResponse: Message = {
+              id: (Date.now() + 1).toString(),
+              username: room.agentId,
+              text: getAgentResponse(room.agentId, userMessage),
+              timestamp: new Date(),
+              isOwn: false
+            };
+            setMessages(prev => [...prev, fallbackResponse]);
+          }, 1000);
+        }
       }
     }
   };
