@@ -366,7 +366,9 @@ const FlunksMessenger: React.FC = () => {
         
         try {
           // Get AI response using the new AI chat hook
+          console.log('🤖 Sending to AI:', { userMessage, agentId: room.agentId, username });
           const aiResponse = await sendToAI(userMessage, room.agentId, username, messages);
+          console.log('🤖 AI Response received:', aiResponse);
           
           setIsTyping(false);
           
@@ -383,9 +385,23 @@ const FlunksMessenger: React.FC = () => {
             };
             
             setMessages(prev => [...prev, aiMessage]);
+          } else {
+            console.log('🤖 No AI response received, using fallback');
+            // If no response, use fallback
+            setTimeout(() => {
+              if (soundsEnabled) sounds.messageReceive();
+              const fallbackResponse: Message = {
+                id: (Date.now() + 1).toString(),
+                username: room.agentId,
+                text: getAgentResponse(room.agentId, userMessage),
+                timestamp: new Date(),
+                isOwn: false
+              };
+              setMessages(prev => [...prev, fallbackResponse]);
+            }, 1000);
           }
         } catch (error) {
-          console.error('AI Response Error:', error);
+          console.error('🚨 AI Response Error:', error);
           setIsTyping(false);
           
           // Fallback to simple response
