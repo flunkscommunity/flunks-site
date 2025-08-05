@@ -30,11 +30,11 @@ const useThemeSettings = create<useThemeSettings>()(
         setBackgroundColor: (backgroundColor: string) =>
           set((state) => ({ backgroundColor })),
         backgroundImage:
-          "https://storage.googleapis.com/flunks_public/desktop-backgrounds/posterized.webp",
+          "/images/my-background.png",
         setBackgroundImage: (backgroundImage: string) =>
           set((state) => ({ backgroundImage })),
         // Desktop background settings (separate from login background)
-        desktopBackground: "https://storage.googleapis.com/flunks_public/desktop-backgrounds/posterized.webp",
+        desktopBackground: "/images/my-background.png",
         setDesktopBackground: (desktopBackground: string) =>
           set((state) => ({ desktopBackground })),
         desktopBackgroundType: 'image' as 'image',
