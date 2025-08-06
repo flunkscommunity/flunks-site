@@ -44,12 +44,19 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                     walletConnectors: [FlowWalletConnectors],
                     walletsFilter: (wallets) => {
                       // Ensure Lilico (Flow Wallet), Blocto, and Dapper are all available on all devices
+                      // Log available wallets for debugging
+                      console.log('Available wallets:', wallets.map(w => ({ key: w.key, name: w.name })));
+                      
                       // Filter to include specific Flow wallets we want
                       const flowWallets = wallets.filter(wallet => 
                         wallet.key === 'flowwallet' || // Lilico/Flow Wallet
+                        wallet.key === 'lilico' ||     // Alternative key for Lilico
+                        wallet.key === 'flow' ||       // Alternative key for Flow Wallet
                         wallet.key === 'blocto' ||     // Blocto
                         wallet.key === 'dapper'       // Dapper
                       );
+                      
+                      console.log('Filtered Flow wallets:', flowWallets.map(w => ({ key: w.key, name: w.name })));
                       
                       // If no specific Flow wallets found, return all (fallback)
                       return flowWallets.length > 0 ? flowWallets : wallets;
@@ -61,7 +68,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                           sections: [
                             {
                               type: SdkViewSectionType.Wallet,
-                              defaultItem: "flowwallet", // Lilico wallet
+                              defaultItem: "lilico", // Try lilico as default first
                             },
                           ],
                         },

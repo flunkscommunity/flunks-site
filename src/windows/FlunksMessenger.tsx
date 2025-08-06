@@ -259,10 +259,10 @@ const FlunksMessenger: React.FC = () => {
   // Mock some online users for demo (in production, this would be real-time data)
   useEffect(() => {
     const mockUsers: OnlineUser[] = [
-      { username: 'CoolGeek92', walletAddress: '0x1234...5678' },
-      { username: 'PrepQueen', walletAddress: '0x8765...4321' },
-      { username: 'JockStar', walletAddress: '0xabcd...efgh' },
-      { username: 'FreakShow', walletAddress: '0x9876...1234' },
+      { username: 'BeefCurtains', walletAddress: '0x1234...5678' },
+      { username: '~Dirty~Sanchez~', walletAddress: '0x8765...4321' },
+      { username: 'RustyTromboner', walletAddress: '0xabcd...efgh' },
+      { username: '', walletAddress: '0x9876...1234' },
     ];
 
     // Add current user if they're logged in

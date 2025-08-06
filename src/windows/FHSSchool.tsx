@@ -697,10 +697,7 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                 <h3 className="font-bold text-lg">📞 Contact Info</h3>
                 <p className="text-sm mt-2">
                   <strong>Phone:</strong> (555) FHS-MAIN<br/>
-                  <strong>Fax:</strong> (555) FHS-FAX<br/>
-                  <strong>Address:</strong><br/>
-                  [SCHOOL ADDRESS PLACEHOLDER]<br/>
-                  Flunks City, FC 12345
+                  <strong>E-mail:</strong> Flunkshigh@gmail.com
                 </p>
               </div>
               
