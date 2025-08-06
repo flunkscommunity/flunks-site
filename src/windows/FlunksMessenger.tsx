@@ -262,7 +262,7 @@ const FlunksMessenger: React.FC = () => {
       { username: 'BeefCurtains', walletAddress: '0x1234...5678' },
       { username: '~Dirty~Sanchez~', walletAddress: '0x8765...4321' },
       { username: 'RustyTromboner', walletAddress: '0xabcd...efgh' },
-      { username: '', walletAddress: '0x9876...1234' },
+      { username: 'Gonzo420', walletAddress: '0x9876...1234' },
     ];
 
     // Add current user if they're logged in
@@ -280,9 +280,9 @@ const FlunksMessenger: React.FC = () => {
     // Simulate users coming online/offline every 30 seconds
     const interval = setInterval(() => {
       const additionalUsers = [
-        { username: 'NightOwl', walletAddress: '0xbeef...cafe' },
-        { username: 'StudyMaster', walletAddress: '0xdead...beef' },
-        { username: 'GameChamp', walletAddress: '0xfeed...face' },
+        { username: 'ScoobySnax', walletAddress: '0xbeef...cafe' },
+        { username: 'Powerbottom69', walletAddress: '0xdead...beef' },
+        { username: 'ThunderTwink', walletAddress: '0xfeed...face' },
       ];
       
       setOnlineUsers(prev => {
