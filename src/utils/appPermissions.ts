@@ -62,8 +62,8 @@ export const APP_PERMISSIONS: AppPermission[] = [
   {
     id: 'fhs-school',
     title: 'FHS School',
-    requiredLevel: ['ADMIN'],
-    description: 'School administration portal'
+    requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
+    description: 'Flunks High School portal'
   },
   
   // Admin only - Developer/Management tools and restricted features
