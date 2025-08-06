@@ -79,10 +79,9 @@ const WelcomePopup: React.FC = () => {
             and Found app handled your backpacks, OnlyFlunks now integrates both
             into a single, efficient platform. This new version allows you to
             view your Flunks in either their original or portrait format, track
-            your total inventory count and gum reserves, and access detailed
-            information about gum earnings per day and total earned for each
-            item. Additionally, you can choose between a gridded or table view
-            of your items.
+            your total inventory count, and access detailed information about
+            your items and their traits. Additionally, you can choose between a 
+            gridded or table view of your items.
             <br />
             <br />
             OnlyFlunks also displays linked items from Dapper as it now reads

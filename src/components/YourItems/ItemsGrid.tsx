@@ -1,6 +1,6 @@
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 // import { MarketplaceIndividualNftDto } from "generated/models";
-import React, { use, useEffect, useMemo, useState } from "react";
+import React, { use, useCallback, useEffect, useMemo, useState } from "react";
 import {
   Button,
   Frame,
@@ -538,7 +538,7 @@ const ItemsGrid: React.FC = () => {
 
   const noItems = !memodCombinedItems?.length;
 
-  const handleOpenOnlyflunksItem = (nft: ObjectDetails) => {
+  const handleOpenOnlyflunksItem = useCallback((nft: ObjectDetails) => {
     console.log(nft);
     openWindow({
       key: `${WINDOW_IDS.ONLYFLUNKS_ITEM}${nft.serialNumber}`,
@@ -578,7 +578,7 @@ const ItemsGrid: React.FC = () => {
         </OnlyflunksItem>
       ),
     });
-  };
+  }, [openWindow, setActiveItem]);
 
   return (
     <div className="!w-full !h-full max-w-full max-h-full flex flex-col">
@@ -589,6 +589,7 @@ const ItemsGrid: React.FC = () => {
         <CustomStyledScrollView
           ref={scrollViewRef}
           className="!p-0 !w-full max-w-full !m-0 [&>div]:!p-0 relative"
+          data-scroll-container="true"
           style={{
             height: activeItem ? "100%" : "calc(100% - 152px)",
           }}
@@ -646,4 +647,4 @@ const ItemsGrid: React.FC = () => {
   );
 };
 
-export default ItemsGrid;
+export default React.memo(ItemsGrid);

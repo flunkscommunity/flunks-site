@@ -3,6 +3,7 @@ import { Frame } from "react95";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
 import AppLoader from "components/AppLoader";
+import { AndroidOptimizations } from "components/AndroidOptimizations";
 
 const Onlyflunks: React.FC = () => {
   const { closeWindow } = useWindowsContext();
@@ -17,6 +18,7 @@ const Onlyflunks: React.FC = () => {
 
   return (
     <AppLoader bgImage="/images/loading/bootup.webp">
+      <AndroidOptimizations />
       <DraggableResizeableWindow
         offSetHeight={44}
         headerTitle="OnlyFlunks"

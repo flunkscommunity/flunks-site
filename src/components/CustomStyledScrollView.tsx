@@ -48,6 +48,13 @@ export const CustomScrollArea = styled.div`
   width: 100%;
   height: 100%;
   padding: 4px;
+  /* Android WebView performance optimizations */
+  will-change: transform;
+  -webkit-overflow-scrolling: touch;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  /* Improve scroll performance on Android */
+  overflow-anchor: none;
   overflow: auto;
   ${createScrollbars()}
   ::-webkit-scrollbar {

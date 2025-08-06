@@ -11,9 +11,10 @@ interface Message {
 }
 
 interface AIResponse {
-  response: string;
+  message: string;
   agent: string;
   emoji: string;
+  isMock?: boolean;
 }
 
 const useAIChat = () => {
@@ -55,7 +56,7 @@ const useAIChat = () => {
       
       // Return a fallback response
       return {
-        response: "Sorry, I'm having trouble connecting right now! 🤔 Please try again in a moment.",
+        message: "Sorry, I'm having trouble connecting right now! 🤔 Please try again in a moment.",
         agent: "System",
         emoji: "⚠️"
       };

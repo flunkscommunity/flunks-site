@@ -1,5 +1,5 @@
 import { MarketplaceIndividualNftDto } from "generated/models";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   AppBar,
   Button,
@@ -14,7 +14,8 @@ import useThemeSettings from "store/useThemeSettings";
 import NavMenu from "./ItemNavMenu";
 import ImageDisplay from "./ItemImageDisplay";
 import TraitSection from "./ItemTraitSection";
-import GumSection from "./ItemGumSection";
+// TODO: GUM functionality temporarily disabled - keep import for future re-implementation
+// import GumSection from "./ItemGumSection";
 import { NftItem } from "./ItemsGrid";
 import { ObjectDetails } from "contexts/StakingContext";
 
@@ -47,6 +48,7 @@ const BackpackItem: React.FC<BackpackItemProps> = (props) => {
       />
       <Frame className="!w-full h-auto pb-4">
         <TraitSection metadata={_traitsObject} />
+        {/* TODO: GUM functionality temporarily disabled for backpacks - keep for future re-implementation
         <GumSection
           pool={"Backpacks"}
           tokenId={Number(props.tokenID)}
@@ -54,9 +56,10 @@ const BackpackItem: React.FC<BackpackItemProps> = (props) => {
           claimedRewards={Number(props?.claimedRewards)?.toFixed(2)}
           rewards={Number(props.rewards)?.toFixed(2)}
         />
+        */}
       </Frame>
     </div>
   );
 };
 
-export default BackpackItem;
+export default React.memo(BackpackItem);

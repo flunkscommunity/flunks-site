@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useWindowsContext } from 'contexts/WindowsContext';
@@ -7,6 +7,8 @@ import { WINDOW_IDS } from 'fixed';
 import { AI_AGENTS, getAgentResponse } from 'data/aiAgents';
 import useMessengerSounds from 'hooks/useMessengerSounds';
 import useAIChat from 'hooks/useAIChat';
+import useChatMessages from 'hooks/useChatMessages';
+import useLocalChatMessages from 'hooks/useLocalChatMessages';
 import { 
   Window, 
   WindowHeader, 
@@ -242,11 +244,13 @@ const FlunksMessenger: React.FC = () => {
   const [tempUsername, setTempUsername] = useState('');
   const [demoMode, setDemoMode] = useState(false);
   const [currentMessage, setCurrentMessage] = useState('');
-  const [messages, setMessages] = useState<Message[]>([]);
   const [selectedContact, setSelectedContact] = useState<string>('💬 General Chat');
   const [isTyping, setIsTyping] = useState(false);
   const [isAiTyping, setIsAiTyping] = useState(false);
   const [soundsEnabled, setSoundsEnabled] = useState(true);
+  
+  // Use local chat for non-persistent rooms (AI rooms)
+  const localChat = useLocalChatMessages(username);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Online users tracking - in production this would come from your backend/WebSocket
@@ -304,16 +308,100 @@ const FlunksMessenger: React.FC = () => {
   // Chat rooms - AI agents get their own dedicated rooms
   const [chatRooms] = useState<Contact[]>([
     { username: '🤖 FlunkBot Room', online: true, isAI: true, agentId: 'FlunkBot' },
-    { username: '📚 StudyBuddy Room', online: true, isAI: true, agentId: 'StudyBuddy' },
+    { username: '🧙‍♂️ WZRD Room', online: true, isAI: true, agentId: 'StudyBuddy' },
     { username: '☕ Town Gossip Room', online: true, isAI: true, agentId: 'TownGossip' },
-    { username: '🏈 SportsCenter 90s', online: true, isAI: true, agentId: 'SportsCenter90s' },
+    { username: '🏈 Sportscenter', online: true, isAI: true, agentId: 'SportsCenter90s' },
     { username: '💬 General Chat', online: true, isAI: false },
     { username: '🎮 Gaming Lounge', online: true, isAI: false },
     { username: '🏫 Study Hall', online: true, isAI: false },
     { username: '🎵 Music & Chill', online: true, isAI: false },
   ]);
 
+  // Define which rooms should be saved to database
+  const PERSISTENT_ROOMS = [
+    '💬 General Chat',
+    '🎮 Gaming Lounge',
+    '🏫 Study Hall',
+    '🎵 Music & Chill'
+  ];
+
+  // Check if current room should be persistent
+  const isRoomPersistent = PERSISTENT_ROOMS.includes(selectedContact);
+  const selectedRoom = chatRooms.find(r => r.username === selectedContact);
+  const isAIRoom = selectedRoom?.isAI || false;
+
+  // Use different hooks based on room type
+  const persistentChat = useChatMessages(
+    isRoomPersistent ? selectedContact : '', 
+    username
+  );
+
+  // Get the appropriate chat data based on room type
+  const { messages, isLoading: messagesLoading, error: messagesError } = 
+    isRoomPersistent ? persistentChat : { messages: localChat.messages, isLoading: false, error: null };
+
+  // Unified post message function
+  const postChatMessage = useCallback(async (
+    messageText: string,
+    walletAddress?: string,
+    isAI: boolean = false,
+    aiAgentId?: string,
+    customUsername?: string
+  ) => {
+    if (isRoomPersistent && persistentChat.postMessage) {
+      // Save to database for persistent rooms
+      return await persistentChat.postMessage(messageText, walletAddress, isAI, aiAgentId, customUsername);
+    } else {
+      // Use local state for AI rooms
+      const displayUsername = customUsername || username;
+      const isOwn = displayUsername === username && !isAI;
+      return localChat.addMessage(messageText, displayUsername, isAI, isOwn);
+    }
+  }, [isRoomPersistent, persistentChat.postMessage, localChat.addMessage, username]);
+
+  // Function to post message to a specific room (for AI greetings)
+  const postMessageToRoom = useCallback(async (
+    roomName: string,
+    messageText: string,
+    walletAddress?: string,
+    isAI: boolean = false,
+    aiAgentId?: string,
+    customUsername?: string
+  ) => {
+    const PERSISTENT_ROOMS = [
+      '💬 General Chat',
+      '🎮 Gaming Lounge',
+      '🏫 Study Hall',
+      '🎵 Music & Chill'
+    ];
+    
+    const isPersistent = PERSISTENT_ROOMS.includes(roomName);
+    
+    if (isPersistent) {
+      // For persistent rooms, only post if it's the current room
+      if (roomName === selectedContact && persistentChat.postMessage) {
+        return await persistentChat.postMessage(messageText, walletAddress, isAI, aiAgentId, customUsername);
+      }
+    } else {
+      // For AI rooms, only post if it's the current room
+      if (roomName === selectedContact) {
+        const displayUsername = customUsername || username;
+        const isOwn = displayUsername === username && !isAI;
+        return localChat.addMessage(messageText, displayUsername, isAI, isOwn);
+      }
+    }
+    return false;
+  }, [selectedContact, persistentChat.postMessage, localChat.addMessage, username]);
+
   const emojis = ['😀', '😂', '😍', '😭', '😎', '🤔', '👍', '👎', '❤️', '🔥'];
+
+  // Clear AI chat when switching between different AI rooms
+  useEffect(() => {
+    const currentRoom = chatRooms.find(r => r.username === selectedContact);
+    if (currentRoom?.isAI && !isRoomPersistent) {
+      localChat.clearMessages();
+    }
+  }, [selectedContact, isRoomPersistent, localChat.clearMessages, chatRooms]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -328,16 +416,12 @@ const FlunksMessenger: React.FC = () => {
         setTimeout(() => sounds.userOnline(), 500);
       }
       
-      // Add welcome message
-      const welcomeMessage: Message = {
-        id: Date.now().toString(),
-        username: 'System',
-        text: `Welcome to Flunks Messenger, ${tempUsername}! 🎉`,
-        timestamp: new Date(),
-        isOwn: false,
-        isSystem: true
-      };
-      setMessages([welcomeMessage]);
+      // Add welcome message to database
+      postChatMessage(
+        `Welcome to Flunks Messenger, ${tempUsername}! 🎉`,
+        user?.userId,
+        false
+      );
     }
   };
 
@@ -347,15 +431,10 @@ const FlunksMessenger: React.FC = () => {
       if (soundsEnabled) sounds.messageSend();
       
       const userMessage = currentMessage.trim();
-      const newMessage: Message = {
-        id: Date.now().toString(),
-        username: username,
-        text: userMessage,
-        timestamp: new Date(),
-        isOwn: true
-      };
       
-      setMessages(prev => [...prev, newMessage]);
+      // Post user message to database
+      await postChatMessage(userMessage, user?.userId, false);
+      
       setCurrentMessage('');
       setIsTyping(false);
 
@@ -365,57 +444,62 @@ const FlunksMessenger: React.FC = () => {
         // Show AI typing indicator
         setTimeout(() => setIsAiTyping(true), 500);
         
+        // Add a safety timeout to clear typing indicator if something goes wrong
+        const typingTimeout = setTimeout(() => {
+          console.log('⚠️ AI typing timeout reached, clearing indicator');
+          setIsAiTyping(false);
+        }, 10000); // 10 second timeout
+        
         try {
           // Get AI response using the new AI chat hook
           console.log('🤖 Sending to AI:', { userMessage, agentId: room.agentId, username });
           const aiResponse = await sendToAI(userMessage, room.agentId, username, messages);
           console.log('🤖 AI Response received:', aiResponse);
           
+          // Clear the timeout since we got a response
+          clearTimeout(typingTimeout);
           setIsAiTyping(false);
           
           if (aiResponse) {
             if (soundsEnabled) sounds.messageReceive(); // Play receive sound for AI response
             
-            const aiMessage: Message = {
-              id: (Date.now() + 1).toString(),
-              username: aiResponse.agent,
-              text: aiResponse.response,
-              timestamp: new Date(),
-              isOwn: false,
-              isAI: true
-            };
-            
-            setMessages(prev => [...prev, aiMessage]);
+            // Post AI response to database
+            await postChatMessage(
+              aiResponse.message,
+              undefined, // No wallet for AI
+              true,
+              room.agentId,
+              AI_AGENTS[room.agentId]?.username || room.agentId
+            );
           } else {
             console.log('🤖 No AI response received, using fallback');
             // If no response, use fallback
-            setTimeout(() => {
+            setTimeout(async () => {
               if (soundsEnabled) sounds.messageReceive();
-              const fallbackResponse: Message = {
-                id: (Date.now() + 1).toString(),
-                username: room.agentId,
-                text: getAgentResponse(room.agentId, userMessage),
-                timestamp: new Date(),
-                isOwn: false
-              };
-              setMessages(prev => [...prev, fallbackResponse]);
+              await postChatMessage(
+                getAgentResponse(room.agentId, userMessage),
+                undefined, // No wallet for AI
+                true,
+                room.agentId,
+                AI_AGENTS[room.agentId]?.username || room.agentId
+              );
             }, 1000);
           }
         } catch (error) {
           console.error('🚨 AI Response Error:', error);
+          clearTimeout(typingTimeout);
           setIsAiTyping(false);
           
           // Fallback to simple response
-          setTimeout(() => {
+          setTimeout(async () => {
             if (soundsEnabled) sounds.messageReceive();
-            const fallbackResponse: Message = {
-              id: (Date.now() + 1).toString(),
-              username: room.agentId,
-              text: getAgentResponse(room.agentId, userMessage),
-              timestamp: new Date(),
-              isOwn: false
-            };
-            setMessages(prev => [...prev, fallbackResponse]);
+            await postChatMessage(
+              getAgentResponse(room.agentId, userMessage),
+              undefined, // No wallet for AI
+              true,
+              room.agentId,
+              AI_AGENTS[room.agentId]?.username || room.agentId
+            );
           }, 1000);
         }
       }
@@ -439,26 +523,24 @@ const FlunksMessenger: React.FC = () => {
   };
 
   const switchToContact = (roomName: string) => {
-    // Clear messages when switching rooms for demo purposes
-    setMessages([]);
     setSelectedContact(roomName);
     
     // If switching to an AI room, show their greeting
-    const room = chatRooms.find(r => r.username === roomName);
-    if (room?.isAI && room.agentId && AI_AGENTS[room.agentId]) {
-      const agent = AI_AGENTS[room.agentId];
+    const newRoom = chatRooms.find(r => r.username === roomName);
+    if (newRoom?.isAI && newRoom.agentId && AI_AGENTS[newRoom.agentId]) {
+      const agent = AI_AGENTS[newRoom.agentId];
       const greeting = agent.conversationStarters[Math.floor(Math.random() * agent.conversationStarters.length)];
       
-      setTimeout(() => {
-        const greetingMessage: Message = {
-          id: `greeting-${Date.now()}`,
-          username: room.agentId,
-          text: greeting,
-          timestamp: new Date(),
-          isOwn: false
-        };
-        
-        setMessages(prev => [...prev, greetingMessage]);
+      setTimeout(async () => {
+        // Use the room-specific function to ensure greeting goes to the correct room
+        await postMessageToRoom(
+          roomName, // Explicitly pass the room name
+          greeting,
+          undefined, // No wallet for AI
+          true,
+          agent.id,
+          agent.username
+        );
       }, 500);
     }
   };
@@ -576,22 +658,6 @@ const FlunksMessenger: React.FC = () => {
           )}
           <Button
             size="sm"
-            onClick={() => {
-              setMessages([]);
-              console.log('🔄 Chat cleared');
-            }}
-            style={{ 
-              marginRight: '8px',
-              fontSize: '10px',
-              padding: '2px 6px',
-              background: '#ff9900'
-            }}
-            title="Clear Chat"
-          >
-            🔄
-          </Button>
-          <Button
-            size="sm"
             onClick={() => setSoundsEnabled(!soundsEnabled)}
             style={{ 
               marginLeft: 'auto', 
@@ -625,7 +691,14 @@ const FlunksMessenger: React.FC = () => {
           {isAiTyping && (
             <MessageBubble isSystem={true}>
               <div className="message-text" style={{ fontStyle: 'italic', color: '#666' }}>
-                {selectedContact} is typing...
+                {(() => {
+                  const room = chatRooms.find(r => r.username === selectedContact);
+                  if (room?.isAI && room.agentId) {
+                    const agent = AI_AGENTS[room.agentId];
+                    return `${agent?.username || room.agentId} is typing...`;
+                  }
+                  return `${selectedContact} is typing...`;
+                })()}
               </div>
             </MessageBubble>
           )}
