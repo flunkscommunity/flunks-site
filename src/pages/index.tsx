@@ -30,6 +30,7 @@ import GameManualWindow from "windows/GameManualWindow";
 import MemeManagerWindow from "windows/MemeManagerWindow";
 import SimpleBrowser from "windows/SimpleBrowser";
 import DevPreview from "windows/DevPreview";
+import ReportCard from "windows/ReportCard";
 import AccessLevelStatus from "components/AccessLevelStatus";
 import ConditionalAppIcon from "components/ConditionalAppIcon";
 import { BACKGROUND_CONFIG } from "config/backgroundConfig";
@@ -353,6 +354,17 @@ const windowsMemod = useMemo(() => (
               ),
             })
           }
+        />
+
+        {/* 15. Report Card */}
+        <ConditionalAppIcon
+          appId="report-card"
+          title="Report Card"
+          icon="/images/icons/report-card.png"
+          onDoubleClick={() => openWindow({
+            key: WINDOW_IDS.REPORT_CARD,
+            window: <ReportCard />
+          })}
         />
       </div>
 

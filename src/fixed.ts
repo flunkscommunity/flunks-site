@@ -51,6 +51,7 @@ export const WINDOW_IDS = {
   MEME_MANAGER: "meme-manager",
   BROWSER: "browser",
   DEV_PREVIEW: "dev-preview",
+  REPORT_CARD: "report-card",
   
   // New location main windows
   JOCKS_HOUSE_MAIN: "jocks_house_main",
@@ -326,5 +327,10 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appName: "Meme Manager",
     appIcon: "/images/icons/high-school-icon.png",
     key: WINDOW_IDS.MEME_MANAGER,
+  },
+  [WINDOW_IDS.REPORT_CARD]: {
+    appName: "Report Card",
+    appIcon: "/images/icons/report-card.png",
+    key: WINDOW_IDS.REPORT_CARD,
   },
 };
