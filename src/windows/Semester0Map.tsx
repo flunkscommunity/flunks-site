@@ -38,6 +38,11 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   const [hovered, setHovered] = useState<string | null>(null);
   const [enhancedHover, setEnhancedHover] = useState<string | null>(null);
   const [isPaused, setIsPaused] = useState(false);
+  // Room overlay state for full-screen room backgrounds
+  const [activeRoom, setActiveRoom] = useState<{
+    location: string;
+    roomName: string;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
   const [showOpeningAnimation, setShowOpeningAnimation] = useState(true);
   const { openWindow, closeWindow } = useWindowsContext();
@@ -148,6 +153,32 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   const handleEnhancedClose = () => {
     setEnhancedHover(null);
     setHovered(null);
+  };
+
+  // Helper: slugify a room/location name for file paths
+  const slugify = (s: string) =>
+    s
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+
+  // Compute background image path with graceful fallback (backgrounds -> icons)
+  const getLocationBackgrounds = (locationKey: string) => {
+    const coverPath = `/images/backgrounds/locations/${locationKey}/cover.webp`;
+    const coverJpg = `/images/backgrounds/locations/${locationKey}/cover.jpg`;
+    const iconPath = `/images/icons/${locationKey}-icon.png`;
+    // Multiple backgrounds allow CSS to fall back when one fails to load
+    return `${`url(${coverPath})`}, ${`url(${coverJpg})`}, ${`url(${iconPath})`}`;
+  };
+
+  // Room image for overlay with jpg/webp fallback
+  const getRoomBackgrounds = (locationKey: string, roomName: string) => {
+    const roomSlug = slugify(roomName);
+    const webp = `/images/backgrounds/locations/${locationKey}/${roomSlug}.webp`;
+    const jpg = `/images/backgrounds/locations/${locationKey}/${roomSlug}.jpg`;
+    // Provide a very subtle gradient last so UI still looks OK if images are missing
+    const gradient = 'linear-gradient(180deg, rgba(10,10,20,0.95), rgba(5,5,10,0.98))';
+    return `${`url(${webp})`}, ${`url(${jpg})`}, ${gradient}`;
   };
 
   useEffect(() => {
@@ -927,7 +958,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           <div 
             className={`${styles["expanded-icon"]} ${styles["png-icon"]}`}
             style={{ 
-              backgroundImage: `url(/images/icons/${enhancedHover}-icon.png)` 
+              backgroundImage: getLocationBackgrounds(enhancedHover)
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -949,13 +980,46 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
               <p>{locationData[enhancedHover as keyof typeof locationData].description}</p>
               <div className={styles["location-preview-rooms"]}>
                 {locationData[enhancedHover as keyof typeof locationData].rooms.map((room, index) => (
-                  <div key={index} className={styles["preview-room"]}>
+                  <div
+                    key={index}
+                    className={styles["preview-room"]}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => setActiveRoom({ location: enhancedHover, roomName: room.name })}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setActiveRoom({ location: enhancedHover, roomName: room.name });
+                      }
+                    }}
+                  >
                     <h4>{room.name}</h4>
                     <p>{room.description}</p>
                   </div>
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Room Fullscreen Overlay (retro pop-up) */}
+      {activeRoom && (
+        <div className={styles["room-overlay"]} onClick={() => setActiveRoom(null)}>
+          <div
+            className={styles["room-image"]}
+            style={{ backgroundImage: getRoomBackgrounds(activeRoom.location, activeRoom.roomName) }}
+            onClick={(e) => e.stopPropagation()}
+          />
+          <div className={styles["room-info-bar"]} onClick={(e) => e.stopPropagation()}>
+            <div className={styles["room-title"]}>
+              {locationData[activeRoom.location as keyof typeof locationData]?.title}
+              <span className={styles["room-sep"]}> • </span>
+              {activeRoom.roomName}
+            </div>
+            <button className={styles["room-close"]} onClick={() => setActiveRoom(null)} aria-label="Close room">
+              ✖
+            </button>
           </div>
         </div>
       )}
