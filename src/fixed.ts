@@ -52,6 +52,7 @@ export const WINDOW_IDS = {
   BROWSER: "browser",
   DEV_PREVIEW: "dev-preview",
   REPORT_CARD: "report-card",
+  ICON_ANIMATION: "icon-animation",
   
   // New location main windows
   JOCKS_HOUSE_MAIN: "jocks_house_main",
@@ -332,5 +333,10 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appName: "Report Card",
     appIcon: "/images/icons/report-card.png",
     key: WINDOW_IDS.REPORT_CARD,
+  },
+  [WINDOW_IDS.ICON_ANIMATION]: {
+    appName: "Icon Animation",
+    appIcon: "/images/icons/attack-64x64.png",
+    key: WINDOW_IDS.ICON_ANIMATION,
   },
 };

@@ -31,6 +31,7 @@ import MemeManagerWindow from "windows/MemeManagerWindow";
 import SimpleBrowser from "windows/SimpleBrowser";
 import DevPreview from "windows/DevPreview";
 import ReportCard from "windows/ReportCard";
+import IconAnimationWindow from "windows/IconAnimationWindow";
 import AccessLevelStatus from "components/AccessLevelStatus";
 import ConditionalAppIcon from "components/ConditionalAppIcon";
 import { BACKGROUND_CONFIG } from "config/backgroundConfig";
@@ -365,6 +366,30 @@ const windowsMemod = useMemo(() => (
             key: WINDOW_IDS.REPORT_CARD,
             window: <ReportCard />
           })}
+        />
+
+        {/* 16. Icon Animation */}
+        <ConditionalAppIcon
+          appId="icon-animation"
+          title="Icon Animation"
+          icon="/images/icons/attack-64x64.png"
+          onDoubleClick={() =>
+            openWindow({
+              key: WINDOW_IDS.ICON_ANIMATION,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.ICON_ANIMATION}
+                  onClose={() => closeWindow(WINDOW_IDS.ICON_ANIMATION)}
+                  headerTitle="Icon Animation"
+                  initialWidth="520px"
+                  initialHeight="420px"
+                  headerIcon="/images/icons/attack-64x64.png"
+                >
+                  <IconAnimationWindow />
+                </DraggableResizeableWindow>
+              ),
+            })
+          }
         />
       </div>
 

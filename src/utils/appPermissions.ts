@@ -116,6 +116,14 @@ export const APP_PERMISSIONS: AppPermission[] = [
     description: 'Graduation system management'
   },
   
+  // Icon Animation Lab (dev/admin for now)
+  {
+    id: 'icon-animation',
+    title: 'Icon Animation',
+    requiredLevel: ['ADMIN'],
+    description: 'Preview desktop icon animations'
+  },
+  
   // External links - available to all
   {
     id: 'discord',

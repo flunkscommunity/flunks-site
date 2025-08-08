@@ -486,6 +486,26 @@
   left: 66%;
 }
 
+/* High School heartbeat animation (only on hover) */
+.icon.high-school:hover {
+  animation: heartbeat 1.4s ease-in-out infinite;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+/* Also animate the enlarged hover preview for High School */
+.hover-png-preview.high-school .hover-enlarged-icon {
+  animation: heartbeat 1.4s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.06); }
+  50% { transform: scale(0.98); }
+  75% { transform: scale(1.04); }
+}
+
 .paradise-motel {
   top: 18%;
   left: 44%;
