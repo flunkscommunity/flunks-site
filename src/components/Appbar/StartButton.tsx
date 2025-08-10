@@ -105,8 +105,8 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
           }}
           className="!text-xl"
         >
-          <img src="/flunks-logo.png" width="32px" height="32px" />
-          My Profile
+          <img src="/images/icons/my-locker-icon.svg" width="32px" height="32px" />
+          My Locker
         </CustomMenuListItem>
         <CustomMenuListItem
           onClick={() => {

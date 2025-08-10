@@ -54,7 +54,7 @@ const Welcome: React.FC = () => {
       </Anchor> AND ....... 
     </p>,
     <p>
-      [5/6] Don't forget to create your profile! Click on the "My Profile" desktop icon to set up your username, link your Discord, and connect with the community.
+      [5/6] Don't forget to create your profile! Click on the "My Locker" desktop icon to set up your username, link your Discord, and connect with the community.
     </p>,
     <p>
       [6/6] Thanks for making it this far... enter the code <strong>WTF</strong> in the terminal for a surprise!

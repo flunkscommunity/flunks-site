@@ -106,7 +106,7 @@ const UserProfilePrompt: React.FC<ProfilePromptProps> = ({
               Skip for Now
             </Button>
             <Button onClick={handleCreateProfile}>
-              🚀 Create My Profile
+              � Create My Locker
             </Button>
           </div>
 

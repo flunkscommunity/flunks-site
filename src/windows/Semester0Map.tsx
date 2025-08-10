@@ -47,31 +47,34 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   const [showOpeningAnimation, setShowOpeningAnimation] = useState(true);
   const { openWindow, closeWindow } = useWindowsContext();
   const mapRef = useRef<HTMLDivElement>(null);
+  const mapInnerRef = useRef<HTMLDivElement>(null);
+  const isMobileRef = useRef(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [zoom, setZoom] = useState(1);
+  const zoomRef = useRef(1);
   
   // Clique access hooks
   const { hasAccess } = useCliqueAccess();
   const { user } = useDynamicContext();
 
+  // Helper function to handle location access - checks wallet connection first
+  const handleLocationAccess = (
+    locationKey: string, 
+    openLocationWindow: () => void, 
+    e?: React.MouseEvent
+  ) => {
+    if (!user) {
+      // User not signed in - do nothing
+      return;
+    }
+    // User is signed in - proceed with normal access
+    openLocationWindow();
+  };
+
   // Helper function to check clique access and handle unauthorized attempts
   const handleCliqueHouseAccess = (clique: CliqueType, windowId: string, component: JSX.Element, houseName: string) => {
     if (!user) {
-      // Show connect wallet prompt
-      openWindow({
-        key: WINDOW_IDS.ERROR,
-        window: (
-          <ErrorWindow
-            title="Access Denied"
-            message="You need to connect your wallet to access clique houses."
-            actions={
-              <Button onClick={() => closeWindow(WINDOW_IDS.ERROR)}>
-                Close
-              </Button>
-            }
-            windowId={WINDOW_IDS.ERROR}
-            onClose={() => closeWindow(WINDOW_IDS.ERROR)}
-          />
-        ),
-      });
+      // User not signed in - do nothing (no error popup needed since we show the overlay)
       return;
     }
 
@@ -135,6 +138,11 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   };
 
   const handleEnhancedClick = (locationKey: string, e: React.MouseEvent) => {
+    if (!user) {
+      // User not signed in - do nothing
+      return;
+    }
+    
     e.stopPropagation(); // Prevent opening the location window
     console.log('Enhanced click triggered for:', locationKey); // Debug log
     if (enhancedHover === locationKey) {
@@ -154,6 +162,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
     setEnhancedHover(null);
     setHovered(null);
   };
+
+  // Disable hover-on-touch; mobile will be click-to-enter
+  const handleTouchEnter = (_key: string) => {};
+  const handleTouchLeave = () => {};
 
   // Helper: slugify a room/location name for file paths
   const slugify = (s: string) =>
@@ -192,6 +204,20 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Keep map-inner width in sync with zoom (mobile only)
+  useEffect(() => {
+    if (!mapInnerRef.current) return;
+    if (!isMobileRef.current) {
+      // Reset any prior inline styles when switching to desktop
+      mapInnerRef.current.style.width = '';
+      mapInnerRef.current.style.minWidth = '';
+      return;
+    }
+    const baseVW = 320;
+    mapInnerRef.current.style.width = `${baseVW * zoom}vw`;
+    mapInnerRef.current.style.minWidth = `${baseVW * zoom}vw`;
+  }, [zoom]);
+
   useEffect(() => {
     const t = setTimeout(() => {
       setLoading(false);
@@ -204,6 +230,15 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   const togglePause = () => setIsPaused(prev => !prev);
 
   useEffect(() => {
+  // Track mobile once on mount
+  const mobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  isMobileRef.current = mobile;
+  setIsMobile(mobile);
+  // initial zoom: slightly zoomed out on mobile
+  const initialZoom = mobile ? 0.9 : 1;
+  setZoom(initialZoom);
+  zoomRef.current = initialZoom;
+
     const map = mapRef.current;
     if (!map) return;
 
@@ -212,49 +247,107 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
     let startY = 0;
     let scrollLeft = 0;
     let scrollTop = 0;
+    // Pinch state
+    let isPinching = false;
+    let pinchStartDistance = 0;
+    let pinchStartZoom = zoomRef.current;
+    let pinchCenterX = 0;
+    let pinchCenterY = 0;
+    let startScrollWidth = 0;
+    let startScrollHeight = 0;
+
+    const getDistance = (touches: TouchList) => {
+      const [t1, t2] = [touches[0], touches[1]];
+      const dx = t1.clientX - t2.clientX;
+      const dy = t1.clientY - t2.clientY;
+      return Math.hypot(dx, dy);
+    };
 
 
     const start = (e: MouseEvent | TouchEvent) => {
+      // Ignore drags that begin on interactive icons to allow taps
+      const target = (e.target as HTMLElement) || null;
+      if (target && target.closest(`.${styles.icon}`)) return;
+      // If two fingers, start pinch
+      if ('touches' in e && e.touches.length === 2) {
+        isPinching = true;
+        pinchStartDistance = getDistance(e.touches);
+        pinchStartZoom = zoomRef.current;
+        const rect = map.getBoundingClientRect();
+        pinchCenterX = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - rect.left;
+        pinchCenterY = ((e.touches[0].clientY + e.touches[1].clientY) / 2) - rect.top;
+        startScrollWidth = map.scrollWidth;
+        startScrollHeight = map.scrollHeight;
+        return;
+      }
       isDown = true;
       startX = 'touches' in e ? e.touches[0].clientX : e.clientX;
       startY = 'touches' in e ? e.touches[0].clientY : e.clientY;
       scrollLeft = map.scrollLeft;
       scrollTop = map.scrollTop;
-      scrollLeft = map.scrollLeft;
 
       map.classList.add(styles['dragging']);
     };
 
     const move = (e: MouseEvent | TouchEvent) => {
+      if ('touches' in e && e.touches.length === 2) {
+        // Pinch zoom
+        e.preventDefault();
+        if (!isPinching) return;
+        const dist = getDistance(e.touches);
+        const factor = dist / pinchStartDistance;
+        const MIN_ZOOM = 0.7;
+        const MAX_ZOOM = 2.2;
+        const newZoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, pinchStartZoom * factor));
+  if (isMobileRef.current && mapInnerRef.current) {
+          // Update width based on zoom so scroll area scales
+          const baseVW = 320; // base width in vw
+          mapInnerRef.current.style.width = `${baseVW * newZoom}vw`;
+          mapInnerRef.current.style.minWidth = `${baseVW * newZoom}vw`;
+        }
+        // Maintain focus under pinch center
+        const focusX = (map.scrollLeft + pinchCenterX) / startScrollWidth;
+        const focusY = (map.scrollTop + pinchCenterY) / startScrollHeight;
+        // Read new scroll sizes after style update
+        const newScrollWidth = map.scrollWidth;
+        const newScrollHeight = map.scrollHeight;
+        map.scrollLeft = Math.max(0, Math.min(newScrollWidth, focusX * newScrollWidth - pinchCenterX));
+        map.scrollTop = Math.max(0, Math.min(newScrollHeight, focusY * newScrollHeight - pinchCenterY));
+        zoomRef.current = newZoom;
+        setZoom(newZoom);
+        return;
+      }
       if (!isDown) return;
+      e.preventDefault(); // Prevent default touch behavior
       const x = 'touches' in e ? e.touches[0].clientX : e.clientX;
       const y = 'touches' in e ? e.touches[0].clientY : e.clientY;
       map.scrollLeft = scrollLeft - (x - startX);
       map.scrollTop = scrollTop - (y - startY);
-      map.scrollLeft = scrollLeft - (x - startX);
     };
 
     const stop = () => {
       isDown = false;
+      isPinching = false;
       map.classList.remove(styles['dragging']);
     };
 
+  // Enable drag-to-pan for mouse and touch
     map.addEventListener('mousedown', start);
     map.addEventListener('mousemove', move);
     map.addEventListener('mouseup', stop);
     map.addEventListener('mouseleave', stop);
-    map.addEventListener('touchstart', start);
-    map.addEventListener('touchmove', move);
-    map.addEventListener('touchend', stop);
+  map.addEventListener('touchstart', start as EventListener, { passive: false });
+  map.addEventListener('touchmove', move as EventListener, { passive: false });
+  map.addEventListener('touchend', stop as EventListener, { passive: false });
 
     return () => {
       map.removeEventListener('mousedown', start);
       map.removeEventListener('mousemove', move);
       map.removeEventListener('mouseup', stop);
       map.removeEventListener('mouseleave', stop);
-      map.removeEventListener('touchstart', start);
-      map.removeEventListener('touchmove', move);
-      map.removeEventListener('touchend', stop);
+  map.removeEventListener('touchstart', start as EventListener);
+  map.removeEventListener('touchmove', move as EventListener);
+  map.removeEventListener('touchend', stop as EventListener);
     };
   }, []);
 
@@ -266,6 +359,15 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
       
+      {/* Wallet connection prompt for non-authenticated users */}
+      {!user && !loading && (
+        <div className={styles["wallet-prompt-overlay"]}>
+          <div className={styles["wallet-prompt-message"]}>
+            <h2>🔒 Sign in using your wallet to participate in Semester Zero!</h2>
+          </div>
+        </div>
+      )}
+      
       {/* Opening animation for school icon */}
       {showOpeningAnimation && !loading && (
         <div className={styles["opening-animation-overlay"]}>
@@ -273,37 +375,41 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
       
-      <div className={styles["map-inner"]}>
+  <div className={styles["map-inner"]} ref={mapInnerRef}>
         <img
           src="/images/season-zero-map.png"
           className={styles["background-map"]}
           alt="Semester 0 Map"
         />
 
-        {hovered && <div className={styles["map-overlay"]} />}
+  {!isMobile && hovered && <div className={styles["map-overlay"]} />}
 
       <div
         className={`${styles.icon} ${styles.arcade}`}
         onDoubleClick={() =>
-          openWindow({
-            key: WINDOW_IDS.ARCADE_MAIN,
-            window: (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.ARCADE_MAIN}
-                headerTitle="Arcade"
-                onClose={() => closeWindow(WINDOW_IDS.ARCADE_MAIN)}
-                initialWidth="100%"
-                initialHeight="100%"
-                resizable={false}
-              >
-                <ArcadeMain />
-              </DraggableResizeableWindow>
-            ),
-          })
+          handleLocationAccess('arcade', () => 
+            openWindow({
+              key: WINDOW_IDS.ARCADE_MAIN,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.ARCADE_MAIN}
+                  headerTitle="Arcade"
+                  onClose={() => closeWindow(WINDOW_IDS.ARCADE_MAIN)}
+                  initialWidth="100%"
+                  initialHeight="100%"
+                  resizable={false}
+                >
+                  <ArcadeMain />
+                </DraggableResizeableWindow>
+              ),
+            })
+          )
         }
-        onClick={(e) => handleEnhancedClick('arcade', e)}
-        onMouseEnter={() => setHovered('arcade')}
-        onMouseLeave={() => setHovered(null)}
+  onClick={(e) => handleEnhancedClick('arcade', e)}
+  onMouseEnter={() => user && setHovered('arcade')}
+  onMouseLeave={() => setHovered(null)}
+  onTouchStart={() => user && handleTouchEnter('arcade')}
+  onTouchEnd={handleTouchLeave}
       >
       </div>
 
@@ -331,9 +437,11 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             "Jock's House"
           )
         }
-        onClick={(e) => handleEnhancedClick('jocks-house', e)}
-        onMouseEnter={() => setHovered('jocks-house')}
-        onMouseLeave={() => setHovered(null)}
+  onClick={(e) => handleEnhancedClick('jocks-house', e)}
+  onMouseEnter={() => user && setHovered('jocks-house')}
+  onMouseLeave={() => setHovered(null)}
+  onTouchStart={() => user && handleTouchEnter('jocks-house')}
+  onTouchEnd={handleTouchLeave}
       >
       </div>
 
@@ -358,9 +466,11 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             "Freak's House"
           )
         }
-        onClick={(e) => handleEnhancedClick('freaks-house', e)}
-        onMouseEnter={() => setHovered('freaks-house')}
-        onMouseLeave={() => setHovered(null)}
+  onClick={(e) => handleEnhancedClick('freaks-house', e)}
+  onMouseEnter={() => user && setHovered('freaks-house')}
+  onMouseLeave={() => setHovered(null)}
+  onTouchStart={() => user && handleTouchEnter('freaks-house')}
+  onTouchEnd={handleTouchLeave}
       >
       </div>
 
@@ -385,17 +495,21 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             "Geek's House"
           )
         }
-        onClick={(e) => handleEnhancedClick('geeks-house', e)}
-        onMouseEnter={() => setHovered('geeks-house')}
-        onMouseLeave={() => setHovered(null)}
+  onClick={(e) => handleEnhancedClick('geeks-house', e)}
+  onMouseEnter={() => user && setHovered('geeks-house')}
+  onMouseLeave={() => setHovered(null)}
+  onTouchStart={() => user && handleTouchEnter('geeks-house')}
+  onTouchEnd={handleTouchLeave}
       >
       </div>
 
       <div
         className={`${styles.icon} ${styles['preps-house']}`}
-        onClick={(e) => handleEnhancedClick('preps-house', e)}
-        onMouseEnter={() => setHovered('preps-house')}
-        onMouseLeave={() => setHovered(null)}
+  onClick={(e) => handleEnhancedClick('preps-house', e)}
+  onMouseEnter={() => user && setHovered('preps-house')}
+  onMouseLeave={() => setHovered(null)}
+  onTouchStart={() => user && handleTouchEnter('preps-house')}
+  onTouchEnd={handleTouchLeave}
         onDoubleClick={() =>
           handleCliqueHouseAccess(
             'PREP',
@@ -420,109 +534,127 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles['flunk-fm']}`}
-        onClick={(e) => handleEnhancedClick('flunk-fm', e)}
-        onMouseEnter={() => setHovered('flunk-fm')}
-        onMouseLeave={() => setHovered(null)}
+  onClick={(e) => handleEnhancedClick('flunk-fm', e)}
+  onMouseEnter={() => user && setHovered('flunk-fm')}
+  onMouseLeave={() => setHovered(null)}
+  onTouchStart={() => user && handleTouchEnter('flunk-fm')}
+  onTouchEnd={handleTouchLeave}
         onDoubleClick={() =>
-          openWindow({
-            key: WINDOW_IDS.FLUNK_FM_MAIN,
-            window: (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.FLUNK_FM_MAIN}
-                headerTitle="Flunk FM"
-                onClose={() => closeWindow(WINDOW_IDS.FLUNK_FM_MAIN)}
-                initialWidth="100%"
-                initialHeight="100%"
-                resizable={false}
-              >
-                <FlunkFmMain />
-              </DraggableResizeableWindow>
-            ),
-          })
+          handleLocationAccess('flunk-fm', () =>
+            openWindow({
+              key: WINDOW_IDS.FLUNK_FM_MAIN,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.FLUNK_FM_MAIN}
+                  headerTitle="Flunk FM"
+                  onClose={() => closeWindow(WINDOW_IDS.FLUNK_FM_MAIN)}
+                  initialWidth="100%"
+                  initialHeight="100%"
+                  resizable={false}
+                >
+                  <FlunkFmMain />
+                </DraggableResizeableWindow>
+              ),
+            })
+          )
         }
       >
       </div>
 
       <div
         className={`${styles.icon} ${styles.large} ${styles['police-station']}`}
-        onClick={(e) => handleEnhancedClick('police-station', e)}
-        onMouseEnter={() => setHovered('police-station')}
-        onMouseLeave={() => setHovered(null)}
+  onClick={(e) => handleEnhancedClick('police-station', e)}
+  onMouseEnter={() => user && setHovered('police-station')}
+  onMouseLeave={() => setHovered(null)}
+  onTouchStart={() => user && handleTouchEnter('police-station')}
+  onTouchEnd={handleTouchLeave}
         onDoubleClick={() =>
-          openWindow({
-            key: WINDOW_IDS.POLICE_STATION_MAIN,
-            window: (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.POLICE_STATION_MAIN}
-                headerTitle="Police Station"
-                onClose={() => closeWindow(WINDOW_IDS.POLICE_STATION_MAIN)}
-                initialWidth="100%"
-                initialHeight="100%"
-                resizable={false}
-              >
-                <PoliceStationMain />
-              </DraggableResizeableWindow>
-            ),
-          })
+          handleLocationAccess('police-station', () =>
+            openWindow({
+              key: WINDOW_IDS.POLICE_STATION_MAIN,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.POLICE_STATION_MAIN}
+                  headerTitle="Police Station"
+                  onClose={() => closeWindow(WINDOW_IDS.POLICE_STATION_MAIN)}
+                  initialWidth="100%"
+                  initialHeight="100%"
+                  resizable={false}
+                >
+                  <PoliceStationMain />
+                </DraggableResizeableWindow>
+              ),
+            })
+          )
         }
       >
       </div>
 
       <div
         className={`${styles.icon} ${styles.large} ${styles['football-field']}`}
-        onClick={(e) => handleEnhancedClick('football-field', e)}
-        onMouseEnter={() => setHovered('football-field')}
-        onMouseLeave={() => setHovered(null)}
+  onClick={(e) => handleEnhancedClick('football-field', e)}
+  onMouseEnter={() => user && setHovered('football-field')}
+  onMouseLeave={() => setHovered(null)}
+  onTouchStart={() => user && handleTouchEnter('football-field')}
+  onTouchEnd={handleTouchLeave}
         onDoubleClick={() =>
-          openWindow({
-            key: WINDOW_IDS.FOOTBALL_FIELD_MAIN,
-            window: (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.FOOTBALL_FIELD_MAIN}
-                headerTitle="Football Field"
-                onClose={() => closeWindow(WINDOW_IDS.FOOTBALL_FIELD_MAIN)}
-                initialWidth="100%"
-                initialHeight="100%"
-                resizable={false}
-              >
-                <FootballFieldMain />
-              </DraggableResizeableWindow>
-            ),
-          })
+          handleLocationAccess('football-field', () =>
+            openWindow({
+              key: WINDOW_IDS.FOOTBALL_FIELD_MAIN,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.FOOTBALL_FIELD_MAIN}
+                  headerTitle="Football Field"
+                  onClose={() => closeWindow(WINDOW_IDS.FOOTBALL_FIELD_MAIN)}
+                  initialWidth="100%"
+                  initialHeight="100%"
+                  resizable={false}
+                >
+                  <FootballFieldMain />
+                </DraggableResizeableWindow>
+              ),
+            })
+          )
         }
       >
       </div>
 
       <div
         className={`${styles.icon} ${styles.small} ${styles['snack-shack']}`}
-        onClick={(e) => handleEnhancedClick('snack-shack', e)}
-        onMouseEnter={() => setHovered('snack-shack')}
-        onMouseLeave={() => setHovered(null)}
+  onClick={(e) => handleEnhancedClick('snack-shack', e)}
+  onMouseEnter={() => user && setHovered('snack-shack')}
+  onMouseLeave={() => setHovered(null)}
+  onTouchStart={() => user && handleTouchEnter('snack-shack')}
+  onTouchEnd={handleTouchLeave}
         onDoubleClick={() =>
-          openWindow({
-            key: WINDOW_IDS.SNACK_SHACK_MAIN,
-            window: (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.SNACK_SHACK_MAIN}
-                headerTitle="Snack Shack"
-                onClose={() => closeWindow(WINDOW_IDS.SNACK_SHACK_MAIN)}
-                initialWidth="100%"
-                initialHeight="100%"
-                resizable={false}
-              >
-                <SnackShackMain />
-              </DraggableResizeableWindow>
-            ),
-          })
+          handleLocationAccess('snack-shack', () =>
+            openWindow({
+              key: WINDOW_IDS.SNACK_SHACK_MAIN,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.SNACK_SHACK_MAIN}
+                  headerTitle="Snack Shack"
+                  onClose={() => closeWindow(WINDOW_IDS.SNACK_SHACK_MAIN)}
+                  initialWidth="100%"
+                  initialHeight="100%"
+                  resizable={false}
+                >
+                  <SnackShackMain />
+                </DraggableResizeableWindow>
+              ),
+            })
+          )
         }
       >
       </div>
 
       <div
         className={`${styles.icon} ${styles.large} ${styles['four-thieves-bar']}`}
-        onClick={(e) => handleEnhancedClick('four-thieves-bar', e)}
-        onMouseEnter={() => setHovered('four-thieves-bar')}
-        onMouseLeave={() => setHovered(null)}
+  onClick={(e) => handleEnhancedClick('four-thieves-bar', e)}
+  onMouseEnter={() => user && setHovered('four-thieves-bar')}
+  onMouseLeave={() => setHovered(null)}
+  onTouchStart={() => user && handleTouchEnter('four-thieves-bar')}
+  onTouchEnd={handleTouchLeave}
         onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.FOUR_THIEVES_BAR_MAIN,
@@ -545,9 +677,11 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles.junkyard}`}
-        onClick={(e) => handleEnhancedClick('junkyard', e)}
-        onMouseEnter={() => setHovered('junkyard')}
-        onMouseLeave={() => setHovered(null)}
+  onClick={(e) => handleEnhancedClick('junkyard', e)}
+  onMouseEnter={() => user && setHovered('junkyard')}
+  onMouseLeave={() => setHovered(null)}
+  onTouchStart={() => user && handleTouchEnter('junkyard')}
+  onTouchEnd={handleTouchLeave}
         onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.JUNKYARD_MAIN,
@@ -570,9 +704,11 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.small} ${styles['lake-tree']}`}
-        onClick={(e) => handleEnhancedClick('lake-tree', e)}
-        onMouseEnter={() => setHovered('lake-tree')}
-        onMouseLeave={() => setHovered(null)}
+  onClick={(e) => handleEnhancedClick('lake-tree', e)}
+  onMouseEnter={() => user && setHovered('lake-tree')}
+  onMouseLeave={() => setHovered(null)}
+  onTouchStart={() => user && handleTouchEnter('lake-tree')}
+  onTouchEnd={handleTouchLeave}
         onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.LAKE_TREE_MAIN,
@@ -595,9 +731,11 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.small} ${styles['rug-doctor']}`}
-        onClick={(e) => handleEnhancedClick('rug-doctor', e)}
-        onMouseEnter={() => setHovered('rug-doctor')}
-        onMouseLeave={() => setHovered(null)}
+  onClick={(e) => handleEnhancedClick('rug-doctor', e)}
+  onMouseEnter={() => user && setHovered('rug-doctor')}
+  onMouseLeave={() => setHovered(null)}
+  onTouchStart={() => user && handleTouchEnter('rug-doctor')}
+  onTouchEnd={handleTouchLeave}
         onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.RUG_DOCTOR_MAIN,
@@ -620,9 +758,11 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.small} ${styles.shed}`}
-        onClick={(e) => handleEnhancedClick('shed', e)}
-        onMouseEnter={() => setHovered('shed')}
-        onMouseLeave={() => setHovered(null)}
+  onClick={(e) => handleEnhancedClick('shed', e)}
+  onMouseEnter={() => user && setHovered('shed')}
+  onMouseLeave={() => setHovered(null)}
+  onTouchStart={() => user && handleTouchEnter('shed')}
+  onTouchEnd={handleTouchLeave}
         onDoubleClick={() =>
           openWindow({
             key: WINDOW_IDS.SHED_MAIN,
@@ -646,55 +786,63 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       <div
         className={`${styles.icon} ${styles.large} ${styles.treehouse}`}
         onClick={(e) => handleEnhancedClick('secret-treehouse', e)}
-        onMouseEnter={() => setHovered('secret-treehouse')}
-        onMouseLeave={() => setHovered(null)}
+  onMouseEnter={() => user && setHovered('secret-treehouse')}
+  onMouseLeave={() => setHovered(null)}
+  onTouchStart={() => user && handleTouchEnter('secret-treehouse')}
+  onTouchEnd={handleTouchLeave}
         onDoubleClick={() =>
-          openWindow({
-            key: WINDOW_IDS.SECRET_TREEHOUSE_MAIN,
-            window: (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.SECRET_TREEHOUSE_MAIN}
-                headerTitle="Secret Treehouse"
-                onClose={() => closeWindow(WINDOW_IDS.SECRET_TREEHOUSE_MAIN)}
-                initialWidth="100%"
-                initialHeight="100%"
-                resizable={false}
-              >
-                <SecretTreehouseMain />
-              </DraggableResizeableWindow>
-            ),
-          })
+          handleLocationAccess('secret-treehouse', () =>
+            openWindow({
+              key: WINDOW_IDS.SECRET_TREEHOUSE_MAIN,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.SECRET_TREEHOUSE_MAIN}
+                  headerTitle="Secret Treehouse"
+                  onClose={() => closeWindow(WINDOW_IDS.SECRET_TREEHOUSE_MAIN)}
+                  initialWidth="100%"
+                  initialHeight="100%"
+                  resizable={false}
+                >
+                  <SecretTreehouseMain />
+                </DraggableResizeableWindow>
+              ),
+            })
+          )
         }
       >
       </div>
 
       <div
         className={`${styles.icon} ${styles.large} ${styles["high-school"]}`}
-        onClick={(e) => handleEnhancedClick('high-school', e)}
-        onMouseEnter={() => setHovered('high-school')}
-        onMouseLeave={() => setHovered(null)}
+  onClick={(e) => handleEnhancedClick('high-school', e)}
+  onMouseEnter={() => user && setHovered('high-school')}
+  onMouseLeave={() => setHovered(null)}
+  onTouchStart={() => user && handleTouchEnter('high-school')}
+  onTouchEnd={handleTouchLeave}
         onDoubleClick={() =>
-          openWindow({
-            key: WINDOW_IDS.HIGH_SCHOOL_MAIN,
-            window: (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.HIGH_SCHOOL_MAIN}
-                headerTitle="High School"
-                onClose={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_MAIN)}
-                initialWidth="100%"
-                initialHeight="100%"
-                resizable={false}
-              >
-                <HighSchoolMain />
-              </DraggableResizeableWindow>
-            ),
-          })
+          handleLocationAccess('high-school', () =>
+            openWindow({
+              key: WINDOW_IDS.HIGH_SCHOOL_MAIN,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.HIGH_SCHOOL_MAIN}
+                  headerTitle="High School"
+                  onClose={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_MAIN)}
+                  initialWidth="100%"
+                  initialHeight="100%"
+                  resizable={false}
+                >
+                  <HighSchoolMain />
+                </DraggableResizeableWindow>
+              ),
+            })
+          )
         }
       >
       </div>
 
       {/* Hover PNG Preview for High School */}
-      {hovered === 'high-school' && !enhancedHover && (
+  {!isMobile && hovered === 'high-school' && !enhancedHover && (
         <div className={`${styles["hover-png-preview"]} ${styles["high-school"]}`}>
           <div 
             className={styles["hover-enlarged-icon"]}
@@ -707,7 +855,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       )}
 
       {/* Hover PNG Previews for other locations */}
-      {hovered === 'arcade' && !enhancedHover && (
+  {!isMobile && hovered === 'arcade' && !enhancedHover && (
         <div className={`${styles["hover-png-preview"]} ${styles["arcade"]}`}>
           <div 
             className={styles["hover-enlarged-icon"]}
@@ -719,7 +867,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      {hovered === 'jocks-house' && !enhancedHover && (
+  {!isMobile && hovered === 'jocks-house' && !enhancedHover && (
         <div className={`${styles["hover-png-preview"]} ${styles["jocks-house"]}`}>
           <div 
             className={styles["hover-enlarged-icon"]}
@@ -731,7 +879,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      {hovered === 'freaks-house' && !enhancedHover && (
+  {!isMobile && hovered === 'freaks-house' && !enhancedHover && (
         <div className={`${styles["hover-png-preview"]} ${styles["freaks-house"]}`}>
           <div 
             className={styles["hover-enlarged-icon"]}
@@ -743,7 +891,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      {hovered === 'geeks-house' && !enhancedHover && (
+  {!isMobile && hovered === 'geeks-house' && !enhancedHover && (
         <div className={`${styles["hover-png-preview"]} ${styles["geeks-house"]}`}>
           <div 
             className={styles["hover-enlarged-icon"]}
@@ -755,7 +903,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      {hovered === 'preps-house' && !enhancedHover && (
+  {!isMobile && hovered === 'preps-house' && !enhancedHover && (
         <div className={`${styles["hover-png-preview"]} ${styles["preps-house"]}`}>
           <div 
             className={styles["hover-enlarged-icon"]}
@@ -767,7 +915,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      {hovered === 'flunk-fm' && !enhancedHover && (
+  {!isMobile && hovered === 'flunk-fm' && !enhancedHover && (
         <div className={`${styles["hover-png-preview"]} ${styles["flunk-fm"]}`}>
           <div 
             className={styles["hover-enlarged-icon"]}
@@ -779,7 +927,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      {hovered === 'police-station' && !enhancedHover && (
+  {!isMobile && hovered === 'police-station' && !enhancedHover && (
         <div className={`${styles["hover-png-preview"]} ${styles["police-station"]}`}>
           <div 
             className={styles["hover-enlarged-icon"]}
@@ -791,7 +939,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      {hovered === 'football-field' && !enhancedHover && (
+  {!isMobile && hovered === 'football-field' && !enhancedHover && (
         <div className={`${styles["hover-png-preview"]} ${styles["football-field"]}`}>
           <div 
             className={styles["hover-enlarged-icon"]}
@@ -803,7 +951,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      {hovered === 'snack-shack' && !enhancedHover && (
+  {!isMobile && hovered === 'snack-shack' && !enhancedHover && (
         <div className={`${styles["hover-png-preview"]} ${styles["snack-shack"]}`}>
           <div 
             className={styles["hover-enlarged-icon"]}
@@ -815,7 +963,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      {hovered === 'four-thieves-bar' && !enhancedHover && (
+  {!isMobile && hovered === 'four-thieves-bar' && !enhancedHover && (
         <div className={`${styles["hover-png-preview"]} ${styles["four-thieves-bar"]}`}>
           <div 
             className={styles["hover-enlarged-icon"]}
@@ -827,7 +975,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      {hovered === 'junkyard' && !enhancedHover && (
+  {!isMobile && hovered === 'junkyard' && !enhancedHover && (
         <div className={`${styles["hover-png-preview"]} ${styles["junkyard"]}`}>
           <div 
             className={styles["hover-enlarged-icon"]}
@@ -839,7 +987,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      {hovered === 'lake-tree' && !enhancedHover && (
+  {!isMobile && hovered === 'lake-tree' && !enhancedHover && (
         <div className={`${styles["hover-png-preview"]} ${styles["lake-tree"]}`}>
           <div 
             className={styles["hover-enlarged-icon"]}
@@ -851,7 +999,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      {hovered === 'rug-doctor' && !enhancedHover && (
+  {!isMobile && hovered === 'rug-doctor' && !enhancedHover && (
         <div className={`${styles["hover-png-preview"]} ${styles["rug-doctor"]}`}>
           <div 
             className={styles["hover-enlarged-icon"]}
@@ -863,7 +1011,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      {hovered === 'shed' && !enhancedHover && (
+  {!isMobile && hovered === 'shed' && !enhancedHover && (
         <div className={`${styles["hover-png-preview"]} ${styles["shed"]}`}>
           <div 
             className={styles["hover-enlarged-icon"]}
@@ -875,7 +1023,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      {hovered === 'secret-treehouse' && !enhancedHover && (
+  {!isMobile && hovered === 'secret-treehouse' && !enhancedHover && (
         <div className={`${styles["hover-png-preview"]} ${styles["treehouse"]}`}>
           <div 
             className={styles["hover-enlarged-icon"]}
@@ -887,7 +1035,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
 
-      {hovered === 'paradise-motel' && !enhancedHover && (
+  {!isMobile && hovered === 'paradise-motel' && !enhancedHover && (
         <div className={`${styles["hover-png-preview"]} ${styles["paradise-motel"]}`}>
           <div 
             className={styles["hover-enlarged-icon"]}
@@ -901,30 +1049,34 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <div
         className={`${styles.icon} ${styles.large} ${styles["paradise-motel"]}`}
-        onClick={(e) => handleEnhancedClick('paradise-motel', e)}
-        onMouseEnter={() => setHovered('paradise-motel')}
-        onMouseLeave={() => setHovered(null)}
+  onClick={(e) => handleEnhancedClick('paradise-motel', e)}
+  onMouseEnter={() => user && setHovered('paradise-motel')}
+  onMouseLeave={() => setHovered(null)}
+  onTouchStart={() => user && handleTouchEnter('paradise-motel')}
+  onTouchEnd={handleTouchLeave}
         onDoubleClick={() =>
-          openWindow({
-            key: WINDOW_IDS.PARADISE_MOTEL_MAIN,
-            window: (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.PARADISE_MOTEL_MAIN}
-                headerTitle="Paradise Motel"
-                onClose={() => closeWindow(WINDOW_IDS.PARADISE_MOTEL_MAIN)}
-                initialWidth="100%"
-                initialHeight="100%"
-                resizable={false}
-              >
-                <ParadiseMotelMain />
-              </DraggableResizeableWindow>
-            ),
-          })
+          handleLocationAccess('paradise-motel', () =>
+            openWindow({
+              key: WINDOW_IDS.PARADISE_MOTEL_MAIN,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.PARADISE_MOTEL_MAIN}
+                  headerTitle="Paradise Motel"
+                  onClose={() => closeWindow(WINDOW_IDS.PARADISE_MOTEL_MAIN)}
+                  initialWidth="100%"
+                  initialHeight="100%"
+                  resizable={false}
+                >
+                  <ParadiseMotelMain />
+                </DraggableResizeableWindow>
+              ),
+            })
+          )
         }
       >
       </div>
 
-      {hovered && (
+  {!isMobile && hovered && (
         <div className={styles["info-box"]}>
           {hovered === 'arcade' && <>🕹️ Old machines hum with half-lit screens.</>}
           {hovered === 'jocks-house' && <>🏠 Sports trophies and team spirit fill every room.</>}
@@ -944,7 +1096,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           {hovered === 'high-school' && <>🏫 Abandoned halls echo with the past.</>}
           {hovered === 'paradise-motel' && <>🏨 A place where strange guests check in but never leave.</>}
         </div>
-      )}
+  )}
 
       <button className={styles["close-btn"]} onClick={onClose}>✖</button>
       </div>
@@ -1029,16 +1181,16 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         <div
           onClick={togglePause}
           style={{
-            position: 'fixed',
+            position: 'absolute',
             top: 0,
             left: 0,
-            height: '100vh',
-            width: '100vw',
+            height: '100%',
+            width: '100%',
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 9999,
+            zIndex: 50,
           }}
         >
           <img
@@ -1064,10 +1216,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       {/* Pause Button */}
       <div style={{
-        position: 'fixed',
-        top: 80,
-        left: 30,
-        zIndex: 10000,
+        position: 'absolute',
+        top: 20,
+        left: 20,
+        zIndex: 40,
       }}>
         <Button
           onClick={togglePause}

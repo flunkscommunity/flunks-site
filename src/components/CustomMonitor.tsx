@@ -109,6 +109,12 @@ const Background = styled(StyledScrollView).attrs(() => ({
   height: 100%;
   position: relative;
   overflow: hidden;
+  
+  @media (max-width: 768px) {
+    /* Ensure proper containment on mobile */
+    max-width: 100vw;
+    max-height: 100vh;
+  }
 `;
 
 export const FlunkImage = styled.img`

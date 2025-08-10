@@ -36,6 +36,7 @@ import AccessLevelStatus from "components/AccessLevelStatus";
 import ConditionalAppIcon from "components/ConditionalAppIcon";
 import { BACKGROUND_CONFIG } from "config/backgroundConfig";
 import useThemeSettings from "store/useThemeSettings";
+import MobileDebugger from "components/MobileDebugger";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -114,20 +115,21 @@ const windowsMemod = useMemo(() => (
 
   return (
     <>
-      <div className="flex relative flex-col max-h-[calc(100vh-64px)] w-full flex-wrap items-start gap-4 content-start">
-        {/* 1. OnlyFlunks */}
-        <ConditionalAppIcon
-          appId="onlyflunks"
+      <div className="h-full w-full overflow-auto p-4 touch-pan-y">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 min-h-full w-full">
+          {/* 1. OnlyFlunks */}
+          <ConditionalAppIcon
+            appId="onlyflunks"
           title="OnlyFlunks"
           icon="/images/icons/onlyflunks.png"
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.YOUR_STUDENTS, window: <YourStudents /> })}
         />
 
-        {/* 2. My Profile */}
+        {/* 2. My Locker */}
         <ConditionalAppIcon
-          appId="my-profile"
-          title="My Profile"
-          icon="/flunks-logo.png"
+          appId="my-locker"
+          title="My Locker"
+          icon="/images/icons/my-locker-icon.svg"
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.USER_PROFILE, window: <UserProfile /> })}
         />
 
@@ -391,9 +393,8 @@ const windowsMemod = useMemo(() => (
             })
           }
         />
+        </div>
       </div>
-
-
 
       {windowsMemod}
     </>
@@ -462,6 +463,7 @@ const Home: NextPage = () => {
         <Head>
           <title>Flunks High School - Access Required</title>
           <meta name="description" content="Flunks High School - Beta Access Required" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
           <link rel="icon" href="/flunks-logo.png" />
         </Head>
         <AccessGate onAccessGranted={handleAccessGranted} />
@@ -474,11 +476,13 @@ const Home: NextPage = () => {
       <Head>
         <title>Flunks</title>
         <meta name="description" content="Welcome to the Flunks Highschool computer." />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <link rel="icon" href="/flunks-logo.png" />
       </Head>
       
       <MonitorScreenWrapper>
         <AccessLevelStatus />
+        <MobileDebugger />
         <Desktop />
       </MonitorScreenWrapper>
     </>

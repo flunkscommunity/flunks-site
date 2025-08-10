@@ -22,8 +22,8 @@ export const APP_PERMISSIONS: AppPermission[] = [
     description: 'View your NFT collection'
   },
   {
-    id: 'my-profile',
-    title: 'My Profile',
+    id: 'my-locker',
+    title: 'My Locker',
     requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
     description: 'Manage your profile'
   },

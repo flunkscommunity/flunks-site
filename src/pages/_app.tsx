@@ -78,7 +78,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                 >
                   <UserProfileProvider>
                     <PaginatedItemsProvider>
-                      <Component {...pageProps} />
+                      <div className="app-container min-h-screen w-full overflow-hidden">
+                        <Component {...pageProps} />
+                      </div>
                       <Analytics />
                       <DynamicUserProfile />
                     </PaginatedItemsProvider>

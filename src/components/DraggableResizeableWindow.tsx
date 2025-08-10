@@ -202,6 +202,8 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           minHeight: width < 768 ? "calc(100% - 48px)" : "",
           height: getHeight(),
           maxHeight: "calc(100% - 48px)",
+          left: width < 768 ? 0 : undefined,
+          top: width < 768 ? 0 : undefined,
           ...props.style,
         }}
         onClick={_bringWindowToFront}

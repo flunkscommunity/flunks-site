@@ -310,8 +310,8 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     key: WINDOW_IDS.TERMINAL,
   },
   [WINDOW_IDS.USER_PROFILE]: {
-    appName: "My Profile",
-    appIcon: "/flunks-logo.png",
+    appName: "My Locker",
+    appIcon: "/images/icons/my-locker-icon.svg",
     key: WINDOW_IDS.USER_PROFILE,
   },
   [WINDOW_IDS.CLIQUE_ACCESS]: {

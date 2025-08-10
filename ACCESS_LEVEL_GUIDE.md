@@ -24,7 +24,7 @@ The Flunks site now has a comprehensive three-tier access control system that de
 
 ### ✅ **Available to ALL Users (ADMIN + BETA + COMMUNITY)**
 - OnlyFlunks (NFT collection viewer)
-- My Profile (user profile management)
+- My Locker (user profile management)
 - Radio (Flunks FM music player)
 - Chat Rooms (community messaging)
 - About Us (information about Flunks)

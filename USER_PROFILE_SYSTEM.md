@@ -212,7 +212,7 @@ import { UserProfileProvider } from 'contexts/UserProfileContext';
 ```
 
 ### 4. Start Menu Integration
-Profile access is automatically added to the Windows 95 start menu under "My Profile".
+Profile access is automatically added to the Windows 95 start menu under "My Locker".
 
 ## 🎯 Future Enhancements
 
