@@ -129,7 +129,7 @@ const windowsMemod = useMemo(() => (
         <ConditionalAppIcon
           appId="my-locker"
           title="My Locker"
-          icon="/images/icons/my-locker-icon.svg"
+          icon="/images/icons/locker-icon.png"
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.USER_PROFILE, window: <UserProfile /> })}
         />
 
