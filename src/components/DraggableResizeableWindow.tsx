@@ -225,7 +225,17 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
             >
               <div className="flex items-center gap-2">
                 {headerIcon && <img src={headerIcon} className="h-5" />}
-                <span className="!text-xl">{headerTitle}</span>
+                <span 
+                  className="!text-xl select-none"
+                  style={{
+                    display: 'block',
+                    padding: '2px 4px',
+                    borderRadius: '2px',
+                    userSelect: 'none'
+                  }}
+                >
+                  {headerTitle}
+                </span>
               </div>
               {showHeaderActions && (
                 <WindowButtons>
