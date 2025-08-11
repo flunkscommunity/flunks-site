@@ -118,6 +118,7 @@ const UserProfile: React.FC = () => {
                error ? `Error: ${error}` :
                !isConnected ? 'Connect Flow wallet to access your locker' :
                lockerNumber ? (devBypass ? 'Your locker is empty (Dev Mode)' : 'Your locker is empty') :
+               primaryWallet?.address ? 'No locker assigned to this wallet yet. Contact support to get a locker.' :
                'Setting up your locker...'}
             </div>
 
@@ -148,7 +149,7 @@ const UserProfile: React.FC = () => {
               >
                 Connect Flow Wallet to Store Items
               </button>
-            ) : lockerNumber && (
+            ) : lockerNumber ? (
               <div style={{
                 textAlign: 'center',
                 color: devBypass ? '#e74c3c' : '#27ae60',
@@ -160,7 +161,23 @@ const UserProfile: React.FC = () => {
               }}>
                 {devBypass ? '🔧 Dev Mode Active' : '✅ Flow wallet connected'} • Locker #{lockerNumber} assigned
               </div>
-            )}
+            ) : primaryWallet?.address ? (
+              <div style={{
+                textAlign: 'center',
+                color: '#e67e22',
+                fontSize: '14px',
+                background: 'rgba(230, 126, 34, 0.1)',
+                padding: '10px',
+                borderRadius: '6px',
+                border: '1px solid rgba(230, 126, 34, 0.3)'
+              }}>
+                ⚠️ Wallet connected but no locker assigned
+                <br />
+                <span style={{ fontSize: '12px', fontStyle: 'italic' }}>
+                  Contact support to get a locker for your wallet: {primaryWallet.address.slice(0, 8)}...
+                </span>
+              </div>
+            ) : null}
 
             {/* Dev Mode Instructions */}
             {process.env.NODE_ENV === 'development' && !isConnected && (
