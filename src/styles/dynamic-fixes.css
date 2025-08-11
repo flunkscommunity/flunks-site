@@ -1,0 +1,47 @@
+/* Dynamic Labs SDK click fixes */
+.dynamic-shadow-dom,
+.dynamic-widget,
+.dynamic-modal {
+  pointer-events: auto !important;
+  z-index: 9999 !important;
+}
+
+.dynamic-widget button,
+.dynamic-modal button,
+.dynamic-connect-wallet button {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  position: relative !important;
+  z-index: 10000 !important;
+}
+
+/* Ensure wallet selection buttons are clickable */
+[data-dynamic-wallet-list] button,
+[data-testid="wallet-list"] button,
+button[data-testid*="wallet"],
+button[data-testid*="lilico"],
+button[data-testid*="flow"] {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  z-index: 10001 !important;
+  position: relative !important;
+}
+
+/* Override any potential interference from other components */
+.app-container > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Ensure Dynamic modals are above everything */
+.dynamic-overlay,
+.dynamic-backdrop {
+  z-index: 9998 !important;
+}
+
+/* Debug highlight for wallet buttons */
+button[data-testid*="lilico"]:hover,
+button[data-testid*="flow"]:hover {
+  outline: 2px solid #ff0000 !important;
+  background-color: rgba(255, 0, 0, 0.1) !important;
+}

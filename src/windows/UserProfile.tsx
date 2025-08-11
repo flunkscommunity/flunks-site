@@ -3,7 +3,7 @@ import DraggableResizeableWindow from '../components/DraggableResizeableWindow';
 import { WINDOW_IDS } from 'fixed';
 import { useWindowsContext } from '../contexts/WindowsContext';
 import { useLockerInfo } from '../hooks/useLocker';
-import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
+import { useDynamicContext, DynamicConnectButton } from '@dynamic-labs/sdk-react-core';
 
 const UserProfile: React.FC = () => {
   const { closeWindow } = useWindowsContext();
@@ -16,6 +16,7 @@ const UserProfile: React.FC = () => {
   const isLoading = devBypass ? false : loading;
 
   const handleConnectWallet = () => {
+    console.log('🔄 Triggering setShowAuthFlow...');
     if (!devBypass) {
       setShowAuthFlow(true);
     }
@@ -134,11 +135,38 @@ const UserProfile: React.FC = () => {
                   fontWeight: 'bold',
                   cursor: 'pointer',
                   boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  marginBottom: '10px',
+                  pointerEvents: 'auto',
+                  position: 'relative',
+                  zIndex: 100
                 }}
               >
                 Connect Flow Wallet to Store Items
               </button>
+
+              {/* Alternative: Direct Dynamic Connect Button */}
+              <div style={{ marginBottom: '10px' }}>
+                <DynamicConnectButton>
+                  <div style={{
+                    background: '#2ecc71',
+                    color: 'white',
+                    border: 'none',
+                    padding: '10px 20px',
+                    borderRadius: '6px',
+                    fontSize: '13px',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                    textAlign: 'center',
+                    pointerEvents: 'auto',
+                    position: 'relative',
+                    zIndex: 100
+                  }}>
+                    🌊 Alternative: Direct Connect
+                  </div>
+                </DynamicConnectButton>
+              </div>
 
               {process.env.NODE_ENV === 'development' && (
                 <div style={{
@@ -195,7 +223,7 @@ const UserProfile: React.FC = () => {
                   transition: 'all 0.3s ease'
                 }}
               >
-                �� Get Your Locker
+                🔐 Get Your Locker
               </button>
             </div>
           ) : (
