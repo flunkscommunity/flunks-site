@@ -24,6 +24,11 @@ const UserProfile: React.FC = () => {
     setDevBypass(!devBypass);
   };
 
+  const handleCreateProfile = () => {
+    // Show instructions for now - TODO: Integrate with profile creation system
+    alert(`Welcome Flunks holder! 🎉\n\nTo get your locker assigned automatically:\n\n1. Join our Discord server\n2. Use the #get-locker channel\n3. Your locker will be assigned within 24 hours\n\nWallet: ${primaryWallet?.address?.slice(0, 12)}...`);
+  };
+
   return (
     <DraggableResizeableWindow
       headerTitle="My Locker"
@@ -118,7 +123,7 @@ const UserProfile: React.FC = () => {
                error ? `Error: ${error}` :
                !isConnected ? 'Connect Flow wallet to access your locker' :
                lockerNumber ? (devBypass ? 'Your locker is empty (Dev Mode)' : 'Your locker is empty') :
-               primaryWallet?.address ? 'No locker assigned to this wallet yet. Contact support to get a locker.' :
+               primaryWallet?.address ? 'No locker assigned yet - create your profile to get one!' :
                'Setting up your locker...'}
             </div>
 
@@ -162,21 +167,51 @@ const UserProfile: React.FC = () => {
                 {devBypass ? '🔧 Dev Mode Active' : '✅ Flow wallet connected'} • Locker #{lockerNumber} assigned
               </div>
             ) : primaryWallet?.address ? (
-              <div style={{
-                textAlign: 'center',
-                color: '#e67e22',
-                fontSize: '14px',
-                background: 'rgba(230, 126, 34, 0.1)',
-                padding: '10px',
-                borderRadius: '6px',
-                border: '1px solid rgba(230, 126, 34, 0.3)'
-              }}>
-                ⚠️ Wallet connected but no locker assigned
-                <br />
-                <span style={{ fontSize: '12px', fontStyle: 'italic' }}>
-                  Contact support to get a locker for your wallet: {primaryWallet.address.slice(0, 8)}...
-                </span>
-              </div>
+              <>
+                <div style={{
+                  textAlign: 'center',
+                  color: '#e67e22',
+                  fontSize: '14px',
+                  background: 'rgba(230, 126, 34, 0.1)',
+                  padding: '10px',
+                  borderRadius: '6px',
+                  border: '1px solid rgba(230, 126, 34, 0.3)',
+                  marginBottom: '15px'
+                }}>
+                  ⚠️ Wallet connected but no locker assigned
+                  <br />
+                  <span style={{ fontSize: '12px', fontStyle: 'italic' }}>
+                    Wallet: {primaryWallet.address.slice(0, 12)}...
+                  </span>
+                </div>
+                
+                {/* Create Profile Button */}
+                <button
+                  onClick={handleCreateProfile}
+                  style={{
+                    background: '#27ae60',
+                    color: 'white',
+                    border: 'none',
+                    padding: '12px 24px',
+                    borderRadius: '6px',
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.background = '#229954';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.background = '#27ae60';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  �� Get Your Locker
+                </button>
+              </>
             ) : null}
 
             {/* Dev Mode Instructions */}
