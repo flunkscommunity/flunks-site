@@ -653,9 +653,10 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                   }
                 }
               `}</style>
-              <h1 className="text-3xl font-bold mb-2">🏫 FLUNKS HIGH SCHOOL</h1>
-              <p className="text-xl">Home of the Astros 🚀</p>
-              <p className="text-lg mt-2">Excellence in Education Since 1985</p>
+              <h1 className="text-4xl font-bold mb-2">FLUNKS</h1>
+              <h2 className="text-2xl font-bold mb-2">HIGH SCHOOL</h2>
+              <p className="text-xl">🚀 Home of the Astros 🚀</p>
+              <p className="text-lg mt-2">⭐ Reach for the Stars ⭐</p>
             </div>
 
             {/* News & Announcements */}
@@ -663,28 +664,28 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
               <h2 className="text-xl font-bold mb-3 text-red-600 text-center md:text-left">📢 Latest News & Announcements</h2>
               
               <div className="space-y-3">
-                <div className="border-l-4 border-purple-500 pl-3">
+                <div className="border-l-4 border-purple-500 pl-3 text-center">
                   <h3 className="font-bold">🚀 Meet Our Mascot: The Astro!</h3>
                   <p className="text-sm">Our pink space-suited astronaut represents the Flunks High spirit of reaching for the stars! Go Astros!</p>
                 </div>
                 
                 <Separator />
                 
-                <div className="border-l-4 border-blue-500 pl-3">
+                <div className="border-l-4 border-blue-500 pl-3 text-center">
                   <h3 className="font-bold">🎉 Welcome Back Students!</h3>
                   <p className="text-sm">The new school year is off to a great start! Don't forget to pick up your student handbooks from the main office.</p>
                 </div>
                 
                 <Separator />
                 
-                <div className="border-l-4 border-green-500 pl-3">
+                <div className="border-l-4 border-green-500 pl-3 text-center">
                   <h3 className="font-bold">💾 Web3 Innovation at Flunks!</h3>
                   <p className="text-sm">Flunks is a web3 brand that blends high school nostalgia with the excitement of NFTs and modern technology.</p>
                 </div>
                 
                 <Separator />
                 
-                <div className="border-l-4 border-purple-500 pl-3">
+                <div className="border-l-4 border-purple-500 pl-3 text-center">
                   <h3 className="font-bold">💻 Laser Focused Community Leadership</h3>
                   <p className="text-sm">Founded in 2022 by web3 enthusiasts, Flunks has weathered the storm and is now run by a devoted team with a specific vision for the brand.</p>
                 </div>
@@ -722,7 +723,7 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
             </div>
 
             {/* School Community Characters */}
-            <div className="bg-white border-2 border-gray-400 p-4">
+            <div className="bg-white border-2 border-gray-400 p-4 text-center">
               <h2 className="text-xl font-bold mb-3">🎓 Our School Community</h2>
               <p className="text-sm mb-3 text-gray-700">
                 Meet the vibrant students and staff that make Flunks High School special! 
