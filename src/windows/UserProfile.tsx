@@ -11,7 +11,13 @@ const UserProfile: React.FC = () => {
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
   const [devBypass, setDevBypass] = useState(false);
   const [uploadedPhoto, setUploadedPhoto] = useState<string | null>(null);
+  const [uploadedBackground, setUploadedBackground] = useState<string | null>(null);
+  const [overlayText, setOverlayText] = useState<string>('');
+  const [textColor, setTextColor] = useState<string>('#ffffff');
+  const [textSize, setTextSize] = useState<number>(24);
+  const [textPosition, setTextPosition] = useState<{x: number, y: number}>({x: 50, y: 50});
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const backgroundInputRef = useRef<HTMLInputElement>(null);
 
   const isConnected = !!primaryWallet?.address || devBypass;
   const lockerNumber = devBypass ? 999 : (lockerInfo?.locker_number || null);
@@ -57,8 +63,35 @@ const UserProfile: React.FC = () => {
     }
   };
 
+  const handleBackgroundUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Check file size (limit to 10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        alert('Background image size must be under 10MB');
+        return;
+      }
+      
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setUploadedBackground(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const triggerPhotoUpload = () => {
     fileInputRef.current?.click();
+  };
+
+  const triggerBackgroundUpload = () => {
+    backgroundInputRef.current?.click();
   };
 
   const removePhoto = () => {
@@ -66,6 +99,54 @@ const UserProfile: React.FC = () => {
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
+  };
+
+  const removeBackground = () => {
+    setUploadedBackground(null);
+    setOverlayText('');
+    if (backgroundInputRef.current) {
+      backgroundInputRef.current.value = '';
+    }
+  };
+
+  const downloadImage = () => {
+    if (!uploadedBackground) return;
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      
+      // Draw background image
+      ctx.drawImage(img, 0, 0);
+      
+      // Draw text overlay if present
+      if (overlayText && ctx) {
+        ctx.font = `bold ${textSize}px Arial`;
+        ctx.fillStyle = textColor;
+        ctx.strokeStyle = 'rgba(0,0,0,0.8)';
+        ctx.lineWidth = 2;
+        
+        const x = (canvas.width * textPosition.x) / 100;
+        const y = (canvas.height * textPosition.y) / 100;
+        
+        // Add text stroke (outline)
+        ctx.strokeText(overlayText, x, y);
+        // Add text fill
+        ctx.fillText(overlayText, x, y);
+      }
+      
+      // Download the canvas as image
+      const link = document.createElement('a');
+      link.download = 'background-with-text.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    };
+    
+    img.src = uploadedBackground;
   };
 
   return (
@@ -405,7 +486,7 @@ const UserProfile: React.FC = () => {
                 
                 {/* Vintage Poster/Photo */}
                 <div style={{
-                  width: '100%',
+                  width: '50%',
                   height: '50%',
                   background: uploadedPhoto ? 'transparent' : `
                     linear-gradient(135deg, 
@@ -431,7 +512,7 @@ const UserProfile: React.FC = () => {
                 }}
                 onClick={!uploadedPhoto ? triggerPhotoUpload : undefined}
                 >
-                  <div style={{ marginBottom: '3px', fontWeight: 'bold' }}>📸 UPLOAD PHOTO</div>
+                  <div style={{ marginBottom: '3px', fontWeight: 'bold' }}>📸 PHOTO</div>
                   {uploadedPhoto ? (
                     <>
                       <img 
@@ -484,17 +565,306 @@ const UserProfile: React.FC = () => {
                     <>
                       <div style={{ fontSize: '10px', marginBottom: '3px' }}>📷</div>
                       <div style={{ fontSize: '6px', fontStyle: 'italic', opacity: 0.8 }}>
-                        Click to add your photo
+                        Click to add
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Background Upload Section */}
+                <div style={{
+                  width: '50%',
+                  height: '50%',
+                  background: uploadedBackground ? 'transparent' : `
+                    linear-gradient(135deg, 
+                      rgba(139,69,19,0.9) 0%, 
+                      rgba(160,82,45,0.95) 50%,
+                      rgba(139,69,19,1) 100%
+                    )
+                  `,
+                  borderRadius: '3px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '7px',
+                  color: '#F5DEB3',
+                  textAlign: 'center',
+                  position: 'relative',
+                  border: '2px solid #8B4513',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.4)',
+                  transform: 'rotate(-1deg)',
+                  overflow: 'hidden',
+                  cursor: uploadedBackground ? 'default' : 'pointer'
+                }}
+                onClick={!uploadedBackground ? triggerBackgroundUpload : undefined}
+                >
+                  <div style={{ marginBottom: '3px', fontWeight: 'bold' }}>🖼️ BACKGROUND</div>
+                  {uploadedBackground ? (
+                    <>
+                      <div style={{
+                        width: '100%',
+                        height: '100%',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        backgroundImage: `url(${uploadedBackground})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                        {overlayText && (
+                          <div style={{
+                            color: textColor,
+                            fontSize: `${Math.max(textSize / 4, 6)}px`,
+                            fontWeight: 'bold',
+                            textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+                            position: 'absolute',
+                            left: `${textPosition.x}%`,
+                            top: `${textPosition.y}%`,
+                            transform: 'translate(-50%, -50%)',
+                            whiteSpace: 'nowrap',
+                            maxWidth: '90%',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                          }}>
+                            {overlayText}
+                          </div>
+                        )}
+                      </div>
+                      <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: `linear-gradient(45deg, rgba(139,69,19,0.1) 0%, transparent 30%, transparent 70%, rgba(139,69,19,0.1) 100%)`,
+                        pointerEvents: 'none'
+                      }} />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeBackground();
+                        }}
+                        style={{
+                          position: 'absolute',
+                          top: '2px',
+                          right: '2px',
+                          background: 'rgba(220,20,60,0.9)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '50%',
+                          width: '14px',
+                          height: '14px',
+                          fontSize: '8px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          zIndex: 10
+                        }}
+                        title="Remove background"
+                      >×</button>
+                    </>
+                  ) : (
+                    <>
+                      <div style={{ fontSize: '10px', marginBottom: '3px' }}>🖼️</div>
+                      <div style={{ fontSize: '6px', fontStyle: 'italic', opacity: 0.8 }}>
+                        Click to add
                       </div>
                     </>
                   )}
                 </div>
               </div>
 
+              {/* Text Overlay Controls - Only show when background is uploaded */}
+              {uploadedBackground && (
+                <>
+                  <div style={{
+                    position: 'absolute',
+                    top: '140px',
+                    left: '10px',
+                    right: '10px',
+                    height: '80px',
+                    background: `
+                      linear-gradient(135deg, 
+                        rgba(139,69,19,0.8) 0%, 
+                        rgba(160,115,43,0.9) 50%, 
+                        rgba(139,69,19,0.8) 100%
+                      )
+                    `,
+                    borderRadius: '4px',
+                    border: '2px solid #8B4513',
+                    padding: '8px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '4px',
+                    fontSize: '8px',
+                    color: '#F5DEB3'
+                  }}>
+                    <div style={{ fontWeight: 'bold', marginBottom: '2px', textAlign: 'center' }}>✏️ TEXT OVERLAY</div>
+                    
+                    <input
+                      type="text"
+                      placeholder="Enter overlay text..."
+                      value={overlayText}
+                      onChange={(e) => setOverlayText(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '2px 4px',
+                        fontSize: '8px',
+                        border: '1px solid #654321',
+                        borderRadius: '2px',
+                        background: 'rgba(245,222,179,0.9)',
+                        color: '#654321'
+                      }}
+                    />
+                    
+                    <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                      <label style={{ fontSize: '7px', minWidth: '25px' }}>Color:</label>
+                      <input
+                        type="color"
+                        value={textColor}
+                        onChange={(e) => setTextColor(e.target.value)}
+                        style={{
+                          width: '20px',
+                          height: '12px',
+                          border: '1px solid #654321',
+                          borderRadius: '2px',
+                          cursor: 'pointer'
+                        }}
+                      />
+                      
+                      <label style={{ fontSize: '7px', minWidth: '25px', marginLeft: '8px' }}>Size:</label>
+                      <input
+                        type="range"
+                        min="12"
+                        max="48"
+                        value={textSize}
+                        onChange={(e) => setTextSize(parseInt(e.target.value))}
+                        style={{
+                          width: '40px',
+                          height: '8px'
+                        }}
+                      />
+                      <span style={{ fontSize: '7px', minWidth: '20px' }}>{textSize}px</span>
+                    </div>
+                    
+                    <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                      <label style={{ fontSize: '7px', minWidth: '25px' }}>Position:</label>
+                      <input
+                        type="range"
+                        min="10"
+                        max="90"
+                        value={textPosition.x}
+                        onChange={(e) => setTextPosition({...textPosition, x: parseInt(e.target.value)})}
+                        style={{ width: '30px', height: '8px' }}
+                      />
+                      <span style={{ fontSize: '7px' }}>H</span>
+                      <input
+                        type="range"
+                        min="10"
+                        max="90"
+                        value={textPosition.y}
+                        onChange={(e) => setTextPosition({...textPosition, y: parseInt(e.target.value)})}
+                        style={{ width: '30px', height: '8px' }}
+                      />
+                      <span style={{ fontSize: '7px' }}>V</span>
+                    </div>
+                  </div>
+
+                  {/* Large Preview Section */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '230px',
+                    left: '10px',
+                    right: '10px',
+                    height: '120px',
+                    background: 'transparent',
+                    borderRadius: '4px',
+                    border: '2px solid #8B4513',
+                    overflow: 'hidden',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.4)'
+                  }}>
+                    <div style={{
+                      width: '100%',
+                      height: '100%',
+                      backgroundImage: `url(${uploadedBackground})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      position: 'relative',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      {overlayText && (
+                        <div style={{
+                          color: textColor,
+                          fontSize: `${Math.max(textSize / 2, 10)}px`,
+                          fontWeight: 'bold',
+                          textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                          position: 'absolute',
+                          left: `${textPosition.x}%`,
+                          top: `${textPosition.y}%`,
+                          transform: 'translate(-50%, -50%)',
+                          whiteSpace: 'nowrap',
+                          maxWidth: '90%',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          userSelect: 'none'
+                        }}>
+                          {overlayText}
+                        </div>
+                      )}
+                      <div style={{
+                        position: 'absolute',
+                        bottom: '4px',
+                        right: '4px',
+                        background: 'rgba(0,0,0,0.7)',
+                        color: '#F5DEB3',
+                        padding: '2px 6px',
+                        borderRadius: '2px',
+                        fontSize: '7px',
+                        fontWeight: 'bold'
+                      }}>
+                        🖼️ PREVIEW
+                      </div>
+                      <div style={{
+                        position: 'absolute',
+                        bottom: '4px',
+                        left: '4px',
+                        display: 'flex',
+                        gap: '4px'
+                      }}>
+                        <button
+                          onClick={downloadImage}
+                          style={{
+                            background: 'rgba(0,100,0,0.8)',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '2px',
+                            padding: '2px 6px',
+                            fontSize: '7px',
+                            fontWeight: 'bold',
+                            cursor: 'pointer',
+                            boxShadow: '0 1px 2px rgba(0,0,0,0.3)'
+                          }}
+                          title="Download image with text overlay"
+                        >
+                          💾 DOWNLOAD
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
               {/* Bottom Shelf with Vintage Items */}
               <div style={{
                 position: 'absolute',
-                bottom: '40px',
+                bottom: uploadedBackground ? '-20px' : '40px',
                 left: '10px',
                 right: '10px',
                 height: '30px',
@@ -644,13 +1014,20 @@ const UserProfile: React.FC = () => {
         </div>
       </div>
 
-      {/* Hidden file input for photo upload */}
+      {/* Hidden file inputs */}
       <input
         ref={fileInputRef}
         type="file"
         accept="image/*"
         style={{ display: 'none' }}
         onChange={handlePhotoUpload}
+      />
+      <input
+        ref={backgroundInputRef}
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handleBackgroundUpload}
       />
     </DraggableResizeableWindow>
   );

@@ -19,7 +19,7 @@ const Product = ({
     <div className="w-full flex flex-col gap-2 md:gap-3">
       <div className="px-2 md:px-4 lg:px-20">
         <div className="max-w-[1440px] mx-auto w-full flex flex-col">
-          <span className="text-lg md:text-2xl lg:text-4xl font-bold max-w-2xl text-pretty mb-2">
+          <span className="text-2xl md:text-4xl lg:text-6xl font-bold max-w-2xl text-pretty mb-2">
             {title}
           </span>
           <div className="text-sm md:text-lg lg:text-xl">
@@ -338,13 +338,13 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
               {/* November */}
               <button
                 onClick={() => setSelectedMonth('November')}
-                className={`text-center p-3 rounded-xl border-4 text-white font-bold text-lg shadow-lg transition-all hover:scale-105 ${
-                  selectedMonth === 'November' ? 'ring-4 ring-amber-300' : ''
+                className={`text-center p-2 md:p-3 rounded-xl border-2 md:border-4 text-white font-bold text-sm md:text-lg shadow-lg transition-all hover:scale-105 ${
+                  selectedMonth === 'November' ? 'ring-2 md:ring-4 ring-amber-300' : ''
                 }`}
                 style={{
                   background: 'linear-gradient(45deg, #8B4513, #D2691E)',
                   borderColor: '#A0522D',
-                  textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+                  textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
                 }}
               >
                 🍁 November 🍁
@@ -353,13 +353,13 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
               {/* December */}
               <button
                 onClick={() => setSelectedMonth('December')}
-                className={`text-center p-3 rounded-xl border-4 text-white font-bold text-lg shadow-lg transition-all hover:scale-105 ${
-                  selectedMonth === 'December' ? 'ring-4 ring-red-300' : ''
+                className={`text-center p-2 md:p-3 rounded-xl border-2 md:border-4 text-white font-bold text-sm md:text-lg shadow-lg transition-all hover:scale-105 ${
+                  selectedMonth === 'December' ? 'ring-2 md:ring-4 ring-red-300' : ''
                 }`}
                 style={{
                   background: 'linear-gradient(45deg, #B22222, #32CD32)',
                   borderColor: '#DC143C',
-                  textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+                  textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
                 }}
               >
                 ❄️ December ❄️
@@ -660,13 +660,12 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
 
             {/* News & Announcements */}
             <div className="bg-white border-2 border-gray-400 p-4">
-              <h2 className="text-xl font-bold mb-3 text-red-600">📢 Latest News & Announcements</h2>
+              <h2 className="text-xl font-bold mb-3 text-red-600 text-center md:text-left">📢 Latest News & Announcements</h2>
               
               <div className="space-y-3">
                 <div className="border-l-4 border-purple-500 pl-3">
                   <h3 className="font-bold">🚀 Meet Our Mascot: The Astro!</h3>
                   <p className="text-sm">Our pink space-suited astronaut represents the Flunks High spirit of reaching for the stars! Go Astros!</p>
-                  <span className="text-xs text-gray-600">Posted: August 1, 1999</span>
                 </div>
                 
                 <Separator />
@@ -674,7 +673,6 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                 <div className="border-l-4 border-blue-500 pl-3">
                   <h3 className="font-bold">🎉 Welcome Back Students!</h3>
                   <p className="text-sm">The new school year is off to a great start! Don't forget to pick up your student handbooks from the main office.</p>
-                  <span className="text-xs text-gray-600">Posted: August 27, 1998</span>
                 </div>
                 
                 <Separator />
@@ -682,7 +680,6 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                 <div className="border-l-4 border-green-500 pl-3">
                   <h3 className="font-bold">💾 Web3 Innovation at Flunks!</h3>
                   <p className="text-sm">Flunks is a web3 brand that blends high school nostalgia with the excitement of NFTs and modern technology.</p>
-                  <span className="text-xs text-gray-600">Posted: August 15, 1998</span>
                 </div>
                 
                 <Separator />
@@ -690,7 +687,6 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                 <div className="border-l-4 border-purple-500 pl-3">
                   <h3 className="font-bold">💻 Laser Focused Community Leadership</h3>
                   <p className="text-sm">Founded in 2022 by web3 enthusiasts, Flunks has weathered the storm and is now run by a devoted team with a specific vision for the brand.</p>
-                  <span className="text-xs text-gray-600">Posted: August 15, 1998</span>
                 </div>
               </div>
             </div>
@@ -743,7 +739,7 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
 
             {/* Bottom Counter - Very 90s! */}
             <div className="bg-black text-green-400 p-2 text-center font-mono text-sm border-2 border-gray-400">
-              <p>👁️ You are visitor number: 001,337 | Last updated: September 15, 1999</p>
+              <p>👁️ You are visitor number: 001,337 | Created in the 90's</p>
               <p className="text-xs mt-1">Best viewed with Netscape Navigator 4.0 or Internet Explorer 4.0</p>
             </div>
           </div>
