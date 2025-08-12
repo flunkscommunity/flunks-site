@@ -38,12 +38,12 @@ const Onlyflunks: React.FC = () => {
               <Frame 
                 key={index} 
                 variant="well" 
-                className="!p-1 cursor-pointer hover:bg-gray-100 transition-colors"
+                className="!p-1 cursor-pointer md:hover:bg-gray-100 transition-colors active:bg-gray-200"
               >
                 <img
                   src={image}
                   alt={`OnlyFlunks ${index + 1}`}
-                  className="w-full h-16 object-cover bg-gray-200 select-none"
+                  className="w-full h-16 object-cover bg-gray-200 select-none pointer-events-none"
                   style={{
                     imageRendering: "auto",
                   }}

@@ -562,57 +562,6 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
           </div>
         );
       
-      case 'map':
-        return (
-          <div className="p-4 space-y-4">
-            <h2 className="text-xl font-bold mb-4">🏫 School Map & Campus Info</h2>
-            
-            <div className="bg-white border-2 border-gray-400 p-3">
-              <h3 className="font-bold text-lg mb-3">🗺️ Campus Layout:</h3>
-              <div className="bg-gray-200 border border-gray-400 p-4 text-center">
-                <p className="text-lg font-bold">[SCHOOL MAP PLACEHOLDER]</p>
-                <p className="text-sm mt-2">Interactive campus map will be displayed here</p>
-                <p className="text-xs text-gray-600 mt-1">Upload your school layout image</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-white border-2 border-gray-400 p-3">
-                <h3 className="font-bold mb-2">🏢 Building Directory:</h3>
-                <ul className="space-y-1 text-sm">
-                  <li>• <strong>A Wing:</strong> Main Office, Classrooms 101-120</li>
-                  <li>• <strong>B Wing:</strong> Science Labs, Classrooms 201-220</li>
-                  <li>• <strong>C Wing:</strong> Library, Computer Lab</li>
-                  <li>• <strong>Gymnasium:</strong> PE Classes, Sports Events</li>
-                  <li>• <strong>Cafeteria:</strong> Lunch served 11 AM - 1 PM</li>
-                  <li>• <strong>Auditorium:</strong> Assemblies, Drama Productions</li>
-                </ul>
-              </div>
-
-              <div className="bg-white border-2 border-gray-400 p-3">
-                <h3 className="font-bold mb-2">🚌 Transportation:</h3>
-                <ul className="space-y-1 text-sm">
-                  <li>• <strong>Bus Routes:</strong> See main office for schedules</li>
-                  <li>• <strong>Student Parking:</strong> North lot, permit required</li>
-                  <li>• <strong>Visitor Parking:</strong> Front entrance</li>
-                  <li>• <strong>Drop-off Zone:</strong> Circle drive in front</li>
-                </ul>
-                
-                <h3 className="font-bold mb-2 mt-4">🕐 Bell Schedule:</h3>
-                <ul className="space-y-1 text-sm">
-                  <li>• 1st Period: 8:00 - 8:50 AM</li>
-                  <li>• 2nd Period: 9:00 - 9:50 AM</li>
-                  <li>• 3rd Period: 10:00 - 10:50 AM</li>
-                  <li>• Lunch: 11:00 - 11:30 AM</li>
-                  <li>• 4th Period: 11:40 - 12:30 PM</li>
-                  <li>• 5th Period: 12:40 - 1:30 PM</li>
-                  <li>• 6th Period: 1:40 - 2:30 PM</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        );
-      
       default: // home
         return (
           <div className="p-4 space-y-4">
@@ -818,21 +767,6 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
           className="md:w-auto"
         >
           📚 Resources
-        </Button>
-        <Button 
-          onClick={() => setActiveTab('map')}
-          style={{ 
-            backgroundColor: activeTab === 'map' ? '#c0c0c0' : undefined,
-            fontWeight: activeTab === 'map' ? 'bold' : undefined,
-            padding: '8px 12px',
-            fontSize: '14px',
-            minWidth: '80px',
-            height: '36px',
-            width: '100%'
-          }}
-          className="md:w-auto"
-        >
-          🗺️ Map
         </Button>
       </Toolbar>
       <WindowContent 
