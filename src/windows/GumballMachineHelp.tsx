@@ -64,7 +64,7 @@ const GumballMachineHelp: React.FC = () => {
               <h2 className="text-xl font-bold">Non-Custodial Wallets</h2>
               <p className="text-lg">
                 You will need to access Flunks95 with a non-custodial wallet
-                like Lilico and Blocto to use the Gumball Machine. The
+                like Flow Wallet and Blocto to use the Gumball Machine. The
                 transactions and contracts required to use the Gumball Machine
                 are not supported by Dapper Wallet. We recommend transferring
                 your Flunks items to a non-custodial wallet or to link your

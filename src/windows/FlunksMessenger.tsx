@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
+import { useDynamicContext, DynamicWidget } from '@dynamic-labs/sdk-react-core';
 import { useWindowsContext } from 'contexts/WindowsContext';
 import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 import { WINDOW_IDS } from 'fixed';
@@ -242,7 +242,6 @@ const FlunksMessenger: React.FC = () => {
   const { sendToAI, isLoading: aiLoading } = useAIChat();
   const [username, setUsername] = useState('');
   const [tempUsername, setTempUsername] = useState('');
-  const [demoMode, setDemoMode] = useState(false);
   const [currentMessage, setCurrentMessage] = useState('');
   const [selectedContact, setSelectedContact] = useState<string>('💬 General Chat');
   const [isTyping, setIsTyping] = useState(false);
@@ -553,18 +552,13 @@ const FlunksMessenger: React.FC = () => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
-  if (!user && !demoMode) {
+  if (!user) {
     return (
       <UserSetup>
         <h2>🔒 Connect Wallet to Chat</h2>
         <p>Please connect your wallet to access Flunks Messenger</p>
-        <div style={{ marginTop: '20px' }}>
-          <Button onClick={() => setDemoMode(true)}>
-            🎮 Try Demo Mode
-          </Button>
-          <p style={{ fontSize: '10px', color: '#666', marginTop: '10px', textAlign: 'center' }}>
-            Demo mode lets you explore the chat interface without connecting a wallet
-          </p>
+        <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
+          <DynamicWidget />
         </div>
       </UserSetup>
     );
@@ -573,7 +567,7 @@ const FlunksMessenger: React.FC = () => {
   if (!username) {
     return (
       <UserSetup>
-        <h2>👋 Welcome to Flunks Messenger! {demoMode && '(Demo Mode)'}</h2>
+        <h2>👋 Welcome to Flunks Messenger!</h2>
         <div className="setup-form">
           <Frame variant="field" style={{ width: '100%' }}>
             <TextField
@@ -591,12 +585,6 @@ const FlunksMessenger: React.FC = () => {
             Your username will be visible to other users in the chat room.
             <br />
             Choose something fun but appropriate! 😊
-            {demoMode && (
-              <>
-                <br />
-                <strong>🎮 Demo Mode Active</strong> - This is a preview of the chat interface
-              </>
-            )}
           </p>
         </div>
       </UserSetup>

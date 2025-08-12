@@ -1022,3 +1022,45 @@ input[type="text"], input[type="email"], input[type="password"], textarea, .curs
     width: 10px;
   }
 }
+
+/* Report Card text overflow fixes */
+.report-card-container {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.report-card-container textarea {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+.report-card-container .text-area {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+.report-card-container div {
+  max-width: 100% !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+.report-card-buttons {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  justify-content: center !important;
+  max-width: 100% !important;
+}
+
+.report-card-buttons button {
+  flex-shrink: 0 !important;
+  max-width: 100% !important;
+}

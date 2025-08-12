@@ -234,7 +234,7 @@ const ReportCard: React.FC = () => {
       initialHeight="700px"
       resizable={true}
     >
-      <ReportCardContainer>
+      <ReportCardContainer className="report-card-container">
         <ReportCardHeader>
           <SchoolHeader>Flunks High School</SchoolHeader>
           <ReportCardTitle>Feedback Form</ReportCardTitle>
@@ -244,18 +244,14 @@ const ReportCard: React.FC = () => {
         </ReportCardHeader>
 
         <StudentInfo>
-          <div className="info-line">
+          <div className="info-line" style={{ gridColumn: '1 / -1' }}>
             <span className="label">User:</span>
             <TextField
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
               placeholder="Enter your name..."
-              style={{ width: '100%', fontSize: '11px' }}
+              style={{ width: '100%', fontSize: '14px', padding: '8px' }}
             />
-          </div>
-          <div className="info-line">
-            <span className="label">Date:</span>
-            <span className="value">{currentDate}</span>
           </div>
         </StudentInfo>
 
@@ -300,7 +296,7 @@ const ReportCard: React.FC = () => {
           <div className="signature-line">Parent/Guardian Signature</div>
         </SignatureSection>
 
-        <div style={{ marginTop: '20px', display: 'flex', gap: '10px', justifyContent: 'center' }}>
+        <div className="report-card-buttons" style={{ marginTop: '20px' }}>
           <Button onClick={handleSubmit} disabled={isSubmitting}>
             {isSubmitting ? '� Submitting...' : '📤 Submit Feedback'}
           </Button>

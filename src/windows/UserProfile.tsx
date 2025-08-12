@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import DraggableResizeableWindow from '../components/DraggableResizeableWindow';
 import { WINDOW_IDS } from 'fixed';
 import { useWindowsContext } from '../contexts/WindowsContext';
@@ -10,6 +10,8 @@ const UserProfile: React.FC = () => {
   const { lockerInfo, loading, error } = useLockerInfo();
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
   const [devBypass, setDevBypass] = useState(false);
+  const [uploadedPhoto, setUploadedPhoto] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const isConnected = !!primaryWallet?.address || devBypass;
   const lockerNumber = devBypass ? 999 : (lockerInfo?.locker_number || null);
@@ -32,6 +34,40 @@ const UserProfile: React.FC = () => {
     alert('Welcome Flunks holder! 🎉\n\nTo get your locker assigned automatically:\n\n1. Join our Discord server\n2. Use the #get-locker channel\n3. Your locker will be assigned within 24 hours\n\nWallet: ' + (primaryWallet?.address?.slice(0, 12) || 'N/A') + '...');
   };
 
+  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Check file size (limit to 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Photo size must be under 5MB');
+        return;
+      }
+      
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setUploadedPhoto(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const triggerPhotoUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const removePhoto = () => {
+    setUploadedPhoto(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   return (
     <DraggableResizeableWindow
       headerTitle="My Locker"
@@ -41,17 +77,33 @@ const UserProfile: React.FC = () => {
       <div style={{
         width: '100%',
         height: '100%',
-        background: 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)',
+        background: `
+          linear-gradient(145deg, 
+            #8B6914 0%, 
+            #A0732B 15%, 
+            #B8834A 35%, 
+            #A0732B 65%, 
+            #8B6914 85%, 
+            #6B5409 100%
+          )
+        `,
         position: 'relative',
         overflow: 'hidden',
-        fontFamily: 'Arial, sans-serif'
+        fontFamily: '"MS Sans Serif", sans-serif',
+        boxShadow: 'inset 0 0 20px rgba(0,0,0,0.3)'
       }}>
         <div style={{
           width: '100%',
           height: '100%',
-          background: 'linear-gradient(180deg, #ecf0f1 0%, #bdc3c7 100%)',
-          border: '3px solid #95a5a6',
-          borderRadius: '8px',
+          background: `
+            radial-gradient(ellipse at center, 
+              rgba(184,131,74,0.9) 0%, 
+              rgba(139,105,20,0.95) 70%, 
+              rgba(107,84,8,1) 100%
+            )
+          `,
+          border: '4px solid #654321',
+          borderRadius: '12px',
           position: 'relative',
           padding: '20px',
           boxShadow: 'inset 0 0 20px rgba(0,0,0,0.3)'
@@ -81,19 +133,36 @@ const UserProfile: React.FC = () => {
             </button>
           )}
           
-          {/* Locker Number Plate */}
+          {/* Vintage Brass Nameplate */}
           <div style={{
             position: 'absolute',
-            top: '10px',
+            top: '15px',
             left: '50%',
             transform: 'translateX(-50%)',
-            background: devBypass ? '#e74c3c' : '#34495e',
-            color: 'white',
-            padding: '8px 16px',
-            borderRadius: '4px',
+            background: `
+              linear-gradient(145deg, 
+                #DEB887 0%, 
+                #F5DEB3 20%, 
+                #FFE4B5 40%, 
+                #F5DEB3 60%, 
+                #DEB887 80%, 
+                #CD853F 100%
+              )
+            `,
+            color: '#654321',
+            padding: '12px 20px',
+            borderRadius: '8px',
             fontWeight: 'bold',
-            fontSize: '14px',
-            border: '2px solid #2c3e50'
+            fontSize: '13px',
+            border: '3px solid #8B4513',
+            boxShadow: `
+              0 4px 8px rgba(0,0,0,0.4),
+              inset 0 1px 3px rgba(255,255,255,0.6),
+              inset 0 -1px 3px rgba(139,69,19,0.4)
+            `,
+            textShadow: '0 1px 2px rgba(255,255,255,0.8)',
+            fontFamily: '"Times New Roman", serif',
+            letterSpacing: '1.5px'
           }}>
             {isLoading ? 'LOADING...' : 
              error ? 'ERROR' :
@@ -107,42 +176,70 @@ const UserProfile: React.FC = () => {
             <div style={{
               width: '100%',
               height: '80%',
-              marginTop: '40px',
+              marginTop: '50px',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '20px'
+              gap: '25px',
+              background: `
+                radial-gradient(ellipse at center, 
+                  rgba(245,222,179,0.1) 0%, 
+                  rgba(139,105,20,0.05) 70%, 
+                  transparent 100%
+                )
+              `
             }}>
               <div style={{
                 textAlign: 'center',
-                color: '#7f8c8d',
+                color: '#F5DEB3',
                 fontSize: '16px',
-                fontStyle: 'italic'
+                fontStyle: 'italic',
+                textShadow: '1px 1px 3px rgba(0,0,0,0.7)',
+                fontFamily: '"Times New Roman", serif',
+                padding: '15px',
+                background: 'rgba(139,69,19,0.2)',
+                borderRadius: '8px',
+                border: '1px solid rgba(245,222,179,0.3)'
               }}>
-                Connect Flow wallet to access your locker
+                Connect Flow wallet to unlock your vintage locker
               </div>
 
               <button
                 onClick={handleConnectWallet}
                 style={{
-                  background: '#3498db',
-                  color: 'white',
-                  border: 'none',
-                  padding: '12px 24px',
-                  borderRadius: '6px',
+                  background: `
+                    linear-gradient(145deg, 
+                      #B8834A 0%, 
+                      #DEB887 30%, 
+                      #F5DEB3 50%, 
+                      #DEB887 70%, 
+                      #B8834A 100%
+                    )
+                  `,
+                  color: '#654321',
+                  border: '3px solid #8B4513',
+                  padding: '14px 28px',
+                  borderRadius: '8px',
                   fontSize: '14px',
                   fontWeight: 'bold',
                   cursor: 'pointer',
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                  boxShadow: `
+                    0 6px 12px rgba(0,0,0,0.4),
+                    inset 0 1px 3px rgba(255,255,255,0.6),
+                    inset 0 -1px 3px rgba(139,69,19,0.4)
+                  `,
                   transition: 'all 0.3s ease',
                   marginBottom: '10px',
                   pointerEvents: 'auto',
                   position: 'relative',
-                  zIndex: 100
+                  zIndex: 100,
+                  textShadow: '0 1px 2px rgba(255,255,255,0.8)',
+                  fontFamily: '"Times New Roman", serif',
+                  letterSpacing: '0.5px'
                 }}
               >
-                Connect Flow Wallet to Store Items
+                🔐 Connect Flow Wallet to Store Items
               </button>
 
               {/* Alternative: Direct Dynamic Connect Button */}
@@ -227,309 +324,302 @@ const UserProfile: React.FC = () => {
               </button>
             </div>
           ) : (
-            /* 3-Section Locker Design */
+            /* Vintage Brass Locker Interior */
             <div style={{
               width: '100%',
               height: '100%',
-              marginTop: '45px',
-              display: 'flex',
+              marginTop: '50px',
+              padding: '15px',
               position: 'relative',
-              gap: '10px'
+              background: `
+                linear-gradient(135deg, 
+                  rgba(160,115,43,0.2) 0%, 
+                  rgba(245,222,179,0.1) 30%, 
+                  rgba(184,131,74,0.15) 70%, 
+                  rgba(139,105,20,0.25) 100%
+                )
+              `,
+              borderRadius: '8px',
+              border: '2px solid rgba(139,69,19,0.4)',
+              boxShadow: 'inset 0 0 15px rgba(139,69,19,0.3)'
             }}>
-              {/* Left Side - Main 3 Sections */}
+              
+              {/* Vintage Hook at Top */}
               <div style={{
-                width: '65%',
-                height: '100%',
+                position: 'absolute',
+                top: '8px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '20px',
+                height: '8px',
+                background: `
+                  linear-gradient(145deg, 
+                    #DEB887 0%, 
+                    #F5DEB3 50%, 
+                    #DEB887 100%
+                  )
+                `,
+                borderRadius: '4px',
+                border: '1px solid #8B4513',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.6)'
+              }} />
+
+              {/* Upper Shelf - Vintage Items */}
+              <div style={{
+                position: 'absolute',
+                top: '25px',
+                left: '10px',
+                right: '10px',
+                height: '25px',
+                background: `
+                  linear-gradient(135deg, 
+                    rgba(139,69,19,0.3) 0%, 
+                    rgba(160,115,43,0.2) 50%, 
+                    rgba(139,69,19,0.3) 100%
+                  )
+                `,
+                borderRadius: '4px',
+                border: '1px solid rgba(139,69,19,0.5)',
                 display: 'flex',
-                flexDirection: 'column',
-                gap: '8px'
+                alignItems: 'center',
+                justifyContent: 'space-around',
+                padding: '0 8px'
               }}>
-                
-                {/* Top Section - Letter Jacket */}
-                <div style={{
-                  height: '30%',
-                  background: 'linear-gradient(180deg, #d5dbdb 0%, #aeb6bf 100%)',
-                  borderRadius: '6px',
-                  position: 'relative',
-                  border: '2px solid #85929e',
-                  overflow: 'hidden',
-                  padding: '8px'
-                }}>
-                  {/* Jacket Hook */}
-                  <div style={{
-                    position: 'absolute',
-                    top: '3px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '15px',
-                    height: '6px',
-                    background: '#5d6d7e',
-                    borderRadius: '3px'
-                  }} />
-                  
-                  {/* Letter Jacket */}
-                  <div style={{
-                    position: 'absolute',
-                    top: '12px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '60px',
-                    height: '80px',
-                    background: 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)',
-                    borderRadius: '6px 6px 8px 8px',
-                    border: '2px solid #1b2631',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: '0 4px 8px rgba(0,0,0,0.3)'
-                  }}>
-                    <div style={{
-                      color: '#ecf0f1',
-                      fontSize: '18px',
-                      fontWeight: 'bold',
-                      fontFamily: 'Arial, sans-serif',
-                      position: 'relative'
-                    }}>
-                      F
-                      <div style={{
-                        position: 'absolute',
-                        top: '-8px',
-                        right: '-8px',
-                        width: '8px',
-                        height: '8px',
-                        background: '#f39c12',
-                        borderRadius: '50%',
-                        border: '1px solid #d68910'
-                      }} />
-                    </div>
-                  </div>
-                  
-                  {/* Color Selection */}
-                  <div style={{
-                    position: 'absolute',
-                    bottom: '5px',
-                    left: '5px',
-                    display: 'flex',
-                    gap: '3px'
-                  }}>
-                    <div style={{
-                      width: '12px',
-                      height: '12px',
-                      background: '#2c3e50',
-                      borderRadius: '50%',
-                      border: '2px solid #ecf0f1',
-                      cursor: 'pointer'
-                    }} />
-                    <div style={{
-                      width: '12px',
-                      height: '12px',
-                      background: '#e91e63',
-                      borderRadius: '50%',
-                      border: '1px solid #ad1457',
-                      cursor: 'pointer'
-                    }} />
-                  </div>
-                  
-                  <button style={{
-                    position: 'absolute',
-                    bottom: '3px',
-                    right: '3px',
-                    background: '#3498db',
-                    color: 'white',
-                    border: 'none',
-                    padding: '2px 5px',
-                    borderRadius: '2px',
-                    fontSize: '8px',
-                    cursor: 'pointer'
-                  }}>
-                    ✨
-                  </button>
-                </div>
-
-                {/* Middle Section - 90s Counters */}
-                <div style={{
-                  height: '40%',
-                  background: 'linear-gradient(180deg, #d5dbdb 0%, #aeb6bf 100%)',
-                  borderRadius: '6px',
-                  border: '2px solid #85929e',
-                  padding: '8px',
-                  display: 'flex',
-                  justifyContent: 'space-around',
-                  alignItems: 'center',
-                  gap: '5px'
-                }}>
-                  {/* Gum Counter */}
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    background: 'linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%)',
-                    padding: '6px',
-                    borderRadius: '4px',
-                    minWidth: '40px',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                    border: '2px solid #ff4081'
-                  }}>
-                    <div style={{ fontSize: '14px', marginBottom: '2px' }}>🍬</div>
-                    <div style={{ fontSize: '10px', fontWeight: 'bold', color: 'white' }}>Gum</div>
-                    <div style={{ fontSize: '12px', fontWeight: 'bold', color: 'white' }}>0</div>
-                  </div>
-
-                  {/* Flunks Counter */}
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    background: 'linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%)',
-                    padding: '6px',
-                    borderRadius: '4px',
-                    minWidth: '40px',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                    border: '2px solid #26d0ce'
-                  }}>
-                    <div style={{ fontSize: '14px', marginBottom: '2px' }}>👾</div>
-                    <div style={{ fontSize: '10px', fontWeight: 'bold', color: 'white' }}>Flunks</div>
-                    <div style={{ fontSize: '12px', fontWeight: 'bold', color: 'white' }}>0</div>
-                  </div>
-
-                  {/* Backpacks Counter */}
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    background: 'linear-gradient(135deg, #95e1d3 0%, #fce38a 100%)',
-                    padding: '6px',
-                    borderRadius: '4px',
-                    minWidth: '40px',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                    border: '2px solid #7dd3fc'
-                  }}>
-                    <div style={{ fontSize: '14px', marginBottom: '2px' }}>🎒</div>
-                    <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#2c3e50' }}>Bags</div>
-                    <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#2c3e50' }}>0</div>
-                  </div>
-                </div>
-
-                {/* Bottom Section - Future Clique */}
-                <div style={{
-                  height: '25%',
-                  background: 'linear-gradient(180deg, #d5dbdb 0%, #aeb6bf 100%)',
-                  borderRadius: '6px',
-                  border: '2px solid #85929e',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#85929e',
-                  fontSize: '11px',
-                  fontStyle: 'italic',
-                  textAlign: 'center'
-                }}>
-                  🏫 Clique features coming soon...
-                  <br />
-                  <span style={{ fontSize: '9px' }}>Join your class & earn rewards</span>
-                </div>
+                {/* Vintage Items */}
+                <div style={{ fontSize: '12px' }}>📚</div>
+                <div style={{ fontSize: '12px' }}>⚰️</div>
+                <div style={{ fontSize: '12px' }}>🕯️</div>
+                <div style={{ fontSize: '12px' }}>📜</div>
               </div>
 
-              {/* Right Side - Door Interior */}
+              {/* Main Photo Section */}
               <div style={{
-                width: '35%',
-                height: '100%',
-                background: 'linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%)',
-                border: '3px solid #adb5bd',
-                borderRadius: '6px',
-                position: 'relative',
-                padding: '8px',
-                overflow: 'hidden'
+                position: 'absolute',
+                top: '60px',
+                left: '10px',
+                right: '10px',
+                height: '40%',
+                display: 'flex',
+                gap: '10px'
               }}>
-                {/* Mirror */}
+                
+                {/* Vintage Poster/Photo */}
                 <div style={{
                   width: '100%',
-                  height: '35%',
-                  background: 'linear-gradient(135deg, #e8f4f8 0%, #d1ecf1 100%)',
-                  border: '2px solid #85c1e9',
-                  borderRadius: '4px',
-                  marginBottom: '8px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '9px',
-                  color: '#5499c7',
-                  textAlign: 'center',
-                  boxShadow: 'inset 0 0 10px rgba(84, 153, 199, 0.3)'
-                }}>
-                  <div>
-                    Mirror
-                    <br />
-                    💄✨
-                  </div>
-                </div>
-
-                {/* 90s Poster */}
-                <div style={{
-                  width: '100%',
-                  height: '55%',
-                  background: 'linear-gradient(135deg, #f1c40f 0%, #f39c12 100%)',
-                  borderRadius: '4px',
+                  height: '50%',
+                  background: uploadedPhoto ? 'transparent' : `
+                    linear-gradient(135deg, 
+                      rgba(139,69,19,0.9) 0%, 
+                      rgba(160,82,45,0.95) 50%,
+                      rgba(139,69,19,1) 100%
+                    )
+                  `,
+                  borderRadius: '3px',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '9px',
-                  color: '#7d6608',
+                  fontSize: '7px',
+                  color: '#F5DEB3',
                   textAlign: 'center',
                   position: 'relative',
-                  border: '2px solid #d68910',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                }}>
-                  <div style={{ marginBottom: '4px' }}>90s Poster</div>
-                  <div style={{ fontSize: '16px', marginBottom: '4px' }}>🎵📺</div>
-                  <div style={{ fontSize: '8px', fontStyle: 'italic' }}>Customize your vibe</div>
-                  
-                  <button style={{
-                    position: 'absolute',
-                    bottom: '3px',
-                    right: '3px',
-                    background: '#e74c3c',
-                    color: 'white',
-                    border: 'none',
-                    padding: '2px 4px',
-                    borderRadius: '2px',
-                    fontSize: '7px',
-                    cursor: 'pointer'
-                  }}>
-                    📸
-                  </button>
-                </div>
-
-                {/* Shelf */}
-                <div style={{
-                  position: 'absolute',
-                  bottom: '5px',
-                  left: '8px',
-                  right: '8px',
-                  height: '20px',
-                  background: '#95a5a6',
-                  borderRadius: '2px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '8px',
-                  color: '#2c3e50'
-                }}>
-                  📚 Shelf space
+                  border: '2px solid #8B4513',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.4)',
+                  transform: 'rotate(1deg)',
+                  overflow: 'hidden',
+                  cursor: uploadedPhoto ? 'default' : 'pointer'
+                }}
+                onClick={!uploadedPhoto ? triggerPhotoUpload : undefined}
+                >
+                  <div style={{ marginBottom: '3px', fontWeight: 'bold' }}>📸 UPLOAD PHOTO</div>
+                  {uploadedPhoto ? (
+                    <>
+                      <img 
+                        src={uploadedPhoto} 
+                        alt="Profile" 
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          position: 'absolute',
+                          top: 0,
+                          left: 0
+                        }}
+                      />
+                      <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: `linear-gradient(45deg, rgba(139,69,19,0.1) 0%, transparent 30%, transparent 70%, rgba(139,69,19,0.1) 100%)`,
+                        pointerEvents: 'none'
+                      }} />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removePhoto();
+                        }}
+                        style={{
+                          position: 'absolute',
+                          top: '2px',
+                          right: '2px',
+                          background: 'rgba(220,20,60,0.9)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '50%',
+                          width: '14px',
+                          height: '14px',
+                          fontSize: '8px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          zIndex: 10
+                        }}
+                        title="Remove photo"
+                      >×</button>
+                    </>
+                  ) : (
+                    <>
+                      <div style={{ fontSize: '10px', marginBottom: '3px' }}>📷</div>
+                      <div style={{ fontSize: '6px', fontStyle: 'italic', opacity: 0.8 }}>
+                        Click to add your photo
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
+
+              {/* Bottom Shelf with Vintage Items */}
+              <div style={{
+                position: 'absolute',
+                bottom: '40px',
+                left: '10px',
+                right: '10px',
+                height: '30px',
+                background: `
+                  linear-gradient(135deg, 
+                    rgba(139,69,19,0.4) 0%, 
+                    rgba(160,115,43,0.3) 50%, 
+                    rgba(139,69,19,0.4) 100%
+                  )
+                `,
+                borderRadius: '4px',
+                border: '1px solid rgba(139,69,19,0.6)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-around',
+                padding: '0 8px'
+              }}>
+                {/* Vintage Collection Items */}
+                <div style={{ fontSize: '14px', transform: 'rotate(-5deg)' }}>⚱️</div>
+                <div style={{ fontSize: '14px', transform: 'rotate(3deg)' }}>🗝️</div>
+                <div style={{ fontSize: '14px', transform: 'rotate(-2deg)' }}>📖</div>
+                <div style={{ fontSize: '14px', transform: 'rotate(7deg)' }}>🕰️</div>
+              </div>
+
+              {/* Vintage Wear Marks */}
+              <div style={{
+                position: 'absolute',
+                top: '15px',
+                right: '20px',
+                width: '8px',
+                height: '1px',
+                background: 'rgba(107,78,8,0.4)',
+                transform: 'rotate(15deg)'
+              }} />
+              <div style={{
+                position: 'absolute',
+                bottom: '25px',
+                right: '10px',
+                width: '10px',
+                height: '1px',
+                background: 'rgba(107,78,8,0.3)',
+                transform: 'rotate(-20deg)'
+              }} />
             </div>
           )}
 
-          {/* Locker Interior Details */}
+          {/* Vintage Locker Base */}
           <div style={{
             position: 'absolute',
-            bottom: '10px',
+            bottom: '8px',
             left: '10px',
             right: '10px',
-            height: '30px',
-            background: 'linear-gradient(90deg, transparent 0%, #95a5a6 20%, #95a5a6 80%, transparent 100%)',
+            height: '20px',
+            background: `
+              linear-gradient(135deg, 
+                #654321 0%, 
+                #8B4513 30%, 
+                #A0522D 50%, 
+                #8B4513 70%, 
+                #654321 100%
+              )
+            `,
+            borderRadius: '0 0 8px 8px',
+            border: '2px solid #4A2C17',
+            boxShadow: 'inset 0 1px 3px rgba(255,255,255,0.2), 0 -2px 6px rgba(0,0,0,0.4)'
+          }} />
+
+          {/* Vintage Corner Reinforcements */}
+          <div style={{
+            position: 'absolute',
+            top: '5px',
+            left: '5px',
+            width: '8px',
+            height: '8px',
+            background: '#8B4513',
+            borderRadius: '50%',
+            boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4)'
+          }} />
+          <div style={{
+            position: 'absolute',
+            top: '5px',
+            right: '5px',
+            width: '8px',
+            height: '8px',
+            background: '#8B4513',
+            borderRadius: '50%',
+            boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4)'
+          }} />
+          <div style={{
+            position: 'absolute',
+            bottom: '32px',
+            left: '5px',
+            width: '8px',
+            height: '8px',
+            background: '#8B4513',
+            borderRadius: '50%',
+            boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4)'
+          }} />
+          <div style={{
+            position: 'absolute',
+            bottom: '32px',
+            right: '5px',
+            width: '8px',
+            height: '8px',
+            background: '#8B4513',
+            borderRadius: '50%',
+            boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4)'
+          }} />
+
+          {/* Vintage Shadow Effect */}
+          <div style={{
+            position: 'absolute',
+            top: '0',
+            left: '0',
+            right: '0',
+            bottom: '0',
+            background: `
+              radial-gradient(ellipse at 30% 30%, 
+                transparent 0%, 
+                transparent 40%, 
+                rgba(139,69,19,0.1) 70%, 
+                rgba(107,84,8,0.2) 100%
+              )
+            `,
+            pointerEvents: 'none',
             borderRadius: '15px'
           }} />
 
@@ -553,6 +643,15 @@ const UserProfile: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Hidden file input for photo upload */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handlePhotoUpload}
+      />
     </DraggableResizeableWindow>
   );
 };

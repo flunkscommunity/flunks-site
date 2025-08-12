@@ -15,10 +15,10 @@ import {
 } from "@dynamic-labs/sdk-react-core";
 import { SdkViewSectionType, SdkViewType } from "@dynamic-labs/sdk-api";
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
-import WalletDebugger from "../components/WalletDebugger";
 import useThemeSettings from "store/useThemeSettings";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
+import { startWalletBrandingFix } from "utils/walletBrandingFix";
 import { PaginatedItemsProvider } from "contexts/UserPaginatedItems";
 import { UserProfileProvider } from "contexts/UserProfileContext";
 import { AudioProvider } from "contexts/AudioContext";
@@ -31,6 +31,11 @@ const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const memodGlobalStyles = React.useMemo(() => <GlobalStyles />, []);
+
+  // Start wallet branding fix on component mount
+  React.useEffect(() => {
+    startWalletBrandingFix();
+  }, []);
 
   return (
     <>
@@ -45,38 +50,14 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                     environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID || "53675303-5e80-4fe5-88a4-e6caae677432",
                     walletConnectors: [FlowWalletConnectors],
                     walletsFilter: (wallets) => {
-                      // Enhanced debugging for Lilico wallet detection
-                      console.log('🔍 All available wallets:', wallets.map(w => ({ 
+                      // Enhanced debugging for all available wallets
+                      console.log('🔍 ALL AVAILABLE WALLETS:', wallets.map(w => ({ 
                         key: w.key, 
                         name: w.name
                       })));
                       
-                      // Filter to include specific Flow wallets we want
-                      const flowWallets = wallets.filter(wallet => 
-                        wallet.key === 'flowwallet' || // Lilico/Flow Wallet
-                        wallet.key === 'lilico' ||     // Alternative key for Lilico
-                        wallet.key === 'flow' ||       // Alternative key for Flow Wallet
-                        wallet.key === 'blocto' ||     // Blocto
-                        wallet.key === 'dapper' ||     // Dapper
-                        wallet.name?.toLowerCase().includes('lilico') || // Name-based matching
-                        wallet.name?.toLowerCase().includes('flow wallet')
-                      );
-                      
-                      console.log('✅ Filtered Flow wallets:', flowWallets.map(w => ({ 
-                        key: w.key, 
-                        name: w.name
-                      })));
-                      
-                      // Log specifically for Lilico detection
-                      const lilicoWallet = flowWallets.find(w => 
-                        w.key === 'lilico' || 
-                        w.key === 'flowwallet' ||
-                        w.name?.toLowerCase().includes('lilico')
-                      );
-                      console.log('🌊 Lilico wallet found:', lilicoWallet);
-                      
-                      // If no specific Flow wallets found, return all (fallback)
-                      return flowWallets.length > 0 ? flowWallets : wallets;
+                      // Return ALL wallets to see what's available
+                      return wallets;
                     },
                     overrides: {
                       views: [
@@ -85,7 +66,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                           sections: [
                             {
                               type: SdkViewSectionType.Wallet,
-                              // Try multiple potential keys for Lilico
+                              // Default to Flow Wallet instead of Lilico
                               defaultItem: "flowwallet",
                             },
                           ],
@@ -99,6 +80,12 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       },
                       onAuthFailure: (args) => {
                         console.log('❌ Auth failure:', args);
+                      },
+                      onWalletAdded: (args) => {
+                        console.log('🔗 Wallet added:', args);
+                      },
+                      onWalletRemoved: (args) => {
+                        console.log('🔌 Wallet removed:', args);
                       }
                     }
                   }}
@@ -107,7 +94,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                     <PaginatedItemsProvider>
                       <div className="app-container min-h-screen w-full overflow-hidden">
                         <Component {...pageProps} />
-                        {process.env.NODE_ENV === 'development' && <WalletDebugger />}
                       </div>
                       <Analytics />
                       <DynamicUserProfile />

@@ -45,3 +45,16 @@ button[data-testid*="flow"]:hover {
   outline: 2px solid #ff0000 !important;
   background-color: rgba(255, 0, 0, 0.1) !important;
 }
+
+/* Override Lilico branding to Flow Wallet in buttons */
+button[data-testid*="lilico"] span,
+button[data-testid*="lilico"] div {
+  font-size: 0 !important;
+}
+
+button[data-testid*="lilico"]::after {
+  content: "Flow Wallet" !important;
+  font-size: 14px !important;
+  color: inherit !important;
+  display: block !important;
+}

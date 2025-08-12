@@ -1,0 +1,1196 @@
+import React, { useState, useRef } from 'react';
+import DraggableResizeableWindow from '../components/DraggableResizeableWindow';
+import { WINDOW_IDS } from 'fixed';
+import { useWindowsContext } from '../contexts/WindowsContext';
+import { useLockerInfo } from '../hooks/useLocker';
+import { useDynamicContext, DynamicConnectButton } from '@dynamic-labs/sdk-react-core';
+
+const UserProfile: React.FC = () => {
+  const { closeWindow } = useWindowsContext();
+  const { lockerInfo, loading, error } = useLockerInfo();
+  const { primaryWallet, setShowAuthFlow } = useDynamicContext();
+  const [devBypass, setDevBypass] = useState(false);
+  const [uploadedPhoto, setUploadedPhoto] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const isConnected = !!primaryWallet?.address || devBypass;
+  const lockerNumber = devBypass ? 999 : (lockerInfo?.locker_number || null);
+  const isLoading = devBypass ? false : loading;
+
+  const handleConnectWallet = () => {
+    console.log('🔄 Triggering setShowAuthFlow...');
+    if (!devBypass) {
+      setShowAuthFlow(true);
+    }
+  };
+
+  const toggleDevBypass = () => {
+    if (process.env.NODE_ENV === 'development') {
+      setDevBypass(!devBypass);
+    }
+  };
+
+  const handleCreateProfile = () => {
+    alert('Welcome Flunks holder! 🎉\n\nTo get your locker assigned automatically:\n\n1. Join our Discord server\n2. Use the #get-locker channel\n3. Your locker will be assigned within 24 hours\n\nWallet: ' + (primaryWallet?.address?.slice(0, 12) || 'N/A') + '...');
+  };
+
+  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Check file size (limit to 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Photo size must be under 5MB');
+        return;
+      }
+      
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setUploadedPhoto(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const triggerPhotoUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const removePhoto = () => {
+    setUploadedPhoto(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  return (
+    <DraggableResizeableWindow
+      headerTitle="My Locker"
+      windowsId={WINDOW_IDS.USER_PROFILE}
+      onClose={() => closeWindow(WINDOW_IDS.USER_PROFILE)}
+    >
+      <style>
+        {`
+          @keyframes flash {
+            0%, 50% { opacity: 1; }
+            25%, 75% { opacity: 0.7; }
+          }
+          
+          @keyframes pulse {
+            0%, 100% { transform: scale(1) translateY(0px); }
+            50% { transform: scale(1.02) translateY(0px); }
+          }
+          
+          @keyframes gradientShift {
+            0% { background-position: 0% 50%, 0 0, 10px 10px; }
+            50% { background-position: 100% 50%, 5px 5px, 15px 15px; }
+            100% { background-position: 0% 50%, 0 0, 10px 10px; }
+          }
+          
+          @keyframes glow {
+            0% { 
+              box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+              text-shadow: 0 0 5px #00FF00;
+            }
+            100% { 
+              box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+              text-shadow: 0 0 10px #00FF00;
+            }
+          }
+        `}
+      </style>
+      <div style={{
+        width: '100%',
+        height: '100%',
+        background: 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)',
+        position: 'relative',
+        overflow: 'hidden',
+        fontFamily: 'Arial, sans-serif'
+      }}>
+        <div style={{
+          width: '100%',
+          height: '100%',
+          background: 'linear-gradient(180deg, #ecf0f1 0%, #bdc3c7 100%)',
+          border: '3px solid #95a5a6',
+          borderRadius: '8px',
+          position: 'relative',
+          padding: '20px',
+          boxShadow: 'inset 0 0 20px rgba(0,0,0,0.3)'
+        }}>
+          
+          {/* Dev Bypass Button */}
+          {process.env.NODE_ENV === 'development' && (
+            <button
+              onClick={toggleDevBypass}
+              style={{
+                position: 'absolute',
+                top: '5px',
+                right: '5px',
+                background: devBypass ? '#e74c3c' : '#95a5a6',
+                color: 'white',
+                border: 'none',
+                padding: '4px 8px',
+                borderRadius: '3px',
+                fontSize: '10px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                zIndex: 1000
+              }}
+              title={devBypass ? 'Disable Dev Bypass' : 'Enable Dev Bypass'}
+            >
+              {devBypass ? 'DEV ON' : 'DEV'}
+            </button>
+          )}
+          
+          {/* Vintage Brass Nameplate */}
+          <div style={{
+            position: 'absolute',
+            top: '8px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: `
+              linear-gradient(145deg, 
+                #DAA520 0%,     /* Golden */
+                #B8860B 25%,    /* Dark Golden */
+                #FFD700 50%,    /* Gold */
+                #B8860B 75%,    /* Dark Golden */
+                #8B7355 100%    /* Bronze */
+              )
+            `,
+            color: '#2F1B14',
+            padding: '6px 12px',
+            borderRadius: '3px',
+            fontWeight: 'bold',
+            fontSize: '11px',
+            border: '2px solid #8B7355',
+            boxShadow: `
+              0 2px 4px rgba(0,0,0,0.4),
+              inset 0 1px 2px rgba(255,255,255,0.3),
+              inset 0 -1px 2px rgba(0,0,0,0.2)
+            `,
+            textShadow: '1px 1px 1px rgba(255,255,255,0.3)',
+            fontFamily: 'serif'
+          }}>
+            {isLoading ? 'AUTHENTICATING...' : 
+             error ? 'ACCESS DENIED' :
+             lockerNumber ? `LOCKER №${lockerNumber}${devBypass ? ' (DEV)' : ''}` :
+             isConnected ? 'ASSIGNMENT PENDING...' :
+             'AUTHORIZATION REQUIRED'}
+          </div>
+
+          {/* Main Content */}
+          {!isConnected ? (
+            <div style={{
+              width: '100%',
+              height: '80%',
+              marginTop: '40px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '25px',
+              background: `
+                linear-gradient(45deg, 
+                  #2C1810 0%,     /* Dark brown */
+                  #4A2C17 25%,    /* Medium brown */
+                  #6B4423 50%,    /* Light brown */
+                  #4A2C17 75%,    /* Medium brown */
+                  #2C1810 100%    /* Dark brown */
+                )
+              `,
+              borderRadius: '8px',
+              border: '4px solid #1A0F0A',
+              position: 'relative',
+              overflow: 'hidden',
+              boxShadow: `
+                inset 0 0 40px rgba(0,0,0,0.6),
+                0 8px 16px rgba(0,0,0,0.4)
+              `
+            }}>
+              
+              {/* Vintage Paper Texture Overlay */}
+              <div style={{
+                position: 'absolute',
+                top: '0',
+                left: '0',
+                right: '0',
+                bottom: '0',
+                background: `
+                  radial-gradient(circle at 30% 20%, rgba(139,105,20,0.1) 0%, transparent 40%),
+                  radial-gradient(circle at 70% 80%, rgba(160,115,25,0.1) 0%, transparent 35%),
+                  radial-gradient(circle at 20% 70%, rgba(107,78,8,0.1) 0%, transparent 30%)
+                `,
+                pointerEvents: 'none'
+              }} />
+
+              <div style={{
+                textAlign: 'center',
+                color: '#D4AF37',
+                fontSize: '18px',
+                fontFamily: 'serif',
+                fontWeight: 'bold',
+                textShadow: `
+                  2px 2px 0px #000,
+                  -1px -1px 0px #000,
+                  1px -1px 0px #000,
+                  -1px 1px 0px #000,
+                  0 0 10px rgba(212,175,55,0.5)
+                `,
+                letterSpacing: '2px',
+                animation: 'flash 2s infinite',
+                marginBottom: '15px',
+                position: 'relative',
+                zIndex: 2
+              }}>
+                � VAULT SECURED �
+              </div>
+
+              <div style={{
+                textAlign: 'center',
+                color: '#F5DEB3',
+                fontSize: '14px',
+                fontFamily: 'serif',
+                textShadow: `
+                  1px 1px 0px #000,
+                  -1px -1px 0px #000,
+                  1px -1px 0px #000,
+                  -1px 1px 0px #000
+                `,
+                letterSpacing: '1px',
+                lineHeight: '1.6',
+                maxWidth: '280px',
+                marginBottom: '20px',
+                position: 'relative',
+                zIndex: 2,
+                padding: '15px',
+                background: 'rgba(139,105,20,0.1)',
+                border: '1px solid rgba(212,175,55,0.3)',
+                borderRadius: '4px'
+              }}>
+                RESTRICTED ACCESS ZONE
+                <br />
+                <span style={{ color: '#CD853F', fontSize: '12px', fontStyle: 'italic' }}>
+                  Present valid Flow credentials to proceed...
+                </span>
+                <br />
+                <span style={{ color: '#DEB887', fontSize: '10px' }}>
+                  Est. 1995 • Authorized Personnel Only
+                </span>
+              </div>
+
+              {/* Vintage Authentication Button */}
+              <button
+                onClick={handleConnectWallet}
+                style={{
+                  background: `
+                    linear-gradient(145deg, 
+                      #8B4513 0%, 
+                      #A0522D 25%,
+                      #D2691E 50%,
+                      #A0522D 75%,
+                      #8B4513 100%
+                    )
+                  `,
+                  color: '#F5DEB3',
+                  border: '3px solid #654321',
+                  padding: '12px 24px',
+                  borderRadius: '4px',
+                  fontSize: '14px',
+                  fontWeight: 'bold',
+                  fontFamily: 'serif',
+                  cursor: 'pointer',
+                  textShadow: '1px 1px 2px rgba(0,0,0,0.7)',
+                  boxShadow: `
+                    0 4px 8px rgba(0,0,0,0.4),
+                    inset 0 1px 2px rgba(255,255,255,0.2),
+                    inset 0 -1px 2px rgba(0,0,0,0.3)
+                  `,
+                  transition: 'all 0.3s ease',
+                  letterSpacing: '1px',
+                  position: 'relative',
+                  zIndex: 2,
+                  marginBottom: '15px'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = `
+                    0 6px 12px rgba(0,0,0,0.5),
+                    inset 0 1px 2px rgba(255,255,255,0.3),
+                    inset 0 -1px 2px rgba(0,0,0,0.2)
+                  `;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0px)';
+                  e.currentTarget.style.boxShadow = `
+                    0 4px 8px rgba(0,0,0,0.4),
+                    inset 0 1px 2px rgba(255,255,255,0.2),
+                    inset 0 -1px 2px rgba(0,0,0,0.3)
+                  `;
+                }}
+              >
+                �️ AUTHENTICATE ACCESS
+              </button>
+
+              {/* Alternative Dynamic Button */}
+              <div style={{ position: 'relative', zIndex: 2 }}>
+                <DynamicConnectButton>
+                  <div style={{
+                    background: `
+                      linear-gradient(145deg, 
+                        #654321 0%, 
+                        #8B4513 25%,
+                        #A0522D 50%,
+                        #8B4513 75%,
+                        #654321 100%
+                      )
+                    `,
+                    color: '#F5DEB3',
+                    border: '2px solid #D2691E',
+                    padding: '10px 20px',
+                    borderRadius: '3px',
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    fontFamily: 'serif',
+                    cursor: 'pointer',
+                    boxShadow: `
+                      0 3px 6px rgba(0,0,0,0.3),
+                      inset 0 1px 1px rgba(255,255,255,0.1)
+                    `,
+                    textAlign: 'center',
+                    letterSpacing: '0.5px',
+                    textShadow: '1px 1px 1px rgba(0,0,0,0.5)'
+                  }}>
+                    📜 DIRECT ACCESS
+                  </div>
+                </DynamicConnectButton>
+              </div>
+
+              {/* Vintage Development Notice */}
+              {process.env.NODE_ENV === 'development' && (
+                <div style={{
+                  textAlign: 'center',
+                  color: '#D4AF37',
+                  fontSize: '10px',
+                  fontFamily: 'serif',
+                  marginTop: '10px',
+                  padding: '6px 12px',
+                  border: '1px solid #D4AF37',
+                  borderRadius: '3px',
+                  background: 'rgba(212,175,55,0.1)',
+                  boxShadow: '0 0 8px rgba(212,175,55,0.2)',
+                  letterSpacing: '0.5px',
+                  position: 'relative',
+                  zIndex: 2
+                }}>
+                  💡 DEVELOPMENT MODE: Use "DEV" for testing
+                </div>
+              )}
+            </div>
+          ) : !lockerNumber && primaryWallet?.address && !devBypass ? (
+            <div style={{
+              width: '100%',
+              height: '80%',
+              marginTop: '40px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '20px',
+              background: `
+                linear-gradient(145deg, 
+                  rgba(205,181,139,0.95) 0%, 
+                  rgba(184,152,103,1) 100%
+                )
+              `,
+              borderRadius: '8px',
+              border: '3px solid #7A5C28',
+              padding: '20px',
+              boxShadow: 'inset 0 0 20px rgba(0,0,0,0.3)'
+            }}>
+              <div style={{
+                textAlign: 'center',
+                color: '#8B4513',
+                fontSize: '14px',
+                background: 'rgba(255,165,0,0.2)',
+                padding: '12px',
+                borderRadius: '6px',
+                border: '2px solid rgba(255,140,0,0.4)',
+                marginBottom: '15px',
+                fontFamily: 'serif'
+              }}>
+                ⚠️ Credentials verified but vault unassigned
+                <br />
+                <span style={{ fontSize: '11px', fontStyle: 'italic', color: '#654321' }}>
+                  Wallet: {primaryWallet.address.slice(0, 12)}...
+                </span>
+              </div>
+              
+              <button
+                onClick={handleCreateProfile}
+                style={{
+                  background: `
+                    linear-gradient(145deg, 
+                      #228B22 0%, 
+                      #32CD32 50%,
+                      #228B22 100%
+                    )
+                  `,
+                  color: '#F5DEB3',
+                  border: '3px solid #006400',
+                  padding: '12px 24px',
+                  borderRadius: '4px',
+                  fontSize: '14px',
+                  fontWeight: 'bold',
+                  fontFamily: 'serif',
+                  cursor: 'pointer',
+                  boxShadow: `
+                    0 4px 8px rgba(0,0,0,0.3),
+                    inset 0 1px 2px rgba(255,255,255,0.2)
+                  `,
+                  textShadow: '1px 1px 1px rgba(0,0,0,0.5)',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                �️ CLAIM YOUR VAULT
+              </button>
+            </div>
+          ) : (
+            /* Vintage Weathered Locker Design */
+            <div style={{
+              width: '100%',
+              height: '100%',
+              marginTop: '45px',
+              display: 'flex',
+              position: 'relative',
+              background: `
+                linear-gradient(180deg, 
+                  #8B6914 0%,     /* Dark bronze */
+                  #A0732B 20%,    /* Medium bronze */
+                  #B8834A 50%,    /* Light bronze */
+                  #A0732B 80%,    /* Medium bronze */
+                  #6B4E08 100%    /* Very dark bronze */
+                )
+              `,
+              borderRadius: '8px',
+              border: '4px solid #5D4308',
+              boxShadow: `
+                inset 0 0 30px rgba(0,0,0,0.4),
+                inset 2px 2px 8px rgba(255,255,255,0.1),
+                inset -2px -2px 8px rgba(0,0,0,0.3),
+                0 8px 16px rgba(0,0,0,0.5)
+              `,
+              overflow: 'hidden',
+              padding: '12px'
+            }}>
+              
+              {/* Weathering and Rust Effects */}
+              <div style={{
+                position: 'absolute',
+                top: '0',
+                left: '0',
+                right: '0',
+                bottom: '0',
+                background: `
+                  radial-gradient(circle at 20% 30%, rgba(139,69,19,0.6) 0%, transparent 30%),
+                  radial-gradient(circle at 80% 70%, rgba(160,82,45,0.4) 0%, transparent 25%),
+                  radial-gradient(circle at 60% 20%, rgba(139,69,19,0.3) 0%, transparent 20%),
+                  radial-gradient(circle at 30% 80%, rgba(107,78,8,0.5) 0%, transparent 35%)
+                `,
+                pointerEvents: 'none'
+              }} />
+
+              {/* Left Side - Main Locker Interior */}
+              <div style={{
+                width: '65%',
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
+                position: 'relative',
+                zIndex: 2
+              }}>
+                
+                {/* Top Section - Vintage Documents & Jacket */}
+                <div style={{
+                  height: '35%',
+                  background: `
+                    linear-gradient(145deg, 
+                      rgba(205,181,139,0.9) 0%, 
+                      rgba(184,152,103,0.95) 100%
+                    )
+                  `,
+                  borderRadius: '4px',
+                  position: 'relative',
+                  border: '2px solid #7A5C28',
+                  overflow: 'hidden',
+                  padding: '6px',
+                  boxShadow: 'inset 0 0 15px rgba(0,0,0,0.3)'
+                }}>
+                  {/* Vintage Certificate */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '5px',
+                    left: '5px',
+                    width: '45px',
+                    height: '32px',
+                    background: 'linear-gradient(145deg, #F5F1E8 0%, #E8E0CC 100%)',
+                    border: '1px solid #8B7355',
+                    borderRadius: '2px',
+                    fontSize: '6px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#4A3429',
+                    fontFamily: 'serif',
+                    transform: 'rotate(-2deg)',
+                    boxShadow: '1px 1px 3px rgba(0,0,0,0.3)'
+                  }}>
+                    <div style={{ fontWeight: 'bold', fontSize: '5px' }}>FLUNK</div>
+                    <div style={{ fontSize: '4px' }}>VERIFIED</div>
+                    <div style={{ fontSize: '4px' }}>STUDENT</div>
+                    <div style={{ fontSize: '8px', marginTop: '1px' }}>📜</div>
+                  </div>
+
+                  {/* Vintage Jacket Hook */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '2px',
+                    right: '10px',
+                    width: '8px',
+                    height: '4px',
+                    background: '#4A3429',
+                    borderRadius: '2px',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.4)'
+                  }} />
+                  
+                  {/* Weathered Letter Jacket */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '8px',
+                    right: '8px',
+                    width: '35px',
+                    height: '45px',
+                    background: 'linear-gradient(135deg, #2C3E50 0%, #34495E 50%, #2C3E50 100%)',
+                    borderRadius: '4px 4px 6px 6px',
+                    border: '1px solid #1B2631',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.4)',
+                    transform: 'rotate(1deg)'
+                  }}>
+                    <div style={{
+                      color: '#ECF0F1',
+                      fontSize: '12px',
+                      fontWeight: 'bold',
+                      fontFamily: 'Arial, sans-serif',
+                      textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+                    }}>
+                      F
+                    </div>
+                  </div>
+
+                  {/* Vintage Badge/Pin */}
+                  <div style={{
+                    position: 'absolute',
+                    bottom: '8px',
+                    left: '8px',
+                    width: '16px',
+                    height: '16px',
+                    background: 'radial-gradient(circle, #FFD700 0%, #FFA500 100%)',
+                    borderRadius: '50%',
+                    border: '2px solid #B8860B',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '8px',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.4)'
+                  }}>
+                    ⭐
+                  </div>
+                </div>
+
+                {/* Middle Section - Vintage Collection Stats */}
+                <div style={{
+                  height: '40%',
+                  background: `
+                    linear-gradient(145deg, 
+                      rgba(205,181,139,0.9) 0%, 
+                      rgba(184,152,103,0.95) 100%
+                    )
+                  `,
+                  borderRadius: '4px',
+                  border: '2px solid #7A5C28',
+                  padding: '6px',
+                  display: 'flex',
+                  justifyContent: 'space-around',
+                  alignItems: 'center',
+                  gap: '4px',
+                  boxShadow: 'inset 0 0 15px rgba(0,0,0,0.3)',
+                  position: 'relative'
+                }}>
+                  {/* Aged Paper Background */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '2px',
+                    left: '2px',
+                    right: '2px',
+                    bottom: '2px',
+                    background: `
+                      linear-gradient(45deg, 
+                        rgba(240,235,220,0.3) 0%, 
+                        rgba(230,220,190,0.4) 50%,
+                        rgba(210,200,170,0.3) 100%
+                      )
+                    `,
+                    borderRadius: '2px',
+                    pointerEvents: 'none'
+                  }} />
+
+                  {/* Vintage Gum Counter */}
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    background: `
+                      linear-gradient(135deg, 
+                        rgba(255,182,193,0.9) 0%, 
+                        rgba(255,160,122,0.95) 100%
+                      )
+                    `,
+                    padding: '4px',
+                    borderRadius: '3px',
+                    minWidth: '32px',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                    border: '1px solid #D2691E',
+                    position: 'relative',
+                    zIndex: 2
+                  }}>
+                    <div style={{ fontSize: '10px', marginBottom: '1px' }}>🍬</div>
+                    <div style={{ fontSize: '7px', fontWeight: 'bold', color: '#8B4513' }}>Gum</div>
+                    <div style={{ fontSize: '9px', fontWeight: 'bold', color: '#8B4513' }}>0</div>
+                  </div>
+
+                  {/* Vintage Flunks Counter */}
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    background: `
+                      linear-gradient(135deg, 
+                        rgba(152,251,152,0.9) 0%, 
+                        rgba(144,238,144,0.95) 100%
+                      )
+                    `,
+                    padding: '4px',
+                    borderRadius: '3px',
+                    minWidth: '32px',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                    border: '1px solid #228B22',
+                    position: 'relative',
+                    zIndex: 2
+                  }}>
+                    <div style={{ fontSize: '10px', marginBottom: '1px' }}>👾</div>
+                    <div style={{ fontSize: '7px', fontWeight: 'bold', color: '#006400' }}>Flunks</div>
+                    <div style={{ fontSize: '9px', fontWeight: 'bold', color: '#006400' }}>0</div>
+                  </div>
+
+                  {/* Vintage Backpacks Counter */}
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    background: `
+                      linear-gradient(135deg, 
+                        rgba(255,228,181,0.9) 0%, 
+                        rgba(255,218,185,0.95) 100%
+                      )
+                    `,
+                    padding: '4px',
+                    borderRadius: '3px',
+                    minWidth: '32px',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                    border: '1px solid #CD853F',
+                    position: 'relative',
+                    zIndex: 2
+                  }}>
+                    <div style={{ fontSize: '10px', marginBottom: '1px' }}>🎒</div>
+                    <div style={{ fontSize: '7px', fontWeight: 'bold', color: '#8B4513' }}>Bags</div>
+                    <div style={{ fontSize: '9px', fontWeight: 'bold', color: '#8B4513' }}>0</div>
+                  </div>
+
+                  {/* Vintage Ink Stain */}
+                  <div style={{
+                    position: 'absolute',
+                    bottom: '3px',
+                    right: '5px',
+                    width: '8px',
+                    height: '8px',
+                    background: 'radial-gradient(circle, rgba(25,25,112,0.6) 0%, transparent 70%)',
+                    borderRadius: '50%'
+                  }} />
+                </div>
+
+                {/* Bottom Section - Vintage Notice Board */}
+                <div style={{
+                  height: '20%',
+                  background: `
+                    linear-gradient(145deg, 
+                      rgba(205,181,139,0.9) 0%, 
+                      rgba(184,152,103,0.95) 100%
+                    )
+                  `,
+                  borderRadius: '4px',
+                  border: '2px solid #7A5C28',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#4A3429',
+                  fontSize: '8px',
+                  fontStyle: 'italic',
+                  textAlign: 'center',
+                  boxShadow: 'inset 0 0 15px rgba(0,0,0,0.3)',
+                  position: 'relative',
+                  padding: '4px'
+                }}>
+                  {/* Old Paper Background */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '2px',
+                    left: '2px',
+                    right: '2px',
+                    bottom: '2px',
+                    background: `
+                      linear-gradient(25deg, 
+                        rgba(240,235,220,0.8) 0%, 
+                        rgba(235,225,210,0.9) 100%
+                      )
+                    `,
+                    borderRadius: '2px',
+                    border: '1px solid rgba(139,105,20,0.3)'
+                  }} />
+                  
+                  {/* Notice Text */}
+                  <div style={{
+                    position: 'relative',
+                    zIndex: 2,
+                    fontFamily: 'serif',
+                    lineHeight: '1.2'
+                  }}>
+                    📋 CLIQUE RECRUITMENT NOTICE
+                    <br />
+                    <span style={{ fontSize: '7px', color: '#6B4E08' }}>
+                      Join your class & unlock exclusive rewards
+                    </span>
+                  </div>
+
+                  {/* Vintage Stamp */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '2px',
+                    right: '3px',
+                    width: '12px',
+                    height: '8px',
+                    background: 'linear-gradient(45deg, #DC143C 0%, #B22222 100%)',
+                    border: '1px solid #8B0000',
+                    borderRadius: '1px',
+                    fontSize: '5px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    transform: 'rotate(12deg)'
+                  }}>
+                    NEW
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Side - Vintage Door Interior */}
+              <div style={{
+                width: '35%',
+                height: '100%',
+                background: `
+                  linear-gradient(145deg, 
+                    rgba(205,181,139,0.95) 0%, 
+                    rgba(184,152,103,1) 100%
+                  )
+                `,
+                border: '3px solid #7A5C28',
+                borderRadius: '4px',
+                position: 'relative',
+                padding: '6px',
+                overflow: 'hidden',
+                boxShadow: 'inset 0 0 20px rgba(0,0,0,0.4)',
+                zIndex: 2
+              }}>
+                {/* Vintage Map/Document */}
+                <div style={{
+                  width: '100%',
+                  height: '40%',
+                  background: `
+                    linear-gradient(25deg, 
+                      rgba(240,235,220,0.95) 0%, 
+                      rgba(235,225,210,1) 100%
+                    )
+                  `,
+                  border: '2px solid #8B7355',
+                  borderRadius: '2px',
+                  marginBottom: '6px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '7px',
+                  color: '#4A3429',
+                  textAlign: 'center',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                  position: 'relative',
+                  transform: 'rotate(-1deg)'
+                }}>
+                  <div style={{ fontWeight: 'bold', marginBottom: '2px' }}>📍 SCHOOL MAP</div>
+                  <div style={{ fontSize: '6px', lineHeight: '1.1' }}>
+                    Navigate the halls
+                    <br />
+                    Find your classes
+                  </div>
+                  
+                  {/* Map grid lines */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '15px',
+                    left: '8px',
+                    right: '8px',
+                    bottom: '15px',
+                    background: `
+                      repeating-linear-gradient(0deg, 
+                        transparent 0px, 
+                        transparent 3px, 
+                        rgba(139,115,85,0.2) 3px, 
+                        rgba(139,115,85,0.2) 4px
+                      ),
+                      repeating-linear-gradient(90deg, 
+                        transparent 0px, 
+                        transparent 4px, 
+                        rgba(139,115,85,0.2) 4px, 
+                        rgba(139,115,85,0.2) 5px
+                      )
+                    `
+                  }} />
+                </div>
+
+                {/* Vintage Poster/Photo */}
+                <div style={{
+                  width: '100%',
+                  height: '50%',
+                  background: uploadedPhoto ? 'transparent' : `
+                    linear-gradient(135deg, 
+                      rgba(139,69,19,0.9) 0%, 
+                      rgba(160,82,45,0.95) 50%,
+                      rgba(139,69,19,1) 100%
+                    )
+                  `,
+                  borderRadius: '3px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '7px',
+                  color: '#F5DEB3',
+                  textAlign: 'center',
+                  position: 'relative',
+                  border: '2px solid #8B4513',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.4)',
+                  transform: 'rotate(1deg)',
+                  overflow: 'hidden',
+                  cursor: uploadedPhoto ? 'default' : 'pointer'
+                }}
+                onClick={!uploadedPhoto ? triggerPhotoUpload : undefined}
+                >
+                  <div style={{ marginBottom: '3px', fontWeight: 'bold' }}>📸 UPLOAD PHOTO</div>
+                  {uploadedPhoto ? (
+                    <>
+                      <img 
+                        src={uploadedPhoto} 
+                        alt="Profile" 
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          position: 'absolute',
+                          top: 0,
+                          left: 0
+                        }}
+                      />
+                      <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: `linear-gradient(45deg, rgba(139,69,19,0.1) 0%, transparent 30%, transparent 70%, rgba(139,69,19,0.1) 100%)`,
+                        pointerEvents: 'none'
+                      }} />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removePhoto();
+                        }}
+                        style={{
+                          position: 'absolute',
+                          top: '2px',
+                          right: '2px',
+                          background: 'rgba(220,20,60,0.9)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '50%',
+                          width: '14px',
+                          height: '14px',
+                          fontSize: '8px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          zIndex: 10
+                        }}
+                        title="Remove photo"
+                      >×</button>
+                    </>
+                  ) : (
+                    <>
+                      <div style={{ fontSize: '10px', marginBottom: '3px' }}>📷</div>
+                      <div style={{ fontSize: '6px', fontStyle: 'italic', opacity: 0.8 }}>
+                        Click to add your photo
+                      </div>
+                    </>
+                  )}
+                          height: '100%',
+                          objectFit: 'cover',
+                          position: 'absolute',
+                          top: 0,
+                          left: 0
+                        }}
+                      />
+                      <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: `linear-gradient(45deg, rgba(139,69,19,0.1) 0%, transparent 30%, transparent 70%, rgba(139,69,19,0.1) 100%)`,
+                        pointerEvents: 'none'
+                      }} />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removePhoto();
+                        }}
+                        style={{
+                          position: 'absolute',
+                          top: '2px',
+                          right: '2px',
+                          background: 'rgba(220,20,60,0.9)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '50%',
+                          width: '14px',
+                          height: '14px',
+                          fontSize: '8px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          zIndex: 10
+                        }}
+                        title="Remove photo"
+                      >×</button>
+                    </>
+                  ) : (
+                    <>
+                      <div style={{ fontSize: '10px', marginBottom: '3px' }}>📷</div>
+                      <div style={{ fontSize: '6px', fontStyle: 'italic', opacity: 0.8 }}>
+                        Click to add your photo
+                      </div>
+                    </>
+                  )}
+                  <div style={{ fontSize: '6px', fontStyle: 'italic', opacity: 0.8 }}>
+                    Your squad awaits
+                  </div></div>
+                  <div style={{ fontSize: '6px', fontStyle: 'italic', opacity: 0.8 }}>
+                    Your squad awaits
+                  </div>
+                  
+                  {/* Photo corner tabs */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '-1px',
+                    left: '5px',
+                    width: '6px',
+                    height: '6px',
+                    background: 'rgba(245,222,179,0.7)',
+                    transform: 'rotate(45deg)',
+                    border: '0.5px solid #DEB887'
+                  }} />
+                  <div style={{
+                    position: 'absolute',
+                    top: '-1px',
+                    right: '5px',
+                    width: '6px',
+                    height: '6px',
+                    background: 'rgba(245,222,179,0.7)',
+                    transform: 'rotate(45deg)',
+                    border: '0.5px solid #DEB887'
+                  }} />
+                </div>
+
+                {/* Bottom Shelf with Vintage Items */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: '4px',
+                  left: '6px',
+                  right: '6px',
+                  height: '12px',
+                  background: 'linear-gradient(180deg, #A0732B 0%, #8B6914 100%)',
+                  borderRadius: '1px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-around',
+                  fontSize: '6px',
+                  color: '#F5DEB3',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.4)'
+                }}>
+                  📚 📝 🔍
+                </div>
+
+                {/* Vintage Scratches and Wear */}
+                <div style={{
+                  position: 'absolute',
+                  top: '20px',
+                  left: '8px',
+                  width: '15px',
+                  height: '1px',
+                  background: 'rgba(107,78,8,0.4)',
+                  transform: 'rotate(15deg)'
+                }} />
+                <div style={{
+                  position: 'absolute',
+                  bottom: '25px',
+                  right: '10px',
+                  width: '10px',
+                  height: '1px',
+                  background: 'rgba(107,78,8,0.3)',
+                  transform: 'rotate(-20deg)'
+                }} />
+              </div>
+            </div>
+          )}
+
+          {/* Vintage Locker Base */}
+          <div style={{
+            position: 'absolute',
+            bottom: '8px',
+            left: '10px',
+            right: '10px',
+            height: '20px',
+            background: `
+              linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(107,78,8,0.8) 10%, 
+                rgba(139,105,20,0.9) 50%, 
+                rgba(107,78,8,0.8) 90%, 
+                transparent 100%
+              )
+            `,
+            borderRadius: '10px',
+            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.3)'
+          }} />
+
+          {/* Vintage Air Vents/Scratches */}
+          <div style={{
+            position: 'absolute',
+            top: '60px',
+            right: '12px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '3px'
+          }}>
+            {[...Array(8)].map((_, i) => (
+              <div key={i} style={{
+                width: '25px',
+                height: '2px',
+                background: `linear-gradient(90deg, 
+                  rgba(107,78,8,0.6) 0%, 
+                  rgba(139,105,20,0.4) 50%, 
+                  rgba(107,78,8,0.6) 100%
+                )`,
+                borderRadius: '1px',
+                opacity: 0.7
+              }} />
+            ))}
+          </div>
+
+          {/* Additional Vintage Wear Marks */}
+          <div style={{
+            position: 'absolute',
+            top: '15px',
+            left: '8px',
+            width: '30px',
+            height: '2px',
+            background: 'rgba(107,78,8,0.3)',
+            borderRadius: '1px',
+            transform: 'rotate(-15deg)'
+          }} />
+          
+          <div style={{
+            position: 'absolute',
+            bottom: '45px',
+            left: '15px',
+            width: '20px',
+            height: '1px',
+            background: 'rgba(107,78,8,0.4)',
+            transform: 'rotate(25deg)'
+          }} />
+
+          {/* Vintage Corner Dents */}
+          <div style={{
+            position: 'absolute',
+            top: '5px',
+            left: '5px',
+            width: '8px',
+            height: '8px',
+            background: 'radial-gradient(circle, rgba(107,78,8,0.4) 0%, transparent 70%)',
+            borderRadius: '50%'
+          }} />
+          
+          <div style={{
+            position: 'absolute',
+            bottom: '35px',
+            right: '8px',
+            width: '6px',
+            height: '6px',
+            background: 'radial-gradient(circle, rgba(107,78,8,0.3) 0%, transparent 70%)',
+            borderRadius: '50%'
+          }} />
+        </div>
+      </div>
+
+      {/* Hidden file input for photo upload */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handlePhotoUpload}
+      />
+    </DraggableResizeableWindow>
+  );
+};
+
+export default UserProfile;

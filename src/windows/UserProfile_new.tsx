@@ -122,7 +122,7 @@ const UserProfileWindow: React.FC = () => {
                 letterSpacing: '0.05em'
               }}
             >
-              DAPPER • LILICO SUPPORTED
+              DAPPER • FLOW WALLET SUPPORTED
             </div>
 
             {/* Copyright/Version info like old games */}

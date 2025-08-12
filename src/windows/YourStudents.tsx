@@ -65,7 +65,7 @@ const ContentContainer = styled.div`
 const WelcomeCard = styled.div`
   background: transparent;
   border: none;
-  padding: 2rem;
+  padding: 2rem 2rem 5rem 2rem;
   text-align: center;
   max-width: 400px;
   width: 100%;
@@ -232,7 +232,7 @@ const YourStudents: React.FC = () => {
                   textShadow: '1px 1px 0px #000',
                   letterSpacing: '0.5px'
                 }}>
-                  Supported wallets: Lilico, Flow Wallet, Dapper
+                  Supported wallets: Flow Wallet, Blocto, Dapper
                 </p>
               </div>
             </WelcomeCard>

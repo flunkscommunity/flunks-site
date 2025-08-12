@@ -116,7 +116,7 @@ const windowsMemod = useMemo(() => (
   return (
     <>
       <div className="h-full w-full overflow-auto p-4 touch-pan-y">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 min-h-full w-full">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 lg:gap-8 min-h-full w-full items-start justify-items-center">
           {/* 1. OnlyFlunks */}
           <ConditionalAppIcon
             appId="onlyflunks"
@@ -441,9 +441,12 @@ const Home: NextPage = () => {
     const accessGranted = sessionStorage.getItem('flunks-access-granted');
     const isLocalhost = typeof window !== 'undefined' && 
       (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+    const isDev = process.env.NODE_ENV === 'development' || !process.env.NODE_ENV;
+    
+    console.log('🔍 Access Check:', { accessGranted, isLocalhost, isDev, hostname: typeof window !== 'undefined' ? window.location.hostname : 'server' });
     
     // Allow access for localhost development or if access was previously granted
-    if (accessGranted === 'true' || isLocalhost || process.env.NODE_ENV === 'development') {
+    if (accessGranted === 'true' || isLocalhost || isDev) {
       setHasAccess(true);
     }
     

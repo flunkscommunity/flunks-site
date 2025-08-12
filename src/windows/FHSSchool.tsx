@@ -16,30 +16,32 @@ const Product = ({
   direction: "left" | "right";
 }) => {
   return (
-    <div className="w-full flex flex-col gap-3">
-      <div className="px-4 lg:px-20">
+    <div className="w-full flex flex-col gap-2 md:gap-3">
+      <div className="px-2 md:px-4 lg:px-20">
         <div className="max-w-[1440px] mx-auto w-full flex flex-col">
-          <span className="text-2xl md:text-4xl font-bold max-w-2xl text-pretty mb-2">
+          <span className="text-lg md:text-2xl lg:text-4xl font-bold max-w-2xl text-pretty mb-2">
             {title}
           </span>
-          {description}
+          <div className="text-sm md:text-lg lg:text-xl">
+            {description}
+          </div>
         </div>
       </div>
       <FrameWithBackground
-        className="!py-4 overflow-hidden mt-2"
+        className="!py-2 md:!py-4 overflow-hidden mt-2"
         variant="well"
       >
         <Marquee pauseOnClick autoFill direction={direction}>
           {images.map((image, index) => (
-            <Frame key={index} className="!p-2 ml-4 !pb-1">
+            <Frame key={index} className="!p-1 md:!p-2 ml-2 md:ml-4 !pb-1">
               <Frame
                 variant="well"
-                className="!p-0 w-[150px] h-[150px] lg:w-[375px] lg:h-[375px] overflow-hidden"
+                className="!p-0 w-[100px] h-[100px] md:w-[150px] md:h-[150px] lg:w-[375px] lg:h-[375px] overflow-hidden"
               >
                 <img
                   src={image}
                   alt="Flunk"
-                  className="w-[150px] h-[150px] lg:w-[375px] lg:h-[375px] object-cover bg-gray-200 select-none pointer-events-none"
+                  className="w-[100px] h-[100px] md:w-[150px] md:h-[150px] lg:w-[375px] lg:h-[375px] object-cover bg-gray-200 select-none pointer-events-none"
                   style={{
                     imageRendering: "auto",
                   }}
@@ -210,14 +212,15 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
     if (!currentMonth) return null;
 
     return (
-      <div className={`bg-white border-4 ${currentMonth.borderColor} rounded-lg p-4 shadow-lg`}>
-        <h3 className={`text-center font-bold text-xl mb-4 ${currentMonth.textColor}`}>{currentMonth.title}</h3>
+      <div className={`bg-white border-2 md:border-4 ${currentMonth.borderColor} rounded-lg p-2 md:p-4 shadow-lg`}>
+        <h3 className={`text-center font-bold text-lg md:text-xl mb-2 md:mb-4 ${currentMonth.textColor}`}>{currentMonth.title}</h3>
         
         {/* Days of week header */}
         <div className="grid grid-cols-7 gap-1 mb-2">
-          {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(day => (
-            <div key={day} className={`text-center font-bold text-sm p-2 ${currentMonth.bgColor} rounded`}>
-              {day}
+          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
+            <div key={day} className={`text-center font-bold text-xs md:text-sm p-1 md:p-2 ${currentMonth.bgColor} rounded`}>
+              <span className="hidden sm:inline">{['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][index]}</span>
+              <span className="sm:hidden">{day}</span>
             </div>
           ))}
         </div>
@@ -248,13 +251,14 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
               return (
                 <div
                   key={i}
-                  className={`text-center p-2 rounded border font-bold ${
+                  className={`text-center p-1 md:p-2 rounded border font-bold text-xs md:text-sm ${
                     isValidDay 
                       ? hasEvent 
                         ? `${hasEvent.color} ${currentMonth.textColor}` 
                         : `bg-white ${currentMonth.textColor}`
                       : 'bg-gray-100 text-gray-400'
                   }`}
+                  style={{ minHeight: '24px' }}
                 >
                   {isValidDay ? dayNum : ''}
                 </div>
@@ -264,11 +268,11 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
         </div>
         
         {/* Events legend for this month */}
-        <div className="mt-4 space-y-1">
-          <h4 className="font-bold text-sm">Events this month:</h4>
+        <div className="mt-2 md:mt-4 space-y-1">
+          <h4 className="font-bold text-xs md:text-sm">Events this month:</h4>
           {currentMonth.events.map((event, idx) => (
-            <div key={idx} className="flex items-center gap-2 text-sm">
-              <div className={`w-3 h-3 ${event.color} rounded`}></div>
+            <div key={idx} className="flex items-center gap-2 text-xs md:text-sm">
+              <div className={`w-3 h-3 ${event.color} rounded flex-shrink-0`}></div>
               <span><strong>{event.day}:</strong> {event.label}</span>
             </div>
           ))}
@@ -281,21 +285,21 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
     switch (activeTab) {
       case 'calendar':
         return (
-          <div className="p-4 space-y-4">
-            <h2 className="text-xl font-bold mb-4">📅 School Calendar</h2>
+          <div className="p-2 md:p-4 space-y-4">
+            <h2 className="text-lg md:text-xl font-bold mb-4">📅 School Calendar</h2>
             
             {/* Clickable Month Headers */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 mb-6">
               {/* August */}
               <button
                 onClick={() => setSelectedMonth('August')}
-                className={`text-center p-3 rounded-xl border-4 text-white font-bold text-lg shadow-lg transition-all hover:scale-105 ${
-                  selectedMonth === 'August' ? 'ring-4 ring-yellow-300' : ''
+                className={`text-center p-2 md:p-3 rounded-xl border-2 md:border-4 text-white font-bold text-sm md:text-lg shadow-lg transition-all hover:scale-105 ${
+                  selectedMonth === 'August' ? 'ring-2 md:ring-4 ring-yellow-300' : ''
                 }`}
                 style={{
                   background: 'linear-gradient(45deg, #FF8C00, #FFD700)',
                   borderColor: '#FF6347',
-                  textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+                  textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
                 }}
               >
                 🌻 August 🌻
@@ -304,13 +308,13 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
               {/* September */}
               <button
                 onClick={() => setSelectedMonth('September')}
-                className={`text-center p-3 rounded-xl border-4 text-white font-bold text-lg shadow-lg transition-all hover:scale-105 ${
-                  selectedMonth === 'September' ? 'ring-4 ring-green-300' : ''
+                className={`text-center p-2 md:p-3 rounded-xl border-2 md:border-4 text-white font-bold text-sm md:text-lg shadow-lg transition-all hover:scale-105 ${
+                  selectedMonth === 'September' ? 'ring-2 md:ring-4 ring-green-300' : ''
                 }`}
                 style={{
                   background: 'linear-gradient(45deg, #32CD32, #98FB98)',
                   borderColor: '#228B22',
-                  textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+                  textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
                 }}
               >
                 🍂 September 🍂
@@ -319,13 +323,13 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
               {/* October */}
               <button
                 onClick={() => setSelectedMonth('October')}
-                className={`text-center p-3 rounded-xl border-4 text-white font-bold text-lg shadow-lg transition-all hover:scale-105 ${
-                  selectedMonth === 'October' ? 'ring-4 ring-orange-300' : ''
+                className={`text-center p-2 md:p-3 rounded-xl border-2 md:border-4 text-white font-bold text-sm md:text-lg shadow-lg transition-all hover:scale-105 ${
+                  selectedMonth === 'October' ? 'ring-2 md:ring-4 ring-orange-300' : ''
                 }`}
                 style={{
                   background: 'linear-gradient(45deg, #FF4500, #FFA500)',
                   borderColor: '#FF6347',
-                  textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+                  textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
                 }}
               >
                 🎃 October 🎃
@@ -415,37 +419,37 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
       
       case 'staff':
         return (
-          <div className="p-4 space-y-4">
-            <h2 className="text-xl font-bold mb-4">👨‍🏫 Faculty & Staff</h2>
+          <div className="p-2 md:p-4 space-y-4">
+            <h2 className="text-lg md:text-xl font-bold mb-4">👨‍🏫 Faculty & Staff</h2>
             
             {/* School Board Section */}
-            <div className="bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 border-4 border-purple-500 p-6 shadow-lg">
-              <h3 className="font-black text-3xl mb-6 text-center text-purple-800" style={{
-                textShadow: '3px 3px 0px #ff00ff, 6px 6px 0px #00ffff',
+            <div className="bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 border-2 md:border-4 border-purple-500 p-3 md:p-6 shadow-lg">
+              <h3 className="font-black text-xl md:text-3xl mb-4 md:mb-6 text-center text-purple-800" style={{
+                textShadow: '2px 2px 0px #ff00ff, 3px 3px 0px #00ffff',
                 fontFamily: 'Impact, Arial Black, sans-serif'
               }}>
                 🌟 SCHOOL BOARD 🌟
               </h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 gap-4 md:gap-8">
                 {/* Skeremy */}
-                <div className="bg-gradient-to-r from-yellow-300 to-orange-300 border-4 border-red-500 p-6 rounded-lg shadow-xl transform hover:scale-105 transition-transform">
-                  <div className="flex items-start gap-6">
-                    <div className="w-40 h-40 border-4 border-blue-600 rounded-lg flex-shrink-0 overflow-hidden shadow-lg">
+                <div className="bg-gradient-to-r from-yellow-300 to-orange-300 border-2 md:border-4 border-red-500 p-3 md:p-6 rounded-lg shadow-xl">
+                  <div className="flex flex-col md:flex-row items-start gap-3 md:gap-6">
+                    <div className="w-24 h-24 md:w-40 md:h-40 border-2 md:border-4 border-blue-600 rounded-lg flex-shrink-0 overflow-hidden shadow-lg mx-auto md:mx-0">
                       <img 
                         src="/images/about-us/skeremy.png" 
                         alt="Skeremy"
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <div className="flex-1">
-                      <h4 className="font-black text-3xl text-red-700 mb-3" style={{
-                        textShadow: '2px 2px 0px #ffff00, 4px 4px 0px #ff00ff',
+                    <div className="flex-1 text-center md:text-left">
+                      <h4 className="font-black text-lg md:text-3xl text-red-700 mb-2 md:mb-3" style={{
+                        textShadow: '1px 1px 0px #ffff00, 2px 2px 0px #ff00ff',
                         fontFamily: 'Impact, Arial Black, sans-serif'
                       }}>
                         SKEREMY
                       </h4>
-                      <p className="text-lg text-gray-900 font-bold leading-relaxed">
+                      <p className="text-sm md:text-lg text-gray-900 font-bold leading-relaxed">
                         Skeremy is the purveyor of vibes in the Flunks universe. He leads the creative 
                         direction behind the scenes and has a background in graphic design, drugs 
                         and nostalgia.
@@ -455,23 +459,23 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                 </div>
 
                 {/* Nantucket */}
-                <div className="bg-gradient-to-r from-green-300 to-teal-300 border-4 border-purple-500 p-6 rounded-lg shadow-xl transform hover:scale-105 transition-transform">
-                  <div className="flex items-start gap-6">
-                    <div className="w-40 h-40 border-4 border-pink-600 rounded-lg flex-shrink-0 overflow-hidden shadow-lg">
+                <div className="bg-gradient-to-r from-green-300 to-teal-300 border-2 md:border-4 border-purple-500 p-3 md:p-6 rounded-lg shadow-xl">
+                  <div className="flex flex-col md:flex-row items-start gap-3 md:gap-6">
+                    <div className="w-24 h-24 md:w-40 md:h-40 border-2 md:border-4 border-pink-600 rounded-lg flex-shrink-0 overflow-hidden shadow-lg mx-auto md:mx-0">
                       <img 
                         src="/images/about-us/Nantucket.png" 
                         alt="Nantucket"
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <div className="flex-1">
-                      <h4 className="font-black text-3xl text-purple-700 mb-3" style={{
-                        textShadow: '2px 2px 0px #00ff00, 4px 4px 0px #ff0066',
+                    <div className="flex-1 text-center md:text-left">
+                      <h4 className="font-black text-lg md:text-3xl text-purple-700 mb-2 md:mb-3" style={{
+                        textShadow: '1px 1px 0px #00ff00, 2px 2px 0px #ff0066',
                         fontFamily: 'Impact, Arial Black, sans-serif'
                       }}>
                         NANTUCKET
                       </h4>
-                      <p className="text-lg text-gray-900 font-bold leading-relaxed">
+                      <p className="text-sm md:text-lg text-gray-900 font-bold leading-relaxed">
                         Nanny is the one and only glue-sniffin' wanderer of Flunks and the greater 
                         Web3 realm. With a background in programming and shenanigans, he's 
                         going to keep the gears greased and the train on the tracks.
@@ -481,23 +485,23 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                 </div>
 
                 {/* DOLO */}
-                <div className="bg-gradient-to-r from-blue-300 to-indigo-300 border-4 border-orange-500 p-6 rounded-lg shadow-xl transform hover:scale-105 transition-transform">
-                  <div className="flex items-start gap-6">
-                    <div className="w-40 h-40 border-4 border-green-600 rounded-lg flex-shrink-0 overflow-hidden shadow-lg">
+                <div className="bg-gradient-to-r from-blue-300 to-indigo-300 border-2 md:border-4 border-orange-500 p-3 md:p-6 rounded-lg shadow-xl">
+                  <div className="flex flex-col md:flex-row items-start gap-3 md:gap-6">
+                    <div className="w-24 h-24 md:w-40 md:h-40 border-2 md:border-4 border-green-600 rounded-lg flex-shrink-0 overflow-hidden shadow-lg mx-auto md:mx-0">
                       <img 
                         src="/images/about-us/dolo.png" 
                         alt="DOLO"
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <div className="flex-1">
-                      <h4 className="font-black text-3xl text-orange-700 mb-3" style={{
-                        textShadow: '2px 2px 0px #0066ff, 4px 4px 0px #ffff00',
+                    <div className="flex-1 text-center md:text-left">
+                      <h4 className="font-black text-lg md:text-3xl text-orange-700 mb-2 md:mb-3" style={{
+                        textShadow: '1px 1px 0px #0066ff, 2px 2px 0px #ffff00',
                         fontFamily: 'Impact, Arial Black, sans-serif'
                       }}>
                         DOLO
                       </h4>
-                      <p className="text-lg text-gray-900 font-bold leading-relaxed">
+                      <p className="text-sm md:text-lg text-gray-900 font-bold leading-relaxed">
                         DOLO is the hall-passin' drifter of Flunks—never tied down, always in 
                         the mix. With a background in digital marketing, writing, and UX, he turns 
                         ideas into moments that connect, land, and leave an impression.
@@ -507,23 +511,23 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                 </div>
 
                 {/* Handy */}
-                <div className="bg-gradient-to-r from-pink-300 to-rose-300 border-4 border-cyan-500 p-6 rounded-lg shadow-xl transform hover:scale-105 transition-transform">
-                  <div className="flex items-start gap-6">
-                    <div className="w-40 h-40 border-4 border-yellow-600 rounded-lg flex-shrink-0 overflow-hidden shadow-lg">
+                <div className="bg-gradient-to-r from-pink-300 to-rose-300 border-2 md:border-4 border-cyan-500 p-3 md:p-6 rounded-lg shadow-xl">
+                  <div className="flex flex-col md:flex-row items-start gap-3 md:gap-6">
+                    <div className="w-24 h-24 md:w-40 md:h-40 border-2 md:border-4 border-yellow-600 rounded-lg flex-shrink-0 overflow-hidden shadow-lg mx-auto md:mx-0">
                       <img 
                         src="/images/about-us/Handy.png" 
                         alt="Handy"
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <div className="flex-1">
-                      <h4 className="font-black text-3xl text-cyan-700 mb-3" style={{
-                        textShadow: '2px 2px 0px #ff6600, 4px 4px 0px #00ff99',
+                    <div className="flex-1 text-center md:text-left">
+                      <h4 className="font-black text-lg md:text-3xl text-cyan-700 mb-2 md:mb-3" style={{
+                        textShadow: '1px 1px 0px #ff6600, 2px 2px 0px #00ff99',
                         fontFamily: 'Impact, Arial Black, sans-serif'
                       }}>
                         HANDY
                       </h4>
-                      <p className="text-lg text-gray-900 font-bold leading-relaxed">
+                      <p className="text-sm md:text-lg text-gray-900 font-bold leading-relaxed">
                         Handy is a multi-talented artist with a background in illustration and 3D 
                         modeling. He created the art assets for the Flunks Portraits collection, Pocket 
                         Juniors, Flunks 3D, and contributes to the broader Flunks ecosystem.
@@ -534,7 +538,7 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
               </div>
             </div>
 
-            <div className="bg-blue-100 border-2 border-blue-400 p-3">
+            <div className="bg-blue-100 border-2 border-blue-400 p-3 text-sm md:text-base">
               <p><strong>📞 Main Office:</strong> (555) FHS-MAIN</p>
               <p><strong>🕐 Office Hours:</strong> 7:30 AM - 4:00 PM</p>
             </div>
@@ -752,20 +756,24 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
       style={{
         background: `linear-gradient(180deg, #8B5A96 0%, #9B6FA3 15%, #A884B0 30%, #B599BD 45%, #C2AECA 60%, #CFC3D7 75%, #DCD8E4 85%, #E9D5D1 92%, #F5D2BE 96%, #FFCFAB 100%)`,
         height: '100%',
-        position: 'relative'
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column'
       }}
     >
-      <Toolbar className="flex gap-4 p-4 justify-center">
+      <Toolbar className="flex flex-col md:flex-row gap-2 p-2 md:p-4 justify-center">
         <Button 
           onClick={() => setActiveTab('home')}
           style={{ 
             backgroundColor: activeTab === 'home' ? '#c0c0c0' : undefined,
             fontWeight: activeTab === 'home' ? 'bold' : undefined,
-            padding: '12px 20px',
-            fontSize: '16px',
-            minWidth: '140px',
-            height: '48px'
+            padding: '8px 12px',
+            fontSize: '14px',
+            minWidth: '80px',
+            height: '36px',
+            width: '100%'
           }}
+          className="md:w-auto"
         >
           🏠 Home
         </Button>
@@ -774,24 +782,28 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
           style={{ 
             backgroundColor: activeTab === 'calendar' ? '#c0c0c0' : undefined,
             fontWeight: activeTab === 'calendar' ? 'bold' : undefined,
-            padding: '12px 20px',
-            fontSize: '16px',
-            minWidth: '180px',
-            height: '48px'
+            padding: '8px 12px',
+            fontSize: '14px',
+            minWidth: '90px',
+            height: '36px',
+            width: '100%'
           }}
+          className="md:w-auto"
         >
-          📅 School Calendar
+          📅 Calendar
         </Button>
         <Button 
           onClick={() => setActiveTab('staff')}
           style={{ 
             backgroundColor: activeTab === 'staff' ? '#c0c0c0' : undefined,
             fontWeight: activeTab === 'staff' ? 'bold' : undefined,
-            padding: '12px 20px',
-            fontSize: '16px',
-            minWidth: '140px',
-            height: '48px'
+            padding: '8px 12px',
+            fontSize: '14px',
+            minWidth: '80px',
+            height: '36px',
+            width: '100%'
           }}
+          className="md:w-auto"
         >
           👨‍🏫 Staff
         </Button>
@@ -800,11 +812,13 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
           style={{ 
             backgroundColor: activeTab === 'resources' ? '#c0c0c0' : undefined,
             fontWeight: activeTab === 'resources' ? 'bold' : undefined,
-            padding: '12px 20px',
-            fontSize: '16px',
-            minWidth: '160px',
-            height: '48px'
+            padding: '8px 12px',
+            fontSize: '14px',
+            minWidth: '100px',
+            height: '36px',
+            width: '100%'
           }}
+          className="md:w-auto"
         >
           📚 Resources
         </Button>
@@ -813,16 +827,26 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
           style={{ 
             backgroundColor: activeTab === 'map' ? '#c0c0c0' : undefined,
             fontWeight: activeTab === 'map' ? 'bold' : undefined,
-            padding: '12px 20px',
-            fontSize: '16px',
-            minWidth: '160px',
-            height: '48px'
+            padding: '8px 12px',
+            fontSize: '14px',
+            minWidth: '80px',
+            height: '36px',
+            width: '100%'
           }}
+          className="md:w-auto"
         >
-          🗺️ School Map
+          🗺️ Map
         </Button>
       </Toolbar>
-      <WindowContent style={{ height: '100%', overflowY: 'auto' }}>
+      <WindowContent 
+        style={{ 
+          flex: 1,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          minHeight: 0
+        }} 
+        className="p-2 md:p-4"
+      >
         {renderContent()}
       </WindowContent>
     </div>

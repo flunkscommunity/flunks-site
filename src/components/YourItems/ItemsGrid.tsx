@@ -404,9 +404,10 @@ const GridedView: React.FC<{
               <RetroButton
                 onClick={() => setActiveItem(nft)}
                 variant="raised"
-                className="w-full text-xs py-1"
+                className="w-full py-1"
+                style={{ fontSize: '10px' }}
               >
-                <RetroText>FULL DETAILS</RetroText>
+                <RetroText style={{ fontSize: '10px' }}>FULL DETAILS</RetroText>
               </RetroButton>
             </div>
           </RetroImageFrame>

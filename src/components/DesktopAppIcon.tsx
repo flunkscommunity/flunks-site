@@ -8,11 +8,27 @@ interface Props {
 }
 
 const Container = styled.div`
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   text-align: center;
   cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  padding: 4px;
+  width: 100%;
+  min-height: 120px;
+  
+  /* Hover effect for the entire container */
+  &:hover {
+    background: rgba(48, 197, 255, 0.1);
+    backdrop-filter: blur(4px);
+  }
+  
+  @media (min-width: 1024px) {
+    min-height: 140px;
+  }
 `;
 
 // Styled component that takes an image url as a prop
@@ -22,6 +38,38 @@ const AppIcon = styled.div<{ icon: string }>`
   background-image: url(${(props) => props.icon});
   background-size: contain;
   background-position: center;
+  background-repeat: no-repeat;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  
+  /* Larger icons on desktop (min-width: 1024px) */
+  @media (min-width: 1024px) {
+    width: 96px;
+    height: 96px;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  /* Keep mobile size and disable animation for better alignment */
+  @media (max-width: 1023px) {
+    width: 64px;
+    height: 64px;
+  }
+  
+  /* Hover effect for the icon - slight enlargement */
+  .group:hover & {
+    transform: scale(1.1);
+    animation-play-state: paused;
+  }
+  
+  /* Floating animation - only on desktop */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
 `;
 
 const AppTitle = styled.div`
@@ -42,16 +90,16 @@ const DesktopAppIcon: React.FC<Props> = (props) => {
   };
 
   return (
-    <div className="w-auto !max-w-[100px] h-auto">
+    <div className="w-full flex justify-center items-start">
       <div
         // onDoubleClick={onDoubleClick}
         onClick={onDoubleClick}
-        className="p-2 flex-shrink-0 max-w-full transition-transform duration-200 hover:scale-110 active:scale-95"
+        className="p-2 w-full max-w-[100px] lg:max-w-[140px] transition-transform duration-200 hover:scale-110 active:scale-95"
       >
-        <Container className="group flex flex-col gap-2 items-center">
+        <Container className="group flex flex-col gap-2 items-center justify-start h-full">
           <AppIcon icon={icon} />
-          <AppTitle className="group-hover:!bg-[#30c5ff80] text-pretty max-w-[80px] min-w-[80px] text-center backdrop-blur-lg">
-            <span className="text-xl text-white font-bold drop-shadow-[0px_2px_1px_rgba(0,0,0,1)] tracking-wide">
+          <AppTitle className="group-hover:!bg-[#30c5ff80] text-pretty w-full px-2 py-1 text-center backdrop-blur-lg rounded min-h-[2.5rem] flex items-center justify-center">
+            <span className="text-lg lg:text-xl xl:text-2xl text-white font-bold drop-shadow-[0px_2px_1px_rgba(0,0,0,1)] tracking-wide leading-tight">
               {title}
             </span>
           </AppTitle>

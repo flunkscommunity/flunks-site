@@ -68,7 +68,7 @@ const Welcome: React.FC = () => {
           offSetHeight={44}
           headerTitle="Getting Started"
           headerIcon="/images/icons/getting_started.png"
-          initialHeight="416px"
+          initialHeight="480px"
           initialWidth="auto"
           resizable={false}
           showMaximizeButton={false}
