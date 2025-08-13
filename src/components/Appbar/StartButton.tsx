@@ -12,7 +12,7 @@ import AboutUs from "windows/AboutUs";
 import GumballMachine from "windows/GumballMachine";
 import ProjectJnr from "windows/ProjectJnr";
 import Settings from "windows/Settings";
-import UserProfile from "windows/UserProfile";
+import LockerSystemNew from "windows/LockerSystemNew";
 import Welcome from "windows/Welcome";
 import YourStudents from "windows/YourStudents";
 import SimpleBrowser from "windows/SimpleBrowser";
@@ -99,7 +99,7 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
           onClick={() => {
             openWindow({
               key: WINDOW_IDS.USER_PROFILE,
-              window: <UserProfile />,
+              window: <LockerSystemNew />,
             });
             props.closeStartMenu();
           }}

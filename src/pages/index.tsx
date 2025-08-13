@@ -25,7 +25,7 @@ import FHSSchool from "windows/FHSSchool";
 import MyPlace from "windows/MyPlace";
 import FlunksMessenger from "windows/FlunksMessenger";
 import FlunkCreator from "windows/FlunkCreator";
-import UserProfile from "windows/UserProfile";
+import LockerSystemNew from "windows/LockerSystemNew";
 import GameManualWindow from "windows/GameManualWindow";
 import MemeManagerWindow from "windows/MemeManagerWindow";
 import SimpleBrowser from "windows/SimpleBrowser";
@@ -130,7 +130,7 @@ const windowsMemod = useMemo(() => (
           appId="my-locker"
           title="My Locker"
           icon="/images/icons/locker-icon.png"
-          onDoubleClick={() => openWindow({ key: WINDOW_IDS.USER_PROFILE, window: <UserProfile /> })}
+          onDoubleClick={() => openWindow({ key: WINDOW_IDS.USER_PROFILE, window: <LockerSystemNew /> })}
         />
 
         {/* 3. Terminal */}

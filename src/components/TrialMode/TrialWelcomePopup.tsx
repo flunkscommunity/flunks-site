@@ -3,7 +3,7 @@ import { Button, Frame, Window, WindowHeader, WindowContent } from 'react95';
 import { useTrialMode } from 'contexts/TrialModeContext';
 import { useWindowsContext } from 'contexts/WindowsContext';
 import { WINDOW_IDS } from 'fixed';
-import UserProfileWindow from 'windows/UserProfile';
+import LockerSystemNew from 'windows/LockerSystemNew';
 import styled from 'styled-components';
 
 const WelcomeContainer = styled.div`
@@ -68,7 +68,7 @@ const TrialWelcomeWindow: React.FC<TrialWelcomeWindowProps> = ({ onClose }) => {
     setTimeout(() => {
       openWindow({
         key: WINDOW_IDS.USER_PROFILE,
-        window: <UserProfileWindow />
+        window: <LockerSystemNew />
       });
     }, 500);
   };
