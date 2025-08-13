@@ -5,7 +5,8 @@ import { isMobileDevice } from '../utils/mobileWalletDetection';
 import { useWindowsContext } from '../contexts/WindowsContext';
 import { useLockerInfo, useLockerAssignment } from '../hooks/useLocker';
 import { useDynamicContext, DynamicConnectButton } from '@dynamic-labs/sdk-react-core';
-import { WINDOW_IDS } from '../types/Windows';
+// WINDOW_IDS lives in src/fixed.ts (baseUrl set to src)
+import { WINDOW_IDS } from 'fixed';
 
 const LockerSystemNew: React.FC = () => {
   const { closeWindow } = useWindowsContext();
