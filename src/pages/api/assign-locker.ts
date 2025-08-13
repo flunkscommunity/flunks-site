@@ -33,23 +33,46 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   }
 
   try {
-    // First, check if user already has a locker
+    console.log('🔄 assign-locker API called for wallet:', wallet_address);
+    
+    // First, check if user already has a profile with a real username
     const { data: existingUser, error: checkError } = await supabase
       .from('user_profiles')
-      .select('locker_number, wallet_address')
+      .select('locker_number, wallet_address, username')
       .eq('wallet_address', wallet_address)
       .single();
 
+    console.log('🔍 Existing user check result:', { existingUser, checkError: checkError?.code });
+
     if (checkError && checkError.code !== 'PGRST116') { // PGRST116 = no rows returned
-      console.error('Error checking existing user:', checkError);
+      console.error('❌ Error checking existing user:', checkError);
       return res.status(500).json({
         success: false,
         error: 'Database error while checking user'
       });
     }
 
+    // If user doesn't exist, they need to create a profile first
+    if (!existingUser) {
+      console.log('❌ User has no profile - they need to create one first');
+      return res.status(404).json({
+        success: false,
+        error: 'Profile not found. Please create your profile first through the character creation process.'
+      });
+    }
+
+    // If user has a temp/auto-generated username, they need to create a proper profile
+    if (existingUser.username && existingUser.username.startsWith('user_')) {
+      console.log('❌ User has temp username - they need to create proper profile');
+      return res.status(400).json({
+        success: false,
+        error: 'Please create your character profile first to get your locker assigned.'
+      });
+    }
+
     // If user already exists and has a locker
     if (existingUser && existingUser.locker_number) {
+      console.log('✅ User already has locker:', existingUser.locker_number);
       return res.status(200).json({
         success: true,
         locker_number: existingUser.locker_number,
@@ -57,57 +80,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       });
     }
 
-    // If user exists but doesn't have a locker, update them
+    // If user has proper profile but no locker, assign them one
     if (existingUser && !existingUser.locker_number) {
-      const { data: updatedUser, error: updateError } = await supabase
-        .from('user_profiles')
-        .update({ 
-          updated_at: new Date().toISOString() 
-        })
-        .eq('wallet_address', wallet_address)
-        .select('locker_number')
-        .single();
+      console.log('⚠️ User has profile but no locker - assigning one...');
+      
+      // Get the next locker number from the sequence
+      const { data: nextLockerData, error: sequenceError } = await supabase
+        .rpc('assign_next_locker', { 
+          p_wallet_address: wallet_address 
+        });
 
-      if (updateError) {
-        console.error('Error updating existing user:', updateError);
+      if (sequenceError) {
+        console.error('❌ Error calling assign_next_locker function:', sequenceError);
         return res.status(500).json({
           success: false,
-          error: 'Failed to assign locker to existing user'
+          error: 'Failed to assign locker'
         });
       }
 
+      const assignedLocker = nextLockerData;
+      console.log('✅ Locker assigned via function:', assignedLocker);
+      
       return res.status(200).json({
         success: true,
-        locker_number: updatedUser.locker_number,
-        message: `Locker #${updatedUser.locker_number} assigned successfully!`
+        locker_number: assignedLocker,
+        message: `Locker #${assignedLocker} assigned successfully!`
       });
     }
-
-    // User doesn't exist, create new user with auto-assigned locker
-    const { data: newUser, error: insertError } = await supabase
-      .from('user_profiles')
-      .insert({
-        wallet_address: wallet_address,
-        username: null, // They can set this later
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      })
-      .select('locker_number')
-      .single();
-
-    if (insertError) {
-      console.error('Error creating new user:', insertError);
-      return res.status(500).json({
-        success: false,
-        error: 'Failed to create user and assign locker'
-      });
-    }
-
-    return res.status(201).json({
-      success: true,
-      locker_number: newUser.locker_number,
-      message: `Welcome! Locker #${newUser.locker_number} is now yours!`
-    });
 
   } catch (error) {
     console.error('Unexpected error in assign-locker:', error);

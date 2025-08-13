@@ -22,8 +22,7 @@ const LockerSystemNew: React.FC = () => {
   };
 
   const handleCreateProfile = async () => {
-    console.log('🚀 NEW SYSTEM: handleCreateProfile called - Supabase automatic assignment!');
-    console.log('🚀 NEW SYSTEM: assignLocker function exists:', typeof assignLocker);
+    console.log('🚀 NEW SYSTEM: handleCreateProfile called - Checking for existing profile first!');
     
     if (!primaryWallet?.address) {
       alert('Please connect your wallet first!');
@@ -36,14 +35,28 @@ const LockerSystemNew: React.FC = () => {
       console.log('🚀 NEW SYSTEM: assignLocker result:', result);
       
       if (result.success) {
-        // Refresh the locker info to show the new assignment
-        await refetch();
+        alert(`🎉 SUCCESS! ${result.message}\n\nYour locker is now ready to use!\n\n✨ Your profile name is displayed in your locker!`);
         
-        alert(`🎉 SUCCESS! ${result.message}\n\nYour locker is now ready to use!\n\n✨ Powered by Supabase - No Discord needed!`);
+        // Small delay to ensure database update is complete
+        setTimeout(async () => {
+          console.log('🔄 Refreshing locker info after assignment...');
+          await refetch();
+          
+          // Force a complete component re-render by updating a state
+          setCurrentSection(2); // Switch to middle section to show locker
+        }, 1000);
       }
     } catch (error) {
       console.error('Failed to assign locker:', error);
-      alert(`❌ Failed to assign locker: ${error instanceof Error ? error.message : 'Unknown error'}\n\nPlease try again or contact support.`);
+      
+      // Check if this is the "no profile" error
+      if (error instanceof Error && error.message.includes('create your profile first')) {
+        alert(`🎯 CREATE YOUR CHARACTER FIRST!\n\n${error.message}\n\n➡️ Please go through the character creation process in the main app to set up your username, then return here to get your locker assigned.`);
+      } else if (error instanceof Error && error.message.includes('character profile first')) {
+        alert(`🎯 COMPLETE YOUR PROFILE!\n\n${error.message}\n\n➡️ Your profile needs a proper username to get a locker assigned.`);
+      } else {
+        alert(`❌ Failed to assign locker: ${error instanceof Error ? error.message : 'Unknown error'}\n\nPlease try again or contact support.`);
+      }
     }
   };
 
@@ -243,6 +256,11 @@ const LockerSystemNew: React.FC = () => {
                         <div style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '10px' }}>
                           LOCKER #{lockerInfo.locker_number}
                         </div>
+                        {lockerInfo.username && (
+                          <div style={{ fontSize: '18px', marginBottom: '15px', color: '#90EE90' }}>
+                            👤 {lockerInfo.username}
+                          </div>
+                        )}
                         <div style={{ fontSize: '16px', marginBottom: '20px', opacity: 0.9 }}>
                           Welcome to your personal locker!
                         </div>
@@ -418,7 +436,7 @@ const LockerSystemNew: React.FC = () => {
                         opacity: assigning ? 0.7 : 1
                       }}
                     >
-                      {assigning ? '⏳ Assigning Locker...' : '🚀 GET INSTANT LOCKER (NEW SYSTEM)'}
+                      {assigning ? '⏳ Checking Profile...' : '🏠 GET YOUR LOCKER'}
                     </button>
                     
                     <div style={{
@@ -432,10 +450,10 @@ const LockerSystemNew: React.FC = () => {
                       borderRadius: '6px',
                       border: '1px solid rgba(40, 167, 69, 0.3)'
                     }}>
-                      ✨ INSTANT automatic assignment via Supabase!
+                      ✨ Uses your character profile name!
                       <br />
                       <span style={{ fontSize: '12px', fontWeight: 'normal' }}>
-                        No Discord required - get your locker in seconds!
+                        Create your character first, then get your locker assigned
                       </span>
                     </div>
                   </div>
