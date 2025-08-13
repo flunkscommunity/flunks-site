@@ -60,6 +60,49 @@ export const useLockerInfo = () => {
   return { lockerInfo, loading, error, refetch: fetchLockerInfo };
 };
 
+export const useLockerAssignment = () => {
+  const [assigning, setAssigning] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { primaryWallet } = useDynamicContext();
+
+  const assignLocker = async (): Promise<{ success: boolean; locker_number?: number; message?: string }> => {
+    if (!primaryWallet?.address) {
+      throw new Error('No wallet connected');
+    }
+
+    setAssigning(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/assign-locker', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          wallet_address: primaryWallet.address
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to assign locker');
+      }
+
+      return data;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setAssigning(false);
+    }
+  };
+
+  return { assignLocker, assigning, error };
+};
+
 export const useLockerStats = () => {
   const [stats, setStats] = useState<LockerStats | null>(null);
   const [loading, setLoading] = useState(false);
