@@ -47,17 +47,65 @@ const MyApp: AppType = ({ Component, pageProps }) => {
               <ClaimBackpackProvider>
                 <DynamicContextProvider
                   settings={{
-                    environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID || "53675303-5e80-4fe5-88a4-e6caae677432",
+                    environmentId:
+                      process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID ||
+                      "53675303-5e80-4fe5-88a4-e6caae677432",
                     walletConnectors: [FlowWalletConnectors],
+                    // Custom wallet filtering + ordering for better mobile UX
                     walletsFilter: (wallets) => {
-                      // Enhanced debugging for all available wallets
-                      console.log('🔍 ALL AVAILABLE WALLETS:', wallets.map(w => ({ 
-                        key: w.key, 
-                        name: w.name
-                      })));
-                      
-                      // Return ALL wallets to see what's available
-                      return wallets;
+                      const isMobile =
+                        typeof window !== "undefined" &&
+                        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                          window.navigator.userAgent
+                        );
+
+                      // Log once per render pass
+                      try {
+                        console.log(
+                          "🔍 Dynamic wallets (pre-filter)",
+                          wallets.map((w) => ({ key: w.key, name: w.name }))
+                        );
+                      } catch {}
+
+                      // Base Flow wallet keys we care about
+                      const flowKeysPriority = [
+                        "flowwallet", // official Flow Wallet (rebranded Lilico)
+                        "lilico",
+                        "blocto",
+                        "dapper",
+                      ];
+
+                      let filtered = wallets;
+                      if (isMobile) {
+                        filtered = wallets.filter((w) => {
+                          const k = w.key.toLowerCase();
+                          return (
+                            flowKeysPriority.some((p) => k.includes(p))
+                          );
+                        });
+
+                        // If for some reason nothing matched, keep originals
+                        if (!filtered.length) filtered = wallets;
+                      }
+
+                      // Sort so priority Flow wallets surface first
+                      filtered = [...filtered].sort((a, b) => {
+                        const ai = flowKeysPriority.findIndex((p) =>
+                          a.key.toLowerCase().includes(p)
+                        );
+                        const bi = flowKeysPriority.findIndex((p) =>
+                          b.key.toLowerCase().includes(p)
+                        );
+                        return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+                      });
+
+                      try {
+                        console.log(
+                          isMobile ? "📱 Mobile wallets (post-filter)" : "🖥️ Desktop wallets (ordered)",
+                          filtered.map((w) => w.key)
+                        );
+                      } catch {}
+                      return filtered;
                     },
                     overrides: {
                       views: [
@@ -66,28 +114,29 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                           sections: [
                             {
                               type: SdkViewSectionType.Wallet,
-                              // Default to Flow Wallet instead of Lilico
-                              defaultItem: "flowwallet",
+                              // Prefer Blocto on mobile (robust deep-link), Flow Wallet on desktop
+                              defaultItem:
+                                typeof window !== "undefined" &&
+                                /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                                  window.navigator.userAgent
+                                )
+                                  ? "blocto"
+                                  : "flowwallet",
                             },
                           ],
                         },
                       ],
                     },
-                    // Additional settings to ensure proper wallet detection
                     eventsCallbacks: {
-                      onAuthSuccess: (args) => {
-                        console.log('🎉 Auth success:', args);
-                      },
-                      onAuthFailure: (args) => {
-                        console.log('❌ Auth failure:', args);
-                      },
-                      onWalletAdded: (args) => {
-                        console.log('🔗 Wallet added:', args);
-                      },
-                      onWalletRemoved: (args) => {
-                        console.log('🔌 Wallet removed:', args);
-                      }
-                    }
+                      onAuthSuccess: (args) =>
+                        console.log("🎉 Auth success", args),
+                      onAuthFailure: (args) =>
+                        console.log("❌ Auth failure", args),
+                      onWalletAdded: (args) =>
+                        console.log("🔗 Wallet added", args),
+                      onWalletRemoved: (args) =>
+                        console.log("🔌 Wallet removed", args),
+                    },
                   }}
                 >
                   <UserProfileProvider>
@@ -96,6 +145,24 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         <Component {...pageProps} />
                       </div>
                       <Analytics />
+                      {/* Global wallet connect entry point */}
+                      <div
+                        style={{
+                          position: "fixed",
+                          bottom: 16,
+                          right: 16,
+                          zIndex: 10000,
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 8,
+                        }}
+                      >
+                        <DynamicWidget
+                          buttonClassName="dynamic-connect-wallet"
+                          buttonContainerClassName="dynamic-widget-container"
+                          innerButtonComponent={<span>Connect Wallet</span>}
+                        />
+                      </div>
                       <DynamicUserProfile />
                     </PaginatedItemsProvider>
                   </UserProfileProvider>

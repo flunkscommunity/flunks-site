@@ -1,9 +1,11 @@
 import React, { useState, useRef } from 'react';
 import DraggableResizeableWindow from '../components/DraggableResizeableWindow';
-import { WINDOW_IDS } from 'fixed';
+import MobileWalletHelper from '../components/MobileWalletHelper';
+import { isMobileDevice } from '../utils/mobileWalletDetection';
 import { useWindowsContext } from '../contexts/WindowsContext';
 import { useLockerInfo, useLockerAssignment } from '../hooks/useLocker';
 import { useDynamicContext, DynamicConnectButton } from '@dynamic-labs/sdk-react-core';
+import { WINDOW_IDS } from '../types/Windows';
 
 const LockerSystemNew: React.FC = () => {
   const { closeWindow } = useWindowsContext();
@@ -204,6 +206,16 @@ const LockerSystemNew: React.FC = () => {
                     Connect your wallet to access the new automatic locker system
                   </div>
                 </div>
+
+                {/* Mobile-specific wallet guidance */}
+                {isMobileDevice() && (
+                  <MobileWalletHelper 
+                    showDebugInfo={false}
+                    onWalletSelected={(walletType) => {
+                      console.log('Selected mobile wallet:', walletType);
+                    }}
+                  />
+                )}
                 
                 <DynamicConnectButton>
                   <button style={{
