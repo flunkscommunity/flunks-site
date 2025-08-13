@@ -1,6 +1,7 @@
 // API endpoint to get user's locker information
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
+import { normalizeWalletAddress } from 'utils/walletAddress';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -20,9 +21,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { wallet_address } = req.query;
+  const { wallet_address: raw_wallet_address } = req.query as { wallet_address?: string };
+  const wallet_address = normalizeWalletAddress(raw_wallet_address);
 
-  if (!wallet_address || typeof wallet_address !== 'string') {
+  if (!raw_wallet_address || typeof raw_wallet_address !== 'string') {
     return res.status(400).json({ 
       error: 'wallet_address is required' 
     });
@@ -30,11 +32,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     // Get user's locker information
-    const { data: lockerInfo, error } = await supabase
+    let { data: lockerInfo, error } = await supabase
       .from('user_profiles')
       .select('locker_number, username, created_at')
       .eq('wallet_address', wallet_address)
       .single();
+
+    if (error?.code === 'PGRST116' && raw_wallet_address && wallet_address !== raw_wallet_address) {
+      const { data: legacyInfo, error: legacyError } = await supabase
+        .from('user_profiles')
+        .select('locker_number, username, created_at')
+        .eq('wallet_address', raw_wallet_address)
+        .single();
+      if (!legacyError && legacyInfo) {
+        lockerInfo = legacyInfo as any;
+        error = null;
+      }
+    }
 
     if (error) {
       if (error.code === 'PGRST116') { // No rows found

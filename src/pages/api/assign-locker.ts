@@ -1,6 +1,7 @@
 // API endpoint to assign a locker to a user
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
+import { normalizeWalletAddress } from 'utils/walletAddress';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -23,7 +24,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     });
   }
 
-  const { wallet_address } = req.body;
+  const { wallet_address: raw_wallet_address } = req.body;
+  const wallet_address = normalizeWalletAddress(raw_wallet_address);
 
   if (!wallet_address || typeof wallet_address !== 'string') {
     return res.status(400).json({ 
@@ -36,11 +38,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     console.log('🔄 assign-locker API called for wallet:', wallet_address);
     
     // First, check if user already has a profile with a real username
-    const { data: existingUser, error: checkError } = await supabase
+    let { data: existingUser, error: checkError } = await supabase
       .from('user_profiles')
-      .select('locker_number, wallet_address, username')
+      .select('id, locker_number, wallet_address, username')
       .eq('wallet_address', wallet_address)
       .single();
+
+    if (checkError?.code === 'PGRST116' && raw_wallet_address && normalizeWalletAddress(raw_wallet_address) !== raw_wallet_address.toLowerCase()) {
+      const { data: legacyUser, error: legacyError } = await supabase
+        .from('user_profiles')
+        .select('id, locker_number, wallet_address, username')
+        .eq('wallet_address', raw_wallet_address)
+        .single();
+      if (!legacyError && legacyUser) {
+        existingUser = legacyUser as any;
+        checkError = null;
+        try {
+          await supabase
+            .from('user_profiles')
+            .update({ wallet_address })
+            .eq('id', legacyUser.id);
+          console.log('🔧 Normalized legacy wallet address to', wallet_address);
+        } catch (e) {
+          console.warn('⚠️ Failed to normalize wallet address row', e);
+        }
+      }
+    }
 
     console.log('🔍 Existing user check result:', { existingUser, checkError: checkError?.code });
 

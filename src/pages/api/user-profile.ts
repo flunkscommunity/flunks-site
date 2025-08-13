@@ -1,6 +1,7 @@
 // API endpoint to create or update user profile
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
+import { normalizeWalletAddress } from 'utils/walletAddress';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -20,7 +21,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { wallet_address, username, discord_id, email }: UserProfileData = req.body;
+  const { wallet_address: raw_wallet_address, username, discord_id, email }: UserProfileData = req.body;
+  const wallet_address = normalizeWalletAddress(raw_wallet_address);
 
   // Validation
   if (!wallet_address || !username) {

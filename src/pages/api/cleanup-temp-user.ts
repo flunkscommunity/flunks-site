@@ -1,6 +1,7 @@
 // API endpoint to clean up temporary auto-generated users
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
+import { normalizeWalletAddress } from 'utils/walletAddress';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -13,7 +14,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { wallet_address } = req.body;
+  const { wallet_address: raw_wallet_address } = req.body;
+  const wallet_address = normalizeWalletAddress(raw_wallet_address);
 
   if (!wallet_address || typeof wallet_address !== 'string') {
     return res.status(400).json({ 
@@ -25,11 +27,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.log('🧹 Cleaning up auto-generated user for wallet:', wallet_address);
     
     // Check if user has auto-generated username
-    const { data: existingUser, error: checkError } = await supabase
+    let { data: existingUser, error: checkError } = await supabase
       .from('user_profiles')
       .select('username, wallet_address, locker_number')
       .eq('wallet_address', wallet_address)
       .single();
+
+    if (checkError?.code === 'PGRST116' && raw_wallet_address && wallet_address !== raw_wallet_address) {
+      const { data: legacyUser, error: legacyError } = await supabase
+        .from('user_profiles')
+        .select('username, wallet_address, locker_number')
+        .eq('wallet_address', raw_wallet_address)
+        .single();
+      if (!legacyError && legacyUser) {
+        existingUser = legacyUser as any;
+        checkError = null;
+      }
+    }
 
     if (checkError && checkError.code !== 'PGRST116') {
       console.error('❌ Error checking user:', checkError);
