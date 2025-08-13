@@ -10,7 +10,7 @@ interface Props {
   onClose?: () => void;
 }
 
-const FlunkEMart: React.FC<Props> = (props) => {
+const FlunkMart: React.FC<Props> = (props) => {
   const { windowId, onClose } = props;
   const { closeWindow } = useWindowsContext();
 
@@ -58,4 +58,4 @@ const FlunkEMart: React.FC<Props> = (props) => {
   );
 };
 
-export default FlunkEMart;
+export default FlunkMart;

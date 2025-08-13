@@ -94,7 +94,7 @@ const DesktopAppIcon: React.FC<Props> = (props) => {
       <div
         // onDoubleClick={onDoubleClick}
         onClick={onDoubleClick}
-        className="p-2 w-full max-w-[100px] lg:max-w-[140px] transition-transform duration-200 hover:scale-110 active:scale-95"
+        className="p-2 w-full max-w-[120px] lg:max-w-[160px] transition-transform duration-200 hover:scale-110 active:scale-95"
       >
         <Container className="group flex flex-col gap-2 items-center justify-start h-full">
           <AppIcon icon={icon} />
