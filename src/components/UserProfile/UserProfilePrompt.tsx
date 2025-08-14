@@ -4,7 +4,7 @@ import { useUserProfile } from 'contexts/UserProfileContext';
 import { useWindowsContext } from 'contexts/WindowsContext';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { WINDOW_IDS } from 'fixed';
-import UserProfile from 'windows/UserProfile';
+import LockerSystemNew from 'windows/LockerSystemNew';
 
 interface ProfilePromptProps {
   onDismiss?: () => void;
@@ -25,9 +25,10 @@ const UserProfilePrompt: React.FC<ProfilePromptProps> = ({
   }
 
   const handleCreateProfile = () => {
+    // Open the user profile/locker window (same as Start menu)
     openWindow({
       key: WINDOW_IDS.USER_PROFILE,
-      window: <UserProfile />
+      window: <LockerSystemNew />
     });
     onDismiss?.();
   };
@@ -103,7 +104,7 @@ const UserProfilePrompt: React.FC<ProfilePromptProps> = ({
               Skip for Now
             </Button>
             <Button onClick={handleCreateProfile}>
-              � Create My Locker
+              ✨ Create My Locker
             </Button>
           </div>
 
