@@ -53,6 +53,8 @@ export const WINDOW_IDS = {
   DEV_PREVIEW: "dev-preview",
   REPORT_CARD: "report-card",
   ICON_ANIMATION: "icon-animation",
+  BULLETIN_BOARD: "bulletin-board",
+  YEARBOOK: "yearbook",
   
   // New location main windows
   JOCKS_HOUSE_MAIN: "jocks_house_main",
@@ -338,5 +340,15 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appName: "Icon Animation",
     appIcon: "/images/icons/attack-64x64.png",
     key: WINDOW_IDS.ICON_ANIMATION,
+  },
+  [WINDOW_IDS.BULLETIN_BOARD]: {
+    appName: "Bulletin Board",
+    appIcon: "/images/icons/did-you-know.png",
+    key: WINDOW_IDS.BULLETIN_BOARD,
+  },
+  [WINDOW_IDS.YEARBOOK]: {
+    appName: "Flunks Yearbook",
+    appIcon: "/images/icons/open-book.png",
+    key: WINDOW_IDS.YEARBOOK,
   },
 };

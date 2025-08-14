@@ -212,6 +212,14 @@ const pages = [
     content: "radio"
   },
   {
+    title: "Terminal Guide",
+    content: "terminal"
+  },
+  {
+    title: "Gum System",
+    content: "gum-system"
+  },
+  {
     title: "Troubleshooting",
     content: "troubleshooting"
   }
@@ -311,7 +319,7 @@ const GameManualWindow: React.FC = () => {
               </TOCItem>
             ))}
             <div style={{ marginTop: 20, padding: 10, background: '#ffffcc', border: '1px solid #cccc00' }}>
-              <strong>💡 Quick Start:</strong> New to Flunks High School? Start with "Getting Started" to connect your wallet and begin your journey!
+              <strong>💡 Quick Start:</strong> New to Flunks High School? Start with "Getting Started" to connect your wallet and begin your journey! Try the Terminal 💻 for power-user commands and don't forget the new Gum System 🍬 for earning rewards!
             </div>
           </PageContent>
         );
@@ -335,9 +343,16 @@ const GameManualWindow: React.FC = () => {
               <li>🎮 Arcade</li>
               <li>📻 Radio Station</li>
               <li>🌳 Treehouse</li>
+              <li>💻 Terminal (Command Center)</li>
             </ul>
             
-            <h4>Step 3: Check Your Access</h4>
+            <h4>Step 3: Try the Terminal</h4>
+            <p>Open the Terminal app and type <code>help</code> to see available commands. See Chapter 8 for the complete terminal guide.</p>
+            
+            <h4>Step 4: Start Earning Gum!</h4>
+            <p>Look for the floating 🍬 gum button and start earning reward points! See Chapter 9 for complete gum system details.</p>
+            
+            <h4>Step 5: Check Your Access</h4>
             <p>See Chapter 4 for detailed information about clique-based access controls and how to unlock exclusive areas.</p>
           </PageContent>
         );
@@ -468,6 +483,146 @@ const GameManualWindow: React.FC = () => {
             <div style={{ marginTop: 15, padding: 10, background: '#eeffee', border: '1px solid #00cc00' }}>
               <strong>💡 Pro Tip:</strong> The radio continues playing in the background while you explore different areas of the school!
             </div>
+          </PageContent>
+        );
+        
+      case "terminal":
+        return (
+          <PageContent>
+            <PageHeader>💻 Terminal Guide</PageHeader>
+            <h3>Flunks Terminal - Your Command Center</h3>
+            <p>The Terminal is a powerful tool that lets you interact with the Flunks High School system using text commands, just like a real computer terminal!</p>
+            
+            <h4>🚀 Opening the Terminal</h4>
+            <p>Double-click the <strong>Terminal</strong> icon on your desktop to open the command interface.</p>
+            <Screenshot>[TERMINAL ICON ON DESKTOP]</Screenshot>
+            
+            <h4>⌨️ Basic Commands</h4>
+            <p>Here are some essential commands to get you started:</p>
+            <ul>
+              <li><code><strong>help</strong></code> - Show all available commands</li>
+              <li><code><strong>clear</strong></code> - Clear the terminal screen</li>
+              <li><code><strong>whoami</strong></code> - Display your current user info</li>
+              <li><code><strong>ls</strong></code> - List files and directories</li>
+              <li><code><strong>pwd</strong></code> - Show current directory path</li>
+              <li><code><strong>date</strong></code> - Display current date and time</li>
+              <li><code><strong>echo [text]</strong></code> - Print text to the screen</li>
+            </ul>
+            
+            <h4>🏫 School-Specific Commands</h4>
+            <p>Special commands unique to Flunks High School:</p>
+            <ul>
+              <li><code><strong>status</strong></code> - Check your access level and clique membership</li>
+              <li><code><strong>nft</strong></code> - Display your NFT collection info</li>
+              <li><code><strong>wallet</strong></code> - Show connected wallet details</li>
+              <li><code><strong>gum</strong></code> - Check your gum balance and stats</li>
+              <li><code><strong>radio</strong></code> - Control the radio player</li>
+              <li><code><strong>map</strong></code> - Show campus navigation</li>
+              <li><code><strong>grades</strong></code> - View your academic progress</li>
+            </ul>
+            
+            <h4>🎮 Fun Commands</h4>
+            <p>Easter eggs and entertainment commands:</p>
+            <ul>
+              <li><code><strong>fortune</strong></code> - Get a random fortune or quote</li>
+              <li><code><strong>cowsay [text]</strong></code> - Make a cow say something</li>
+              <li><code><strong>matrix</strong></code> - Enter the matrix (green falling text)</li>
+              <li><code><strong>rickroll</strong></code> - You know what this does...</li>
+              <li><code><strong>konami</strong></code> - Try the famous cheat code</li>
+              <li><code><strong>sudo</strong></code> - Pretend you have admin privileges</li>
+            </ul>
+            
+            <h4>📁 File System Commands</h4>
+            <p>Navigate and explore the virtual file system:</p>
+            <ul>
+              <li><code><strong>cd [directory]</strong></code> - Change to specified directory</li>
+              <li><code><strong>cat [file]</strong></code> - Display file contents</li>
+              <li><code><strong>find [name]</strong></code> - Search for files or directories</li>
+              <li><code><strong>tree</strong></code> - Show directory structure as a tree</li>
+              <li><code><strong>history</strong></code> - Show command history</li>
+            </ul>
+            
+            <h4>⚙️ Terminal Features</h4>
+            <p><strong>Command History:</strong> Use ↑ and ↓ arrow keys to cycle through previous commands</p>
+            <p><strong>Tab Completion:</strong> Press Tab to auto-complete commands and file names</p>
+            <p><strong>Copy/Paste:</strong> Right-click for context menu options</p>
+            <p><strong>Resize Window:</strong> Drag corners to resize the terminal window</p>
+            <p><strong>Multiple Sessions:</strong> Open multiple terminal windows simultaneously</p>
+            
+            <h4>🔐 Security Features</h4>
+            <p>The terminal includes several security and authentication features:</p>
+            <ul>
+              <li><strong>Wallet Integration:</strong> Commands automatically detect your connected wallet</li>
+              <li><strong>Access Control:</strong> Some commands require specific NFT ownership</li>
+              <li><strong>Safe Execution:</strong> All commands run in a secure sandbox environment</li>
+              <li><strong>Permission Levels:</strong> Different access tiers based on your clique membership</li>
+            </ul>
+            
+            <div style={{ marginTop: 15, padding: 10, background: '#fff0e6', border: '1px solid #ff8800' }}>
+              <strong>⚡ Power User Tip:</strong> Type <code>help advanced</code> to see hidden commands and developer tools available to experienced users!
+            </div>
+            
+            <div style={{ marginTop: 10, padding: 10, background: '#f0f8ff', border: '1px solid #0066cc' }}>
+              <strong>🎯 Quick Start:</strong> New to terminals? Start with <code>help</code>, then try <code>whoami</code> and <code>status</code> to get your bearings!
+            </div>
+            
+            <Screenshot>[TERMINAL INTERFACE - Command prompt, help output, colorful text]</Screenshot>
+          </PageContent>
+        );
+        
+      case "gum-system":
+        return (
+          <PageContent>
+            <PageHeader>🍬 Gum System</PageHeader>
+            <h3>Earn & Collect Gum Points!</h3>
+            <p>The Gum System is Flunks High School's reward mechanism that lets you earn points through various activities around campus.</p>
+            
+            <h4>🎯 How to Earn Gum</h4>
+            <p><strong>Floating Gum Button:</strong> Look for the floating 🍬 button that moves around your screen!</p>
+            <ul>
+              <li><strong>Click to Earn:</strong> Click the button to earn 5 gum points</li>
+              <li><strong>Drag to Move:</strong> Drag the button to reposition it anywhere on screen</li>
+              <li><strong>Auto-Movement:</strong> After earning, the button automatically moves to a new location</li>
+              <li><strong>Cooldown:</strong> 1-minute cooldown between clicks to prevent spam</li>
+              <li><strong>Daily Limit:</strong> Maximum 100 gum per day from the floating button</li>
+            </ul>
+            
+            <h4>📊 Gum Display</h4>
+            <p>Your current gum balance is always visible in the top-right corner of your screen, showing:</p>
+            <ul>
+              <li><strong>Current Balance:</strong> Your available gum points</li>
+              <li><strong>Total Earned:</strong> Lifetime gum earnings</li>
+              <li><strong>Total Spent:</strong> Gum used for purchases (coming soon!)</li>
+            </ul>
+            
+            <h4>🚀 Additional Earning Methods</h4>
+            <p>More ways to earn gum are being added regularly:</p>
+            <ul>
+              <li><strong>Daily Login:</strong> Bonus gum for returning each day</li>
+              <li><strong>Feature Usage:</strong> Earn points for exploring different areas</li>
+              <li><strong>Special Events:</strong> Limited-time bonus opportunities</li>
+              <li><strong>Achievements:</strong> Unlock rewards for completing challenges</li>
+            </ul>
+            
+            <h4>💰 Future Spending Options</h4>
+            <p>Coming soon, you'll be able to spend gum on:</p>
+            <ul>
+              <li>🎨 Exclusive avatar customizations</li>
+              <li>🔓 Premium area access</li>
+              <li>🎵 Special radio stations</li>
+              <li>🏆 Achievement boosters</li>
+              <li>🎁 Mystery reward boxes</li>
+            </ul>
+            
+            <h4>🔧 Admin Panel (For Testing)</h4>
+            <p><strong>Keyboard Shortcut:</strong> Press <code>Ctrl + G</code> to open the gum admin panel</p>
+            <p>The admin panel shows detailed statistics, transaction history, and allows testing of different gum sources.</p>
+            
+            <div style={{ marginTop: 15, padding: 10, background: '#fff5ee', border: '1px solid #ff8c00' }}>
+              <strong>🍬 Pro Tip:</strong> The gum system uses blockchain technology to securely track your earnings across sessions. Your gum balance is permanently stored and tied to your wallet address!
+            </div>
+            
+            <Screenshot>[GUM SYSTEM INTERFACE - Floating button, balance display, admin panel]</Screenshot>
           </PageContent>
         );
         

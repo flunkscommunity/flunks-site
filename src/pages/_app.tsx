@@ -23,6 +23,9 @@ import { PaginatedItemsProvider } from "contexts/UserPaginatedItems";
 import { UserProfileProvider } from "contexts/UserProfileContext";
 import { AudioProvider } from "contexts/AudioContext";
 import { RadioProvider } from "contexts/RadioContext";
+import { GumProvider } from "contexts/GumContext";
+import { FloatingGumButton } from "components/FloatingGumButton";
+import { GumDisplay } from "components/GumDisplay";
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -141,29 +144,34 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                 >
                   <UserProfileProvider>
                     <PaginatedItemsProvider>
-                      <div className="app-container min-h-screen w-full overflow-hidden">
-                        <Component {...pageProps} />
-                      </div>
-                      <Analytics />
-                      {/* Global wallet connect entry point */}
-                      <div
-                        style={{
-                          position: "fixed",
-                          bottom: 16,
-                          right: 16,
-                          zIndex: 10000,
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 8,
-                        }}
-                      >
-                        <DynamicWidget
-                          buttonClassName="dynamic-connect-wallet"
-                          buttonContainerClassName="dynamic-widget-container"
-                          innerButtonComponent={<span>Connect Wallet</span>}
-                        />
-                      </div>
-                      <DynamicUserProfile />
+                      <GumProvider>
+                        <div className="app-container min-h-screen w-full overflow-hidden">
+                          <Component {...pageProps} />
+                        </div>
+                        <Analytics />
+                        {/* Gum System Components */}
+                        <GumDisplay showDetailedStats={true} />
+                        <FloatingGumButton initialX={150} initialY={200} />
+                        {/* Global wallet connect entry point */}
+                        <div
+                          style={{
+                            position: "fixed",
+                            bottom: 16,
+                            right: 16,
+                            zIndex: 10000,
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 8,
+                          }}
+                        >
+                          <DynamicWidget
+                            buttonClassName="dynamic-connect-wallet"
+                            buttonContainerClassName="dynamic-widget-container"
+                            innerButtonComponent={<span>Connect Wallet</span>}
+                          />
+                        </div>
+                        <DynamicUserProfile />
+                      </GumProvider>
                     </PaginatedItemsProvider>
                   </UserProfileProvider>
                 </DynamicContextProvider>

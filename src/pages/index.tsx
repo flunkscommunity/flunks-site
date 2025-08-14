@@ -32,11 +32,14 @@ import SimpleBrowser from "windows/SimpleBrowser";
 import DevPreview from "windows/DevPreview";
 import ReportCard from "windows/ReportCard";
 import IconAnimationWindow from "windows/IconAnimationWindow";
+import BulletinBoard from "windows/BulletinBoard";
+import Yearbook from "windows/Yearbook";
 import AccessLevelStatus from "components/AccessLevelStatus";
 import ConditionalAppIcon from "components/ConditionalAppIcon";
 import { BACKGROUND_CONFIG } from "config/backgroundConfig";
 import useThemeSettings from "store/useThemeSettings";
 import MobileDebugger from "components/MobileDebugger";
+import { GumAdminPanel } from "components/GumAdminPanel";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -84,6 +87,20 @@ const Desktop = () => {
   const router = useRouter();
   const { windows, openWindow, closeWindow, windowApps } = useWindowsContext();
   const { showGettingStartedOnStartup } = useGettingStarted();
+  const [showGumAdmin, setShowGumAdmin] = useState(false);
+
+  // Keyboard shortcut for gum admin panel (Ctrl+G)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key.toLowerCase() === 'g') {
+        event.preventDefault();
+        setShowGumAdmin(prev => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
 useEffect(() => {
   if (showGettingStartedOnStartup) {
@@ -393,10 +410,41 @@ const windowsMemod = useMemo(() => (
             })
           }
         />
+
+        {/* 17. Bulletin Board */}
+        <ConditionalAppIcon
+          appId="bulletin-board"
+          title="Bulletin Board"
+          icon="/images/icons/did-you-know.png"
+          onDoubleClick={() =>
+            openWindow({
+              key: WINDOW_IDS.BULLETIN_BOARD,
+              window: <BulletinBoard />
+            })
+          }
+        />
+
+        {/* 18. Yearbook */}
+        <ConditionalAppIcon
+          appId="yearbook"
+          title="Flunks Yearbook"
+          icon="/images/icons/open-book.png"
+          onDoubleClick={() =>
+            openWindow({
+              key: WINDOW_IDS.YEARBOOK,
+              window: <Yearbook />
+            })
+          }
+        />
         </div>
       </div>
 
       {windowsMemod}
+      
+      {/* Gum Admin Panel - Ctrl+G to toggle */}
+      {showGumAdmin && (
+        <GumAdminPanel onClose={() => setShowGumAdmin(false)} />
+      )}
     </>
   );
 };
