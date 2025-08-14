@@ -1,8 +1,8 @@
--- Gum System Schema
+-- Gum System Schema - Safe Version (handles existing tables)
 -- Table to track user gum balances and transactions
 
--- Main gum balances table
-CREATE TABLE user_gum_balances (
+-- Create tables only if they don't exist
+CREATE TABLE IF NOT EXISTS user_gum_balances (
   id SERIAL PRIMARY KEY,
   wallet_address VARCHAR(64) UNIQUE NOT NULL,
   total_gum BIGINT DEFAULT 0 NOT NULL,
@@ -11,8 +11,7 @@ CREATE TABLE user_gum_balances (
   CONSTRAINT positive_gum_balance CHECK (total_gum >= 0)
 );
 
--- Gum transactions table for tracking all gum earning/spending activities
-CREATE TABLE gum_transactions (
+CREATE TABLE IF NOT EXISTS gum_transactions (
   id SERIAL PRIMARY KEY,
   wallet_address VARCHAR(64) NOT NULL,
   transaction_type VARCHAR(32) NOT NULL, -- 'earned', 'spent', 'bonus', etc.
@@ -23,8 +22,7 @@ CREATE TABLE gum_transactions (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Gum source configuration table for managing different earning methods
-CREATE TABLE gum_sources (
+CREATE TABLE IF NOT EXISTS gum_sources (
   id SERIAL PRIMARY KEY,
   source_name VARCHAR(64) UNIQUE NOT NULL,
   base_reward INTEGER NOT NULL,
@@ -36,8 +34,7 @@ CREATE TABLE gum_sources (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- User cooldowns table to track when users can earn again from specific sources
-CREATE TABLE user_gum_cooldowns (
+CREATE TABLE IF NOT EXISTS user_gum_cooldowns (
   id SERIAL PRIMARY KEY,
   wallet_address VARCHAR(64) NOT NULL,
   source_name VARCHAR(64) NOT NULL,
@@ -47,35 +44,95 @@ CREATE TABLE user_gum_cooldowns (
   UNIQUE(wallet_address, source_name)
 );
 
--- Add indexes for performance
-CREATE INDEX idx_gum_balances_wallet ON user_gum_balances(wallet_address);
-CREATE INDEX idx_gum_transactions_wallet ON gum_transactions(wallet_address);
-CREATE INDEX idx_gum_transactions_source ON gum_transactions(source);
-CREATE INDEX idx_gum_transactions_created ON gum_transactions(created_at);
-CREATE INDEX idx_gum_cooldowns_wallet_source ON user_gum_cooldowns(wallet_address, source_name);
-CREATE INDEX idx_gum_cooldowns_last_earned ON user_gum_cooldowns(last_earned_at);
+-- Add missing columns if they don't exist
+DO $$ 
+BEGIN
+    -- Add description column to gum_sources if it doesn't exist
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'gum_sources' AND column_name = 'description'
+    ) THEN
+        ALTER TABLE gum_sources ADD COLUMN description TEXT;
+    END IF;
+END $$;
 
--- Add foreign key constraints
-ALTER TABLE gum_transactions 
-ADD CONSTRAINT fk_gum_transactions_wallet 
-FOREIGN KEY (wallet_address) REFERENCES user_profiles(wallet_address) ON DELETE CASCADE;
+-- Create indexes if they don't exist
+CREATE INDEX IF NOT EXISTS idx_gum_balances_wallet ON user_gum_balances(wallet_address);
+CREATE INDEX IF NOT EXISTS idx_gum_transactions_wallet ON gum_transactions(wallet_address);
+CREATE INDEX IF NOT EXISTS idx_gum_transactions_source ON gum_transactions(source);
+CREATE INDEX IF NOT EXISTS idx_gum_transactions_created ON gum_transactions(created_at);
+CREATE INDEX IF NOT EXISTS idx_gum_cooldowns_wallet_source ON user_gum_cooldowns(wallet_address, source_name);
+CREATE INDEX IF NOT EXISTS idx_gum_cooldowns_last_earned ON user_gum_cooldowns(last_earned_at);
 
-ALTER TABLE user_gum_balances 
-ADD CONSTRAINT fk_gum_balances_wallet 
-FOREIGN KEY (wallet_address) REFERENCES user_profiles(wallet_address) ON DELETE CASCADE;
+-- Add foreign key constraints only if they don't exist
+DO $$ 
+BEGIN
+    -- Check if user_profiles table exists before adding foreign keys
+    IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'user_profiles') THEN
+        
+        -- Add foreign key for gum_transactions if it doesn't exist
+        IF NOT EXISTS (
+            SELECT 1 FROM information_schema.table_constraints 
+            WHERE constraint_name = 'fk_gum_transactions_wallet' AND table_name = 'gum_transactions'
+        ) THEN
+            ALTER TABLE gum_transactions 
+            ADD CONSTRAINT fk_gum_transactions_wallet 
+            FOREIGN KEY (wallet_address) REFERENCES user_profiles(wallet_address) ON DELETE CASCADE;
+        END IF;
 
-ALTER TABLE user_gum_cooldowns 
-ADD CONSTRAINT fk_gum_cooldowns_wallet 
-FOREIGN KEY (wallet_address) REFERENCES user_profiles(wallet_address) ON DELETE CASCADE;
+        -- Add foreign key for user_gum_balances if it doesn't exist
+        IF NOT EXISTS (
+            SELECT 1 FROM information_schema.table_constraints 
+            WHERE constraint_name = 'fk_gum_balances_wallet' AND table_name = 'user_gum_balances'
+        ) THEN
+            ALTER TABLE user_gum_balances 
+            ADD CONSTRAINT fk_gum_balances_wallet 
+            FOREIGN KEY (wallet_address) REFERENCES user_profiles(wallet_address) ON DELETE CASCADE;
+        END IF;
 
--- Add triggers to auto-update updated_at columns
-CREATE TRIGGER update_gum_balances_updated_at 
-    BEFORE UPDATE ON user_gum_balances 
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+        -- Add foreign key for user_gum_cooldowns if it doesn't exist
+        IF NOT EXISTS (
+            SELECT 1 FROM information_schema.table_constraints 
+            WHERE constraint_name = 'fk_gum_cooldowns_wallet' AND table_name = 'user_gum_cooldowns'
+        ) THEN
+            ALTER TABLE user_gum_cooldowns 
+            ADD CONSTRAINT fk_gum_cooldowns_wallet 
+            FOREIGN KEY (wallet_address) REFERENCES user_profiles(wallet_address) ON DELETE CASCADE;
+        END IF;
+        
+    END IF;
+END $$;
 
-CREATE TRIGGER update_gum_sources_updated_at 
-    BEFORE UPDATE ON gum_sources 
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+-- Create update function if it doesn't exist
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- Add triggers only if they don't exist
+DO $$ 
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.triggers 
+        WHERE trigger_name = 'update_gum_balances_updated_at'
+    ) THEN
+        CREATE TRIGGER update_gum_balances_updated_at 
+            BEFORE UPDATE ON user_gum_balances 
+            FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.triggers 
+        WHERE trigger_name = 'update_gum_sources_updated_at'
+    ) THEN
+        CREATE TRIGGER update_gum_sources_updated_at 
+            BEFORE UPDATE ON gum_sources 
+            FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    END IF;
+END $$;
 
 -- Enable Row Level Security
 ALTER TABLE user_gum_balances ENABLE ROW LEVEL SECURITY;
@@ -83,36 +140,48 @@ ALTER TABLE gum_transactions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE gum_sources ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_gum_cooldowns ENABLE ROW LEVEL SECURITY;
 
--- Policies for gum_balances
+-- Drop existing policies if they exist and recreate them
+DROP POLICY IF EXISTS "Users can read own gum balance" ON user_gum_balances;
+DROP POLICY IF EXISTS "Allow gum balance updates" ON user_gum_balances;
+DROP POLICY IF EXISTS "Users can read own transactions" ON gum_transactions;
+DROP POLICY IF EXISTS "Allow transaction inserts" ON gum_transactions;
+DROP POLICY IF EXISTS "Allow public read gum sources" ON gum_sources;
+DROP POLICY IF EXISTS "Users can read own cooldowns" ON user_gum_cooldowns;
+DROP POLICY IF EXISTS "Allow cooldown management" ON user_gum_cooldowns;
+
+-- Create policies
 CREATE POLICY "Users can read own gum balance" ON user_gum_balances
 FOR SELECT USING (wallet_address = current_setting('jwt.claims.wallet_address', true));
 
 CREATE POLICY "Allow gum balance updates" ON user_gum_balances
 FOR ALL USING (true); -- Will be handled by functions
 
--- Policies for gum_transactions  
 CREATE POLICY "Users can read own transactions" ON gum_transactions
 FOR SELECT USING (wallet_address = current_setting('jwt.claims.wallet_address', true));
 
 CREATE POLICY "Allow transaction inserts" ON gum_transactions
 FOR INSERT WITH CHECK (true); -- Will be handled by functions
 
--- Policies for gum_sources (public read)
 CREATE POLICY "Allow public read gum sources" ON gum_sources
 FOR SELECT USING (true);
 
--- Policies for cooldowns
 CREATE POLICY "Users can read own cooldowns" ON user_gum_cooldowns
 FOR SELECT USING (wallet_address = current_setting('jwt.claims.wallet_address', true));
 
 CREATE POLICY "Allow cooldown management" ON user_gum_cooldowns
 FOR ALL USING (true); -- Will be handled by functions
 
--- Insert default gum sources
+-- Insert or update default gum sources
 INSERT INTO gum_sources (source_name, base_reward, cooldown_minutes, daily_limit, description) VALUES
 ('floating_button', 5, 360, 20, 'Floating gum button clicks'),
 ('daily_login', 10, 1440, 10, 'Daily login bonus'),
-('special_event', 50, 0, 50, 'Special event rewards');
+('special_event', 50, 0, 50, 'Special event rewards')
+ON CONFLICT (source_name) DO UPDATE SET
+  base_reward = EXCLUDED.base_reward,
+  cooldown_minutes = EXCLUDED.cooldown_minutes,
+  daily_limit = EXCLUDED.daily_limit,
+  description = EXCLUDED.description,
+  updated_at = CURRENT_TIMESTAMP;
 
 -- Function to award gum (handles balance updates, transaction logging, and cooldowns)
 CREATE OR REPLACE FUNCTION award_gum(

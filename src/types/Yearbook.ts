@@ -25,7 +25,7 @@ export interface YearbookFilters {
   clique?: string;
   trait?: string;
   search?: string;
-  sortBy?: 'tokenId' | 'rank' | 'name';
+  sortBy?: 'tokenId' | 'rank' | 'name' | 'random';
   limit?: number;
   offset?: number;
 }

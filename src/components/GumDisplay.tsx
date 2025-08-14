@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { getUserGumStats, getUserGumBalance, type GumStats } from '../utils/gumAPI';
 
@@ -82,7 +82,7 @@ const GumBalance = styled.div<{ $isUpdating: boolean }>`
   position: relative;
   z-index: 2;
   
-  ${props => props.$isUpdating && `
+  ${props => props.$isUpdating && css`
     animation: ${countUp} 0.5s ease-out;
   `}
 `;
@@ -171,11 +171,15 @@ export const GumDisplay: React.FC<GumDisplayProps> = ({
         const stats = await getUserGumStats(primaryWallet.address);
         if (stats) {
           setGumStats(stats);
-          setBalance(stats.current_balance);
+          setBalance(stats.current_balance || 0);
+        } else {
+          // No stats found, set defaults
+          setGumStats(null);
+          setBalance(0);
         }
       } else {
         const currentBalance = await getUserGumBalance(primaryWallet.address);
-        setBalance(currentBalance);
+        setBalance(currentBalance || 0);
       }
       setLastUpdate(Date.now());
     } catch (err) {
@@ -218,7 +222,10 @@ export const GumDisplay: React.FC<GumDisplayProps> = ({
   }, []);
 
   // Format large numbers
-  const formatNumber = (num: number): string => {
+  const formatNumber = (num: number | null | undefined): string => {
+    if (num == null || isNaN(num)) {
+      return '0';
+    }
     if (num >= 1000000) {
       return (num / 1000000).toFixed(1) + 'M';
     }

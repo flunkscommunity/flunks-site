@@ -3,7 +3,7 @@ import DraggableResizeableWindow from '../components/DraggableResizeableWindow';
 import { useWindowsContext } from '../contexts/WindowsContext';
 import { WINDOW_IDS } from 'fixed';
 import styled from 'styled-components';
-import { Button, Select, TextInput, Frame, ScrollView, Progress } from 'react95';
+import { Button, Select, TextInput, Frame, ScrollView, Progress, Checkbox } from 'react95';
 import { FlunkNFT, YearbookFilters, YearbookStats } from '../types/Yearbook';
 import { YearbookAPI, YearbookMockData } from '../utils/yearbookAPI';
 
@@ -97,6 +97,32 @@ const HeaderSection = styled.div`
     text-shadow: 1px 1px 2px #000;
     color: #000;
   }
+  
+  @media (max-width: 768px) {
+    padding: 12px;
+    
+    h1 {
+      font-size: 22px;
+      letter-spacing: 1px;
+    }
+    
+    p {
+      font-size: 12px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    padding: 8px;
+    
+    h1 {
+      font-size: 18px;
+      letter-spacing: 0.5px;
+    }
+    
+    p {
+      font-size: 11px;
+    }
+  }
 `;
 
 const StatsSection = styled.div`
@@ -114,6 +140,8 @@ const StatsSection = styled.div`
   font-weight: bold;
   font-size: 12px;
   position: relative;
+  flex-wrap: wrap;
+  gap: 8px;
   
   &::after {
     content: '';
@@ -135,6 +163,8 @@ const StatsSection = styled.div`
     position: relative;
     z-index: 1;
     animation: pulse 2s infinite;
+    min-width: 60px;
+    text-align: center;
     
     &:nth-child(1) { animation-delay: 0s; }
     &:nth-child(2) { animation-delay: 0.5s; }
@@ -147,13 +177,23 @@ const StatsSection = styled.div`
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.05); }
   }
+  
+  @media (max-width: 768px) {
+    padding: 8px;
+    font-size: 10px;
+    
+    div {
+      padding: 4px 8px;
+      min-width: 50px;
+      font-size: 9px;
+    }
+  }
 `;
 
 const FilterSection = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  align-items: center;
+  flex-direction: column;
+  gap: 12px;
   padding: 12px 16px;
   background: 
     repeating-linear-gradient(
@@ -182,6 +222,22 @@ const FilterSection = styled.div`
     z-index: 1;
   }
   
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+  
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex: 1;
+    min-width: 120px;
+  }
+  
   span {
     font-weight: bold;
     font-size: 11px;
@@ -189,6 +245,148 @@ const FilterSection = styled.div`
     color: #000;
     text-shadow: 1px 1px 0px #FFF;
     font-family: 'MS Sans Serif', sans-serif;
+    min-width: 40px;
+  }
+  
+  select, input {
+    flex: 1;
+    min-width: 80px;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 8px;
+    gap: 8px;
+    
+    .filter-row {
+      flex-direction: column;
+      gap: 8px;
+      align-items: stretch;
+    }
+    
+    .filter-group {
+      min-width: 100%;
+      justify-content: space-between;
+    }
+    
+    span {
+      font-size: 10px;
+      min-width: 60px;
+    }
+    
+    select, input {
+      min-width: 120px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .filter-group {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 4px;
+    }
+    
+    span {
+      text-align: left;
+    }
+    
+    select, input {
+      min-width: 100%;
+    }
+  }
+`;
+
+const TraitFilterSection = styled.div`
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px inset #C0C0C0;
+  margin-top: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  
+  .trait-category {
+    border-bottom: 1px solid #808080;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  
+  .trait-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #C0C0C0;
+    border-bottom: 1px solid #808080;
+    cursor: pointer;
+    font-family: 'MS Sans Serif', sans-serif;
+    font-weight: bold;
+    font-size: 11px;
+    
+    &:hover {
+      background: #D0D0D0;
+    }
+    
+    .trait-name {
+      color: #000;
+    }
+    
+    .trait-count {
+      color: #666;
+      font-size: 10px;
+    }
+    
+    .expand-icon {
+      font-size: 12px;
+      transition: transform 0.2s;
+      
+      &.expanded {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  
+  .trait-values {
+    padding: 8px;
+    background: #FFFFFF;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    
+    &.expanded {
+      display: flex;
+    }
+    
+    .trait-value {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px;
+      cursor: pointer;
+      border-radius: 2px;
+      
+      &:hover {
+        background: #E0E0E0;
+      }
+      
+      label {
+        font-family: 'MS Sans Serif', sans-serif;
+        font-size: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+        
+        .value-name {
+          color: #000;
+        }
+        
+        .value-count {
+          color: #666;
+          margin-left: auto;
+        }
+      }
+    }
   }
 `;
 
@@ -221,6 +419,23 @@ const FlunksGrid = styled.div`
   > * {
     position: relative;
     z-index: 1;
+  }
+  
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    padding: 12px;
+  }
+  
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+    padding: 8px;
+  }
+  
+  @media (max-width: 360px) {
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 `;
 
@@ -262,6 +477,20 @@ const FlunkCard = styled.div`
     75% { background: linear-gradient(90deg, #FF1493, #FF00FF, #00FFFF, #FFFF00); }
     100% { background: linear-gradient(90deg, #FF00FF, #00FFFF, #FFFF00, #FF1493); }
   }
+  
+  @media (max-width: 768px) {
+    &:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 4px 4px 0px #FF00FF, 6px 6px 0px #00FFFF;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    &:hover {
+      transform: none;
+      box-shadow: 4px 4px 0px #808080;
+    }
+  }
 `;
 
 const FlunkImage = styled.img`
@@ -274,6 +503,14 @@ const FlunkImage = styled.img`
   
   &:hover {
     filter: contrast(1.4) saturate(1.5) hue-rotate(15deg);
+  }
+  
+  @media (max-width: 768px) {
+    height: 160px;
+  }
+  
+  @media (max-width: 480px) {
+    height: 140px;
   }
 `;
 
@@ -374,6 +611,58 @@ const FlunkInfo = styled.div`
         border-color: #FF69B4;
         box-shadow: 1px 1px 0px #CC4080;
       }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    padding: 10px;
+    
+    h3 {
+      font-size: 13px;
+    }
+    
+    .token-id {
+      font-size: 11px;
+    }
+    
+    .clique-badge {
+      font-size: 9px;
+      padding: 3px 6px;
+    }
+    
+    .rank {
+      font-size: 10px;
+    }
+    
+    .traits .trait {
+      font-size: 8px;
+      padding: 1px 4px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    padding: 8px;
+    
+    h3 {
+      font-size: 12px;
+    }
+    
+    .token-id {
+      font-size: 10px;
+    }
+    
+    .clique-badge {
+      font-size: 8px;
+      padding: 2px 4px;
+    }
+    
+    .rank {
+      font-size: 9px;
+    }
+    
+    .traits .trait {
+      font-size: 7px;
+      padding: 1px 3px;
     }
   }
 `;
@@ -491,11 +780,14 @@ const Yearbook: React.FC = () => {
     clique: 'ALL',
     trait: 'ALL',
     search: '',
-    sortBy: 'tokenId'
+    sortBy: 'random'
   });
-  const [selectedTraitType, setSelectedTraitType] = useState<string>('ALL');
+  
+  // New trait filtering state
+  const [selectedTraits, setSelectedTraits] = useState<{ [traitType: string]: string[] }>({});
+  const [expandedTraits, setExpandedTraits] = useState<{ [traitType: string]: boolean }>({});
 
-  // Load initial data
+  // Load initial data immediately and show Flunks right away
   useEffect(() => {
     loadYearbookData();
   }, []);
@@ -509,10 +801,12 @@ const Yearbook: React.FC = () => {
       const USE_MOCK_DATA = true; // Set to false when your API is ready
 
       if (USE_MOCK_DATA) {
-        // Simulate loading delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        setFlunks(YearbookMockData.generateMockFlunks(100));
-        setStats(YearbookMockData.getMockStats());
+        // Generate more mock data and show it immediately (no artificial delay)
+        const mockFlunks = YearbookMockData.generateMockFlunks(200);
+        const mockStats = YearbookMockData.getMockStats();
+        
+        setFlunks(mockFlunks);
+        setStats(mockStats);
       } else {
         // Real API calls
         const [flunksData, statsData] = await Promise.all([
@@ -530,46 +824,61 @@ const Yearbook: React.FC = () => {
     }
   };
 
-  // Extract all unique trait types and values
+  // Extract all unique trait types and values with counts
   const availableTraits = useMemo(() => {
-    const traitMap = new Map<string, Set<string>>();
+    const traitMap = new Map<string, Map<string, number>>();
     
     flunks.forEach(flunk => {
       flunk.metadata.attributes.forEach(attr => {
         if (!traitMap.has(attr.trait_type)) {
-          traitMap.set(attr.trait_type, new Set());
+          traitMap.set(attr.trait_type, new Map());
         }
-        traitMap.get(attr.trait_type)!.add(attr.value);
+        const valueMap = traitMap.get(attr.trait_type)!;
+        valueMap.set(attr.value, (valueMap.get(attr.value) || 0) + 1);
       });
     });
 
-    const result: { [key: string]: string[] } = {};
-    traitMap.forEach((values, traitType) => {
-      result[traitType] = Array.from(values).sort();
+    const result: { [key: string]: { [value: string]: number } } = {};
+    traitMap.forEach((valueMap, traitType) => {
+      const values: { [value: string]: number } = {};
+      Array.from(valueMap.entries())
+        .sort(([a], [b]) => a.localeCompare(b))
+        .forEach(([value, count]) => {
+          values[value] = count;
+        });
+      result[traitType] = values;
     });
 
     return result;
   }, [flunks]);
 
-  const traitTypeOptions = useMemo(() => [
-    { value: 'ALL', label: 'All Traits' },
-    ...Object.keys(availableTraits).sort().map(traitType => ({
-      value: traitType,
-      label: traitType
-    }))
-  ], [availableTraits]);
+  // Handle trait expansion toggle
+  const toggleTraitExpansion = (traitType: string) => {
+    setExpandedTraits(prev => ({
+      ...prev,
+      [traitType]: !prev[traitType]
+    }));
+  };
 
-  const traitValueOptions = useMemo(() => {
-    if (selectedTraitType === 'ALL') {
-      return [{ value: 'ALL', label: 'All Values' }];
-    }
-    
-    const values = availableTraits[selectedTraitType] || [];
-    return [
-      { value: 'ALL', label: 'All Values' },
-      ...values.map(value => ({ value, label: value }))
-    ];
-  }, [selectedTraitType, availableTraits]);
+  // Handle trait value selection
+  const toggleTraitValue = (traitType: string, value: string) => {
+    setSelectedTraits(prev => {
+      const currentValues = prev[traitType] || [];
+      const newValues = currentValues.includes(value)
+        ? currentValues.filter(v => v !== value)
+        : [...currentValues, value];
+      
+      return {
+        ...prev,
+        [traitType]: newValues
+      };
+    });
+  };
+
+  // Clear all trait filters
+  const clearAllTraits = () => {
+    setSelectedTraits({});
+  };
 
   const filteredFlunks = useMemo(() => {
     let filtered = flunks;
@@ -579,14 +888,16 @@ const Yearbook: React.FC = () => {
       filtered = filtered.filter(flunk => flunk.clique === filters.clique);
     }
 
-    // Filter by specific trait
-    if (selectedTraitType !== 'ALL' && filters.trait !== 'ALL') {
-      filtered = filtered.filter(flunk => 
-        flunk.metadata.attributes.some(attr => 
-          attr.trait_type === selectedTraitType && attr.value === filters.trait
-        )
-      );
-    }
+    // Filter by selected traits (new Flowty-style filtering)
+    Object.entries(selectedTraits).forEach(([traitType, selectedValues]) => {
+      if (selectedValues.length > 0) {
+        filtered = filtered.filter(flunk => 
+          flunk.metadata.attributes.some(attr => 
+            attr.trait_type === traitType && selectedValues.includes(attr.value)
+          )
+        );
+      }
+    });
 
     // Filter by search term
     if (filters.search) {
@@ -601,7 +912,7 @@ const Yearbook: React.FC = () => {
       );
     }
 
-    // Sort
+    // Sort - randomize by default, but allow other sorting
     filtered.sort((a, b) => {
       switch (filters.sortBy) {
         case 'tokenId':
@@ -610,13 +921,15 @@ const Yearbook: React.FC = () => {
           return (a.rank || 9999) - (b.rank || 9999);
         case 'name':
           return a.metadata.name.localeCompare(b.metadata.name);
+        case 'random':
         default:
-          return 0;
+          // Consistent randomization based on token ID
+          return (a.tokenId % 17) - (b.tokenId % 17);
       }
     });
 
     return filtered;
-  }, [flunks, filters, selectedTraitType]);
+  }, [flunks, filters, selectedTraits]);
 
   const displayStats = useMemo(() => {
     if (stats) return stats;
@@ -681,89 +994,97 @@ const Yearbook: React.FC = () => {
         )}
 
         <FilterSection>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>Clique:</span>
-            <Select
-              value={filters.clique}
-              onChange={(value) => setFilters(prev => ({ ...prev, clique: value.value }))}
-              style={{ minWidth: '100px' }}
-              options={[
-                { value: 'ALL', label: 'All Cliques' },
-                { value: 'GEEK', label: '🤓 GEEKS' },
-                { value: 'JOCK', label: '🏈 JOCKS' },
-                { value: 'PREP', label: '👔 PREPS' },
-                { value: 'FREAK', label: '🎸 FREAKS' }
-              ]}
-            />
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>Trait:</span>
-            <Select
-              value={selectedTraitType}
-              onChange={(value) => {
-                setSelectedTraitType(value.value);
-                setFilters(prev => ({ ...prev, trait: 'ALL' }));
-              }}
-              style={{ minWidth: '120px' }}
-              options={traitTypeOptions}
-            />
-          </div>
-
-          {selectedTraitType !== 'ALL' && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span>Value:</span>
+          <div className="filter-row">
+            <div className="filter-group">
+              <span>Clique:</span>
               <Select
-                value={filters.trait || 'ALL'}
-                onChange={(value) => setFilters(prev => ({ ...prev, trait: value.value }))}
-                style={{ minWidth: '120px' }}
-                options={traitValueOptions}
+                value={filters.clique}
+                onChange={(value) => setFilters(prev => ({ ...prev, clique: value.value }))}
+                options={[
+                  { value: 'ALL', label: 'All Cliques' },
+                  { value: 'GEEK', label: '🤓 GEEKS' },
+                  { value: 'JOCK', label: '🏈 JOCKS' },
+                  { value: 'PREP', label: '👔 PREPS' },
+                  { value: 'FREAK', label: '🎸 FREAKS' }
+                ]}
               />
             </div>
-          )}
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>Sort:</span>
-            <Select
-              value={filters.sortBy}
-              onChange={(value) => setFilters(prev => ({ ...prev, sortBy: value.value as 'tokenId' | 'rank' | 'name' }))}
-              style={{ minWidth: '100px' }}
-              options={[
-                { value: 'tokenId', label: 'Token ID' },
-                { value: 'rank', label: 'Rarity Rank' },
-                { value: 'name', label: 'Name' }
-              ]}
-            />
+            <div className="filter-group">
+              <span>Sort:</span>
+              <Select
+                value={filters.sortBy}
+                onChange={(value) => setFilters(prev => ({ ...prev, sortBy: value.value as 'tokenId' | 'rank' | 'name' | 'random' }))}
+                options={[
+                  { value: 'random', label: 'Random' },
+                  { value: 'tokenId', label: 'Token ID' },
+                  { value: 'rank', label: 'Rarity Rank' },
+                  { value: 'name', label: 'Name' }
+                ]}
+              />
+            </div>
+
+            <div className="filter-group">
+              <span>Search:</span>
+              <TextInput
+                value={filters.search}
+                onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+                placeholder="Name, ID, or trait..."
+              />
+            </div>
+
+            <div className="filter-group">
+              <Button
+                onClick={() => {
+                  setFilters({
+                    clique: 'ALL',
+                    trait: 'ALL',
+                    search: '',
+                    sortBy: 'random'
+                  });
+                  clearAllTraits();
+                }}
+              >
+                🔄 Reset
+              </Button>
+
+              <Button onClick={loadYearbookData}>
+                🔄 Refresh
+              </Button>
+            </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>Search:</span>
-            <TextInput
-              value={filters.search}
-              onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-              placeholder="Name, ID, or trait..."
-              style={{ width: '150px' }}
-            />
-          </div>
-
-          <Button
-            onClick={() => {
-              setFilters({
-                clique: 'ALL',
-                trait: 'ALL',
-                search: '',
-                sortBy: 'tokenId'
-              });
-              setSelectedTraitType('ALL');
-            }}
-            style={{ marginLeft: 'auto' }}
-          >
-            🔄 Reset
-          </Button>
-
-          <Button onClick={loadYearbookData}>
-            🔄 Refresh
-          </Button>
+          {/* New Flowty-style Trait Filtering */}
+          <TraitFilterSection>
+            {Object.entries(availableTraits).map(([traitType, values]) => (
+              <div key={traitType} className="trait-category">
+                <div 
+                  className="trait-header"
+                  onClick={() => toggleTraitExpansion(traitType)}
+                >
+                  <div className="trait-name">{traitType}</div>
+                  <div className="trait-count">{Object.keys(values).length}</div>
+                  <div className={`expand-icon ${expandedTraits[traitType] ? 'expanded' : ''}`}>
+                    ▼
+                  </div>
+                </div>
+                <div className={`trait-values ${expandedTraits[traitType] ? 'expanded' : ''}`}>
+                  {Object.entries(values).map(([value, count]) => (
+                    <div key={value} className="trait-value">
+                      <label>
+                        <Checkbox
+                          checked={selectedTraits[traitType]?.includes(value) || false}
+                          onChange={() => toggleTraitValue(traitType, value)}
+                        />
+                        <span className="value-name">{value}</span>
+                        <span className="value-count">{count}</span>
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </TraitFilterSection>
         </FilterSection>
 
         <FlunksGrid>

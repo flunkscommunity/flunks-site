@@ -56,10 +56,12 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
   // Fetch user profile when wallet connects
   const fetchProfile = async () => {
     if (!walletAddress) {
+      console.log('👤 UserProfile: No wallet address, clearing profile');
       setProfile(null);
       return;
     }
 
+    console.log('👤 UserProfile: Fetching profile for wallet:', walletAddress);
     setLoading(true);
     setError(null);
 
@@ -75,18 +77,22 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
         const storedProfile = localStorage.getItem(`flunks_profile_${walletAddress}`);
         if (storedProfile) {
           const profileData = JSON.parse(storedProfile);
+          console.log('👤 UserProfile: Found stored profile:', profileData);
           setProfile(profileData);
         } else {
+          console.log('👤 UserProfile: No stored profile found');
           setProfile(null);
         }
         return;
       }
 
       // Use API when Supabase is properly configured
+      console.log('👤 UserProfile: Calling API /api/get-user-profile?wallet=' + walletAddress);
       const response = await fetch(`/api/get-user-profile?wallet=${walletAddress}`);
       
       if (response.status === 404) {
         // No profile found - this is normal for new users
+        console.log('👤 UserProfile: No profile found in database (404) - user needs to create profile');
         setProfile(null);
         return;
       }
@@ -96,6 +102,7 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
       }
 
       const profileData = await response.json();
+      console.log('👤 UserProfile: Profile fetched successfully:', profileData);
       setProfile(profileData);
 
     } catch (err) {

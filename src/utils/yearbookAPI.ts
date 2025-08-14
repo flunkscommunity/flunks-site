@@ -251,10 +251,13 @@ export class YearbookMockData {
   
   static generateMockFlunks(count: number = 50): FlunkNFT[] {
     const cliques = ['GEEK', 'JOCK', 'PREP', 'FREAK'];
-    const backgrounds = ['Blue', 'Red', 'Green', 'Purple', 'Yellow', 'Pink', 'Orange'];
-    const hairstyles = ['Curly', 'Straight', 'Afro', 'Buzz', 'Long', 'Short', 'Spiky'];
-    const eyes = ['Big', 'Small', 'Squinty', 'Closed', 'Tired', 'Angry'];
-    const expressions = ['Happy', 'Sad', 'Angry', 'Neutral', 'Surprised', 'Cool'];
+    const backgrounds = ['School Hallway', 'Library', 'Gym', 'Cafeteria', 'Classroom', 'Locker Room', 'Principal\'s Office', 'Science Lab'];
+    const faces = ['Happy', 'Serious', 'Smiling', 'Focused', 'Confident', 'Shy', 'Excited', 'Cool'];
+    const heads = ['Baseball Cap', 'Beanie', 'Headband', 'Hair Bow', 'No Hat', 'Bandana', 'Crown', 'Glasses'];
+    const pigments = ['Light', 'Medium', 'Dark', 'Pale', 'Tan', 'Olive', 'Fair', 'Deep'];
+    const superlatives = ['Most Likely to Succeed', 'Class Clown', 'Most Athletic', 'Best Dressed', 'Most Creative', 'Teacher\'s Pet', 'Most Popular', 'Biggest Rebel'];
+    const torsos = ['T-Shirt', 'Hoodie', 'Jersey', 'Polo', 'Tank Top', 'Sweater', 'Blazer', 'Jacket'];
+    const types = ['Student', 'Athlete', 'Scholar', 'Artist', 'Leader', 'Musician', 'Rebel', 'Socialite'];
 
     return Array.from({ length: count }, (_, index) => {
       const tokenId = 1000 + index;
@@ -264,14 +267,17 @@ export class YearbookMockData {
         tokenId,
         metadata: {
           name: `Flunk #${tokenId}`,
-          description: `A ${clique.toLowerCase()} from Flunks High School`,
+          description: `A ${clique.toLowerCase()} from Flunks High School, Class of 2024`,
           image: `/images/about-us/fp-${(index % 10) + 1}.avif`,
           attributes: [
             { trait_type: 'Clique', value: clique },
             { trait_type: 'Background', value: backgrounds[index % backgrounds.length] },
-            { trait_type: 'Hair', value: hairstyles[index % hairstyles.length] },
-            { trait_type: 'Eyes', value: eyes[index % eyes.length] },
-            { trait_type: 'Expression', value: expressions[index % expressions.length] }
+            { trait_type: 'Face', value: faces[index % faces.length] },
+            { trait_type: 'Head', value: heads[index % heads.length] },
+            { trait_type: 'Pigment', value: pigments[index % pigments.length] },
+            { trait_type: 'Superlative', value: superlatives[index % superlatives.length] },
+            { trait_type: 'Torso', value: torsos[index % torsos.length] },
+            { trait_type: 'Type', value: types[index % types.length] }
           ]
         },
         rank: Math.floor(Math.random() * 10000) + 1,
