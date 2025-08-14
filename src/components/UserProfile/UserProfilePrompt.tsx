@@ -4,6 +4,7 @@ import { useUserProfile } from 'contexts/UserProfileContext';
 import { useWindowsContext } from 'contexts/WindowsContext';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { WINDOW_IDS } from 'fixed';
+import UserProfile from 'windows/UserProfile';
 
 interface ProfilePromptProps {
   onDismiss?: () => void;
@@ -26,11 +27,7 @@ const UserProfilePrompt: React.FC<ProfilePromptProps> = ({
   const handleCreateProfile = () => {
     openWindow({
       key: WINDOW_IDS.USER_PROFILE,
-      window: (
-        <div>
-          {/* UserProfile window will be loaded here */}
-        </div>
-      ),
+      window: <UserProfile />
     });
     onDismiss?.();
   };

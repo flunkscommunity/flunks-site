@@ -13,10 +13,13 @@ import StakingProvider from "contexts/StakingContext";
 import { FclTransactionProvider } from "contexts/FclTransactionContext";
 import StakeableItemsTable from "components/Staking/Table";
 import GumballMachineHelp from "./GumballMachineHelp";
+import { useUserProfile } from "contexts/UserProfileContext";
+import UserProfile from "./UserProfile";
 
 const GumballMachine: React.FC = () => {
   const { closeWindow, openWindow } = useWindowsContext();
   const { user } = useDynamicContext();
+  const { hasProfile } = useUserProfile();
 
   if (!user) {
     return (
@@ -31,6 +34,36 @@ const GumballMachine: React.FC = () => {
             <DynamicConnectButton>
               <Button className="ml-auto">Sign In</Button>
             </DynamicConnectButton>
+          </>
+        }
+        windowId={WINDOW_IDS.GUMBALL_MACHINE}
+      />
+    );
+  }
+
+  // Check if user has profile before allowing gum staking
+  if (!hasProfile) {
+    return (
+      <ErrorWindow
+        title="Profile Required"
+        message="You need to create your profile before using the Gumball Machine."
+        actions={
+          <>
+            <Button onClick={() => closeWindow(WINDOW_IDS.GUMBALL_MACHINE)}>
+              Close
+            </Button>
+            <Button 
+              className="ml-auto" 
+              onClick={() => {
+                closeWindow(WINDOW_IDS.GUMBALL_MACHINE);
+                openWindow({
+                  key: WINDOW_IDS.USER_PROFILE,
+                  window: <UserProfile />
+                });
+              }}
+            >
+              Create Profile
+            </Button>
           </>
         }
         windowId={WINDOW_IDS.GUMBALL_MACHINE}

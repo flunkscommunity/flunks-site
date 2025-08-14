@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
+import { useUserProfile } from '../contexts/UserProfileContext';
 import { getUserGumStats, getUserGumBalance, type GumStats } from '../utils/gumAPI';
 
 // Shine animation for the gum display
@@ -148,12 +149,21 @@ export const GumDisplay: React.FC<GumDisplayProps> = ({
   refreshInterval = 30000 // 30 seconds
 }) => {
   const { primaryWallet } = useDynamicContext();
+  const { hasProfile, profile } = useUserProfile();
   const [gumStats, setGumStats] = useState<GumStats | null>(null);
   const [balance, setBalance] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<number>(Date.now());
+
+  // Don't show gum display if no profile exists
+  if (!hasProfile || !primaryWallet?.address) {
+    console.log('🍬 GumDisplay: Hidden - requires profile. hasProfile:', hasProfile, 'wallet:', !!primaryWallet?.address);
+    return null;
+  }
+
+  console.log('🍬 GumDisplay: Showing for profile:', profile?.username);
 
   // Load gum data
   const loadGumData = async (showAnimation = false) => {

@@ -107,28 +107,60 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     if (existingUser && !existingUser.locker_number) {
       console.log('⚠️ User has profile but no locker - assigning one...');
       
-      // Get the next locker number from the sequence
-      const { data: nextLockerData, error: sequenceError } = await supabase
-        .rpc('assign_next_locker', { 
-          p_wallet_address: wallet_address 
+      try {
+        // Use a transaction to safely assign the next locker number
+        // First, get the highest locker number currently assigned
+        const { data: maxLockerData, error: maxLockerError } = await supabase
+          .from('user_profiles')
+          .select('locker_number')
+          .not('locker_number', 'is', null)
+          .order('locker_number', { ascending: false })
+          .limit(1)
+          .single();
+
+        let nextLockerNumber = 1; // Default to 1 if no lockers assigned yet
+        
+        if (!maxLockerError && maxLockerData?.locker_number) {
+          nextLockerNumber = maxLockerData.locker_number + 1;
+        }
+
+        console.log('📋 Next locker number to assign:', nextLockerNumber);
+
+        // Update the user with the new locker number
+        const { data: updateData, error: updateError } = await supabase
+          .from('user_profiles')
+          .update({ 
+            locker_number: nextLockerNumber,
+            updated_at: new Date().toISOString()
+          })
+          .eq('wallet_address', wallet_address)
+          .select('locker_number')
+          .single();
+
+        if (updateError) {
+          console.error('❌ Error updating user with locker number:', updateError);
+          return res.status(500).json({
+            success: false,
+            error: 'Failed to assign locker'
+          });
+        }
+
+        const assignedLocker = updateData.locker_number;
+        console.log('✅ Locker assigned via manual assignment:', assignedLocker);
+        
+        return res.status(200).json({
+          success: true,
+          locker_number: assignedLocker,
+          message: `Locker #${assignedLocker} assigned successfully!`
         });
 
-      if (sequenceError) {
-        console.error('❌ Error calling assign_next_locker function:', sequenceError);
+      } catch (error) {
+        console.error('❌ Error in locker assignment process:', error);
         return res.status(500).json({
           success: false,
-          error: 'Failed to assign locker'
+          error: 'Failed to assign locker due to unexpected error'
         });
       }
-
-      const assignedLocker = nextLockerData;
-      console.log('✅ Locker assigned via function:', assignedLocker);
-      
-      return res.status(200).json({
-        success: true,
-        locker_number: assignedLocker,
-        message: `Locker #${assignedLocker} assigned successfully!`
-      });
     }
 
   } catch (error) {

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { awardGum, getUserGumBalance, type GumAwardResult } from '../utils/gumAPI';
+import { useUserProfile } from '../contexts/UserProfileContext';
 
 // Floating animation for the gum button
 const float = keyframes`
@@ -177,6 +178,7 @@ export const FloatingGumButton: React.FC<FloatingGumButtonProps> = ({
   initialY = 100
 }) => {
   const { primaryWallet } = useDynamicContext();
+  const { hasProfile, profile } = useUserProfile();
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [isDragging, setIsDragging] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
@@ -266,6 +268,14 @@ export const FloatingGumButton: React.FC<FloatingGumButtonProps> = ({
 
   const handleGumClick = async () => {
     if (!primaryWallet?.address || !canEarn) return;
+
+    // Check if user has a profile before allowing gum collection
+    if (!hasProfile) {
+      console.log('🍬 User needs profile to collect gum - will be handled in locker app');
+      // TODO: This will be handled by the "my locker" app in the future
+      alert('Please create your profile first by opening your locker!');
+      return;
+    }
 
     setIsClicked(true);
     
@@ -371,7 +381,13 @@ export const FloatingGumButton: React.FC<FloatingGumButtonProps> = ({
       $y={position.y}
       $isClicked={isClicked}
       onMouseDown={handleMouseDown}
-      title={canEarn ? 'Click to earn gum! Drag to move.' : 'Cooling down...'}
+      title={
+        !hasProfile 
+          ? 'Create your profile in your locker first!'
+          : canEarn 
+            ? 'Click to earn gum! Drag to move.' 
+            : 'Cooling down...'
+      }
     >
       <GumButton
         $isClicked={isClicked}
@@ -380,7 +396,7 @@ export const FloatingGumButton: React.FC<FloatingGumButtonProps> = ({
         <GumIcon>
           🍬
           <div style={{ fontSize: '8px', marginTop: '2px' }}>
-            {canEarn ? 'GUM' : 'WAIT'}
+            {!hasProfile ? 'PROFILE' : canEarn ? 'GUM' : 'WAIT'}
           </div>
         </GumIcon>
         

@@ -26,6 +26,7 @@ import { RadioProvider } from "contexts/RadioContext";
 import { GumProvider } from "contexts/GumContext";
 import { FloatingGumButton } from "components/FloatingGumButton";
 import { GumDisplay } from "components/GumDisplay";
+import UserProfilePrompt from "components/UserProfile/UserProfilePrompt";
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -149,9 +150,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                           <Component {...pageProps} />
                         </div>
                         <Analytics />
-                        {/* Gum System Components */}
-                        <GumDisplay showDetailedStats={true} />
-                        <FloatingGumButton initialX={150} initialY={200} />
+                        {/* Global Profile Creation Prompt */}
+                        <UserProfilePrompt autoShow={true} />
                         {/* Global wallet connect entry point */}
                         <div
                           style={{
