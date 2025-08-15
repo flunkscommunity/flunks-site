@@ -38,7 +38,7 @@ import AccessLevelStatus from "components/AccessLevelStatus";
 import ConditionalAppIcon from "components/ConditionalAppIcon";
 import { BACKGROUND_CONFIG } from "config/backgroundConfig";
 import useThemeSettings from "store/useThemeSettings";
-import MobileDebugger from "components/MobileDebugger";
+
 import { GumAdminPanel } from "components/GumAdminPanel";
 
 const FullScreenLoader = () => {
@@ -533,7 +533,6 @@ const Home: NextPage = () => {
       
       <MonitorScreenWrapper>
         <AccessLevelStatus />
-        <MobileDebugger />
         <Desktop />
       </MonitorScreenWrapper>
     </>
