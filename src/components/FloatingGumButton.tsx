@@ -47,7 +47,7 @@ const FloatingContainer = styled.div<{
   position: fixed;
   left: ${props => props.$x}px;
   top: ${props => props.$y}px;
-  z-index: 1000;
+  z-index: 500; /* Lower z-index so it appears behind windows but above desktop */
   cursor: ${props => props.$isDragging ? 'grabbing' : 'grab'};
   user-select: none;
   
@@ -174,8 +174,8 @@ interface FloatingGumButtonProps {
 }
 
 export const FloatingGumButton: React.FC<FloatingGumButtonProps> = ({
-  initialX = 100,
-  initialY = 100
+  initialX = typeof window !== 'undefined' ? window.innerWidth / 2 - 30 : 100,
+  initialY = typeof window !== 'undefined' ? window.innerHeight / 2 - 30 : 100
 }) => {
   const { primaryWallet } = useDynamicContext();
   const { hasProfile, profile } = useUserProfile();
@@ -294,6 +294,9 @@ export const FloatingGumButton: React.FC<FloatingGumButtonProps> = ({
         setEarnings(result.earned);
         setShowEarnings(true);
         setGumBalance(prev => prev + result.earned);
+        
+        // Dispatch event to update gum displays elsewhere
+        window.dispatchEvent(new CustomEvent('gumBalanceUpdated'));
         
         // Move to random position after successful click
         setTimeout(() => {

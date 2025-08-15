@@ -1,10 +1,12 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import DraggableResizeableWindow from '../components/DraggableResizeableWindow';
 import MobileWalletHelper from '../components/MobileWalletHelper';
 import { isMobileDevice } from '../utils/mobileWalletDetection';
 import { useWindowsContext } from '../contexts/WindowsContext';
 import { useLockerInfo, useLockerAssignment } from '../hooks/useLocker';
 import { useDynamicContext, DynamicConnectButton } from '@dynamic-labs/sdk-react-core';
+import { getUserGumBalance } from '../utils/gumAPI';
+import { useUserProfile } from '../contexts/UserProfileContext';
 // WINDOW_IDS lives in src/fixed.ts (baseUrl set to src)
 import { WINDOW_IDS } from 'fixed';
 
@@ -13,9 +15,38 @@ const LockerSystemNew: React.FC = () => {
   const { lockerInfo, loading, error, refetch } = useLockerInfo();
   const { assignLocker, assigning } = useLockerAssignment();
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
+  const { hasProfile, profile } = useUserProfile();
   const [devBypass, setDevBypass] = useState(false);
   const [currentSection, setCurrentSection] = useState<1 | 2 | 3>(1);
+  const [gumBalance, setGumBalance] = useState<number>(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Load gum balance when wallet connects
+  useEffect(() => {
+    if (primaryWallet?.address) {
+      loadGumBalance();
+    }
+  }, [primaryWallet?.address]);
+
+  // Listen for gum balance updates from floating button
+  useEffect(() => {
+    const handleGumUpdate = () => {
+      loadGumBalance();
+    };
+
+    window.addEventListener('gumBalanceUpdated', handleGumUpdate);
+    return () => window.removeEventListener('gumBalanceUpdated', handleGumUpdate);
+  }, []);
+
+  const loadGumBalance = async () => {
+    if (!primaryWallet?.address) return;
+    try {
+      const balance = await getUserGumBalance(primaryWallet.address);
+      setGumBalance(balance || 0);
+    } catch (error) {
+      console.error('Error loading gum balance:', error);
+    }
+  };
 
   // Toggle dev bypass mode
   const toggleDevBypass = () => {
@@ -109,10 +140,17 @@ const LockerSystemNew: React.FC = () => {
 
   return (
     <DraggableResizeableWindow
-      headerTitle="🚀 NEW LOCKER SYSTEM - SUPABASE POWERED!"
+      headerTitle="My Locker"
       windowsId={WINDOW_IDS.USER_PROFILE}
       onClose={() => closeWindow(WINDOW_IDS.USER_PROFILE)}
     >
+      <style>{`
+        @keyframes gumEarnings {
+          0% { opacity: 0; transform: translateX(-50%) scale(0.5) translateY(0); }
+          50% { opacity: 1; transform: translateX(-50%) scale(1.2) translateY(-20px); }
+          100% { opacity: 0; transform: translateX(-50%) scale(0.8) translateY(-40px); }
+        }
+      `}</style>
       <div style={{
         width: '100%',
         height: '100%',
@@ -276,9 +314,6 @@ const LockerSystemNew: React.FC = () => {
                         )}
                         <div style={{ fontSize: '16px', marginBottom: '20px', opacity: 0.9 }}>
                           Welcome to your personal locker!
-                        </div>
-                        <div style={{ fontSize: '12px', opacity: 0.7 }}>
-                          ✨ Automatically assigned via Supabase
                         </div>
                         <div style={{ fontSize: '14px', marginTop: '20px' }}>
                           Scroll down to explore your locker sections
@@ -474,6 +509,58 @@ const LockerSystemNew: React.FC = () => {
               </>
             )}
           </>
+        )}
+
+        {/* RETRO 90's GUM COUNTER */}
+        {primaryWallet?.address && (
+          <div style={{
+            position: 'absolute',
+            bottom: '10px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: 'linear-gradient(145deg, #c0c0c0, #808080)',
+            border: '3px ridge #c0c0c0',
+            borderRadius: '8px',
+            padding: '8px 16px',
+            fontFamily: 'MS Sans Serif, sans-serif',
+            fontSize: '12px',
+            fontWeight: 'bold',
+            color: '#000',
+            boxShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            minWidth: '150px',
+            justifyContent: 'center'
+          }}>
+            <div style={{
+              background: 'linear-gradient(45deg, #ff00ff, #ff69b4)',
+              borderRadius: '50%',
+              width: '16px',
+              height: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '10px',
+              boxShadow: 'inset 1px 1px 2px rgba(255,255,255,0.3)'
+            }}>
+              🍬
+            </div>
+            <div style={{
+              background: '#000',
+              color: '#00ff00',
+              fontFamily: 'Courier New, monospace',
+              fontSize: '11px',
+              padding: '2px 6px',
+              border: '1px inset #c0c0c0',
+              minWidth: '60px',
+              textAlign: 'center',
+              textShadow: '0 0 2px #00ff00'
+            }}>
+              {gumBalance.toLocaleString()}
+            </div>
+            <span style={{ fontSize: '10px', color: '#333' }}>GUM</span>
+          </div>
         )}
 
         {/* DEV BYPASS INDICATOR */}

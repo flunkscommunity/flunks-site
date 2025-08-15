@@ -171,6 +171,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                           />
                         </div>
                         <DynamicUserProfile />
+                        
+                        {/* Floating Gum Button - centered on desktop, behind windows */}
+                        <FloatingGumButton />
                       </GumProvider>
                     </PaginatedItemsProvider>
                   </UserProfileProvider>

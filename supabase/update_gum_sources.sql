@@ -48,6 +48,10 @@ INSERT INTO gum_sources (source_name, base_reward, cooldown_minutes, daily_limit
 VALUES ('special_event', 50, 0, 50, 'Special event rewards')
 ON CONFLICT (source_name) DO NOTHING;
 
+INSERT INTO gum_sources (source_name, base_reward, cooldown_minutes, daily_limit, description) 
+VALUES ('locker_jacket', 3, 300, 15, 'Gum earned from clicking button in locker jacket section')
+ON CONFLICT (source_name) DO NOTHING;
+
 -- Verify the updates
 SELECT source_name, base_reward, cooldown_minutes, daily_limit, description, updated_at 
 FROM gum_sources 

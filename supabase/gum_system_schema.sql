@@ -112,7 +112,8 @@ FOR ALL USING (true); -- Will be handled by functions
 INSERT INTO gum_sources (source_name, base_reward, cooldown_minutes, daily_limit, description) VALUES
 ('floating_button', 5, 360, 20, 'Floating gum button clicks'),
 ('daily_login', 10, 1440, 10, 'Daily login bonus'),
-('special_event', 50, 0, 50, 'Special event rewards');
+('special_event', 50, 0, 50, 'Special event rewards'),
+('locker_jacket', 3, 300, 15, 'Gum earned from clicking button in locker jacket section');
 
 -- Function to award gum (handles balance updates, transaction logging, and cooldowns)
 CREATE OR REPLACE FUNCTION award_gum(
