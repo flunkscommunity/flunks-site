@@ -38,6 +38,63 @@ const LockerSystemNew: React.FC = () => {
     return () => window.removeEventListener('gumBalanceUpdated', handleGumUpdate);
   }, []);
 
+  // Scroll position listener with snap-to-section behavior
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scrollContainerRef.current) {
+        const container = scrollContainerRef.current;
+        const containerHeight = container.clientHeight;
+        const scrollTop = container.scrollTop;
+        
+        // Determine which section user is closest to
+        let targetSection: 1 | 2 | 3;
+        if (scrollTop < containerHeight * 0.4) {
+          targetSection = 1;
+        } else if (scrollTop < containerHeight * 1.8) {
+          targetSection = 2;
+        } else {
+          targetSection = 3;
+        }
+        
+        // Only snap if we're not already in the middle of scrolling
+        if (targetSection !== currentSection) {
+          setCurrentSection(targetSection);
+          
+          // Smooth snap to the target section
+          let targetScrollTop = 0;
+          if (targetSection === 2) {
+            targetScrollTop = containerHeight * 0.8;
+          } else if (targetSection === 3) {
+            targetScrollTop = containerHeight * 0.8 + containerHeight * 1.4;
+          }
+          
+          // Use smooth scrolling to snap to position
+          container.scrollTo({
+            top: targetScrollTop,
+            behavior: 'smooth'
+          });
+        }
+      }
+    };
+
+    const container = scrollContainerRef.current;
+    if (container) {
+      // Add some debouncing to prevent excessive snapping
+      let scrollTimeout: NodeJS.Timeout;
+      
+      const debouncedScroll = () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(handleScroll, 150);
+      };
+      
+      container.addEventListener('scroll', debouncedScroll);
+      return () => {
+        container.removeEventListener('scroll', debouncedScroll);
+        clearTimeout(scrollTimeout);
+      };
+    }
+  }, [currentSection]);
+
   const loadGumBalance = async () => {
     if (!primaryWallet?.address) return;
     try {
@@ -77,7 +134,7 @@ const LockerSystemNew: React.FC = () => {
           await refetch();
           
           // Force a complete component re-render by updating a state
-          setCurrentSection(2); // Switch to middle section to show locker
+          setCurrentSection(1); // Start at top
         }, 1000);
       }
     } catch (error) {
@@ -94,7 +151,7 @@ const LockerSystemNew: React.FC = () => {
     }
   };
 
-  // Smooth scroll to specific section
+  // Simple smooth scroll to specific section
   const scrollToSection = (section: 1 | 2 | 3) => {
     if (scrollContainerRef.current) {
       const container = scrollContainerRef.current;
@@ -105,9 +162,9 @@ const LockerSystemNew: React.FC = () => {
       if (section === 1) {
         targetScrollTop = 0;
       } else if (section === 2) {
-        targetScrollTop = containerHeight * 0.8; // After top section
+        targetScrollTop = containerHeight * 0.8;
       } else if (section === 3) {
-        targetScrollTop = containerHeight * 0.8 + containerHeight * 1.4; // After top + middle
+        targetScrollTop = containerHeight * 0.8 + containerHeight * 1.4;
       }
       
       container.scrollTo({
@@ -126,15 +183,15 @@ const LockerSystemNew: React.FC = () => {
     } else if (e.key === 'ArrowDown' && currentSection < 3) {
       e.preventDefault();
       scrollToSection((currentSection + 1) as 1 | 2 | 3);
-    } else if (e.key === 'Enter') {
+    } else if (e.key === '1') {
       e.preventDefault();
-      if (currentSection === 1) {
-        setCurrentSection(2);
-      } else if (currentSection === 2) {
-        setCurrentSection(3);
-      } else {
-        setCurrentSection(3);
-      }
+      scrollToSection(1);
+    } else if (e.key === '2') {
+      e.preventDefault();
+      scrollToSection(2);
+    } else if (e.key === '3') {
+      e.preventDefault();
+      scrollToSection(3);
     }
   };
 
@@ -149,6 +206,46 @@ const LockerSystemNew: React.FC = () => {
           0% { opacity: 0; transform: translateX(-50%) scale(0.5) translateY(0); }
           50% { opacity: 1; transform: translateX(-50%) scale(1.2) translateY(-20px); }
           100% { opacity: 0; transform: translateX(-50%) scale(0.8) translateY(-40px); }
+        }
+        
+        @keyframes lockerGlow {
+          0% { box-shadow: 0 0 20px rgba(40, 167, 69, 0.3); }
+          50% { box-shadow: 0 0 40px rgba(40, 167, 69, 0.6), 0 0 80px rgba(40, 167, 69, 0.3); }
+          100% { box-shadow: 0 0 20px rgba(40, 167, 69, 0.3); }
+        }
+        
+        @keyframes jacketSway {
+          0% { transform: rotate(-2deg); }
+          50% { transform: rotate(2deg); }
+          100% { transform: rotate(-2deg); }
+        }
+        
+        @keyframes scrollIndicator {
+          0% { opacity: 1; transform: translateY(0px); }
+          50% { opacity: 0.5; transform: translateY(10px); }
+          100% { opacity: 1; transform: translateY(0px); }
+        }
+        
+        @keyframes fadeInUp {
+          0% { opacity: 0; transform: translateY(30px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .locker-section {
+          animation: fadeInUp 1s ease-out;
+        }
+        
+        .jacket-container:hover {
+          animation: jacketSway 2s ease-in-out infinite;
+        }
+        
+        .scroll-indicator {
+          animation: scrollIndicator 2s ease-in-out infinite;
+        }
+        
+        .progress-bar {
+          transition: width 0.1s ease-out;
+          background: linear-gradient(90deg, #40a9ff, #1890ff, #096dd9);
         }
       `}</style>
       <div style={{
@@ -285,23 +382,141 @@ const LockerSystemNew: React.FC = () => {
                       width: '100%',
                       height: '100%',
                       overflowY: 'auto',
-                      scrollBehavior: 'smooth'
+                      scrollBehavior: 'smooth',
+                      position: 'relative'
                     }}
                   >
-                    {/* Section 1: Top */}
+                    {/* Scrolling Progress Bar */}
                     <div style={{
+                      position: 'fixed',
+                      top: '0',
+                      left: '0',
+                      right: '0',
+                      height: '4px',
+                      background: 'rgba(255,255,255,0.2)',
+                      zIndex: 1000
+                    }}>
+                      <div 
+                        className="progress-bar"
+                        style={{
+                          height: '100%',
+                          width: `${(currentSection - 1) * 50}%`,
+                          borderRadius: '0 2px 2px 0'
+                        }}
+                      />
+                    </div>
+
+                    {/* Navigation Controls */}
+                    <div style={{
+                      position: 'fixed',
+                      bottom: '100px',
+                      right: '20px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '8px',
+                      zIndex: 1000
+                    }}>
+                      {/* Section Navigation */}
+                      {[1, 2, 3].map((section) => (
+                        <button
+                          key={section}
+                          onClick={() => scrollToSection(section as 1 | 2 | 3)}
+                          style={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '50%',
+                            border: 'none',
+                            background: currentSection === section 
+                              ? 'linear-gradient(145deg, #40a9ff, #1890ff)'
+                              : 'rgba(255,255,255,0.2)',
+                            color: currentSection === section ? 'white' : '#666',
+                            fontSize: '14px',
+                            fontWeight: 'bold',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease',
+                            backdropFilter: 'blur(10px)',
+                            boxShadow: currentSection === section 
+                              ? '0 4px 15px rgba(64, 169, 255, 0.4)'
+                              : '0 2px 8px rgba(0,0,0,0.2)'
+                          }}
+                        >
+                          {section === 1 ? '🏠' : section === 2 ? '👕' : '📚'}
+                        </button>
+                      ))}
+                    </div>
+                    {/* Keyboard Shortcuts Hint */}
+                    <div style={{
+                      position: 'fixed',
+                      top: '20px',
+                      left: '20px',
+                      background: 'rgba(0,0,0,0.7)',
+                      color: 'white',
+                      padding: '8px 12px',
+                      borderRadius: '6px',
+                      fontSize: '10px',
+                      opacity: 0.6,
+                      zIndex: 1000,
+                      backdropFilter: 'blur(10px)'
+                    }}>
+                      🎯 1,2,3: Jump to section | ↑↓: Navigate
+                    </div>
+
+                    {/* Navigation Controls */}
+                    <div style={{
+                      position: 'fixed',
+                      bottom: '100px',
+                      right: '20px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '8px',
+                      zIndex: 1000
+                    }}>
+                      {/* Section Navigation */}
+                      {[1, 2, 3].map((section) => (
+                        <button
+                          key={section}
+                          onClick={() => scrollToSection(section as 1 | 2 | 3)}
+                          style={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '50%',
+                            border: 'none',
+                            background: currentSection === section 
+                              ? 'linear-gradient(145deg, #40a9ff, #1890ff)'
+                              : 'rgba(255,255,255,0.2)',
+                            color: currentSection === section ? 'white' : '#666',
+                            fontSize: '14px',
+                            fontWeight: 'bold',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease',
+                            backdropFilter: 'blur(10px)',
+                            boxShadow: currentSection === section 
+                              ? '0 4px 15px rgba(64, 169, 255, 0.4)'
+                              : '0 2px 8px rgba(0,0,0,0.2)'
+                          }}
+                        >
+                          {section === 1 ? '🏠' : section === 2 ? '👕' : '📚'}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Section 1: Top */}
+                    <div className="locker-section" style={{
                       height: '80vh',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      textAlign: 'center'
+                      textAlign: 'center',
+                      position: 'relative'
                     }}>
                       <div style={{
                         background: 'rgba(40, 167, 69, 0.95)',
                         color: 'white',
                         padding: '30px',
                         borderRadius: '15px',
-                        maxWidth: '400px'
+                        maxWidth: '400px',
+                        animation: currentSection === 1 ? 'lockerGlow 3s ease-in-out infinite' : 'none',
+                        backdropFilter: 'blur(10px)'
                       }}>
                         <div style={{ fontSize: '48px', marginBottom: '20px' }}>🏠</div>
                         <div style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '10px' }}>
@@ -315,14 +530,20 @@ const LockerSystemNew: React.FC = () => {
                         <div style={{ fontSize: '16px', marginBottom: '20px', opacity: 0.9 }}>
                           Welcome to your personal locker!
                         </div>
-                        <div style={{ fontSize: '14px', marginTop: '20px' }}>
-                          Scroll down to explore your locker sections
+                        <div className="scroll-indicator" style={{ 
+                          fontSize: '14px', 
+                          marginTop: '20px',
+                          cursor: 'pointer'
+                        }}
+                        onClick={() => scrollToSection(2)}
+                        >
+                          ⬇️ Scroll down to explore
                         </div>
                       </div>
                     </div>
 
-                    {/* Section 2: Middle (Expanded for Letter Jacket) */}
-                    <div style={{
+                    {/* Section 2: Middle (Letter Jacket with Enhanced Effects) */}
+                    <div className="locker-section" style={{
                       height: '140vh',
                       display: 'flex',
                       alignItems: 'center',
@@ -336,15 +557,17 @@ const LockerSystemNew: React.FC = () => {
                         padding: '40px',
                         borderRadius: '20px',
                         textAlign: 'center',
-                        maxWidth: '500px'
+                        maxWidth: '500px',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255,255,255,0.1)'
                       }}>
                         <div style={{ fontSize: '32px', marginBottom: '20px' }}>👕</div>
                         <div style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px' }}>
                           Letter Jacket Section
                         </div>
                         
-                        {/* CSS Letter Jacket */}
-                        <div style={{
+                        {/* Enhanced CSS Letter Jacket with Hover Effects */}
+                        <div className="jacket-container" style={{
                           position: 'relative',
                           width: '120px',
                           height: '140px',
@@ -352,32 +575,40 @@ const LockerSystemNew: React.FC = () => {
                           background: 'linear-gradient(145deg, #1a365d, #2d3748)',
                           borderRadius: '60px 60px 20px 20px',
                           border: '3px solid #4299e1',
-                          boxShadow: '0 8px 25px rgba(0,0,0,0.5)',
+                          boxShadow: `
+                            0 8px 25px rgba(0,0,0,0.5),
+                            inset 0 2px 10px rgba(255,255,255,0.1)
+                          `,
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'center'
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          transition: 'all 0.3s ease',
+                          transform: currentSection === 2 ? 'scale(1.05)' : 'scale(1)'
                         }}>
-                          {/* Letter */}
+                          {/* Animated Letter */}
                           <div style={{
                             fontSize: '48px',
                             fontWeight: 'bold',
                             color: '#ffd700',
-                            textShadow: '2px 2px 4px rgba(0,0,0,0.7)',
-                            fontFamily: 'serif'
+                            textShadow: '2px 2px 4px rgba(0,0,0,0.7), 0 0 20px rgba(255,215,0,0.5)',
+                            fontFamily: 'serif',
+                            animation: currentSection === 2 ? 'pulse 2s ease-in-out infinite' : 'none'
                           }}>
                             F
                           </div>
                           
-                          {/* Sleeves */}
+                          {/* Enhanced Sleeves with Gradient */}
                           <div style={{
                             position: 'absolute',
                             left: '-15px',
                             top: '20px',
                             width: '25px',
                             height: '60px',
-                            background: 'linear-gradient(145deg, #1a365d, #2d3748)',
+                            background: 'linear-gradient(145deg, #1a365d, #2d3748, #4a5568)',
                             borderRadius: '15px',
-                            border: '2px solid #4299e1'
+                            border: '2px solid #4299e1',
+                            boxShadow: 'inset 0 2px 5px rgba(255,255,255,0.1)'
                           }} />
                           <div style={{
                             position: 'absolute',
@@ -385,12 +616,13 @@ const LockerSystemNew: React.FC = () => {
                             top: '20px',
                             width: '25px',
                             height: '60px',
-                            background: 'linear-gradient(145deg, #1a365d, #2d3748)',
+                            background: 'linear-gradient(145deg, #1a365d, #2d3748, #4a5568)',
                             borderRadius: '15px',
-                            border: '2px solid #4299e1'
+                            border: '2px solid #4299e1',
+                            boxShadow: 'inset 0 2px 5px rgba(255,255,255,0.1)'
                           }} />
                           
-                          {/* Collar */}
+                          {/* Glowing Collar */}
                           <div style={{
                             position: 'absolute',
                             top: '-5px',
@@ -399,27 +631,68 @@ const LockerSystemNew: React.FC = () => {
                             height: '20px',
                             background: 'linear-gradient(145deg, #4299e1, #63b3ed)',
                             borderRadius: '10px 10px 0 0',
-                            border: '2px solid #2b6cb0'
+                            border: '2px solid #2b6cb0',
+                            boxShadow: '0 0 15px rgba(66, 153, 225, 0.4)'
                           }} />
+                          
+                          {/* Sparkle Effects for when focused */}
+                          {currentSection === 2 && (
+                            <>
+                              <div style={{
+                                position: 'absolute',
+                                top: '10px',
+                                right: '10px',
+                                width: '4px',
+                                height: '4px',
+                                background: '#ffd700',
+                                borderRadius: '50%',
+                                boxShadow: '0 0 10px #ffd700',
+                                animation: 'pulse 1.5s ease-in-out infinite'
+                              }} />
+                              <div style={{
+                                position: 'absolute',
+                                bottom: '15px',
+                                left: '15px',
+                                width: '6px',
+                                height: '6px',
+                                background: '#40a9ff',
+                                borderRadius: '50%',
+                                boxShadow: '0 0 12px #40a9ff',
+                                animation: 'pulse 2s ease-in-out infinite 0.5s'
+                              }} />
+                            </>
+                          )}
                         </div>
                         
                         <div style={{ fontSize: '14px', opacity: 0.8, lineHeight: '1.5' }}>
                           Your Flunks varsity letter jacket hangs here proudly.
                           <br />
-                          <span style={{ fontSize: '12px', opacity: 0.6 }}>
-                            Scroll to see more locker sections
-                          </span>
+                          <em style={{ color: '#ffd700', fontSize: '13px' }}>
+                            A symbol of your community membership
+                          </em>
+                        </div>
+                        
+                        <div className="scroll-indicator" style={{ 
+                          fontSize: '12px', 
+                          opacity: 0.6, 
+                          marginTop: '15px',
+                          cursor: 'pointer'
+                        }}
+                        onClick={() => scrollToSection(3)}
+                        >
+                          ⬇️ Continue to storage area
                         </div>
                       </div>
                     </div>
 
-                    {/* Section 3: Bottom */}
-                    <div style={{
+                    {/* Section 3: Bottom (Enhanced Storage Area) */}
+                    <div className="locker-section" style={{
                       height: '80vh',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 100%)'
+                      background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 100%)',
+                      position: 'relative'
                     }}>
                       <div style={{
                         background: 'rgba(108, 117, 125, 0.95)',
@@ -427,19 +700,73 @@ const LockerSystemNew: React.FC = () => {
                         padding: '30px',
                         borderRadius: '15px',
                         textAlign: 'center',
-                        maxWidth: '400px'
+                        maxWidth: '400px',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        transform: currentSection === 3 ? 'scale(1.02)' : 'scale(1)',
+                        transition: 'transform 0.3s ease'
                       }}>
                         <div style={{ fontSize: '32px', marginBottom: '20px' }}>📚</div>
                         <div style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '15px' }}>
                           Storage Section
                         </div>
+                        
+                        {/* Interactive Storage Items */}
+                        <div style={{
+                          display: 'flex',
+                          justifyContent: 'space-around',
+                          margin: '20px 0',
+                          gap: '10px'
+                        }}>
+                          {['📖', '🎒', '📝', '🗂️'].map((item, index) => (
+                            <div key={index} style={{
+                              fontSize: '24px',
+                              padding: '10px',
+                              background: 'rgba(255,255,255,0.1)',
+                              borderRadius: '8px',
+                              cursor: 'pointer',
+                              transition: 'all 0.3s ease',
+                              animation: currentSection === 3 ? `fadeInUp 0.5s ease-out ${index * 0.1}s both` : 'none'
+                            }}
+                            onMouseOver={(e) => {
+                              e.currentTarget.style.transform = 'scale(1.2) rotate(5deg)';
+                              e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
+                            }}
+                            onMouseOut={(e) => {
+                              e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
+                              e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                            }}
+                            >
+                              {item}
+                            </div>
+                          ))}
+                        </div>
+                        
                         <div style={{ fontSize: '14px', lineHeight: '1.6', opacity: 0.9 }}>
                           This is the bottom section of your locker where you can store
                           books, supplies, and other items. Everything is organized
                           and easily accessible.
                         </div>
-                        <div style={{ fontSize: '12px', marginTop: '15px', opacity: 0.7 }}>
-                          End of locker - scroll up to navigate
+                        
+                        <div style={{ 
+                          fontSize: '12px', 
+                          marginTop: '15px', 
+                          opacity: 0.7,
+                          cursor: 'pointer',
+                          padding: '8px',
+                          background: 'rgba(255,255,255,0.05)',
+                          borderRadius: '6px',
+                          transition: 'background 0.3s ease'
+                        }}
+                        onClick={() => scrollToSection(1)}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+                        }}
+                        >
+                          ⬆️ Back to top
                         </div>
                       </div>
                     </div>

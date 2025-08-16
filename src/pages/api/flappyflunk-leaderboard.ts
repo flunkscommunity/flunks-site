@@ -12,7 +12,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { data, error } = await supabase
+  // Get scores first, then manually fetch user profiles for those wallets
+  const { data: scoresData, error } = await supabase
     .from('flappyflunk_scores')
     .select('wallet, score')
     .order('score', { ascending: false })
@@ -23,7 +24,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(500).json({ error: error.message });
   }
 
-  return res.status(200).json(data);
+  // Get unique wallet addresses
+  const walletAddresses = scoresData?.map(row => row.wallet) || [];
+  
+  // Fetch user profiles for those wallets
+  const { data: profilesData } = await supabase
+    .from('user_profiles')
+    .select('wallet_address, username')
+    .in('wallet_address', walletAddresses);
+
+  // Create a lookup map for profiles
+  const profileMap = new Map();
+  profilesData?.forEach(profile => {
+    profileMap.set(profile.wallet_address, profile);
+  });
+
+  // Transform the data to include username or fallback to wallet
+  const transformedData = scoresData?.map((row: any) => {
+    const userProfile = profileMap.get(row.wallet);
+    return {
+      wallet: row.wallet,
+      score: row.score,
+      username: userProfile?.username || `${row.wallet.slice(0, 6)}...${row.wallet.slice(-4)}`,
+      hasProfile: !!userProfile?.username
+    };
+  });
+
+  return res.status(200).json(transformedData);
 }
 // This API route fetches the leaderboard scores for the Flappy Flunk game
 // and returns them in descending order by score, limited to the top 100 scores.

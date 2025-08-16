@@ -99,6 +99,25 @@ const AstronautText = styled.span`
   font-weight: bold;
 `;
 
+const PinkBoxText = styled.div`
+  position: absolute;
+  top: 67%;
+  left: 13%;
+  width: 22%;
+  height: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000080;
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8);
+  z-index: 12;
+  pointer-events: none;
+`;
+
 const ClickableHotspot = styled.div`
   position: absolute;
   cursor: pointer;
@@ -142,6 +161,11 @@ const BulletinBoard: React.FC = () => {
                 height: '40%'
               }}
             />
+            
+            {/* Text overlay for pink box */}
+            <PinkBoxText>
+              Find the Code
+            </PinkBoxText>
           </BulletinImage>
         </div>
         

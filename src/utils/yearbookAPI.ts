@@ -259,16 +259,31 @@ export class YearbookMockData {
     const torsos = ['T-Shirt', 'Hoodie', 'Jersey', 'Polo', 'Tank Top', 'Sweater', 'Blazer', 'Jacket'];
     const types = ['Student', 'Athlete', 'Scholar', 'Artist', 'Leader', 'Musician', 'Rebel', 'Socialite'];
 
+    // Available image sets with their counts
+    const imageSets = [
+      { prefix: 'fp-', count: 10, extension: 'avif' },  // fp-1.avif to fp-10.avif
+      { prefix: 'f2d-', count: 10, extension: 'avif' }, // f2d-1.avif to f2d-10.avif
+      { prefix: 'bp-', count: 10, extension: 'avif' },  // bp-1.avif to bp-10.avif
+      { prefix: 'f3d-', count: 10, extension: 'webp' }, // f3d-1.webp to f3d-10.webp
+      { prefix: 'jnr-', count: 10, extension: 'webp' }, // jnr-1.webp to jnr-10.webp
+    ];
+
     return Array.from({ length: count }, (_, index) => {
       const tokenId = 1000 + index;
       const clique = cliques[index % cliques.length];
+      
+      // Select image set and number within that set
+      const imageSetIndex = Math.floor(index / 10) % imageSets.length;
+      const imageSet = imageSets[imageSetIndex];
+      const imageNumber = (index % imageSet.count) + 1;
+      const imagePath = `/images/about-us/${imageSet.prefix}${imageNumber}.${imageSet.extension}`;
       
       return {
         tokenId,
         metadata: {
           name: `Flunk #${tokenId}`,
           description: `A ${clique.toLowerCase()} from Flunks High School, Class of 2024`,
-          image: `/images/about-us/fp-${(index % 10) + 1}.avif`,
+          image: imagePath,
           attributes: [
             { trait_type: 'Clique', value: clique },
             { trait_type: 'Background', value: backgrounds[index % backgrounds.length] },

@@ -14,6 +14,8 @@ const fetcher = (url: string) => fetch(url).then((r) => r.json());
 interface ScoreRow {
   wallet: string;
   score: number;
+  username: string;
+  hasProfile: boolean;
   challenge_id?: string;
   metadata?: any;
   timestamp?: string;
@@ -36,7 +38,7 @@ const FlappyLeaderboardWindow: React.FC = () => {
         <TableHead>
           <TableRow>
             <TableHeadCell>#</TableHeadCell>
-            <TableHeadCell>Wallet</TableHeadCell>
+            <TableHeadCell>Player</TableHeadCell>
             <TableHeadCell>Score</TableHeadCell>
           </TableRow>
         </TableHead>
@@ -57,8 +59,22 @@ const FlappyLeaderboardWindow: React.FC = () => {
             scores!.map((row, idx) => (
               <TableRow key={idx}>
                 <TableDataCell>{idx + 1}</TableDataCell>
-                <TableDataCell className="truncate max-w-[120px]">
-                  {row.wallet}
+                <TableDataCell className="truncate max-w-[120px]" title={row.hasProfile ? row.username : row.wallet}>
+                  <span style={{ 
+                    color: row.hasProfile ? '#000' : '#666',
+                    fontWeight: row.hasProfile ? 'bold' : 'normal'
+                  }}>
+                    {row.username}
+                  </span>
+                  {row.hasProfile && (
+                    <span style={{ 
+                      fontSize: '10px', 
+                      marginLeft: '4px', 
+                      color: '#28a745' 
+                    }}>
+                      ✓
+                    </span>
+                  )}
                 </TableDataCell>
                 <TableDataCell>{row.score}</TableDataCell>
               </TableRow>

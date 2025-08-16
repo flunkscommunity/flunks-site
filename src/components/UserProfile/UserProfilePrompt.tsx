@@ -1,40 +1,80 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Frame, Window, WindowHeader, WindowContent } from 'react95';
 import { useUserProfile } from 'contexts/UserProfileContext';
 import { useWindowsContext } from 'contexts/WindowsContext';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { WINDOW_IDS } from 'fixed';
 import LockerSystemNew from 'windows/LockerSystemNew';
+import RPGProfileForm from './RPGProfileForm';
 
-interface ProfilePromptProps {
+interface UserProfilePromptProps {
   onDismiss?: () => void;
   autoShow?: boolean;
+  showToast?: boolean; // New prop to control toast visibility
 }
 
-const UserProfilePrompt: React.FC<ProfilePromptProps> = ({ 
-  onDismiss,
-  autoShow = false 
+const UserProfilePrompt: React.FC<UserProfilePromptProps> = ({ 
+  onDismiss, 
+  autoShow = false,
+  showToast = false
 }) => {
   const { primaryWallet } = useDynamicContext();
   const { hasProfile, loading } = useUserProfile();
   const { openWindow } = useWindowsContext();
+  const [showRPGForm, setShowRPGForm] = useState(false);
 
-  // Don't show if wallet not connected, loading, or user already has profile
+  // Auto-show the RPG form when wallet connects and no profile exists
+  useEffect(() => {
+    if (autoShow && primaryWallet?.address && !loading && !hasProfile && !showRPGForm) {
+      // Small delay to ensure everything is loaded
+      const timer = setTimeout(() => {
+        console.log('Auto-showing RPG profile form');
+        setShowRPGForm(true);
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [primaryWallet?.address, loading, hasProfile, autoShow, showRPGForm]);
+
+  // Don't show anything if wallet not connected, loading, or user already has profile
   if (!primaryWallet?.address || loading || hasProfile) {
     return null;
   }
 
   const handleCreateProfile = () => {
-    // Open the user profile/locker window (same as Start menu)
-    openWindow({
-      key: WINDOW_IDS.USER_PROFILE,
-      window: <LockerSystemNew />
-    });
+    console.log('Create Profile button clicked - opening RPG form');
+    setShowRPGForm(true);
+  };
+
+  const handleRPGClose = () => {
+    setShowRPGForm(false);
     onDismiss?.();
   };
 
-  if (autoShow) {
-    // Auto-show as a toast/notification
+  const handleRPGComplete = () => {
+    setShowRPGForm(false);
+    onDismiss?.();
+    // Profile was successfully created, the UserProfileContext will update automatically
+  };
+
+  // If we should show the RPG form (either auto or manual)
+  if (showRPGForm) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="relative">
+          <RPGProfileForm 
+            onComplete={handleRPGComplete} 
+            onCancel={handleRPGClose} 
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Show the toast in bottom-right if:
+  // 1. showToast prop is explicitly true, OR
+  // 2. autoShow is enabled and either we haven't auto-shown yet, or we have auto-shown but aren't currently showing the RPG form
+  if (showToast || (autoShow && !showRPGForm)) {
+    // Show toast notification in bottom right corner
     return (
       <div className="fixed bottom-4 right-4 z-50 max-w-sm">
         <Frame variant="window" className="p-4 bg-yellow-50 border-yellow-300">

@@ -151,7 +151,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         </div>
                         <Analytics />
                         {/* Global Profile Creation Prompt */}
-                        <UserProfilePrompt autoShow={true} />
+                        <UserProfilePrompt autoShow={true} showToast={false} />
                         {/* Global wallet connect entry point */}
                         <div
                           style={{

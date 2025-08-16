@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
-import { awardGum, getUserGumBalance, type GumAwardResult } from '../utils/gumAPI';
+import { awardGum, getUserGumBalance, checkGumCooldown, type GumAwardResult } from '../utils/gumAPI';
 import { useUserProfile } from '../contexts/UserProfileContext';
 
 // Floating animation for the gum button
@@ -193,12 +193,54 @@ export const FloatingGumButton: React.FC<FloatingGumButtonProps> = ({
   const dragStartRef = useRef({ x: 0, y: 0 });
   const cooldownTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Load initial gum balance
+  // Load initial gum balance and check for existing cooldown
   useEffect(() => {
     if (primaryWallet?.address) {
       loadGumBalance();
+      checkInitialCooldown();
     }
   }, [primaryWallet?.address]);
+
+  const checkInitialCooldown = async () => {
+    if (!primaryWallet?.address) return;
+    
+    // First check localStorage for persisted cooldown
+    const storedCooldownEnd = localStorage.getItem(`gum_cooldown_${primaryWallet.address}`);
+    if (storedCooldownEnd) {
+      const cooldownEndTime = new Date(storedCooldownEnd);
+      const now = new Date();
+      
+      if (cooldownEndTime > now) {
+        // Still in cooldown
+        const remainingMs = cooldownEndTime.getTime() - now.getTime();
+        const remainingMinutes = Math.ceil(remainingMs / (1000 * 60));
+        
+        setCanEarn(false);
+        startCooldown(remainingMinutes);
+        return;
+      } else {
+        // Cooldown expired, remove from localStorage
+        localStorage.removeItem(`gum_cooldown_${primaryWallet.address}`);
+      }
+    }
+    
+    // If no localStorage cooldown or it expired, check with server
+    try {
+      const cooldownCheck = await checkGumCooldown(primaryWallet.address, 'floating_button');
+      
+      if (!cooldownCheck.canEarn && cooldownCheck.cooldownMinutes) {
+        // Server says still in cooldown
+        setCanEarn(false);
+        startCooldown(cooldownCheck.cooldownMinutes);
+      } else {
+        setCanEarn(true);
+      }
+    } catch (error) {
+      console.error('Error checking initial cooldown:', error);
+      // Default to allowing earning on error
+      setCanEarn(true);
+    }
+  };
 
   const loadGumBalance = async () => {
     if (!primaryWallet?.address) return;
@@ -328,9 +370,18 @@ export const FloatingGumButton: React.FC<FloatingGumButtonProps> = ({
     setCanEarn(false);
     setCooldownProgress(100);
     
+    // Store cooldown end time in localStorage for persistence across page reloads
+    const cooldownEndTime = new Date(Date.now() + minutes * 60 * 1000);
+    localStorage.setItem(`gum_cooldown_${primaryWallet?.address}`, cooldownEndTime.toISOString());
+    
     const totalMs = minutes * 60 * 1000;
     const intervalMs = 100;
     let elapsed = 0;
+    
+    // Clear any existing timer
+    if (cooldownTimerRef.current) {
+      clearInterval(cooldownTimerRef.current);
+    }
 
     const timer = setInterval(() => {
       elapsed += intervalMs;
@@ -341,6 +392,9 @@ export const FloatingGumButton: React.FC<FloatingGumButtonProps> = ({
         clearInterval(timer);
         setCanEarn(true);
         setCooldownProgress(0);
+        
+        // Clear localStorage when cooldown expires
+        localStorage.removeItem(`gum_cooldown_${primaryWallet?.address}`);
       }
     }, intervalMs);
 
@@ -373,6 +427,18 @@ export const FloatingGumButton: React.FC<FloatingGumButtonProps> = ({
 
   // Don't show if no wallet connected
   if (!primaryWallet?.address) {
+    return null;
+  }
+
+  // Hide button completely during cooldown
+  if (!canEarn && !hasProfile) {
+    // Still show if user doesn't have profile (for profile creation prompt)
+    // But hide completely if they have profile and are in cooldown
+    return null;
+  }
+
+  // Hide if user has profile but is in cooldown
+  if (hasProfile && !canEarn) {
     return null;
   }
 

@@ -7,6 +7,95 @@ import { Button, Select, TextInput, Frame, ScrollView, Progress, Checkbox } from
 import { FlunkNFT, YearbookFilters, YearbookStats } from '../types/Yearbook';
 import { YearbookAPI, YearbookMockData } from '../utils/yearbookAPI';
 
+// Image component with better fallback handling
+const FlunkImageWrapper = styled.div`
+  width: 100%;
+  height: 180px;
+  background: #C0C0C0;
+  border-bottom: 3px solid #FF00FF;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  @media (max-width: 768px) {
+    height: 160px;
+  }
+  
+  @media (max-width: 480px) {
+    height: 140px;
+  }
+`;
+
+const FlunkImageComponent: React.FC<{ src: string; alt: string; className?: string }> = ({ 
+  src, 
+  alt, 
+  className 
+}) => {
+  const [imageError, setImageError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
+
+  const fallbackImages = [
+    '/images/about-us/fp-1.avif',
+    '/images/icons/user.png',
+    '/images/flunks-logo.png'
+  ];
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const currentSrc = imageError ? (fallbackImages[currentImageIndex] || '/images/icons/user.png') : src;
+
+  const handleImageError = () => {
+    if (!imageError) {
+      setImageError(true);
+      setCurrentImageIndex(0);
+    } else if (currentImageIndex < fallbackImages.length - 1) {
+      setCurrentImageIndex(prev => prev + 1);
+    }
+  };
+
+  const handleImageLoad = () => {
+    setImageLoading(false);
+  };
+
+  if (imageLoading && !imageError) {
+    return (
+      <FlunkImageWrapper className={className}>
+        <div style={{ 
+          background: '#808080', 
+          width: '60px', 
+          height: '60px', 
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#FFF',
+          fontSize: '12px'
+        }}>
+          Loading...
+        </div>
+      </FlunkImageWrapper>
+    );
+  }
+
+  return (
+    <FlunkImageWrapper className={className}>
+      <img
+        src={currentSrc}
+        alt={alt}
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          filter: 'contrast(1.2) saturate(1.3)',
+        }}
+        onError={handleImageError}
+        onLoad={handleImageLoad}
+      />
+    </FlunkImageWrapper>
+  );
+};
+
 const YearbookContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -393,8 +482,8 @@ const TraitFilterSection = styled.div`
 const FlunksGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
-  padding: 16px;
+  gap: 20px;
+  padding: 20px;
   overflow-y: auto;
   flex: 1;
   background: 
@@ -421,21 +510,28 @@ const FlunksGrid = styled.div`
     z-index: 1;
   }
   
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 16px;
+  }
+  
   @media (max-width: 768px) {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+    padding: 14px;
+  }
+  
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 12px;
     padding: 12px;
   }
   
-  @media (max-width: 480px) {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 8px;
-    padding: 8px;
-  }
-  
   @media (max-width: 360px) {
-    grid-template-columns: 1fr;
-    gap: 8px;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 10px;
   }
 `;
 
@@ -493,25 +589,8 @@ const FlunkCard = styled.div`
   }
 `;
 
-const FlunkImage = styled.img`
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-bottom: 3px solid #FF00FF;
-  position: relative;
-  filter: contrast(1.2) saturate(1.3);
-  
-  &:hover {
-    filter: contrast(1.4) saturate(1.5) hue-rotate(15deg);
-  }
-  
-  @media (max-width: 768px) {
-    height: 160px;
-  }
-  
-  @media (max-width: 480px) {
-    height: 140px;
-  }
+const FlunkImage = styled(FlunkImageComponent)`
+  /* Styling is handled in FlunkImageWrapper */
 `;
 
 const FlunkInfo = styled.div`
@@ -673,7 +752,7 @@ const LoadingContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex: 1;
-  gap: 16px;
+  gap: 20px;
   background: 
     repeating-linear-gradient(
       90deg,
@@ -691,7 +770,7 @@ const LoadingContainer = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(192, 192, 192, 0.9);
+    background: rgba(192, 192, 192, 0.95);
   }
   
   > * {
@@ -705,12 +784,20 @@ const LoadingContainer = styled.div`
     color: #000;
     font-size: 16px;
     text-shadow: 1px 1px 0px #FFF;
-    animation: blink 1s infinite;
+    animation: loadingPulse 1.5s ease-in-out infinite;
+    text-align: center;
+    margin: 0;
   }
   
-  @keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0.3; }
+  @keyframes loadingPulse {
+    0%, 100% { 
+      opacity: 1; 
+      transform: scale(1); 
+    }
+    50% { 
+      opacity: 0.7; 
+      transform: scale(1.05); 
+    }
   }
 `;
 
@@ -720,14 +807,21 @@ const ErrorContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex: 1;
-  gap: 16px;
+  gap: 20px;
   background: 
     repeating-linear-gradient(
       45deg,
       #FF0000,
       #FF0000 10px,
-      #FFFF00 10px,
-      #FFFF00 20px
+      #FFB6C1 10px,
+      #FFB6C1 20px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      #FF4500,
+      #FF4500 10px,
+      #FFF8DC 10px,
+      #FFF8DC 20px
     );
   position: relative;
   
@@ -738,7 +832,7 @@ const ErrorContainer = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(192, 192, 192, 0.9);
+    background: rgba(255, 255, 255, 0.9);
   }
   
   > * {
@@ -747,12 +841,13 @@ const ErrorContainer = styled.div`
   }
   
   h3 {
-    margin: 0;
+    margin: 0 0 10px 0;
     color: #FF0000;
     font-family: 'MS Sans Serif', sans-serif;
-    font-size: 18px;
+    font-size: 20px;
     text-shadow: 2px 2px 0px #000;
-    animation: errorPulse 1.5s infinite;
+    animation: errorShake 2s ease-in-out infinite;
+    text-align: center;
   }
   
   p {
@@ -760,11 +855,99 @@ const ErrorContainer = styled.div`
     font-family: 'MS Sans Serif', sans-serif;
     font-weight: bold;
     text-shadow: 1px 1px 0px #FFF;
+    text-align: center;
+    margin: 0 0 20px 0;
+    max-width: 400px;
+    line-height: 1.4;
   }
   
-  @keyframes errorPulse {
-    0%, 100% { transform: scale(1); color: #FF0000; }
-    50% { transform: scale(1.1); color: #FF6600; }
+  @keyframes errorShake {
+    0%, 100% { 
+      transform: translateX(0) scale(1); 
+      color: #FF0000; 
+    }
+    25% { 
+      transform: translateX(-2px) scale(1.02); 
+      color: #FF4500; 
+    }
+    75% { 
+      transform: translateX(2px) scale(0.98); 
+      color: #FF6600; 
+    }
+  }
+`;
+
+const ResultsCounter = styled.div`
+  padding: 8px 16px;
+  background: #C0C0C0;
+  border: 2px inset #C0C0C0;
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  color: #000;
+  text-align: center;
+  border-bottom: 2px solid #808080;
+  
+  .results-text {
+    color: #000080;
+  }
+  
+  .total-text {
+    color: #666;
+    margin-left: 8px;
+  }
+`;
+
+const NoResultsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 20px;
+  padding: 40px;
+  background: 
+    linear-gradient(45deg, #E0E0E0 25%, transparent 25%),
+    linear-gradient(-45deg, #E0E0E0 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #F5F5F5 75%),
+    linear-gradient(-45deg, transparent 75%, #F5F5F5 75%);
+  background-size: 30px 30px;
+  background-position: 0 0, 0 15px, 15px -15px, -15px 0px;
+  border: 3px outset #C0C0C0;
+  
+  .no-results-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+    animation: float 2s ease-in-out infinite;
+  }
+  
+  h3 {
+    margin: 0 0 10px 0;
+    color: #000080;
+    font-family: 'MS Sans Serif', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0px #FFF;
+    text-align: center;
+  }
+  
+  p {
+    color: #404040;
+    font-family: 'MS Sans Serif', sans-serif;
+    font-size: 14px;
+    text-align: center;
+    margin: 0 0 20px 0;
+    max-width: 300px;
+    line-height: 1.4;
+  }
+  
+  @keyframes float {
+    0%, 100% { 
+      transform: translateY(0); 
+    }
+    50% { 
+      transform: translateY(-10px); 
+    }
   }
 `;
 
@@ -801,8 +984,9 @@ const Yearbook: React.FC = () => {
       const USE_MOCK_DATA = true; // Set to false when your API is ready
 
       if (USE_MOCK_DATA) {
-        // Generate more mock data and show it immediately (no artificial delay)
-        const mockFlunks = YearbookMockData.generateMockFlunks(200);
+        // Simulate a small delay to show loading state, then show data
+        await new Promise(resolve => setTimeout(resolve, 500));
+        const mockFlunks = YearbookMockData.generateMockFlunks(300); // Increased to 300 for better variety
         const mockStats = YearbookMockData.getMockStats();
         
         setFlunks(mockFlunks);
@@ -813,12 +997,22 @@ const Yearbook: React.FC = () => {
           YearbookAPI.fetchFlunks(filters),
           YearbookAPI.fetchStats()
         ]);
+        
+        if (!flunksData || flunksData.length === 0) {
+          throw new Error('No Flunks data found. The collection might be empty or temporarily unavailable.');
+        }
+        
         setFlunks(flunksData);
         setStats(statsData);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load yearbook data');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load yearbook data';
+      setError(`📚 ${errorMessage}`);
       console.error('Yearbook loading error:', err);
+      
+      // Set empty data to prevent showing stale data
+      setFlunks([]);
+      setStats(null);
     } finally {
       setLoading(false);
     }
@@ -956,8 +1150,11 @@ const Yearbook: React.FC = () => {
     if (loading) {
       return (
         <LoadingContainer>
-          <Progress />
-          <p>Loading Flunks High School Yearbook...</p>
+          <Progress variant="tile" />
+          <p>📚 Loading Flunks High School Yearbook...</p>
+          <div style={{ fontSize: '12px', color: '#666', marginTop: '10px' }}>
+            Fetching student profiles, images, and stats...
+          </div>
         </LoadingContainer>
       );
     }
@@ -1087,15 +1284,23 @@ const Yearbook: React.FC = () => {
           </TraitFilterSection>
         </FilterSection>
 
+        <ResultsCounter>
+          <span className="results-text">
+            Showing {filteredFlunks.length} students
+          </span>
+          {flunks.length > 0 && (
+            <span className="total-text">
+              of {flunks.length} total
+            </span>
+          )}
+        </ResultsCounter>
+
         <FlunksGrid>
           {filteredFlunks.map((flunk) => (
             <FlunkCard key={flunk.tokenId}>
               <FlunkImage
                 src={flunk.metadata.image}
                 alt={flunk.metadata.name}
-                onError={(e) => {
-                  e.currentTarget.src = '/images/about-us/fp-1.avif';
-                }}
               />
               <FlunkInfo>
                 <h3>{flunk.metadata.name}</h3>
@@ -1123,17 +1328,29 @@ const Yearbook: React.FC = () => {
           ))}
         </FlunksGrid>
 
-        {filteredFlunks.length === 0 && !loading && (
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            flex: 1,
-            fontSize: '18px',
-            color: '#666'
-          }}>
-            No Flunks found matching your filters 📚
-          </div>
+        {filteredFlunks.length === 0 && !loading && flunks.length > 0 && (
+          <NoResultsContainer>
+            <div className="no-results-icon">🔍</div>
+            <h3>No Students Found</h3>
+            <p>Try adjusting your filters or search terms</p>
+            <Button onClick={() => {
+              setFilters({ clique: 'ALL', trait: 'ALL', search: '', sortBy: 'random' });
+              setSelectedTraits({});
+            }}>
+              Clear All Filters
+            </Button>
+          </NoResultsContainer>
+        )}
+        
+        {flunks.length === 0 && !loading && !error && (
+          <NoResultsContainer>
+            <div className="no-results-icon">📚</div>
+            <h3>Yearbook is Empty</h3>
+            <p>No students have been loaded yet. This might be a temporary issue.</p>
+            <Button onClick={loadYearbookData}>
+              Reload Yearbook
+            </Button>
+          </NoResultsContainer>
         )}
       </>
     );
