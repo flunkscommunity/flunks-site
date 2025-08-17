@@ -847,7 +847,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           <div 
             className={styles["hover-enlarged-icon"]}
             style={{ 
-              backgroundImage: `url(/images/icons/high-school-icon.png)` 
+              backgroundImage: `url(/images/icons/high-school-icon-front.png)` 
             }}
           >
           </div>
