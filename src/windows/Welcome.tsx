@@ -26,7 +26,7 @@ const Welcome: React.FC = () => {
     setShowWelcome(isChecked);
   };
 
-  const icon = "/images/icons/did-you-know.png";
+  const icon = "/images/icons/bulletin-board-icon.png";
   const tips = [
     <p>
       [1/6] Semester Zero is starting soon! Check the school calendar for

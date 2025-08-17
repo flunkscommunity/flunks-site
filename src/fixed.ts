@@ -343,7 +343,7 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
   },
   [WINDOW_IDS.BULLETIN_BOARD]: {
     appName: "Bulletin Board",
-    appIcon: "/images/icons/did-you-know.png",
+    appIcon: "/images/icons/bulletin-board-icon.png",
     key: WINDOW_IDS.BULLETIN_BOARD,
   },
   [WINDOW_IDS.YEARBOOK]: {

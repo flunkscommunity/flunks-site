@@ -140,7 +140,7 @@ const BulletinBoard: React.FC = () => {
     <DraggableResizeableWindow
       windowsId={WINDOW_IDS.BULLETIN_BOARD}
       headerTitle="Community Bulletin Board"
-      headerIcon="/images/icons/did-you-know.png"
+      headerIcon="/images/icons/bulletin-board-icon.png"
       onClose={() => closeWindow(WINDOW_IDS.BULLETIN_BOARD)}
       initialWidth="800px"
       initialHeight="900px"

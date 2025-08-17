@@ -415,7 +415,7 @@ const windowsMemod = useMemo(() => (
         <ConditionalAppIcon
           appId="bulletin-board"
           title="Bulletin Board"
-          icon="/images/icons/did-you-know.png"
+          icon="/images/icons/bulletin-board-icon.png"
           onDoubleClick={() =>
             openWindow({
               key: WINDOW_IDS.BULLETIN_BOARD,
