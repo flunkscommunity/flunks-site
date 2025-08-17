@@ -323,7 +323,7 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
   },
   [WINDOW_IDS.GAME_MANUAL]: {
     appName: "Game Manual",
-    appIcon: "/images/icons/high-school-icon.png",
+    appIcon: "/images/icons/game-manual-icon.png",
     key: WINDOW_IDS.GAME_MANUAL,
   },
   [WINDOW_IDS.MEME_MANAGER]: {

@@ -222,7 +222,7 @@ const windowsMemod = useMemo(() => (
         <ConditionalAppIcon
           appId="game-manual"
           title="Game Manual"
-          icon="/images/icons/high-school-icon.png"
+          icon="/images/icons/game-manual-icon.png"
           onDoubleClick={() => openWindow({
             key: WINDOW_IDS.GAME_MANUAL,
             window: <GameManualWindow />

@@ -676,7 +676,7 @@ const GameManualWindow: React.FC = () => {
       initialWidth="600px"
       initialHeight="650px"
       headerTitle="Flunks High School - Official Game Manual"
-      headerIcon="/images/icons/high-school-icon.png"
+      headerIcon="/images/icons/game-manual-icon.png"
     >
       <ManualContainer>
             {renderPageContent()}
