@@ -741,7 +741,7 @@ const GameManualWindow: React.FC = () => {
                 minWidth: '60px',
                 textAlign: 'center'
               }}>
-                <img src="/images/icons/did-you-know.png" alt="Bulletin Board" style={{ width: '48px', height: '48px' }} />
+                <img src="/images/icons/bulletin-board-icon.png" alt="Bulletin Board" style={{ width: '48px', height: '48px' }} />
               </div>
               <div>
                 <h3 style={{ 
