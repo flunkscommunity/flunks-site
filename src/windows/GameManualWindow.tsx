@@ -192,19 +192,23 @@ const pages = [
     content: "toc"
   },
   {
-    title: "Getting Started",
-    content: "getting-started"
+    title: "Desktop Applications",
+    content: "desktop-applications"
   },
   {
-    title: "Clique Houses & Access",
+    title: "Desktop Applications II",
+    content: "desktop-applications-2"
+  },
+  {
+    title: "Desktop Applications III",
+    content: "desktop-applications-3"
+  },
+  {
+    title: "Conditional Rendering",
     content: "clique-access"
   },
   {
-    title: "School Navigation",
-    content: "navigation"
-  },
-  {
-    title: "NFT Collection Guide",
+    title: "NFT Utility",
     content: "nft-guide"
   },
   {
@@ -241,71 +245,19 @@ const GameManualWindow: React.FC = () => {
     switch (page.content) {
       case "cover":
         return (
-          <CoverPage>
-            {/* Nintendo-style cover recreation */}
-            <CoverTitle style={{ zIndex: 2 }}>FLUNKS</CoverTitle>
-            
-            {/* School and arcade buildings illustration */}
-            <div style={{
-              position: 'absolute',
-              top: '120px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              zIndex: 2,
-              fontSize: '12px',
-              color: '#8B4513',
-              textAlign: 'center',
-              fontWeight: 'bold'
-            }}>
-              🏫 SCHOOL 🎮 ARCADE 🌳
-              <br />
-              🚍 [POLICE LINE DO NOT CROSS] 🚍
-              <br />
-              <div style={{ 
-                fontSize: '24px', 
-                margin: '10px 0',
-                color: '#FF6B35',
-                textShadow: '2px 2px 0px #8B4513'
-              }}>
-                👤 STUDENT CHARACTER
-              </div>
-            </div>
-            
-            <CoverSubtitle style={{ 
-              position: 'absolute', 
-              bottom: '80px', 
-              zIndex: 2,
-              fontSize: '18px'
-            }}>
-              GAME MANUAL
-            </CoverSubtitle>
-            
-            <SystemBadge style={{ zIndex: 2 }}>
-              FLOW BLOCKCHAIN
-            </SystemBadge>
-            
-            <RatingBadge style={{ zIndex: 2 }}>
-              <span className="rating">KA</span>
-              <span className="ages">KIDS TO ADULTS</span>
-            </RatingBadge>
-            
-            {/* Nintendo branding */}
-            <div style={{
-              position: 'absolute',
-              bottom: '20px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              color: '#FF6B35',
-              fontSize: '10px',
-              fontWeight: 'bold',
-              textAlign: 'center',
-              zIndex: 2,
-              textShadow: '1px 1px 0px #8B4513'
-            }}>
-              SUPER NINTENDO®<br />
-              ENTERTAINMENT SYSTEM
-            </div>
-          </CoverPage>
+          <div style={{
+            width: '100%',
+            height: '500px',
+            backgroundImage: 'url(/images/page-1.png)',
+            backgroundSize: 'contain',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            {/* Image will be displayed as background */}
+          </div>
         );
         
       case "toc":
@@ -324,110 +276,776 @@ const GameManualWindow: React.FC = () => {
           </PageContent>
         );
         
-      case "getting-started":
+      case "desktop-applications":
         return (
           <PageContent>
-            <PageHeader>🚀 Getting Started</PageHeader>
-            <h3>Welcome to Flunks High School!</h3>
-            <p>This manual will guide you through all the features and systems in your virtual high school experience.</p>
+            <PageHeader>� Desktop Applications</PageHeader>
+            <p style={{ textAlign: 'center', marginBottom: '20px', fontStyle: 'italic' }}>
+              Launch these essential apps to explore everything Flunks High School has to offer!
+            </p>
             
-            <h4>Step 1: Connect Your Wallet</h4>
-            <p>To access exclusive areas and features, you'll need to connect a Flow blockchain wallet containing Flunks NFTs.</p>
-            <Screenshot>[WALLET CONNECTION SCREEN]</Screenshot>
+            {/* OnlyFlunks */}
+            <div style={{
+              background: 'linear-gradient(135deg, #ff6b9d, #ff8e9b)',
+              border: '3px solid #333',
+              borderRadius: '12px',
+              padding: '20px',
+              marginBottom: '20px',
+              boxShadow: '4px 4px 0px #000',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '25px',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '6px 6px 0px #000, 0 0 20px rgba(255, 107, 157, 0.6)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '4px 4px 0px #000';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}>
+              <div style={{ 
+                minWidth: '60px',
+                textAlign: 'center'
+              }}>
+                <img src="/images/icons/onlyflunks.png" alt="OnlyFlunks" style={{ width: '48px', height: '48px' }} />
+              </div>
+              <div>
+                <h3 style={{ 
+                  color: '#fff', 
+                  textShadow: '2px 2px 0px #000', 
+                  margin: '0 0 10px 0',
+                  fontSize: '20px'
+                }}>OnlyFlunks</h3>
+                <p style={{ 
+                  color: '#fff', 
+                  textShadow: '1px 1px 0px #000',
+                  margin: 0,
+                  fontSize: '14px',
+                  lineHeight: '1.4'
+                }}>
+                  Browse and collect rare student NFTs in the school's exclusive marketplace. 
+                  Discover unique traits, trade with other students, and build your collection of digital Flunks characters.
+                </p>
+              </div>
+            </div>
+
+            {/* My Locker */}
+            <div style={{
+              background: 'linear-gradient(135deg, #4ecdc4, #44a08d)',
+              border: '3px solid #333',
+              borderRadius: '12px',
+              padding: '20px',
+              marginBottom: '20px',
+              boxShadow: '4px 4px 0px #000',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '25px',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '6px 6px 0px #000, 0 0 20px rgba(78, 205, 196, 0.6)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '4px 4px 0px #000';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}>
+              <div style={{ 
+                minWidth: '60px',
+                textAlign: 'center'
+              }}>
+                <img src="/images/icons/locker-icon.png" alt="My Locker" style={{ width: '48px', height: '48px' }} />
+              </div>
+              <div>
+                <h3 style={{ 
+                  color: '#fff', 
+                  textShadow: '2px 2px 0px #000', 
+                  margin: '0 0 10px 0',
+                  fontSize: '20px'
+                }}>My Locker</h3>
+                <p style={{ 
+                  color: '#fff', 
+                  textShadow: '1px 1px 0px #000',
+                  margin: 0,
+                  fontSize: '14px',
+                  lineHeight: '1.4'
+                }}>
+                  Manage your student profile, customize your avatar, and organize your digital items. 
+                  Set your username, bio, and showcase your favorite NFTs in your personal locker space.
+                </p>
+              </div>
+            </div>
+
+            {/* Terminal */}
+            <div style={{
+              background: 'linear-gradient(135deg, #667eea, #764ba2)',
+              border: '3px solid #333',
+              borderRadius: '12px',
+              padding: '20px',
+              marginBottom: '25px',
+              boxShadow: '4px 4px 0px #000',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '25px',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '6px 6px 0px #000, 0 0 20px rgba(102, 126, 234, 0.6)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '4px 4px 0px #000';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}>
+              <div style={{ 
+                minWidth: '60px',
+                textAlign: 'center'
+              }}>
+                <img src="/images/icons/newterminal.png" alt="Terminal" style={{ width: '48px', height: '48px' }} />
+              </div>
+              <div>
+                <h3 style={{ 
+                  color: '#fff', 
+                  textShadow: '2px 2px 0px #000', 
+                  margin: '0 0 10px 0',
+                  fontSize: '20px'
+                }}>Terminal</h3>
+                <p style={{ 
+                  color: '#fff', 
+                  textShadow: '1px 1px 0px #000',
+                  margin: 0,
+                  fontSize: '14px',
+                  lineHeight: '1.4'
+                }}>
+                  Execute powerful system commands and access advanced features through the command-line interface. 
+                  Type 'help' to discover available commands and unlock hidden school functions.
+                </p>
+              </div>
+            </div>
             
-            <h4>Step 2: Explore the Campus</h4>
-            <p>Navigate through different areas of the school including:</p>
-            <ul>
-              <li>🏫 Main School Building</li>
-              <li>🏠 Clique Houses (Access Required)</li>
-              <li>🎮 Arcade</li>
-              <li>📻 Radio Station</li>
-              <li>🌳 Treehouse</li>
-              <li>💻 Terminal (Command Center)</li>
-            </ul>
+            <div style={{
+              background: 'linear-gradient(90deg, #667eea, #764ba2)',
+              border: '3px solid #333',
+              borderRadius: '8px',
+              padding: '15px',
+              marginTop: '20px',
+              textAlign: 'center',
+              boxShadow: '3px 3px 0px #000'
+            }}>
+              <strong style={{ color: '#fff', textShadow: '1px 1px 0px #000', fontSize: '14px' }}>
+                💡 Pro Tip: Double-click any desktop icon to launch the application instantly!
+              </strong>
+            </div>
+          </PageContent>
+        );
+        
+      case "desktop-applications-2":
+        return (
+          <PageContent>
+            <PageHeader>💻 Desktop Applications II</PageHeader>
+            <p style={{ textAlign: 'center', marginBottom: '25px', fontStyle: 'italic' }}>
+              Essential school navigation and information tools!
+            </p>
             
-            <h4>Step 3: Try the Terminal</h4>
-            <p>Open the Terminal app and type <code>help</code> to see available commands. See Chapter 8 for the complete terminal guide.</p>
+            {/* FHS */}
+            <div style={{
+              background: 'linear-gradient(135deg, #f093fb, #f5576c)',
+              border: '3px solid #333',
+              borderRadius: '12px',
+              padding: '20px',
+              marginBottom: '20px',
+              boxShadow: '4px 4px 0px #000',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '25px',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '6px 6px 0px #000, 0 0 20px rgba(240, 147, 251, 0.6)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '4px 4px 0px #000';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}>
+              <div style={{ 
+                minWidth: '60px',
+                textAlign: 'center'
+              }}>
+                <img src="/images/icons/fhs.png" alt="FHS" style={{ width: '48px', height: '48px' }} />
+              </div>
+              <div>
+                <h3 style={{ 
+                  color: '#fff', 
+                  textShadow: '2px 2px 0px #000', 
+                  margin: '0 0 10px 0',
+                  fontSize: '20px'
+                }}>FHS</h3>
+                <p style={{ 
+                  color: '#fff', 
+                  textShadow: '1px 1px 0px #000',
+                  margin: 0,
+                  fontSize: '14px',
+                  lineHeight: '1.4'
+                }}>
+                  Navigate through the main school building and explore different areas of Flunks High School. 
+                  Access classrooms, hallways, the cafeteria, and discover hidden secrets within the campus.
+                </p>
+              </div>
+            </div>
+
+            {/* Game Manual */}
+            <div style={{
+              background: 'linear-gradient(135deg, #ffecd2, #fcb69f)',
+              border: '3px solid #333',
+              borderRadius: '12px',
+              padding: '20px',
+              marginBottom: '20px',
+              boxShadow: '4px 4px 0px #000',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '25px',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '6px 6px 0px #000, 0 0 20px rgba(255, 236, 210, 0.8)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '4px 4px 0px #000';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}>
+              <div style={{ 
+                minWidth: '60px',
+                textAlign: 'center'
+              }}>
+                <img src="/images/icons/game-manual-icon.png" alt="Game Manual" style={{ width: '48px', height: '48px' }} />
+              </div>
+              <div>
+                <h3 style={{ 
+                  color: '#333', 
+                  textShadow: '1px 1px 0px #fff', 
+                  margin: '0 0 10px 0',
+                  fontSize: '20px'
+                }}>Game Manual</h3>
+                <p style={{ 
+                  color: '#333', 
+                  textShadow: '1px 1px 0px #fff',
+                  margin: 0,
+                  fontSize: '14px',
+                  lineHeight: '1.4'
+                }}>
+                  Access comprehensive documentation about all game features, systems, and mechanics. 
+                  Learn advanced strategies, troubleshooting tips, and discover Easter eggs hidden throughout the school.
+                </p>
+              </div>
+            </div>
+
+            {/* Radio */}
+            <div style={{
+              background: 'linear-gradient(135deg, #a8edea, #fed6e3)',
+              border: '3px solid #333',
+              borderRadius: '12px',
+              padding: '20px',
+              marginBottom: '25px',
+              boxShadow: '4px 4px 0px #000',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '25px',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '6px 6px 0px #000, 0 0 20px rgba(168, 237, 234, 0.8)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '4px 4px 0px #000';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}>
+              <div style={{ 
+                minWidth: '60px',
+                textAlign: 'center'
+              }}>
+                <img src="/images/icons/boom-box.png" alt="Radio" style={{ width: '48px', height: '48px' }} />
+              </div>
+              <div>
+                <h3 style={{ 
+                  color: '#333', 
+                  textShadow: '1px 1px 0px #fff', 
+                  margin: '0 0 10px 0',
+                  fontSize: '20px'
+                }}>Radio</h3>
+                <p style={{ 
+                  color: '#333', 
+                  textShadow: '1px 1px 0px #fff',
+                  margin: 0,
+                  fontSize: '14px',
+                  lineHeight: '1.4'
+                }}>
+                  Tune in to various campus radio stations featuring different music genres and DJ personalities. 
+                  Enjoy background music while exploring, or discover special radio shows with exclusive content.
+                </p>
+              </div>
+            </div>
+
+            <div style={{
+              background: 'linear-gradient(90deg, #667eea, #764ba2)',
+              border: '3px solid #333',
+              borderRadius: '8px',
+              padding: '15px',
+              textAlign: 'center',
+              boxShadow: '3px 3px 0px #000'
+            }}>
+              <strong style={{ color: '#fff', textShadow: '1px 1px 0px #000', fontSize: '14px' }}>
+                💡 Pro Tip: Each app offers unique features to enhance your Flunks High School experience!
+              </strong>
+            </div>
+          </PageContent>
+        );
+        
+      case "desktop-applications-3":
+        return (
+          <PageContent>
+            <PageHeader>💻 Desktop Applications III</PageHeader>
+            <p style={{ textAlign: 'center', marginBottom: '25px', fontStyle: 'italic' }}>
+              Communication, tracking, and information apps!
+            </p>
             
-            <h4>Step 4: Start Earning Gum!</h4>
-            <p>Look for the floating 🍬 gum button and start earning reward points! See Chapter 9 for complete gum system details.</p>
-            
-            <h4>Step 5: Check Your Access</h4>
-            <p>See Chapter 4 for detailed information about clique-based access controls and how to unlock exclusive areas.</p>
+            {/* Chat Rooms */}
+            <div style={{
+              background: 'linear-gradient(135deg, #ff9a9e, #fecfef)',
+              border: '3px solid #333',
+              borderRadius: '12px',
+              padding: '20px',
+              marginBottom: '20px',
+              boxShadow: '4px 4px 0px #000',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '25px',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '6px 6px 0px #000, 0 0 20px rgba(255, 154, 158, 0.8)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '4px 4px 0px #000';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}>
+              <div style={{ 
+                minWidth: '60px',
+                textAlign: 'center'
+              }}>
+                <img src="/images/icons/chat-rooms.png" alt="Chat Rooms" style={{ width: '48px', height: '48px' }} />
+              </div>
+              <div>
+                <h3 style={{ 
+                  color: '#333', 
+                  textShadow: '1px 1px 0px #fff', 
+                  margin: '0 0 10px 0',
+                  fontSize: '20px'
+                }}>Chat Rooms</h3>
+                <p style={{ 
+                  color: '#333', 
+                  textShadow: '1px 1px 0px #fff',
+                  margin: 0,
+                  fontSize: '14px',
+                  lineHeight: '1.4'
+                }}>
+                  Connect and chat with other students in real-time messaging rooms. 
+                  Join different conversation topics, make friends, and participate in the school's social community.
+                </p>
+              </div>
+            </div>
+
+            {/* Report Card */}
+            <div style={{
+              background: 'linear-gradient(135deg, #a18cd1, #fbc2eb)',
+              border: '3px solid #333',
+              borderRadius: '12px',
+              padding: '20px',
+              marginBottom: '20px',
+              boxShadow: '4px 4px 0px #000',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '25px',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '6px 6px 0px #000, 0 0 20px rgba(161, 140, 209, 0.8)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '4px 4px 0px #000';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}>
+              <div style={{ 
+                minWidth: '60px',
+                textAlign: 'center'
+              }}>
+                <img src="/images/icons/report-card.png" alt="Report Card" style={{ width: '48px', height: '48px' }} />
+              </div>
+              <div>
+                <h3 style={{ 
+                  color: '#333', 
+                  textShadow: '1px 1px 0px #fff', 
+                  margin: '0 0 10px 0',
+                  fontSize: '20px'
+                }}>Report Card</h3>
+                <p style={{ 
+                  color: '#333', 
+                  textShadow: '1px 1px 0px #fff',
+                  margin: 0,
+                  fontSize: '14px',
+                  lineHeight: '1.4'
+                }}>
+                  View your academic achievements, progress tracking, and performance statistics. 
+                  Monitor your completion rates for various activities and earn recognition for your accomplishments.
+                </p>
+              </div>
+            </div>
+
+            {/* Bulletin Board */}
+            <div style={{
+              background: 'linear-gradient(135deg, #ffecd2, #fcb69f)',
+              border: '3px solid #333',
+              borderRadius: '12px',
+              padding: '20px',
+              marginBottom: '25px',
+              boxShadow: '4px 4px 0px #000',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '25px',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '6px 6px 0px #000, 0 0 20px rgba(255, 236, 210, 0.8)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '4px 4px 0px #000';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}>
+              <div style={{ 
+                minWidth: '60px',
+                textAlign: 'center'
+              }}>
+                <img src="/images/icons/did-you-know.png" alt="Bulletin Board" style={{ width: '48px', height: '48px' }} />
+              </div>
+              <div>
+                <h3 style={{ 
+                  color: '#333', 
+                  textShadow: '1px 1px 0px #fff', 
+                  margin: '0 0 10px 0',
+                  fontSize: '20px'
+                }}>Bulletin Board</h3>
+                <p style={{ 
+                  color: '#333', 
+                  textShadow: '1px 1px 0px #fff',
+                  margin: 0,
+                  fontSize: '14px',
+                  lineHeight: '1.4'
+                }}>
+                  Stay updated with the latest school announcements, events, and important information. 
+                  Check for new updates, special events, and community news posted by the administration.
+                </p>
+              </div>
+            </div>
+
+            <div style={{
+              background: 'linear-gradient(90deg, #667eea, #764ba2)',
+              border: '3px solid #333',
+              borderRadius: '8px',
+              padding: '15px',
+              textAlign: 'center',
+              boxShadow: '3px 3px 0px #000'
+            }}>
+              <strong style={{ color: '#fff', textShadow: '1px 1px 0px #000', fontSize: '14px' }}>
+                🎓 Congratulations! You've learned about all desktop applications available at Flunks High School!
+              </strong>
+            </div>
           </PageContent>
         );
         
       case "clique-access":
         return (
           <PageContent>
-            <PageHeader>🏠 Clique Houses & Access Privileges</PageHeader>
-            <p>Flunks High School features exclusive clique houses that require specific NFT ownership for access.</p>
-            
-            <h3>🎯 How It Works</h3>
-            <p>Each clique house requires you to own an NFT with the corresponding clique trait:</p>
-            
-            <div style={{ margin: '15px 0' }}>
-              <strong>🤓 Geek House:</strong> Requires NFT with "GEEK" trait<br/>
-              <strong>🏈 Jock House:</strong> Requires NFT with "JOCK" trait<br/>
-              <strong>💅 Prep House:</strong> Requires NFT with "PREP" trait<br/>
-              <strong>🖤 Freak House:</strong> Requires NFT with "FREAK" trait
+            <div style={{
+              background: 'linear-gradient(135deg, #1e3c72, #2a5298)',
+              border: '4px solid #000',
+              borderRadius: '10px',
+              padding: '20px',
+              marginBottom: '20px',
+              boxShadow: '5px 5px 0px #000',
+              textAlign: 'center'
+            }}>
+              <h1 style={{
+                fontFamily: 'monospace',
+                fontSize: '24px',
+                color: '#fff',
+                textShadow: '3px 3px 0px #000',
+                margin: '0 0 10px 0',
+                letterSpacing: '2px',
+                textTransform: 'uppercase'
+              }}>
+                💻 Conditional Rendering
+              </h1>
+              <div style={{
+                fontFamily: 'monospace',
+                fontSize: '12px',
+                color: '#00ff00',
+                textShadow: '1px 1px 0px #000',
+                letterSpacing: '1px'
+              }}>
+                ADVANCED SYSTEM MECHANICS
+              </div>
             </div>
-            
-            <h3>📊 Your Current Access Status</h3>
-            <CliqueAccessPanel />
-            
-            <h3>🎮 Accessing Houses</h3>
-            <p>1. Navigate to the Semester Zero map</p>
-            <p>2. Double-click on any clique house</p>
-            <p>3. If you have access, you'll enter immediately</p>
-            <p>4. If not, you'll see information about the required NFT</p>
-            
-            <Screenshot>[CLIQUE HOUSE ACCESS SCREEN]</Screenshot>
-            
-            <div style={{ marginTop: 15, padding: 10, background: '#ffeeee', border: '1px solid #cc0000' }}>
-              <strong>⚠️ Access Denied?</strong> You need to own an NFT with the corresponding clique trait. Visit the NFT marketplace to collect the required Flunks!
+
+            <div style={{
+              background: 'linear-gradient(135deg, #654ea3, #eaafc8)',
+              border: '3px solid #333',
+              borderRadius: '8px',
+              padding: '18px',
+              marginBottom: '18px',
+              boxShadow: '4px 4px 0px #000'
+            }}>
+              <h3 style={{
+                fontFamily: 'monospace',
+                fontSize: '16px',
+                color: '#fff',
+                textShadow: '2px 2px 0px #000',
+                margin: '0 0 12px 0',
+                letterSpacing: '1px'
+              }}>🎯 HOW THE SYSTEM WORKS</h3>
+              <p style={{
+                fontFamily: 'monospace',
+                fontSize: '13px',
+                color: '#fff',
+                textShadow: '1px 1px 0px #000',
+                lineHeight: '1.5',
+                margin: 0
+              }}>
+                Semester Zero uses conditional rendering to display content based on your NFT ownership. 
+                Each exclusive area checks your wallet for specific traits before granting access.
+              </p>
             </div>
-          </PageContent>
-        );
-        
-      case "navigation":
-        return (
-          <PageContent>
-            <PageHeader>🗺️ School Navigation</PageHeader>
-            <h3>Campus Map Overview</h3>
-            <p>The Flunks High School campus is divided into several key areas:</p>
-            
-            <Screenshot>[CAMPUS MAP LAYOUT]</Screenshot>
-            
-            <h4>🏫 Main Areas</h4>
-            <ul>
-              <li><strong>Main Building:</strong> Classrooms, cafeteria, and administrative offices</li>
-              <li><strong>Semester Zero:</strong> Special interactive map with clique houses</li>
-              <li><strong>Arcade:</strong> Classic games and entertainment</li>
-              <li><strong>Treehouse:</strong> Community gathering space</li>
-            </ul>
-            
-            <h4>🏠 Clique Houses (Access Required)</h4>
-            <ul>
-              <li><strong>Geek House:</strong> Tech lab, coding stations, gaming setup</li>
-              <li><strong>Jock House:</strong> Gym equipment, sports memorabilia</li>
-              <li><strong>Prep House:</strong> Fashion studio, social lounge</li>
-              <li><strong>Freak House:</strong> Art studio, music equipment</li>
-            </ul>
-            
-            <h4>🎮 Navigation Controls</h4>
-            <p><strong>Mouse:</strong> Click to interact with objects and areas</p>
-            <p><strong>Double-click:</strong> Enter buildings and rooms</p>
-            <p><strong>Windows:</strong> Drag to move, resize corners to adjust size</p>
+
+            <div style={{
+              background: 'linear-gradient(135deg, #ff9a56, #ffad56)',
+              border: '3px solid #333',
+              borderRadius: '8px',
+              padding: '18px',
+              marginBottom: '18px',
+              boxShadow: '4px 4px 0px #000'
+            }}>
+              <h3 style={{
+                fontFamily: 'monospace',
+                fontSize: '16px',
+                color: '#333',
+                textShadow: '1px 1px 0px #fff',
+                margin: '0 0 15px 0',
+                letterSpacing: '1px'
+              }}>🏠 CLIQUE ACCESS REQUIREMENTS</h3>
+              
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '12px',
+                fontFamily: 'monospace',
+                fontSize: '12px'
+              }}>
+                <div style={{
+                  background: 'rgba(0,0,0,0.2)',
+                  padding: '10px',
+                  borderRadius: '6px',
+                  border: '2px solid #333'
+                }}>
+                  <strong style={{ color: '#333', textShadow: '1px 1px 0px #fff' }}>🤓 GEEK HOUSE</strong><br/>
+                  <span style={{ color: '#333', textShadow: '1px 1px 0px #fff' }}>Requires: "GEEK" trait</span>
+                </div>
+                <div style={{
+                  background: 'rgba(0,0,0,0.2)',
+                  padding: '10px',
+                  borderRadius: '6px',
+                  border: '2px solid #333'
+                }}>
+                  <strong style={{ color: '#333', textShadow: '1px 1px 0px #fff' }}>🏈 JOCK HOUSE</strong><br/>
+                  <span style={{ color: '#333', textShadow: '1px 1px 0px #fff' }}>Requires: "JOCK" trait</span>
+                </div>
+                <div style={{
+                  background: 'rgba(0,0,0,0.2)',
+                  padding: '10px',
+                  borderRadius: '6px',
+                  border: '2px solid #333'
+                }}>
+                  <strong style={{ color: '#333', textShadow: '1px 1px 0px #fff' }}>💅 PREP HOUSE</strong><br/>
+                  <span style={{ color: '#333', textShadow: '1px 1px 0px #fff' }}>Requires: "PREP" trait</span>
+                </div>
+                <div style={{
+                  background: 'rgba(0,0,0,0.2)',
+                  padding: '10px',
+                  borderRadius: '6px',
+                  border: '2px solid #333'
+                }}>
+                  <strong style={{ color: '#333', textShadow: '1px 1px 0px #fff' }}>🖤 FREAK HOUSE</strong><br/>
+                  <span style={{ color: '#333', textShadow: '1px 1px 0px #fff' }}>Requires: "FREAK" trait</span>
+                </div>
+              </div>
+            </div>
+
+            <div style={{
+              background: 'linear-gradient(135deg, #667eea, #764ba2)',
+              border: '3px solid #333',
+              borderRadius: '8px',
+              padding: '18px',
+              marginBottom: '18px',
+              boxShadow: '4px 4px 0px #000'
+            }}>
+              <h3 style={{
+                fontFamily: 'monospace',
+                fontSize: '16px',
+                color: '#fff',
+                textShadow: '2px 2px 0px #000',
+                margin: '0 0 12px 0',
+                letterSpacing: '1px'
+              }}>📊 ACCESS STATUS CHECKER</h3>
+              <div style={{ marginBottom: '15px' }}>
+                <CliqueAccessPanel />
+              </div>
+            </div>
+
+            <div style={{
+              background: 'linear-gradient(135deg, #43cea2, #185a9d)',
+              border: '3px solid #333',
+              borderRadius: '8px',
+              padding: '18px',
+              marginBottom: '18px',
+              boxShadow: '4px 4px 0px #000'
+            }}>
+              <h3 style={{
+                fontFamily: 'monospace',
+                fontSize: '16px',
+                color: '#fff',
+                textShadow: '2px 2px 0px #000',
+                margin: '0 0 12px 0',
+                letterSpacing: '1px'
+              }}>🎮 STEP-BY-STEP ACCESS GUIDE</h3>
+              
+              <div style={{
+                fontFamily: 'monospace',
+                fontSize: '13px',
+                color: '#fff',
+                textShadow: '1px 1px 0px #000',
+                lineHeight: '1.6'
+              }}>
+                <div style={{ margin: '8px 0', display: 'flex', alignItems: 'center' }}>
+                  <span style={{ 
+                    background: '#000', 
+                    color: '#00ff00', 
+                    padding: '2px 8px', 
+                    marginRight: '10px',
+                    borderRadius: '4px',
+                    minWidth: '20px',
+                    textAlign: 'center',
+                    fontWeight: 'bold'
+                  }}>1</span>
+                  Navigate to the Semester Zero interactive map
+                </div>
+                <div style={{ margin: '8px 0', display: 'flex', alignItems: 'center' }}>
+                  <span style={{ 
+                    background: '#000', 
+                    color: '#00ff00', 
+                    padding: '2px 8px', 
+                    marginRight: '10px',
+                    borderRadius: '4px',
+                    minWidth: '20px',
+                    textAlign: 'center',
+                    fontWeight: 'bold'
+                  }}>2</span>
+                  Double-click on any clique house building
+                </div>
+                <div style={{ margin: '8px 0', display: 'flex', alignItems: 'center' }}>
+                  <span style={{ 
+                    background: '#000', 
+                    color: '#00ff00', 
+                    padding: '2px 8px', 
+                    marginRight: '10px',
+                    borderRadius: '4px',
+                    minWidth: '20px',
+                    textAlign: 'center',
+                    fontWeight: 'bold'
+                  }}>3</span>
+                  System checks your NFT traits automatically
+                </div>
+                <div style={{ margin: '8px 0', display: 'flex', alignItems: 'center' }}>
+                  <span style={{ 
+                    background: '#000', 
+                    color: '#00ff00', 
+                    padding: '2px 8px', 
+                    marginRight: '10px',
+                    borderRadius: '4px',
+                    minWidth: '20px',
+                    textAlign: 'center',
+                    fontWeight: 'bold'
+                  }}>4</span>
+                  ACCESS GRANTED or requirement info displayed
+                </div>
+              </div>
+            </div>
+
+            <div style={{
+              background: 'linear-gradient(135deg, #ff6b6b, #ee5a52)',
+              border: '3px solid #333',
+              borderRadius: '8px',
+              padding: '15px',
+              boxShadow: '4px 4px 0px #000',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '15px'
+            }}>
+              <div style={{ fontSize: '32px' }}>⚠️</div>
+              <div>
+                <h4 style={{
+                  fontFamily: 'monospace',
+                  fontSize: '14px',
+                  color: '#fff',
+                  textShadow: '2px 2px 0px #000',
+                  margin: '0 0 8px 0',
+                  letterSpacing: '1px'
+                }}>ACCESS DENIED ERROR</h4>
+                <p style={{
+                  fontFamily: 'monospace',
+                  fontSize: '12px',
+                  color: '#fff',
+                  textShadow: '1px 1px 0px #000',
+                  margin: 0,
+                  lineHeight: '1.4'
+                }}>
+                  Missing required NFT trait! Visit the marketplace to acquire the necessary Flunks character 
+                  with the correct clique attribute for house access.
+                </p>
+              </div>
+            </div>
           </PageContent>
         );
         
       case "nft-guide":
         return (
           <PageContent>
-            <PageHeader>🎨 NFT Collection Guide</PageHeader>
+            <PageHeader>🎨 NFT Utility</PageHeader>
             <h3>Understanding Flunks NFTs</h3>
-            <p>Flunks NFTs are your key to unlocking exclusive content and areas within the school.</p>
+            <p>Flunks NFTs are your key to unlocking exclusive content within Semester Zero.</p>
             
             <h4>📋 NFT Traits</h4>
             <p>Each Flunks NFT contains various traits including:</p>
