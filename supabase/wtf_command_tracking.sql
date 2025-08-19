@@ -4,7 +4,7 @@
 -- Create table to track wtf command usage
 CREATE TABLE IF NOT EXISTS wtf_command_logs (
   id BIGSERIAL PRIMARY KEY,
-  wallet_address TEXT NOT NULL,
+  wallet_address TEXT, -- Can be null for anonymous users
   command_input TEXT DEFAULT 'wtf',
   access_level TEXT, -- ADMIN, BETA, COMMUNITY
   session_id TEXT,
@@ -22,9 +22,9 @@ CREATE INDEX IF NOT EXISTS idx_wtf_command_logs_access_level ON wtf_command_logs
 -- Add RLS (Row Level Security) policies
 ALTER TABLE wtf_command_logs ENABLE ROW LEVEL SECURITY;
 
--- Policy for authenticated users to insert their own records
+-- Policy for users to insert their own records (including anonymous users)
 CREATE POLICY "Users can insert their own wtf command logs" ON wtf_command_logs
-  FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
+  FOR INSERT WITH CHECK (true);
 
 -- Policy for admins to view all records (simplified - all authenticated users can view)
 CREATE POLICY "Authenticated users can view wtf command logs" ON wtf_command_logs
@@ -132,8 +132,11 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Grant necessary permissions
+GRANT USAGE ON SEQUENCE wtf_command_logs_id_seq TO anon;
+GRANT INSERT ON wtf_command_logs TO anon;
 GRANT USAGE ON SEQUENCE wtf_command_logs_id_seq TO authenticated;
 GRANT INSERT ON wtf_command_logs TO authenticated;
+GRANT EXECUTE ON FUNCTION log_wtf_command TO anon;
 GRANT EXECUTE ON FUNCTION log_wtf_command TO authenticated;
 GRANT EXECUTE ON FUNCTION get_wtf_command_stats TO authenticated;
 GRANT EXECUTE ON FUNCTION get_recent_wtf_commands TO authenticated;

@@ -20,8 +20,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       command = 'wtf' 
     } = req.body;
 
-    if (!wallet) {
-      return res.status(400).json({ error: 'Wallet address required' });
+    // Allow null wallet for anonymous/trial mode users
+    if (wallet === undefined) {
+      return res.status(400).json({ error: 'Wallet address required (undefined not allowed)' });
     }
 
     // Get client IP address
