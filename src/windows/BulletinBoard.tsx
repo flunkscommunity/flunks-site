@@ -162,10 +162,21 @@ const BulletinBoard: React.FC = () => {
               }}
             />
             
-            {/* Text overlay for pink box */}
-            <PinkBoxText>
-              Find the Code
-            </PinkBoxText>
+            {/* Clickable hotspot for the lightbulb icon in pink box */}
+            <ClickableHotspot
+              onClick={() => {
+                // Add your code here for what happens when the lightbulb is clicked
+                console.log('Lightbulb icon clicked!');
+                // You can add additional functionality here later
+              }}
+              title="Click the lightbulb!"
+              style={{
+                top: '67%',
+                left: '13%',
+                width: '22%',
+                height: '25%'
+              }}
+            />
           </BulletinImage>
         </div>
         

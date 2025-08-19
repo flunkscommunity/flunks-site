@@ -38,6 +38,7 @@ import AccessLevelStatus from "components/AccessLevelStatus";
 import ConditionalAppIcon from "components/ConditionalAppIcon";
 import { BACKGROUND_CONFIG } from "config/backgroundConfig";
 import useThemeSettings from "store/useThemeSettings";
+import { initializeEasterEggs, addSourceCodeHints } from "utils/easterEggs";
 
 import { GumAdminPanel } from "components/GumAdminPanel";
 
@@ -96,10 +97,52 @@ const Desktop = () => {
         event.preventDefault();
         setShowGumAdmin(prev => !prev);
       }
+      
+      // Secret key combination to show access codes (Ctrl+Shift+H)
+      if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'h') {
+        event.preventDefault();
+        console.log(`
+🔑 SECRET ACCESS CODES REVEALED! 🔑
+
+FLUNKS2025    - Admin Access (Full Features)
+SEMESTER0     - Beta Access (Core Features) 
+HIGHSCHOOL95  - Community Access (Basic Features)
+
+💡 Use any of these codes in the access gate to unlock the platform!
+        `);
+        
+        // Show a subtle notification
+        const notification = document.createElement('div');
+        notification.innerHTML = '🔑 Access codes logged to console!';
+        notification.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: #000;
+          color: #00ff00;
+          padding: 10px 20px;
+          border: 2px solid #00ff00;
+          font-family: monospace;
+          font-size: 14px;
+          z-index: 9999;
+          border-radius: 4px;
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 3000);
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Initialize easter eggs and console commands
+  useEffect(() => {
+    initializeEasterEggs();
+    addSourceCodeHints();
   }, []);
 
 useEffect(() => {

@@ -6,7 +6,7 @@ import { WINDOW_IDS } from "fixed";
 import { useEffect, useMemo, useState } from "react";
 import { Button, Frame, GroupBox, MenuList, MenuListItem } from "react95";
 import { getTokenStakeInfo } from "web3/script-get-token-stake-info";
-import GumballMachine from "windows/GumballMachine";
+import GumballMachine from "windows/GumCenterNew";
 
 const GumSection = ({
   pool,

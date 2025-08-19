@@ -115,6 +115,12 @@ export const APP_PERMISSIONS: AppPermission[] = [
     requiredLevel: ['ADMIN'],
     description: 'Graduation system management'
   },
+  {
+    id: 'yearbook',
+    title: 'Flunks Yearbook',
+    requiredLevel: ['ADMIN'],
+    description: 'Browse student yearbook entries'
+  },
   
   // Icon Animation Lab (dev/admin for now)
   {

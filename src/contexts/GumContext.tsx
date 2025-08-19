@@ -7,6 +7,8 @@ import {
   type GumStats, 
   type GumAwardResult 
 } from '../utils/gumAPI';
+import { autoClaimDailyLogin } from '../services/dailyLoginService';
+import { checkForSpecialEvents } from '../services/specialEventsService';
 
 export interface GumContextType {
   balance: number;
@@ -161,6 +163,15 @@ export const GumProvider: React.FC<GumProviderProps> = ({
   useEffect(() => {
     if (primaryWallet?.address) {
       refreshStats();
+      
+      // Auto-claim daily login bonus
+      autoClaimDailyLogin(primaryWallet.address).then(() => {
+        // Refresh balance after potential daily login claim
+        setTimeout(() => refreshBalance(), 1000);
+      });
+      
+      // Check for special events
+      checkForSpecialEvents(primaryWallet.address);
     } else {
       // Reset state when wallet disconnects
       setBalance(0);
@@ -168,7 +179,7 @@ export const GumProvider: React.FC<GumProviderProps> = ({
       setError(null);
       setLoading(false);
     }
-  }, [primaryWallet?.address, refreshStats]);
+  }, [primaryWallet?.address, refreshStats, refreshBalance]);
 
   // Auto refresh
   useEffect(() => {

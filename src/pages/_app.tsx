@@ -24,7 +24,6 @@ import { UserProfileProvider } from "contexts/UserProfileContext";
 import { AudioProvider } from "contexts/AudioContext";
 import { RadioProvider } from "contexts/RadioContext";
 import { GumProvider } from "contexts/GumContext";
-import { FloatingGumButton } from "components/FloatingGumButton";
 import { GumDisplay } from "components/GumDisplay";
 import UserProfilePrompt from "components/UserProfile/UserProfilePrompt";
 
@@ -171,9 +170,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                           />
                         </div>
                         <DynamicUserProfile />
-                        
-                        {/* Floating Gum Button - centered on desktop, behind windows */}
-                        <FloatingGumButton />
                       </GumProvider>
                     </PaginatedItemsProvider>
                   </UserProfileProvider>

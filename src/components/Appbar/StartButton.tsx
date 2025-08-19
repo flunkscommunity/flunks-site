@@ -9,7 +9,7 @@ import React from "react";
 import { Button, MenuList, MenuListItem, Separator } from "react95";
 import styled from "styled-components";
 import AboutUs from "windows/AboutUs";
-import GumballMachine from "windows/GumballMachine";
+import GumballMachine from "windows/GumCenterNew";
 import ProjectJnr from "windows/ProjectJnr";
 import Settings from "windows/Settings";
 import LockerSystemNew from "windows/LockerSystemNew";

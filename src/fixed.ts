@@ -141,7 +141,7 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     key: WINDOW_IDS.YOUR_STUDENTS,
   },
   [WINDOW_IDS.GUMBALL_MACHINE]: {
-    appName: "Gum Machine",
+    appName: "Gum Center",
     appIcon: "/images/icons/gum-machine.png",
     key: WINDOW_IDS.GUMBALL_MACHINE,
   },

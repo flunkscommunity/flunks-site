@@ -1,5 +1,5 @@
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
-import { Button, Frame, Toolbar } from "react95";
+import { Button, Frame, Toolbar, MenuList, MenuListItem } from "react95";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
 import AppLoader from "components/AppLoader";
@@ -8,18 +8,77 @@ import {
   useDynamicContext,
 } from "@dynamic-labs/sdk-react-core";
 import ErrorWindow from "./ErrorWindow";
-import GumDashboard from "components/Staking/GumDashboard";
-import StakingProvider from "contexts/StakingContext";
-import { FclTransactionProvider } from "contexts/FclTransactionContext";
-import StakeableItemsTable from "components/Staking/Table";
-import GumballMachineHelp from "./GumballMachineHelp";
 import { useUserProfile } from "contexts/UserProfileContext";
 import UserProfile from "./UserProfile";
+import { useGum } from "contexts/GumContext";
+import { useState, useEffect } from "react";
+import { getActiveSpecialEvents, claimSpecialEvent, type SpecialEvent } from "../services/specialEventsService";
+import { claimDailyLogin, canClaimDailyLogin } from "../services/dailyLoginService";
+import { GumDisplay } from "components/GumDisplay";
 
 const GumballMachine: React.FC = () => {
   const { closeWindow, openWindow } = useWindowsContext();
-  const { user } = useDynamicContext();
+  const { user, primaryWallet } = useDynamicContext();
   const { hasProfile } = useUserProfile();
+  const { balance, stats, refreshBalance, refreshStats } = useGum();
+  const [specialEvents, setSpecialEvents] = useState<SpecialEvent[]>([]);
+  const [canClaimDaily, setCanClaimDaily] = useState(false);
+  const [claimingEvent, setClaimingEvent] = useState<string | null>(null);
+  const [claimingDaily, setClaimingDaily] = useState(false);
+
+  // Load special events and daily login status
+  useEffect(() => {
+    if (primaryWallet?.address) {
+      setSpecialEvents(getActiveSpecialEvents());
+      
+      canClaimDailyLogin(primaryWallet.address).then(setCanClaimDaily);
+    }
+  }, [primaryWallet?.address]);
+
+  const handleClaimSpecialEvent = async (eventId: string) => {
+    if (!primaryWallet?.address || claimingEvent) return;
+    
+    setClaimingEvent(eventId);
+    try {
+      const result = await claimSpecialEvent(primaryWallet.address, eventId);
+      
+      if (result.success) {
+        alert(`🎉 Claimed ${result.earned} GUM from ${result.event_name}!`);
+        refreshBalance();
+        // Update special events list
+        setSpecialEvents(getActiveSpecialEvents());
+      } else {
+        alert(`❌ ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Error claiming special event:', error);
+      alert('❌ Failed to claim special event');
+    } finally {
+      setClaimingEvent(null);
+    }
+  };
+
+  const handleClaimDailyLogin = async () => {
+    if (!primaryWallet?.address || claimingDaily) return;
+    
+    setClaimingDaily(true);
+    try {
+      const result = await claimDailyLogin(primaryWallet.address);
+      
+      if (result.success) {
+        alert(`🎉 Daily bonus claimed: ${result.earned} GUM!`);
+        refreshBalance();
+        setCanClaimDaily(false);
+      } else {
+        alert(`❌ ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Error claiming daily login:', error);
+      alert('❌ Failed to claim daily bonus');
+    } finally {
+      setClaimingDaily(false);
+    }
+  };
 
   if (!user) {
     return (
