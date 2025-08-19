@@ -49,18 +49,6 @@ const GateWindow = styled(Window)`
   width: 90%;
 `;
 
-const AccessCode = {
-  ADMIN: 'FLUNKS2025',
-  BETA: 'SEMESTER0',
-  COMMUNITY: 'HIGHSCHOOL95'
-};
-
-const AccessLevel = {
-  ADMIN: 'ADMIN',
-  BETA: 'BETA', 
-  COMMUNITY: 'COMMUNITY'
-};
-
 interface AccessGateProps {
   onAccessGranted: () => void;
 }
@@ -82,28 +70,29 @@ const AccessGate: React.FC<AccessGateProps> = ({ onAccessGranted }) => {
     setLoading(true);
     setError('');
 
-    // Simulate checking access code
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      const response = await fetch('/api/validate-access', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code }),
+      });
 
-    const upperCode = code.toUpperCase();
-    if (Object.values(AccessCode).includes(upperCode as any)) {
-      // Determine access level
-      let accessLevel;
-      if (upperCode === AccessCode.ADMIN) {
-        accessLevel = AccessLevel.ADMIN;
-      } else if (upperCode === AccessCode.BETA) {
-        accessLevel = AccessLevel.BETA;
-      } else if (upperCode === AccessCode.COMMUNITY) {
-        accessLevel = AccessLevel.BETA; // Give COMMUNITY users the same access as BETA
+      const result = await response.json();
+
+      if (result.success) {
+        // Store access in session
+        sessionStorage.setItem('flunks-access-granted', 'true');
+        sessionStorage.setItem('flunks-access-level', result.accessLevel);
+        sessionStorage.setItem('flunks-access-code', result.code);
+        onAccessGranted();
+      } else {
+        setError('Invalid access code. Please contact the Flunks team for access.');
       }
-
-      // Store access in session
-      sessionStorage.setItem('flunks-access-granted', 'true');
-      sessionStorage.setItem('flunks-access-level', accessLevel);
-      sessionStorage.setItem('flunks-access-code', upperCode);
-      onAccessGranted();
-    } else {
-      setError('Invalid access code. Please contact the Flunks team for access.');
+    } catch (error) {
+      console.error('Access validation error:', error);
+      setError('Connection error. Please try again.');
     }
     
     setLoading(false);

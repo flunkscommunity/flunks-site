@@ -11,12 +11,12 @@ I've implemented a **Beta Access Gate** that:
 - ✅ **Blocks unauthorized users** with a professional access code screen
 - ✅ **Preserves all your existing features** once access is granted
 - ✅ **Works in development** (localhost bypasses the gate automatically)
-- ✅ **Easy to manage** via environment variables and access codes
+- ✅ **Easy to manage** via backend API and secure validation
 
-### Access Codes Created:
-- `FLUNKS2025` - Admin access
-- `SEMESTER0` - Beta tester access  
-- `HIGHSCHOOL95` - Community access
+### Access Control:
+- Access codes are configured in backend API
+- Multiple access levels supported (Admin, Beta, Community)
+- Contact admin for access codes
 
 ## 🚀 Deployment Options
 

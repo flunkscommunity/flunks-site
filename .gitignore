@@ -45,3 +45,6 @@ yarn-error.log*
 # flow
 emulator-account.pkey
 imports
+
+# Private files
+PRIVATE_ACCESS_CODES.md

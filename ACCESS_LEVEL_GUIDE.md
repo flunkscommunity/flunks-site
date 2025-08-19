@@ -6,17 +6,17 @@ The Flunks site now has a comprehensive three-tier access control system that de
 ## Access Levels & Codes
 
 ### 🔴 **ADMINISTRATOR** 
-- **Code:** `FLUNKS2025`
+- **Code:** [SECURE - Backend Only]
 - **Access:** ALL applications including developer tools
 - **Description:** Full site access for developers and administrators
 
 ### 🟡 **BETA TESTER**
-- **Code:** `SEMESTER0` 
+- **Code:** [SECURE - Backend Only]
 - **Access:** Core applications + advanced features (LIMITED)
 - **Description:** Beta testing access with restricted admin tools
 
 ### 🟢 **COMMUNITY MEMBER**
-- **Code:** `HIGHSCHOOL95`
+- **Code:** [SECURE - Backend Only]
 - **Access:** Essential community applications only
 - **Description:** Basic access for general community members
 
@@ -65,19 +65,19 @@ The Flunks site now has a comprehensive three-tier access control system that de
 ## Usage Instructions
 
 ### For Administrators:
-- Use code `FLUNKS2025` to access all features
+- Contact admin team for administrator access code
 - Can manage and test all applications
 - Has access to developer and management tools
 
 ### For Beta Testers:
-- Use code `SEMESTER0` for beta access
+- Contact admin team for beta access code
 - Can test core functionality and some advanced features
 - **Can access:** OnlyFlunks, Profile, Radio, Chat, About, Discord, X, Market, Terminal, Clique Access, FHS School
 - **Cannot access:** Semester Zero, Game Manual, Meme Manager, MyPlace, Flappy Flunk
 - Perfect for testing core user workflows without access to admin tools
 
 ### For Community Members:
-- Use code `HIGHSCHOOL95` for basic access
+- Contact admin team for community access code
 - Can use essential community features
 - Great for general users who want to explore the basic platform
 

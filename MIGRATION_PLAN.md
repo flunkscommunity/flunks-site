@@ -23,9 +23,9 @@ I've created a **professional access gate** that:
 
 ### 🎫 Access Codes Created:
 ```
-FLUNKS2025     - Admin/Team access
-SEMESTER0      - Beta tester access  
-HIGHSCHOOL95   - Community access
+[SECURE] - Admin/Team access (backend only)
+[SECURE] - Beta tester access (backend only) 
+[SECURE] - Community access (backend only)
 ```
 
 ### 🎨 User Experience:
@@ -82,7 +82,7 @@ npm run build
 npm start  # This will show access gate
 
 # Test access codes
-node scripts/check-access-codes.js --test SEMESTER0
+node scripts/check-access-codes.js --test-api
 ```
 
 ### **Phase 3: Deployment** (15 minutes)
@@ -107,9 +107,9 @@ vercel --prod
 ## 🎮 Access Management Strategy
 
 ### **Launch Strategy:**
-1. **Week 1:** Limited access with `FLUNKS2025` for core team
-2. **Week 2:** Beta access with `SEMESTER0` for community  
-3. **Week 3+:** Broader access with `HIGHSCHOOL95`
+1. **Week 1:** Limited access with admin codes for core team
+2. **Week 2:** Beta access codes distributed to community  
+3. **Week 3+:** Broader access codes for general users
 4. **Public Launch:** Remove access gate entirely
 
 ### **Removing Access Gate:**

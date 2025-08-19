@@ -1,27 +1,36 @@
-# Create T3 App
+# 🏫 Flunks High School
 
-This is an app bootstrapped according to the [init.tips](https://init.tips) stack, also known as the T3-Stack.
+A nostalgic Web3 social platform bringing back the golden age of internet communities.
 
-## What's next? How do I make an app with this?
+## 🎓 Getting Started
 
-We try to keep this project as simple as possible, so you can start with the most basic configuration and then move on to more advanced configuration.
+This platform requires an access code to enter. Contact the team or join our community for access.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## 🚀 For Developers
 
-- [Next-Auth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [TailwindCSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+### Local Development
 
-We also [roll our own docs](https://create.t3.gg) with some summary information and links to the respective documentation.
+```bash
+npm install
+npm run dev
+```
 
-Also checkout these awesome tutorials on `create-t3-app`.
+Local development automatically grants admin access for testing.
 
-- [Build a Blog With the T3 Stack - tRPC, TypeScript, Next.js, Prisma & Zod](https://www.youtube.com/watch?v=syEWlxVFUrY)
-- [Build a Live Chat Application with the T3 Stack - TypeScript, Tailwind, tRPC](https://www.youtube.com/watch?v=dXRRY37MPuk)
-- [Build a full stack app with create-t3-app](https://www.nexxel.dev/blog/ct3a-guestbook)
-- [A first look at create-t3-app](https://dev.to/ajcwebdev/a-first-look-at-create-t3-app-1i8f)
+### Tech Stack
 
-## How do I deploy this?
+- Next.js + React
+- TypeScript
+- Supabase Database
+- Dynamic Wallet Integration
+- React95 UI Components
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## 🌐 Community
+
+- **Discord**: [Join our community]
+- **Twitter**: [@flunkshighschool]
+- **GitHub**: [flunkscommunity]
+
+---
+
+*Built with 💚 by the Flunks team*

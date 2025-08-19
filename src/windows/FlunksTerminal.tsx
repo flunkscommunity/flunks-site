@@ -25,48 +25,54 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
     let validCommand = true;
     let commandType = 'unknown';
 
-    const command = input.toLowerCase();
+    try {
+      // Get command response from secure backend API
+      const apiResponse = await fetch('/api/terminal-commands', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ command: input.toLowerCase() }),
+      });
 
-    switch (command) {
-      case 'help':
-        response = 'Available commands: help, whoami, flunks, clear';
-        commandType = COMMAND_TYPES.SYSTEM;
-        break;
-      case 'whoami':
-        response = 'You are a misfit of Flunks High.';
-        commandType = COMMAND_TYPES.SYSTEM;
-        break;
-      case 'flunks':
-        response = 'Flunks is a 90s-inspired digital universe full of secrets.';
-        commandType = COMMAND_TYPES.SYSTEM;
-        break;
-      case 'wtf':
-        response = "surprise, we just stole all your NFT's! jk, you're entered into a drawing for FLOW.";
-        commandType = COMMAND_TYPES.CODE;
-        break;
-      case 'clear':
-        setHistory([]);
-        setInput('');
-        commandType = COMMAND_TYPES.SYSTEM;
-        // Track clear command
-        await trackTerminalActivity(
-          user?.verifiedCredentials?.[0]?.address || null,
-          input,
-          commandType,
-          'Terminal cleared',
-          true,
-          sessionId
-        );
-        return;
-      default:
+      const result = await apiResponse.json();
+
+      if (result.success) {
+        response = result.response;
+        commandType = result.type;
+        validCommand = result.validCommand;
+
+        // Special handling for clear command
+        if (result.response === '__CLEAR__') {
+          setHistory([]);
+          setInput('');
+          // Track clear command
+          await trackTerminalActivity(
+            user?.verifiedCredentials?.[0]?.address || null,
+            input,
+            commandType,
+            'Terminal cleared',
+            true,
+            sessionId
+          );
+          return;
+        }
+      } else {
         response = 'Command not recognized. Type "help" to see available commands.';
         validCommand = false;
-        commandType = COMMAND_TYPES.UNKNOWN;
-        if (errorSound) {
-          errorSound.currentTime = 0;
-          errorSound.play();
-        }
-        break;
+        commandType = 'UNKNOWN';
+      }
+    } catch (error) {
+      console.error('Terminal command error:', error);
+      response = 'System error. Please try again.';
+      validCommand = false;
+      commandType = 'ERROR';
+    }
+
+    // Play error sound for invalid commands
+    if (!validCommand && errorSound) {
+      errorSound.currentTime = 0;
+      errorSound.play();
     }
 
     // Track terminal activity

@@ -80,8 +80,6 @@ if (allPassed) {
   console.log('⚠️  Some checks failed. Please fix the issues above before deploying.');
 }
 
-console.log('\n🔐 Access Codes for Testing:');
-console.log('   FLUNKS2025 (Admin)');
-console.log('   SEMESTER0 (Beta)');
-console.log('   HIGHSCHOOL95 (Community)');
+console.log('\n🔐 Access codes are configured in backend API');
+console.log('   Contact admin for access codes');
 console.log('');
