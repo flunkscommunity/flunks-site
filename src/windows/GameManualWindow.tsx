@@ -208,20 +208,12 @@ const pages = [
     content: "clique-access"
   },
   {
-    title: "NFT Utility",
-    content: "nft-guide"
-  },
-  {
-    title: "Radio System",
-    content: "radio"
+    title: "Gum System",
+    content: "gum-system"
   },
   {
     title: "Terminal Guide",
     content: "terminal"
-  },
-  {
-    title: "Gum System",
-    content: "gum-system"
   },
   {
     title: "Troubleshooting",
@@ -1040,153 +1032,7 @@ const GameManualWindow: React.FC = () => {
           </PageContent>
         );
         
-      case "nft-guide":
-        return (
-          <PageContent>
-            <PageHeader>🎨 NFT Utility</PageHeader>
-            <h3>Understanding Flunks NFTs</h3>
-            <p>Flunks NFTs are your key to unlocking exclusive content within Semester Zero.</p>
-            
-            <h4>📋 NFT Traits</h4>
-            <p>Each Flunks NFT contains various traits including:</p>
-            <ul>
-              <li><strong>Clique:</strong> GEEK, JOCK, PREP, or FREAK</li>
-              <li><strong>Background:</strong> Visual appearance traits</li>
-              <li><strong>Accessories:</strong> Special items and clothing</li>
-              <li><strong>Rarity:</strong> Common, Uncommon, Rare, Epic, Legendary</li>
-            </ul>
-            
-            <h4>🛒 Where to Get NFTs</h4>
-            <p>• Primary marketplace during mint events</p>
-            <p>• Secondary markets for trading</p>
-            <p>• Community giveaways and contests</p>
-            <p>• Special school events and achievements</p>
-            
-            <h4>💎 NFT Benefits</h4>
-            <ul>
-              <li>🏠 Access to exclusive clique houses</li>
-              <li>🎮 Special games and activities</li>
-              <li>🎵 Custom radio station privileges</li>
-              <li>🏆 Exclusive content and rewards</li>
-              <li>👥 Community recognition and status</li>
-            </ul>
-            
-            <Screenshot>[NFT COLLECTION INTERFACE]</Screenshot>
-          </PageContent>
-        );
-        
-      case "radio":
-        return (
-          <PageContent>
-            <PageHeader>📻 Radio System</PageHeader>
-            <h3>Flunks FM Radio</h3>
-            <p>Enjoy a variety of music stations while exploring the campus!</p>
-            
-            <h4>🎵 Available Stations</h4>
-            <ul>
-              <li><strong>Classic Hits:</strong> Nostalgic favorites from the 80s and 90s</li>
-              <li><strong>Study Beats:</strong> Lo-fi and ambient music for concentration</li>
-              <li><strong>Pump Up:</strong> High-energy tracks for gaming and activities</li>
-              <li><strong>Chill Zone:</strong> Relaxed vibes for casual browsing</li>
-            </ul>
-            
-            <h4>🎛️ Radio Controls</h4>
-            <p><strong>Play/Pause:</strong> Control playback</p>
-            <p><strong>Station Select:</strong> Switch between different channels</p>
-            <p><strong>Volume:</strong> Adjust audio level</p>
-            <p><strong>Minimize:</strong> Keep music playing while using other apps</p>
-            
-            <Screenshot>[RADIO PLAYER INTERFACE]</Screenshot>
-            
-            <div style={{ marginTop: 15, padding: 10, background: '#eeffee', border: '1px solid #00cc00' }}>
-              <strong>💡 Pro Tip:</strong> The radio continues playing in the background while you explore different areas of the school!
-            </div>
-          </PageContent>
-        );
-        
-      case "terminal":
-        return (
-          <PageContent>
-            <PageHeader>💻 Terminal Guide</PageHeader>
-            <h3>Flunks Terminal - Your Command Center</h3>
-            <p>The Terminal is a powerful tool that lets you interact with the Flunks High School system using text commands, just like a real computer terminal!</p>
-            
-            <h4>🚀 Opening the Terminal</h4>
-            <p>Double-click the <strong>Terminal</strong> icon on your desktop to open the command interface.</p>
-            <Screenshot>[TERMINAL ICON ON DESKTOP]</Screenshot>
-            
-            <h4>⌨️ Basic Commands</h4>
-            <p>Here are some essential commands to get you started:</p>
-            <ul>
-              <li><code><strong>help</strong></code> - Show all available commands</li>
-              <li><code><strong>clear</strong></code> - Clear the terminal screen</li>
-              <li><code><strong>whoami</strong></code> - Display your current user info</li>
-              <li><code><strong>ls</strong></code> - List files and directories</li>
-              <li><code><strong>pwd</strong></code> - Show current directory path</li>
-              <li><code><strong>date</strong></code> - Display current date and time</li>
-              <li><code><strong>echo [text]</strong></code> - Print text to the screen</li>
-            </ul>
-            
-            <h4>🏫 School-Specific Commands</h4>
-            <p>Special commands unique to Flunks High School:</p>
-            <ul>
-              <li><code><strong>status</strong></code> - Check your access level and clique membership</li>
-              <li><code><strong>nft</strong></code> - Display your NFT collection info</li>
-              <li><code><strong>wallet</strong></code> - Show connected wallet details</li>
-              <li><code><strong>gum</strong></code> - Check your gum balance and stats</li>
-              <li><code><strong>radio</strong></code> - Control the radio player</li>
-              <li><code><strong>map</strong></code> - Show campus navigation</li>
-              <li><code><strong>grades</strong></code> - View your academic progress</li>
-            </ul>
-            
-            <h4>🎮 Fun Commands</h4>
-            <p>Easter eggs and entertainment commands:</p>
-            <ul>
-              <li><code><strong>fortune</strong></code> - Get a random fortune or quote</li>
-              <li><code><strong>cowsay [text]</strong></code> - Make a cow say something</li>
-              <li><code><strong>matrix</strong></code> - Enter the matrix (green falling text)</li>
-              <li><code><strong>rickroll</strong></code> - You know what this does...</li>
-              <li><code><strong>konami</strong></code> - Try the famous cheat code</li>
-              <li><code><strong>sudo</strong></code> - Pretend you have admin privileges</li>
-            </ul>
-            
-            <h4>📁 File System Commands</h4>
-            <p>Navigate and explore the virtual file system:</p>
-            <ul>
-              <li><code><strong>cd [directory]</strong></code> - Change to specified directory</li>
-              <li><code><strong>cat [file]</strong></code> - Display file contents</li>
-              <li><code><strong>find [name]</strong></code> - Search for files or directories</li>
-              <li><code><strong>tree</strong></code> - Show directory structure as a tree</li>
-              <li><code><strong>history</strong></code> - Show command history</li>
-            </ul>
-            
-            <h4>⚙️ Terminal Features</h4>
-            <p><strong>Command History:</strong> Use ↑ and ↓ arrow keys to cycle through previous commands</p>
-            <p><strong>Tab Completion:</strong> Press Tab to auto-complete commands and file names</p>
-            <p><strong>Copy/Paste:</strong> Right-click for context menu options</p>
-            <p><strong>Resize Window:</strong> Drag corners to resize the terminal window</p>
-            <p><strong>Multiple Sessions:</strong> Open multiple terminal windows simultaneously</p>
-            
-            <h4>🔐 Security Features</h4>
-            <p>The terminal includes several security and authentication features:</p>
-            <ul>
-              <li><strong>Wallet Integration:</strong> Commands automatically detect your connected wallet</li>
-              <li><strong>Access Control:</strong> Some commands require specific NFT ownership</li>
-              <li><strong>Safe Execution:</strong> All commands run in a secure sandbox environment</li>
-              <li><strong>Permission Levels:</strong> Different access tiers based on your clique membership</li>
-            </ul>
-            
-            <div style={{ marginTop: 15, padding: 10, background: '#fff0e6', border: '1px solid #ff8800' }}>
-              <strong>⚡ Power User Tip:</strong> Type <code>help advanced</code> to see hidden commands and developer tools available to experienced users!
-            </div>
-            
-            <div style={{ marginTop: 10, padding: 10, background: '#f0f8ff', border: '1px solid #0066cc' }}>
-              <strong>🎯 Quick Start:</strong> New to terminals? Start with <code>help</code>, then try <code>whoami</code> and <code>status</code> to get your bearings!
-            </div>
-            
-            <Screenshot>[TERMINAL INTERFACE - Command prompt, help output, colorful text]</Screenshot>
-          </PageContent>
-        );
+
         
       case "gum-system":
         return (
@@ -1241,6 +1087,58 @@ const GameManualWindow: React.FC = () => {
             </div>
             
             <Screenshot>[GUM SYSTEM INTERFACE - Floating button, balance display, admin panel]</Screenshot>
+          </PageContent>
+        );
+        
+      case "terminal":
+        return (
+          <PageContent>
+            <PageHeader>💻 Terminal Guide</PageHeader>
+            <h3>Flunks Terminal - Your Command Center</h3>
+            <p>The Terminal is a powerful tool that lets you interact with the Flunks High School system using text commands, just like a real computer terminal!</p>
+            
+            <div style={{ marginTop: 15, padding: 10, background: '#ffeeee', border: '1px solid #cc0000' }}>
+              <strong>🔐 Beta Access Required:</strong> This feature requires SEMESTER0 access code or higher.
+            </div>
+            
+            <h4>🚀 Opening the Terminal</h4>
+            <p>Double-click the <strong>Terminal</strong> icon on your desktop to open the command interface.</p>
+            <Screenshot>[TERMINAL ICON ON DESKTOP]</Screenshot>
+            
+            <h4>⌨️ Basic Commands</h4>
+            <p>Here are some essential commands to get you started:</p>
+            <ul>
+              <li><code><strong>help</strong></code> - Show all available commands</li>
+              <li><code><strong>clear</strong></code> - Clear the terminal screen</li>
+              <li><code><strong>whoami</strong></code> - Display your current user info</li>
+              <li><code><strong>flunks</strong></code> - Show Flunks High School ASCII art</li>
+              <li><code><strong>wtf</strong></code> - What's this feature about?</li>
+            </ul>
+            
+            <h4>⚙️ Terminal Features</h4>
+            <p><strong>Command History:</strong> Use ↑ and ↓ arrow keys to cycle through previous commands</p>
+            <p><strong>Copy/Paste:</strong> Right-click for context menu options</p>
+            <p><strong>Resize Window:</strong> Drag corners to resize the terminal window</p>
+            <p><strong>Multiple Sessions:</strong> Open multiple terminal windows simultaneously</p>
+            
+            <h4>🔐 Security Features</h4>
+            <p>The terminal includes several security and authentication features:</p>
+            <ul>
+              <li><strong>Wallet Integration:</strong> Commands automatically detect your connected wallet</li>
+              <li><strong>Access Control:</strong> Some commands require specific access levels</li>
+              <li><strong>Safe Execution:</strong> All commands run in a secure environment</li>
+              <li><strong>Beta Testing:</strong> Available to beta access holders</li>
+            </ul>
+            
+            <div style={{ marginTop: 15, padding: 10, background: '#fff0e6', border: '1px solid #ff8800' }}>
+              <strong>⚡ Power User Tip:</strong> Type <code>help</code> to see all available commands for your access level!
+            </div>
+            
+            <div style={{ marginTop: 10, padding: 10, background: '#f0f8ff', border: '1px solid #0066cc' }}>
+              <strong>🎯 Quick Start:</strong> New to terminals? Start with <code>help</code>, then try <code>whoami</code> to get your bearings!
+            </div>
+            
+            <Screenshot>[TERMINAL INTERFACE - Command prompt, help output, colorful text]</Screenshot>
           </PageContent>
         );
         

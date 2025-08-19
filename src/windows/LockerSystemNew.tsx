@@ -19,7 +19,31 @@ const LockerSystemNew: React.FC = () => {
   const [devBypass, setDevBypass] = useState(false);
   const [currentSection, setCurrentSection] = useState<1 | 2 | 3>(1);
   const [gumBalance, setGumBalance] = useState<number>(0);
+  const [selectedJacket, setSelectedJacket] = useState<number>(0); // 0 or 1 for jacket options
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Jacket options
+  const jacketOptions = [
+    {
+      name: 'Classic Varsity',
+      image: '/images/jackets/jacket-classic.png',
+      description: 'Traditional Flunks varsity style'
+    },
+    {
+      name: 'Retro 90s',  
+      image: '/images/jackets/jacket-retro.png',
+      description: 'Nostalgic 90s throwback design'
+    }
+  ];
+
+  // Handle jacket navigation
+  const switchJacket = (direction: 'left' | 'right') => {
+    if (direction === 'left') {
+      setSelectedJacket(selectedJacket === 0 ? jacketOptions.length - 1 : selectedJacket - 1);
+    } else {
+      setSelectedJacket(selectedJacket === jacketOptions.length - 1 ? 0 : selectedJacket + 1);
+    }
+  };
 
   // Load gum balance when wallet connects
   useEffect(() => {
@@ -183,6 +207,12 @@ const LockerSystemNew: React.FC = () => {
     } else if (e.key === 'ArrowDown' && currentSection < 3) {
       e.preventDefault();
       scrollToSection((currentSection + 1) as 1 | 2 | 3);
+    } else if (e.key === 'ArrowLeft' && currentSection === 2) {
+      e.preventDefault();
+      switchJacket('left');
+    } else if (e.key === 'ArrowRight' && currentSection === 2) {
+      e.preventDefault();
+      switchJacket('right');
     } else if (e.key === '1') {
       e.preventDefault();
       scrollToSection(1);
@@ -563,105 +593,202 @@ const LockerSystemNew: React.FC = () => {
                       }}>
                         <div style={{ fontSize: '32px', marginBottom: '20px' }}>👕</div>
                         <div style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px' }}>
-                          Letter Jacket Section
+                          Letter Jacket Selection
                         </div>
                         
-                        {/* Enhanced CSS Letter Jacket with Hover Effects */}
-                        <div className="jacket-container" style={{
+                        {/* Jacket Selection Interface */}
+                        <div style={{
                           position: 'relative',
-                          width: '120px',
-                          height: '140px',
+                          width: '300px',
                           margin: '20px auto',
-                          background: 'linear-gradient(145deg, #1a365d, #2d3748)',
-                          borderRadius: '60px 60px 20px 20px',
-                          border: '3px solid #4299e1',
-                          boxShadow: `
-                            0 8px 25px rgba(0,0,0,0.5),
-                            inset 0 2px 10px rgba(255,255,255,0.1)
-                          `,
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'center',
-                          cursor: 'pointer',
-                          transition: 'all 0.3s ease',
-                          transform: currentSection === 2 ? 'scale(1.05)' : 'scale(1)'
+                          justifyContent: 'center'
                         }}>
-                          {/* Animated Letter */}
+                          
+                          {/* Left Arrow */}
+                          <button
+                            onClick={() => switchJacket('left')}
+                            style={{
+                              position: 'absolute',
+                              left: '0px',
+                              background: 'rgba(255,255,255,0.2)',
+                              border: '2px solid #4299e1',
+                              borderRadius: '50%',
+                              width: '40px',
+                              height: '40px',
+                              color: 'white',
+                              fontSize: '18px',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              transition: 'all 0.2s ease',
+                              zIndex: 10
+                            }}
+                            onMouseOver={(e) => {
+                              e.currentTarget.style.background = 'rgba(66, 153, 225, 0.5)';
+                              e.currentTarget.style.transform = 'scale(1.1)';
+                            }}
+                            onMouseOut={(e) => {
+                              e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
+                              e.currentTarget.style.transform = 'scale(1)';
+                            }}
+                          >
+                            ←
+                          </button>
+
+                          {/* Jacket Display */}
                           <div style={{
-                            fontSize: '48px',
-                            fontWeight: 'bold',
-                            color: '#ffd700',
-                            textShadow: '2px 2px 4px rgba(0,0,0,0.7), 0 0 20px rgba(255,215,0,0.5)',
-                            fontFamily: 'serif',
-                            animation: currentSection === 2 ? 'pulse 2s ease-in-out infinite' : 'none'
+                            position: 'relative',
+                            width: '160px',
+                            height: '180px',
+                            margin: '0 20px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center'
                           }}>
-                            F
+                            
+                            {/* Jacket Image or Placeholder */}
+                            <div style={{
+                              width: '120px',
+                              height: '140px',
+                              background: 'linear-gradient(145deg, #1a365d, #2d3748)',
+                              borderRadius: '60px 60px 20px 20px',
+                              border: '3px solid #4299e1',
+                              boxShadow: `
+                                0 8px 25px rgba(0,0,0,0.5),
+                                inset 0 2px 10px rgba(255,255,255,0.1)
+                              `,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              transition: 'all 0.3s ease',
+                              transform: currentSection === 2 ? 'scale(1.05)' : 'scale(1)',
+                              backgroundImage: `url('${jacketOptions[selectedJacket].image}')`,
+                              backgroundSize: 'cover',
+                              backgroundPosition: 'center',
+                              backgroundRepeat: 'no-repeat'
+                            }}>
+                              
+                              {/* Fallback Letter if no image */}
+                              <div style={{
+                                fontSize: '48px',
+                                fontWeight: 'bold',
+                                color: '#ffd700',
+                                textShadow: '2px 2px 4px rgba(0,0,0,0.7), 0 0 20px rgba(255,215,0,0.5)',
+                                fontFamily: 'serif',
+                                animation: currentSection === 2 ? 'pulse 2s ease-in-out infinite' : 'none'
+                              }}>
+                                F
+                              </div>
+                              
+                              {/* Jacket sleeves */}
+                              <div style={{
+                                position: 'absolute',
+                                left: '-15px',
+                                top: '20px',
+                                width: '25px',
+                                height: '60px',
+                                background: 'linear-gradient(145deg, #1a365d, #2d3748, #4a5568)',
+                                borderRadius: '15px',
+                                border: '2px solid #4299e1',
+                                boxShadow: 'inset 0 2px 5px rgba(255,255,255,0.1)'
+                              }} />
+                              <div style={{
+                                position: 'absolute',
+                                right: '-15px',
+                                top: '20px',
+                                width: '25px',
+                                height: '60px',
+                                background: 'linear-gradient(145deg, #1a365d, #2d3748, #4a5568)',
+                                borderRadius: '15px',
+                                border: '2px solid #4299e1',
+                                boxShadow: 'inset 0 2px 5px rgba(255,255,255,0.1)'
+                              }} />
+                            </div>
+
+                            {/* Jacket Name & Description */}
+                            <div style={{
+                              marginTop: '15px',
+                              textAlign: 'center'
+                            }}>
+                              <div style={{ 
+                                fontSize: '14px', 
+                                fontWeight: 'bold', 
+                                color: '#4299e1',
+                                marginBottom: '4px'
+                              }}>
+                                {jacketOptions[selectedJacket].name}
+                              </div>
+                              <div style={{ 
+                                fontSize: '11px', 
+                                opacity: 0.8,
+                                color: '#ccc'
+                              }}>
+                                {jacketOptions[selectedJacket].description}
+                              </div>
+                            </div>
                           </div>
-                          
-                          {/* Enhanced Sleeves with Gradient */}
+
+                          {/* Right Arrow */}
+                          <button
+                            onClick={() => switchJacket('right')}
+                            style={{
+                              position: 'absolute',
+                              right: '0px',
+                              background: 'rgba(255,255,255,0.2)',
+                              border: '2px solid #4299e1',
+                              borderRadius: '50%',
+                              width: '40px',
+                              height: '40px',
+                              color: 'white',
+                              fontSize: '18px',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              transition: 'all 0.2s ease',
+                              zIndex: 10
+                            }}
+                            onMouseOver={(e) => {
+                              e.currentTarget.style.background = 'rgba(66, 153, 225, 0.5)';
+                              e.currentTarget.style.transform = 'scale(1.1)';
+                            }}
+                            onMouseOut={(e) => {
+                              e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
+                              e.currentTarget.style.transform = 'scale(1)';
+                            }}
+                          >
+                            →
+                          </button>
+
+                          {/* Selection Indicator Dots */}
                           <div style={{
                             position: 'absolute',
-                            left: '-15px',
-                            top: '20px',
-                            width: '25px',
-                            height: '60px',
-                            background: 'linear-gradient(145deg, #1a365d, #2d3748, #4a5568)',
-                            borderRadius: '15px',
-                            border: '2px solid #4299e1',
-                            boxShadow: 'inset 0 2px 5px rgba(255,255,255,0.1)'
-                          }} />
-                          <div style={{
-                            position: 'absolute',
-                            right: '-15px',
-                            top: '20px',
-                            width: '25px',
-                            height: '60px',
-                            background: 'linear-gradient(145deg, #1a365d, #2d3748, #4a5568)',
-                            borderRadius: '15px',
-                            border: '2px solid #4299e1',
-                            boxShadow: 'inset 0 2px 5px rgba(255,255,255,0.1)'
-                          }} />
-                          
-                          {/* Glowing Collar */}
-                          <div style={{
-                            position: 'absolute',
-                            top: '-5px',
-                            left: '35px',
-                            right: '35px',
-                            height: '20px',
-                            background: 'linear-gradient(145deg, #4299e1, #63b3ed)',
-                            borderRadius: '10px 10px 0 0',
-                            border: '2px solid #2b6cb0',
-                            boxShadow: '0 0 15px rgba(66, 153, 225, 0.4)'
-                          }} />
-                          
-                          {/* Sparkle Effects for when focused */}
-                          {currentSection === 2 && (
-                            <>
-                              <div style={{
-                                position: 'absolute',
-                                top: '10px',
-                                right: '10px',
-                                width: '4px',
-                                height: '4px',
-                                background: '#ffd700',
-                                borderRadius: '50%',
-                                boxShadow: '0 0 10px #ffd700',
-                                animation: 'pulse 1.5s ease-in-out infinite'
-                              }} />
-                              <div style={{
-                                position: 'absolute',
-                                bottom: '15px',
-                                left: '15px',
-                                width: '6px',
-                                height: '6px',
-                                background: '#40a9ff',
-                                borderRadius: '50%',
-                                boxShadow: '0 0 12px #40a9ff',
-                                animation: 'pulse 2s ease-in-out infinite 0.5s'
-                              }} />
-                            </>
-                          )}
+                            bottom: '-25px',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            display: 'flex',
+                            gap: '8px'
+                          }}>
+                            {jacketOptions.map((_, index) => (
+                              <div
+                                key={index}
+                                onClick={() => setSelectedJacket(index)}
+                                style={{
+                                  width: '8px',
+                                  height: '8px',
+                                  borderRadius: '50%',
+                                  background: selectedJacket === index ? '#4299e1' : 'rgba(255,255,255,0.4)',
+                                  cursor: 'pointer',
+                                  transition: 'all 0.2s ease',
+                                  boxShadow: selectedJacket === index ? '0 0 8px rgba(66, 153, 225, 0.6)' : 'none'
+                                }}
+                              />
+                            ))}
+                          </div>
                         </div>
                         
                         <div style={{ fontSize: '14px', opacity: 0.8, lineHeight: '1.5' }}>
