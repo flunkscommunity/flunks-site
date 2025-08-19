@@ -50,8 +50,8 @@ export const APP_PERMISSIONS: AppPermission[] = [
   {
     id: 'terminal',
     title: 'Terminal',
-    requiredLevel: ['ADMIN'],
-    description: 'Advanced terminal access'
+    requiredLevel: ['ADMIN', 'BETA'],
+    description: 'Advanced terminal access for beta testers'
   },
   {
     id: 'clique-access',
