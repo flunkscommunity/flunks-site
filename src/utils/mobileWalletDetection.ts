@@ -21,18 +21,25 @@ export const detectMobileWallets = () => {
     // Dapper - mobile web supported
     dapper: !!(window as any).dapper,
     
-    // Lilico/Flow Wallet - check for mobile variants
+    // Lilico/Flow Wallet - check for all possible variants
     lilico: !!(window as any).lilico || 
             !!(window as any).fcl_wallet?.lilico ||
-            !!(window as any).flowWallet,
+            !!(window as any).flowWallet?.lilico ||
+            !!(window as any).flowWallet ||
+            // Additional checks for newer implementations
+            !!(window as any).FlowWallet ||
+            !!(window as any).flow?.wallet,
     
     // FCL configuration
     fcl: !!(window as any).fcl,
     
     // Check for mobile app deep links or injected providers
     flowWalletMobile: !!(window as any).flowWallet || 
+                      !!(window as any).FlowWallet ||
                       !!(window as any).flow ||
-                      !!(window as any).fcl_wallet?.flow
+                      !!(window as any).fcl_wallet?.flow ||
+                      // Check for browser extension
+                      !!(window as any).lilico
   };
   
   console.log('📱 Mobile Wallet Detection:', wallets);

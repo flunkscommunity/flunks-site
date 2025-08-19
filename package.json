@@ -15,9 +15,9 @@
     "setup-radio-stations": "node ./scripts/setup-radio-stations.js"
   },
   "dependencies": {
-    "@dynamic-labs/flow": "^3.9.13",
-    "@dynamic-labs/sdk-api": "^0.0.715",
-    "@dynamic-labs/sdk-react-core": "^3.9.13",
+    "@dynamic-labs/flow": "^4.29.0",
+    "@dynamic-labs/sdk-api": "^0.0.757",
+    "@dynamic-labs/sdk-react-core": "^4.29.0",
     "@react-spring/web": "^9.7.3",
     "@react-three/drei": "^9.105.6",
     "@react-three/fiber": "^8.16.5",

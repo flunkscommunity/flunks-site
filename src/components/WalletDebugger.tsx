@@ -20,6 +20,8 @@ const WalletDebugger: React.FC = () => {
         (window as any).fcl_wallet?.lilico || 
         (window as any).flowWallet?.lilico || 
         (window as any).flowWallet || 
+        (window as any).FlowWallet ||
+        (window as any).flow?.wallet ||
         (window as any).flow
       );
       setHasFlowWallet(flowWalletExists);
@@ -41,16 +43,27 @@ const WalletDebugger: React.FC = () => {
                         (window as any).fcl_wallet?.lilico || 
                         (window as any).flowWallet?.lilico ||
                         (window as any).flowWallet ||
+                        (window as any).FlowWallet ||
+                        (window as any).flow?.wallet ||
                         (window as any).flow;
       
       if (flowWallet) {
         console.log('✅ Flow wallet detected:', flowWallet);
         // Flow wallet is available
-        const response = await flowWallet.authenticate();
-        console.log('Flow wallet auth response:', response);
+        if (typeof flowWallet.authenticate === 'function') {
+          const response = await flowWallet.authenticate();
+          console.log('Flow wallet auth response:', response);
+        } else {
+          console.log('❌ Flow wallet detected but no authenticate method');
+          setShowAuthFlow(true);
+        }
       } else {
         console.log('❌ Flow wallet not found in window');
-        console.log('Available window properties:', Object.keys(window).filter(key => key.toLowerCase().includes('lil') || key.toLowerCase().includes('flow')));
+        console.log('Available window properties:', Object.keys(window).filter(key => 
+          key.toLowerCase().includes('lil') || 
+          key.toLowerCase().includes('flow') ||
+          key.toLowerCase().includes('wallet')
+        ));
         // Fall back to Dynamic auth flow
         setShowAuthFlow(true);
       }

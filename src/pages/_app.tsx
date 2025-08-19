@@ -26,6 +26,8 @@ import { RadioProvider } from "contexts/RadioContext";
 import { GumProvider } from "contexts/GumContext";
 import { GumDisplay } from "components/GumDisplay";
 import UserProfilePrompt from "components/UserProfile/UserProfilePrompt";
+import MobileFlowWalletConnection from "components/MobileFlowWalletConnection";
+import WalletTester from "components/WalletTester";
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -73,22 +75,31 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       // Base Flow wallet keys we care about
                       const flowKeysPriority = [
                         "flowwallet", // official Flow Wallet (rebranded Lilico)
-                        "lilico",
-                        "blocto",
-                        "dapper",
+                        "lilico",     // Legacy Lilico name
+                        "flow",       // Generic Flow wallet
+                        "blocto",     // Blocto wallet
+                        "dapper",     // Dapper wallet
                       ];
 
                       let filtered = wallets;
                       if (isMobile) {
+                        // On mobile, filter to Flow ecosystem wallets
                         filtered = wallets.filter((w) => {
                           const k = w.key.toLowerCase();
                           return (
-                            flowKeysPriority.some((p) => k.includes(p))
+                            flowKeysPriority.some((p) => k.includes(p)) ||
+                            // Also include any wallet that looks like Flow-related
+                            k.includes('flow') ||
+                            k.includes('wallet')
                           );
                         });
 
-                        // If for some reason nothing matched, keep originals
+                        // If for some reason nothing matched, keep all wallets
                         if (!filtered.length) filtered = wallets;
+                      } else {
+                        // On desktop, ensure all Flow wallets are available
+                        // but prioritize them at the top
+                        filtered = wallets;
                       }
 
                       // Sort so priority Flow wallets surface first
@@ -130,15 +141,15 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         },
                       ],
                     },
-                    eventsCallbacks: {
+                    events: {
                       onAuthSuccess: (args) =>
                         console.log("🎉 Auth success", args),
                       onAuthFailure: (args) =>
                         console.log("❌ Auth failure", args),
-                      onWalletAdded: (args) =>
-                        console.log("🔗 Wallet added", args),
-                      onWalletRemoved: (args) =>
-                        console.log("🔌 Wallet removed", args),
+                      onAuthFlowOpen: () =>
+                        console.log("� Auth flow opened"),
+                      onAuthFlowClose: () =>
+                        console.log("� Auth flow closed"),
                     },
                   }}
                 >
@@ -146,11 +157,14 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                     <PaginatedItemsProvider>
                       <GumProvider>
                         <div className="app-container min-h-screen w-full overflow-hidden">
+                          <WalletTester />
                           <Component {...pageProps} />
                         </div>
                         <Analytics />
                         {/* Global Profile Creation Prompt */}
                         <UserProfilePrompt autoShow={true} showToast={false} />
+                        {/* Mobile Flow Wallet Connection Helper */}
+                        <MobileFlowWalletConnection />
                         {/* Global wallet connect entry point */}
                         <div
                           style={{
