@@ -846,51 +846,24 @@ const LockerSystemNew: React.FC = () => {
                           gap: '8px'
                         }}>
                           {[
-                            { icon: '🎁', label: 'Bonus', color: '#ff6b6b' },
-                            { icon: '�', label: 'Events', color: '#4ecdc4' },
-                            { icon: '�', label: 'Stats', color: '#45b7d1' },
-                            { icon: '�', label: 'Trade', color: '#96ceb4' }
+                            { icon: '❓', label: 'Bonus', color: '#ff6b6b' },
+                            { icon: '❓', label: 'Events', color: '#4ecdc4' },
+                            { icon: '❓', label: 'Stats', color: '#45b7d1' },
+                            { icon: '❓', label: 'Trade', color: '#96ceb4' }
                           ].map((item, index) => (
                             <div key={index} style={{
                               fontSize: '18px',
                               padding: '8px',
                               background: `rgba(255,255,255,0.1)`,
                               borderRadius: '8px',
-                              cursor: 'pointer',
                               transition: 'all 0.3s ease',
                               animation: currentSection === 3 ? `fadeInUp 0.5s ease-out ${index * 0.1}s both` : 'none',
                               border: `1px solid ${item.color}`,
                               minWidth: '50px',
-                              textAlign: 'center'
+                              textAlign: 'center',
+                              opacity: 0.6
                             }}
-                            onMouseOver={(e) => {
-                              e.currentTarget.style.transform = 'scale(1.1) translateY(-3px)';
-                              e.currentTarget.style.background = `${item.color}20`;
-                              e.currentTarget.style.boxShadow = `0 5px 15px ${item.color}40`;
-                            }}
-                            onMouseOut={(e) => {
-                              e.currentTarget.style.transform = 'scale(1) translateY(0)';
-                              e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-                              e.currentTarget.style.boxShadow = 'none';
-                            }}
-                            onClick={() => {
-                              // Different actions for each button
-                              switch(item.label) {
-                                case 'Bonus':
-                                  alert('🎁 Check the Gum Center app for daily bonuses!');
-                                  break;
-                                case 'Events':
-                                  alert('🏆 Special events available in Gum Center!');
-                                  break;
-                                case 'Stats':
-                                  alert(`📊 Balance: ${gumBalance.toLocaleString()} GUM\n🏅 Keep earning!`);
-                                  break;
-                                case 'Trade':
-                                  alert('🔄 Gum trading coming soon!');
-                                  break;
-                              }
-                            }}
-                            title={`${item.icon} ${item.label}`}
+                            title={`${item.label} - Coming Soon`}
                             >
                               <div>{item.icon}</div>
                               <div style={{ fontSize: '9px', marginTop: '2px', opacity: 0.8 }}>
