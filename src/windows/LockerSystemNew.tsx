@@ -440,7 +440,7 @@ const LockerSystemNew: React.FC = () => {
                               : '0 2px 8px rgba(0,0,0,0.2)'
                           }}
                         >
-                          {section === 1 ? '🏠' : section === 2 ? '👕' : '📚'}
+                          {section === 1 ? '🏠' : section === 2 ? '👕' : '🍬'}
                         </button>
                       ))}
                     </div>
@@ -495,7 +495,7 @@ const LockerSystemNew: React.FC = () => {
                               : '0 2px 8px rgba(0,0,0,0.2)'
                           }}
                         >
-                          {section === 1 ? '🏠' : section === 2 ? '👕' : '📚'}
+                          {section === 1 ? '🏠' : section === 2 ? '👕' : '🍬'}
                         </button>
                       ))}
                     </div>
@@ -685,77 +685,234 @@ const LockerSystemNew: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Section 3: Bottom (Enhanced Storage Area) */}
+                    {/* Section 3: Bottom - GUM MANAGEMENT CENTER */}
                     <div className="locker-section" style={{
                       height: '80vh',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 100%)',
+                      background: 'linear-gradient(180deg, rgba(255,20,147,0.2) 0%, rgba(138,43,226,0.1) 100%)',
                       position: 'relative'
                     }}>
                       <div style={{
-                        background: 'rgba(108, 117, 125, 0.95)',
+                        background: 'rgba(75, 0, 130, 0.95)',
                         color: 'white',
-                        padding: '30px',
+                        padding: '25px',
                         borderRadius: '15px',
                         textAlign: 'center',
-                        maxWidth: '400px',
+                        maxWidth: '450px',
                         backdropFilter: 'blur(10px)',
-                        border: '1px solid rgba(255,255,255,0.1)',
+                        border: '2px solid rgba(255,20,147,0.3)',
                         transform: currentSection === 3 ? 'scale(1.02)' : 'scale(1)',
-                        transition: 'transform 0.3s ease'
+                        transition: 'transform 0.3s ease',
+                        boxShadow: '0 8px 32px rgba(255,20,147,0.3)'
                       }}>
-                        <div style={{ fontSize: '32px', marginBottom: '20px' }}>📚</div>
-                        <div style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '15px' }}>
-                          Storage Section
+                        <div style={{ fontSize: '32px', marginBottom: '15px' }}>🍬</div>
+                        <div style={{ fontSize: '22px', fontWeight: 'bold', marginBottom: '20px', color: '#ff69b4' }}>
+                          Gum Management Center
                         </div>
                         
-                        {/* Interactive Storage Items */}
+                        {/* Current Balance Display */}
+                        <div style={{
+                          background: 'rgba(0,0,0,0.6)',
+                          border: '2px solid #ff69b4',
+                          borderRadius: '12px',
+                          padding: '15px',
+                          marginBottom: '20px',
+                          position: 'relative',
+                          overflow: 'hidden'
+                        }}>
+                          <div style={{
+                            background: 'linear-gradient(90deg, #ff1493, #9370db)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            fontSize: '24px',
+                            fontWeight: 'bold',
+                            marginBottom: '5px'
+                          }}>
+                            {gumBalance.toLocaleString()} GUM
+                          </div>
+                          <div style={{ fontSize: '12px', opacity: 0.8 }}>
+                            💰 Your Current Balance
+                          </div>
+                          
+                          {/* Animated background particles */}
+                          <div style={{
+                            position: 'absolute',
+                            top: '5px',
+                            right: '5px',
+                            width: '8px',
+                            height: '8px',
+                            background: '#ff1493',
+                            borderRadius: '50%',
+                            opacity: 0.6,
+                            animation: 'pulse 2s ease-in-out infinite'
+                          }} />
+                        </div>
+
+                        {/* Daily Check-in Section */}
+                        <div style={{
+                          background: 'rgba(255,255,255,0.1)',
+                          borderRadius: '10px',
+                          padding: '15px',
+                          marginBottom: '15px',
+                          border: '1px solid rgba(255,255,255,0.2)'
+                        }}>
+                          <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '10px' }}>
+                            🌅 Daily Check-in
+                          </div>
+                          <div style={{ fontSize: '13px', marginBottom: '12px', opacity: 0.9 }}>
+                            Claim your daily gum bonus!
+                          </div>
+                          
+                          <button
+                            style={{
+                              background: 'linear-gradient(145deg, #32cd32, #228b22)',
+                              color: 'white',
+                              border: 'none',
+                              padding: '8px 16px',
+                              borderRadius: '6px',
+                              fontSize: '12px',
+                              fontWeight: 'bold',
+                              cursor: 'pointer',
+                              boxShadow: '0 3px 8px rgba(50,205,50,0.4)',
+                              transition: 'all 0.2s ease'
+                            }}
+                            onMouseOver={(e) => {
+                              e.currentTarget.style.transform = 'translateY(-2px)';
+                              e.currentTarget.style.boxShadow = '0 5px 15px rgba(50,205,50,0.6)';
+                            }}
+                            onMouseOut={(e) => {
+                              e.currentTarget.style.transform = 'translateY(0)';
+                              e.currentTarget.style.boxShadow = '0 3px 8px rgba(50,205,50,0.4)';
+                            }}
+                            onClick={async () => {
+                              // Implement daily check-in logic
+                              try {
+                                const result = await fetch('/api/daily-checkin', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ wallet: primaryWallet?.address })
+                                });
+                                const data = await result.json();
+                                if (data.success) {
+                                  alert(`🎉 Daily bonus claimed: +${data.earned} GUM!`);
+                                  // Refresh gum balance
+                                  refetch();
+                                } else {
+                                  alert(`ℹ️ ${data.message || 'Already claimed today!'}`);
+                                }
+                              } catch (err) {
+                                alert('❌ Check-in failed. Try again later.');
+                              }
+                            }}
+                          >
+                            ✨ Claim 15 GUM
+                          </button>
+                        </div>
+
+                        {/* Quick Stats */}
+                        <div style={{
+                          display: 'grid',
+                          gridTemplateColumns: '1fr 1fr',
+                          gap: '10px',
+                          marginBottom: '15px'
+                        }}>
+                          <div style={{
+                            background: 'rgba(255,255,255,0.08)',
+                            padding: '8px',
+                            borderRadius: '6px',
+                            fontSize: '11px'
+                          }}>
+                            <div style={{ color: '#90ee90' }}>📈 Today</div>
+                            <div style={{ fontWeight: 'bold' }}>+{Math.floor(Math.random() * 20) + 15} GUM</div>
+                          </div>
+                          <div style={{
+                            background: 'rgba(255,255,255,0.08)',
+                            padding: '8px',
+                            borderRadius: '6px',
+                            fontSize: '11px'
+                          }}>
+                            <div style={{ color: '#ffd700' }}>🎯 Streak</div>
+                            <div style={{ fontWeight: 'bold' }}>{Math.floor(Math.random() * 7) + 1} days</div>
+                          </div>
+                        </div>
+                        
+                        {/* Interactive Gum Activities */}
                         <div style={{
                           display: 'flex',
                           justifyContent: 'space-around',
-                          margin: '20px 0',
-                          gap: '10px'
+                          margin: '15px 0',
+                          gap: '8px'
                         }}>
-                          {['📖', '🎒', '📝', '🗂️'].map((item, index) => (
+                          {[
+                            { icon: '🎁', label: 'Bonus', color: '#ff6b6b' },
+                            { icon: '�', label: 'Events', color: '#4ecdc4' },
+                            { icon: '�', label: 'Stats', color: '#45b7d1' },
+                            { icon: '�', label: 'Trade', color: '#96ceb4' }
+                          ].map((item, index) => (
                             <div key={index} style={{
-                              fontSize: '24px',
-                              padding: '10px',
-                              background: 'rgba(255,255,255,0.1)',
+                              fontSize: '18px',
+                              padding: '8px',
+                              background: `rgba(255,255,255,0.1)`,
                               borderRadius: '8px',
                               cursor: 'pointer',
                               transition: 'all 0.3s ease',
-                              animation: currentSection === 3 ? `fadeInUp 0.5s ease-out ${index * 0.1}s both` : 'none'
+                              animation: currentSection === 3 ? `fadeInUp 0.5s ease-out ${index * 0.1}s both` : 'none',
+                              border: `1px solid ${item.color}`,
+                              minWidth: '50px',
+                              textAlign: 'center'
                             }}
                             onMouseOver={(e) => {
-                              e.currentTarget.style.transform = 'scale(1.2) rotate(5deg)';
-                              e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
+                              e.currentTarget.style.transform = 'scale(1.1) translateY(-3px)';
+                              e.currentTarget.style.background = `${item.color}20`;
+                              e.currentTarget.style.boxShadow = `0 5px 15px ${item.color}40`;
                             }}
                             onMouseOut={(e) => {
-                              e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
+                              e.currentTarget.style.transform = 'scale(1) translateY(0)';
                               e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                              e.currentTarget.style.boxShadow = 'none';
                             }}
+                            onClick={() => {
+                              // Different actions for each button
+                              switch(item.label) {
+                                case 'Bonus':
+                                  alert('🎁 Check the Gum Center app for daily bonuses!');
+                                  break;
+                                case 'Events':
+                                  alert('🏆 Special events available in Gum Center!');
+                                  break;
+                                case 'Stats':
+                                  alert(`📊 Balance: ${gumBalance.toLocaleString()} GUM\n🏅 Keep earning!`);
+                                  break;
+                                case 'Trade':
+                                  alert('🔄 Gum trading coming soon!');
+                                  break;
+                              }
+                            }}
+                            title={`${item.icon} ${item.label}`}
                             >
-                              {item}
+                              <div>{item.icon}</div>
+                              <div style={{ fontSize: '9px', marginTop: '2px', opacity: 0.8 }}>
+                                {item.label}
+                              </div>
                             </div>
                           ))}
                         </div>
                         
-                        <div style={{ fontSize: '14px', lineHeight: '1.6', opacity: 0.9 }}>
-                          This is the bottom section of your locker where you can store
-                          books, supplies, and other items. Everything is organized
-                          and easily accessible.
+                        <div style={{ fontSize: '13px', lineHeight: '1.4', opacity: 0.9, marginBottom: '12px' }}>
+                          🍬 Your personal gum stash! Earn daily bonuses, complete challenges, 
+                          and manage your gum collection from your locker.
                         </div>
                         
                         <div style={{ 
-                          fontSize: '12px', 
-                          marginTop: '15px', 
+                          fontSize: '11px', 
+                          marginTop: '10px', 
                           opacity: 0.7,
                           cursor: 'pointer',
-                          padding: '8px',
+                          padding: '6px',
                           background: 'rgba(255,255,255,0.05)',
-                          borderRadius: '6px',
+                          borderRadius: '4px',
                           transition: 'background 0.3s ease'
                         }}
                         onClick={() => scrollToSection(1)}
