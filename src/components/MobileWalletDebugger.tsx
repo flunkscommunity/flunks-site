@@ -270,11 +270,16 @@ const MobileWalletDebugger: React.FC = () => {
           // Try to trigger Dynamic Labs connection for the selected wallet
           if (typeof window !== 'undefined') {
             (window as any).SELECTED_WALLET_TYPE = walletType;
+            // Ensure all wallets are visible so the selected key appears
+            (window as any).FORCE_SHOW_ALL_WALLETS = true;
+            // Enable strict selection so only the chosen wallet is shown/used when possible
+            (window as any).SELECTED_WALLET_STRICT = true;
             console.log('🔧 Set selected wallet type:', walletType);
             
             // Force show that specific wallet
             setTimeout(() => {
-              setShowAuthFlow(true);
+              setShowAuthFlow(false);
+              setTimeout(() => setShowAuthFlow(true), 150);
             }, 200);
           }
         }}

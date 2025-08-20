@@ -70,6 +70,18 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                     initialAuthenticationMode: 'connect-only',
                     // Custom wallet filtering + ordering for better mobile UX
                     walletsFilter: (wallets) => {
+                      // Helper to normalize wallet keys for fuzzy matching
+                      const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+                      const matchesSelected = (key: string, selected: string) => {
+                        const k = norm(key);
+                        const s = norm(selected);
+                        if (s.includes('blocto')) return k.includes('blocto');
+                        if (s.includes('dapper')) return k.includes('dapper');
+                        if (s.includes('lilico')) return k.includes('lilico') || k.includes('flowwallet');
+                        if (s.includes('flowwallet')) return k.includes('flowwallet') || k.includes('lilico') || (k.includes('flow') && !k.includes('blocto') && !k.includes('dapper'));
+                        if (s === 'flow') return k.includes('flow') && !k.includes('blocto') && !k.includes('dapper');
+                        return k.includes(s);
+                      };
                       const isMobile =
                         typeof window !== "undefined" &&
                         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -79,6 +91,12 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       // Check for force override (for debugging)
                       const forceShowAll = typeof window !== "undefined" && 
                         (window as any).FORCE_SHOW_ALL_WALLETS;
+
+                      // If a wallet was chosen from the CustomMobileWalletModal, prioritize it
+                      const selectedType = typeof window !== 'undefined'
+                        ? (window as any).SELECTED_WALLET_TYPE as string | undefined
+                        : undefined;
+                      const strictSelected = typeof window !== 'undefined' && (window as any).SELECTED_WALLET_STRICT === true;
 
                       // Always log the available wallets first
                       console.log('🔍 Dynamic wallets available:', wallets.map(w => ({ 
@@ -113,12 +131,37 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                           available: (w as any).available 
                         })));
                         
+                        // If a specific wallet type was selected, ensure it sorts to the top
+                        if (selectedType) {
+                          const sel = selectedType.toLowerCase();
+                          return [...forcedWallets].sort((a, b) => {
+                            const aSel = matchesSelected(a.key, sel) ? 0 : 1;
+                            const bSel = matchesSelected(b.key, sel) ? 0 : 1;
+                            return aSel - bSel;
+                          });
+                        }
+
                         return forcedWallets;
                       }
 
                       // On mobile, just return ALL wallets without any filtering
                       if (isMobile) {
                         console.log('📱 Mobile detected - showing ALL wallets without filtering');
+                        // If a wallet was explicitly chosen
+                        if (selectedType) {
+                          const sel = selectedType.toLowerCase();
+                          const ordered = [...wallets].sort((a, b) => {
+                            const aSel = matchesSelected(a.key, sel) ? 0 : 1;
+                            const bSel = matchesSelected(b.key, sel) ? 0 : 1;
+                            return aSel - bSel;
+                          });
+                          // In strict mode, only return matching wallets so Dynamic can't fallback to Blocto
+                          if (strictSelected) {
+                            const filteredOnly = ordered.filter(w => matchesSelected(w.key, sel));
+                            return filteredOnly.length ? filteredOnly : ordered;
+                          }
+                          return ordered;
+                        }
                         return wallets;
                       }
 
@@ -141,6 +184,21 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       ];
 
                       let filtered = wallets;
+
+                      // If a wallet was selected, put it first on desktop too
+                      if (selectedType) {
+                        const sel = selectedType.toLowerCase();
+                        filtered = [...filtered].sort((a, b) => {
+                          const aSel = matchesSelected(a.key, sel) ? -1 : 0;
+                          const bSel = matchesSelected(b.key, sel) ? -1 : 0;
+                          if (aSel !== bSel) return bSel - aSel; // selected first
+                          return 0;
+                        });
+                        if (strictSelected) {
+                          const only = filtered.filter(w => matchesSelected(w.key, sel));
+                          if (only.length) filtered = only;
+                        }
+                      }
 
                       // Sort so priority Flow wallets surface first
                       filtered = [...filtered].sort((a, b) => {
@@ -173,10 +231,18 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                               defaultItem: (() => {
                                 const forceShowAll = typeof window !== "undefined" && 
                                   (window as any).FORCE_SHOW_ALL_WALLETS;
+                                const selectedType = typeof window !== 'undefined'
+                                  ? (window as any).SELECTED_WALLET_TYPE as string | undefined
+                                  : undefined;
                                 
                                 if (forceShowAll) {
                                   console.log('🚨 FORCE_SHOW_ALL_WALLETS: Not setting defaultItem');
                                   return undefined; // Don't set a default to avoid filtering
+                                }
+                                // If user picked a wallet in the custom modal, honor it
+                                if (selectedType) {
+                                  console.log('🎯 Defaulting to selected wallet from custom modal:', selectedType);
+                                  return selectedType;
                                 }
                                 
                                 return typeof window !== "undefined" &&
@@ -190,11 +256,21 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                               ...((() => {
                                 const forceShowAll = typeof window !== "undefined" && 
                                   (window as any).FORCE_SHOW_ALL_WALLETS;
+                                const selectedType = typeof window !== 'undefined'
+                                  ? (window as any).SELECTED_WALLET_TYPE as string | undefined
+                                  : undefined;
                                 
                                 if (forceShowAll) {
                                   console.log('🚨 FORCE_SHOW_ALL_WALLETS: Overriding wallet section config');
                                   return {
                                     walletItems: ['all'], // Show all available wallets
+                                    onlyShowInstalled: false
+                                  };
+                                }
+                                // When a wallet was selected, ensure all wallets are listed (so the key exists)
+                                if (selectedType) {
+                                  return {
+                                    walletItems: ['all'],
                                     onlyShowInstalled: false
                                   };
                                 }
@@ -206,14 +282,28 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       ],
                     },
                     events: {
-                      onAuthSuccess: (args) =>
-                        console.log("🎉 Auth success", args),
-                      onAuthFailure: (args) =>
-                        console.log("❌ Auth failure", args),
-                      onAuthFlowOpen: () =>
-                        console.log("� Auth flow opened"),
-                      onAuthFlowClose: () =>
-                        console.log("� Auth flow closed"),
+                      onAuthSuccess: (args) => {
+                        console.log("🎉 Auth success", args);
+                        if (typeof window !== 'undefined') {
+                          delete (window as any).SELECTED_WALLET_TYPE;
+                          delete (window as any).FORCE_SHOW_ALL_WALLETS;
+                        }
+                      },
+                      onAuthFailure: (args) => {
+                        console.log("❌ Auth failure", args);
+                        if (typeof window !== 'undefined') {
+                          delete (window as any).SELECTED_WALLET_TYPE;
+                        }
+                      },
+                      onAuthFlowOpen: () => {
+                        console.log("� Auth flow opened");
+                      },
+                      onAuthFlowClose: () => {
+                        console.log("� Auth flow closed");
+                        if (typeof window !== 'undefined') {
+                          delete (window as any).SELECTED_WALLET_TYPE;
+                        }
+                      },
                     },
                   }}
                 >
