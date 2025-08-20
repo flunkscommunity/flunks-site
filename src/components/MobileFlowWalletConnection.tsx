@@ -12,6 +12,7 @@ export const MobileFlowWalletConnection: React.FC<MobileFlowWalletConnectionProp
   const { setShowAuthFlow } = useDynamicContext();
   const [isClient, setIsClient] = useState(false);
   const [walletAvailable, setWalletAvailable] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -48,6 +49,21 @@ export const MobileFlowWalletConnection: React.FC<MobileFlowWalletConnectionProp
     // Try to open Flow Wallet app directly
     const flowWalletUrl = `https://wallet.flow.com/open?callback=${encodeURIComponent(window.location.href)}`;
     window.location.href = flowWalletUrl;
+  };
+
+  const copyCurrentLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch (e) {
+      console.log('Clipboard write failed:', e);
+    }
+  };
+
+  const openDapperInfo = () => {
+    // We cannot deep-link Dapper reliably from web; instruct user to open this page in Dapper's in-app browser.
+    alert('To use Dapper on mobile:\n\n1) Open the Dapper app\n2) Use the in-app browser\n3) Paste the copied link to this page\n\nThen tap Connect Wallet.');
   };
 
   const openLilicoApp = () => {
@@ -106,6 +122,20 @@ export const MobileFlowWalletConnection: React.FC<MobileFlowWalletConnectionProp
               🌊 Get Flow Wallet
             </button>
             <button
+              onClick={openDapperInfo}
+              style={{
+                background: '#5932EA',
+                color: 'white',
+                border: 'none',
+                padding: '6px 10px',
+                borderRadius: '4px',
+                fontSize: '11px',
+                cursor: 'pointer'
+              }}
+            >
+              💎 Use Dapper (Open in App)
+            </button>
+            <button
               onClick={openLilicoApp}
               style={{
                 background: '#4A90E2',
@@ -118,6 +148,20 @@ export const MobileFlowWalletConnection: React.FC<MobileFlowWalletConnectionProp
               }}
             >
               💎 Get Lilico Wallet
+            </button>
+            <button
+              onClick={copyCurrentLink}
+              style={{
+                background: '#343a40',
+                color: 'white',
+                border: 'none',
+                padding: '6px 10px',
+                borderRadius: '4px',
+                fontSize: '11px',
+                cursor: 'pointer'
+              }}
+            >
+              📋 {copied ? 'Link Copied!' : 'Copy Link for Wallet App'}
             </button>
           </div>
         </div>
