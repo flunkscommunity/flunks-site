@@ -2,7 +2,36 @@
 
 export const isMobileDevice = (): boolean => {
   if (typeof window === 'undefined') return false;
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(window.navigator.userAgent);
+  
+  // More comprehensive mobile detection
+  const userAgent = window.navigator.userAgent;
+  const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile/i.test(userAgent);
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  const isSmallScreen = window.innerWidth <= 768 || window.screen.width <= 768;
+  
+  // Check for specific mobile indicators
+  const mobileIndicators = [
+    isMobileUA,
+    isTouchDevice && isSmallScreen,
+    /Mobi|Android/i.test(userAgent),
+    /iPhone|iPad|iPod/i.test(userAgent),
+    window.orientation !== undefined
+  ];
+  
+  const isMobile = mobileIndicators.some(indicator => indicator);
+  
+  console.log('🔍 Mobile Detection Details:', {
+    userAgent,
+    isMobileUA,
+    isTouchDevice,
+    isSmallScreen,
+    screenWidth: window.screen?.width,
+    innerWidth: window.innerWidth,
+    orientation: window.orientation,
+    result: isMobile
+  });
+  
+  return isMobile;
 };
 
 export const isTabletDevice = (): boolean => {

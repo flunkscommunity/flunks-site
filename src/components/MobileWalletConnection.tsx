@@ -21,7 +21,7 @@ export const MobileWalletConnection: React.FC<MobileWalletConnectionProps> = ({
   }, []);
 
   const connectMobileWallet = async (walletType: 'flow' | 'lilico' | 'dapper') => {
-    if (!isClient || !isMobileDevice()) return;
+    if (!isClient) return;
     
     setConnectionAttempt(walletType);
     setIsConnecting(true);
@@ -29,15 +29,15 @@ export const MobileWalletConnection: React.FC<MobileWalletConnectionProps> = ({
     try {
       console.log(`🔗 Attempting to connect ${walletType} wallet on mobile...`);
       
-      // Set Dynamic Labs overrides for mobile wallet selection
+      // Set Dynamic Labs overrides for mobile wallet selection - more aggressive
       (window as any).FORCE_SHOW_ALL_WALLETS = true;
       (window as any).FORCE_DESKTOP_MODE = false;
-      (window as any).SELECTED_WALLET_STRICT = true;
+      (window as any).SELECTED_WALLET_STRICT = false; // Don't be too strict to allow fallbacks
       
       // Map wallet type to Dynamic Labs wallet key
       const walletKeyMap: Record<string, string> = {
         'flow': 'flowwallet',
-        'lilico': 'lilico', 
+        'lilico': 'flowwallet', // Use flowwallet key for lilico too
         'dapper': 'dapper'
       };
       
@@ -45,8 +45,19 @@ export const MobileWalletConnection: React.FC<MobileWalletConnectionProps> = ({
       (window as any).SELECTED_WALLET_TYPE = selectedKey;
       
       console.log(`🔗 Set wallet preference: ${selectedKey}`);
+      console.log(`🚨 Force flags set:`, {
+        FORCE_SHOW_ALL_WALLETS: (window as any).FORCE_SHOW_ALL_WALLETS,
+        SELECTED_WALLET_TYPE: (window as any).SELECTED_WALLET_TYPE,
+        SELECTED_WALLET_STRICT: (window as any).SELECTED_WALLET_STRICT
+      });
       
-      // Try different connection strategies based on wallet type
+      // Small delay to let the flags take effect, then trigger Dynamic Labs
+      setTimeout(() => {
+        console.log('📱 Triggering Dynamic Labs modal...');
+        setShowAuthFlow(true);
+      }, 100);
+      
+      // Also try direct connection strategies
       switch (walletType) {
         case 'flow':
         case 'lilico':
@@ -60,9 +71,13 @@ export const MobileWalletConnection: React.FC<MobileWalletConnectionProps> = ({
       
     } catch (error) {
       console.error(`❌ Failed to connect ${walletType} wallet:`, error);
+      // Always try Dynamic Labs as fallback
+      setShowAuthFlow(true);
     } finally {
-      setIsConnecting(false);
-      setConnectionAttempt(null);
+      setTimeout(() => {
+        setIsConnecting(false);
+        setConnectionAttempt(null);
+      }, 2000); // Give more time for connection
     }
   };
 
@@ -138,7 +153,15 @@ export const MobileWalletConnection: React.FC<MobileWalletConnectionProps> = ({
 
   if (!isClient) return <div>Loading wallet options...</div>;
 
-  if (!isMobileDevice()) {
+  // Force mobile detection - more aggressive check
+  const isReallyMobile = typeof window !== 'undefined' && (
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile/i.test(window.navigator.userAgent) ||
+    'ontouchstart' in window ||
+    navigator.maxTouchPoints > 0 ||
+    window.innerWidth <= 768
+  );
+
+  if (!isReallyMobile) {
     return (
       <div style={{ padding: '15px', background: '#f0f0f0', borderRadius: '8px' }}>
         <p>🖥️ Desktop detected - wallet connections should work normally through Dynamic Labs.</p>
