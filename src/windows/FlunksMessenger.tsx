@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useDynamicContext, DynamicWidget } from '@dynamic-labs/sdk-react-core';
 import { useWindowsContext } from 'contexts/WindowsContext';
+import { useUserProfile } from 'contexts/UserProfileContext';
 import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 import { WINDOW_IDS } from 'fixed';
 import { AI_AGENTS, getAgentResponse } from 'data/aiAgents';
@@ -238,8 +239,11 @@ interface OnlineUser {
 const FlunksMessenger: React.FC = () => {
   const { user } = useDynamicContext();
   const { closeWindow } = useWindowsContext();
+  const { profile, hasProfile } = useUserProfile();
   const sounds = useMessengerSounds();
   const { sendToAI, isLoading: aiLoading } = useAIChat();
+  
+  // Auto-use profile username if available, otherwise require manual entry
   const [username, setUsername] = useState('');
   const [tempUsername, setTempUsername] = useState('');
   const [currentMessage, setCurrentMessage] = useState('');
@@ -391,6 +395,29 @@ const FlunksMessenger: React.FC = () => {
     }
     return false;
   }, [selectedContact, persistentChat.postMessage, localChat.addMessage, username]);
+
+  // Auto-set username from profile when available
+  useEffect(() => {
+    if (hasProfile && profile?.username && !username) {
+      setUsername(profile.username);
+      
+      // Play welcome sound when profile username is loaded
+      if (soundsEnabled) {
+        setTimeout(() => sounds.userOnline(), 500);
+      }
+      
+      // Add welcome message when profile username is auto-loaded
+      setTimeout(async () => {
+        if (profile.username) {
+          await postChatMessage(
+            `Welcome back to Flunks Messenger, ${profile.username}! 🎉`,
+            user?.userId,
+            false
+          );
+        }
+      }, 1500); // Give the chat system time to initialize
+    }
+  }, [hasProfile, profile, username, soundsEnabled, sounds, postChatMessage, user]);
 
   const emojis = ['😀', '😂', '😍', '😭', '😎', '🤔', '👍', '👎', '❤️', '🔥'];
 
@@ -564,31 +591,55 @@ const FlunksMessenger: React.FC = () => {
     );
   }
 
+  // If user doesn't have a username yet (either no profile or need to set one manually)
   if (!username) {
-    return (
-      <UserSetup>
-        <h2>👋 Welcome to Flunks Messenger!</h2>
-        <div className="setup-form">
-          <Frame variant="field" style={{ width: '100%' }}>
-            <TextField
-              value={tempUsername}
-              onChange={(e) => setTempUsername(e.target.value)}
-              placeholder="Enter your username..."
-              onKeyPress={(e) => e.key === 'Enter' && handleUsernameSubmit()}
-              style={{ width: '100%' }}
-            />
-          </Frame>
-          <Button onClick={handleUsernameSubmit} disabled={!tempUsername.trim()}>
-            Start Chatting! 💬
-          </Button>
-          <p style={{ fontSize: '11px', color: '#666', textAlign: 'center', marginTop: '10px' }}>
-            Your username will be visible to other users in the chat room.
-            <br />
-            Choose something fun but appropriate! 😊
-          </p>
-        </div>
-      </UserSetup>
-    );
+    // Show different messages based on whether they have a profile
+    if (hasProfile && profile?.username) {
+      // This shouldn't happen due to the useEffect above, but just in case
+      return (
+        <UserSetup>
+          <h2>⏳ Loading your profile...</h2>
+          <p>Setting up your chat session with username: {profile.username}</p>
+        </UserSetup>
+      );
+    } else {
+      // User needs to either create a profile or set a temporary chat username
+      return (
+        <UserSetup>
+          <h2>👋 Welcome to Flunks Messenger!</h2>
+          {hasProfile === false ? (
+            <div className="setup-form">
+              <p style={{ marginBottom: '15px', color: '#666' }}>
+                You don't have a profile yet. You can create one or just enter a temporary username for chat.
+              </p>
+              <Frame variant="field" style={{ width: '100%' }}>
+                <TextField
+                  value={tempUsername}
+                  onChange={(e) => setTempUsername(e.target.value)}
+                  placeholder="Enter a temporary username for chat..."
+                  onKeyPress={(e) => e.key === 'Enter' && handleUsernameSubmit()}
+                  style={{ width: '100%' }}
+                />
+              </Frame>
+              <Button onClick={handleUsernameSubmit} disabled={!tempUsername.trim()}>
+                Start Chatting! 💬
+              </Button>
+              <p style={{ fontSize: '11px', color: '#666', textAlign: 'center', marginTop: '10px' }}>
+                Your username will be visible to other users in the chat room.
+                <br />
+                Tip: Create a profile in "My Locker" to save your username permanently! 🎯
+              </p>
+            </div>
+          ) : (
+            <div className="setup-form">
+              <p style={{ marginBottom: '15px', color: '#666' }}>
+                Loading your profile...
+              </p>
+            </div>
+          )}
+        </UserSetup>
+      );
+    }
   }
 
   return (
