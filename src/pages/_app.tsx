@@ -19,7 +19,8 @@ import useThemeSettings from "store/useThemeSettings";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { startWalletBrandingFix } from "utils/walletBrandingFix";
-import { enhanceFlowWalletDetection } from "utils/flowWalletDetection";
+import { enhanceFlowWalletDetection } from '../utils/flowWalletDetection';
+import MobileWalletDebugger from '../components/MobileWalletDebugger';
 import { PaginatedItemsProvider } from "contexts/UserPaginatedItems";
 import { UserProfileProvider } from "contexts/UserProfileContext";
 import { AudioProvider } from "contexts/AudioContext";
@@ -75,6 +76,15 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                           window.navigator.userAgent
                         );
 
+                      // Check for force override (for debugging)
+                      const forceShowAll = typeof window !== "undefined" && 
+                        (window as any).FORCE_SHOW_ALL_WALLETS;
+
+                      if (forceShowAll) {
+                        console.log('🚨 FORCE_SHOW_ALL_WALLETS enabled - showing all wallets');
+                        return wallets;
+                      }
+
                       // Log once per render pass
                       try {
                         console.log(
@@ -93,15 +103,26 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       ];
 
                       let filtered = wallets;
-                      if (isMobile) {
-                        // On mobile, filter to Flow ecosystem wallets
+                      
+                      // TEMPORARY: Disable mobile filtering to ensure all wallets show
+                      // TODO: Remove this once mobile wallet detection is fixed
+                      const DISABLE_MOBILE_FILTERING = true;
+                      
+                      if (isMobile && !DISABLE_MOBILE_FILTERING) {
+                        // On mobile, filter to Flow ecosystem wallets + ensure Dapper is included
                         filtered = wallets.filter((w) => {
                           const k = w.key.toLowerCase();
                           return (
                             flowKeysPriority.some((p) => k.includes(p)) ||
                             // Also include any wallet that looks like Flow-related
                             k.includes('flow') ||
-                            k.includes('wallet')
+                            k.includes('wallet') ||
+                            k.includes('dapper') ||  // Explicitly include Dapper
+                            k.includes('lilico') ||  // Explicitly include Lilico
+                            // Fallback for common mobile wallet patterns
+                            w.name.toLowerCase().includes('flow') ||
+                            w.name.toLowerCase().includes('dapper') ||
+                            w.name.toLowerCase().includes('lilico')
                           );
                         });
 
@@ -175,6 +196,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         <UserProfilePrompt autoShow={true} showToast={false} />
                         {/* Mobile Flow Wallet Connection Helper */}
                         <MobileFlowWalletConnection />
+                        {/* Mobile Wallet Debugger - only shows on mobile */}
+                        <MobileWalletDebugger />
                         {/* Global wallet connect entry point */}
                         <div
                           style={{
