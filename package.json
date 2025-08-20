@@ -63,6 +63,7 @@
     "eslint-config-next": "14.2.3",
     "orval": "^6.28.2",
     "postcss": "^8.4.38",
+    "supabase": "^2.34.3",
     "tailwindcss": "^3.4.3",
     "typescript": "^5",
     "url-loader": "^4.1.1"
