@@ -14,6 +14,29 @@ export const isTabletDevice = (): boolean => {
 export const detectMobileWallets = () => {
   if (typeof window === 'undefined') return {};
   
+  // Enhanced detection for Flow Wallet/Lilico browser extensions
+  const checkFlowWalletExtension = () => {
+    // Check common extension injection patterns
+    const extensionChecks = [
+      // Standard Lilico injection
+      !!(window as any).lilico,
+      // Flow Wallet browser extension
+      !!(window as any).flowWallet,
+      !!(window as any).FlowWallet,
+      // FCL wallet connections
+      !!(window as any).fcl_wallet?.lilico,
+      !!(window as any).fcl_wallet?.flowWallet,
+      // Flow ecosystem checks
+      !!(window as any).flow?.wallet,
+      !!(window as any).flow?.lilico,
+      // Check for extension context
+      !!(document.querySelector('meta[name="flow-wallet-installed"]')),
+      !!(document.querySelector('meta[name="lilico-installed"]')),
+    ];
+    
+    return extensionChecks.some(check => check);
+  };
+  
   const wallets = {
     // Blocto - has good mobile web support
     blocto: !!(window as any).blocto || !!(window as any).BloctoWallet,
@@ -21,28 +44,25 @@ export const detectMobileWallets = () => {
     // Dapper - mobile web supported
     dapper: !!(window as any).dapper,
     
-    // Lilico/Flow Wallet - check for all possible variants
-    lilico: !!(window as any).lilico || 
-            !!(window as any).fcl_wallet?.lilico ||
-            !!(window as any).flowWallet?.lilico ||
-            !!(window as any).flowWallet ||
-            // Additional checks for newer implementations
-            !!(window as any).FlowWallet ||
-            !!(window as any).flow?.wallet,
+    // Enhanced Lilico/Flow Wallet detection
+    lilico: checkFlowWalletExtension(),
     
     // FCL configuration
     fcl: !!(window as any).fcl,
     
-    // Check for mobile app deep links or injected providers
-    flowWalletMobile: !!(window as any).flowWallet || 
-                      !!(window as any).FlowWallet ||
+    // Specific mobile checks
+    flowWalletMobile: checkFlowWalletExtension() || 
                       !!(window as any).flow ||
-                      !!(window as any).fcl_wallet?.flow ||
-                      // Check for browser extension
-                      !!(window as any).lilico
+                      !!(window as any).fcl_wallet?.flow
   };
   
-  console.log('📱 Mobile Wallet Detection:', wallets);
+  console.log('📱 Enhanced Wallet Detection:', wallets);
+  console.log('🔍 Window Flow properties:', Object.keys(window).filter(key => 
+    key.toLowerCase().includes('lil') || 
+    key.toLowerCase().includes('flow') ||
+    key.toLowerCase().includes('wallet')
+  ));
+  
   return wallets;
 };
 

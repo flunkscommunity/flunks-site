@@ -31,18 +31,49 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       ? forwarded.split(',')[0] 
       : req.connection.remoteAddress || null;
 
+    console.log('🔍 WTF Command Logging Request:', {
+      wallet,
+      command,
+      accessLevel,
+      sessionId,
+      userAgent
+    });
+
     // Log the WTF command usage
-    const { data, error } = await supabase.rpc('log_wtf_command', {
+    const { data, error } = await supabase.rpc('log_terminal_command', {
       p_wallet_address: wallet,
+      p_command_input: command,
       p_access_level: accessLevel,
       p_session_id: sessionId,
-      p_user_agent: userAgent,
-      p_ip_address: ip
+      p_user_agent: userAgent
     });
 
     if (error) {
-      console.error('Error logging WTF command:', error);
-      return res.status(500).json({ error: 'Failed to log command usage' });
+      console.error('❌ Error with RPC log_terminal_command:', error);
+      console.error('RPC Error details:', JSON.stringify(error, null, 2));
+      
+      // Also try direct insert as fallback
+      console.log('⚠️ Trying fallback direct insert...');
+      const { data: fallbackData, error: fallbackError } = await supabase
+        .from('terminal_activities')
+        .insert({
+          wallet_address: wallet,
+          command_input: command,
+          access_level: accessLevel,
+          session_id: sessionId,
+          user_agent: userAgent
+        });
+      
+      if (fallbackError) {
+        console.error('❌ Fallback insert also failed:', fallbackError);
+        console.error('Fallback Error details:', JSON.stringify(fallbackError, null, 2));
+        return res.status(500).json({ error: 'Failed to log command usage' });
+      } else {
+        console.log('✅ Fallback insert successful!');
+      }
+    } else {
+      console.log('✅ RPC log_terminal_command successful!');
+      console.log('RPC Response data:', data);
     }
 
     return res.status(200).json({ 

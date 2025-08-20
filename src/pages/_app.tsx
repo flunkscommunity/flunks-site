@@ -19,6 +19,7 @@ import useThemeSettings from "store/useThemeSettings";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { startWalletBrandingFix } from "utils/walletBrandingFix";
+import { enhanceFlowWalletDetection } from "utils/flowWalletDetection";
 import { PaginatedItemsProvider } from "contexts/UserPaginatedItems";
 import { UserProfileProvider } from "contexts/UserProfileContext";
 import { AudioProvider } from "contexts/AudioContext";
@@ -27,7 +28,6 @@ import { GumProvider } from "contexts/GumContext";
 import { GumDisplay } from "components/GumDisplay";
 import UserProfilePrompt from "components/UserProfile/UserProfilePrompt";
 import MobileFlowWalletConnection from "components/MobileFlowWalletConnection";
-import WalletTester from "components/WalletTester";
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -37,9 +37,18 @@ const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
 const MyApp: AppType = ({ Component, pageProps }) => {
   const memodGlobalStyles = React.useMemo(() => <GlobalStyles />, []);
 
-  // Start wallet branding fix on component mount
+  // Start wallet branding fix and enhance detection on component mount
   React.useEffect(() => {
     startWalletBrandingFix();
+    
+    // Enhance Flow Wallet detection for Dynamic Labs
+    const enhanceDetection = async () => {
+      // Wait a bit for extensions to load
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      enhanceFlowWalletDetection();
+    };
+    
+    enhanceDetection();
   }, []);
 
   return (
@@ -56,6 +65,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID ||
                       "53675303-5e80-4fe5-88a4-e6caae677432",
                     walletConnectors: [FlowWalletConnectors],
+                    // Enhanced wallet detection
+                    initialAuthenticationMode: 'connect-only',
                     // Custom wallet filtering + ordering for better mobile UX
                     walletsFilter: (wallets) => {
                       const isMobile =
@@ -157,7 +168,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                     <PaginatedItemsProvider>
                       <GumProvider>
                         <div className="app-container min-h-screen w-full overflow-hidden">
-                          <WalletTester />
                           <Component {...pageProps} />
                         </div>
                         <Analytics />
