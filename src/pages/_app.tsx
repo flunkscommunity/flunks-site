@@ -93,41 +93,55 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         );
                       } catch {}
 
-                      // Base Flow wallet keys we care about
+                      // Base Flow wallet keys we care about (in priority order)
                       const flowKeysPriority = [
+                        "dapper",     // Dapper wallet (important for Flow)
                         "flowwallet", // official Flow Wallet (rebranded Lilico)
                         "lilico",     // Legacy Lilico name
                         "flow",       // Generic Flow wallet
                         "blocto",     // Blocto wallet
-                        "dapper",     // Dapper wallet
                       ];
 
                       let filtered = wallets;
                       
-                      // TEMPORARY: Disable mobile filtering to ensure all wallets show
-                      // TODO: Remove this once mobile wallet detection is fixed
-                      const DISABLE_MOBILE_FILTERING = true;
+                      // Mobile filtering control
+                      const DISABLE_MOBILE_FILTERING = true; // TEMPORARILY DISABLED - Set to false to re-enable mobile filtering
                       
+                      // More balanced mobile filtering - show Flow ecosystem wallets but don't be too restrictive
                       if (isMobile && !DISABLE_MOBILE_FILTERING) {
-                        // On mobile, filter to Flow ecosystem wallets + ensure Dapper is included
-                        filtered = wallets.filter((w) => {
+                        // On mobile, prefer Flow ecosystem wallets but be more inclusive
+                        const mobileWallets = wallets.filter((w) => {
                           const k = w.key.toLowerCase();
+                          const n = w.name.toLowerCase();
                           return (
+                            // Explicit Flow ecosystem wallets
                             flowKeysPriority.some((p) => k.includes(p)) ||
-                            // Also include any wallet that looks like Flow-related
+                            // Name-based matching (more reliable)
+                            n.includes('flow') ||
+                            n.includes('dapper') ||
+                            n.includes('lilico') ||
+                            n.includes('blocto') ||
+                            // Key-based fallbacks
                             k.includes('flow') ||
-                            k.includes('wallet') ||
-                            k.includes('dapper') ||  // Explicitly include Dapper
-                            k.includes('lilico') ||  // Explicitly include Lilico
-                            // Fallback for common mobile wallet patterns
-                            w.name.toLowerCase().includes('flow') ||
-                            w.name.toLowerCase().includes('dapper') ||
-                            w.name.toLowerCase().includes('lilico')
+                            k.includes('dapper') ||
+                            k.includes('lilico') ||
+                            k.includes('blocto') ||
+                            k.includes('wallet')
                           );
                         });
 
-                        // If for some reason nothing matched, keep all wallets
-                        if (!filtered.length) filtered = wallets;
+                        // Use filtered list if we found relevant wallets, otherwise show all
+                        filtered = mobileWallets.length > 0 ? mobileWallets : wallets;
+                        
+                        // Debug logging for mobile wallet filtering
+                        try {
+                          console.log('📱 Mobile wallet filtering results:', {
+                            originalCount: wallets.length,
+                            filteredCount: filtered.length,
+                            originalWallets: wallets.map(w => `${w.name} (${w.key})`),
+                            filteredWallets: filtered.map(w => `${w.name} (${w.key})`)
+                          });
+                        } catch (e) {}
                       } else {
                         // On desktop, ensure all Flow wallets are available
                         // but prioritize them at the top
