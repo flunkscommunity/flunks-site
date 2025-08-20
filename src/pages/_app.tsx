@@ -104,7 +104,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       ];
 
                       let filtered = wallets;
-                      if (isMobile) {
+                      
+                      // TEMPORARILY DISABLE MOBILE FILTERING - Show all wallets on mobile
+                      const DISABLE_MOBILE_FILTERING = true;
+                      
+                      if (isMobile && !DISABLE_MOBILE_FILTERING) {
                         // On mobile, filter to Flow ecosystem wallets
                         filtered = wallets.filter((w) => {
                           const k = w.key.toLowerCase();
@@ -119,8 +123,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         // If for some reason nothing matched, keep all wallets
                         if (!filtered.length) filtered = wallets;
                       } else {
-                        // On desktop, ensure all Flow wallets are available
-                        // but prioritize them at the top
+                        // Show all wallets (desktop or mobile with filtering disabled)
                         filtered = wallets;
                       }
 

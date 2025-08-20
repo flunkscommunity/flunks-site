@@ -46,10 +46,15 @@ const MobileWalletDebugger: React.FC = () => {
   }, []);
 
   const handleForceShowAllWallets = () => {
-    // Temporarily override mobile detection
+    // Temporarily override mobile detection and force all wallets to show
     if (typeof window !== 'undefined') {
       (window as any).FORCE_SHOW_ALL_WALLETS = true;
-      setShowAuthFlow(true);
+      console.log('🚨 FORCE_SHOW_ALL_WALLETS enabled');
+      // Try to trigger a re-render of the Dynamic widget
+      setTimeout(() => {
+        setShowAuthFlow(false);
+        setTimeout(() => setShowAuthFlow(true), 100);
+      }, 100);
     }
   };
 
