@@ -20,7 +20,6 @@ import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { startWalletBrandingFix } from "utils/walletBrandingFix";
 import { enhanceFlowWalletDetection } from '../utils/flowWalletDetection';
-import { forceMobileWalletsAvailable } from '../utils/forceMobileWallets';
 import MobileWalletDebugger from '../components/MobileWalletDebugger';
 import { PaginatedItemsProvider } from "contexts/UserPaginatedItems";
 import { UserProfileProvider } from "contexts/UserProfileContext";
@@ -30,7 +29,7 @@ import { GumProvider } from "contexts/GumContext";
 import { GumDisplay } from "components/GumDisplay";
 import UserProfilePrompt from "components/UserProfile/UserProfilePrompt";
 import MobileFlowWalletConnection from "components/MobileFlowWalletConnection";
-import MobileWalletConnection from "components/MobileWalletConnection";
+import SimpleMobileWalletHelper from "components/SimpleMobileWalletHelper";
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -44,16 +43,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   React.useEffect(() => {
     startWalletBrandingFix();
     
-    // Force mobile wallets to be available
-    forceMobileWalletsAvailable();
-    
     // Enhance Flow Wallet detection for Dynamic Labs
     const enhanceDetection = async () => {
       // Wait a bit for extensions to load
       await new Promise(resolve => setTimeout(resolve, 1000));
       enhanceFlowWalletDetection();
-      // Force mobile wallets again after detection
-      forceMobileWalletsAvailable();
     };
     
     enhanceDetection();
@@ -158,46 +152,10 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       // On mobile, just return ALL wallets without any filtering
                       if (isMobile) {
                         console.log('📱 Mobile detected - showing ALL wallets without filtering');
-                        
-                        // Force add Flow ecosystem wallets if they don't exist
-                        const mobileOptimizedWallets = [...wallets];
-                        
-                        // Ensure Flow/Lilico wallets are available
-                        const flowWalletExists = wallets.some(w => 
-                          w.key.includes('flow') || w.key.includes('lilico')
-                        );
-                        
-                        const dapperExists = wallets.some(w => 
-                          w.key.includes('dapper')
-                        );
-                        
-                        // Add missing wallets for mobile
-                        if (!flowWalletExists) {
-                          mobileOptimizedWallets.push({
-                            key: 'flowwallet',
-                            name: 'Flow Wallet',
-                            isInstalled: true,
-                            available: true,
-                            canConnect: true,
-                            connectionMethods: ['wallet_connect', 'deep_link']
-                          } as any);
-                        }
-                        
-                        if (!dapperExists) {
-                          mobileOptimizedWallets.push({
-                            key: 'dapper',
-                            name: 'Dapper',
-                            isInstalled: true,
-                            available: true,
-                            canConnect: true,
-                            connectionMethods: ['wallet_connect', 'web']
-                          } as any);
-                        }
-                        
                         // If a wallet was explicitly chosen
                         if (selectedType) {
                           const sel = selectedType.toLowerCase();
-                          const ordered = [...mobileOptimizedWallets].sort((a, b) => {
+                          const ordered = [...wallets].sort((a, b) => {
                             const aSel = matchesSelected(a.key, sel) ? 0 : 1;
                             const bSel = matchesSelected(b.key, sel) ? 0 : 1;
                             return aSel - bSel;
@@ -212,10 +170,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                           try { (window as any).LAST_DYNAMIC_WALLETS = ordered.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
                           return ordered;
                         }
-                        
-                        console.log('📱 Mobile wallets with Flow/Dapper added:', mobileOptimizedWallets.map(w => ({ key: w.key, name: (w as any).name })));
-                        try { (window as any).LAST_DYNAMIC_WALLETS = mobileOptimizedWallets.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
-                        return mobileOptimizedWallets;
+                        try { (window as any).LAST_DYNAMIC_WALLETS = wallets.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
+                        return wallets;
                       }
 
                       // Log once per render pass
@@ -384,10 +340,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         <Analytics />
                         {/* Global Profile Creation Prompt */}
                         <UserProfilePrompt autoShow={true} showToast={false} />
-                        {/* Mobile Flow Wallet Connection Helper */}
-                        <MobileFlowWalletConnection />
-                        {/* Enhanced Mobile Wallet Connection */}
-                        <MobileWalletConnection onWalletConnected={(wallet) => console.log('✅ Mobile wallet connected:', wallet)} />
+                        {/* Simple Mobile Wallet Helper - non-intrusive */}
+                        <SimpleMobileWalletHelper />
                         {/* Mobile Wallet Debugger - only shows on mobile */}
                         <MobileWalletDebugger />
                         {/* Global wallet connect entry point */}
