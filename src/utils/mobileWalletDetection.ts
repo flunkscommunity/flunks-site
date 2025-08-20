@@ -41,8 +41,8 @@ export const detectMobileWallets = () => {
     // Blocto - has good mobile web support
     blocto: !!(window as any).blocto || !!(window as any).BloctoWallet,
     
-    // Dapper - mobile web supported (always available on mobile)
-    dapper: isMobileDevice() ? true : !!(window as any).dapper,
+    // Dapper - mobile web supported
+    dapper: !!(window as any).dapper,
     
     // Enhanced Lilico/Flow Wallet detection
     lilico: checkFlowWalletExtension(),

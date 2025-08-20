@@ -91,57 +91,33 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                           "🔍 Dynamic wallets (pre-filter)",
                           wallets.map((w) => ({ key: w.key, name: w.name }))
                         );
+                        console.log("🔍 Device detection:", { isMobile, forceShowAll });
                       } catch {}
 
-                      // Base Flow wallet keys we care about (in priority order)
+                      // Base Flow wallet keys we care about
                       const flowKeysPriority = [
-                        "dapper",     // Dapper wallet (important for Flow)
                         "flowwallet", // official Flow Wallet (rebranded Lilico)
                         "lilico",     // Legacy Lilico name
                         "flow",       // Generic Flow wallet
                         "blocto",     // Blocto wallet
+                        "dapper",     // Dapper wallet
                       ];
 
                       let filtered = wallets;
-                      
-                      // Mobile filtering control
-                      const DISABLE_MOBILE_FILTERING = true; // TEMPORARILY DISABLED - Set to false to re-enable mobile filtering
-                      
-                      // More balanced mobile filtering - show Flow ecosystem wallets but don't be too restrictive
-                      if (isMobile && !DISABLE_MOBILE_FILTERING) {
-                        // On mobile, prefer Flow ecosystem wallets but be more inclusive
-                        const mobileWallets = wallets.filter((w) => {
+                      if (isMobile) {
+                        // On mobile, filter to Flow ecosystem wallets
+                        filtered = wallets.filter((w) => {
                           const k = w.key.toLowerCase();
-                          const n = w.name.toLowerCase();
                           return (
-                            // Explicit Flow ecosystem wallets
                             flowKeysPriority.some((p) => k.includes(p)) ||
-                            // Name-based matching (more reliable)
-                            n.includes('flow') ||
-                            n.includes('dapper') ||
-                            n.includes('lilico') ||
-                            n.includes('blocto') ||
-                            // Key-based fallbacks
+                            // Also include any wallet that looks like Flow-related
                             k.includes('flow') ||
-                            k.includes('dapper') ||
-                            k.includes('lilico') ||
-                            k.includes('blocto') ||
                             k.includes('wallet')
                           );
                         });
 
-                        // Use filtered list if we found relevant wallets, otherwise show all
-                        filtered = mobileWallets.length > 0 ? mobileWallets : wallets;
-                        
-                        // Debug logging for mobile wallet filtering
-                        try {
-                          console.log('📱 Mobile wallet filtering results:', {
-                            originalCount: wallets.length,
-                            filteredCount: filtered.length,
-                            originalWallets: wallets.map(w => `${w.name} (${w.key})`),
-                            filteredWallets: filtered.map(w => `${w.name} (${w.key})`)
-                          });
-                        } catch (e) {}
+                        // If for some reason nothing matched, keep all wallets
+                        if (!filtered.length) filtered = wallets;
                       } else {
                         // On desktop, ensure all Flow wallets are available
                         // but prioritize them at the top
