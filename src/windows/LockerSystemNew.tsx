@@ -62,61 +62,62 @@ const LockerSystemNew: React.FC = () => {
     return () => window.removeEventListener('gumBalanceUpdated', handleGumUpdate);
   }, []);
 
-  // Scroll position listener with snap-to-section behavior
+  // Scroll position listener with snap-to-section behavior (DISABLED)
   useEffect(() => {
-    const handleScroll = () => {
-      if (scrollContainerRef.current) {
-        const container = scrollContainerRef.current;
-        const containerHeight = container.clientHeight;
-        const scrollTop = container.scrollTop;
+    // Scroll functionality disabled - no longer snaps to sections
+    // const handleScroll = () => {
+    //   if (scrollContainerRef.current) {
+    //     const container = scrollContainerRef.current;
+    //     const containerHeight = container.clientHeight;
+    //     const scrollTop = container.scrollTop;
         
-        // Determine which section user is closest to
-        let targetSection: 1 | 2 | 3;
-        if (scrollTop < containerHeight * 0.4) {
-          targetSection = 1;
-        } else if (scrollTop < containerHeight * 1.8) {
-          targetSection = 2;
-        } else {
-          targetSection = 3;
-        }
+    //     // Determine which section user is closest to
+    //     let targetSection: 1 | 2 | 3;
+    //     if (scrollTop < containerHeight * 0.4) {
+    //       targetSection = 1;
+    //     } else if (scrollTop < containerHeight * 1.8) {
+    //       targetSection = 2;
+    //     } else {
+    //       targetSection = 3;
+    //     }
         
-        // Only snap if we're not already in the middle of scrolling
-        if (targetSection !== currentSection) {
-          setCurrentSection(targetSection);
+    //     // Only snap if we're not already in the middle of scrolling
+    //     if (targetSection !== currentSection) {
+    //       setCurrentSection(targetSection);
           
-          // Smooth snap to the target section
-          let targetScrollTop = 0;
-          if (targetSection === 2) {
-            targetScrollTop = containerHeight * 0.8;
-          } else if (targetSection === 3) {
-            targetScrollTop = containerHeight * 0.8 + containerHeight * 1.4;
-          }
+    //       // Smooth snap to the target section
+    //       let targetScrollTop = 0;
+    //       if (targetSection === 2) {
+    //         targetScrollTop = containerHeight * 0.8;
+    //       } else if (targetSection === 3) {
+    //         targetScrollTop = containerHeight * 0.8 + containerHeight * 1.4;
+    //       }
           
-          // Use smooth scrolling to snap to position
-          container.scrollTo({
-            top: targetScrollTop,
-            behavior: 'smooth'
-          });
-        }
-      }
-    };
+    //       // Use smooth scrolling to snap to position
+    //       container.scrollTo({
+    //         top: targetScrollTop,
+    //         behavior: 'smooth'
+    //       });
+    //     }
+    //   }
+    // };
 
-    const container = scrollContainerRef.current;
-    if (container) {
-      // Add some debouncing to prevent excessive snapping
-      let scrollTimeout: NodeJS.Timeout;
+    // const container = scrollContainerRef.current;
+    // if (container) {
+    //   // Add some debouncing to prevent excessive snapping
+    //   let scrollTimeout: NodeJS.Timeout;
       
-      const debouncedScroll = () => {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(handleScroll, 150);
-      };
+    //   const debouncedScroll = () => {
+    //     clearTimeout(scrollTimeout);
+    //     scrollTimeout = setTimeout(handleScroll, 150);
+    //   };
       
-      container.addEventListener('scroll', debouncedScroll);
-      return () => {
-        container.removeEventListener('scroll', debouncedScroll);
-        clearTimeout(scrollTimeout);
-      };
-    }
+    //   container.addEventListener('scroll', debouncedScroll);
+    //   return () => {
+    //     container.removeEventListener('scroll', debouncedScroll);
+    //     clearTimeout(scrollTimeout);
+    //   };
+    // }
   }, [currentSection]);
 
   const loadGumBalance = async () => {
@@ -175,54 +176,60 @@ const LockerSystemNew: React.FC = () => {
     }
   };
 
-  // Simple smooth scroll to specific section
+  // Simple smooth scroll to specific section (DISABLED)
   const scrollToSection = (section: 1 | 2 | 3) => {
-    if (scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
-      const containerHeight = container.clientHeight;
+    // Scroll functionality disabled - no longer scrolls to sections
+    console.log(`Scroll to section ${section} disabled`);
+    // if (scrollContainerRef.current) {
+    //   const container = scrollContainerRef.current;
+    //   const containerHeight = container.clientHeight;
       
-      let targetScrollTop = 0;
+    //   let targetScrollTop = 0;
       
-      if (section === 1) {
-        targetScrollTop = 0;
-      } else if (section === 2) {
-        targetScrollTop = containerHeight * 0.8;
-      } else if (section === 3) {
-        targetScrollTop = containerHeight * 0.8 + containerHeight * 1.4;
-      }
+    //   if (section === 1) {
+    //     targetScrollTop = 0;
+    //   } else if (section === 2) {
+    //     targetScrollTop = containerHeight * 0.8;
+    //   } else if (section === 3) {
+    //     targetScrollTop = containerHeight * 0.8 + containerHeight * 1.4;
+    //   }
       
-      container.scrollTo({
-        top: targetScrollTop,
-        behavior: 'smooth'
-      });
+    //   container.scrollTo({
+    //     top: targetScrollTop,
+    //     behavior: 'smooth'
+    //   });
       
-      setCurrentSection(section);
-    }
+    //   setCurrentSection(section);
+    // }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'ArrowUp' && currentSection > 1) {
-      e.preventDefault();
-      scrollToSection((currentSection - 1) as 1 | 2 | 3);
-    } else if (e.key === 'ArrowDown' && currentSection < 3) {
-      e.preventDefault();
-      scrollToSection((currentSection + 1) as 1 | 2 | 3);
-    } else if (e.key === 'ArrowLeft' && currentSection === 2) {
+    // Scroll navigation disabled - only jacket switching remains active
+    // if (e.key === 'ArrowUp' && currentSection > 1) {
+    //   e.preventDefault();
+    //   scrollToSection((currentSection - 1) as 1 | 2 | 3);
+    // } else if (e.key === 'ArrowDown' && currentSection < 3) {
+    //   e.preventDefault();
+    //   scrollToSection((currentSection + 1) as 1 | 2 | 3);
+    // } else 
+    if (e.key === 'ArrowLeft' && currentSection === 2) {
       e.preventDefault();
       switchJacket('left');
     } else if (e.key === 'ArrowRight' && currentSection === 2) {
       e.preventDefault();
       switchJacket('right');
-    } else if (e.key === '1') {
-      e.preventDefault();
-      scrollToSection(1);
-    } else if (e.key === '2') {
-      e.preventDefault();
-      scrollToSection(2);
-    } else if (e.key === '3') {
-      e.preventDefault();
-      scrollToSection(3);
-    }
+    } 
+    // Section jumping disabled
+    // else if (e.key === '1') {
+    //   e.preventDefault();
+    //   scrollToSection(1);
+    // } else if (e.key === '2') {
+    //   e.preventDefault();
+    //   scrollToSection(2);
+    // } else if (e.key === '3') {
+    //   e.preventDefault();
+    //   scrollToSection(3);
+    // }
   };
 
   return (
@@ -446,7 +453,8 @@ const LockerSystemNew: React.FC = () => {
                       gap: '8px',
                       zIndex: 1000
                     }}>
-                      {/* Section Navigation */}
+                      {/* Section Navigation - DISABLED */}
+                      {/* Navigation buttons removed to disable scrolling
                       {[1, 2, 3].map((section) => (
                         <button
                           key={section}
@@ -473,8 +481,9 @@ const LockerSystemNew: React.FC = () => {
                           {section === 1 ? '🏠' : section === 2 ? '👕' : '🍬'}
                         </button>
                       ))}
+                      */}
                     </div>
-                    {/* Keyboard Shortcuts Hint */}
+                    {/* Keyboard Shortcuts Hint - UPDATED */}
                     <div style={{
                       position: 'fixed',
                       top: '20px',
@@ -488,7 +497,7 @@ const LockerSystemNew: React.FC = () => {
                       zIndex: 1000,
                       backdropFilter: 'blur(10px)'
                     }}>
-                      🎯 1,2,3: Jump to section | ↑↓: Navigate
+                      � ←→: Switch jackets in section 2
                     </div>
 
                     {/* Navigation Controls */}
@@ -560,6 +569,8 @@ const LockerSystemNew: React.FC = () => {
                         <div style={{ fontSize: '16px', marginBottom: '20px', opacity: 0.9 }}>
                           Welcome to your personal locker!
                         </div>
+                        {/* Scroll indicator removed */}
+                        {/*
                         <div className="scroll-indicator" style={{ 
                           fontSize: '14px', 
                           marginTop: '20px',
@@ -569,6 +580,7 @@ const LockerSystemNew: React.FC = () => {
                         >
                           ⬇️ Scroll down to explore
                         </div>
+                        */}
                       </div>
                     </div>
 
@@ -799,6 +811,8 @@ const LockerSystemNew: React.FC = () => {
                           </em>
                         </div>
                         
+                        {/* Continue to storage area scroll indicator removed */}
+                        {/*
                         <div className="scroll-indicator" style={{ 
                           fontSize: '12px', 
                           opacity: 0.6, 
@@ -809,6 +823,7 @@ const LockerSystemNew: React.FC = () => {
                         >
                           ⬇️ Continue to storage area
                         </div>
+                        */}
                       </div>
                     </div>
 
@@ -1005,6 +1020,8 @@ const LockerSystemNew: React.FC = () => {
                           and manage your gum collection from your locker.
                         </div>
                         
+                        {/* Back to top scroll indicator removed */}
+                        {/*
                         <div style={{ 
                           fontSize: '11px', 
                           marginTop: '10px', 
@@ -1025,6 +1042,7 @@ const LockerSystemNew: React.FC = () => {
                         >
                           ⬆️ Back to top
                         </div>
+                        */}
                       </div>
                     </div>
                   </div>

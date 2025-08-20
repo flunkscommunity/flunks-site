@@ -183,27 +183,29 @@ const UserProfile: React.FC = () => {
 
   // Smooth scroll to specific section
   const scrollToSection = (section: 1 | 2 | 3) => {
-    if (scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
-      const containerHeight = container.clientHeight;
+    // Scroll functionality disabled
+    console.log(`Scroll to section ${section} disabled`);
+    // if (scrollContainerRef.current) {
+    //   const container = scrollContainerRef.current;
+    //   const containerHeight = container.clientHeight;
       
-      let targetScrollTop = 0;
+    //   let targetScrollTop = 0;
       
-      if (section === 1) {
-        targetScrollTop = 0;
-      } else if (section === 2) {
-        targetScrollTop = containerHeight * 0.8;
-      } else if (section === 3) {
-        targetScrollTop = containerHeight * 0.8 + containerHeight * 1.4;
-      }
+    //   if (section === 1) {
+    //     targetScrollTop = 0;
+    //   } else if (section === 2) {
+    //     targetScrollTop = containerHeight * 0.8;
+    //   } else if (section === 3) {
+    //     targetScrollTop = containerHeight * 0.8 + containerHeight * 1.4;
+    //   }
       
-      container.scrollTo({
-        top: targetScrollTop,
-        behavior: 'smooth'
-      });
+    //   container.scrollTo({
+    //     top: targetScrollTop,
+    //     behavior: 'smooth'
+    //   });
       
-      setCurrentSection(section);
-    }
+    //   setCurrentSection(section);
+    // }
   };
 
   // Handle scroll event to update current section
@@ -460,7 +462,7 @@ const UserProfile: React.FC = () => {
             }}>
               {hasProfile ? 
                 '🎓 Your profile is ready! Click above to get your personal locker assigned.' :
-                '🌈 Create your retro profile with rainbow completion screen, then get your locker!'
+                '🌈 Create your profile, then get your locker!'
               }
             </div>
           </div>
