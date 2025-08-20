@@ -80,7 +80,7 @@ export const trackTerminalActivity = async (
   sessionId: string | null
 ): Promise<void> => {
   try {
-    const data: TerminalActivityData = {
+  const data: TerminalActivityData = {
       wallet_address: walletAddress,
       command_entered: command,
       command_type: commandType,
@@ -95,10 +95,30 @@ export const trackTerminalActivity = async (
     
     // Save to Supabase database only if configured
     if (hasValidSupabaseConfig && supabase) {
-      const { error } = await supabase.from('terminal_activities').insert(data);
+      // First attempt with current schema (command_entered)
+      let { error } = await supabase.from('terminal_activities').insert(data as any);
       if (error) {
-        console.error('Supabase error:', error);
-        throw error;
+        console.error('Supabase insert error (command_entered):', error);
+        // If the remote schema doesn't have command_entered, retry with legacy column name
+        const message = (error as any)?.message || '';
+        if (message.includes("command_entered") || (error as any)?.code === 'PGRST204') {
+          const legacyData: any = {
+            wallet_address: walletAddress,
+            command_input: command,
+            command_type: commandType,
+            response_given: response,
+            success: success,
+            session_id: sessionId,
+            timestamp: new Date().toISOString()
+          };
+          const retry = await supabase.from('terminal_activities').insert(legacyData);
+          if (retry.error) {
+            console.error('Supabase retry error (command_input):', retry.error);
+            throw retry.error;
+          }
+        } else {
+          throw error;
+        }
       }
     } else {
       console.log('Supabase not configured - tracking locally only');

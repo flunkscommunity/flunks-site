@@ -23,16 +23,43 @@ CREATE INDEX IF NOT EXISTS idx_wtf_command_logs_access_level ON wtf_command_logs
 ALTER TABLE wtf_command_logs ENABLE ROW LEVEL SECURITY;
 
 -- Policy for users to insert their own records (including anonymous users)
-CREATE POLICY "Users can insert their own wtf command logs" ON wtf_command_logs
-  FOR INSERT WITH CHECK (true);
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE schemaname = 'public' AND tablename = 'wtf_command_logs' 
+      AND policyname = 'Users can insert their own wtf command logs'
+  ) THEN
+    CREATE POLICY "Users can insert their own wtf command logs" ON wtf_command_logs
+      FOR INSERT WITH CHECK (true);
+  END IF;
+END$$;
 
 -- Policy for admins to view all records (simplified - all authenticated users can view)
-CREATE POLICY "Authenticated users can view wtf command logs" ON wtf_command_logs
-  FOR SELECT USING (auth.uid() IS NOT NULL);
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE schemaname = 'public' AND tablename = 'wtf_command_logs' 
+      AND policyname = 'Authenticated users can view wtf command logs'
+  ) THEN
+    CREATE POLICY "Authenticated users can view wtf command logs" ON wtf_command_logs
+      FOR SELECT USING (auth.uid() IS NOT NULL);
+  END IF;
+END$$;
 
 -- Policy for users to view only their own records
-CREATE POLICY "Users can view their own wtf command logs" ON wtf_command_logs
-  FOR SELECT USING (wallet_address = auth.jwt() ->> 'wallet_address');
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE schemaname = 'public' AND tablename = 'wtf_command_logs' 
+      AND policyname = 'Users can view their own wtf command logs'
+  ) THEN
+    CREATE POLICY "Users can view their own wtf command logs" ON wtf_command_logs
+      FOR SELECT USING (wallet_address = auth.jwt() ->> 'wallet_address');
+  END IF;
+END$$;
 
 -- Function to automatically update the updated_at timestamp
 CREATE OR REPLACE FUNCTION update_wtf_command_logs_updated_at()

@@ -22,17 +22,17 @@ const LockerSystemNew: React.FC = () => {
   const [selectedJacket, setSelectedJacket] = useState<number>(0); // 0 or 1 for jacket options
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Jacket options
+  // Jacket options (now using jersey assets)
   const jacketOptions = [
     {
-      name: 'Classic Varsity',
-      image: '/images/jackets/jacket-classic.png',
-      description: 'Traditional Flunks varsity style'
+      name: 'Jersey 1',
+      image: '/images/jerseys/jersey-1.png',
+      description: 'Flunks jersey option'
     },
     {
-      name: 'Retro 90s',  
-      image: '/images/jackets/jacket-retro.png',
-      description: 'Nostalgic 90s throwback design'
+      name: 'Jersey 2',  
+      image: '/images/jerseys/jersey-2.png',
+      description: 'Alternate jersey option'
     }
   ];
 
@@ -605,7 +605,7 @@ const LockerSystemNew: React.FC = () => {
                       }}>
                         <div style={{ fontSize: '32px', marginBottom: '20px' }}>👕</div>
                         <div style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px' }}>
-                          Letter Jacket Selection
+                          Jersey Selection
                         </div>
                         
                         {/* Jacket Selection Interface */}
