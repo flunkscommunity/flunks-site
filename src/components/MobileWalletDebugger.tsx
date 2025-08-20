@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { isMobileDevice, detectMobileWallets } from '../utils/mobileWalletDetection';
+import CustomMobileWalletModal from './CustomMobileWalletModal';
 
 const MobileWalletDebugger: React.FC = () => {
   const { setShowAuthFlow } = useDynamicContext();
   const [debugInfo, setDebugInfo] = useState<any>({});
   const [isClient, setIsClient] = useState(false);
+  const [showCustomModal, setShowCustomModal] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -214,6 +216,21 @@ const MobileWalletDebugger: React.FC = () => {
         </button>
 
         <button
+          onClick={() => setShowCustomModal(true)}
+          style={{
+            background: '#17a2b8',
+            color: 'white',
+            border: 'none',
+            padding: '5px 8px',
+            borderRadius: '3px',
+            fontSize: '10px',
+            cursor: 'pointer'
+          }}
+        >
+          🔧 Custom Wallet Modal
+        </button>
+
+        <button
           onClick={handleClearForceFlag}
           style={{
             background: '#6c757d',
@@ -242,6 +259,26 @@ const MobileWalletDebugger: React.FC = () => {
           {JSON.stringify(debugInfo, null, 2)}
         </pre>
       </details>
+
+      <CustomMobileWalletModal
+        isOpen={showCustomModal}
+        onClose={() => setShowCustomModal(false)}
+        onSelectWallet={(walletType) => {
+          console.log('🔧 Custom modal selected wallet:', walletType);
+          setShowCustomModal(false);
+          
+          // Try to trigger Dynamic Labs connection for the selected wallet
+          if (typeof window !== 'undefined') {
+            (window as any).SELECTED_WALLET_TYPE = walletType;
+            console.log('🔧 Set selected wallet type:', walletType);
+            
+            // Force show that specific wallet
+            setTimeout(() => {
+              setShowAuthFlow(true);
+            }, 200);
+          }
+        }}
+      />
     </div>
   );
 };

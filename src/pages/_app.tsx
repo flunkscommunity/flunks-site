@@ -116,6 +116,12 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         return forcedWallets;
                       }
 
+                      // On mobile, just return ALL wallets without any filtering
+                      if (isMobile) {
+                        console.log('📱 Mobile detected - showing ALL wallets without filtering');
+                        return wallets;
+                      }
+
                       // Log once per render pass
                       try {
                         console.log(
@@ -135,28 +141,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       ];
 
                       let filtered = wallets;
-                      
-                      // TEMPORARILY DISABLE MOBILE FILTERING - Show all wallets on mobile
-                      const DISABLE_MOBILE_FILTERING = true;
-                      
-                      if (isMobile && !DISABLE_MOBILE_FILTERING) {
-                        // On mobile, filter to Flow ecosystem wallets
-                        filtered = wallets.filter((w) => {
-                          const k = w.key.toLowerCase();
-                          return (
-                            flowKeysPriority.some((p) => k.includes(p)) ||
-                            // Also include any wallet that looks like Flow-related
-                            k.includes('flow') ||
-                            k.includes('wallet')
-                          );
-                        });
-
-                        // If for some reason nothing matched, keep all wallets
-                        if (!filtered.length) filtered = wallets;
-                      } else {
-                        // Show all wallets (desktop or mobile with filtering disabled)
-                        filtered = wallets;
-                      }
 
                       // Sort so priority Flow wallets surface first
                       filtered = [...filtered].sort((a, b) => {
