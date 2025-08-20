@@ -12,7 +12,8 @@
     "organize-traits": "node ./scripts/organize-traits.js",
     "generate-trait-data": "node ./scripts/generate-trait-data.js",
     "setup-traits": "npm run organize-traits && npm run generate-trait-data",
-    "setup-radio-stations": "node ./scripts/setup-radio-stations.js"
+    "setup-radio-stations": "node ./scripts/setup-radio-stations.js",
+    "test-mobile-wallets": "node ./scripts/test-mobile-wallets.js"
   },
   "dependencies": {
     "@dynamic-labs/flow": "^4.29.0",

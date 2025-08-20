@@ -42,13 +42,37 @@ export const MobileFlowWalletConnection: React.FC<MobileFlowWalletConnectionProp
 
   const handleConnectWallet = () => {
     console.log('🔄 Opening wallet connection flow for mobile...');
+    
+    // Enhanced mobile wallet connection with proper Dynamic Labs integration
+    if (typeof window !== 'undefined') {
+      // Force mobile-friendly wallet selection
+      (window as any).FORCE_SHOW_ALL_WALLETS = true;
+      (window as any).SELECTED_WALLET_TYPE = 'flowwallet';
+      (window as any).SELECTED_WALLET_STRICT = true;
+      
+      console.log('📱 Set mobile wallet preferences for Flow/Lilico');
+    }
+    
     setShowAuthFlow(true);
   };
 
   const openFlowWalletApp = () => {
-    // Try to open Flow Wallet app directly
-    const flowWalletUrl = `https://wallet.flow.com/open?callback=${encodeURIComponent(window.location.href)}`;
-    window.location.href = flowWalletUrl;
+    // Enhanced Flow Wallet app opening with better callback handling
+    const currentUrl = window.location.href;
+    const flowWalletUrl = `https://wallet.flow.com/connect?callback=${encodeURIComponent(currentUrl)}`;
+    
+    // Try app deep link first
+    const appLink = document.createElement('a');
+    appLink.href = `flow-wallet://connect?callback=${encodeURIComponent(currentUrl)}`;
+    appLink.target = '_blank';
+    document.body.appendChild(appLink);
+    appLink.click();
+    document.body.removeChild(appLink);
+    
+    // Fallback to web version after a short delay
+    setTimeout(() => {
+      window.open(flowWalletUrl, '_blank');
+    }, 1000);
   };
 
   const copyCurrentLink = async () => {

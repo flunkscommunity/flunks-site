@@ -29,6 +29,7 @@ import { GumProvider } from "contexts/GumContext";
 import { GumDisplay } from "components/GumDisplay";
 import UserProfilePrompt from "components/UserProfile/UserProfilePrompt";
 import MobileFlowWalletConnection from "components/MobileFlowWalletConnection";
+import MobileWalletConnection from "components/MobileWalletConnection";
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -340,6 +341,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         <UserProfilePrompt autoShow={true} showToast={false} />
                         {/* Mobile Flow Wallet Connection Helper */}
                         <MobileFlowWalletConnection />
+                        {/* Enhanced Mobile Wallet Connection */}
+                        <MobileWalletConnection onWalletConnected={(wallet) => console.log('✅ Mobile wallet connected:', wallet)} />
                         {/* Mobile Wallet Debugger - only shows on mobile */}
                         <MobileWalletDebugger />
                         {/* Global wallet connect entry point */}

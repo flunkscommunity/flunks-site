@@ -37,30 +37,36 @@ export const detectMobileWallets = () => {
     return extensionChecks.some(check => check);
   };
   
+  // Enhanced mobile wallet detection - more aggressive for mobile
+  const isMobile = isMobileDevice();
+  
   const wallets = {
     // Blocto - has good mobile web support
-    blocto: !!(window as any).blocto || !!(window as any).BloctoWallet,
+    blocto: !!(window as any).blocto || !!(window as any).BloctoWallet || isMobile,
     
     // Dapper - always available via web on mobile
-    dapper: isMobileDevice() ? true : !!(window as any).dapper,
+    dapper: isMobile || !!(window as any).dapper,
     
-    // Enhanced Lilico/Flow Wallet detection - more lenient on mobile
-    lilico: isMobileDevice() ? true : checkFlowWalletExtension(),
+    // Enhanced Lilico/Flow Wallet detection - assume available on mobile
+    lilico: isMobile || checkFlowWalletExtension(),
     
-    // FCL configuration
+    // FCL configuration - assume available if FCL is configured
     fcl: !!(window as any).fcl,
     
-    // Specific mobile checks - assume available on mobile
-    flowWalletMobile: isMobileDevice() ? true : (checkFlowWalletExtension() || 
+    // Generic Flow wallet detection - more lenient on mobile
+    flowWalletMobile: isMobile || (checkFlowWalletExtension() || 
                       !!(window as any).flow ||
                       !!(window as any).fcl_wallet?.flow)
   };
   
-  console.log('📱 Enhanced Wallet Detection:', wallets);
+  console.log('📱 Enhanced Mobile Wallet Detection:', wallets);
+  console.log('🔍 Mobile Device:', isMobile);
   console.log('🔍 Window Flow properties:', Object.keys(window).filter(key => 
     key.toLowerCase().includes('lil') || 
     key.toLowerCase().includes('flow') ||
-    key.toLowerCase().includes('wallet')
+    key.toLowerCase().includes('wallet') ||
+    key.toLowerCase().includes('dapper') ||
+    key.toLowerCase().includes('blocto')
   ));
   
   return wallets;

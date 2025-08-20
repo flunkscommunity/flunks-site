@@ -684,18 +684,6 @@ const LockerSystemNew: React.FC = () => {
                               backgroundRepeat: 'no-repeat'
                             }}>
                               
-                              {/* Fallback Letter if no image */}
-                              <div style={{
-                                fontSize: '48px',
-                                fontWeight: 'bold',
-                                color: '#ffd700',
-                                textShadow: '2px 2px 4px rgba(0,0,0,0.7), 0 0 20px rgba(255,215,0,0.5)',
-                                fontFamily: 'serif',
-                                animation: currentSection === 2 ? 'pulse 2s ease-in-out infinite' : 'none'
-                              }}>
-                                F
-                              </div>
-                              
                               {/* Jacket sleeves */}
                               <div style={{
                                 position: 'absolute',
