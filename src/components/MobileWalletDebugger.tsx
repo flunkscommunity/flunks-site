@@ -5,14 +5,35 @@ import CustomMobileWalletModal from './CustomMobileWalletModal';
 
 const MobileWalletDebugger: React.FC = () => {
   const { setShowAuthFlow } = useDynamicContext();
+  // Helper to explicitly open a specific wallet by nudging Dynamic's state
+  const openWalletDirect = (key: string) => {
+    try {
+      // Hint Dynamic to default to this wallet; our overrides in _app.tsx will pick this up
+      (window as any).SELECTED_WALLET_TYPE = key;
+      (window as any).FORCE_SHOW_ALL_WALLETS = true;
+      (window as any).SELECTED_WALLET_STRICT = true;
+      setShowAuthFlow(false);
+      setTimeout(() => setShowAuthFlow(true), 50);
+    } catch (e) {
+      console.warn('Failed to open wallet directly', e);
+      setShowAuthFlow(true);
+    }
+  };
   const [debugInfo, setDebugInfo] = useState<any>({});
   const [isClient, setIsClient] = useState(false);
   const [showCustomModal, setShowCustomModal] = useState(false);
+  const [availableWallets, setAvailableWallets] = useState<Array<{ key: string; name?: string }>>([]);
 
   useEffect(() => {
     setIsClient(true);
     
     if (typeof window !== 'undefined') {
+      // Pull latest wallet list from Dynamic (populated in walletsFilter)
+      try {
+        const list = (window as any).LAST_DYNAMIC_WALLETS as Array<{ key: string; name?: string }> | undefined;
+        if (list && Array.isArray(list)) setAvailableWallets(list);
+      } catch {}
+
       const info = {
         isMobile: isMobileDevice(),
         userAgent: navigator.userAgent,
@@ -46,6 +67,29 @@ const MobileWalletDebugger: React.FC = () => {
       setDebugInfo(info);
     }
   }, []);
+
+  // Utility to match aliases to available keys
+  const pickWalletKey = (desired: string): string => {
+    const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const d = norm(desired);
+    if (!availableWallets || availableWallets.length === 0) return desired;
+    const ranked = availableWallets
+      .map(w => ({ w, k: norm(w.key) }))
+      .sort((a, b) => {
+        const score = (k: string) => {
+          if (d.includes('blocto')) return k.includes('blocto') ? 3 : 0;
+          if (d.includes('dapper')) return k.includes('dapper') ? 3 : 0;
+          if (d.includes('lilico')) return (k.includes('lilico') || k.includes('flowwallet')) ? 3 : 0;
+          if (d.includes('flowwallet')) return (k.includes('flowwallet') || k.includes('lilico')) ? 3 : 0;
+          if (d === 'flow') return (k.includes('flow') && !k.includes('blocto') && !k.includes('dapper')) ? 2 : 0;
+          return k.includes(d) ? 1 : 0;
+        };
+        return score(b.k) - score(a.k);
+      });
+    return ranked.length && (ranked[0].w.key.toLowerCase().includes('blocto') && d !== 'blocto')
+      ? (ranked.find(r => !r.w.key.toLowerCase().includes('blocto'))?.w.key || desired)
+      : (ranked[0]?.w.key || desired);
+  };
 
   const handleForceShowAllWallets = () => {
     // Temporarily override mobile detection and force all wallets to show
@@ -263,26 +307,25 @@ const MobileWalletDebugger: React.FC = () => {
       <CustomMobileWalletModal
         isOpen={showCustomModal}
         onClose={() => setShowCustomModal(false)}
-        onSelectWallet={(walletType) => {
+    onSelectWallet={(walletType) => {
           console.log('🔧 Custom modal selected wallet:', walletType);
           setShowCustomModal(false);
           
           // Try to trigger Dynamic Labs connection for the selected wallet
           if (typeof window !== 'undefined') {
-            (window as any).SELECTED_WALLET_TYPE = walletType;
+      const resolved = pickWalletKey(walletType);
+      (window as any).SELECTED_WALLET_TYPE = resolved;
             // Ensure all wallets are visible so the selected key appears
             (window as any).FORCE_SHOW_ALL_WALLETS = true;
             // Enable strict selection so only the chosen wallet is shown/used when possible
             (window as any).SELECTED_WALLET_STRICT = true;
-            console.log('🔧 Set selected wallet type:', walletType);
+      console.log('🔧 Set selected wallet type:', resolved);
             
             // Force show that specific wallet
-            setTimeout(() => {
-              setShowAuthFlow(false);
-              setTimeout(() => setShowAuthFlow(true), 150);
-            }, 200);
+      setTimeout(() => openWalletDirect(resolved), 150);
           }
         }}
+    availableWallets={availableWallets}
       />
     </div>
   );

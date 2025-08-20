@@ -4,16 +4,26 @@ interface CustomMobileWalletModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectWallet: (walletType: string) => void;
+  availableWallets?: Array<{ key: string; name?: string }>;
 }
 
 const CustomMobileWalletModal: React.FC<CustomMobileWalletModalProps> = ({ 
   isOpen, 
   onClose, 
-  onSelectWallet 
+  onSelectWallet,
+  availableWallets
 }) => {
   if (!isOpen) return null;
 
-  const wallets = [
+  // If Dynamic provided available wallets, use them; otherwise fall back to curated list
+  const wallets = availableWallets && availableWallets.length > 0
+    ? availableWallets.map(w => ({
+        key: w.key,
+        name: w.name || w.key,
+        description: 'Available via Dynamic',
+        icon: '🪪'
+      }))
+    : [
     {
       key: 'blocto',
       name: 'Blocto',

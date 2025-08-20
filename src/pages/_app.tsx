@@ -134,13 +134,16 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         // If a specific wallet type was selected, ensure it sorts to the top
                         if (selectedType) {
                           const sel = selectedType.toLowerCase();
-                          return [...forcedWallets].sort((a, b) => {
+                          const out = [...forcedWallets].sort((a, b) => {
                             const aSel = matchesSelected(a.key, sel) ? 0 : 1;
                             const bSel = matchesSelected(b.key, sel) ? 0 : 1;
                             return aSel - bSel;
                           });
+                          try { (window as any).LAST_DYNAMIC_WALLETS = out.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
+                          return out;
                         }
 
+                        try { (window as any).LAST_DYNAMIC_WALLETS = forcedWallets.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
                         return forcedWallets;
                       }
 
@@ -158,10 +161,14 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                           // In strict mode, only return matching wallets so Dynamic can't fallback to Blocto
                           if (strictSelected) {
                             const filteredOnly = ordered.filter(w => matchesSelected(w.key, sel));
-                            return filteredOnly.length ? filteredOnly : ordered;
+                            const out = filteredOnly.length ? filteredOnly : ordered;
+                            try { (window as any).LAST_DYNAMIC_WALLETS = out.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
+                            return out;
                           }
+                          try { (window as any).LAST_DYNAMIC_WALLETS = ordered.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
                           return ordered;
                         }
+                        try { (window as any).LAST_DYNAMIC_WALLETS = wallets.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
                         return wallets;
                       }
 
@@ -216,6 +223,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                           isMobile ? "📱 Mobile wallets (post-filter)" : "🖥️ Desktop wallets (ordered)",
                           filtered.map((w) => w.key)
                         );
+                        try { (window as any).LAST_DYNAMIC_WALLETS = filtered.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
                       } catch {}
                       return filtered;
                     },
@@ -234,6 +242,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                                 const selectedType = typeof window !== 'undefined'
                                   ? (window as any).SELECTED_WALLET_TYPE as string | undefined
                                   : undefined;
+                                const strictSelected = typeof window !== 'undefined' && (window as any).SELECTED_WALLET_STRICT === true;
                                 
                                 if (forceShowAll) {
                                   console.log('🚨 FORCE_SHOW_ALL_WALLETS: Not setting defaultItem');
@@ -259,6 +268,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                                 const selectedType = typeof window !== 'undefined'
                                   ? (window as any).SELECTED_WALLET_TYPE as string | undefined
                                   : undefined;
+                                const strictSelected = typeof window !== 'undefined' && (window as any).SELECTED_WALLET_STRICT === true;
                                 
                                 if (forceShowAll) {
                                   console.log('🚨 FORCE_SHOW_ALL_WALLETS: Overriding wallet section config');
@@ -267,8 +277,16 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                                     onlyShowInstalled: false
                                   };
                                 }
-                                // When a wallet was selected, ensure all wallets are listed (so the key exists)
+                                // When a wallet was selected
                                 if (selectedType) {
+                                  // In strict mode, only show that specific wallet to avoid Blocto fallback
+                                  if (strictSelected) {
+                                    console.log('🔒 Strict selection enabled for:', selectedType);
+                                    return {
+                                      walletItems: [selectedType],
+                                      onlyShowInstalled: false
+                                    };
+                                  }
                                   return {
                                     walletItems: ['all'],
                                     onlyShowInstalled: false
@@ -297,6 +315,10 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       },
                       onAuthFlowOpen: () => {
                         console.log("� Auth flow opened");
+                        try {
+                          const wallets = (window as any)?.dynamic?.wallets || undefined;
+                          if (wallets) console.log('🔎 Wallets on open:', wallets.map((w: any) => w.key));
+                        } catch {}
                       },
                       onAuthFlowClose: () => {
                         console.log("� Auth flow closed");
