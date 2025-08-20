@@ -74,7 +74,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         typeof window !== "undefined" &&
                         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
                           window.navigator.userAgent
-                        );
+                        ) && !(window as any).FORCE_DESKTOP_MODE; // Override mobile detection
 
                       // Check for force override (for debugging)
                       const forceShowAll = typeof window !== "undefined" && 
@@ -87,11 +87,33 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         isInstalled: (w as any).isInstalled,
                         connectionMethods: (w as any).connectionMethods 
                       })));
+                      console.log('🔍 Device detection override:', { 
+                        isMobile, 
+                        forceShowAll, 
+                        forceDesktop: (window as any).FORCE_DESKTOP_MODE 
+                      });
 
                       if (forceShowAll) {
                         console.log('🚨 FORCE_SHOW_ALL_WALLETS enabled - showing all wallets');
                         console.log('🚨 All available wallets:', wallets.map(w => ({ key: w.key, name: w.name })));
-                        return wallets;
+                        
+                        // Force all wallets to appear as "available" by modifying their properties
+                        const forcedWallets = wallets.map(wallet => ({
+                          ...wallet,
+                          isInstalled: true,
+                          available: true,
+                          canConnect: true,
+                          connectionMethods: ['injected', 'wallet_connect', 'deep_link']
+                        }));
+                        
+                        console.log('🚨 Forced wallets:', forcedWallets.map(w => ({ 
+                          key: w.key, 
+                          name: w.name, 
+                          isInstalled: (w as any).isInstalled,
+                          available: (w as any).available 
+                        })));
+                        
+                        return forcedWallets;
                       }
 
                       // Log once per render pass
@@ -180,6 +202,20 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                                     ? "blocto"
                                     : "flowwallet";
                               })(),
+                              // Force show all wallet options when force flag is set
+                              ...((() => {
+                                const forceShowAll = typeof window !== "undefined" && 
+                                  (window as any).FORCE_SHOW_ALL_WALLETS;
+                                
+                                if (forceShowAll) {
+                                  console.log('🚨 FORCE_SHOW_ALL_WALLETS: Overriding wallet section config');
+                                  return {
+                                    walletItems: ['all'], // Show all available wallets
+                                    onlyShowInstalled: false
+                                  };
+                                }
+                                return {};
+                              })()),
                             },
                           ],
                         },

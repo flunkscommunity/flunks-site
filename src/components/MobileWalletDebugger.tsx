@@ -52,6 +52,19 @@ const MobileWalletDebugger: React.FC = () => {
       console.log('🚨 FORCE_SHOW_ALL_WALLETS enabled');
       console.log('🚨 Window flag set:', (window as any).FORCE_SHOW_ALL_WALLETS);
       
+      // Also try to override Dynamic Labs mobile detection
+      (window as any).FORCE_DESKTOP_MODE = true;
+      
+      // Override navigator.userAgent temporarily for Dynamic Labs
+      if (navigator.userAgent) {
+        (window as any).ORIGINAL_USER_AGENT = navigator.userAgent;
+        Object.defineProperty(navigator, 'userAgent', {
+          get: () => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+          configurable: true
+        });
+        console.log('🚨 Temporarily overrode user agent to desktop');
+      }
+      
       // Try to trigger a re-render of the Dynamic widget
       setTimeout(() => {
         setShowAuthFlow(false);
@@ -66,7 +79,19 @@ const MobileWalletDebugger: React.FC = () => {
   const handleClearForceFlag = () => {
     if (typeof window !== 'undefined') {
       delete (window as any).FORCE_SHOW_ALL_WALLETS;
-      console.log('🚨 FORCE_SHOW_ALL_WALLETS cleared');
+      delete (window as any).FORCE_DESKTOP_MODE;
+      
+      // Restore original user agent
+      if ((window as any).ORIGINAL_USER_AGENT) {
+        Object.defineProperty(navigator, 'userAgent', {
+          get: () => (window as any).ORIGINAL_USER_AGENT,
+          configurable: true
+        });
+        delete (window as any).ORIGINAL_USER_AGENT;
+        console.log('🚨 Restored original user agent');
+      }
+      
+      console.log('🚨 All force flags cleared');
       setShowAuthFlow(false);
     }
   };
@@ -164,6 +189,28 @@ const MobileWalletDebugger: React.FC = () => {
           }}
         >
           🚨 Force Show All Wallets
+        </button>
+
+        <button
+          onClick={() => {
+            if (typeof window !== 'undefined') {
+              (window as any).FORCE_DESKTOP_MODE = true;
+              console.log('🖥️ Desktop mode forced');
+              setShowAuthFlow(false);
+              setTimeout(() => setShowAuthFlow(true), 200);
+            }
+          }}
+          style={{
+            background: '#28a745',
+            color: 'white',
+            border: 'none',
+            padding: '5px 8px',
+            borderRadius: '3px',
+            fontSize: '10px',
+            cursor: 'pointer'
+          }}
+        >
+          🖥️ Force Desktop Mode
         </button>
 
         <button
