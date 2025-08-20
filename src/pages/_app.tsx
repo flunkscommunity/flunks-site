@@ -80,8 +80,17 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       const forceShowAll = typeof window !== "undefined" && 
                         (window as any).FORCE_SHOW_ALL_WALLETS;
 
+                      // Always log the available wallets first
+                      console.log('🔍 Dynamic wallets available:', wallets.map(w => ({ 
+                        key: w.key, 
+                        name: w.name,
+                        isInstalled: (w as any).isInstalled,
+                        connectionMethods: (w as any).connectionMethods 
+                      })));
+
                       if (forceShowAll) {
                         console.log('🚨 FORCE_SHOW_ALL_WALLETS enabled - showing all wallets');
+                        console.log('🚨 All available wallets:', wallets.map(w => ({ key: w.key, name: w.name })));
                         return wallets;
                       }
 
@@ -154,13 +163,23 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                             {
                               type: SdkViewSectionType.Wallet,
                               // Prefer Blocto on mobile (robust deep-link), Flow Wallet on desktop
-                              defaultItem:
-                                typeof window !== "undefined" &&
-                                /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-                                  window.navigator.userAgent
-                                )
-                                  ? "blocto"
-                                  : "flowwallet",
+                              // But don't set defaultItem if forcing all wallets to show
+                              defaultItem: (() => {
+                                const forceShowAll = typeof window !== "undefined" && 
+                                  (window as any).FORCE_SHOW_ALL_WALLETS;
+                                
+                                if (forceShowAll) {
+                                  console.log('🚨 FORCE_SHOW_ALL_WALLETS: Not setting defaultItem');
+                                  return undefined; // Don't set a default to avoid filtering
+                                }
+                                
+                                return typeof window !== "undefined" &&
+                                  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                                    window.navigator.userAgent
+                                  )
+                                    ? "blocto"
+                                    : "flowwallet";
+                              })(),
                             },
                           ],
                         },

@@ -50,11 +50,24 @@ const MobileWalletDebugger: React.FC = () => {
     if (typeof window !== 'undefined') {
       (window as any).FORCE_SHOW_ALL_WALLETS = true;
       console.log('🚨 FORCE_SHOW_ALL_WALLETS enabled');
+      console.log('🚨 Window flag set:', (window as any).FORCE_SHOW_ALL_WALLETS);
+      
       // Try to trigger a re-render of the Dynamic widget
       setTimeout(() => {
         setShowAuthFlow(false);
-        setTimeout(() => setShowAuthFlow(true), 100);
+        setTimeout(() => {
+          setShowAuthFlow(true);
+          console.log('🚨 Auth flow reopened with force flag');
+        }, 200);
       }, 100);
+    }
+  };
+
+  const handleClearForceFlag = () => {
+    if (typeof window !== 'undefined') {
+      delete (window as any).FORCE_SHOW_ALL_WALLETS;
+      console.log('🚨 FORCE_SHOW_ALL_WALLETS cleared');
+      setShowAuthFlow(false);
     }
   };
 
@@ -95,6 +108,13 @@ const MobileWalletDebugger: React.FC = () => {
             {wallet}: {detected ? '✅' : '❌'}
           </div>
         ))}
+      </div>
+
+      <div style={{ marginBottom: '10px' }}>
+        <strong>Force Flag Status:</strong>
+        <div style={{ color: (typeof window !== 'undefined' && (window as any).FORCE_SHOW_ALL_WALLETS) ? '#00ff00' : '#ff6666' }}>
+          FORCE_SHOW_ALL_WALLETS: {(typeof window !== 'undefined' && (window as any).FORCE_SHOW_ALL_WALLETS) ? '✅ ACTIVE' : '❌ OFF'}
+        </div>
       </div>
 
       <div style={{ marginBottom: '10px' }}>
@@ -144,6 +164,21 @@ const MobileWalletDebugger: React.FC = () => {
           }}
         >
           🚨 Force Show All Wallets
+        </button>
+
+        <button
+          onClick={handleClearForceFlag}
+          style={{
+            background: '#6c757d',
+            color: 'white',
+            border: 'none',
+            padding: '5px 8px',
+            borderRadius: '3px',
+            fontSize: '10px',
+            cursor: 'pointer'
+          }}
+        >
+          🔄 Clear Force Flag
         </button>
       </div>
 
