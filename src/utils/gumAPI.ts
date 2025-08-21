@@ -189,20 +189,24 @@ export async function checkGumCooldown(
       };
     }
 
-    // Check daily limit
-    const today = new Date().toDateString();
-    const resetDate = new Date(data.daily_reset_date).toDateString();
+    // Check daily limit with proper date handling
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    const resetDate = new Date(data.daily_reset_date).toISOString().split('T')[0]; // Normalize to YYYY-MM-DD
+    
+    console.log('📅 Date comparison - Today:', today, 'Reset date:', resetDate);
     
     if (today !== resetDate) {
       // New day, can earn
+      console.log('🆕 New day detected - can earn');
       return { canEarn: true };
     }
 
+    // Same day - check if daily limit would be exceeded
     if (source_config.daily_limit && 
         (data.daily_earned_amount + source_config.base_reward) > source_config.daily_limit) {
       return {
         canEarn: false,
-        reason: 'Daily limit reached'
+        reason: `Daily limit reached (${data.daily_earned_amount}/${source_config.daily_limit})`
       };
     }
 

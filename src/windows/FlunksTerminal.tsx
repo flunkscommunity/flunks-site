@@ -131,6 +131,27 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
       });
     }
 
+    // Special logging for Flow command (non-blocking for better UX)
+    if (input.toLowerCase().trim() === 'flow' && validCommand) {
+      // Fire and forget - don't await this to avoid UI delay
+      fetch('/api/log-flow-command', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          wallet: user?.verifiedCredentials?.[0]?.address || null,
+          username: profile?.username || null,
+          accessLevel: 'BETA', // Users with terminal access have BETA level
+          sessionId: sessionId,
+          command: input
+        })
+      }).catch(error => {
+        console.error('Failed to log Flow command:', error);
+        // Don't show error to user, just log it
+      });
+    }
+
     if (validCommand && successSound) {
       successSound.currentTime = 0;
       successSound.play();

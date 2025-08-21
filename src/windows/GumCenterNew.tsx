@@ -14,6 +14,7 @@ import { useGum } from "contexts/GumContext";
 import { useState, useEffect } from "react";
 import { getActiveSpecialEvents, claimSpecialEvent, type SpecialEvent } from "../services/specialEventsService";
 import { claimDailyLogin, canClaimDailyLogin } from "../services/dailyLoginService";
+import { GumCooldownTimer } from "../components/GumCooldownTimer";
 
 const GumballMachine: React.FC = () => {
   const { closeWindow, openWindow } = useWindowsContext();
@@ -30,9 +31,15 @@ const GumballMachine: React.FC = () => {
     if (primaryWallet?.address) {
       setSpecialEvents(getActiveSpecialEvents());
       
+      // Initial check for daily login - will be updated by countdown timer
       canClaimDailyLogin(primaryWallet.address).then(setCanClaimDaily);
     }
   }, [primaryWallet?.address]);
+
+  // Handle countdown timer updates
+  const handleDailyLoginUpdate = (canClaim: boolean) => {
+    setCanClaimDaily(canClaim);
+  };
 
   const handleClaimSpecialEvent = async (eventId: string) => {
     if (!primaryWallet?.address || claimingEvent) return;
@@ -160,9 +167,21 @@ const GumballMachine: React.FC = () => {
             <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               🌅 Daily Login Bonus
             </h3>
-            <p style={{ margin: '0 0 12px 0', fontSize: '14px' }}>
+            <p style={{ margin: '0 0 8px 0', fontSize: '14px' }}>
               Earn 15 GUM every day just for logging in! (Automatically claimed when you connect)
             </p>
+            
+            {/* Countdown Timer */}
+            {primaryWallet?.address && (
+              <div style={{ margin: '8px 0', fontSize: '14px' }}>
+                <GumCooldownTimer
+                  walletAddress={primaryWallet.address}
+                  source="daily_login"
+                  onCanClaim={handleDailyLoginUpdate}
+                />
+              </div>
+            )}
+            
             {canClaimDaily ? (
               <Button 
                 onClick={handleClaimDailyLogin}
@@ -172,7 +191,9 @@ const GumballMachine: React.FC = () => {
                 {claimingDaily ? 'Claiming...' : 'Claim 15 GUM'}
               </Button>
             ) : (
-              <Button disabled>Already Claimed Today</Button>
+              <Button disabled>
+                {claimingDaily ? 'Claiming...' : 'Already Claimed Today'}
+              </Button>
             )}
           </Frame>
 
