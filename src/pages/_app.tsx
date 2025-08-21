@@ -31,6 +31,9 @@ import UserProfilePrompt from "components/UserProfile/UserProfilePrompt";
 import MobileFlowWalletConnection from "components/MobileFlowWalletConnection";
 import SimpleMobileWalletHelper from "components/SimpleMobileWalletHelper";
 import MobileDynamicWalletOverrideFix from "components/MobileDynamicWalletOverrideFix";
+import AggressiveMobileWalletFix from "components/AggressiveMobileWalletFix";
+import AggressiveDesktopFlowWalletFix from "components/AggressiveDesktopFlowWalletFix";
+import ManualMobileWalletSelector from "components/ManualMobileWalletSelector";
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -359,6 +362,12 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         <SimpleMobileWalletHelper />
                         {/* Mobile Wallet Override Fix - forces Flow/Lilico to appear */}
                         <MobileDynamicWalletOverrideFix />
+                        {/* AGGRESSIVE Mobile Wallet Fix - nuclear option */}
+                        <AggressiveMobileWalletFix />
+                        {/* AGGRESSIVE Desktop Flow Wallet Fix */}
+                        <AggressiveDesktopFlowWalletFix />
+                        {/* Manual Mobile Wallet Selector - bypasses Dynamic filtering */}
+                        <ManualMobileWalletSelector />
                         {/* Mobile Wallet Debugger - only shows on mobile */}
                         <MobileWalletDebugger />
                         {/* Global wallet connect entry point */}
