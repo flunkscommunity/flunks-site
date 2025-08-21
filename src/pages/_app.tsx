@@ -20,7 +20,6 @@ import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { startWalletBrandingFix } from "utils/walletBrandingFix";
 import { enhanceFlowWalletDetection } from '../utils/flowWalletDetection';
-import MobileWalletDebugger from '../components/MobileWalletDebugger';
 import { PaginatedItemsProvider } from "contexts/UserPaginatedItems";
 import { UserProfileProvider } from "contexts/UserProfileContext";
 import { AudioProvider } from "contexts/AudioContext";
@@ -33,7 +32,7 @@ import SimpleMobileWalletHelper from "components/SimpleMobileWalletHelper";
 import MobileDynamicWalletOverrideFix from "components/MobileDynamicWalletOverrideFix";
 import AggressiveMobileWalletFix from "components/AggressiveMobileWalletFix";
 import AggressiveDesktopFlowWalletFix from "components/AggressiveDesktopFlowWalletFix";
-import ManualMobileWalletSelector from "components/ManualMobileWalletSelector";
+import EnhancedMobileWalletSelector from "components/EnhancedMobileWalletSelector";
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -366,10 +365,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         <AggressiveMobileWalletFix />
                         {/* AGGRESSIVE Desktop Flow Wallet Fix */}
                         <AggressiveDesktopFlowWalletFix />
-                        {/* Manual Mobile Wallet Selector - bypasses Dynamic filtering */}
-                        <ManualMobileWalletSelector />
-                        {/* Mobile Wallet Debugger - only shows on mobile */}
-                        <MobileWalletDebugger />
+                        {/* Enhanced Mobile Wallet Selector - bypasses Dynamic filtering completely */}
+                        <EnhancedMobileWalletSelector />
                         {/* Global wallet connect entry point */}
                         <div
                           style={{

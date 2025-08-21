@@ -5,6 +5,7 @@
 CREATE TABLE IF NOT EXISTS magic_carpet_logs (
   id BIGSERIAL PRIMARY KEY,
   wallet_address TEXT, -- Can be null for anonymous users
+  username TEXT, -- User's profile username, can be null
   command_input TEXT DEFAULT 'magic carpet',
   access_level TEXT, -- ADMIN, BETA, COMMUNITY
   session_id TEXT,
@@ -16,6 +17,7 @@ CREATE TABLE IF NOT EXISTS magic_carpet_logs (
 
 -- Add indexes for better query performance
 CREATE INDEX IF NOT EXISTS idx_magic_carpet_logs_wallet ON magic_carpet_logs(wallet_address);
+CREATE INDEX IF NOT EXISTS idx_magic_carpet_logs_username ON magic_carpet_logs(username);
 CREATE INDEX IF NOT EXISTS idx_magic_carpet_logs_created_at ON magic_carpet_logs(created_at);
 CREATE INDEX IF NOT EXISTS idx_magic_carpet_logs_access_level ON magic_carpet_logs(access_level);
 
@@ -70,6 +72,7 @@ CREATE TRIGGER update_magic_carpet_logs_updated_at_trigger
 -- Function to log magic carpet command usage
 CREATE OR REPLACE FUNCTION log_magic_carpet_command(
   p_wallet_address TEXT,
+  p_username TEXT DEFAULT NULL,
   p_access_level TEXT DEFAULT NULL,
   p_session_id TEXT DEFAULT NULL,
   p_user_agent TEXT DEFAULT NULL,
@@ -79,12 +82,14 @@ RETURNS BOOLEAN AS $$
 BEGIN
   INSERT INTO magic_carpet_logs (
     wallet_address,
+    username,
     access_level,
     session_id,
     user_agent,
     ip_address
   ) VALUES (
     p_wallet_address,
+    p_username,
     p_access_level,
     p_session_id,
     p_user_agent,
@@ -127,6 +132,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE OR REPLACE FUNCTION get_recent_magic_carpet_commands(limit_count INTEGER DEFAULT 50)
 RETURNS TABLE(
   wallet_address TEXT,
+  username TEXT,
   access_level TEXT,
   created_at TIMESTAMPTZ,
   session_id TEXT,
@@ -137,6 +143,7 @@ BEGIN
   RETURN QUERY
   SELECT 
     w.wallet_address,
+    w.username,
     w.access_level,
     w.created_at,
     w.session_id,

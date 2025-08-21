@@ -9,6 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const { 
       wallet, 
+      username,
       accessLevel,
       sessionId,
       userAgent = req.headers['user-agent'] || null,
@@ -23,6 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     console.log('Logging Magic Carpet command:', {
       wallet: wallet || 'anonymous',
+      username: username || 'no username',
       accessLevel,
       sessionId,
       userAgent,
@@ -35,6 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const { data: rpcData, error: rpcError } = await supabase.rpc('log_magic_carpet_command', {
         p_wallet_address: wallet,
+        p_username: username,
         p_access_level: accessLevel,
         p_session_id: sessionId,
         p_user_agent: userAgent,
@@ -56,6 +59,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         .from('magic_carpet_logs')
         .insert({
           wallet_address: wallet,
+          username: username,
           command_input: command,
           access_level: accessLevel,
           session_id: sessionId,

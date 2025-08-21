@@ -3,6 +3,7 @@ import {
   TextField
 } from 'react95';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
+import { useUserProfile } from '../contexts/UserProfileContext';
 import { trackTerminalActivity, generateSessionId, COMMAND_TYPES } from 'utils/activityTracking';
 
 const errorSound = typeof Audio !== "undefined" ? new Audio('/sounds/incorrect.mp3') : null;
@@ -10,6 +11,7 @@ const successSound = typeof Audio !== "undefined" ? new Audio('/sounds/correct.m
 
 const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
   const { user } = useDynamicContext();
+  const { profile } = useUserProfile();
   const [history, setHistory] = useState<string[]>([]);
   const [input, setInput] = useState('');
   const terminalEndRef = useRef<HTMLDivElement>(null);
@@ -97,6 +99,7 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
         },
         body: JSON.stringify({
           wallet: user?.verifiedCredentials?.[0]?.address || null,
+          username: profile?.username || null,
           accessLevel: 'BETA', // Users with terminal access have BETA level
           sessionId: sessionId,
           command: input
@@ -117,6 +120,7 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
         },
         body: JSON.stringify({
           wallet: user?.verifiedCredentials?.[0]?.address || null,
+          username: profile?.username || null,
           accessLevel: 'BETA', // Users with terminal access have BETA level
           sessionId: sessionId,
           command: input
