@@ -24,6 +24,25 @@ export const replaceLilicoBranding = () => {
         textNode.textContent = textNode.textContent.replace(/lilico/g, 'Flow Wallet');
       }
     });
+
+    // Also handle attribute replacements (alt text, aria-labels, etc.)
+    if (element instanceof Element) {
+      const allElements = element.querySelectorAll('*');
+      allElements.forEach(el => {
+        // Replace alt text
+        if (el.getAttribute('alt')?.includes('Lilico')) {
+          el.setAttribute('alt', el.getAttribute('alt')!.replace(/Lilico/g, 'Flow Wallet'));
+        }
+        // Replace aria-label
+        if (el.getAttribute('aria-label')?.includes('Lilico')) {
+          el.setAttribute('aria-label', el.getAttribute('aria-label')!.replace(/Lilico/g, 'Flow Wallet'));
+        }
+        // Replace title
+        if (el.getAttribute('title')?.includes('Lilico')) {
+          el.setAttribute('title', el.getAttribute('title')!.replace(/Lilico/g, 'Flow Wallet'));
+        }
+      });
+    }
   };
 
   // Target Dynamic Labs modal content
@@ -35,13 +54,18 @@ export const replaceLilicoBranding = () => {
           
           // Check if this is a Dynamic Labs modal or component
           if (element.querySelector?.('[data-testid*="lilico"]') ||
+              element.querySelector?.('[data-testid*="flowwallet"]') ||
               element.textContent?.includes('Lilico') ||
-              element.textContent?.includes('Install Lilico extension')) {
+              element.textContent?.includes('Install Lilico extension') ||
+              element.className?.includes('lilico') ||
+              element.id?.includes('lilico')) {
             replaceTextInElement(element);
           }
 
           // Also check the element itself
-          if (element.textContent?.includes('Lilico')) {
+          if (element.textContent?.includes('Lilico') ||
+              element.className?.includes('lilico') ||
+              element.id?.includes('lilico')) {
             replaceTextInElement(element);
           }
         }
@@ -74,7 +98,22 @@ export const startWalletBrandingFix = () => {
   if (observer) {
     observer.disconnect();
   }
+  console.log('🔧 Starting aggressive wallet branding fix...');
   observer = replaceLilicoBranding();
+  
+  // Also do periodic checks to catch any missed instances
+  const periodicCheck = setInterval(() => {
+    if (document.querySelector('[data-testid*="lilico"], [class*="lilico"], [id*="lilico"]')) {
+      console.log('🔧 Found Lilico branding - applying fix...');
+      if (observer) observer.disconnect();
+      observer = replaceLilicoBranding();
+    }
+  }, 1000);
+
+  // Clean up after 30 seconds to avoid running forever
+  setTimeout(() => {
+    clearInterval(periodicCheck);
+  }, 30000);
 };
 
 export const stopWalletBrandingFix = () => {

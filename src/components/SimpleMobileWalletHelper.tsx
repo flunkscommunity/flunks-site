@@ -34,9 +34,17 @@ export const SimpleMobileWalletHelper: React.FC = () => {
     
     // Set force show all wallets for debugging
     (window as any).FORCE_SHOW_ALL_WALLETS = true;
+    console.log('📱 Force flags set - triggering auth flow...');
     
     // Simple trigger - no overrides, let Dynamic Labs handle it normally
     setShowAuthFlow(true);
+  };
+
+  const testWalletForce = () => {
+    console.log('🧪 Testing wallet force injection...');
+    (window as any).FORCE_SHOW_ALL_WALLETS = true;
+    console.log('🧪 Available wallets:', (window as any).LAST_DYNAMIC_WALLETS || 'Not set yet');
+    alert('Check console for wallet debug info');
   };
 
   return (
@@ -68,6 +76,21 @@ export const SimpleMobileWalletHelper: React.FC = () => {
         }}
       >
         Connect Flow/Dapper
+      </button>
+      <button
+        onClick={testWalletForce}
+        style={{
+          background: '#28a745',
+          color: 'white',
+          border: 'none',
+          padding: '8px 12px',
+          borderRadius: '4px',
+          fontSize: '12px',
+          cursor: 'pointer',
+          marginTop: '4px'
+        }}
+      >
+        🧪 Debug Wallets
       </button>
     </div>
   );

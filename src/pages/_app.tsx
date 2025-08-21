@@ -150,18 +150,41 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         return forcedWallets;
                       }
 
-                      // On mobile, return ALL wallets without complex filtering
+                      // On mobile, return ALL wallets without complex filtering + force missing Flow wallets
                       if (isMobile) {
-                        console.log('📱 Mobile detected - returning ALL wallets without filtering');
-                        console.log('📱 Available mobile wallets:', wallets.map(w => w.key));
+                        console.log('📱 Mobile detected - forcing Flow wallets to appear');
+                        console.log('📱 Original wallets:', wallets.map(w => w.key));
+                        
+                        // Force add missing Flow wallets on mobile
+                        const existingKeys = wallets.map(w => w.key.toLowerCase());
+                        let allWallets = [...wallets];
+                        
+                        if (!existingKeys.some(k => k.includes('flowwallet') || k.includes('lilico'))) {
+                          console.log('📱 Adding missing Flow Wallet');
+                          allWallets.push({
+                            key: 'flowwallet',
+                            name: 'Flow Wallet',
+                            connector: { name: 'flowwallet' }
+                          } as any);
+                        }
+                        
+                        if (!existingKeys.includes('lilico')) {
+                          console.log('📱 Adding missing Lilico');
+                          allWallets.push({
+                            key: 'lilico', 
+                            name: 'Lilico',
+                            connector: { name: 'lilico' }
+                          } as any);
+                        }
                         
                         // Sort to put Flow wallets first but don't filter any out
-                        const sortedWallets = [...wallets].sort((a, b) => {
+                        const sortedWallets = [...allWallets].sort((a, b) => {
                           const ai = flowKeysPriority.findIndex((p) => a.key.toLowerCase().includes(p));
                           const bi = flowKeysPriority.findIndex((p) => b.key.toLowerCase().includes(p));
                           return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
                         });
                         
+                        console.log('📱 Final mobile wallets:', sortedWallets.map(w => ({ key: w.key, name: w.name })));
                         try { (window as any).LAST_DYNAMIC_WALLETS = sortedWallets.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
                         return sortedWallets;
                       }
