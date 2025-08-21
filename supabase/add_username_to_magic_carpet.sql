@@ -48,8 +48,9 @@ EXCEPTION
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Update the get_recent_magic_carpet_commands function to include username
-CREATE OR REPLACE FUNCTION get_recent_magic_carpet_commands(limit_count INTEGER DEFAULT 50)
+-- Drop and recreate the get_recent_magic_carpet_commands function to include username
+DROP FUNCTION IF EXISTS get_recent_magic_carpet_commands(INTEGER);
+CREATE FUNCTION get_recent_magic_carpet_commands(limit_count INTEGER DEFAULT 50)
 RETURNS TABLE(
   wallet_address TEXT,
   username TEXT,

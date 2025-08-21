@@ -14,6 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const { 
       wallet, 
+      username,
       accessLevel,
       sessionId,
       userAgent = req.headers['user-agent'] || null,
@@ -33,6 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     console.log('🔍 WTF Command Logging Request:', {
       wallet,
+      username,
       command,
       accessLevel,
       sessionId,
@@ -44,6 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const { data: rpcData, error: rpcError } = await supabase.rpc('log_wtf_command', {
         p_wallet_address: wallet,
+        p_username: username || null,
         p_access_level: accessLevel,
         p_session_id: sessionId,
         p_user_agent: userAgent,
@@ -60,19 +63,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     if (!rpcOk) {
-      // Fallback to direct insert into wtf_command_logs
+      // Fallback to direct insert into new wtf_logs table
       const { error: insertErr } = await supabase
-        .from('wtf_command_logs')
+        .from('wtf_logs')
         .insert({
           wallet_address: wallet,
-          command_input: command,
+          username: username || null,
           access_level: accessLevel,
           session_id: sessionId,
           user_agent: userAgent,
           ip_address: ip ?? null
         } as any);
       if (insertErr) {
-        console.error('❌ Insert into wtf_command_logs failed:', insertErr);
+        console.error('❌ Insert into wtf_logs failed:', insertErr);
         // As last resort, write to terminal_activities with schema compatibility
         const { error: finalErr } = await supabase
           .from('terminal_activities')
