@@ -107,6 +107,26 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
       });
     }
 
+    // Special logging for Magic Carpet command (non-blocking for better UX)
+    if (input.toLowerCase().trim() === 'magic carpet' && validCommand) {
+      // Fire and forget - don't await this to avoid UI delay
+      fetch('/api/log-magic-carpet-command', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          wallet: user?.verifiedCredentials?.[0]?.address || null,
+          accessLevel: 'BETA', // Users with terminal access have BETA level
+          sessionId: sessionId,
+          command: input
+        })
+      }).catch(error => {
+        console.error('Failed to log Magic Carpet command:', error);
+        // Don't show error to user, just log it
+      });
+    }
+
     if (validCommand && successSound) {
       successSound.currentTime = 0;
       successSound.play();

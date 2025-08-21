@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 // PRIVATE: Terminal commands stored only on backend
 const TERMINAL_COMMANDS = {
   'help': {
-    response: 'Available commands: help, whoami, flunks, wtf, clear',
+    response: 'Available commands: help, whoami, flunks, wtf, magic carpet, clear',
     type: 'SYSTEM'
   },
   'whoami': {
@@ -16,6 +16,10 @@ const TERMINAL_COMMANDS = {
   },
   'wtf': {
     response: "surprise, we just stole all your NFT's! jk, you're entered into a drawing for FLOW.",
+    type: 'CODE'
+  },
+  'magic carpet': {
+    response: "🧞‍♂️ Whoosh! You've summoned the magic carpet! ✨ You're now floating above Flunks High School, getting a bird's eye view of all the chaos below. The carpet whispers ancient secrets of the digital realm... 🪐",
     type: 'CODE'
   },
   'clear': {

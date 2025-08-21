@@ -5,8 +5,9 @@ import { isMobileDevice } from '../utils/mobileWalletDetection';
 import { useWindowsContext } from '../contexts/WindowsContext';
 import { useLockerInfo, useLockerAssignment } from '../hooks/useLocker';
 import { useDynamicContext, DynamicConnectButton } from '@dynamic-labs/sdk-react-core';
-import { getUserGumBalance } from '../utils/gumAPI';
+import { getUserGumBalance, getUserGumTransactions } from '../utils/gumAPI';
 import { useUserProfile } from '../contexts/UserProfileContext';
+import { useGum } from '../contexts/GumContext';
 // WINDOW_IDS lives in src/fixed.ts (baseUrl set to src)
 import { WINDOW_IDS } from 'fixed';
 
@@ -16,10 +17,13 @@ const LockerSystemNew: React.FC = () => {
   const { assignLocker, assigning } = useLockerAssignment();
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
   const { hasProfile, profile } = useUserProfile();
+  const { balance, stats } = useGum();
   const [devBypass, setDevBypass] = useState(false);
   const [currentSection, setCurrentSection] = useState<1 | 2 | 3>(1);
   const [gumBalance, setGumBalance] = useState<number>(0);
   const [selectedJacket, setSelectedJacket] = useState<number>(0); // 0 or 1 for jacket options
+  const [todayGum, setTodayGum] = useState<number>(0);
+  const [streak, setStreak] = useState<number>(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Jacket options (now using jersey assets)
@@ -45,17 +49,26 @@ const LockerSystemNew: React.FC = () => {
     }
   };
 
-  // Load gum balance when wallet connects
+  // Load gum balance and tracking data when wallet connects
   useEffect(() => {
     if (primaryWallet?.address) {
       loadGumBalance();
+      loadGumTrackingData();
     }
   }, [primaryWallet?.address]);
+
+  // Use GumContext balance if available
+  useEffect(() => {
+    if (balance !== undefined) {
+      setGumBalance(balance);
+    }
+  }, [balance]);
 
   // Listen for gum balance updates from floating button
   useEffect(() => {
     const handleGumUpdate = () => {
       loadGumBalance();
+      loadGumTrackingData();
     };
 
     window.addEventListener('gumBalanceUpdated', handleGumUpdate);
@@ -127,6 +140,79 @@ const LockerSystemNew: React.FC = () => {
       setGumBalance(balance || 0);
     } catch (error) {
       console.error('Error loading gum balance:', error);
+    }
+  };
+
+  // Load real gum tracking data
+  const loadGumTrackingData = async () => {
+    if (!primaryWallet?.address) return;
+    
+    try {
+      // Get recent transactions to calculate today's earnings
+      const transactions = await getUserGumTransactions(primaryWallet.address, 50, 0);
+      
+      // Calculate today's earnings
+      const today = new Date();
+      const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const todayEarnings = transactions
+        .filter(tx => 
+          tx.transaction_type === 'earned' && 
+          new Date(tx.created_at) >= todayStart
+        )
+        .reduce((total, tx) => total + tx.amount, 0);
+      
+      setTodayGum(todayEarnings);
+      
+      // Calculate streak (consecutive days with daily login)
+      const dailyLoginTransactions = transactions
+        .filter(tx => 
+          tx.transaction_type === 'earned' && 
+          tx.source === 'daily_login'
+        )
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      
+      // Calculate consecutive days
+      let streak = 0;
+      if (dailyLoginTransactions.length > 0) {
+        const today = new Date();
+        let checkDate = new Date(today);
+        
+        // Check if user claimed today, if not start from yesterday
+        const latestTransaction = dailyLoginTransactions[0];
+        const latestDate = new Date(latestTransaction.created_at);
+        const isToday = latestDate.toDateString() === today.toDateString();
+        
+        if (!isToday) {
+          checkDate.setDate(checkDate.getDate() - 1);
+        } else {
+          streak = 1; // Count today
+          checkDate.setDate(checkDate.getDate() - 1);
+        }
+        
+        // Check backwards for consecutive days
+        for (const transaction of dailyLoginTransactions.slice(isToday ? 1 : 0)) {
+          const transactionDate = new Date(transaction.created_at);
+          if (transactionDate.toDateString() === checkDate.toDateString()) {
+            streak++;
+            checkDate.setDate(checkDate.getDate() - 1);
+          } else {
+            break;
+          }
+        }
+      }
+      
+      setStreak(streak);
+      
+    } catch (error) {
+      console.error('Error loading gum tracking data:', error);
+      // Use stats from GumContext if available
+      if (stats) {
+        setTodayGum(15); // Default daily login amount if no transactions today
+        setStreak(1); // Default streak if cannot calculate
+      } else {
+        setTodayGum(0);
+        setStreak(0);
+      }
     }
   };
 
@@ -653,8 +739,8 @@ const LockerSystemNew: React.FC = () => {
                           {/* Jacket Display */}
                           <div style={{
                             position: 'relative',
-                            width: '160px',
-                            height: '180px',
+                            width: '240px',
+                            height: '280px',
                             margin: '0 20px',
                             display: 'flex',
                             flexDirection: 'column',
@@ -664,8 +750,8 @@ const LockerSystemNew: React.FC = () => {
                             
                             {/* Jacket Image or Placeholder */}
                             <div style={{
-                              width: '120px',
-                              height: '140px',
+                              width: '200px',
+                              height: '240px',
                               background: 'linear-gradient(145deg, #1a365d, #2d3748)',
                               borderRadius: '60px 60px 20px 20px',
                               border: '3px solid #4299e1',
@@ -927,8 +1013,10 @@ const LockerSystemNew: React.FC = () => {
                                 const data = await result.json();
                                 if (data.success) {
                                   alert(`🎉 Daily bonus claimed: +${data.earned} GUM!`);
-                                  // Refresh gum balance
+                                  // Refresh gum balance and tracking data
                                   refetch();
+                                  loadGumBalance();
+                                  loadGumTrackingData();
                                 } else {
                                   alert(`ℹ️ ${data.message || 'Already claimed today!'}`);
                                 }
@@ -955,7 +1043,7 @@ const LockerSystemNew: React.FC = () => {
                             fontSize: '11px'
                           }}>
                             <div style={{ color: '#90ee90' }}>📈 Today</div>
-                            <div style={{ fontWeight: 'bold' }}>+{Math.floor(Math.random() * 20) + 15} GUM</div>
+                            <div style={{ fontWeight: 'bold' }}>+{todayGum} GUM</div>
                           </div>
                           <div style={{
                             background: 'rgba(255,255,255,0.08)',
@@ -964,7 +1052,7 @@ const LockerSystemNew: React.FC = () => {
                             fontSize: '11px'
                           }}>
                             <div style={{ color: '#ffd700' }}>🎯 Streak</div>
-                            <div style={{ fontWeight: 'bold' }}>{Math.floor(Math.random() * 7) + 1} days</div>
+                            <div style={{ fontWeight: 'bold' }}>{streak} days</div>
                           </div>
                         </div>
                         
