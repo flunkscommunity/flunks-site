@@ -75,35 +75,36 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
       errorSound.play();
     }
 
-    // Track terminal activity
-    await trackTerminalActivity(
+    // Track terminal activity (non-blocking for better UX)
+    trackTerminalActivity(
       user?.verifiedCredentials?.[0]?.address || null,
       input,
       commandType,
       response,
       validCommand,
       sessionId
-    );
+    ).catch(error => {
+      console.error('Failed to track terminal activity:', error);
+    });
 
-    // Special logging for WTF command
+    // Special logging for WTF command (non-blocking for better UX)
     if (input.toLowerCase().trim() === 'wtf' && validCommand) {
-      try {
-        await fetch('/api/log-wtf-command', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            wallet: user?.verifiedCredentials?.[0]?.address || null,
-            accessLevel: 'BETA', // Users with terminal access have BETA level
-            sessionId: sessionId,
-            command: input
-          })
-        });
-      } catch (error) {
+      // Fire and forget - don't await this to avoid UI delay
+      fetch('/api/log-wtf-command', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          wallet: user?.verifiedCredentials?.[0]?.address || null,
+          accessLevel: 'BETA', // Users with terminal access have BETA level
+          sessionId: sessionId,
+          command: input
+        })
+      }).catch(error => {
         console.error('Failed to log WTF command:', error);
         // Don't show error to user, just log it
-      }
+      });
     }
 
     if (validCommand && successSound) {
