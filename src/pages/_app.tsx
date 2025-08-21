@@ -30,6 +30,7 @@ import { GumDisplay } from "components/GumDisplay";
 import UserProfilePrompt from "components/UserProfile/UserProfilePrompt";
 import MobileFlowWalletConnection from "components/MobileFlowWalletConnection";
 import SimpleMobileWalletHelper from "components/SimpleMobileWalletHelper";
+import MobileDynamicWalletOverrideFix from "components/MobileDynamicWalletOverrideFix";
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -333,6 +334,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         <UserProfilePrompt autoShow={true} showToast={false} />
                         {/* Simple Mobile Wallet Helper - non-intrusive */}
                         <SimpleMobileWalletHelper />
+                        {/* Mobile Wallet Override Fix - forces Flow/Lilico to appear */}
+                        <MobileDynamicWalletOverrideFix />
                         {/* Mobile Wallet Debugger - only shows on mobile */}
                         <MobileWalletDebugger />
                         {/* Global wallet connect entry point */}

@@ -24,6 +24,17 @@ export const SimpleMobileWalletHelper: React.FC = () => {
   if (!isMobile || user) return null;
 
   const handleMobileConnect = () => {
+    // Enhanced debugging for mobile wallet issues
+    console.log('📱 Mobile Connect Debug:', {
+      forceShowAll: (window as any).FORCE_SHOW_ALL_WALLETS,
+      lastWallets: (window as any).LAST_DYNAMIC_WALLETS,
+      userAgent: navigator.userAgent,
+      isMobile
+    });
+    
+    // Set force show all wallets for debugging
+    (window as any).FORCE_SHOW_ALL_WALLETS = true;
+    
     // Simple trigger - no overrides, let Dynamic Labs handle it normally
     setShowAuthFlow(true);
   };

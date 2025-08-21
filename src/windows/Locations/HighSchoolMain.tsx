@@ -29,7 +29,7 @@ const HighSchoolMain = () => {
   return (
     <div className="relative w-full h-full">
       <img
-        src="/images/backdrops/BLANK.png"
+        src="/images/backgrounds/locations/high-school/cover.png"
         alt="High School Background"
         className="absolute inset-0 w-full h-full object-cover z-0"
       />
