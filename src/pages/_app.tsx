@@ -149,29 +149,20 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         return forcedWallets;
                       }
 
-                      // On mobile, just return ALL wallets without any filtering
+                      // On mobile, return ALL wallets without complex filtering
                       if (isMobile) {
-                        console.log('📱 Mobile detected - showing ALL wallets without filtering');
-                        // If a wallet was explicitly chosen
-                        if (selectedType) {
-                          const sel = selectedType.toLowerCase();
-                          const ordered = [...wallets].sort((a, b) => {
-                            const aSel = matchesSelected(a.key, sel) ? 0 : 1;
-                            const bSel = matchesSelected(b.key, sel) ? 0 : 1;
-                            return aSel - bSel;
-                          });
-                          // In strict mode, only return matching wallets so Dynamic can't fallback to Blocto
-                          if (strictSelected) {
-                            const filteredOnly = ordered.filter(w => matchesSelected(w.key, sel));
-                            const out = filteredOnly.length ? filteredOnly : ordered;
-                            try { (window as any).LAST_DYNAMIC_WALLETS = out.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
-                            return out;
-                          }
-                          try { (window as any).LAST_DYNAMIC_WALLETS = ordered.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
-                          return ordered;
-                        }
-                        try { (window as any).LAST_DYNAMIC_WALLETS = wallets.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
-                        return wallets;
+                        console.log('📱 Mobile detected - returning ALL wallets without filtering');
+                        console.log('📱 Available mobile wallets:', wallets.map(w => w.key));
+                        
+                        // Sort to put Flow wallets first but don't filter any out
+                        const sortedWallets = [...wallets].sort((a, b) => {
+                          const ai = flowKeysPriority.findIndex((p) => a.key.toLowerCase().includes(p));
+                          const bi = flowKeysPriority.findIndex((p) => b.key.toLowerCase().includes(p));
+                          return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+                        });
+                        
+                        try { (window as any).LAST_DYNAMIC_WALLETS = sortedWallets.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
+                        return sortedWallets;
                       }
 
                       // Log once per render pass
@@ -236,32 +227,32 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                           sections: [
                             {
                               type: SdkViewSectionType.Wallet,
-                              // Prefer Blocto on mobile (robust deep-link), Flow Wallet on desktop
-                              // But don't set defaultItem if forcing all wallets to show
+                              // Don't set a default wallet on mobile - let user choose
                               defaultItem: (() => {
+                                const isMobile = typeof window !== "undefined" &&
+                                  (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile/i.test(
+                                    window.navigator.userAgent
+                                  ) || 'ontouchstart' in window || navigator.maxTouchPoints > 0);
+                                
                                 const forceShowAll = typeof window !== "undefined" && 
                                   (window as any).FORCE_SHOW_ALL_WALLETS;
                                 const selectedType = typeof window !== 'undefined'
                                   ? (window as any).SELECTED_WALLET_TYPE as string | undefined
                                   : undefined;
-                                const strictSelected = typeof window !== 'undefined' && (window as any).SELECTED_WALLET_STRICT === true;
                                 
-                                if (forceShowAll) {
-                                  console.log('🚨 FORCE_SHOW_ALL_WALLETS: Not setting defaultItem');
-                                  return undefined; // Don't set a default to avoid filtering
+                                if (forceShowAll || isMobile) {
+                                  console.log('� Mobile or force mode: Not setting defaultItem to allow all wallets');
+                                  return undefined; // Don't set a default
                                 }
-                                // If user picked a wallet in the custom modal, honor it
+                                
+                                // If user picked a wallet in the custom modal, honor it  
                                 if (selectedType) {
                                   console.log('🎯 Defaulting to selected wallet from custom modal:', selectedType);
                                   return selectedType;
                                 }
                                 
-                                return typeof window !== "undefined" &&
-                                  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-                                    window.navigator.userAgent
-                                  )
-                                    ? "blocto"
-                                    : "flowwallet";
+                                // Desktop default
+                                return "flowwallet";
                               })(),
                               // Force show all wallet options when force flag is set
                               ...((() => {

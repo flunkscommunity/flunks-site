@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mobile Wallet Test - Dynamic Labs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: #1a1a1a; 
+            color: #fff; 
+        }
+        .debug { 
+            background: #333; 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 5px; 
+        }
+        button { 
+            background: #0070f3; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            margin: 5px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Mobile Wallet Test</h1>
+    <div class="debug">
+        <p><strong>User Agent:</strong> <span id="useragent"></span></p>
+        <p><strong>Is Mobile:</strong> <span id="ismobile"></span></p>
+        <p><strong>Touch Support:</strong> <span id="touch"></span></p>
+        <p><strong>Max Touch Points:</strong> <span id="maxtouch"></span></p>
+    </div>
+
+    <button onclick="forceShowAll()">Force Show All Wallets</button>
+    <button onclick="clearOverrides()">Clear Overrides</button>
+    <button onclick="goToSite()">Go to Main Site</button>
+
+    <div id="console" class="debug"></div>
+
+    <script>
+        function log(msg) {
+            document.getElementById('console').innerHTML += '<p>' + msg + '</p>';
+            console.log(msg);
+        }
+
+        function forceShowAll() {
+            window.FORCE_SHOW_ALL_WALLETS = true;
+            window.FORCE_DESKTOP_MODE = false;
+            window.SELECTED_WALLET_TYPE = null;
+            window.SELECTED_WALLET_STRICT = false;
+            log('✅ Set FORCE_SHOW_ALL_WALLETS = true');
+            log('✅ Cleared wallet selection overrides');
+        }
+
+        function clearOverrides() {
+            delete window.FORCE_SHOW_ALL_WALLETS;
+            delete window.FORCE_DESKTOP_MODE;
+            delete window.SELECTED_WALLET_TYPE;
+            delete window.SELECTED_WALLET_STRICT;
+            log('✅ Cleared all overrides');
+        }
+
+        function goToSite() {
+            window.location.href = '/';
+        }
+
+        // Display device info
+        document.getElementById('useragent').textContent = navigator.userAgent;
+        
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile/i.test(navigator.userAgent) || 
+                         'ontouchstart' in window || 
+                         navigator.maxTouchPoints > 0;
+        
+        document.getElementById('ismobile').textContent = isMobile ? 'YES' : 'NO';
+        document.getElementById('touch').textContent = 'ontouchstart' in window ? 'YES' : 'NO';
+        document.getElementById('maxtouch').textContent = navigator.maxTouchPoints || '0';
+
+        log('🔍 Device Detection Results:');
+        log('- Mobile detected: ' + isMobile);
+        log('- Touch support: ' + ('ontouchstart' in window));
+        log('- Max touch points: ' + (navigator.maxTouchPoints || 0));
+    </script>
+</body>
+</html>
