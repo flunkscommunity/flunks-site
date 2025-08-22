@@ -15,6 +15,7 @@ import Settings from "windows/Settings";
 import LockerSystemNew from "windows/LockerSystemNew";
 import Welcome from "windows/Welcome";
 import YourStudents from "windows/YourStudents";
+import Onlyflunks from "windows/Onlyflunks";
 import SimpleBrowser from "windows/SimpleBrowser";
 import DevPreview from "windows/DevPreview";
 
@@ -85,8 +86,8 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
         <CustomMenuListItem
           onClick={() => {
             openWindow({
-              key: WINDOW_IDS.YOUR_STUDENTS,
-              window: <YourStudents />,
+              key: WINDOW_IDS.FLUNKS_HUB,
+              window: <Onlyflunks />,
             });
             props.closeStartMenu();
           }}

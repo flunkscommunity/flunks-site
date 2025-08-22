@@ -139,7 +139,7 @@ const windowsMemod = useMemo(() => (
             appId="onlyflunks"
           title="OnlyFlunks"
           icon="/images/icons/onlyflunks.png"
-          onDoubleClick={() => openWindow({ key: WINDOW_IDS.YOUR_STUDENTS, window: <YourStudents /> })}
+          onDoubleClick={() => openWindow({ key: WINDOW_IDS.FLUNKS_HUB, window: <Onlyflunks /> })}
         />
 
         {/* 2. My Locker */}
