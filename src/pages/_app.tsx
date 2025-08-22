@@ -66,194 +66,44 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID ||
                       "53675303-5e80-4fe5-88a4-e6caae677432",
                     walletConnectors: [FlowWalletConnectors],
-                    // Enhanced wallet detection
+                    // Simplified wallet detection for reliability
                     initialAuthenticationMode: 'connect-only',
-                    // Custom wallet filtering + ordering for better mobile UX
                     walletsFilter: (wallets) => {
-                      // Helper to normalize wallet keys for fuzzy matching
-                      const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
-                      const matchesSelected = (key: string, selected: string) => {
-                        const k = norm(key);
-                        const s = norm(selected);
-                        if (s.includes('blocto')) return k.includes('blocto');
-                        if (s.includes('dapper')) return k.includes('dapper');
-                        if (s.includes('lilico')) return k.includes('lilico') || k.includes('flowwallet');
-                        if (s.includes('flowwallet')) return k.includes('flowwallet') || k.includes('lilico') || (k.includes('flow') && !k.includes('blocto') && !k.includes('dapper'));
-                        if (s === 'flow') return k.includes('flow') && !k.includes('blocto') && !k.includes('dapper');
-                        return k.includes(s);
-                      };
-
-                      // Smart device detection - Fixed to properly detect desktop
-                      const isDesktop = typeof window !== "undefined" && 
-                        window.innerWidth > 1024 && 
-                        !('ontouchstart' in window) && 
-                        !window.navigator.userAgent.match(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i);
-
-                      // Only consider mobile if explicitly forced, otherwise respect desktop detection
-                      const isMobile = typeof window !== "undefined" &&
-                        ((window as any).MOBILE_WALLET_OVERRIDE === true) &&
-                        !(window as any).FORCE_DESKTOP_MODE && 
-                        !isDesktop; // Respect desktop detection
-
-                      // Check for force override (for debugging)
-                      const forceShowAll = typeof window !== "undefined" && 
-                        (window as any).FORCE_SHOW_ALL_WALLETS;
-
-                      // If a wallet was chosen from the CustomMobileWalletModal, prioritize it
-                      const selectedType = typeof window !== 'undefined'
-                        ? (window as any).SELECTED_WALLET_TYPE as string | undefined
-                        : undefined;
-                      const strictSelected = typeof window !== 'undefined' && (window as any).SELECTED_WALLET_STRICT === true;
-
-                      // Always log the available wallets first
-                      console.log('🔍 Dynamic wallets available:', wallets.map(w => ({ 
+                      console.log('🔍 Original Dynamic wallets:', wallets.map(w => ({ 
                         key: w.key, 
                         name: w.name,
-                        isInstalled: (w as any).isInstalled,
-                        connectionMethods: (w as any).connectionMethods 
+                        isInstalled: (w as any).isInstalled
                       })));
-                      console.log('🔍 Device detection:', { 
-                        isDesktop, 
-                        isMobile, 
-                        forceShowAll, 
-                        forceDesktop: (window as any).FORCE_DESKTOP_MODE 
-                      });
 
-                      // Desktop: Always use native wallet detection on actual desktop devices
-                      if (isDesktop && !forceShowAll && !(window as any).MOBILE_WALLET_OVERRIDE) {
-                        console.log('🖥️ Desktop mode - using native wallet detection');
-                        return wallets; // Return wallets as-is, respecting actual installation status
-                      }
+                      // Check if we're on mobile
+                      const isMobile = typeof window !== "undefined" &&
+                        (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(
+                          window.navigator.userAgent
+                        ) || 'ontouchstart' in window);
 
-                      if (forceShowAll) {
-                        console.log('🚨 FORCE_SHOW_ALL_WALLETS enabled - showing all wallets');
-                        console.log('🚨 All available wallets:', wallets.map(w => ({ key: w.key, name: w.name })));
-                        
-                        // Force all wallets to appear as "available" by modifying their properties
-                        const forcedWallets = wallets.map(wallet => ({
-                          ...wallet,
-                          isInstalled: true,
-                          available: true,
-                          canConnect: true,
-                          connectionMethods: ['injected', 'wallet_connect', 'deep_link']
-                        }));
-                        
-                        console.log('🚨 Forced wallets:', forcedWallets.map(w => ({ 
-                          key: w.key, 
-                          name: w.name, 
-                          isInstalled: (w as any).isInstalled,
-                          available: (w as any).available 
-                        })));
-                        
-                        // If a specific wallet type was selected, ensure it sorts to the top
-                        if (selectedType) {
-                          const sel = selectedType.toLowerCase();
-                          const out = [...forcedWallets].sort((a, b) => {
-                            const aSel = matchesSelected(a.key, sel) ? 0 : 1;
-                            const bSel = matchesSelected(b.key, sel) ? 0 : 1;
-                            return aSel - bSel;
-                          });
-                          try { (window as any).LAST_DYNAMIC_WALLETS = out.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
-                          return out;
-                        }
-
-                        try { (window as any).LAST_DYNAMIC_WALLETS = forcedWallets.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
-                        return forcedWallets;
-                      }
-
-                      // On mobile, return ALL wallets without complex filtering + force missing Flow wallets
+                      // On mobile, show Dapper and Blocto (which work reliably on mobile)
                       if (isMobile) {
-                        console.log('📱 Mobile detected - forcing Flow wallets to appear');
-                        console.log('📱 Original wallets:', wallets.map(w => w.key));
-                        
-                        // Force add missing Flow wallets on mobile
-                        const existingKeys = wallets.map(w => w.key.toLowerCase());
-                        let allWallets = [...wallets];
-                        
-                        if (!existingKeys.some(k => k.includes('flowwallet') || k.includes('lilico'))) {
-                          console.log('📱 Adding missing Flow Wallet');
-                          allWallets.push({
-                            key: 'flowwallet',
-                            name: 'Flow Wallet',
-                            connector: { name: 'flowwallet' }
-                          } as any);
-                        }
-                        
-                        if (!existingKeys.includes('lilico')) {
-                          console.log('📱 Adding missing Lilico');
-                          allWallets.push({
-                            key: 'lilico', 
-                            name: 'Lilico',
-                            connector: { name: 'lilico' }
-                          } as any);
-                        }
-                        
-                        // Sort to put Flow wallets first but don't filter any out
-                        const sortedWallets = [...allWallets].sort((a, b) => {
-                          const ai = flowKeysPriority.findIndex((p) => a.key.toLowerCase().includes(p));
-                          const bi = flowKeysPriority.findIndex((p) => b.key.toLowerCase().includes(p));
-                          return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
-                        });
-                        
-                        console.log('📱 Final mobile wallets:', sortedWallets.map(w => ({ key: w.key, name: w.name })));
-                        try { (window as any).LAST_DYNAMIC_WALLETS = sortedWallets.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
-                        return sortedWallets;
+                        console.log('📱 Mobile detected - showing mobile-friendly wallets');
+                        const mobileWallets = wallets.filter(w => 
+                          w.key.toLowerCase().includes('dapper') || 
+                          w.key.toLowerCase().includes('blocto')
+                        );
+                        console.log('📱 Mobile wallets:', mobileWallets.map(w => w.key));
+                        return mobileWallets;
                       }
 
-                      // Log once per render pass
-                      try {
-                        console.log(
-                          "🔍 Dynamic wallets (pre-filter)",
-                          wallets.map((w) => ({ key: w.key, name: w.name }))
-                        );
-                        console.log("🔍 Device detection:", { isMobile, forceShowAll });
-                      } catch {}
-
-                      // Base Flow wallet keys we care about
-                      const flowKeysPriority = [
-                        "flowwallet", // official Flow Wallet (rebranded Lilico)
-                        "lilico",     // Legacy Lilico name
-                        "flow",       // Generic Flow wallet
-                        "blocto",     // Blocto wallet
-                        "dapper",     // Dapper wallet
-                      ];
-
-                      let filtered = wallets;
-
-                      // If a wallet was selected, put it first on desktop too
-                      if (selectedType) {
-                        const sel = selectedType.toLowerCase();
-                        filtered = [...filtered].sort((a, b) => {
-                          const aSel = matchesSelected(a.key, sel) ? -1 : 0;
-                          const bSel = matchesSelected(b.key, sel) ? -1 : 0;
-                          if (aSel !== bSel) return bSel - aSel; // selected first
-                          return 0;
-                        });
-                        if (strictSelected) {
-                          const only = filtered.filter(w => matchesSelected(w.key, sel));
-                          if (only.length) filtered = only;
-                        }
-                      }
-
-                      // Sort so priority Flow wallets surface first
-                      filtered = [...filtered].sort((a, b) => {
-                        const ai = flowKeysPriority.findIndex((p) =>
-                          a.key.toLowerCase().includes(p)
-                        );
-                        const bi = flowKeysPriority.findIndex((p) =>
-                          b.key.toLowerCase().includes(p)
-                        );
+                      // On desktop, prioritize Flow wallets but keep all
+                      console.log('�️ Desktop detected - showing all wallets with Flow priority');
+                      const flowKeysPriority = ["flowwallet", "lilico", "flow", "blocto", "dapper"];
+                      
+                      const sorted = [...wallets].sort((a, b) => {
+                        const ai = flowKeysPriority.findIndex(p => a.key.toLowerCase().includes(p));
+                        const bi = flowKeysPriority.findIndex(p => b.key.toLowerCase().includes(p));
                         return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
                       });
 
-                      try {
-                        console.log(
-                          isMobile ? "📱 Mobile wallets (post-filter)" : "🖥️ Desktop wallets (ordered)",
-                          filtered.map((w) => w.key)
-                        );
-                        try { (window as any).LAST_DYNAMIC_WALLETS = filtered.map(w => ({ key: w.key, name: (w as any).name })); } catch {}
-                      } catch {}
-                      return filtered;
+                      console.log('️ Desktop wallets (sorted):', sorted.map(w => w.key));
+                      return sorted;
                     },
                     overrides: {
                       views: [
@@ -262,66 +112,22 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                           sections: [
                             {
                               type: SdkViewSectionType.Wallet,
-                              // Don't set a default wallet on mobile - let user choose
                               defaultItem: (() => {
                                 const isMobile = typeof window !== "undefined" &&
-                                  (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile/i.test(
+                                  (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(
                                     window.navigator.userAgent
-                                  ) || 'ontouchstart' in window || navigator.maxTouchPoints > 0);
+                                  ) || 'ontouchstart' in window);
                                 
-                                const forceShowAll = typeof window !== "undefined" && 
-                                  (window as any).FORCE_SHOW_ALL_WALLETS;
-                                const selectedType = typeof window !== 'undefined'
-                                  ? (window as any).SELECTED_WALLET_TYPE as string | undefined
-                                  : undefined;
-                                
-                                if (forceShowAll || isMobile) {
-                                  console.log('� Mobile or force mode: Not setting defaultItem to allow all wallets');
-                                  return undefined; // Don't set a default
+                                // On mobile, show Dapper as default (most reliable)
+                                if (isMobile) {
+                                  console.log('📱 Mobile: Defaulting to Dapper');
+                                  return "dapper";
                                 }
                                 
-                                // If user picked a wallet in the custom modal, honor it  
-                                if (selectedType) {
-                                  console.log('🎯 Defaulting to selected wallet from custom modal:', selectedType);
-                                  return selectedType;
-                                }
-                                
-                                // Desktop default
+                                // On desktop, default to flowwallet/lilico
+                                console.log('�️ Desktop: Defaulting to Flow Wallet');
                                 return "flowwallet";
                               })(),
-                              // Force show all wallet options when force flag is set
-                              ...((() => {
-                                const forceShowAll = typeof window !== "undefined" && 
-                                  (window as any).FORCE_SHOW_ALL_WALLETS;
-                                const selectedType = typeof window !== 'undefined'
-                                  ? (window as any).SELECTED_WALLET_TYPE as string | undefined
-                                  : undefined;
-                                const strictSelected = typeof window !== 'undefined' && (window as any).SELECTED_WALLET_STRICT === true;
-                                
-                                if (forceShowAll) {
-                                  console.log('🚨 FORCE_SHOW_ALL_WALLETS: Overriding wallet section config');
-                                  return {
-                                    walletItems: ['all'], // Show all available wallets
-                                    onlyShowInstalled: false
-                                  };
-                                }
-                                // When a wallet was selected
-                                if (selectedType) {
-                                  // In strict mode, only show that specific wallet to avoid Blocto fallback
-                                  if (strictSelected) {
-                                    console.log('🔒 Strict selection enabled for:', selectedType);
-                                    return {
-                                      walletItems: [selectedType],
-                                      onlyShowInstalled: false
-                                    };
-                                  }
-                                  return {
-                                    walletItems: ['all'],
-                                    onlyShowInstalled: false
-                                  };
-                                }
-                                return {};
-                              })()),
                             },
                           ],
                         },
@@ -329,30 +135,16 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                     },
                     events: {
                       onAuthSuccess: (args) => {
-                        console.log("🎉 Auth success", args);
-                        if (typeof window !== 'undefined') {
-                          delete (window as any).SELECTED_WALLET_TYPE;
-                          delete (window as any).FORCE_SHOW_ALL_WALLETS;
-                        }
+                        console.log("🎉 Dynamic Auth success", args);
                       },
                       onAuthFailure: (args) => {
-                        console.log("❌ Auth failure", args);
-                        if (typeof window !== 'undefined') {
-                          delete (window as any).SELECTED_WALLET_TYPE;
-                        }
+                        console.log("❌ Dynamic Auth failure", args);
                       },
                       onAuthFlowOpen: () => {
-                        console.log("� Auth flow opened");
-                        try {
-                          const wallets = (window as any)?.dynamic?.wallets || undefined;
-                          if (wallets) console.log('🔎 Wallets on open:', wallets.map((w: any) => w.key));
-                        } catch {}
+                        console.log("🔓 Dynamic Auth flow opened");
                       },
                       onAuthFlowClose: () => {
-                        console.log("� Auth flow closed");
-                        if (typeof window !== 'undefined') {
-                          delete (window as any).SELECTED_WALLET_TYPE;
-                        }
+                        console.log("🔒 Dynamic Auth flow closed");
                       },
                     },
                   }}

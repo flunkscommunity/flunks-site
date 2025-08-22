@@ -1,84 +1,35 @@
 import { useEffect } from 'react';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 
-// Smart wallet detection that properly handles desktop vs mobile
+// Simplified smart wallet detection - non-interfering version
 export const SmartWalletDetection = () => {
   const { user } = useDynamicContext();
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    // Clear any existing overrides first
-    delete (window as any).FORCE_SHOW_ALL_WALLETS;
-    delete (window as any).SELECTED_WALLET_TYPE;
-    delete (window as any).SELECTED_WALLET_STRICT;
-    delete (window as any).MOBILE_WALLET_OVERRIDE;
+    // Simple device detection for logging only
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(navigator.userAgent);
+    const isDesktop = !isMobile && window.innerWidth > 1024;
 
-    // Detect device type properly - More reliable desktop detection
-    const isDesktop = window.innerWidth > 1024 && 
-      !('ontouchstart' in window) && 
-      navigator.maxTouchPoints === 0 &&
-      !navigator.userAgent.match(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i);
-
-    const isTablet = !isDesktop && window.innerWidth >= 768 && window.innerWidth <= 1024 &&
-      (navigator.maxTouchPoints > 0 || 'ontouchstart' in window);
-
-    const isMobile = !isDesktop && !isTablet && window.innerWidth < 768;
-
-    console.log('🔍 Smart Wallet Detection:', {
-      isDesktop,
-      isTablet,
+    console.log('🔍 Device Detection (Non-Interfering):', {
       isMobile,
+      isDesktop,
       screenWidth: window.innerWidth,
-      touchPoints: navigator.maxTouchPoints,
       userAgent: navigator.userAgent.substring(0, 50) + '...'
     });
 
-    if (isDesktop) {
-      // Desktop: Use proper wallet detection, don't force anything
-      console.log('🖥️ Desktop detected - using native wallet detection');
-      (window as any).FORCE_DESKTOP_MODE = true;
-      
-      // Clear any mobile overrides
-      delete (window as any).MOBILE_WALLET_OVERRIDE;
-      delete (window as any).FORCE_SHOW_ALL_WALLETS;
-      
-      // Only show installed wallets on desktop
-      if ((window as any).lilico || (window as any).flowWallet) {
-        console.log('✅ Flow Wallet/Lilico detected on desktop');
-      } else {
-        console.log('❌ No Flow Wallet/Lilico detected on desktop');
-      }
+    // Only log wallet status, don't modify anything
+    const walletStatus = {
+      lilico: !!(window as any).lilico,
+      flowWallet: !!(window as any).flow,
+      dapper: !!(window as any).dapper,
+      blocto: !!(window as any).blocto
+    };
 
-    } else if (isTablet) {
-      // Tablet: Hybrid approach
-      console.log('📱 Tablet detected - using hybrid wallet detection');
-      (window as any).FORCE_SHOW_ALL_WALLETS = false; // Don't force all
-      
-      // Enable mobile wallet options but respect desktop extensions if available
-      if ((window as any).lilico || (window as any).flowWallet) {
-        console.log('✅ Desktop wallet extensions found on tablet');
-      } else {
-        console.log('🔄 Enabling mobile wallet options for tablet');
-        (window as any).MOBILE_WALLET_OVERRIDE = true;
-      }
+    console.log('� Wallet Extensions (Read-Only):', walletStatus);
 
-    } else if (isMobile) {
-      // Mobile: Enable mobile-specific wallet options
-      console.log('📱 Mobile detected - enabling mobile wallet support');
-      (window as any).FORCE_SHOW_ALL_WALLETS = true;
-      (window as any).MOBILE_WALLET_OVERRIDE = true;
-      
-      console.log('📱 Mobile wallet options enabled');
-    }
-
-    // Don't interfere if user is already connected
-    if (user) {
-      console.log('✅ User already connected, skipping wallet detection overrides');
-      return;
-    }
-
-  }, [user]);
+  }, [user]); // Only re-run when user changes
 
   return null; // This component doesn't render anything
 };

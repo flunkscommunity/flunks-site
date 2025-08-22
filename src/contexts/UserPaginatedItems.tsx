@@ -27,6 +27,8 @@ interface PaginatedContextProps {
   currentDataPages: string[][];
   refresh: () => void;
   allItems: ObjectDetails[];
+  error?: any;
+  isLoading?: boolean;
 }
 
 const PaginatedItemsContext = createContext<PaginatedContextProps | undefined>(
@@ -59,9 +61,19 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
 
   console.log(flunksMetadata);
 
-  const { data: tokenData } = useSWR(
+  const { data: tokenData, error: tokenDataError, isValidating } = useSWR(
     walletAddress ? ["allData", walletAddress, resetCacheKey] : null,
-    (key, address) => getOwnerTokenIdsWhale(address),
+    async (key, address) => {
+      try {
+        console.log('🔍 UserPaginatedItems: Fetching token data for', address);
+        const result = await getOwnerTokenIdsWhale(address);
+        console.log('✅ UserPaginatedItems: Token data fetched successfully', result);
+        return result;
+      } catch (error) {
+        console.error('❌ UserPaginatedItems: Error fetching token data:', error);
+        throw error;
+      }
+    },
     {
       revalidateOnFocus: false,
       refreshWhenHidden: false,
@@ -69,32 +81,59 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
       revalidateIfStale: false,
       revalidateOnReconnect: false,
       onSuccess: (data) => {
-        const flunksPages = Array.from(
-          { length: Math.ceil(data.flunks.length / PAGE_SIZE) },
-          (_, i) => data.flunks.slice(i * PAGE_SIZE, i * PAGE_SIZE + PAGE_SIZE)
-        );
-        const backpackPages = Array.from(
-          { length: Math.ceil(data.backpack.length / PAGE_SIZE) },
-          (_, i) => data.backpack.slice(i * PAGE_SIZE, i * PAGE_SIZE + PAGE_SIZE)
-        );
+        try {
+          console.log('🔍 UserPaginatedItems: Processing token data', data);
+          
+          if (!data || typeof data !== 'object') {
+            console.warn('⚠️ UserPaginatedItems: Invalid data received:', data);
+            return;
+          }
+          
+          const flunks = Array.isArray(data.flunks) ? data.flunks : [];
+          const backpack = Array.isArray(data.backpack) ? data.backpack : [];
+          
+          console.log('🔍 UserPaginatedItems: Flunks count:', flunks.length, 'Backpack count:', backpack.length);
+          
+          const flunksPages = Array.from(
+            { length: Math.ceil(flunks.length / PAGE_SIZE) },
+            (_, i) => flunks.slice(i * PAGE_SIZE, i * PAGE_SIZE + PAGE_SIZE)
+          );
+          const backpackPages = Array.from(
+            { length: Math.ceil(backpack.length / PAGE_SIZE) },
+            (_, i) => backpack.slice(i * PAGE_SIZE, i * PAGE_SIZE + PAGE_SIZE)
+          );
 
-        const tokenDataPage = { flunks: flunksPages, backpack: backpackPages };
-        setTokenDataPages(tokenDataPage);
+          const tokenDataPage = { flunks: flunksPages, backpack: backpackPages };
+          setTokenDataPages(tokenDataPage);
 
-        const allFlunksMetadata = tokenDataPage.flunks.map((page) =>
-          getOwnerTokenStakeInfoWhale(walletAddress, "flunks", page.map(Number))
-        );
-        const allBackpacksMetadata = tokenDataPage.backpack.map((page) =>
-          getOwnerTokenStakeInfoWhale(walletAddress, "backpacks", page.map(Number))
-        );
-        
-        Promise.all(allFlunksMetadata).then((flunksMetadata) => {
-          setFlunksMetadata(flunksMetadata);
-        });
+          const allFlunksMetadata = tokenDataPage.flunks.map((page) =>
+            getOwnerTokenStakeInfoWhale(walletAddress, "flunks", page.map(Number))
+          );
+          const allBackpacksMetadata = tokenDataPage.backpack.map((page) =>
+            getOwnerTokenStakeInfoWhale(walletAddress, "backpacks", page.map(Number))
+          );
+          
+          Promise.all(allFlunksMetadata).then((flunksMetadata) => {
+            console.log('✅ UserPaginatedItems: Flunks metadata loaded', flunksMetadata);
+            setFlunksMetadata(flunksMetadata);
+          }).catch((error) => {
+            console.error('❌ UserPaginatedItems: Error loading flunks metadata:', error);
+            setFlunksMetadata([]);
+          });
 
-        Promise.all(allBackpacksMetadata).then((backpacksMetadata) => {
-          setBackpacksMetadata(backpacksMetadata);
-        });
+          Promise.all(allBackpacksMetadata).then((backpacksMetadata) => {
+            console.log('✅ UserPaginatedItems: Backpacks metadata loaded', backpacksMetadata);
+            setBackpacksMetadata(backpacksMetadata);
+          }).catch((error) => {
+            console.error('❌ UserPaginatedItems: Error loading backpacks metadata:', error);
+            setBackpacksMetadata([]);
+          });
+        } catch (error) {
+          console.error('❌ UserPaginatedItems: Error in onSuccess handler:', error);
+        }
+      },
+      onError: (error) => {
+        console.error('❌ UserPaginatedItems: SWR error:', error);
       }
     }
   );
@@ -140,7 +179,9 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
     setViewType,
     currentDataPages: filter === "flunks" ? tokenDataPages.flunks : tokenDataPages.backpack,
     refresh: () => setResetCacheKey((prev) => prev + 1),
-    allItems
+    allItems,
+    error: tokenDataError,
+    isLoading: isValidating
   };
 
   return (

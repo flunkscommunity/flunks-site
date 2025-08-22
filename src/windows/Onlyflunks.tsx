@@ -7,11 +7,35 @@ import { AndroidOptimizations } from "components/AndroidOptimizations";
 import { useDynamicContext, DynamicWidget } from "@dynamic-labs/sdk-react-core";
 import { usePaginatedItems } from "contexts/UserPaginatedItems";
 import { useState, useEffect } from "react";
+import OnlyflunksDebugger from "components/OnlyflunksDebugger";
 
 const Onlyflunks: React.FC = () => {
   const { closeWindow, openWindow } = useWindowsContext();
   const { user, primaryWallet } = useDynamicContext();
-  const { allItems, flunksCount, backpacksCount } = usePaginatedItems();
+  
+  // Add error handling for the paginated items hook
+  let paginatedItemsData;
+  let paginatedItemsError = null;
+  
+  try {
+    paginatedItemsData = usePaginatedItems();
+  } catch (error) {
+    console.error('🚨 OnlyFlunks: Error with usePaginatedItems hook:', error);
+    paginatedItemsError = error;
+    // Fallback values
+    paginatedItemsData = {
+      allItems: [],
+      flunksCount: 0,
+      backpacksCount: 0,
+      error: null,
+      isLoading: false
+    };
+  }
+  
+  const { allItems, flunksCount, backpacksCount, error: contextError, isLoading } = paginatedItemsData;
+  
+  // Combine both possible error sources
+  const finalError = paginatedItemsError || contextError;
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Filter items for display (show first 8 items for preview)
@@ -45,7 +69,11 @@ const Onlyflunks: React.FC = () => {
     walletConnector: primaryWallet?.connector,
     isAuthenticated,
     totalItemsCount,
-    allItemsLength: allItems.length
+    allItemsLength: allItems.length,
+    paginatedItemsError: paginatedItemsError?.message || 'none',
+    contextError: contextError?.message || 'none',
+    finalError: finalError?.message || 'none',
+    isLoading
   });
 
   // Extra detailed wallet debugging
@@ -92,7 +120,29 @@ const Onlyflunks: React.FC = () => {
         headerIcon="/images/icons/onlyflunks.png"
       >
         <Frame variant="inside" className="p-4 h-full w-full flex flex-col items-start gap-4">
-          {isDynamicLoading ? (
+          {/* Always show debugger at the top for troubleshooting */}
+          <OnlyflunksDebugger 
+            paginatedItemsError={finalError}
+            allItems={allItems}
+            flunksCount={flunksCount}
+            backpacksCount={backpacksCount}
+          />
+          
+          {finalError ? (
+            // Show error state if the paginated items hook failed
+            <div className="w-full h-full flex flex-col items-center justify-center gap-4">
+              <div className="text-2xl">⚠️</div>
+              <h3>Error Loading OnlyFlunks</h3>
+              <p className="text-center text-red-600">
+                {finalError.message || 'Unknown error occurred'}
+              </p>
+              <div className="text-xs text-center p-4 bg-red-50 border border-red-200 rounded max-w-md">
+                <strong>Debug Info:</strong><br />
+                This error occurred while loading your NFT collection data.<br />
+                Please check your wallet connection and try refreshing the page.
+              </div>
+            </div>
+          ) : isDynamicLoading ? (
             // Show loading while Dynamic Context initializes
             <div className="w-full h-full flex flex-col items-center justify-center gap-4">
               <div className="text-2xl">⏳</div>
