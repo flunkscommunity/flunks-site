@@ -14,17 +14,16 @@ export const SmartWalletDetection = () => {
     delete (window as any).SELECTED_WALLET_STRICT;
     delete (window as any).MOBILE_WALLET_OVERRIDE;
 
-    // Detect device type properly
+    // Detect device type properly - More reliable desktop detection
     const isDesktop = window.innerWidth > 1024 && 
       !('ontouchstart' in window) && 
+      navigator.maxTouchPoints === 0 &&
       !navigator.userAgent.match(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i);
 
-    const isTablet = window.innerWidth >= 768 && window.innerWidth <= 1024 &&
+    const isTablet = !isDesktop && window.innerWidth >= 768 && window.innerWidth <= 1024 &&
       (navigator.maxTouchPoints > 0 || 'ontouchstart' in window);
 
-    const isMobile = window.innerWidth < 768 &&
-      (navigator.maxTouchPoints > 0 || 'ontouchstart' in window ||
-       navigator.userAgent.match(/Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i));
+    const isMobile = !isDesktop && !isTablet && window.innerWidth < 768;
 
     console.log('🔍 Smart Wallet Detection:', {
       isDesktop,
@@ -39,6 +38,10 @@ export const SmartWalletDetection = () => {
       // Desktop: Use proper wallet detection, don't force anything
       console.log('🖥️ Desktop detected - using native wallet detection');
       (window as any).FORCE_DESKTOP_MODE = true;
+      
+      // Clear any mobile overrides
+      delete (window as any).MOBILE_WALLET_OVERRIDE;
+      delete (window as any).FORCE_SHOW_ALL_WALLETS;
       
       // Only show installed wallets on desktop
       if ((window as any).lilico || (window as any).flowWallet) {

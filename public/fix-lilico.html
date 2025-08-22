@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fix Lilico Desktop Connection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .success { color: #4caf50; }
+        .error { color: #f44336; }
+        .info { color: #2196f3; }
+        .warning { color: #ff9800; }
+        .code {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        button {
+            background: #2196f3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #1976d2; }
+        .red { background: #f44336; }
+        .red:hover { background: #d32f2f; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🔧 Fix Lilico Desktop Connection</h1>
+        <p class="info">This tool will fix the issue where Lilico shows "Install Extension" instead of connecting directly on desktop.</p>
+        
+        <div id="status"></div>
+        
+        <button onclick="fixDesktopConnection()">Fix Desktop Connection</button>
+        <button onclick="clearAllOverrides()" class="red">Clear All Wallet Overrides</button>
+        <button onclick="checkStatus()">Check Current Status</button>
+        
+        <h3>Manual Fix (run in console):</h3>
+        <div class="code">
+window.FORCE_DESKTOP_MODE = true;<br>
+delete window.MOBILE_WALLET_OVERRIDE;<br>
+window.location.reload();
+        </div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const status = document.getElementById('status');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info';
+            status.innerHTML += `<p class="${className}">[${timestamp}] ${message}</p>`;
+            console.log(`[${timestamp}] ${message}`);
+        }
+
+        function fixDesktopConnection() {
+            log('🔧 Fixing Lilico Desktop Connection...');
+            
+            try {
+                // Clear all mobile wallet overrides
+                delete window.MOBILE_WALLET_OVERRIDE;
+                delete window.DYNAMIC_MOBILE_WALLET_OVERRIDE;
+                delete window.SELECTED_WALLET_TYPE;
+                delete window.SELECTED_WALLET_STRICT;
+                
+                // Force desktop mode
+                window.FORCE_DESKTOP_MODE = true;
+                
+                // Clear any previous wallet selections
+                delete window.LAST_DYNAMIC_WALLETS;
+                
+                log('✅ Desktop mode forced, mobile overrides cleared', 'success');
+                log('🔄 Redirecting to main site in 3 seconds...', 'info');
+                
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 3000);
+                
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        function clearAllOverrides() {
+            log('🧹 Clearing all wallet overrides...');
+            
+            const overrides = [
+                'MOBILE_WALLET_OVERRIDE',
+                'DYNAMIC_MOBILE_WALLET_OVERRIDE', 
+                'SELECTED_WALLET_TYPE',
+                'SELECTED_WALLET_STRICT',
+                'FORCE_DESKTOP_MODE',
+                'LAST_DYNAMIC_WALLETS',
+                'FORCE_SHOW_ALL_WALLETS'
+            ];
+            
+            overrides.forEach(key => {
+                delete window[key];
+            });
+            
+            log('✅ All overrides cleared', 'success');
+        }
+
+        function checkStatus() {
+            log('📊 Current Status:', 'info');
+            log(`Screen width: ${window.innerWidth}px`);
+            log(`Touch support: ${'ontouchstart' in window ? 'Yes' : 'No'}`);
+            log(`MOBILE_WALLET_OVERRIDE: ${window.MOBILE_WALLET_OVERRIDE || 'undefined'}`);
+            log(`FORCE_DESKTOP_MODE: ${window.FORCE_DESKTOP_MODE || 'undefined'}`);
+            log(`DYNAMIC_MOBILE_WALLET_OVERRIDE: ${window.DYNAMIC_MOBILE_WALLET_OVERRIDE || 'undefined'}`);
+            
+            const isDesktop = window.innerWidth > 1024 && 
+                !('ontouchstart' in window) && 
+                !window.navigator.userAgent.match(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i);
+            
+            log(`Detected as: ${isDesktop ? 'Desktop 🖥️' : 'Mobile 📱'}`, isDesktop ? 'success' : 'warning');
+        }
+
+        // Auto-check status on load
+        window.onload = () => {
+            log('🚀 Lilico Desktop Fix Tool loaded');
+            checkStatus();
+        };
+    </script>
+</body>
+</html>

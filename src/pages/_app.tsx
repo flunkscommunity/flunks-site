@@ -83,15 +83,17 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         return k.includes(s);
                       };
 
-                      // Smart device detection
+                      // Smart device detection - Fixed to properly detect desktop
                       const isDesktop = typeof window !== "undefined" && 
                         window.innerWidth > 1024 && 
                         !('ontouchstart' in window) && 
                         !window.navigator.userAgent.match(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i);
 
+                      // Only consider mobile if explicitly forced, otherwise respect desktop detection
                       const isMobile = typeof window !== "undefined" &&
-                        (!isDesktop || (window as any).MOBILE_WALLET_OVERRIDE) &&
-                        !(window as any).FORCE_DESKTOP_MODE;
+                        ((window as any).MOBILE_WALLET_OVERRIDE === true) &&
+                        !(window as any).FORCE_DESKTOP_MODE && 
+                        !isDesktop; // Respect desktop detection
 
                       // Check for force override (for debugging)
                       const forceShowAll = typeof window !== "undefined" && 
@@ -117,8 +119,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         forceDesktop: (window as any).FORCE_DESKTOP_MODE 
                       });
 
-                      // Desktop: Use normal wallet detection, don't force anything unless explicitly requested
-                      if (isDesktop && !forceShowAll) {
+                      // Desktop: Always use native wallet detection on actual desktop devices
+                      if (isDesktop && !forceShowAll && !(window as any).MOBILE_WALLET_OVERRIDE) {
                         console.log('🖥️ Desktop mode - using native wallet detection');
                         return wallets; // Return wallets as-is, respecting actual installation status
                       }
