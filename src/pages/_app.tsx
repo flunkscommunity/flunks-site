@@ -33,6 +33,7 @@ import MobileDynamicWalletOverrideFix from "components/MobileDynamicWalletOverri
 import AggressiveMobileWalletFix from "components/AggressiveMobileWalletFix";
 import AggressiveDesktopFlowWalletFix from "components/AggressiveDesktopFlowWalletFix";
 import EnhancedMobileWalletSelector from "components/EnhancedMobileWalletSelector";
+import SmartWalletDetection from "components/SmartWalletDetection";
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -86,12 +87,16 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         if (s === 'flow') return k.includes('flow') && !k.includes('blocto') && !k.includes('dapper');
                         return k.includes(s);
                       };
-                      const isMobile =
-                        typeof window !== "undefined" &&
-                        (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile/i.test(
-                          window.navigator.userAgent
-                        ) || 'ontouchstart' in window || navigator.maxTouchPoints > 0) && 
-                        !(window as any).FORCE_DESKTOP_MODE; // Override mobile detection
+
+                      // Smart device detection
+                      const isDesktop = typeof window !== "undefined" && 
+                        window.innerWidth > 1024 && 
+                        !('ontouchstart' in window) && 
+                        !window.navigator.userAgent.match(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i);
+
+                      const isMobile = typeof window !== "undefined" &&
+                        (!isDesktop || (window as any).MOBILE_WALLET_OVERRIDE) &&
+                        !(window as any).FORCE_DESKTOP_MODE;
 
                       // Check for force override (for debugging)
                       const forceShowAll = typeof window !== "undefined" && 
@@ -110,11 +115,18 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         isInstalled: (w as any).isInstalled,
                         connectionMethods: (w as any).connectionMethods 
                       })));
-                      console.log('🔍 Device detection override:', { 
+                      console.log('🔍 Device detection:', { 
+                        isDesktop, 
                         isMobile, 
                         forceShowAll, 
                         forceDesktop: (window as any).FORCE_DESKTOP_MODE 
                       });
+
+                      // Desktop: Use normal wallet detection, don't force anything unless explicitly requested
+                      if (isDesktop && !forceShowAll) {
+                        console.log('🖥️ Desktop mode - using native wallet detection');
+                        return wallets; // Return wallets as-is, respecting actual installation status
+                      }
 
                       if (forceShowAll) {
                         console.log('🚨 FORCE_SHOW_ALL_WALLETS enabled - showing all wallets');
@@ -357,15 +369,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         <Analytics />
                         {/* Global Profile Creation Prompt */}
                         <UserProfilePrompt autoShow={true} showToast={false} />
+                        {/* Smart Wallet Detection - handles desktop vs mobile properly */}
+                        <SmartWalletDetection />
                         {/* Simple Mobile Wallet Helper - non-intrusive */}
                         <SimpleMobileWalletHelper />
-                        {/* Mobile Wallet Override Fix - forces Flow/Lilico to appear */}
-                        <MobileDynamicWalletOverrideFix />
-                        {/* AGGRESSIVE Mobile Wallet Fix - nuclear option */}
-                        <AggressiveMobileWalletFix />
-                        {/* AGGRESSIVE Desktop Flow Wallet Fix */}
-                        <AggressiveDesktopFlowWalletFix />
-                        {/* Enhanced Mobile Wallet Selector - bypasses Dynamic filtering completely */}
+                        {/* Enhanced Mobile Wallet Selector - bypasses Dynamic filtering completely on mobile only */}
                         <EnhancedMobileWalletSelector />
                         {/* Global wallet connect entry point */}
                         <div
