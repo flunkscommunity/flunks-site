@@ -18,22 +18,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { wallet, username, accessLevel, sessionId } = req.body;
+    const { 
+      wallet, 
+      username,
+      accessLevel,
+      sessionId,
+      userAgent = req.headers['user-agent'] || null,
+      command = 'flow' 
+    } = req.body;
 
-    if (!wallet) {
+    // Allow null wallet for anonymous/trial mode users
+    if (wallet === undefined) {
       return res.status(400).json({ 
         success: false, 
-        error: 'Wallet address required' 
+        error: 'Wallet address required (undefined not allowed)' 
       });
     }
 
-    const userAgent = req.headers['user-agent'] || 'unknown';
-    const ipAddress = getClientIP(req);
+    // Get client IP address
+    const forwarded = req.headers['x-forwarded-for'];
+    const ipAddress = typeof forwarded === 'string' 
+      ? forwarded.split(',')[0] 
+      : req.socket.remoteAddress || 'unknown';
 
     console.log('🔍 Flow Command Logging Request:', {
-      wallet,
-      username,
-      command: 'flow',
+      wallet: wallet || 'anonymous',
+      username: username || 'no username',
+      command,
       accessLevel,
       sessionId,
       userAgent
@@ -75,7 +86,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           session_id: sessionId || null,
           user_agent: userAgent,
           ip_address: ipAddress,
-          command_input: 'flow'
+          command_input: command
         });
 
       if (insertError) {
