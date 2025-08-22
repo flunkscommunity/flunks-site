@@ -2,7 +2,6 @@ import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { Frame, Button } from "react95";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
-import AppLoader from "components/AppLoader";
 import { AndroidOptimizations } from "components/AndroidOptimizations";
 import { useDynamicContext, DynamicWidget } from "@dynamic-labs/sdk-react-core";
 import { usePaginatedItems } from "contexts/UserPaginatedItems";
@@ -109,7 +108,7 @@ const Onlyflunks: React.FC = () => {
   }
 
   return (
-    <AppLoader bgImage="/images/loading/bootup.webp">
+    <>
       <AndroidOptimizations />
       <DraggableResizeableWindow
         offSetHeight={44}
@@ -167,7 +166,7 @@ const Onlyflunks: React.FC = () => {
           )}
         </Frame>
       </DraggableResizeableWindow>
-    </AppLoader>
+    </>
   );
 };
 

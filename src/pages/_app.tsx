@@ -81,14 +81,16 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                           window.navigator.userAgent
                         ) || 'ontouchstart' in window);
 
-                      // On mobile, show Dapper and Blocto (which work reliably on mobile)
+                      // On mobile, show all 4 Flow wallets (Blocto, Dapper, Lilico, Flow Wallet)
                       if (isMobile) {
-                        console.log('📱 Mobile detected - showing mobile-friendly wallets');
+                        console.log('📱 Mobile detected - showing all Flow wallets');
                         const mobileWallets = wallets.filter(w => 
                           w.key.toLowerCase().includes('dapper') || 
-                          w.key.toLowerCase().includes('blocto')
+                          w.key.toLowerCase().includes('blocto') ||
+                          w.key.toLowerCase().includes('lilico') ||
+                          w.key.toLowerCase().includes('flow')
                         );
-                        console.log('📱 Mobile wallets:', mobileWallets.map(w => w.key));
+                        console.log('📱 Mobile wallets (all 4):', mobileWallets.map(w => w.key));
                         return mobileWallets;
                       }
 

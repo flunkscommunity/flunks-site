@@ -38,6 +38,9 @@ import AccessLevelStatus from "components/AccessLevelStatus";
 import ConditionalAppIcon from "components/ConditionalAppIcon";
 import { BACKGROUND_CONFIG } from "config/backgroundConfig";
 import useThemeSettings from "store/useThemeSettings";
+import RPGProfileForm from "components/UserProfile/RPGProfileForm";
+import { useUserProfile } from "contexts/UserProfileContext";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 import { GumAdminPanel } from "components/GumAdminPanel";
 
@@ -88,6 +91,8 @@ const Desktop = () => {
   const { windows, openWindow, closeWindow, windowApps } = useWindowsContext();
   const { showGettingStartedOnStartup } = useGettingStarted();
   const [showGumAdmin, setShowGumAdmin] = useState(false);
+  const { primaryWallet } = useDynamicContext();
+  const { hasProfile, profile } = useUserProfile();
 
   // Keyboard shortcut for gum admin panel (Ctrl+G)
   useEffect(() => {
@@ -150,7 +155,50 @@ const windowsMemod = useMemo(() => (
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.USER_PROFILE, window: <LockerSystemNew /> })}
         />
 
-        {/* 3. Terminal */}
+        {/* 3. Create Profile - Only show if wallet connected */}
+        {primaryWallet?.address && (
+          <ConditionalAppIcon
+            appId="create-profile"
+            title={hasProfile ? `Edit ${profile?.username || 'Profile'}` : "Create Profile"}
+            icon="/images/icons/astro-mascot.png"
+            onDoubleClick={() => openWindow({
+              key: 'PROFILE_CREATOR',
+              window: (
+                <DraggableResizeableWindow
+                  windowsId="PROFILE_CREATOR"
+                  onClose={() => closeWindow('PROFILE_CREATOR')}
+                  headerTitle={hasProfile ? "Edit Your Flunks Profile" : "Create Your Flunks Profile"}
+                  headerIcon="/images/icons/astro-mascot.png"
+                  initialWidth="auto"
+                  initialHeight="auto"
+                  resizable={false}
+                  style={{ zIndex: 1000 }}
+                >
+                  <div style={{ 
+                    background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)',
+                    minHeight: '400px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <RPGProfileForm 
+                      onComplete={() => {
+                        closeWindow('PROFILE_CREATOR');
+                        alert(hasProfile ? 
+                          '✅ Profile updated successfully!' : 
+                          '🎉 Profile created successfully! Welcome to the Flunks community!'
+                        );
+                      }}
+                      onCancel={() => closeWindow('PROFILE_CREATOR')}
+                    />
+                  </div>
+                </DraggableResizeableWindow>
+              )
+            })}
+          />
+        )}
+
+        {/* 4. Terminal */}
         <ConditionalAppIcon
           appId="terminal"
           title="Terminal"
@@ -172,7 +220,7 @@ const windowsMemod = useMemo(() => (
           })}
         />
 
-        {/* 4. FHS */}
+        {/* 5. FHS */}
         <ConditionalAppIcon
           appId="fhs-school"
           title="FHS"
@@ -195,7 +243,7 @@ const windowsMemod = useMemo(() => (
           })}
         />
 
-        {/* 5. Semester Zero */}
+        {/* 6. Semester Zero */}
         <ConditionalAppIcon
           appId="semester-zero"
           title="semester zero"
@@ -218,7 +266,7 @@ const windowsMemod = useMemo(() => (
           })}
         />
 
-        {/* 5.5. Game Manual */}
+        {/* 6.5. Game Manual */}
         <ConditionalAppIcon
           appId="game-manual"
           title="Game Manual"

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import DraggableResizeableWindow from '../components/DraggableResizeableWindow';
 import MobileWalletHelper from '../components/MobileWalletHelper';
+import { GumCooldownTimer } from '../components/GumCooldownTimer';
 import { isMobileDevice } from '../utils/mobileWalletDetection';
 import { useWindowsContext } from '../contexts/WindowsContext';
 import { useLockerInfo, useLockerAssignment } from '../hooks/useLocker';
@@ -24,6 +25,7 @@ const LockerSystemNew: React.FC = () => {
   const [selectedJacket, setSelectedJacket] = useState<number>(0); // 0 or 1 for jacket options
   const [todayGum, setTodayGum] = useState<number>(0);
   const [streak, setStreak] = useState<number>(0);
+  const [canClaimDaily, setCanClaimDaily] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Jacket options (now using jersey assets)
@@ -981,28 +983,54 @@ const LockerSystemNew: React.FC = () => {
                             Claim your daily gum bonus!
                           </div>
                           
+                          {/* Cooldown Timer */}
+                          {primaryWallet?.address && (
+                            <div style={{ margin: '8px 0', fontSize: '14px' }}>
+                              <GumCooldownTimer
+                                walletAddress={primaryWallet.address}
+                                source="daily_login"
+                                onCanClaim={(canClaim) => {
+                                  // Update button state based on cooldown
+                                  setCanClaimDaily(canClaim);
+                                }}
+                              />
+                            </div>
+                          )}
+                          
                           <button
                             style={{
-                              background: 'linear-gradient(145deg, #32cd32, #228b22)',
+                              background: canClaimDaily ? 
+                                'linear-gradient(145deg, #32cd32, #228b22)' :
+                                'linear-gradient(145deg, #666, #444)',
                               color: 'white',
                               border: 'none',
                               padding: '8px 16px',
                               borderRadius: '6px',
                               fontSize: '12px',
                               fontWeight: 'bold',
-                              cursor: 'pointer',
-                              boxShadow: '0 3px 8px rgba(50,205,50,0.4)',
-                              transition: 'all 0.2s ease'
+                              cursor: canClaimDaily ? 'pointer' : 'not-allowed',
+                              boxShadow: canClaimDaily ? 
+                                '0 3px 8px rgba(50,205,50,0.4)' :
+                                '0 3px 8px rgba(102,102,102,0.4)',
+                              transition: 'all 0.2s ease',
+                              opacity: canClaimDaily ? 1 : 0.6
                             }}
                             onMouseOver={(e) => {
-                              e.currentTarget.style.transform = 'translateY(-2px)';
-                              e.currentTarget.style.boxShadow = '0 5px 15px rgba(50,205,50,0.6)';
+                              if (canClaimDaily) {
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                e.currentTarget.style.boxShadow = '0 5px 15px rgba(50,205,50,0.6)';
+                              }
                             }}
                             onMouseOut={(e) => {
-                              e.currentTarget.style.transform = 'translateY(0)';
-                              e.currentTarget.style.boxShadow = '0 3px 8px rgba(50,205,50,0.4)';
+                              if (canClaimDaily) {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = '0 3px 8px rgba(50,205,50,0.4)';
+                              }
                             }}
+                            disabled={!canClaimDaily}
                             onClick={async () => {
+                              if (!canClaimDaily) return;
+                              
                               // Implement daily check-in logic
                               try {
                                 const result = await fetch('/api/daily-checkin', {
@@ -1017,6 +1045,8 @@ const LockerSystemNew: React.FC = () => {
                                   refetch();
                                   loadGumBalance();
                                   loadGumTrackingData();
+                                  // Reset button state
+                                  setCanClaimDaily(false);
                                 } else {
                                   alert(`ℹ️ ${data.message || 'Already claimed today!'}`);
                                 }
@@ -1025,7 +1055,7 @@ const LockerSystemNew: React.FC = () => {
                               }
                             }}
                           >
-                            ✨ Claim 15 GUM
+                            {canClaimDaily ? '✨ Claim 15 GUM' : '⏰ Daily Amount Claimed'}
                           </button>
                         </div>
 
