@@ -27,13 +27,8 @@ import { RadioProvider } from "contexts/RadioContext";
 import { GumProvider } from "contexts/GumContext";
 import { GumDisplay } from "components/GumDisplay";
 import UserProfilePrompt from "components/UserProfile/UserProfilePrompt";
-import MobileFlowWalletConnection from "components/MobileFlowWalletConnection";
-import SimpleMobileWalletHelper from "components/SimpleMobileWalletHelper";
-import MobileDynamicWalletOverrideFix from "components/MobileDynamicWalletOverrideFix";
-import AggressiveMobileWalletFix from "components/AggressiveMobileWalletFix";
-import AggressiveDesktopFlowWalletFix from "components/AggressiveDesktopFlowWalletFix";
-import EnhancedMobileWalletSelector from "components/EnhancedMobileWalletSelector";
 import SmartWalletDetection from "components/SmartWalletDetection";
+import CleanMobileWalletSelector from "components/CleanMobileWalletSelector";
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -367,32 +362,12 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                           <Component {...pageProps} />
                         </div>
                         <Analytics />
-                        {/* Global Profile Creation Prompt */}
-                        <UserProfilePrompt autoShow={true} showToast={false} />
+                        {/* Global Profile Creation Prompt - only show when needed */}
+                        <UserProfilePrompt autoShow={false} showToast={false} />
                         {/* Smart Wallet Detection - handles desktop vs mobile properly */}
                         <SmartWalletDetection />
-                        {/* Simple Mobile Wallet Helper - non-intrusive */}
-                        <SimpleMobileWalletHelper />
-                        {/* Enhanced Mobile Wallet Selector - bypasses Dynamic filtering completely on mobile only */}
-                        <EnhancedMobileWalletSelector />
-                        {/* Global wallet connect entry point */}
-                        <div
-                          style={{
-                            position: "fixed",
-                            bottom: 16,
-                            right: 16,
-                            zIndex: 10000,
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: 8,
-                          }}
-                        >
-                          <DynamicWidget
-                            buttonClassName="dynamic-connect-wallet"
-                            buttonContainerClassName="dynamic-widget-container"
-                            innerButtonComponent={<span>Connect Wallet</span>}
-                          />
-                        </div>
+                        {/* Clean Mobile Wallet Selector - no debug components */}
+                        <CleanMobileWalletSelector />
                         <DynamicUserProfile />
                       </GumProvider>
                     </PaginatedItemsProvider>
