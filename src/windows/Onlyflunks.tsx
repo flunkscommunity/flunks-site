@@ -7,12 +7,13 @@ import { AndroidOptimizations } from "components/AndroidOptimizations";
 import { useDynamicContext, DynamicWidget } from "@dynamic-labs/sdk-react-core";
 import { usePaginatedItems } from "contexts/UserPaginatedItems";
 import { useState, useEffect } from "react";
-import OnlyflunksDebugger from "components/OnlyflunksDebugger";
 import ItemsGrid from "components/YourItems/ItemsGrid";
+import BootScreen from "components/BootScreen";
 
 const Onlyflunks: React.FC = () => {
   const { closeWindow } = useWindowsContext();
   const { user, primaryWallet } = useDynamicContext();
+  const [bootComplete, setBootComplete] = useState(false);
   
   // Add error handling for the paginated items hook
   let paginatedItemsData;
@@ -102,6 +103,11 @@ const Onlyflunks: React.FC = () => {
     return () => clearInterval(interval);
   }, [user, primaryWallet, isAuthenticated, isDynamicLoading]);
 
+  // Show boot screen first if not completed
+  if (!bootComplete) {
+    return <BootScreen onComplete={() => setBootComplete(true)} />;
+  }
+
   return (
     <AppLoader bgImage="/images/loading/bootup.webp">
       <AndroidOptimizations />
@@ -115,14 +121,6 @@ const Onlyflunks: React.FC = () => {
         headerIcon="/images/icons/onlyflunks.png"
       >
         <Frame variant="inside" className="p-4 h-full w-full flex flex-col items-start gap-4">
-          {/* Always show debugger at the top for troubleshooting */}
-          <OnlyflunksDebugger 
-            paginatedItemsError={finalError}
-            allItems={allItems}
-            flunksCount={flunksCount}
-            backpacksCount={backpacksCount}
-          />
-          
           {finalError ? (
             // Show error state if the paginated items hook failed
             <div className="w-full h-full flex flex-col items-center justify-center gap-4">
