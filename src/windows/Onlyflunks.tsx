@@ -6,7 +6,7 @@ import AppLoader from "components/AppLoader";
 import { AndroidOptimizations } from "components/AndroidOptimizations";
 import { useDynamicContext, DynamicWidget } from "@dynamic-labs/sdk-react-core";
 import { usePaginatedItems } from "contexts/UserPaginatedItems";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Onlyflunks: React.FC = () => {
   const { closeWindow, openWindow } = useWindowsContext();
@@ -21,15 +21,63 @@ const Onlyflunks: React.FC = () => {
   // Use the same authentication check as other components - just check for wallet address
   const isAuthenticated = !!primaryWallet?.address;
 
-  // Debug logging
+  // IMMEDIATE DEBUG - This should show up as soon as OnlyFlunks opens
+  console.log('🚨 ONLYFLUNKS OPENED - IMMEDIATE DEBUG:', {
+    timestamp: new Date().toISOString(),
+    user: user,
+    primaryWallet: primaryWallet,
+    walletAddress: primaryWallet?.address,
+    isAuthenticated: isAuthenticated
+  });
+
+  // Log every render
+  console.log('🎯 OnlyFlunks RENDER:', new Date().toLocaleTimeString());
+
+  // Enhanced debug logging
   console.log('🧠 OnlyFlunks Authentication State:', {
     user: !!user,
+    userType: typeof user,
+    userKeys: user ? Object.keys(user) : null,
     primaryWallet: !!primaryWallet,
+    primaryWalletType: typeof primaryWallet,
+    primaryWalletKeys: primaryWallet ? Object.keys(primaryWallet) : null,
     walletAddress: primaryWallet?.address,
+    walletConnector: primaryWallet?.connector,
     isAuthenticated,
     totalItemsCount,
     allItemsLength: allItems.length
   });
+
+  // Extra detailed wallet debugging
+  if (primaryWallet) {
+    console.log('🔍 Wallet Details:', primaryWallet);
+  }
+  
+  // Check Dynamic context state
+  console.log('🔧 Dynamic Context Full State:', {
+    user,
+    primaryWallet
+  });
+
+  // Check if Dynamic Context is still initializing
+  const isDynamicLoading = user === undefined && primaryWallet === undefined;
+
+  // Add a useEffect to continuously monitor the wallet state
+  useEffect(() => {
+    // Always log debug info every 3 seconds when OnlyFlunks is open
+    const interval = setInterval(() => {
+      console.log('🔄 OnlyFlunks Wallet Monitor:', {
+        timestamp: new Date().toISOString(),
+        user: !!user,
+        primaryWallet: !!primaryWallet,
+        walletAddress: primaryWallet?.address,
+        isAuthenticated,
+        isDynamicLoading
+      });
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [user, primaryWallet, isAuthenticated, isDynamicLoading]);
 
   return (
     <AppLoader bgImage="/images/loading/bootup.webp">
@@ -44,7 +92,13 @@ const Onlyflunks: React.FC = () => {
         headerIcon="/images/icons/onlyflunks.png"
       >
         <Frame variant="inside" className="p-4 h-full w-full flex flex-col items-start gap-4">
-          {!isAuthenticated ? (
+          {isDynamicLoading ? (
+            // Show loading while Dynamic Context initializes
+            <div className="w-full h-full flex flex-col items-center justify-center gap-4">
+              <div className="text-2xl">⏳</div>
+              <p>Loading wallet context...</p>
+            </div>
+          ) : !isAuthenticated ? (
             // Show wallet connection UI when user is not authenticated
             <div className="w-full h-full flex flex-col items-center justify-center gap-6">
               <h3>🔒 Connect Wallet to Access OnlyFlunks</h3>
