@@ -27,8 +27,9 @@ import { RadioProvider } from "contexts/RadioContext";
 import { GumProvider } from "contexts/GumContext";
 import { GumDisplay } from "components/GumDisplay";
 import UserProfilePrompt from "components/UserProfile/UserProfilePrompt";
-import SmartWalletDetection from "components/SmartWalletDetection";
-import CleanMobileWalletSelector from "components/CleanMobileWalletSelector";
+// Removed mobile wallet components to show standard Dynamic installation
+// import SmartWalletDetection from "components/SmartWalletDetection";
+// import CleanMobileWalletSelector from "components/CleanMobileWalletSelector";
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -69,43 +70,24 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                     // Simplified wallet detection for reliability
                     initialAuthenticationMode: 'connect-only',
                     walletsFilter: (wallets) => {
-                      console.log('🔍 Original Dynamic wallets:', wallets.map(w => ({ 
+                      console.log('� NO RESTRICTIONS - Standard Dynamic CLI Installation');
+                      console.log('📋 All available wallets (unfiltered):', wallets.map(w => ({ 
                         key: w.key, 
                         name: w.name,
-                        isInstalled: (w as any).isInstalled
+                        isInstalled: (w as any).isInstalled,
+                        mobile: (w as any).mobile,
+                        available: (w as any).available
                       })));
-
-                      // Check if we're on mobile
-                      const isMobile = typeof window !== "undefined" &&
-                        (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(
-                          window.navigator.userAgent
-                        ) || 'ontouchstart' in window);
-
-                      // On mobile, show all 4 Flow wallets (Blocto, Dapper, Lilico, Flow Wallet)
-                      if (isMobile) {
-                        console.log('📱 Mobile detected - showing all Flow wallets');
-                        const mobileWallets = wallets.filter(w => 
-                          w.key.toLowerCase().includes('dapper') || 
-                          w.key.toLowerCase().includes('blocto') ||
-                          w.key.toLowerCase().includes('lilico') ||
-                          w.key.toLowerCase().includes('flow')
-                        );
-                        console.log('📱 Mobile wallets (all 4):', mobileWallets.map(w => w.key));
-                        return mobileWallets;
-                      }
-
-                      // On desktop, prioritize Flow wallets but keep all
-                      console.log('�️ Desktop detected - showing all wallets with Flow priority');
-                      const flowKeysPriority = ["flowwallet", "lilico", "flow", "blocto", "dapper"];
                       
-                      const sorted = [...wallets].sort((a, b) => {
-                        const ai = flowKeysPriority.findIndex(p => a.key.toLowerCase().includes(p));
-                        const bi = flowKeysPriority.findIndex(p => b.key.toLowerCase().includes(p));
-                        return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
-                      });
-
-                      console.log('️ Desktop wallets (sorted):', sorted.map(w => w.key));
-                      return sorted;
+                      // Store wallet list for debugging
+                      if (typeof window !== "undefined") {
+                        (window as any).LAST_DYNAMIC_WALLETS = wallets;
+                        (window as any).ALL_WALLETS_VISIBLE = true;
+                      }
+                      
+                      // Return ALL wallets exactly as Dynamic CLI would provide them
+                      // No filtering, no mobile/desktop detection, no restrictions
+                      return wallets;
                     },
                     overrides: {
                       views: [
@@ -114,22 +96,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                           sections: [
                             {
                               type: SdkViewSectionType.Wallet,
-                              defaultItem: (() => {
-                                const isMobile = typeof window !== "undefined" &&
-                                  (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(
-                                    window.navigator.userAgent
-                                  ) || 'ontouchstart' in window);
-                                
-                                // On mobile, show Dapper as default (most reliable)
-                                if (isMobile) {
-                                  console.log('📱 Mobile: Defaulting to Dapper');
-                                  return "dapper";
-                                }
-                                
-                                // On desktop, default to flowwallet/lilico
-                                console.log('�️ Desktop: Defaulting to Flow Wallet');
-                                return "flowwallet";
-                              })(),
+                              // No default wallet selection - let Dynamic Labs choose naturally
+                              defaultItem: undefined,
                             },
                           ],
                         },
@@ -160,10 +128,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         <Analytics />
                         {/* Global Profile Creation Prompt - only show when needed */}
                         <UserProfilePrompt autoShow={false} showToast={false} />
-                        {/* Smart Wallet Detection - handles desktop vs mobile properly */}
-                        <SmartWalletDetection />
-                        {/* Clean Mobile Wallet Selector - no debug components */}
-                        <CleanMobileWalletSelector />
+                        {/* Removed all mobile wallet helper components to show standard Dynamic installation */}
+                        {/* <SmartWalletDetection /> */}
+                        {/* <CleanMobileWalletSelector /> */}
                         <DynamicUserProfile />
                       </GumProvider>
                     </PaginatedItemsProvider>
