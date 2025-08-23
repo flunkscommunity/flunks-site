@@ -1036,57 +1036,148 @@ const GameManualWindow: React.FC = () => {
         
       case "gum-system":
         return (
-          <PageContent>
-            <PageHeader>🍬 Gum System</PageHeader>
-            <h3>Earn & Collect Gum Points!</h3>
-            <p>The Gum System is Flunks High School's reward mechanism that lets you earn points through various activities around campus.</p>
-            
-            <h4>🎯 How to Earn Gum</h4>
-            <p><strong>Floating Gum Button:</strong> Look for the floating 🍬 button that moves around your screen!</p>
-            <ul>
-              <li><strong>Click to Earn:</strong> Click the button to earn 5 gum points</li>
-              <li><strong>Drag to Move:</strong> Drag the button to reposition it anywhere on screen</li>
-              <li><strong>Auto-Movement:</strong> After earning, the button automatically moves to a new location</li>
-              <li><strong>Cooldown:</strong> 1-minute cooldown between clicks to prevent spam</li>
-              <li><strong>Daily Limit:</strong> Maximum 100 gum per day from the floating button</li>
-            </ul>
-            
-            <h4>📊 Gum Display</h4>
-            <p>Your current gum balance is always visible in the top-right corner of your screen, showing:</p>
-            <ul>
-              <li><strong>Current Balance:</strong> Your available gum points</li>
-              <li><strong>Total Earned:</strong> Lifetime gum earnings</li>
-              <li><strong>Total Spent:</strong> Gum used for purchases (coming soon!)</li>
-            </ul>
-            
-            <h4>🚀 Additional Earning Methods</h4>
-            <p>More ways to earn gum are being added regularly:</p>
-            <ul>
-              <li><strong>Daily Login:</strong> Bonus gum for returning each day</li>
-              <li><strong>Feature Usage:</strong> Earn points for exploring different areas</li>
-              <li><strong>Special Events:</strong> Limited-time bonus opportunities</li>
-              <li><strong>Achievements:</strong> Unlock rewards for completing challenges</li>
-            </ul>
-            
-            <h4>💰 Future Spending Options</h4>
-            <p>Coming soon, you'll be able to spend gum on:</p>
-            <ul>
-              <li>🎨 Exclusive avatar customizations</li>
-              <li>🔓 Premium area access</li>
-              <li>🎵 Special radio stations</li>
-              <li>🏆 Achievement boosters</li>
-              <li>🎁 Mystery reward boxes</li>
-            </ul>
-            
-            <h4>🔧 Admin Panel (For Testing)</h4>
-            <p><strong>Keyboard Shortcut:</strong> Press <code>Ctrl + G</code> to open the gum admin panel</p>
-            <p>The admin panel shows detailed statistics, transaction history, and allows testing of different gum sources.</p>
-            
-            <div style={{ marginTop: 15, padding: 10, background: '#fff5ee', border: '1px solid #ff8c00' }}>
-              <strong>🍬 Pro Tip:</strong> The gum system uses blockchain technology to securely track your earnings across sessions. Your gum balance is permanently stored and tied to your wallet address!
+          <PageContent style={{ background: 'linear-gradient(135deg, #4a90e2 0%, #357abd 25%, #2c5aa0 50%, #1e3a72 75%, #0f1b36 100%)' }}>
+            <div style={{ 
+              background: 'linear-gradient(45deg, #f0f8ff 0%, #e6f3ff 50%, #ddeeff 100%)', 
+              padding: '20px', 
+              borderRadius: '15px', 
+              border: '4px solid #4a90e2',
+              boxShadow: '0 0 20px rgba(74, 144, 226, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.3)',
+              marginBottom: '15px'
+            }}>
+              <PageHeader style={{ 
+                color: '#1e3a72', 
+                textShadow: '2px 2px 4px rgba(74, 144, 226, 0.3)',
+                fontSize: '24px',
+                textAlign: 'center',
+                borderBottom: '3px solid #4a90e2'
+              }}>🍬 Semester Zero GUM Mechanics</PageHeader>
+              
+              <div style={{ textAlign: 'center', margin: '10px 0' }}>
+                <span style={{ fontSize: '48px', textShadow: '0 0 10px rgba(74, 144, 226, 0.8)' }}>�⚙️🍬⚙️�</span>
+              </div>
+              
+              <h3 style={{ color: '#2c5aa0', textAlign: 'center', fontSize: '18px' }}>Systematic Reward Distribution</h3>
+              <p style={{ textAlign: 'center', fontSize: '14px', fontStyle: 'italic', color: '#1e3a72' }}>
+                Learn how the GUM reward system operates throughout Semester Zero campus.
+              </p>
             </div>
             
-            <Screenshot>[GUM SYSTEM INTERFACE - Floating button, balance display, admin panel]</Screenshot>
+            <div style={{ 
+              background: 'rgba(255, 255, 255, 0.9)', 
+              padding: '15px', 
+              borderRadius: '10px', 
+              border: '2px solid #4a90e2',
+              marginBottom: '15px'
+            }}>
+              <h4 style={{ color: '#1e3a72', fontSize: '16px', marginBottom: '10px' }}>🎯 GUM Earning Mechanisms</h4>
+              
+              <div style={{ 
+                background: 'linear-gradient(90deg, #e6f3ff 0%, #cce7ff 100%)', 
+                padding: '10px', 
+                borderRadius: '8px', 
+                border: '1px solid #4a90e2',
+                marginBottom: '10px'
+              }}>
+                <p><strong style={{ color: '#2c5aa0' }}>🌅 Daily Login System:</strong> Automated reward distribution</p>
+                <ul style={{ marginLeft: '20px', color: '#1e3a72' }}>
+                  <li><strong>Reward:</strong> 15 GUM points daily</li>
+                  <li><strong>Mechanism:</strong> Automatically processed when wallet connects</li>
+                  <li><strong>Cooldown:</strong> 24-hour cycle</li>
+                  <li><strong>Notification:</strong> System notification upon processing</li>
+                </ul>
+              </div>
+              
+              <div style={{ 
+                background: 'linear-gradient(90deg, #f0f4ff 0%, #e0e8ff 100%)', 
+                padding: '10px', 
+                borderRadius: '8px', 
+                border: '1px solid #357abd',
+                marginBottom: '10px'
+              }}>
+                <p><strong style={{ color: '#1e3a72' }}>🧥 Locker Interaction System:</strong> Manual engagement rewards</p>
+                <ul style={{ marginLeft: '20px', color: '#1e3a72' }}>
+                  <li><strong>Reward:</strong> 3 GUM points per interaction</li>
+                  <li><strong>Location:</strong> Navigate to "My Locker" → Interact with jacket area</li>
+                  <li><strong>Cooldown:</strong> 5-hour intervals between interactions</li>
+                  <li><strong>Daily Maximum:</strong> 15 GUM per day (5 interactions)</li>
+                </ul>
+              </div>
+              
+              <div style={{ 
+                background: 'linear-gradient(90deg, #fff8e6 0%, #ffefcc 100%)', 
+                padding: '10px', 
+                borderRadius: '8px', 
+                border: '1px solid #d4a017'
+              }}>
+                <p><strong style={{ color: '#b8860b' }}>🎉 Special Event System:</strong> Time-limited bonus distributions</p>
+                <ul style={{ marginLeft: '20px', color: '#8b6914' }}>
+                  <li><strong>Weekend Events:</strong> 25 GUM bonus (Saturday-Sunday)</li>
+                  <li><strong>Welcome Bonus:</strong> 100 GUM (first-time user incentive)</li>
+                  <li><strong>Seasonal Events:</strong> Holiday-themed reward cycles</li>
+                  <li><strong>Access:</strong> Monitor Gum Center for active events</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div style={{ 
+              background: 'rgba(255, 255, 255, 0.9)', 
+              padding: '15px', 
+              borderRadius: '10px', 
+              border: '2px solid #4a90e2',
+              marginBottom: '15px'
+            }}>
+              <h4 style={{ color: '#1e3a72', fontSize: '16px', marginBottom: '10px' }}>📊 System Dashboard</h4>
+              <p>Your GUM balance interface displays in the top-right corner, featuring:</p>
+              <ul style={{ marginLeft: '20px', color: '#2c5aa0' }}>
+                <li><strong>Current Balance:</strong> Real-time point total</li>
+                <li><strong>Live Updates:</strong> Animated balance changes upon earning</li>
+                <li><strong>Persistent Storage:</strong> Data linked to wallet address</li>
+              </ul>
+              
+              <p style={{ marginTop: '10px' }}><strong>System Access:</strong> Click the 🍬 Gum Center icon to view detailed statistics and mechanics!</p>
+            </div>
+            
+            <div style={{ 
+              background: 'linear-gradient(45deg, #4a90e2 0%, #357abd 100%)', 
+              padding: '15px', 
+              borderRadius: '10px', 
+              border: '2px solid #2c5aa0',
+              textAlign: 'center'
+            }}>
+              <h4 style={{ color: '#ffffff', fontSize: '16px', marginBottom: '10px' }}>⚙️ Daily Optimization Strategy</h4>
+              <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: '10px' }}>
+                <div style={{ background: 'rgba(255, 255, 255, 0.9)', padding: '10px', borderRadius: '8px', minWidth: '120px' }}>
+                  <div style={{ fontSize: '24px' }}>🌅</div>
+                  <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#1e3a72' }}>Daily Login</div>
+                  <div style={{ fontSize: '14px', color: '#2c5aa0' }}>+15 GUM</div>
+                </div>
+                <div style={{ background: 'rgba(255, 255, 255, 0.9)', padding: '10px', borderRadius: '8px', minWidth: '120px' }}>
+                  <div style={{ fontSize: '24px' }}>🧥</div>
+                  <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#1e3a72' }}>Locker System</div>
+                  <div style={{ fontSize: '14px', color: '#2c5aa0' }}>+15 GUM/day</div>
+                </div>
+                <div style={{ background: 'rgba(255, 255, 255, 0.9)', padding: '10px', borderRadius: '8px', minWidth: '120px' }}>
+                  <div style={{ fontSize: '24px' }}>🎉</div>
+                  <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#1e3a72' }}>Event System</div>
+                  <div style={{ fontSize: '14px', color: '#2c5aa0' }}>+25-100 GUM</div>
+                </div>
+              </div>
+              <p style={{ margin: '10px 0 0 0', fontSize: '12px', fontWeight: 'bold', color: '#ffffff' }}>
+                � Maximum Daily Yield: 30+ GUM with systematic engagement �
+              </p>
+            </div>
+            
+            <div style={{ 
+              marginTop: '15px', 
+              padding: '10px', 
+              background: 'rgba(74, 144, 226, 0.1)', 
+              border: '1px solid #4a90e2',
+              borderRadius: '8px',
+              textAlign: 'center'
+            }}>
+              <strong style={{ color: '#1e3a72' }}>🔧 System Administration:</strong> Press <code>Ctrl + G</code> to access the GUM admin panel for detailed system analytics!
+            </div>
           </PageContent>
         );
         
@@ -1191,7 +1282,7 @@ const GameManualWindow: React.FC = () => {
       onClose={() => closeWindow(WINDOW_IDS.GAME_MANUAL)}
       initialWidth="600px"
       initialHeight="650px"
-      headerTitle="Flunks High School - Official Game Manual"
+      headerTitle="Semester Zero Game Manual"
       headerIcon="/images/icons/game-manual-icon.png"
     >
       <ManualContainer>
