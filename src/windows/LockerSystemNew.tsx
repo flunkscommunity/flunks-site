@@ -687,7 +687,8 @@ const LockerSystemNew: React.FC = () => {
                         padding: '40px',
                         borderRadius: '20px',
                         textAlign: 'center',
-                        maxWidth: '500px',
+                        width: '75%',
+                        maxWidth: '800px',
                         backdropFilter: 'blur(10px)',
                         border: '1px solid rgba(255,255,255,0.1)'
                       }}>
@@ -699,7 +700,8 @@ const LockerSystemNew: React.FC = () => {
                         {/* Jacket Selection Interface */}
                         <div style={{
                           position: 'relative',
-                          width: '300px',
+                          width: '100%',
+                          maxWidth: '600px',
                           margin: '20px auto',
                           display: 'flex',
                           alignItems: 'center',
@@ -711,14 +713,14 @@ const LockerSystemNew: React.FC = () => {
                             onClick={() => switchJacket('left')}
                             style={{
                               position: 'absolute',
-                              left: '0px',
+                              left: '20px',
                               background: 'rgba(255,255,255,0.2)',
                               border: '2px solid #4299e1',
                               borderRadius: '50%',
-                              width: '40px',
-                              height: '40px',
+                              width: '50px',
+                              height: '50px',
                               color: 'white',
-                              fontSize: '18px',
+                              fontSize: '20px',
                               cursor: 'pointer',
                               display: 'flex',
                               alignItems: 'center',
@@ -741,8 +743,8 @@ const LockerSystemNew: React.FC = () => {
                           {/* Jacket Display */}
                           <div style={{
                             position: 'relative',
-                            width: '240px',
-                            height: '280px',
+                            width: '400px',
+                            height: '480px',
                             margin: '0 20px',
                             display: 'flex',
                             flexDirection: 'column',
@@ -752,8 +754,8 @@ const LockerSystemNew: React.FC = () => {
                             
                             {/* Jacket Image or Placeholder */}
                             <div style={{
-                              width: '200px',
-                              height: '240px',
+                              width: '350px',
+                              height: '420px',
                               background: 'linear-gradient(145deg, #1a365d, #2d3748)',
                               borderRadius: '60px 60px 20px 20px',
                               border: '3px solid #4299e1',
@@ -775,23 +777,23 @@ const LockerSystemNew: React.FC = () => {
                               {/* Jacket sleeves */}
                               <div style={{
                                 position: 'absolute',
-                                left: '-15px',
-                                top: '20px',
-                                width: '25px',
-                                height: '60px',
+                                left: '-20px',
+                                top: '30px',
+                                width: '35px',
+                                height: '100px',
                                 background: 'linear-gradient(145deg, #1a365d, #2d3748, #4a5568)',
-                                borderRadius: '15px',
+                                borderRadius: '20px',
                                 border: '2px solid #4299e1',
                                 boxShadow: 'inset 0 2px 5px rgba(255,255,255,0.1)'
                               }} />
                               <div style={{
                                 position: 'absolute',
-                                right: '-15px',
-                                top: '20px',
-                                width: '25px',
-                                height: '60px',
+                                right: '-20px',
+                                top: '30px',
+                                width: '35px',
+                                height: '100px',
                                 background: 'linear-gradient(145deg, #1a365d, #2d3748, #4a5568)',
-                                borderRadius: '15px',
+                                borderRadius: '20px',
                                 border: '2px solid #4299e1',
                                 boxShadow: 'inset 0 2px 5px rgba(255,255,255,0.1)'
                               }} />
@@ -825,14 +827,14 @@ const LockerSystemNew: React.FC = () => {
                             onClick={() => switchJacket('right')}
                             style={{
                               position: 'absolute',
-                              right: '0px',
+                              right: '20px',
                               background: 'rgba(255,255,255,0.2)',
                               border: '2px solid #4299e1',
                               borderRadius: '50%',
-                              width: '40px',
-                              height: '40px',
+                              width: '50px',
+                              height: '50px',
                               color: 'white',
-                              fontSize: '18px',
+                              fontSize: '20px',
                               cursor: 'pointer',
                               display: 'flex',
                               alignItems: 'center',

@@ -115,8 +115,8 @@ const Onlyflunks: React.FC = () => {
         headerTitle="OnlyFlunks"
         windowsId={WINDOW_IDS.FLUNKS_HUB}
         onClose={() => closeWindow(WINDOW_IDS.FLUNKS_HUB)}
-        initialWidth="600px"
-        initialHeight="500px"
+        initialWidth="900px"
+        initialHeight="700px"
         headerIcon="/images/icons/onlyflunks.png"
       >
         <Frame variant="inside" className="p-4 h-full w-full flex flex-col items-start gap-4">

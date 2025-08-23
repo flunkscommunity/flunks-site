@@ -54,11 +54,11 @@ const CustomImage = styled.img`
   }
 `;
 
-// Retro 8-bit grid styling - Fixed responsive layout
+// Retro 8-bit grid styling - Fixed 4-per-row layout for OnlyFlunks
 const RetroGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
   padding: 16px;
   width: 100%;
   box-sizing: border-box;
@@ -71,18 +71,19 @@ const RetroGrid = styled.div`
   background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
   
   @media (max-width: 1200px) {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
   }
   
   @media (max-width: 800px) {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
     padding: 12px;
   }
   
   @media (max-width: 600px) {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
     padding: 8px;
   }
 `;

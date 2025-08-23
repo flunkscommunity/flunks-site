@@ -17,3 +17,6 @@ Error awarding gum: {
   message: 'insert or update on table "user_gum_cooldowns" violates foreign key constraint "fk_gum_cooldowns_wallet"'
 }
  POST /api/daily-checkin 200 in 728ms
+ ✓ Compiled in 303ms (98 modules)
+ ✓ Compiled in 176ms (98 modules)
+ ✓ Compiled in 123ms (98 modules)

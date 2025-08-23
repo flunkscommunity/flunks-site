@@ -550,7 +550,10 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
         padding: '30px',
         textAlign: 'center',
         boxShadow: '0 0 20px rgba(255, 255, 255, 0.5)',
-        maxWidth: '500px'
+        width: '100%',
+        minWidth: '320px',
+        maxWidth: '90vw',
+        boxSizing: 'border-box'
       }}>
         <div style={{ 
           fontSize: '48px', 
@@ -584,11 +587,14 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
           background: 'rgba(255,255,255,0.9)',
           border: '2px solid #000',
           borderRadius: '8px',
-          padding: '15px',
+          padding: '20px',
           color: '#000',
           fontSize: '14px',
           fontWeight: 'bold',
-          marginBottom: '20px'
+          marginBottom: '20px',
+          wordWrap: 'break-word',
+          maxWidth: '100%',
+          minWidth: '300px'
         }}>
           ✨ Profile Details ✨<br/>
           👤 {formData.username}<br/>
