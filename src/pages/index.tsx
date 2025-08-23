@@ -36,6 +36,7 @@ import BulletinBoard from "windows/BulletinBoard";
 import Yearbook from "windows/Yearbook";
 import AccessLevelStatus from "components/AccessLevelStatus";
 import ConditionalAppIcon from "components/ConditionalAppIcon";
+import { getUserAccessLevel } from "utils/appPermissions";
 import { BACKGROUND_CONFIG } from "config/backgroundConfig";
 import useThemeSettings from "store/useThemeSettings";
 import RPGProfileForm from "components/UserProfile/RPGProfileForm";
@@ -91,7 +92,7 @@ const Desktop = () => {
   const { windows, openWindow, closeWindow, windowApps } = useWindowsContext();
   const { showGettingStartedOnStartup } = useGettingStarted();
   const [showGumAdmin, setShowGumAdmin] = useState(false);
-  const { primaryWallet } = useDynamicContext();
+  const { primaryWallet, setShowAuthFlow } = useDynamicContext();
   const { hasProfile, profile } = useUserProfile();
 
   // Keyboard shortcut for gum admin panel (Ctrl+G)
@@ -155,48 +156,127 @@ const windowsMemod = useMemo(() => (
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.USER_PROFILE, window: <LockerSystemNew /> })}
         />
 
-        {/* 3. Create Profile - Only show if wallet connected */}
-        {primaryWallet?.address && (
-          <ConditionalAppIcon
-            appId="create-profile"
-            title={hasProfile ? `Edit ${profile?.username || 'Profile'}` : "Create Profile"}
-            icon="/images/icons/astro-mascot.png"
-            onDoubleClick={() => openWindow({
-              key: 'PROFILE_CREATOR',
-              window: (
-                <DraggableResizeableWindow
-                  windowsId="PROFILE_CREATOR"
-                  onClose={() => closeWindow('PROFILE_CREATOR')}
-                  headerTitle={hasProfile ? "Edit Your Flunks Profile" : "Create Your Flunks Profile"}
-                  headerIcon="/images/icons/astro-mascot.png"
-                  initialWidth="auto"
-                  initialHeight="auto"
-                  resizable={false}
-                  style={{ zIndex: 1000 }}
-                >
-                  <div style={{ 
-                    background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)',
-                    minHeight: '400px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <RPGProfileForm 
-                      onComplete={() => {
-                        closeWindow('PROFILE_CREATOR');
-                        alert(hasProfile ? 
-                          '✅ Profile updated successfully!' : 
-                          '🎉 Profile created successfully! Welcome to the Flunks community!'
-                        );
-                      }}
-                      onCancel={() => closeWindow('PROFILE_CREATOR')}
-                    />
-                  </div>
-                </DraggableResizeableWindow>
-              )
-            })}
-          />
-        )}
+        {/* 3. Create Profile - Show for BETA+ users */}
+        {(() => {
+          const userAccessLevel = getUserAccessLevel();
+          const showCreateProfile = userAccessLevel && ['ADMIN', 'BETA', 'COMMUNITY'].includes(userAccessLevel);
+          
+          if (!showCreateProfile) return null;
+          
+          return (
+            <ConditionalAppIcon
+              appId="create-profile"
+              title={hasProfile ? `Edit ${profile?.username || 'Profile'}` : "Create Profile"}
+              icon="/images/icons/astro-mascot.png"
+              onDoubleClick={() => {
+                // If no wallet connected, show sign-in prompt
+                if (!primaryWallet?.address) {
+                  openWindow({
+                    key: 'PROFILE_SIGNIN_PROMPT',
+                    window: (
+                      <DraggableResizeableWindow
+                        windowsId="PROFILE_SIGNIN_PROMPT"
+                        onClose={() => closeWindow('PROFILE_SIGNIN_PROMPT')}
+                        headerTitle="Sign In Required"
+                        headerIcon="/images/icons/astro-mascot.png"
+                        initialWidth="400px"
+                        initialHeight="300px"
+                        resizable={false}
+                        style={{ zIndex: 1000 }}
+                      >
+                        <div style={{ 
+                          background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)',
+                          height: '100%',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          padding: '30px',
+                          textAlign: 'center',
+                          color: 'white'
+                        }}>
+                          <img 
+                            src="/images/icons/astro-mascot.png" 
+                            alt="Flunks Astronaut" 
+                            style={{ width: '64px', height: '80px', marginBottom: '20px' }}
+                          />
+                          <h2 style={{ margin: '0 0 15px 0', fontSize: '20px' }}>Create Your Profile</h2>
+                          <p style={{ margin: '0 0 20px 0', fontSize: '14px', lineHeight: '1.4' }}>
+                            Connect your wallet to create your Semester Zero character profile and get your locker assigned!
+                          </p>
+                          <button
+                            onClick={() => {
+                              closeWindow('PROFILE_SIGNIN_PROMPT');
+                              setShowAuthFlow(true);
+                            }}
+                            style={{
+                              background: '#ffffff',
+                              color: '#8b5cf6',
+                              border: '2px solid #8b5cf6',
+                              borderRadius: '8px',
+                              padding: '12px 24px',
+                              fontSize: '16px',
+                              fontWeight: 'bold',
+                              cursor: 'pointer',
+                              transition: 'all 0.2s ease'
+                            }}
+                            onMouseOver={(e) => {
+                              e.currentTarget.style.background = '#8b5cf6';
+                              e.currentTarget.style.color = '#ffffff';
+                            }}
+                            onMouseOut={(e) => {
+                              e.currentTarget.style.background = '#ffffff';
+                              e.currentTarget.style.color = '#8b5cf6';
+                            }}
+                          >
+                            🔗 Connect Wallet
+                          </button>
+                        </div>
+                      </DraggableResizeableWindow>
+                    )
+                  });
+                  return;
+                }
+                
+                // If wallet connected, show profile form
+                openWindow({
+                  key: 'PROFILE_CREATOR',
+                  window: (
+                    <DraggableResizeableWindow
+                      windowsId="PROFILE_CREATOR"
+                      onClose={() => closeWindow('PROFILE_CREATOR')}
+                      headerTitle={hasProfile ? "Edit Your Flunks Profile" : "Create Your Flunks Profile"}
+                      headerIcon="/images/icons/astro-mascot.png"
+                      initialWidth="auto"
+                      initialHeight="auto"
+                      resizable={false}
+                      style={{ zIndex: 1000 }}
+                    >
+                      <div style={{ 
+                        background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)',
+                        minHeight: '400px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                        <RPGProfileForm 
+                          onComplete={() => {
+                            closeWindow('PROFILE_CREATOR');
+                            alert(hasProfile ? 
+                              '✅ Profile updated successfully!' : 
+                              '🎉 Profile created successfully! Welcome to the Flunks community!'
+                            );
+                          }}
+                          onCancel={() => closeWindow('PROFILE_CREATOR')}
+                        />
+                      </div>
+                    </DraggableResizeableWindow>
+                  )
+                });
+              }}
+            />
+          );
+        })()}
 
         {/* 4. Terminal */}
         <ConditionalAppIcon
