@@ -10,6 +10,7 @@ import useMessengerSounds from 'hooks/useMessengerSounds';
 import useAIChat from 'hooks/useAIChat';
 import useChatMessages from 'hooks/useChatMessages';
 import useLocalChatMessages from 'hooks/useLocalChatMessages';
+import UserDisplay from 'components/UserDisplay';
 import { 
   Window, 
   WindowHeader, 
@@ -216,6 +217,7 @@ const UserSetup = styled.div`
 interface Message {
   id: string;
   username: string;
+  profileIcon?: string;
   text: string;
   timestamp: Date;
   isOwn: boolean;
@@ -233,6 +235,7 @@ interface Contact {
 interface OnlineUser {
   username: string;
   walletAddress: string;
+  profileIcon?: string;
   isCurrentUser?: boolean;
 }
 
@@ -274,6 +277,7 @@ const FlunksMessenger: React.FC = () => {
       mockUsers.unshift({
         username: currentUserName,
         walletAddress: user.userId,
+        profileIcon: profile?.profile_icon,
         isCurrentUser: true
       });
     }
@@ -358,7 +362,7 @@ const FlunksMessenger: React.FC = () => {
       // Use local state for AI rooms
       const displayUsername = customUsername || username;
       const isOwn = displayUsername === username && !isAI;
-      return localChat.addMessage(messageText, displayUsername, isAI, isOwn);
+      return localChat.addMessage(messageText, displayUsername, isAI, isOwn, isAI ? '🤖' : profile?.profile_icon);
     }
   }, [isRoomPersistent, persistentChat.postMessage, localChat.addMessage, username]);
 
@@ -390,7 +394,7 @@ const FlunksMessenger: React.FC = () => {
       if (roomName === selectedContact) {
         const displayUsername = customUsername || username;
         const isOwn = displayUsername === username && !isAI;
-        return localChat.addMessage(messageText, displayUsername, isAI, isOwn);
+        return localChat.addMessage(messageText, displayUsername, isAI, isOwn, isAI ? '🤖' : profile?.profile_icon);
       }
     }
     return false;
@@ -671,15 +675,23 @@ const FlunksMessenger: React.FC = () => {
                 key={user.walletAddress} 
                 isCurrentUser={user.isCurrentUser}
               >
-                <span className="username">
-                  {user.isCurrentUser ? `${user.username} (You)` : user.username}
-                </span>
-                <span className="wallet">
-                  {user.walletAddress.length > 10 
-                    ? `${user.walletAddress.slice(0, 6)}...${user.walletAddress.slice(-4)}`
-                    : user.walletAddress
-                  }
-                </span>
+                <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <UserDisplay
+                    username={user.isCurrentUser ? `${user.username} (You)` : user.username}
+                    profileIcon={user.profileIcon}
+                    size="small"
+                    style={{ 
+                      color: user.isCurrentUser ? '#0066cc' : '#333',
+                      fontWeight: user.isCurrentUser ? 'bold' : 'normal'
+                    }}
+                  />
+                  <span className="wallet">
+                    {user.walletAddress.length > 10 
+                      ? `${user.walletAddress.slice(0, 6)}...${user.walletAddress.slice(-4)}`
+                      : user.walletAddress
+                    }
+                  </span>
+                </div>
               </OnlineUserItem>
             ))}
           </div>
@@ -714,7 +726,14 @@ const FlunksMessenger: React.FC = () => {
           {messages.map((message) => (
             <MessageBubble key={message.id} isOwn={message.isOwn} isSystem={message.isSystem}>
               <div className="message-header">
-                {message.username}
+                <UserDisplay
+                  username={message.username}
+                  profileIcon={message.profileIcon}
+                  size="small"
+                  style={{
+                    color: message.isSystem ? '#666' : message.isOwn ? '#0066cc' : '#cc0000'
+                  }}
+                />
                 <span className="message-time">{formatTime(message.timestamp)}</span>
               </div>
               <div className="message-text">{message.text}</div>

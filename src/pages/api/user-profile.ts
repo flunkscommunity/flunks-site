@@ -11,6 +11,7 @@ const supabase = createClient(
 export interface UserProfileData {
   wallet_address: string;
   username: string;
+  profile_icon?: string;
   discord_id?: string;
   email?: string;
 }
@@ -21,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { wallet_address: raw_wallet_address, username, discord_id, email }: UserProfileData = req.body;
+  const { wallet_address: raw_wallet_address, username, profile_icon, discord_id, email }: UserProfileData = req.body;
   const wallet_address = normalizeWalletAddress(raw_wallet_address);
 
   // Validation
@@ -88,6 +89,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .upsert({
         wallet_address,
         username,
+        profile_icon: profile_icon || '🎭',
         discord_id: discord_id || null,
         email: email || null,
       }, {

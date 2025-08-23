@@ -15,11 +15,13 @@ interface ChatMessage {
   is_ai: boolean;
   ai_agent_id?: string;
   created_at: string;
+  profile_icon?: string;
 }
 
 interface Message {
   id: string;
   username: string;
+  profileIcon?: string;
   text: string;
   timestamp: Date;
   isOwn: boolean;
@@ -37,6 +39,7 @@ const useChatMessages = (roomName: string, currentUsername: string) => {
     return {
       id: dbMessage.id.toString(),
       username: dbMessage.username,
+      profileIcon: dbMessage.profile_icon,
       text: dbMessage.message_text,
       timestamp: new Date(dbMessage.created_at),
       isOwn: dbMessage.username === currentUsername,

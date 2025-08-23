@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Fetch user profiles for those wallets
   const { data: profilesData } = await supabase
     .from('user_profiles')
-    .select('wallet_address, username')
+    .select('wallet_address, username, profile_icon')
     .in('wallet_address', walletAddresses);
 
   // Create a lookup map for profiles
@@ -46,6 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       wallet: row.wallet,
       score: row.score,
       username: userProfile?.username || `${row.wallet.slice(0, 6)}...${row.wallet.slice(-4)}`,
+      profile_icon: userProfile?.profile_icon,
       hasProfile: !!userProfile?.username
     };
   });

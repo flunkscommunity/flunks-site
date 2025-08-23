@@ -3,6 +3,7 @@ import { useState, useCallback } from 'react';
 interface Message {
   id: string;
   username: string;
+  profileIcon?: string;
   text: string;
   timestamp: Date;
   isOwn: boolean;
@@ -17,11 +18,13 @@ const useLocalChatMessages = (currentUsername: string) => {
     messageText: string,
     username: string,
     isAI: boolean = false,
-    isOwn: boolean = false
+    isOwn: boolean = false,
+    profileIcon?: string
   ) => {
     const newMessage: Message = {
       id: `${Date.now()}-${Math.random()}`,
       username,
+      profileIcon: isAI ? '🤖' : profileIcon,
       text: messageText,
       timestamp: new Date(),
       isOwn,

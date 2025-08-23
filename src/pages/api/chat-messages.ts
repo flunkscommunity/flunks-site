@@ -28,7 +28,37 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ error: error.message });
       }
 
-      return res.status(200).json({ messages: messages || [] });
+      // Get profile icons for users who have messages
+      const usernames = [...new Set(
+        messages?.filter(m => m.username && !['System'].includes(m.username) && !m.is_ai)
+                .map(m => m.username) || []
+      )];
+
+      let profilesData = [];
+      if (usernames.length > 0) {
+        const { data, error: profileError } = await supabase
+          .from('user_profiles')
+          .select('username, profile_icon')
+          .in('username', usernames);
+
+        if (!profileError) {
+          profilesData = data || [];
+        }
+      }
+
+      // Create a map of username to profile icon
+      const profileMap = new Map();
+      profilesData.forEach(profile => {
+        profileMap.set(profile.username, profile.profile_icon);
+      });
+
+      // Add profile icons to messages
+      const messagesWithIcons = messages?.map(message => ({
+        ...message,
+        profile_icon: message.is_ai ? '🤖' : profileMap.get(message.username)
+      })) || [];
+
+      return res.status(200).json({ messages: messagesWithIcons });
 
     } catch (error) {
       console.error('🔥 Chat messages fetch error:', error);

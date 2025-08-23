@@ -5,6 +5,7 @@ export interface UserProfile {
   id: number;
   wallet_address: string;
   username: string;
+  profile_icon?: string;
   discord_id?: string;
   email?: string;
   created_at: string;
@@ -14,6 +15,7 @@ export interface UserProfile {
 export interface UserProfileData {
   wallet_address: string;
   username: string;
+  profile_icon?: string;
   discord_id?: string;
   email?: string;
 }

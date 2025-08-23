@@ -4,11 +4,31 @@ import { useUserProfile } from 'contexts/UserProfileContext';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import styled from 'styled-components';
 import { trackProfileActivation, generateSessionId, PROFILE_STEPS } from 'utils/activityTracking';
+import ProfileIconSelector from './ProfileIconSelector';
+import UserDisplay from '../UserDisplay';
 
 // Background pattern definitions
 const backgroundPatterns = {
   gradient: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)',
-  diagonal: `linear-gradient(45deg, #8b5cf6 25%, #a855f7 25%, #a855f7 50%, #8b5cf6 50%, #8b5cf6 75%, #a855f7 75%)`,
+  diagonal: `linear-gradient(45deg,         <div style={{
+          background: '#222',
+          border: '2px solid #666',
+          borderRadius: '8px',
+          padding: '20px',
+          color: '#000',
+          fontSize: '14px',
+          fontWeight: 'bold',
+          marginBottom: '20px',
+          wordWrap: 'break-word',
+          maxWidth: '100%',
+          minWidth: '300px'
+        }}>
+          ✨ Profile Details ✨<br/>
+          {formData.profile_icon} {formData.username}<br/>
+          {formData.discord_id && <>🎮 {formData.discord_id}<br/></>}
+          {formData.email && <>📧 {formData.email}<br/></>}
+          💰 {primaryWallet?.address?.slice(0, 6)}...{primaryWallet?.address?.slice(-4)}
+        </div>7 25%, #a855f7 50%, #8b5cf6 50%, #8b5cf6 75%, #a855f7 75%)`,
   dots: `radial-gradient(circle at 25% 25%, #a855f7 2px, transparent 2px), radial-gradient(circle at 75% 75%, #8b5cf6 2px, transparent 2px), linear-gradient(135deg, #a855f7, #8b5cf6)`,
   checkerboard: `linear-gradient(45deg, #8b5cf6 25%, transparent 25%), linear-gradient(-45deg, #8b5cf6 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #a855f7 75%), linear-gradient(-45deg, transparent 75%, #a855f7 75%)`,
   hexagon: `linear-gradient(30deg, #8b5cf6 12%, transparent 12.5%, transparent 87%, #8b5cf6 87.5%, #8b5cf6), linear-gradient(150deg, #8b5cf6 12%, transparent 12.5%, transparent 87%, #8b5cf6 87.5%, #8b5cf6), linear-gradient(30deg, #8b5cf6 12%, transparent 12.5%, transparent 87%, #8b5cf6 87.5%, #8b5cf6), linear-gradient(150deg, #8b5cf6 12%, transparent 12.5%, transparent 87%, #8b5cf6 87.5%, #8b5cf6), #a855f7`,
@@ -240,7 +260,7 @@ interface RPGProfileFormProps {
   onCancel?: () => void;
 }
 
-type FormStep = 'username' | 'discord' | 'email' | 'confirm' | 'success';
+type FormStep = 'username' | 'icon' | 'discord' | 'email' | 'confirm' | 'success';
 
 const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel }) => {
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
@@ -250,6 +270,7 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
   const [backgroundPattern, setBackgroundPattern] = useState<keyof typeof backgroundPatterns>('checkerboard');
   const [formData, setFormData] = useState({
     username: '',
+    profile_icon: '🎭', // Default icon
     discord_id: '',
     email: ''
   });
@@ -269,6 +290,7 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
     if (isEditMode && profile) {
       setFormData({
         username: profile.username || '',
+        profile_icon: profile.profile_icon || '🎭',
         discord_id: profile.discord_id || '',
         email: profile.email || ''
       });
@@ -305,6 +327,13 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
       prompt: 'What do you want to be called in the Flunks universe?',
       placeholder: 'FlunkMaster2024',
       maxLength: 32,
+      required: true
+    },
+    icon: {
+      title: 'Profile Icon',
+      prompt: 'Choose an icon that will represent you on leaderboards and throughout the site!',
+      placeholder: '',
+      maxLength: 0,
       required: true
     },
     discord: {
@@ -411,7 +440,7 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
     }));
 
     // Move to next step
-    const steps: FormStep[] = ['username', 'discord', 'email', 'confirm'];
+    const steps: FormStep[] = ['username', 'icon', 'discord', 'email', 'confirm'];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex < steps.length - 1) {
       setCurrentStep(steps[currentIndex + 1]);
@@ -421,14 +450,14 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
   };
 
   const handleSkip = () => {
-    if (currentStep === 'username') return; // Username is required
+    if (currentStep === 'username' || currentStep === 'icon') return; // Username and icon are required
     
     setFormData(prev => ({
       ...prev,
       [currentStep === 'discord' ? 'discord_id' : currentStep]: ''
     }));
 
-    const steps: FormStep[] = ['username', 'discord', 'email', 'confirm'];
+    const steps: FormStep[] = ['username', 'icon', 'discord', 'email', 'confirm'];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex < steps.length - 1) {
       setCurrentStep(steps[currentIndex + 1]);
@@ -538,6 +567,7 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
   );
 
   const renderSuccessScreen = () => {
+    console.log('Success screen formData:', formData);
     return (
     <UsernameContainer>
       <AstroLogo src="/images/icons/astro-mascot.png" alt="Flunks Astronaut" />
@@ -597,7 +627,12 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
           minWidth: '300px'
         }}>
           ✨ Profile Details ✨<br/>
-          👤 {formData.username}<br/>
+          <UserDisplay 
+            username={formData.username} 
+            profileIcon={formData.profile_icon || '🎭'}
+            size="medium"
+            style={{ margin: '8px 0', fontSize: '16px' }}
+          /><br/>
           {formData.discord_id && <>🎮 {formData.discord_id}<br/></>}
           {formData.email && <>📧 {formData.email}<br/></>}
           💰 {primaryWallet?.address?.slice(0, 6)}...{primaryWallet?.address?.slice(-4)}
@@ -624,7 +659,12 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
             borderRadius: '8px',
             cursor: 'pointer',
             boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
-            textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+            textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+            width: '100%',
+            maxWidth: '320px',
+            minHeight: '48px',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden'
           }}
         >
           🚀 Continue to Flunks Universe!
@@ -688,6 +728,32 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
         renderConfirmationScreen()
       ) : currentStep === 'success' ? (
         renderSuccessScreen()
+      ) : currentStep === 'icon' ? (
+        <ProfileIconSelector
+          username={formData.username}
+          selectedIcon={formData.profile_icon}
+          onIconChange={(icon) => {
+            console.log('Icon selected:', icon);
+            setFormData(prev => {
+              const updated = { ...prev, profile_icon: icon };
+              console.log('Updated formData:', updated);
+              return updated;
+            });
+          }}
+          onConfirm={() => {
+            const steps: FormStep[] = ['username', 'icon', 'discord', 'email', 'confirm'];
+            const currentIndex = steps.indexOf(currentStep);
+            if (currentIndex < steps.length - 1) {
+              setCurrentStep(steps[currentIndex + 1]);
+              setCurrentInput('');
+              setValidationMessage('');
+            }
+          }}
+          onBack={() => {
+            setCurrentStep('username');
+            setCurrentInput(formData.username);
+          }}
+        />
       ) : (
         <>
           {currentStep === 'username' ? (

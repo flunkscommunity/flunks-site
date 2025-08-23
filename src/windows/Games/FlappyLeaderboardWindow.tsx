@@ -8,6 +8,7 @@ import {
   TableBody,
   TableDataCell,
 } from 'react95';
+import UserDisplay from 'components/UserDisplay';
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -15,6 +16,7 @@ interface ScoreRow {
   wallet: string;
   score: number;
   username: string;
+  profile_icon?: string;
   hasProfile: boolean;
   challenge_id?: string;
   metadata?: any;
@@ -60,12 +62,17 @@ const FlappyLeaderboardWindow: React.FC = () => {
               <TableRow key={idx}>
                 <TableDataCell>{idx + 1}</TableDataCell>
                 <TableDataCell className="truncate max-w-[120px]" title={row.hasProfile ? row.username : row.wallet}>
-                  <span style={{ 
-                    color: row.hasProfile ? '#000' : '#666',
-                    fontWeight: row.hasProfile ? 'bold' : 'normal'
-                  }}>
-                    {row.username}
-                  </span>
+                  <UserDisplay
+                    username={row.username}
+                    profileIcon={row.profile_icon}
+                    size="small"
+                    showWalletFallback={!row.hasProfile}
+                    walletAddress={row.wallet}
+                    style={{
+                      color: row.hasProfile ? '#000' : '#666',
+                      fontWeight: row.hasProfile ? 'bold' : 'normal'
+                    }}
+                  />
                   {row.hasProfile && (
                     <span style={{ 
                       fontSize: '10px', 

@@ -28,6 +28,12 @@ export const APP_PERMISSIONS: AppPermission[] = [
     description: 'Manage your profile'
   },
   {
+    id: 'create-profile',
+    title: 'Create Profile',
+    requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
+    description: 'Create or edit your user profile'
+  },
+  {
     id: 'radio',
     title: 'Radio',
     requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
