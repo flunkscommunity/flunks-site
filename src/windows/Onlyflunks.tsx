@@ -3,72 +3,52 @@ import { Frame, Button } from "react95";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
 import { AndroidOptimizations } from "components/AndroidOptimizations";
-import { useDynamicContext, DynamicWidget } from "@dynamic-labs/sdk-react-core";
-import { usePaginatedItems } from "contexts/UserPaginatedItems";
+import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
+import { useAuth } from "contexts/AuthContext";
 import { useState, useEffect } from "react";
 import ItemsGrid from "components/YourItems/ItemsGrid";
 import BootScreen from "components/BootScreen";
 
 const Onlyflunks: React.FC = () => {
   const { closeWindow } = useWindowsContext();
-  const { user, primaryWallet } = useDynamicContext();
+  const auth = useAuth();
   const [bootComplete, setBootComplete] = useState(false);
   
-  // Add error handling for the paginated items hook
-  let paginatedItemsData;
-  let paginatedItemsError = null;
-  
-  try {
-    paginatedItemsData = usePaginatedItems();
-  } catch (error) {
-    console.error('🚨 OnlyFlunks: Error with usePaginatedItems hook:', error);
-    paginatedItemsError = error;
-    // Fallback values
-    paginatedItemsData = {
-      allItems: [],
-      flunksCount: 0,
-      backpacksCount: 0,
-      error: null,
-      isLoading: false
-    };
-  }
-  
-  const { allItems, flunksCount, backpacksCount, error: contextError, isLoading } = paginatedItemsData;
-  
-  // Combine both possible error sources
-  const finalError = paginatedItemsError || contextError;
-
-  // Use the same authentication check as other components - just check for wallet address
-  const isAuthenticated = !!primaryWallet?.address;
+  // Destructure auth context for easier use
+  const {
+    isAuthenticated,
+    isWalletConnected,
+    walletAddress,
+    flunksCount,
+    hasFlunks,
+    isLoading,
+    user,
+    primaryWallet,
+    getAuthStatus
+  } = auth;
 
   // IMMEDIATE DEBUG - This should show up as soon as OnlyFlunks opens
   console.log('🚨 ONLYFLUNKS OPENED - IMMEDIATE DEBUG:', {
     timestamp: new Date().toISOString(),
     user: user,
     primaryWallet: primaryWallet,
-    walletAddress: primaryWallet?.address,
-    isAuthenticated: isAuthenticated
+    walletAddress: walletAddress,
+    isAuthenticated: isAuthenticated,
+    authStatus: getAuthStatus()
   });
 
   // Log every render
   console.log('🎯 OnlyFlunks RENDER:', new Date().toLocaleTimeString());
 
-  // Enhanced debug logging
+  // Enhanced debug logging with the new authentication logic
   console.log('🧠 OnlyFlunks Authentication State:', {
-    user: !!user,
-    userType: typeof user,
-    userKeys: user ? Object.keys(user) : null,
-    primaryWallet: !!primaryWallet,
-    primaryWalletType: typeof primaryWallet,
-    primaryWalletKeys: primaryWallet ? Object.keys(primaryWallet) : null,
-    walletAddress: primaryWallet?.address,
-    walletConnector: primaryWallet?.connector,
     isAuthenticated,
-    allItemsLength: allItems.length,
-    paginatedItemsError: paginatedItemsError?.message || 'none',
-    contextError: contextError?.message || 'none',
-    finalError: finalError?.message || 'none',
-    isLoading
+    isWalletConnected,
+    walletAddress,
+    flunksCount,
+    hasFlunks,
+    isLoading,
+    authStatus: getAuthStatus()
   });
 
   // Extra detailed wallet debugging
@@ -82,8 +62,8 @@ const Onlyflunks: React.FC = () => {
     primaryWallet
   });
 
-  // Check if Dynamic Context is still initializing
-  const isDynamicLoading = user === undefined && primaryWallet === undefined;
+  // Check if Dynamic Context is still initializing - use auth context loading state
+  const showLoadingState = isLoading;
 
   // Add a useEffect to continuously monitor the wallet state
   useEffect(() => {
@@ -91,16 +71,15 @@ const Onlyflunks: React.FC = () => {
     const interval = setInterval(() => {
       console.log('🔄 OnlyFlunks Wallet Monitor:', {
         timestamp: new Date().toISOString(),
-        user: !!user,
-        primaryWallet: !!primaryWallet,
-        walletAddress: primaryWallet?.address,
         isAuthenticated,
-        isDynamicLoading
+        isWalletConnected,
+        walletAddress,
+        authStatus: getAuthStatus()
       });
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [user, primaryWallet, isAuthenticated, isDynamicLoading]);
+  }, [isAuthenticated, isWalletConnected, walletAddress]);
 
   // Show boot screen first if not completed
   if (!bootComplete) {
@@ -120,22 +99,8 @@ const Onlyflunks: React.FC = () => {
         headerIcon="/images/icons/onlyflunks.png"
       >
         <Frame variant="inside" className="p-4 h-full w-full flex flex-col items-start gap-4">
-          {finalError ? (
-            // Show error state if the paginated items hook failed
-            <div className="w-full h-full flex flex-col items-center justify-center gap-4">
-              <div className="text-2xl">⚠️</div>
-              <h3>Error Loading OnlyFlunks</h3>
-              <p className="text-center text-red-600">
-                {finalError.message || 'Unknown error occurred'}
-              </p>
-              <div className="text-xs text-center p-4 bg-red-50 border border-red-200 rounded max-w-md">
-                <strong>Debug Info:</strong><br />
-                This error occurred while loading your NFT collection data.<br />
-                Please check your wallet connection and try refreshing the page.
-              </div>
-            </div>
-          ) : isDynamicLoading ? (
-            // Show loading while Dynamic Context initializes
+          {showLoadingState ? (
+            // Show loading while Auth Context initializes
             <div className="w-full h-full flex flex-col items-center justify-center gap-4">
               <div className="text-2xl">⏳</div>
               <p>Loading wallet context...</p>
@@ -155,9 +120,10 @@ const Onlyflunks: React.FC = () => {
               </div>
               <div className="text-xs text-center p-4 bg-gray-100 rounded">
                 <strong>Debug Info:</strong><br />
-                User: {user ? '✅' : '❌'}<br />
-                Wallet: {primaryWallet ? '✅' : '❌'}<br />
-                Address: {primaryWallet?.address || 'None'}
+                Authenticated: {isAuthenticated ? '✅' : '❌'}<br />
+                Wallet Connected: {isWalletConnected ? '✅' : '❌'}<br />
+                Address: {walletAddress || 'None'}<br />
+                Auth Status: {getAuthStatus()}
               </div>
             </div>
           ) : (

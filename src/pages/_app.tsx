@@ -25,6 +25,7 @@ import { UserProfileProvider } from "contexts/UserProfileContext";
 import { AudioProvider } from "contexts/AudioContext";
 import { RadioProvider } from "contexts/RadioContext";
 import { GumProvider } from "contexts/GumContext";
+import { AuthProvider } from "contexts/AuthContext";
 import { GumDisplay } from "components/GumDisplay";
 import UserProfilePrompt from "components/UserProfile/UserProfilePrompt";
 // Removed mobile wallet components to show standard Dynamic installation
@@ -121,18 +122,20 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                 >
                   <UserProfileProvider>
                     <PaginatedItemsProvider>
-                      <GumProvider>
-                        <div className="app-container min-h-screen w-full overflow-hidden">
-                          <Component {...pageProps} />
-                        </div>
-                        <Analytics />
-                        {/* Global Profile Creation Prompt - only show when needed */}
-                        <UserProfilePrompt autoShow={false} showToast={false} />
-                        {/* Removed all mobile wallet helper components to show standard Dynamic installation */}
-                        {/* <SmartWalletDetection /> */}
-                        {/* <CleanMobileWalletSelector /> */}
-                        <DynamicUserProfile />
-                      </GumProvider>
+                      <AuthProvider>
+                        <GumProvider>
+                          <div className="app-container min-h-screen w-full overflow-hidden">
+                            <Component {...pageProps} />
+                          </div>
+                          <Analytics />
+                          {/* Global Profile Creation Prompt - only show when needed */}
+                          <UserProfilePrompt autoShow={false} showToast={false} />
+                          {/* Removed all mobile wallet helper components to show standard Dynamic installation */}
+                          {/* <SmartWalletDetection /> */}
+                          {/* <CleanMobileWalletSelector /> */}
+                          <DynamicUserProfile />
+                        </GumProvider>
+                      </AuthProvider>
                     </PaginatedItemsProvider>
                   </UserProfileProvider>
                 </DynamicContextProvider>

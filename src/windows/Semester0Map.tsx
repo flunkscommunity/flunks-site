@@ -31,7 +31,7 @@ import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import ErrorWindow from 'windows/ErrorWindow';
 import { useHouseImage } from '../utils/dayNightHouses';
 import { DynamicHouseIcon } from '../components/DynamicHouseIcon';
-import { usePaginatedItems } from 'contexts/UserPaginatedItems';
+import { useAuth } from 'contexts/AuthContext';
 
 interface Props {
   onClose: () => void;
@@ -59,21 +59,12 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   // Clique access hooks
   const { hasAccess } = useCliqueAccess();
   const { user, primaryWallet } = useDynamicContext();
+  const auth = useAuth();
   
-  // Safe NFT data access with fallback
-  let flunksCount = 0;
-  try {
-    const paginatedItems = usePaginatedItems();
-    flunksCount = paginatedItems?.flunksCount || 0;
-  } catch (error) {
-    console.log('PaginatedItems not available, defaulting to 0 flunks');
-  }
+  // Get authentication and NFT data from auth context
+  const { isAuthenticated, flunksCount, hasFlunks } = auth;
 
-  // Authentication is wallet connection, but access is NFT-based
-  const isAuthenticated = user || primaryWallet?.address;
-  const hasFlunks = flunksCount > 0;
-
-  // Helper function to handle location access - checks NFT ownership
+  // Helper function to handle location access - checks NFT ownership but allows wallet-only auth
   const handleLocationAccess = (
     locationKey: string, 
     openLocationWindow: () => void, 
@@ -82,6 +73,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
     if (!isAuthenticated) {
       // Show connection prompt
       console.log('Please connect your wallet to access locations');
+      alert('Please connect your wallet to access this location.');
       return;
     }
     
