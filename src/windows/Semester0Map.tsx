@@ -29,6 +29,8 @@ import SemesterZeroCSSLoader from "components/SemesterZeroCSSLoader";
 import { useCliqueAccess, CliqueType } from 'hooks/useCliqueAccess';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import ErrorWindow from 'windows/ErrorWindow';
+import { useHouseImage } from '../utils/dayNightHouses';
+import { DynamicHouseIcon } from '../components/DynamicHouseIcon';
 
 interface Props {
   onClose: () => void;
@@ -384,7 +386,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
   {!isMobile && hovered && <div className={styles["map-overlay"]} />}
 
-      <div
+      <DynamicHouseIcon
+        houseId="arcade"
         className={`${styles.icon} ${styles.arcade}`}
         onDoubleClick={() =>
           handleLocationAccess('arcade', () => 
@@ -405,18 +408,18 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             })
           )
         }
-  onClick={(e) => handleEnhancedClick('arcade', e)}
-  onMouseEnter={() => user && setHovered('arcade')}
-  onMouseLeave={() => setHovered(null)}
-  onTouchStart={() => user && handleTouchEnter('arcade')}
-  onTouchEnd={handleTouchLeave}
-      >
-      </div>
+        onClick={(e) => handleEnhancedClick('arcade', e)}
+        onMouseEnter={() => user && setHovered('arcade')}
+        onMouseLeave={() => setHovered(null)}
+        onTouchStart={() => user && handleTouchEnter('arcade')}
+        onTouchEnd={handleTouchLeave}
+      />
 
       {/* New locations */}
 
       {/* New locations */}
-      <div
+      <DynamicHouseIcon
+        houseId="jocks-house"
         className={`${styles.icon} ${styles['jocks-house']}`}
         onDoubleClick={() =>
           handleCliqueHouseAccess(
@@ -437,15 +440,15 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             "Jock's House"
           )
         }
-  onClick={(e) => handleEnhancedClick('jocks-house', e)}
-  onMouseEnter={() => user && setHovered('jocks-house')}
-  onMouseLeave={() => setHovered(null)}
-  onTouchStart={() => user && handleTouchEnter('jocks-house')}
-  onTouchEnd={handleTouchLeave}
-      >
-      </div>
+        onClick={(e) => handleEnhancedClick('jocks-house', e)}
+        onMouseEnter={() => user && setHovered('jocks-house')}
+        onMouseLeave={() => setHovered(null)}
+        onTouchStart={() => user && handleTouchEnter('jocks-house')}
+        onTouchEnd={handleTouchLeave}
+      />
 
-      <div
+      <DynamicHouseIcon
+        houseId="freaks-house"
         className={`${styles.icon} ${styles.large} ${styles['freaks-house']}`}
         onDoubleClick={() =>
           handleCliqueHouseAccess(
@@ -466,15 +469,15 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             "Freak's House"
           )
         }
-  onClick={(e) => handleEnhancedClick('freaks-house', e)}
-  onMouseEnter={() => user && setHovered('freaks-house')}
-  onMouseLeave={() => setHovered(null)}
-  onTouchStart={() => user && handleTouchEnter('freaks-house')}
-  onTouchEnd={handleTouchLeave}
-      >
-      </div>
+        onClick={(e) => handleEnhancedClick('freaks-house', e)}
+        onMouseEnter={() => user && setHovered('freaks-house')}
+        onMouseLeave={() => setHovered(null)}
+        onTouchStart={() => user && handleTouchEnter('freaks-house')}
+        onTouchEnd={handleTouchLeave}
+      />
 
-      <div
+      <DynamicHouseIcon
+        houseId="geeks-house"
         className={`${styles.icon} ${styles.large} ${styles['geeks-house']}`}
         onDoubleClick={() =>
           handleCliqueHouseAccess(
@@ -495,21 +498,21 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             "Geek's House"
           )
         }
-  onClick={(e) => handleEnhancedClick('geeks-house', e)}
-  onMouseEnter={() => user && setHovered('geeks-house')}
-  onMouseLeave={() => setHovered(null)}
-  onTouchStart={() => user && handleTouchEnter('geeks-house')}
-  onTouchEnd={handleTouchLeave}
-      >
-      </div>
+        onClick={(e) => handleEnhancedClick('geeks-house', e)}
+        onMouseEnter={() => user && setHovered('geeks-house')}
+        onMouseLeave={() => setHovered(null)}
+        onTouchStart={() => user && handleTouchEnter('geeks-house')}
+        onTouchEnd={handleTouchLeave}
+      />
 
-      <div
+      <DynamicHouseIcon
+        houseId="preps-house"
         className={`${styles.icon} ${styles['preps-house']}`}
-  onClick={(e) => handleEnhancedClick('preps-house', e)}
-  onMouseEnter={() => user && setHovered('preps-house')}
-  onMouseLeave={() => setHovered(null)}
-  onTouchStart={() => user && handleTouchEnter('preps-house')}
-  onTouchEnd={handleTouchLeave}
+        onClick={(e) => handleEnhancedClick('preps-house', e)}
+        onMouseEnter={() => user && setHovered('preps-house')}
+        onMouseLeave={() => setHovered(null)}
+        onTouchStart={() => user && handleTouchEnter('preps-house')}
+        onTouchEnd={handleTouchLeave}
         onDoubleClick={() =>
           handleCliqueHouseAccess(
             'PREP',
@@ -529,8 +532,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             "Prep's House"
           )
         }
-      >
-      </div>
+      />
 
       <div
         className={`${styles.icon} ${styles['flunk-fm']}`}
@@ -812,13 +814,14 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       >
       </div>
 
-      <div
+      <DynamicHouseIcon
+        houseId="high-school"
         className={`${styles.icon} ${styles.large} ${styles["high-school"]}`}
-  onClick={(e) => handleEnhancedClick('high-school', e)}
-  onMouseEnter={() => user && setHovered('high-school')}
-  onMouseLeave={() => setHovered(null)}
-  onTouchStart={() => user && handleTouchEnter('high-school')}
-  onTouchEnd={handleTouchLeave}
+        onClick={(e) => handleEnhancedClick('high-school', e)}
+        onMouseEnter={() => user && setHovered('high-school')}
+        onMouseLeave={() => setHovered(null)}
+        onTouchStart={() => user && handleTouchEnter('high-school')}
+        onTouchEnd={handleTouchLeave}
         onDoubleClick={() =>
           handleLocationAccess('high-school', () =>
             openWindow({
@@ -838,8 +841,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             })
           )
         }
-      >
-      </div>
+      />
 
       {/* Hover PNG Preview for High School */}
   {!isMobile && hovered === 'high-school' && !enhancedHover && (

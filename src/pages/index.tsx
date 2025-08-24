@@ -44,6 +44,7 @@ import { useUserProfile } from "contexts/UserProfileContext";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 import { GumAdminPanel } from "components/GumAdminPanel";
+import { TimeConfigAdmin } from "components/DayNightHouse";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -92,15 +93,20 @@ const Desktop = () => {
   const { windows, openWindow, closeWindow, windowApps } = useWindowsContext();
   const { showGettingStartedOnStartup } = useGettingStarted();
   const [showGumAdmin, setShowGumAdmin] = useState(false);
+  const [showTimeAdmin, setShowTimeAdmin] = useState(false);
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
   const { hasProfile, profile } = useUserProfile();
 
-  // Keyboard shortcut for gum admin panel (Ctrl+G)
+  // Keyboard shortcut for gum admin panel (Ctrl+G) and time admin (Ctrl+T)
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.ctrlKey && event.key.toLowerCase() === 'g') {
         event.preventDefault();
         setShowGumAdmin(prev => !prev);
+      }
+      if (event.ctrlKey && event.key.toLowerCase() === 't') {
+        event.preventDefault();
+        setShowTimeAdmin(prev => !prev);
       }
     };
 
@@ -572,6 +578,45 @@ const windowsMemod = useMemo(() => (
       {/* Gum Admin Panel - Ctrl+G to toggle */}
       {showGumAdmin && (
         <GumAdminPanel onClose={() => setShowGumAdmin(false)} />
+      )}
+
+      {/* Time Admin Panel - Ctrl+T to toggle */}
+      {showTimeAdmin && (
+        <div style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 9999,
+          background: 'white',
+          borderRadius: '8px',
+          padding: '8px',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)'
+        }}>
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            marginBottom: '8px',
+            borderBottom: '1px solid #ccc',
+            paddingBottom: '8px'
+          }}>
+            <h2 style={{ margin: 0, fontSize: '18px' }}>🌅🌙 Day/Night Configuration</h2>
+            <button 
+              onClick={() => setShowTimeAdmin(false)}
+              style={{ 
+                background: 'none', 
+                border: 'none', 
+                fontSize: '20px', 
+                cursor: 'pointer',
+                color: '#666'
+              }}
+            >
+              ✖
+            </button>
+          </div>
+          <TimeConfigAdmin />
+        </div>
       )}
     </>
   );
