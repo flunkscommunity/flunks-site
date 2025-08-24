@@ -31,6 +31,7 @@ import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import ErrorWindow from 'windows/ErrorWindow';
 import { useHouseImage } from '../utils/dayNightHouses';
 import { DynamicHouseIcon } from '../components/DynamicHouseIcon';
+import { usePaginatedItems } from 'contexts/UserPaginatedItems';
 
 interface Props {
   onClose: () => void;
@@ -58,28 +59,51 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   // Clique access hooks
   const { hasAccess } = useCliqueAccess();
   const { user, primaryWallet } = useDynamicContext();
+  
+  // Safe NFT data access with fallback
+  let flunksCount = 0;
+  try {
+    const paginatedItems = usePaginatedItems();
+    flunksCount = paginatedItems?.flunksCount || 0;
+  } catch (error) {
+    console.log('PaginatedItems not available, defaulting to 0 flunks');
+  }
 
-  // More robust authentication check - wallet connection is primary indicator
+  // Authentication is wallet connection, but access is NFT-based
   const isAuthenticated = user || primaryWallet?.address;
+  const hasFlunks = flunksCount > 0;
 
-  // Helper function to handle location access - checks wallet connection first
+  // Helper function to handle location access - checks NFT ownership
   const handleLocationAccess = (
     locationKey: string, 
     openLocationWindow: () => void, 
     e?: React.MouseEvent
   ) => {
     if (!isAuthenticated) {
-      // User not signed in - do nothing
+      // Show connection prompt
+      console.log('Please connect your wallet to access locations');
       return;
     }
-    // User is signed in - proceed with normal access
+    
+    if (!hasFlunks) {
+      // Show NFT requirement message
+      alert(`You need at least 1 Flunk NFT to access locations. You currently have ${flunksCount} Flunks.`);
+      return;
+    }
+    
+    // User has NFTs - proceed with normal access
     openLocationWindow();
   };
 
   // Helper function to check clique access and handle unauthorized attempts
   const handleCliqueHouseAccess = (clique: CliqueType, windowId: string, component: JSX.Element, houseName: string) => {
     if (!isAuthenticated) {
-      // User not signed in - do nothing (no error popup needed since we show the overlay)
+      alert('Please connect your wallet to access clique houses.');
+      return;
+    }
+
+    if (!hasFlunks) {
+      alert(`You need at least 1 Flunk NFT to access locations. You currently have ${flunksCount} Flunks.`);
       return;
     }
 
@@ -364,19 +388,34 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         </div>
       )}
       
-      {/* Wallet connection prompt for non-authenticated users */}
-      {!isAuthenticated && !loading && (
-        <div className={styles["wallet-prompt-overlay"]}>
-          <div className={styles["wallet-prompt-message"]}>
-            <h2>🔒 Sign in using your wallet to participate in Semester Zero!</h2>
-          </div>
-        </div>
-      )}
+      {/* Map is always visible - access restrictions handled at location level */}
       
       {/* Opening animation for school icon */}
       {showOpeningAnimation && !loading && (
         <div className={styles["opening-animation-overlay"]}>
           <div className={styles["opening-school-icon"]}></div>
+        </div>
+      )}
+
+      {/* Wallet Status Indicator */}
+      {!loading && (
+        <div style={{
+          position: 'absolute',
+          top: '20px',
+          right: '20px',
+          background: isAuthenticated ? (hasFlunks ? '#4CAF50' : '#FF9800') : '#f44336',
+          color: 'white',
+          padding: '8px 16px',
+          borderRadius: '20px',
+          fontSize: '12px',
+          fontWeight: 'bold',
+          zIndex: 1000,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+          fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif'
+        }}>
+          {isAuthenticated ? (
+            hasFlunks ? `✅ ${flunksCount} Flunks - Full Access` : `⚠️ Connected - Need Flunks for Access`
+          ) : `❌ No Wallet Connected`}
         </div>
       )}
       
