@@ -57,7 +57,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   
   // Clique access hooks
   const { hasAccess } = useCliqueAccess();
-  const { user } = useDynamicContext();
+  const { user, primaryWallet } = useDynamicContext();
+
+  // More robust authentication check - wallet connection is primary indicator
+  const isAuthenticated = user || primaryWallet?.address;
 
   // Helper function to handle location access - checks wallet connection first
   const handleLocationAccess = (
@@ -65,7 +68,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
     openLocationWindow: () => void, 
     e?: React.MouseEvent
   ) => {
-    if (!user) {
+    if (!isAuthenticated) {
       // User not signed in - do nothing
       return;
     }
@@ -75,7 +78,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
   // Helper function to check clique access and handle unauthorized attempts
   const handleCliqueHouseAccess = (clique: CliqueType, windowId: string, component: JSX.Element, houseName: string) => {
-    if (!user) {
+    if (!isAuthenticated) {
       // User not signed in - do nothing (no error popup needed since we show the overlay)
       return;
     }
@@ -362,7 +365,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       )}
       
       {/* Wallet connection prompt for non-authenticated users */}
-      {!user && !loading && (
+      {!isAuthenticated && !loading && (
         <div className={styles["wallet-prompt-overlay"]}>
           <div className={styles["wallet-prompt-message"]}>
             <h2>🔒 Sign in using your wallet to participate in Semester Zero!</h2>
