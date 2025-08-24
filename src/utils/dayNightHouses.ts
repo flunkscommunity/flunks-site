@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from './supabaseClient';
+import { supabase } from '../lib/supabase';
 
 export interface HouseImage {
   house_id: string;
@@ -25,6 +25,11 @@ export interface TimeConfig {
  */
 export async function getHouseImage(houseId: string): Promise<string | null> {
   try {
+    if (!supabase) {
+      console.warn('Supabase not configured');
+      return null;
+    }
+
     const { data, error } = await supabase
       .rpc('get_house_image', { house_id_param: houseId });
 
@@ -45,6 +50,11 @@ export async function getHouseImage(houseId: string): Promise<string | null> {
  */
 export async function getAllHousesWithCurrentImages(): Promise<HouseImage[]> {
   try {
+    if (!supabase) {
+      console.warn('Supabase not configured');
+      return [];
+    }
+
     const { data, error } = await supabase
       .from('house_images_current')
       .select('*');
@@ -66,6 +76,11 @@ export async function getAllHousesWithCurrentImages(): Promise<HouseImage[]> {
  */
 export async function isDayTime(): Promise<boolean> {
   try {
+    if (!supabase) {
+      console.warn('Supabase not configured, defaulting to day time');
+      return true;
+    }
+
     const { data, error } = await supabase
       .rpc('is_day_time');
 
@@ -86,6 +101,11 @@ export async function isDayTime(): Promise<boolean> {
  */
 export async function getTimeConfig(): Promise<TimeConfig | null> {
   try {
+    if (!supabase) {
+      console.warn('Supabase not configured');
+      return null;
+    }
+
     const { data, error } = await supabase
       .from('time_config')
       .select('*')
@@ -111,6 +131,11 @@ export async function getTimeConfig(): Promise<TimeConfig | null> {
  */
 export async function updateTimeConfig(config: Partial<TimeConfig>): Promise<boolean> {
   try {
+    if (!supabase) {
+      console.warn('Supabase not configured');
+      return false;
+    }
+
     // First, deactivate all configs
     await supabase
       .from('time_config')
