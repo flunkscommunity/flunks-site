@@ -54,14 +54,20 @@
   font-size: 28px;
   transition: all 0.3s ease;
   border-radius: 50%;
-  background-color: transparent;
-  backdrop-filter: none;
-  border: 2px solid transparent;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(2px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  animation: gentlePulse 3s ease-in-out infinite;
 }
 
 .icon:hover {
   transform: scale(1.2);
   cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+  animation: activePulse 1.5s ease-in-out infinite;
 }
 
 .icon:active {
@@ -905,6 +911,29 @@
   color: #00ff9c;
   font-family: 'w95fa', 'Courier New', monospace;
   letter-spacing: 1px;
+}
+
+/* Pulse animations for interactive locations */
+@keyframes gentlePulse {
+  0%, 100% { 
+    opacity: 0.8;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  }
+  50% { 
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+}
+
+@keyframes activePulse {
+  0%, 100% { 
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+    transform: scale(1.2);
+  }
+  50% { 
+    box-shadow: 0 0 35px rgba(255, 255, 255, 0.6);
+    transform: scale(1.25);
+  }
 }
 
 @media (max-width: 768px) {

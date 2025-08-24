@@ -447,7 +447,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         onMouseLeave={() => setHovered(null)}
         onTouchStart={() => user && handleTouchEnter('arcade')}
         onTouchEnd={handleTouchLeave}
-      />
+      >
+        🕹️
+      </DynamicHouseIcon>
 
       {/* New locations */}
 

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
+import { useAuth } from './AuthContext';
 import { 
   getUserGumStats, 
   getUserGumBalance, 
@@ -47,36 +48,44 @@ export const GumProvider: React.FC<GumProviderProps> = ({
   autoRefreshInterval = 30000 
 }) => {
   const { primaryWallet } = useDynamicContext();
+  const auth = useAuth();
   const [balance, setBalance] = useState<number>(0);
   const [stats, setStats] = useState<GumStats | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Use auth context for wallet address - more reliable
+  const walletAddress = auth.walletAddress || primaryWallet?.address;
+
   // Refresh balance only
   const refreshBalance = useCallback(async () => {
-    if (!primaryWallet?.address) {
+    if (!walletAddress || !auth.isAuthenticated) {
+      console.log('🍬 GumProvider: No wallet address or not authenticated, setting balance to 0');
       setBalance(0);
       return;
     }
 
     try {
       setError(null);
-      const newBalance = await getUserGumBalance(primaryWallet.address);
+      console.log('🍬 GumProvider: Fetching balance for wallet:', walletAddress);
+      const newBalance = await getUserGumBalance(walletAddress);
+      console.log('🍬 GumProvider: Got balance:', newBalance);
       setBalance(newBalance);
       
       // Dispatch custom event for other components
       window.dispatchEvent(new CustomEvent('gumBalanceUpdated', { 
-        detail: { balance: newBalance, walletAddress: primaryWallet.address }
+        detail: { balance: newBalance, walletAddress: walletAddress }
       }));
     } catch (err) {
-      console.error('Error refreshing gum balance:', err);
+      console.error('🍬 GumProvider: Error refreshing gum balance:', err);
       setError('Failed to refresh balance');
     }
-  }, [primaryWallet?.address]);
+  }, [walletAddress, auth.isAuthenticated]);
 
   // Refresh full stats
   const refreshStats = useCallback(async () => {
-    if (!primaryWallet?.address) {
+    if (!walletAddress || !auth.isAuthenticated) {
+      console.log('🍬 GumProvider: No wallet address or not authenticated, clearing stats');
       setStats(null);
       setBalance(0);
       return;
@@ -86,27 +95,29 @@ export const GumProvider: React.FC<GumProviderProps> = ({
     setError(null);
 
     try {
-      const newStats = await getUserGumStats(primaryWallet.address);
+      console.log('🍬 GumProvider: Fetching stats for wallet:', walletAddress);
+      const newStats = await getUserGumStats(walletAddress);
       if (newStats) {
+        console.log('🍬 GumProvider: Got stats:', newStats);
         setStats(newStats);
         setBalance(newStats.current_balance);
         
         // Dispatch custom event
         window.dispatchEvent(new CustomEvent('gumStatsUpdated', { 
-          detail: { stats: newStats, walletAddress: primaryWallet.address }
+          detail: { stats: newStats, walletAddress: walletAddress }
         }));
       }
     } catch (err) {
-      console.error('Error refreshing gum stats:', err);
+      console.error('🍬 GumProvider: Error refreshing gum stats:', err);
       setError('Failed to refresh stats');
     } finally {
       setLoading(false);
     }
-  }, [primaryWallet?.address]);
+  }, [walletAddress, auth.isAuthenticated]);
 
   // Earn gum from a source
   const earnGum = useCallback(async (source: string, metadata?: any): Promise<GumAwardResult> => {
-    if (!primaryWallet?.address) {
+    if (!walletAddress || !auth.isAuthenticated) {
       return {
         success: false,
         earned: 0,
@@ -115,7 +126,9 @@ export const GumProvider: React.FC<GumProviderProps> = ({
     }
 
     try {
-      const result = await awardGum(primaryWallet.address, source, metadata);
+      console.log('🍬 GumProvider: Awarding gum from source:', source, 'to wallet:', walletAddress);
+      const result = await awardGum(walletAddress, source, metadata);
+      console.log('🍬 GumProvider: Award result:', result);
       
       if (result.success && result.earned > 0) {
         // Update local balance immediately for responsive UI
@@ -129,14 +142,14 @@ export const GumProvider: React.FC<GumProviderProps> = ({
       
       return result;
     } catch (err) {
-      console.error('Error earning gum:', err);
+      console.error('🍬 GumProvider: Error earning gum:', err);
       return {
         success: false,
         earned: 0,
         error: 'Failed to earn gum'
       };
     }
-  }, [primaryWallet?.address, refreshBalance]);
+  }, [walletAddress, auth.isAuthenticated, refreshBalance]);
 
   // Update balance manually (for optimistic updates)
   const updateBalance = useCallback((newBalance: number) => {
@@ -159,38 +172,40 @@ export const GumProvider: React.FC<GumProviderProps> = ({
     return balance >= cost;
   }, [balance]);
 
-  // Initial load when wallet connects
+  // Initial load when wallet connects - use auth context
   useEffect(() => {
-    if (primaryWallet?.address) {
+    if (walletAddress && auth.isAuthenticated) {
+      console.log('🍬 GumProvider: Wallet connected, loading GUM data for:', walletAddress);
       refreshStats();
       
-      // Auto-claim daily login bonus
-      autoClaimDailyLogin(primaryWallet.address).then(() => {
-        // Refresh balance after potential daily login claim
-        setTimeout(() => refreshBalance(), 1000);
-      });
+      // TODO: Re-enable daily login after database setup is confirmed
+      // autoClaimDailyLogin(walletAddress).then(() => {
+      //   // Refresh balance after potential daily login claim
+      //   setTimeout(() => refreshBalance(), 1000);
+      // });
       
       // Check for special events
-      checkForSpecialEvents(primaryWallet.address);
+      checkForSpecialEvents(walletAddress);
     } else {
       // Reset state when wallet disconnects
+      console.log('🍬 GumProvider: Wallet disconnected, resetting GUM state');
       setBalance(0);
       setStats(null);
       setError(null);
       setLoading(false);
     }
-  }, [primaryWallet?.address, refreshStats, refreshBalance]);
+  }, [walletAddress, auth.isAuthenticated, refreshStats, refreshBalance]);
 
   // Auto refresh
   useEffect(() => {
-    if (!primaryWallet?.address || autoRefreshInterval <= 0) return;
+    if (!walletAddress || !auth.isAuthenticated || autoRefreshInterval <= 0) return;
 
     const interval = setInterval(() => {
       refreshBalance();
     }, autoRefreshInterval);
 
     return () => clearInterval(interval);
-  }, [primaryWallet?.address, autoRefreshInterval, refreshBalance]);
+  }, [walletAddress, auth.isAuthenticated, autoRefreshInterval, refreshBalance]);
 
   // Listen for external gum updates
   useEffect(() => {
