@@ -48,6 +48,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   } | null>(null);
   const [loading, setLoading] = useState(true);
   const [showOpeningAnimation, setShowOpeningAnimation] = useState(true);
+  // Special state for high school hover effect
+  const [highSchoolHovered, setHighSchoolHovered] = useState(false);
+  // Special state for arcade hover effect  
+  const [arcadeHovered, setArcadeHovered] = useState(false);
   const { openWindow, closeWindow } = useWindowsContext();
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInnerRef = useRef<HTMLDivElement>(null);
@@ -149,13 +153,79 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   };
 
   const handleEnhancedHover = (locationKey: string) => {
+    if (locationKey === 'high-school') {
+      setHighSchoolHovered(true);
+      return;
+    }
+    if (locationKey === 'arcade') {
+      setArcadeHovered(true);
+      return;
+    }
     setEnhancedHover(locationKey);
     setHovered(locationKey);
   };
 
   const handleEnhancedLeave = () => {
+    if (highSchoolHovered) {
+      setHighSchoolHovered(false);
+      return;
+    }
+    if (arcadeHovered) {
+      setArcadeHovered(false);
+      return;
+    }
     setEnhancedHover(null);
     setHovered(null);
+  };
+
+  const handleHighSchoolClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (highSchoolHovered && user) {
+      // Open the high school with day/night functionality
+      handleLocationAccess('high-school', () => 
+        openWindow({
+          key: WINDOW_IDS.HIGH_SCHOOL_MAIN,
+          window: (
+            <DraggableResizeableWindow
+              windowsId={WINDOW_IDS.HIGH_SCHOOL_MAIN}
+              headerTitle="High School"
+              onClose={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_MAIN)}
+              initialWidth="100%"
+              initialHeight="100%"
+              resizable={false}
+            >
+              <HighSchoolMain />
+            </DraggableResizeableWindow>
+          ),
+        })
+      );
+    }
+    setHighSchoolHovered(false);
+  };
+
+  const handleArcadeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (arcadeHovered && user) {
+      // Open the arcade with day/night functionality
+      handleLocationAccess('arcade', () => 
+        openWindow({
+          key: WINDOW_IDS.ARCADE_MAIN,
+          window: (
+            <DraggableResizeableWindow
+              windowsId={WINDOW_IDS.ARCADE_MAIN}
+              headerTitle="Arcade"
+              onClose={() => closeWindow(WINDOW_IDS.ARCADE_MAIN)}
+              initialWidth="100%"
+              initialHeight="100%"
+              resizable={false}
+            >
+              <ArcadeMain />
+            </DraggableResizeableWindow>
+          ),
+        })
+      );
+    }
+    setArcadeHovered(false);
   };
 
   const handleEnhancedClick = (locationKey: string, e: React.MouseEvent) => {
@@ -442,11 +512,11 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             })
           )
         }
-        onClick={(e) => handleEnhancedClick('arcade', e)}
+        onClick={handleArcadeClick}
         onMouseEnter={() => user && handleEnhancedHover('arcade')}
         onMouseLeave={handleEnhancedLeave}
-        onTouchStart={() => user && handleTouchEnter('arcade')}
-        onTouchEnd={handleTouchLeave}
+        onTouchStart={() => user && handleEnhancedHover('arcade')}
+        onTouchEnd={handleEnhancedLeave}
       >
       </DynamicHouseIcon>
 
@@ -597,17 +667,55 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             })
           )
         }
-        onClick={(e) => handleEnhancedClick('high-school', e)}
+        onClick={handleHighSchoolClick}
         onMouseEnter={() => user && handleEnhancedHover('high-school')}
         onMouseLeave={handleEnhancedLeave}
-        onTouchStart={() => user && handleTouchEnter('high-school')}
-        onTouchEnd={handleTouchLeave}
+        onTouchStart={() => user && handleEnhancedHover('high-school')}
+        onTouchEnd={handleEnhancedLeave}
       >
         🏫
       </DynamicHouseIcon>
 
       <button className={styles["close-btn"]} onClick={onClose}>✖</button>
       </div>
+
+      {/* Special High School Hover Overlay */}
+      {highSchoolHovered && (
+        <div 
+          className={styles["high-school-overlay"]}
+          onClick={handleHighSchoolClick}
+        >
+          {/* Dimmed background */}
+          <div className={styles["dimmed-background"]} />
+          
+          {/* Large high school icon */}
+          <div 
+            className={styles["large-high-school-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/high-school-icon.png)`
+            }}
+          />
+        </div>
+      )}
+
+      {/* Special Arcade Hover Overlay */}
+      {arcadeHovered && (
+        <div 
+          className={styles["arcade-overlay"]}
+          onClick={handleArcadeClick}
+        >
+          {/* Dimmed background */}
+          <div className={styles["dimmed-background"]} />
+          
+          {/* Large arcade icon */}
+          <div 
+            className={styles["large-arcade-icon"]}
+            style={{ 
+              backgroundImage: `url(/images/icons/arcade-icon.png)`
+            }}
+          />
+        </div>
+      )}
 
       {/* Enhanced Hover Overlay */}
       {enhancedHover && locationData[enhancedHover as keyof typeof locationData] && (

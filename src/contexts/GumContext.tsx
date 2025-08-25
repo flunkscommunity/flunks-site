@@ -178,11 +178,13 @@ export const GumProvider: React.FC<GumProviderProps> = ({
       console.log('🍬 GumProvider: Wallet connected, loading GUM data for:', walletAddress);
       refreshStats();
       
-      // TODO: Re-enable daily login after database setup is confirmed
-      // autoClaimDailyLogin(walletAddress).then(() => {
-      //   // Refresh balance after potential daily login claim
-      //   setTimeout(() => refreshBalance(), 1000);
-      // });
+      // Auto-claim daily login bonus when wallet connects
+      autoClaimDailyLogin(walletAddress).then(() => {
+        // Refresh balance after potential daily login claim
+        setTimeout(() => refreshBalance(), 1000);
+      }).catch(err => {
+        console.warn('🍬 Daily login auto-claim failed (this is normal on first connection):', err);
+      });
       
       // Check for special events
       checkForSpecialEvents(walletAddress);
