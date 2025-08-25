@@ -366,9 +366,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       map.removeEventListener('mousemove', move);
       map.removeEventListener('mouseup', stop);
       map.removeEventListener('mouseleave', stop);
-  map.removeEventListener('touchstart', start as EventListener);
-  map.removeEventListener('touchmove', move as EventListener);
-  map.removeEventListener('touchend', stop as EventListener);
+      map.removeEventListener('touchstart', start as EventListener);
+      map.removeEventListener('touchmove', move as EventListener);
+      map.removeEventListener('touchend', stop as EventListener);
     };
   }, []);
 

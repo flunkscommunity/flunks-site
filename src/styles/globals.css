@@ -1064,3 +1064,16 @@ input[type="text"], input[type="email"], input[type="password"], textarea, .curs
   flex-shrink: 0 !important;
   max-width: 100% !important;
 }
+
+/* OnlyFlunks 90s Authentication Screen Animations */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
