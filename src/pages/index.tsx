@@ -663,11 +663,27 @@ const Home: NextPage = () => {
     const isLocalhost = typeof window !== 'undefined' && 
       (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
     const isDev = process.env.NODE_ENV === 'development' || !process.env.NODE_ENV;
+    const isDevDomain = typeof window !== 'undefined' && 
+      window.location.hostname.startsWith('dev.');
+    const isProductionMainSite = typeof window !== 'undefined' && 
+      !window.location.hostname.startsWith('dev.') && 
+      !isLocalhost && 
+      process.env.NODE_ENV === 'production';
     
-    console.log('🔍 Access Check:', { accessGranted, isLocalhost, isDev, hostname: typeof window !== 'undefined' ? window.location.hostname : 'server' });
+    console.log('🔍 Access Check:', { 
+      accessGranted, 
+      isLocalhost, 
+      isDev, 
+      isDevDomain, 
+      isProductionMainSite, 
+      hostname: typeof window !== 'undefined' ? window.location.hostname : 'server' 
+    });
     
-    // Allow access for localhost development or if access was previously granted
-    if (accessGranted === 'true' || isLocalhost || isDev) {
+    // Access logic:
+    // - localhost: always allowed (development)
+    // - production main site (flunks.net): always allowed (no code needed)
+    // - dev domain (dev.flunks.net): requires access code
+    if (isLocalhost || isProductionMainSite || accessGranted === 'true') {
       setHasAccess(true);
     }
     

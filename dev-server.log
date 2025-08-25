@@ -2,161 +2,43 @@
 > flunks-95@0.1.0 dev
 > next dev
 
- ⚠ Port 3000 is in use, trying 3001 instead.
   ▲ Next.js 14.2.28
-  - Local:        http://localhost:3001
+  - Local:        http://localhost:3000
   - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 1282ms
- ✓ Compiled /api/daily-checkin in 123ms (114 modules)
-Error awarding gum: {
-  code: '23503',
-  details: 'Key (wallet_address)=(0x123testuser) is not present in table "user_profiles".',
-  hint: null,
-  message: 'insert or update on table "user_gum_cooldowns" violates foreign key constraint "fk_gum_cooldowns_wallet"'
+ ✓ Ready in 1470ms
+ ✓ Compiled /api/debug-daily-login in 135ms (112 modules)
+🔍 Debugging daily login for wallet: 0x123test
+📊 Daily login source config: {
+  id: 2,
+  source_name: 'daily_login',
+  base_reward: 5,
+  cooldown_minutes: 1440,
+  daily_limit: 5,
+  description: 'Daily login bonus - 5 GUM per day',
+  is_active: true,
+  created_at: '2025-08-14T15:37:54.313663+00:00',
+  updated_at: '2025-08-25T02:21:24.883381+00:00'
 }
- POST /api/daily-checkin 200 in 728ms
- ✓ Compiled in 303ms (98 modules)
- ✓ Compiled in 176ms (98 modules)
- ✓ Compiled in 123ms (98 modules)
- ✓ Compiled in 80ms (98 modules)
- ✓ Compiled in 66ms (98 modules)
- ✓ Compiled in 90ms (96 modules)
- ✓ Compiled in 71ms (96 modules)
- ✓ Compiled in 123ms (96 modules)
- ✓ Compiled in 115ms (96 modules)
- ✓ Compiled in 88ms (96 modules)
- ✓ Compiled in 58ms (96 modules)
- ✓ Compiled in 42ms (96 modules)
- ✓ Compiled in 51ms (96 modules)
- ✓ Compiled in 61ms (96 modules)
- ✓ Compiled in 40ms (96 modules)
- ✓ Compiled in 60ms (96 modules)
- ✓ Compiled in 35ms (96 modules)
- ✓ Compiled in 39ms (97 modules)
- ✓ Compiled in 46ms (97 modules)
- ✓ Compiled in 166ms (97 modules)
- ○ Compiling / ...
- ✓ Compiled / in 10.7s (3951 modules)
-[DEPRECATED] Default export is deprecated. Instead use `import { create } from 'zustand'`.
-[DEPRECATED] `getStorage`, `serialize` and `deserialize` options are deprecated. Use `storage` option instead.
-AccessGate Background Config: {
-  imageUrl: '/images/my-background.png',
-  enableScrolling: false,
-  pattern: 'none',
-  speed: 5,
-  opacity: 1,
-  tileSize: 25
+⏰ User cooldown record: {
+  id: 26,
+  wallet_address: '0x123test',
+  source_name: 'daily_login',
+  last_earned_at: '2025-08-25T02:39:12.914203+00:00',
+  daily_earned_amount: 5,
+  daily_reset_date: '2025-08-25'
 }
-[DEPRECATED] `getStorage`, `serialize` and `deserialize` options are deprecated. Use `storage` option instead.
-[]
-Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
-    at ShadowDOM (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/components/ShadowDOM/ShadowDOM.js:87:22)
-    at ShadowedDynamicUserProfile (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/widgets/DynamicWidget/components/DynamicUserProfile/DynamicUserProfile.js:111:39)
-    at GumProvider (webpack-internal:///./src/contexts/GumContext.tsx:31:24)
-    at PaginatedItemsProvider (webpack-internal:///./src/contexts/UserPaginatedItems.tsx:25:35)
-    at UserProfileProvider (webpack-internal:///./src/contexts/UserProfileContext.tsx:25:32)
-    at ErrorBoundaryExclude (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/ErrorBoundary/ErrorBoundaryExclude.js:4:1)
-    at SocialRedirectContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/SocialRedirectContext/SocialRedirectContext.js:85:42)
-    at PhantomRedirectContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/PhantomRedirectContext/PhantomRedirectContext.js:83:43)
-    at ConnectWithOtpProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/ConnectWithOtpContext/ConnectWithOtpProvider.js:91:35)
-    at UserFieldEditorContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/UserFieldEditorContext/UserFieldEditorContext.js:83:43)
-    at WalletGroupContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/WalletGroupContext/WalletGroupContext.js:15:39)
-    at SendBalanceContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/SendBalanceContext/SendBalanceContext.js:85:39)
-    at AccessDeniedContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/AccessDeniedContext/AccessDeniedContext.js:6:40)
-    at FundingContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/FundingContext/FundingContext.js:85:35)
-    at DynamicBridgeWidgetContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/widgets/DynamicBridgeWidget/context/DynamicBridgeWidgetContext/DynamicBridgeWidgetContext.js:14:47)
-    at DynamicWidgetContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/widgets/DynamicWidget/context/DynamicWidgetContext.js:84:41)
-    at PasskeyContextProviderWithBrowser (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/PasskeyContext/PasskeyContext.js:87:46)
-    at PasskeyContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/PasskeyContext/PasskeyContext.js:187:35)
-    at VerificationProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/VerificationContext/VerificationContext.js:7:33)
-    at WalletContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/WalletContext/WalletContext.js:6:34)
-    at AccountExistsContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/AccountExistsContext/AccountExistsContext.js:6:41)
-    at CaptchaContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/CaptchaContext/CaptchaContext.js:19:35)
-    at ViewContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/ViewContext/ViewContext.js:8:32)
-    at LoadingContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/LoadingContext/LoadingContext.js:81:35)
-    at ThemeContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/ThemeContext/ThemeContext.js:20:33)
-    at WalletBookContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/wallet-book/src/components/WalletBookContextProvider.js:5:38)
-    at I18nextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/react-i18next/dist/es/I18nextProvider.js:5:5)
-    at InnerDynamicContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/DynamicContext/DynamicContext.js:146:40)
-    at WidgetRegistryContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/WidgetRegistry/WidgetRegistryContextProvider.js:25:42)
-    at IpConfigurationContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/IpConfigurationContext/IpConfigurationContext.js:8:43)
-    at FieldsStateProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/FieldsStateContext/FieldsStateContext.js:7:32)
-    at UserWalletsProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/UserWalletsContext/UserWalletsContext.js:8:32)
-    at ErrorContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/ErrorContext/ErrorContext.js:30:33)
-    at ErrorBoundaryReporter (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/ErrorBoundary/ErrorBoundary.js:21:9)
-    at ErrorBoundary (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/ErrorBoundary/ErrorBoundary.js:52:11)
-    at ReinitializeContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/ReinitializeContext/ReinitializeContextProvider.js:30:40)
-    at DynamicContextProvider (file:///Users/jeremy/Desktop/flunks-site/node_modules/@dynamic-labs/sdk-react-core/src/lib/context/DynamicContext/DynamicContext.js:729:35)
-    at ClaimBackpackProvider (webpack-internal:///./src/contexts/BackpackClaimContext.tsx:22:13)
-    at WindowsProvider (webpack-internal:///./src/contexts/WindowsContext.tsx:35:13)
-    at RadioProvider (webpack-internal:///./src/contexts/RadioContext.tsx:29:26)
-    at AudioProvider (webpack-internal:///./src/contexts/AudioContext.tsx:20:26)
-    at exports.ThemeProvider (/Users/jeremy/Desktop/flunks-site/node_modules/styled-components/dist/styled-components.cjs.js:1:24846)
-    at ThemeWrapper (webpack-internal:///./src/pages/_app.tsx:60:25)
-    at MyApp (webpack-internal:///./src/pages/_app.tsx:71:18)
-    at StyleRegistry (/Users/jeremy/Desktop/flunks-site/node_modules/styled-jsx/dist/index/index.js:449:36)
-    at eU (/Users/jeremy/Desktop/flunks-site/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:8:20506)
-    at eH (/Users/jeremy/Desktop/flunks-site/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:17:1788)
-    at eJ (/Users/jeremy/Desktop/flunks-site/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:17:3091)
-    at div
-    at e9 (/Users/jeremy/Desktop/flunks-site/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:26:761)
- ✓ Compiled in 1036ms (2942 modules)
- ✓ Compiled in 1412ms (2944 modules)
- ✓ Compiled in 903ms (2944 modules)
- ✓ Compiled in 380ms (2944 modules)
- ✓ Compiled in 1044ms (2944 modules)
- ✓ Compiled in 736ms (2944 modules)
- ✓ Compiled in 351ms (2944 modules)
-<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/jeremy/Desktop/flunks-site/.next/cache/webpack/client-development/0.pack.gz_' -> '/Users/jeremy/Desktop/flunks-site/.next/cache/webpack/client-development/0.pack.gz'
- ✓ Compiled in 737ms (2944 modules)
- ✓ Compiled in 363ms (2846 modules)
- ✓ Compiled in 206ms (2846 modules)
- ✓ Compiled in 228ms (2846 modules)
- ✓ Compiled in 282ms (2846 modules)
- ✓ Compiled in 185ms (2846 modules)
- ✓ Compiled in 363ms (2846 modules)
- ✓ Compiled in 196ms (2846 modules)
- ✓ Compiled in 479ms (2846 modules)
- ✓ Compiled in 214ms (2846 modules)
- ✓ Compiled in 202ms (2846 modules)
- ✓ Compiled in 177ms (2846 modules)
- ✓ Compiled in 1010ms (2846 modules)
- ✓ Compiled in 214ms (2846 modules)
- ✓ Compiled in 465ms (2846 modules)
- ✓ Compiled in 189ms (2846 modules)
- ✓ Compiled in 240ms (2846 modules)
- ✓ Compiled in 248ms (2846 modules)
- ✓ Compiled in 403ms (2846 modules)
- ✓ Compiled in 432ms (2846 modules)
- ✓ Compiled in 237ms (2846 modules)
- ✓ Compiled in 217ms (2846 modules)
- ✓ Compiled in 233ms (2846 modules)
- ✓ Compiled in 267ms (2846 modules)
- ✓ Compiled in 242ms (2846 modules)
- ✓ Compiled in 265ms (2846 modules)
- ✓ Compiled in 243ms (2846 modules)
- ✓ Compiled in 223ms (2846 modules)
- ✓ Compiled in 170ms (2846 modules)
- ✓ Compiled in 156ms (2846 modules)
- ✓ Compiled in 309ms (2846 modules)
- ✓ Compiled in 398ms (2846 modules)
- ✓ Compiled in 196ms (2846 modules)
- ✓ Compiled in 253ms (2846 modules)
- ✓ Compiled in 641ms (2846 modules)
- ✓ Compiled in 266ms (2846 modules)
- ✓ Compiled in 192ms (2846 modules)
- ✓ Compiled in 218ms (2846 modules)
- ✓ Compiled in 189ms (2846 modules)
- ✓ Compiled in 233ms (2846 modules)
- ✓ Compiled in 225ms (2846 modules)
- ✓ Compiled in 432ms (2846 modules)
- ✓ Compiled in 161ms (2846 modules)
- ✓ Compiled in 172ms (2846 modules)
- ✓ Compiled in 311ms (2846 modules)
- ✓ Compiled in 422ms (2846 modules)
- ✓ Compiled in 318ms (2846 modules)
- ✓ Compiled in 171ms (2846 modules)
- ✓ Compiled in 181ms (2846 modules)
- ✓ Compiled in 141ms (2846 modules)
+🕐 Minutes since last earn: 438.98285
+🕐 Required cooldown minutes: 1440
+📅 Today: Mon Aug 25 2025
+📅 Reset date: Sun Aug 24 2025
+💰 Daily earned amount: 5
+💰 Daily limit: 5
+🆕 New day detected - can claim
+ GET /api/debug-daily-login?wallet=0x123test 200 in 406ms
+ ✓ Compiled /api/daily-checkin in 59ms (116 modules)
+ POST /api/daily-checkin 200 in 221ms
+ POST /api/daily-checkin 200 in 199ms
+ POST /api/daily-checkin 200 in 147ms
+ POST /api/daily-checkin 200 in 127ms

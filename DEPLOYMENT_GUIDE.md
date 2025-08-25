@@ -1,53 +1,51 @@
-# 🚀 Deployment Guide: Moving to flunks.net
+# 🚀 Beta Launch Deployment Guide
 
-## 🎯 Overview
+## 🎯 Two-Environment Setup Complete!
 
-This guide covers deploying your Flunks 95 site to `flunks.net` while maintaining the access control you want to preserve.
+You now have a perfect setup for launching your beta while keeping development tools available:
 
-## 🔐 Access Control Strategy
+### **Production Branch** (`production`) - Live Beta Site
+- ✅ **Clean user experience** - no admin tools visible
+- ✅ **School hover fixed** - now shows 300x300 icon
+- ✅ **Transparent boxes removed** - clean map experience  
+- ✅ **GUM system working** - daily rewards functional
+- ✅ **Ready for beta testers**
 
-I've implemented a **Beta Access Gate** that:
+### **Development Branch** (`main`) - Admin & Testing
+- 🔧 **Full admin access** - GUM admin panel (Ctrl+G)
+- 🔧 **Time configuration** - Day/night admin (Ctrl+T)
+- 🔧 **Debug endpoints** - All testing APIs available
+- 🔧 **Development tools** - Scripts and diagnostics
 
-- ✅ **Blocks unauthorized users** with a professional access code screen
-- ✅ **Preserves all your existing features** once access is granted
-- ✅ **Works in development** (localhost bypasses the gate automatically)
-- ✅ **Easy to manage** via backend API and secure validation
+## 🌐 Deployment Strategy
 
-### Access Control:
-- Access codes are configured in backend API
-- Multiple access levels supported (Admin, Beta, Community)
-- Contact admin for access codes
+### **Recommended Setup:**
 
-## 🚀 Deployment Options
+### **Recommended Setup:**
 
-### **Option 1: Vercel (Recommended)** ⭐
+**Live Site (flunks.net):**
+```bash
+# Deploy production branch
+git checkout production
+vercel --prod --branch production
+# Point flunks.net to this deployment
+```
 
-1. **Connect to Vercel:**
-   ```bash
-   npm install -g vercel
-   cd /Users/jeremy/Desktop/flunks-site
-   vercel
-   ```
+**Dev Site (dev.flunks.net):**
+```bash  
+# Deploy main branch
+git checkout main
+vercel --alias dev.flunks.net --branch main
+```
 
-2. **Configure Domain:**
-   - In Vercel dashboard, go to your project settings
-   - Add `flunks.net` as a custom domain
-   - Update your domain's DNS to point to Vercel
+## 🔧 Quick Deploy Steps
 
-3. **Environment Variables:**
-   - Copy variables from `.env.production` to Vercel dashboard
-   - Go to Project Settings → Environment Variables
-   - Add each variable from the production env file
+### 1. **Install Vercel CLI:**
+```bash
+npm install -g vercel
+```
 
-4. **Deploy:**
-   ```bash
-   vercel --prod
-   ```
-
-### **Option 2: Netlify**
-
-1. **Build and Deploy:**
-   ```bash
+### 2. **Deploy Production (Live Site):**
    npm run build
    netlify deploy --prod --dir=out
    ```

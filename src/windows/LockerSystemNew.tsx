@@ -31,14 +31,14 @@ const LockerSystemNew: React.FC = () => {
   // Jacket options (now using jersey assets)
   const jacketOptions = [
     {
-      name: 'Jersey 1',
+      name: 'Jacket 1',
       image: '/images/jerseys/jersey-1.png',
-      description: 'Flunks jersey option'
+      description: 'Flunks jacket option'
     },
     {
-      name: 'Jersey 2',  
+      name: 'Jacket 2',  
       image: '/images/jerseys/jersey-2.png',
-      description: 'Alternate jersey option'
+      description: 'Alternate jacket option'
     }
   ];
 
@@ -694,7 +694,7 @@ const LockerSystemNew: React.FC = () => {
                       }}>
                         <div style={{ fontSize: '32px', marginBottom: '20px' }}>👕</div>
                         <div style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px' }}>
-                          Jersey Selection
+                          Jacket Selection
                         </div>
                         
                         {/* Jacket Selection Interface */}
@@ -882,7 +882,7 @@ const LockerSystemNew: React.FC = () => {
                         </div>
                         
                         <div style={{ fontSize: '14px', opacity: 0.8, lineHeight: '1.5' }}>
-                          Your Flunks varsity letter jacket hangs here proudly.
+                          Your Flunks varsity jacket selection hangs here proudly.
                           <br />
                           <em style={{ color: '#ffd700', fontSize: '13px' }}>
                             A symbol of your community membership

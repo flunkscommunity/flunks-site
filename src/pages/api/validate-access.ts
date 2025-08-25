@@ -2,7 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 // PRIVATE: Access codes stored only on backend
 const ACCESS_CODES = {
-  'FLUNKS2025': 'ADMIN',
+  'flunks2025': 'ADMIN',
+  'FLUNKS2025': 'ADMIN', // Keep uppercase version too
   'SEMESTER0': 'BETA', 
   'HIGHSCHOOL95': 'BETA'
 };
@@ -21,14 +22,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     });
   }
 
-  const upperCode = code.toUpperCase();
-  const accessLevel = ACCESS_CODES[upperCode as keyof typeof ACCESS_CODES];
+  const accessLevel = ACCESS_CODES[code as keyof typeof ACCESS_CODES];
 
   if (accessLevel) {
     return res.status(200).json({
       success: true,
       accessLevel,
-      code: upperCode
+      code: code
     });
   } else {
     return res.status(401).json({
