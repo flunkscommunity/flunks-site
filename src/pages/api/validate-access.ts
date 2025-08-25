@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const ACCESS_CODES = {
   'flunks2025': 'ADMIN',
   'FLUNKS2025': 'ADMIN', // Keep uppercase version too
+  'semester0': 'BETA',
   'SEMESTER0': 'BETA', 
   'HIGHSCHOOL95': 'BETA'
 };

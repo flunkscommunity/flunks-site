@@ -680,11 +680,10 @@ const Home: NextPage = () => {
     });
     
     // Access logic:
-    // - localhost: always allowed (development) - TEMPORARILY DISABLED FOR TESTING
+    // - localhost: always allowed (development)
     // - production main site (flunks.net): always allowed (no code needed)
     // - dev domain (dev.flunks.net): requires access code
-    // TEMPORARILY FORCE ACCESS GATE FOR TESTING
-    if (accessGranted === 'true') {
+    if (isLocalhost || isProductionMainSite || accessGranted === 'true') {
       setHasAccess(true);
     }
     
