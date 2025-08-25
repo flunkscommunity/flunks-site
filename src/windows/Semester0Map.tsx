@@ -48,10 +48,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   } | null>(null);
   const [loading, setLoading] = useState(true);
   const [showOpeningAnimation, setShowOpeningAnimation] = useState(true);
-  // Special state for high school hover effect
-  const [highSchoolHovered, setHighSchoolHovered] = useState(false);
-  // Special state for arcade hover effect  
-  const [arcadeHovered, setArcadeHovered] = useState(false);
   const { openWindow, closeWindow } = useWindowsContext();
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInnerRef = useRef<HTMLDivElement>(null);
@@ -153,79 +149,15 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   };
 
   const handleEnhancedHover = (locationKey: string) => {
-    if (locationKey === 'high-school') {
-      setHighSchoolHovered(true);
-      return;
-    }
-    if (locationKey === 'arcade') {
-      setArcadeHovered(true);
-      return;
-    }
-    setEnhancedHover(locationKey);
+    // Set both hover states for screen dimming and icon enlarging
     setHovered(locationKey);
+    setEnhancedHover(locationKey);
   };
 
   const handleEnhancedLeave = () => {
-    if (highSchoolHovered) {
-      setHighSchoolHovered(false);
-      return;
-    }
-    if (arcadeHovered) {
-      setArcadeHovered(false);
-      return;
-    }
+    // Clear all hover states
     setEnhancedHover(null);
     setHovered(null);
-  };
-
-  const handleHighSchoolClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (highSchoolHovered && user) {
-      // Open the high school with day/night functionality
-      handleLocationAccess('high-school', () => 
-        openWindow({
-          key: WINDOW_IDS.HIGH_SCHOOL_MAIN,
-          window: (
-            <DraggableResizeableWindow
-              windowsId={WINDOW_IDS.HIGH_SCHOOL_MAIN}
-              headerTitle="High School"
-              onClose={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_MAIN)}
-              initialWidth="100%"
-              initialHeight="100%"
-              resizable={false}
-            >
-              <HighSchoolMain />
-            </DraggableResizeableWindow>
-          ),
-        })
-      );
-    }
-    setHighSchoolHovered(false);
-  };
-
-  const handleArcadeClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (arcadeHovered && user) {
-      // Open the arcade with day/night functionality
-      handleLocationAccess('arcade', () => 
-        openWindow({
-          key: WINDOW_IDS.ARCADE_MAIN,
-          window: (
-            <DraggableResizeableWindow
-              windowsId={WINDOW_IDS.ARCADE_MAIN}
-              headerTitle="Arcade"
-              onClose={() => closeWindow(WINDOW_IDS.ARCADE_MAIN)}
-              initialWidth="100%"
-              initialHeight="100%"
-              resizable={false}
-            >
-              <ArcadeMain />
-            </DraggableResizeableWindow>
-          ),
-        })
-      );
-    }
-    setArcadeHovered(false);
   };
 
   const handleEnhancedClick = (locationKey: string, e: React.MouseEvent) => {
@@ -488,7 +420,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           alt="Semester 0 Map"
         />
 
-  {!isMobile && hovered && <div className={styles["map-overlay"]} />}
+      {/* Screen dimming overlay - appears when hovering over any target location */}
+      {!isMobile && (hovered === 'high-school' || hovered === 'arcade' || hovered === 'freaks-house' || hovered === 'geeks-house' || hovered === 'jocks-house' || hovered === 'preps-house') && (
+        <div className={styles["map-overlay"]} />
+      )}
 
       <DynamicHouseIcon
         houseId="arcade"
@@ -512,11 +447,11 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             })
           )
         }
-        onClick={handleArcadeClick}
+        onClick={(e) => handleEnhancedClick('arcade', e)}
         onMouseEnter={() => user && handleEnhancedHover('arcade')}
         onMouseLeave={handleEnhancedLeave}
-        onTouchStart={() => user && handleEnhancedHover('arcade')}
-        onTouchEnd={handleEnhancedLeave}
+        onTouchStart={() => user && handleTouchEnter('arcade')}
+        onTouchEnd={handleTouchLeave}
       >
       </DynamicHouseIcon>
 
@@ -667,11 +602,11 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             })
           )
         }
-        onClick={handleHighSchoolClick}
+        onClick={(e) => handleEnhancedClick('high-school', e)}
         onMouseEnter={() => user && handleEnhancedHover('high-school')}
         onMouseLeave={handleEnhancedLeave}
-        onTouchStart={() => user && handleEnhancedHover('high-school')}
-        onTouchEnd={handleEnhancedLeave}
+        onTouchStart={() => user && handleTouchEnter('high-school')}
+        onTouchEnd={handleTouchLeave}
       >
         🏫
       </DynamicHouseIcon>
@@ -679,45 +614,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       <button className={styles["close-btn"]} onClick={onClose}>✖</button>
       </div>
 
-      {/* Special High School Hover Overlay */}
-      {highSchoolHovered && (
-        <div 
-          className={styles["high-school-overlay"]}
-          onClick={handleHighSchoolClick}
-        >
-          {/* Dimmed background */}
-          <div className={styles["dimmed-background"]} />
-          
-          {/* Large high school icon */}
-          <div 
-            className={styles["large-high-school-icon"]}
-            style={{ 
-              backgroundImage: `url(/images/icons/high-school-icon.png)`
-            }}
-          />
-        </div>
-      )}
-
-      {/* Special Arcade Hover Overlay */}
-      {arcadeHovered && (
-        <div 
-          className={styles["arcade-overlay"]}
-          onClick={handleArcadeClick}
-        >
-          {/* Dimmed background */}
-          <div className={styles["dimmed-background"]} />
-          
-          {/* Large arcade icon */}
-          <div 
-            className={styles["large-arcade-icon"]}
-            style={{ 
-              backgroundImage: `url(/images/icons/arcade-icon.png)`
-            }}
-          />
-        </div>
-      )}
-
-      {/* Enhanced Hover Overlay */}
+      {/* Enhanced Hover Overlay - Shows for school, arcade, and clique houses */}
       {enhancedHover && locationData[enhancedHover as keyof typeof locationData] && (
         <div 
           className={styles["enhanced-hover-overlay"]}
@@ -726,9 +623,90 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           <div 
             className={`${styles["expanded-icon"]} ${styles["png-icon"]}`}
             style={{ 
-              backgroundImage: `url(/images/icons/${enhancedHover}-icon.png)`
+              backgroundImage: `url(/images/icons/${enhancedHover}-icon.png)`,
+              cursor: 'pointer'
             }}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              // Handle opening the location based on type
+              if (enhancedHover === 'high-school' || enhancedHover === 'arcade') {
+                handleLocationAccess(enhancedHover, () => {
+                  const windowId = enhancedHover === 'high-school' ? WINDOW_IDS.HIGH_SCHOOL_MAIN : WINDOW_IDS.ARCADE_MAIN;
+                  const title = enhancedHover === 'high-school' ? 'High School' : 'Arcade';
+                  const MainComponent = enhancedHover === 'high-school' ? HighSchoolMain : ArcadeMain;
+                  
+                  openWindow({
+                    key: windowId,
+                    window: (
+                      <DraggableResizeableWindow
+                        windowsId={windowId}
+                        headerTitle={title}
+                        onClose={() => closeWindow(windowId)}
+                        initialWidth="100%"
+                        initialHeight="100%"
+                        resizable={false}
+                      >
+                        <MainComponent />
+                      </DraggableResizeableWindow>
+                    ),
+                  });
+                });
+              } else if (enhancedHover === 'freaks-house') {
+                handleCliqueHouseAccess('FREAK', WINDOW_IDS.FREAKS_HOUSE_MAIN, (
+                  <DraggableResizeableWindow
+                    windowsId={WINDOW_IDS.FREAKS_HOUSE_MAIN}
+                    headerTitle="Freak's House"
+                    onClose={() => closeWindow(WINDOW_IDS.FREAKS_HOUSE_MAIN)}
+                    initialWidth="100%"
+                    initialHeight="100%"
+                    resizable={false}
+                  >
+                    <FreaksHouseMain />
+                  </DraggableResizeableWindow>
+                ), "Freak's House");
+              } else if (enhancedHover === 'geeks-house') {
+                handleCliqueHouseAccess('GEEK', WINDOW_IDS.GEEKS_HOUSE_MAIN, (
+                  <DraggableResizeableWindow
+                    windowsId={WINDOW_IDS.GEEKS_HOUSE_MAIN}
+                    headerTitle="Geek's House"
+                    onClose={() => closeWindow(WINDOW_IDS.GEEKS_HOUSE_MAIN)}
+                    initialWidth="100%"
+                    initialHeight="100%"
+                    resizable={false}
+                  >
+                    <GeeksHouseMain />
+                  </DraggableResizeableWindow>
+                ), "Geek's House");
+              } else if (enhancedHover === 'jocks-house') {
+                handleCliqueHouseAccess('JOCK', WINDOW_IDS.JOCKS_HOUSE_MAIN, (
+                  <DraggableResizeableWindow
+                    windowsId={WINDOW_IDS.JOCKS_HOUSE_MAIN}
+                    headerTitle="Jock's House"
+                    onClose={() => closeWindow(WINDOW_IDS.JOCKS_HOUSE_MAIN)}
+                    initialWidth="100%"
+                    initialHeight="100%"
+                    resizable={false}
+                  >
+                    <JocksHouseMain />
+                  </DraggableResizeableWindow>
+                ), "Jock's House");
+              } else if (enhancedHover === 'preps-house') {
+                handleCliqueHouseAccess('PREP', WINDOW_IDS.PREPS_HOUSE_MAIN, (
+                  <DraggableResizeableWindow
+                    windowsId={WINDOW_IDS.PREPS_HOUSE_MAIN}
+                    headerTitle="Prep's House"
+                    onClose={() => closeWindow(WINDOW_IDS.PREPS_HOUSE_MAIN)}
+                    initialWidth="100%"
+                    initialHeight="100%"
+                    resizable={false}
+                  >
+                    <PrepsHouseMain />
+                  </DraggableResizeableWindow>
+                ), "Prep's House");
+              }
+              // Close the enhanced hover after opening location
+              handleEnhancedClose();
+            }}
           >
           </div>
           

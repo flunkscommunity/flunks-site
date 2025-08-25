@@ -73,8 +73,19 @@ const LockerSystemNew: React.FC = () => {
       loadGumTrackingData();
     };
 
+    const handleDailyLoginClaimed = () => {
+      // Refresh tracking data when daily login is claimed
+      loadGumBalance();
+      loadGumTrackingData();
+    };
+
     window.addEventListener('gumBalanceUpdated', handleGumUpdate);
-    return () => window.removeEventListener('gumBalanceUpdated', handleGumUpdate);
+    window.addEventListener('dailyLoginClaimed', handleDailyLoginClaimed);
+    
+    return () => {
+      window.removeEventListener('gumBalanceUpdated', handleGumUpdate);
+      window.removeEventListener('dailyLoginClaimed', handleDailyLoginClaimed);
+    };
   }, []);
 
   // Scroll position listener with snap-to-section behavior (DISABLED)
@@ -147,22 +158,33 @@ const LockerSystemNew: React.FC = () => {
 
   // Load real gum tracking data
   const loadGumTrackingData = async () => {
-    if (!primaryWallet?.address) return;
+    if (!primaryWallet?.address) {
+      console.log('🔍 LockerSystem: No wallet address, skipping tracking data load');
+      return;
+    }
+    
+    console.log('🔍 LockerSystem: Loading GUM tracking data for:', primaryWallet.address.slice(0, 8) + '...');
     
     try {
       // Get recent transactions to calculate today's earnings
       const transactions = await getUserGumTransactions(primaryWallet.address, 50, 0);
+      console.log('📊 LockerSystem: Retrieved', transactions.length, 'transactions');
       
       // Calculate today's earnings
       const today = new Date();
       const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
       const todayEarnings = transactions
-        .filter(tx => 
-          tx.transaction_type === 'earned' && 
-          new Date(tx.created_at) >= todayStart
-        )
+        .filter(tx => {
+          const isEarned = tx.transaction_type === 'earned';
+          const isToday = new Date(tx.created_at) >= todayStart;
+          if (isEarned && isToday) {
+            console.log('📈 Today transaction:', tx.source, tx.amount, 'GUM');
+          }
+          return isEarned && isToday;
+        })
         .reduce((total, tx) => total + tx.amount, 0);
       
+      console.log('💰 LockerSystem: Today total earnings:', todayEarnings, 'GUM');
       setTodayGum(todayEarnings);
       
       // Calculate streak (consecutive days with daily login)
@@ -172,6 +194,8 @@ const LockerSystemNew: React.FC = () => {
           tx.source === 'daily_login'
         )
         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      
+      console.log('🔥 LockerSystem: Daily login transactions found:', dailyLoginTransactions.length);
       
       // Calculate consecutive days
       let streak = 0;
@@ -183,6 +207,10 @@ const LockerSystemNew: React.FC = () => {
         const latestTransaction = dailyLoginTransactions[0];
         const latestDate = new Date(latestTransaction.created_at);
         const isToday = latestDate.toDateString() === today.toDateString();
+        
+        console.log('📅 LockerSystem: Latest daily login date:', latestDate.toDateString());
+        console.log('📅 LockerSystem: Today date:', today.toDateString());
+        console.log('📅 LockerSystem: Is today?', isToday);
         
         if (!isToday) {
           checkDate.setDate(checkDate.getDate() - 1);
@@ -203,15 +231,18 @@ const LockerSystemNew: React.FC = () => {
         }
       }
       
+      console.log('🎯 LockerSystem: Calculated streak:', streak, 'days');
       setStreak(streak);
       
     } catch (error) {
-      console.error('Error loading gum tracking data:', error);
+      console.error('❌ LockerSystem: Error loading gum tracking data:', error);
       // Use stats from GumContext if available
       if (stats) {
+        console.log('🔄 LockerSystem: Using fallback from GumContext stats');
         setTodayGum(15); // Default daily login amount if no transactions today
         setStreak(1); // Default streak if cannot calculate
       } else {
+        console.log('⚠️ LockerSystem: No stats available, setting to 0');
         setTodayGum(0);
         setStreak(0);
       }

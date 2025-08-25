@@ -89,11 +89,20 @@ export async function autoClaimDailyLogin(walletAddress: string): Promise<void> 
     if (result.success && result.earned > 0) {
       console.log(`🎉 Daily login bonus claimed: ${result.earned} GUM!`);
       
-      // Dispatch event to update UI
+      // Dispatch events to update UI
       window.dispatchEvent(new CustomEvent('dailyLoginClaimed', {
         detail: { 
           earned: result.earned,
           walletAddress 
+        }
+      }));
+      
+      // Also dispatch the generic gum balance update event
+      window.dispatchEvent(new CustomEvent('gumBalanceUpdated', {
+        detail: { 
+          earned: result.earned,
+          walletAddress,
+          source: 'daily_login'
         }
       }));
       

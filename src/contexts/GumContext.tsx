@@ -134,6 +134,17 @@ export const GumProvider: React.FC<GumProviderProps> = ({
         // Update local balance immediately for responsive UI
         setBalance(prev => prev + result.earned);
         
+        // Dispatch event to update other UI components
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('gumBalanceUpdated', {
+            detail: { 
+              earned: result.earned,
+              walletAddress,
+              source
+            }
+          }));
+        }
+        
         // Refresh full data in background
         setTimeout(() => {
           refreshBalance();
@@ -181,7 +192,18 @@ export const GumProvider: React.FC<GumProviderProps> = ({
       // Auto-claim daily login bonus when wallet connects
       autoClaimDailyLogin(walletAddress).then(() => {
         // Refresh balance after potential daily login claim
-        setTimeout(() => refreshBalance(), 1000);
+        setTimeout(() => {
+          refreshBalance();
+          // Dispatch event to update tracking displays
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('gumBalanceUpdated', {
+              detail: { 
+                walletAddress,
+                source: 'auto_daily_login_complete'
+              }
+            }));
+          }
+        }, 1000);
       }).catch(err => {
         console.warn('🍬 Daily login auto-claim failed (this is normal on first connection):', err);
       });
