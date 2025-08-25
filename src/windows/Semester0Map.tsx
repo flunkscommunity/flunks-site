@@ -448,7 +448,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         onTouchStart={() => user && handleTouchEnter('arcade')}
         onTouchEnd={handleTouchLeave}
       >
-        🕹️
       </DynamicHouseIcon>
 
       {/* New locations */}
@@ -481,7 +480,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         onMouseLeave={() => setHovered(null)}
         onTouchStart={() => user && handleTouchEnter('jocks-house')}
         onTouchEnd={handleTouchLeave}
-      />
+      >
+      </DynamicHouseIcon>
 
       <DynamicHouseIcon
         houseId="freaks-house"
@@ -510,7 +510,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         onMouseLeave={() => setHovered(null)}
         onTouchStart={() => user && handleTouchEnter('freaks-house')}
         onTouchEnd={handleTouchLeave}
-      />
+      >
+      </DynamicHouseIcon>
 
       <DynamicHouseIcon
         houseId="geeks-house"
@@ -539,7 +540,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         onMouseLeave={() => setHovered(null)}
         onTouchStart={() => user && handleTouchEnter('geeks-house')}
         onTouchEnd={handleTouchLeave}
-      />
+      >
+        🤓
+      </DynamicHouseIcon>
 
       <DynamicHouseIcon
         houseId="preps-house"
@@ -568,7 +571,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             "Prep's House"
           )
         }
-      />
+      >
+        💅
+      </DynamicHouseIcon>
 
       <div
         className={`${styles.icon} ${styles['flunk-fm']}`}
@@ -597,6 +602,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           )
         }
       >
+        📻
       </div>
 
       <div
@@ -626,6 +632,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           )
         }
       >
+        👮
       </div>
 
       <div
@@ -655,6 +662,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           )
         }
       >
+        🏈
       </div>
 
       <div
@@ -684,6 +692,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           )
         }
       >
+        🍟
       </div>
 
       <div
@@ -711,6 +720,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           })
         }
       >
+        🍺
       </div>
 
       <div

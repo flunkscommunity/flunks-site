@@ -161,16 +161,6 @@
   left: 46%;
 }
 
-.hover-png-preview.motel {
-  top: 60%;
-  left: 75%;
-}
-
-.hover-png-preview.diner {
-  top: 55%;
-  left: 25%;
-}
-
 .hover-png-preview.jocks-house {
   top: 58%;
   left: 15%;
@@ -444,72 +434,74 @@
 .treehouse {
   top: 74%;   
   left: 23%;  /* Updated position for secret treehouse */
+  background-image: url('/images/icons/secret-treehouse-icon.png');
 }
 
 .arcade {
   top: 38%;
   left: 46%;
-}
-
-.motel {
-  top: 60%;
-  left: 75%;
-}
-
-.diner {
-  top: 55%;
-  left: 25%;
+  background-image: url('/images/icons/arcade-icon.png');
 }
 
 /* New map locations */
 .jocks-house {
   top: 58%;
   left: 15%;
+  background-image: url('/images/icons/jocks-house-icon.png');
 }
 
 .freaks-house {
   top: 35%;
   left: 26%;
+  background-image: url('/images/icons/freaks-house-icon.png');
 }
 
 .flunk-fm {
   top: 31%;
   left: 41%;
+  background-image: url('/images/icons/flunk-fm-icon.png');
 }
 
 .geeks-house {
   top: 17%;
   left: 30%;
+  background-image: url('/images/icons/geeks-house-icon.png');
 }
 
 .junkyard {
   top: 55%;
   left: 84%;
+  background-image: url('/images/icons/junkyard-icon.png');
 }
 
 .lake-tree {
   top: 85%;
   left: 53%;
+  background-image: url('/images/icons/lake-tree-icon.png');
 }
 
 .snack-shack {
   top: 76%;
   left: 45%;
+  background-image: url('/images/icons/snack-shack-icon.png');
 }
 
 .rug-doctor {
   top: 45%;
   left: 40%;
+  background-image: url('/images/icons/rug-doctor-icon.png');
 }
 
 .four-thieves-bar {
   top: 55%;
   left: 44%;
+  background-image: url('/images/icons/four-thieves-bar-icon.png');
 }
 
 .high-school {
   top: 32%;
   left: 66%;
+  background-image: url('/images/icons/high-school-icon.png');
 }
 
 /* High School heartbeat animation (only on hover) */
@@ -559,26 +551,31 @@
 .paradise-motel {
   top: 18%;
   left: 44%;
+  background-image: url('/images/icons/paradise-motel-icon.png');
 }
 
 .shed {
   top: 20%;
   left:68%;
+  background-image: url('/images/icons/shed-icon.png');
 }
 
 .police-station {
   top: 12%;
   left: 54%;
+  background-image: url('/images/icons/police-station-icon.png');
 }
 
 .preps-house {
   top: 30%;
   left: 53%;
+  background-image: url('/images/icons/preps-house-icon.png');
 }
 
 .football-field {
   top: 25%;
   left: 75%;
+  background-image: url('/images/icons/football-field-icon.png');
 }
 
 .map-overlay {
