@@ -180,12 +180,6 @@ export const getUserAccessLevel = (): AccessLevel | null => {
   if (typeof window === 'undefined') return null;
   
   const accessLevel = sessionStorage.getItem('flunks-access-level');
-  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  
-  // Grant admin access for localhost development
-  if (isLocalhost || process.env.NODE_ENV === 'development') {
-    return 'ADMIN';
-  }
   
   return accessLevel as AccessLevel;
 };

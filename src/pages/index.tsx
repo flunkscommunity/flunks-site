@@ -679,11 +679,9 @@ const Home: NextPage = () => {
       hostname: typeof window !== 'undefined' ? window.location.hostname : 'server' 
     });
     
-    // Access logic:
-    // - localhost: always allowed (development)
-    // - production main site (flunks.net): always allowed (no code needed)
-    // - dev domain (dev.flunks.net): requires access code
-    if (isLocalhost || isProductionMainSite || accessGranted === 'true') {
+    // Access logic: Always require access code for beta testing
+    // Only grant access if user has entered valid access code
+    if (accessGranted === 'true') {
       setHasAccess(true);
     }
     
