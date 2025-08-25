@@ -237,8 +237,8 @@
 }
 
 .hover-enlarged-icon {
-  width: 150px;
-  height: 150px;
+  width: 300px;
+  height: 300px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
