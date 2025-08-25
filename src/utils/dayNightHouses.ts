@@ -176,11 +176,61 @@ export function useHouseImage(
   useEffect(() => {
     const fetchImage = async () => {
       setIsLoading(true);
-      const url = await getHouseImage(houseId);
       const dayTime = await isDayTime();
-      setImageUrl(url);
       setIsDay(dayTime);
-      setIsLoading(false);
+
+      // Try to get the image from database first
+      const dbUrl = await getHouseImage(houseId);
+      if (dbUrl) {
+        // Check if the image actually loads
+        const img = new Image();
+        img.onload = () => {
+          setImageUrl(dbUrl);
+          setIsLoading(false);
+        };
+        img.onerror = () => {
+          // If database image fails, fallback to local files
+          tryLocalFallback();
+        };
+        img.src = dbUrl;
+      } else {
+        // No database image, try local fallback
+        tryLocalFallback();
+      }
+
+      function tryLocalFallback() {
+        const nightPath = `/images/buildings/${houseId}-night.jpg`;
+        const dayPath = `/images/buildings/${houseId}-day.jpg`;
+        const housesNightPath = `/images/houses/${houseId}-night.jpg`;
+        const housesDayPath = `/images/houses/${houseId}-day.jpg`;
+        
+        const pathsToTry = dayTime 
+          ? [dayPath, housesDayPath, nightPath, housesNightPath]
+          : [nightPath, housesNightPath, dayPath, housesDayPath];
+
+        let currentIndex = 0;
+
+        const tryNextImage = () => {
+          if (currentIndex >= pathsToTry.length) {
+            setImageUrl(null);
+            setIsLoading(false);
+            return;
+          }
+
+          const img = new Image();
+          img.onload = () => {
+            setImageUrl(pathsToTry[currentIndex]);
+            setIsLoading(false);
+          };
+          img.onerror = () => {
+            currentIndex++;
+            tryNextImage();
+          };
+          img.src = pathsToTry[currentIndex];
+        };
+
+        tryNextImage();
+      }
     };
 
     // Initial fetch

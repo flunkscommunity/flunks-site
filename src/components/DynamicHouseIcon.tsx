@@ -60,12 +60,6 @@ export function DynamicHouseIcon({
         backgroundRepeat: 'no-repeat'
       }}
     >
-      {/* Optional day/night indicator for debugging */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className={styles['time-indicator']}>
-          {isDay ? '☀️' : '🌙'}
-        </div>
-      )}
       {children}
     </div>
   );
