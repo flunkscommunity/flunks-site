@@ -270,7 +270,7 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
   const [backgroundPattern, setBackgroundPattern] = useState<keyof typeof backgroundPatterns>('checkerboard');
   const [formData, setFormData] = useState({
     username: '',
-    profile_icon: '🎭', // Default icon
+    profile_icon: '', // No default icon - user must select one
     discord_id: '',
     email: ''
   });
@@ -551,7 +551,14 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
           Profile Summary
         </div>
         <div style={{ fontSize: '16px', textAlign: 'left', lineHeight: '1.6' }}>
-          <div>👤 Username: <strong>{formData.username}</strong></div>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+            <span style={{ marginRight: '8px' }}>✨ Profile:</span>
+            <UserDisplay 
+              username={formData.username} 
+              profileIcon={formData.profile_icon}
+              size="medium"
+            />
+          </div>
           {formData.discord_id && (
             <div>🎮 Discord: <strong>{formData.discord_id}</strong></div>
           )}
@@ -568,6 +575,7 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
 
   const renderSuccessScreen = () => {
     console.log('Success screen formData:', formData);
+    console.log('Selected profile icon:', formData.profile_icon);
     return (
     <UsernameContainer>
       <AstroLogo src="/images/icons/astro-mascot.png" alt="Flunks Astronaut" />
@@ -629,7 +637,7 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
           ✨ Profile Details ✨<br/>
           <UserDisplay 
             username={formData.username} 
-            profileIcon={formData.profile_icon || '🎭'}
+            profileIcon={formData.profile_icon || '❓'}
             size="medium"
             style={{ margin: '8px 0', fontSize: '16px' }}
           /><br/>

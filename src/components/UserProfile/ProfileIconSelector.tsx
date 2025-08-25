@@ -124,7 +124,11 @@ const ProfileIconSelector: React.FC<ProfileIconSelectorProps> = ({
           <IconButton
             key={index}
             $selected={selectedIcon === icon}
-            onClick={() => onIconChange(icon)}
+            onClick={() => {
+              console.log('ProfileIconSelector: Icon clicked:', icon);
+              console.log('ProfileIconSelector: Current selectedIcon:', selectedIcon);
+              onIconChange(icon);
+            }}
             title={`Select ${icon} as your profile icon`}
           >
             {icon}
