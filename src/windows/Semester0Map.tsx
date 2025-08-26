@@ -632,7 +632,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             <DynamicHouseIcon
               houseId="high-school"
               className={`${styles["nav-icon"]} ${styles['high-school-nav']}`}
-              onDoubleClick={() =>
+              onClick={() =>
                 handleLocationAccess('high-school', () => 
                   openWindow({
                     key: WINDOW_IDS.HIGH_SCHOOL_MAIN,
@@ -641,9 +641,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                         windowsId={WINDOW_IDS.HIGH_SCHOOL_MAIN}
                         headerTitle="High School"
                         onClose={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_MAIN)}
-                        initialWidth="100%"
-                        initialHeight="100%"
-                        resizable={false}
+                        initialWidth="70vw"
+                        initialHeight="70vh"
+                        resizable={true}
                       >
                         <HighSchoolMain />
                       </DraggableResizeableWindow>
@@ -651,7 +651,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                   })
                 )
               }
-              onClick={(e) => handleEnhancedClick('high-school', e)}
               onMouseEnter={() => {
                 setHovered('high-school');
                 user && handleEnhancedHover('high-school');
@@ -668,7 +667,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             <DynamicHouseIcon
               houseId="arcade"
               className={`${styles["nav-icon"]} ${styles['arcade-nav']}`}
-              onDoubleClick={() =>
+              onClick={() =>
                 handleLocationAccess('arcade', () => 
                   openWindow({
                     key: WINDOW_IDS.ARCADE_MAIN,
@@ -677,9 +676,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                         windowsId={WINDOW_IDS.ARCADE_MAIN}
                         headerTitle="Arcade"
                         onClose={() => closeWindow(WINDOW_IDS.ARCADE_MAIN)}
-                        initialWidth="100%"
-                        initialHeight="100%"
-                        resizable={false}
+                        initialWidth="70vw"
+                        initialHeight="70vh"
+                        resizable={true}
                       >
                         <ArcadeMain />
                       </DraggableResizeableWindow>
@@ -687,7 +686,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                   })
                 )
               }
-              onClick={(e) => handleEnhancedClick('arcade', e)}
               onMouseEnter={() => {
                 setHovered('arcade');
                 user && handleEnhancedHover('arcade');
@@ -709,7 +707,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             <DynamicHouseIcon
               houseId="jocks-house"
               className={`${styles["nav-icon"]} ${styles['jocks-house-nav']}`}
-              onDoubleClick={() =>
+              onClick={() =>
                 handleCliqueHouseAccess(
                   'JOCK',
                   WINDOW_IDS.JOCKS_HOUSE_MAIN,
@@ -718,9 +716,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                       windowsId={WINDOW_IDS.JOCKS_HOUSE_MAIN}
                       headerTitle="Jock's House"
                       onClose={() => closeWindow(WINDOW_IDS.JOCKS_HOUSE_MAIN)}
-                      initialWidth="100%"
-                      initialHeight="100%"
-                      resizable={false}
+                      initialWidth="70vw"
+                      initialHeight="70vh"
+                      resizable={true}
                     >
                       <JocksHouseMain />
                     </DraggableResizeableWindow>
@@ -728,7 +726,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                   "Jock's House"
                 )
               }
-              onClick={(e) => handleEnhancedClick('jocks-house', e)}
               onMouseEnter={() => {
                 setHovered('jocks-house');
                 user && handleEnhancedHover('jocks-house');
@@ -745,7 +742,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             <DynamicHouseIcon
               houseId="freaks-house"
               className={`${styles["nav-icon"]} ${styles['freaks-house-nav']}`}
-              onDoubleClick={() =>
+              onClick={() =>
                 handleCliqueHouseAccess(
                   'FREAK',
                   WINDOW_IDS.FREAKS_HOUSE_MAIN,
@@ -754,9 +751,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                       windowsId={WINDOW_IDS.FREAKS_HOUSE_MAIN}
                       headerTitle="Freak's House"
                       onClose={() => closeWindow(WINDOW_IDS.FREAKS_HOUSE_MAIN)}
-                      initialWidth="100%"
-                      initialHeight="100%"
-                      resizable={false}
+                      initialWidth="70vw"
+                      initialHeight="70vh"
+                      resizable={true}
                     >
                       <FreaksHouseMain />
                     </DraggableResizeableWindow>
@@ -764,7 +761,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                   "Freak's House"
                 )
               }
-              onClick={(e) => handleEnhancedClick('freaks-house', e)}
               onMouseEnter={() => {
                 setHovered('freaks-house');
                 user && handleEnhancedHover('freaks-house');
@@ -781,7 +777,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             <DynamicHouseIcon
               houseId="geeks-house"
               className={`${styles["nav-icon"]} ${styles['geeks-house-nav']}`}
-              onDoubleClick={() =>
+              onClick={() =>
                 handleCliqueHouseAccess(
                   'GEEK',
                   WINDOW_IDS.GEEKS_HOUSE_MAIN,
@@ -790,9 +786,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                       windowsId={WINDOW_IDS.GEEKS_HOUSE_MAIN}
                       headerTitle="Geek's House"
                       onClose={() => closeWindow(WINDOW_IDS.GEEKS_HOUSE_MAIN)}
-                      initialWidth="100%"
-                      initialHeight="100%"
-                      resizable={false}
+                      initialWidth="70vw"
+                      initialHeight="70vh"
+                      resizable={true}
                     >
                       <GeeksHouseMain />
                     </DraggableResizeableWindow>
@@ -800,7 +796,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                   "Geek's House"
                 )
               }
-              onClick={(e) => handleEnhancedClick('geeks-house', e)}
               onMouseEnter={() => {
                 setHovered('geeks-house');
                 user && handleEnhancedHover('geeks-house');
@@ -817,7 +812,25 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             <DynamicHouseIcon
               houseId="preps-house"
               className={`${styles["nav-icon"]} ${styles['preps-house-nav']}`}
-              onClick={(e) => handleEnhancedClick('preps-house', e)}
+              onClick={() =>
+                handleCliqueHouseAccess(
+                  'PREP',
+                  WINDOW_IDS.PREPS_HOUSE_MAIN,
+                  (
+                    <DraggableResizeableWindow
+                      windowsId={WINDOW_IDS.PREPS_HOUSE_MAIN}
+                      headerTitle="Prep's House"
+                      onClose={() => closeWindow(WINDOW_IDS.PREPS_HOUSE_MAIN)}
+                      initialWidth="70vw"
+                      initialHeight="70vh"
+                      resizable={true}
+                    >
+                      <PrepsHouseMain />
+                    </DraggableResizeableWindow>
+                  ),
+                  "Prep's House"
+                )
+              }
               onMouseEnter={() => {
                 setHovered('preps-house');
                 user && handleEnhancedHover('preps-house');
@@ -828,25 +841,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
               }}
               onTouchStart={() => user && handleTouchEnter('preps-house')}
               onTouchEnd={handleTouchLeave}
-              onDoubleClick={() =>
-                handleCliqueHouseAccess(
-                  'PREP',
-                  WINDOW_IDS.PREPS_HOUSE_MAIN,
-                  (
-                    <DraggableResizeableWindow
-                      windowsId={WINDOW_IDS.PREPS_HOUSE_MAIN}
-                      headerTitle="Prep's House"
-                      onClose={() => closeWindow(WINDOW_IDS.PREPS_HOUSE_MAIN)}
-                      initialWidth="100%"
-                      initialHeight="100%"
-                      resizable={false}
-                    >
-                      <PrepsHouseMain />
-                    </DraggableResizeableWindow>
-                  ),
-                  "Prep's House"
-                )
-              }
             >
             </DynamicHouseIcon>
           </div>

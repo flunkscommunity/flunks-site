@@ -48,13 +48,13 @@ const HighSchoolMain = () => {
           windowsId={roomKey}
           headerTitle={title}
           onClose={() => closeWindow(roomKey)}
-          initialWidth="400px"
-          initialHeight="300px"
-          resizable={false}
+          initialWidth="30vw"
+          initialHeight="30vh"
+          resizable={true}
         >
-          <div className="p-4 text-sm leading-relaxed bg-[#1a1a1a] text-white w-full h-full">
-            <h1 className="text-xl mb-2">{title}</h1>
-            <p>{content}</p>
+          <div className="p-3 text-sm leading-relaxed bg-[#1a1a1a] text-white w-full h-full overflow-hidden">
+            <h1 className="text-lg mb-2 font-semibold">{title}</h1>
+            <p className="text-xs leading-relaxed">{content}</p>
           </div>
         </DraggableResizeableWindow>
       ),
@@ -109,89 +109,92 @@ const HighSchoolMain = () => {
         </button>
       )}
 
-      {/* Hallway */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.HIGH_SCHOOL_HALLWAY,
-            "Hallway",
-            "Lockers line the walls, covered in mysterious graffiti and faded club posters."
-          )
-        }
-        className="absolute top-4 left-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
-      >
-        🚪 Hallway
-      </button>
+      {/* Bottom Navigation Bar */}
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-4 z-10 flex-wrap justify-center max-w-4xl px-4">
+        {/* Hallway */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.HIGH_SCHOOL_HALLWAY,
+              "Hallway",
+              "Lockers line the walls, covered in mysterious graffiti and faded club posters."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          🚪 Hallway
+        </button>
 
-      {/* Classroom */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.HIGH_SCHOOL_CLASSROOM,
-            "Classroom",
-            "Dusty desks with carved initials. The chalkboard still has equations from the last day of school."
-          )
-        }
-        className="absolute top-4 center-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105 left-1/2 transform -translate-x-1/2"
-      >
-        📚 Classroom
-      </button>
+        {/* Classroom */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.HIGH_SCHOOL_CLASSROOM,
+              "Classroom",
+              "Dusty desks with carved initials. The chalkboard still has equations from the last day of school."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          📚 Classroom
+        </button>
 
-      {/* Cafeteria */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.HIGH_SCHOOL_CAFETERIA,
-            "Cafeteria",
-            "Empty lunch trays still sit on tables. A suspicious smell lingers in the air."
-          )
-        }
-        className="absolute top-4 right-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
-      >
-        🍽️ Cafeteria
-      </button>
+        {/* Cafeteria */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.HIGH_SCHOOL_CAFETERIA,
+              "Cafeteria",
+              "Empty lunch trays still sit on tables. A suspicious smell lingers in the air."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          🍽️ Cafeteria
+        </button>
 
-      {/* Gymnasium */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.HIGH_SCHOOL_GYMNASIUM,
-            "Gymnasium",
-            "The basketball hoops are bent at strange angles. Echoes of old cheers seem to bounce off the walls."
-          )
-        }
-        className="absolute bottom-4 left-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
-      >
-        🏀 Gymnasium
-      </button>
+        {/* Gymnasium */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.HIGH_SCHOOL_GYMNASIUM,
+              "Gymnasium",
+              "The basketball hoops are bent at strange angles. Echoes of old cheers seem to bounce off the walls."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          🏀 Gymnasium
+        </button>
 
-      {/* Library */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.HIGH_SCHOOL_LIBRARY,
-            "Library",
-            "Books are scattered everywhere. One particular book seems to glow faintly on the librarian's desk."
-          )
-        }
-        className="absolute bottom-4 center-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105 left-1/2 transform -translate-x-1/2"
-      >
-        📖 Library
-      </button>
+        {/* Library */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.HIGH_SCHOOL_LIBRARY,
+              "Library",
+              "Books are scattered everywhere. One particular book seems to glow faintly on the librarian's desk."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          📖 Library
+        </button>
 
-      {/* Principal's Office */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.HIGH_SCHOOL_OFFICE,
-            "Principal's Office",
-            "The desk drawers are slightly open. Student files are scattered about with red marks and strange symbols."
-          )
-        }
-        className="absolute bottom-4 right-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
-      >
-        🏢 Office
-      </button>
+        {/* Principal's Office */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.HIGH_SCHOOL_OFFICE,
+              "Principal's Office",
+              "The desk drawers are slightly open. Student files are scattered about with red marks and strange symbols."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          🏢 Office
+        </button>
+      </div>
     </div>
   );
 };
