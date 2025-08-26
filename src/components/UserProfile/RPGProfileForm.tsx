@@ -420,6 +420,11 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
 
   const handleNext = async () => {
     if (currentStep === 'confirm') {
+      // Validate that profile icon is selected before submission
+      if (!formData.profile_icon || formData.profile_icon.trim() === '') {
+        setValidationMessage('Please select a profile icon before creating your profile');
+        return;
+      }
       await handleSubmit();
       return;
     }

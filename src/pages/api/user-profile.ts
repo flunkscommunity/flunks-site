@@ -45,6 +45,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
   }
 
+  // Profile icon validation - required field
+  if (!profile_icon || profile_icon.trim() === '') {
+    return res.status(400).json({ 
+      error: 'Profile icon is required' 
+    });
+  }
+
   // Email validation (if provided)
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ 
@@ -89,7 +96,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .upsert({
         wallet_address,
         username,
-        profile_icon: profile_icon || '🎭',
+        profile_icon, // Use the selected icon directly - no fallback
         discord_id: discord_id || null,
         email: email || null,
       }, {

@@ -732,7 +732,7 @@ const LockerSystemNew: React.FC = () => {
                         <div style={{
                           position: 'relative',
                           width: '100%',
-                          maxWidth: '600px',
+                          maxWidth: '1000px',
                           margin: '20px auto',
                           display: 'flex',
                           alignItems: 'center',
@@ -774,8 +774,8 @@ const LockerSystemNew: React.FC = () => {
                           {/* Jacket Display */}
                           <div style={{
                             position: 'relative',
-                            width: '400px',
-                            height: '480px',
+                            width: '800px',
+                            height: '960px',
                             margin: '0 20px',
                             display: 'flex',
                             flexDirection: 'column',
@@ -785,49 +785,18 @@ const LockerSystemNew: React.FC = () => {
                             
                             {/* Jacket Image or Placeholder */}
                             <div style={{
-                              width: '350px',
-                              height: '420px',
-                              background: 'linear-gradient(145deg, #1a365d, #2d3748)',
-                              borderRadius: '60px 60px 20px 20px',
-                              border: '3px solid #4299e1',
-                              boxShadow: `
-                                0 8px 25px rgba(0,0,0,0.5),
-                                inset 0 2px 10px rgba(255,255,255,0.1)
-                              `,
+                              width: '700px',
+                              height: '840px',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
                               transition: 'all 0.3s ease',
                               transform: currentSection === 2 ? 'scale(1.05)' : 'scale(1)',
                               backgroundImage: `url('${jacketOptions[selectedJacket].image}')`,
-                              backgroundSize: 'cover',
+                              backgroundSize: 'contain',
                               backgroundPosition: 'center',
                               backgroundRepeat: 'no-repeat'
                             }}>
-                              
-                              {/* Jacket sleeves */}
-                              <div style={{
-                                position: 'absolute',
-                                left: '-20px',
-                                top: '30px',
-                                width: '35px',
-                                height: '100px',
-                                background: 'linear-gradient(145deg, #1a365d, #2d3748, #4a5568)',
-                                borderRadius: '20px',
-                                border: '2px solid #4299e1',
-                                boxShadow: 'inset 0 2px 5px rgba(255,255,255,0.1)'
-                              }} />
-                              <div style={{
-                                position: 'absolute',
-                                right: '-20px',
-                                top: '30px',
-                                width: '35px',
-                                height: '100px',
-                                background: 'linear-gradient(145deg, #1a365d, #2d3748, #4a5568)',
-                                borderRadius: '20px',
-                                border: '2px solid #4299e1',
-                                boxShadow: 'inset 0 2px 5px rgba(255,255,255,0.1)'
-                              }} />
                             </div>
 
                             {/* Jacket Name & Description */}
