@@ -108,26 +108,26 @@ export function useTimeBasedImage(
 export const HOUSE_CONFIGS: Record<string, TimeBasedImage> = {
   'jocks-house': {
     id: 'jocks-house',
-    dayImage: '/images/houses/jocks-house-day.jpg',
-    nightImage: '/images/houses/jocks-house-night.jpg',
+    dayImage: '/images/icons/jocks-house-icon.png',
+    nightImage: '/images/icons/jocks-house-icon.png',
     description: 'Jocks House - Day & Night'
   },
   'preps-house': {
     id: 'preps-house',
-    dayImage: '/images/houses/preps-house-day.jpg',
-    nightImage: '/images/houses/preps-house-night.jpg',
+    dayImage: '/images/icons/preps-house-icon.png',
+    nightImage: '/images/icons/preps-house-icon.png',
     description: 'Preps House - Day & Night'
   },
   'geeks-house': {
     id: 'geeks-house',
-    dayImage: '/images/houses/geeks-house-day.jpg',
-    nightImage: '/images/houses/geeks-house-night.jpg',
+    dayImage: '/images/icons/geeks-house-icon.png',
+    nightImage: '/images/icons/geeks-house-icon.png',
     description: 'Geeks House - Day & Night'
   },
   'freaks-house': {
     id: 'freaks-house',
-    dayImage: '/images/houses/freaks-house-day.jpg',
-    nightImage: '/images/houses/freaks-house-night.jpg',
+    dayImage: '/images/icons/freaks-house-icon.png',
+    nightImage: '/images/icons/freaks-house-icon.png',
     description: 'Freaks House - Day & Night'
   }
 };

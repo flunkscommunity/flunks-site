@@ -199,14 +199,9 @@ export function useHouseImage(
       }
 
       function tryLocalFallback() {
-        const nightPath = `/images/buildings/${houseId}-night.jpg`;
-        const dayPath = `/images/buildings/${houseId}-day.jpg`;
-        const housesNightPath = `/images/houses/${houseId}-night.jpg`;
-        const housesDayPath = `/images/houses/${houseId}-day.jpg`;
+        const iconPath = `/images/icons/${houseId}-icon.png`;
         
-        const pathsToTry = dayTime 
-          ? [dayPath, housesDayPath, nightPath, housesNightPath]
-          : [nightPath, housesNightPath, dayPath, housesDayPath];
+        const pathsToTry = [iconPath];
 
         let currentIndex = 0;
 

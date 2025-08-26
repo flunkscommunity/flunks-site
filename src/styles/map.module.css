@@ -100,15 +100,160 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: black;
   z-index: 30;
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-end;
-  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
   pointer-events: auto;
-  animation: fadeInOverlay 0.2s ease-out;
+  animation: fadeInOverlay 0.3s ease-out;
+}
+
+/* Dimmed background for the map */
+.dimmed-map-background {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(2px);
+}
+
+/* Large enlarged icon overlay in center of screen */
+.enlarged-icon-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.3));
+  animation: enlargedIconAppear 0.4s ease-out;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Special animation for high school enlarged icon */
+.enlarged-icon-overlay.high-school-enlarged {
+  animation: enlargedIconAppear 0.4s ease-out, heartbeat 2.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 40px rgba(255, 255, 156, 0.5));
+}
+
+@keyframes enlargedIconAppear {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Location info panel (replaces the old location-preview) */
+.location-info-panel {
+  position: absolute;
+  bottom: 120px;
+  right: 30px;
+  width: 350px;
+  max-height: 300px;
+  background: rgba(0, 0, 0, 0.95);
+  border: 2px solid #00ff9c;
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 30px rgba(0, 255, 156, 0.3);
+  animation: slideInFromRight 0.3s ease-out;
+  overflow-y: auto;
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Close button for info panel */
+.location-info-panel .close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: #00ff9c;
+  font-size: 20px;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.location-info-panel .close-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+/* Info panel content */
+.location-info-panel h2 {
+  color: #00ff9c;
+  font-family: 'w95fa', 'Courier New', monospace;
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(0, 255, 156, 0.5);
+}
+
+.location-preview-content p {
+  color: #ccc;
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 0 0 15px 0;
+}
+
+.location-preview-rooms {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.preview-room {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.preview-room:hover {
+  background: rgba(0, 255, 156, 0.1);
+  border-color: rgba(0, 255, 156, 0.3);
+  transform: translateX(5px);
+}
+
+.preview-room h4 {
+  color: white;
+  margin: 0 0 5px 0;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.preview-room p {
+  color: #aaa;
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.3;
 }
 
 @keyframes fadeInOverlay {
@@ -122,7 +267,7 @@
   }
 }
 
-/* Fullscreen image area for the selected location */
+/* Legacy expanded icon styles - keeping for compatibility */
 .expanded-icon {
   position: absolute;
   inset: 0;
@@ -588,6 +733,74 @@
   backdrop-filter: blur(1px);
 }
 
+/* Large PNG icons that appear over their actual map locations when hovering bottom nav */
+.map-location-hover {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 15;
+  pointer-events: none;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.6));
+  animation: mapLocationPulse 2s ease-in-out infinite;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes mapLocationPulse {
+  0%, 100% { 
+    transform: translate(-50%, -50%) scale(1);
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.6));
+  }
+  50% { 
+    transform: translate(-50%, -50%) scale(1.1);
+    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.8));
+  }
+}
+
+/* Positioning for each location's large hover icon on the actual map */
+.map-location-hover.high-school {
+  top: 32%;
+  left: 66%;
+  background-image: url('/images/icons/high-school-icon.png');
+}
+
+.map-location-hover.arcade {
+  top: 38%;
+  left: 46%;
+  background-image: url('/images/icons/arcade-icon.png');
+}
+
+.map-location-hover.jocks-house {
+  top: 58%;
+  left: 15%;
+  background-image: url('/images/icons/jocks-house-icon.png');
+}
+
+.map-location-hover.freaks-house {
+  top: 35%;
+  left: 26%;
+  background-image: url('/images/icons/freaks-house-icon.png');
+}
+
+.map-location-hover.geeks-house {
+  top: 17%;
+  left: 30%;
+  background-image: url('/images/icons/geeks-house-icon.png');
+}
+
+.map-location-hover.preps-house {
+  top: 30%;
+  left: 53%;
+  background-image: url('/images/icons/preps-house-icon.png');
+}
+
+/* Special heartbeat animation for high school when hovering */
+.map-location-hover.high-school {
+  animation: mapLocationPulse 2s ease-in-out infinite, heartbeat 2.4s ease-in-out infinite;
+}
+
 .map-overlay.dimmed {
   opacity: 1;
 }
@@ -1049,5 +1262,175 @@
   
   .wallet-prompt-overlay {
     padding: 15px;
+  }
+}
+
+/* Bottom Navigation Bar */
+.bottom-nav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 0.3) 100%);
+  backdrop-filter: blur(10px);
+  border-top: 2px solid rgba(0, 255, 156, 0.3);
+  padding: 25px 20px 20px 20px;
+  z-index: 25;
+  display: flex;
+  gap: 50px;
+  justify-content: center;
+  align-items: flex-end;
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+}
+
+.nav-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-section h3 {
+  color: #00ff9c;
+  font-family: 'w95fa', 'Courier New', monospace;
+  font-size: 16px;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 15px rgba(0, 255, 156, 0.6);
+  font-weight: bold;
+  text-align: center;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-icon {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0 !important; /* Hide emoji text completely */
+  transition: all 0.3s ease;
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(0, 255, 156, 0.4);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  animation: gentlePulse 3s ease-in-out infinite;
+  overflow: hidden;
+}
+
+.nav-icon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.nav-icon:hover::before {
+  opacity: 1;
+}
+
+.nav-icon:hover {
+  transform: scale(1.15) translateY(-8px);
+  background-color: rgba(0, 255, 156, 0.15);
+  border-color: rgba(0, 255, 156, 0.8);
+  box-shadow: 
+    0 8px 30px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(0, 255, 156, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  animation: activePulse 1.5s ease-in-out infinite;
+}
+
+.nav-icon:active {
+  transform: scale(1.05) translateY(-5px);
+  transition: transform 0.1s ease;
+}
+
+/* Navigation icon backgrounds */
+.high-school-nav {
+  background-image: url('/images/icons/high-school-icon.png');
+}
+
+.arcade-nav {
+  background-image: url('/images/icons/arcade-icon.png');
+}
+
+.jocks-house-nav {
+  background-image: url('/images/icons/jocks-house-icon.png');
+}
+
+.freaks-house-nav {
+  background-image: url('/images/icons/freaks-house-icon.png');
+}
+
+.geeks-house-nav {
+  background-image: url('/images/icons/geeks-house-icon.png');
+}
+
+.preps-house-nav {
+  background-image: url('/images/icons/preps-house-icon.png');
+}
+
+/* Special hover effect for High School in navigation */
+.nav-icon.high-school-nav:hover {
+  animation: heartbeat 2.4s ease-in-out infinite, activePulse 1.5s ease-in-out infinite;
+}
+
+@media (max-width: 768px) {
+  .bottom-nav {
+    padding: 20px 15px 15px 15px;
+    gap: 30px;
+    flex-direction: column;
+  }
+  
+  .nav-section {
+    width: 100%;
+  }
+  
+  .nav-buttons {
+    gap: 15px;
+    justify-content: center;
+  }
+  
+  .nav-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
+  }
+  
+  .nav-section h3 {
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+
+  .location-info-panel {
+    bottom: 200px;
+    right: 15px;
+    left: 15px;
+    width: auto;
+    max-height: 250px;
+  }
+  
+  .enlarged-icon-overlay {
+    width: 300px;
+    height: 300px;
   }
 }

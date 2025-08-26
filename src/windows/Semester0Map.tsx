@@ -425,6 +425,18 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         <div className={styles["map-overlay"]} />
       )}
 
+      {/* Large PNG icons over their actual map locations when hovering bottom nav */}
+      {!isMobile && hovered && !enhancedHover && (
+        <div 
+          className={`${styles["map-location-hover"]} ${styles[hovered]}`}
+          style={{ 
+            backgroundImage: `url(/images/icons/${hovered}-icon.png)`,
+          }}
+        />
+      )}
+
+      {/* Remove old scattered icons - now using bottom navigation */}
+      {/* 
       <DynamicHouseIcon
         houseId="arcade"
         className={`${styles.icon} ${styles.arcade}`}
@@ -455,9 +467,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       >
       </DynamicHouseIcon>
 
-      {/* New locations */}
-
-      {/* New locations */}
       <DynamicHouseIcon
         houseId="jocks-house"
         className={`${styles.icon} ${styles['jocks-house']}`}
@@ -610,18 +619,252 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       >
         🏫
       </DynamicHouseIcon>
+      */}
 
       <button className={styles["close-btn"]} onClick={onClose}>✖</button>
       </div>
 
-      {/* Enhanced Hover Overlay - Shows for school, arcade, and clique houses */}
+      {/* Bottom Navigation Bar */}
+      <div className={styles["bottom-nav"]}>
+        <div className={styles["nav-section"]}>
+          <h3>Main Locations</h3>
+          <div className={styles["nav-buttons"]}>
+            <DynamicHouseIcon
+              houseId="high-school"
+              className={`${styles["nav-icon"]} ${styles['high-school-nav']}`}
+              onDoubleClick={() =>
+                handleLocationAccess('high-school', () => 
+                  openWindow({
+                    key: WINDOW_IDS.HIGH_SCHOOL_MAIN,
+                    window: (
+                      <DraggableResizeableWindow
+                        windowsId={WINDOW_IDS.HIGH_SCHOOL_MAIN}
+                        headerTitle="High School"
+                        onClose={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_MAIN)}
+                        initialWidth="100%"
+                        initialHeight="100%"
+                        resizable={false}
+                      >
+                        <HighSchoolMain />
+                      </DraggableResizeableWindow>
+                    ),
+                  })
+                )
+              }
+              onClick={(e) => handleEnhancedClick('high-school', e)}
+              onMouseEnter={() => {
+                setHovered('high-school');
+                user && handleEnhancedHover('high-school');
+              }}
+              onMouseLeave={() => {
+                setHovered(null);
+                handleEnhancedLeave();
+              }}
+              onTouchStart={() => user && handleTouchEnter('high-school')}
+              onTouchEnd={handleTouchLeave}
+            >
+            </DynamicHouseIcon>
+            
+            <DynamicHouseIcon
+              houseId="arcade"
+              className={`${styles["nav-icon"]} ${styles['arcade-nav']}`}
+              onDoubleClick={() =>
+                handleLocationAccess('arcade', () => 
+                  openWindow({
+                    key: WINDOW_IDS.ARCADE_MAIN,
+                    window: (
+                      <DraggableResizeableWindow
+                        windowsId={WINDOW_IDS.ARCADE_MAIN}
+                        headerTitle="Arcade"
+                        onClose={() => closeWindow(WINDOW_IDS.ARCADE_MAIN)}
+                        initialWidth="100%"
+                        initialHeight="100%"
+                        resizable={false}
+                      >
+                        <ArcadeMain />
+                      </DraggableResizeableWindow>
+                    ),
+                  })
+                )
+              }
+              onClick={(e) => handleEnhancedClick('arcade', e)}
+              onMouseEnter={() => {
+                setHovered('arcade');
+                user && handleEnhancedHover('arcade');
+              }}
+              onMouseLeave={() => {
+                setHovered(null);
+                handleEnhancedLeave();
+              }}
+              onTouchStart={() => user && handleTouchEnter('arcade')}
+              onTouchEnd={handleTouchLeave}
+            >
+            </DynamicHouseIcon>
+          </div>
+        </div>
+
+        <div className={styles["nav-section"]}>
+          <h3>Clique Houses</h3>
+          <div className={styles["nav-buttons"]}>
+            <DynamicHouseIcon
+              houseId="jocks-house"
+              className={`${styles["nav-icon"]} ${styles['jocks-house-nav']}`}
+              onDoubleClick={() =>
+                handleCliqueHouseAccess(
+                  'JOCK',
+                  WINDOW_IDS.JOCKS_HOUSE_MAIN,
+                  (
+                    <DraggableResizeableWindow
+                      windowsId={WINDOW_IDS.JOCKS_HOUSE_MAIN}
+                      headerTitle="Jock's House"
+                      onClose={() => closeWindow(WINDOW_IDS.JOCKS_HOUSE_MAIN)}
+                      initialWidth="100%"
+                      initialHeight="100%"
+                      resizable={false}
+                    >
+                      <JocksHouseMain />
+                    </DraggableResizeableWindow>
+                  ),
+                  "Jock's House"
+                )
+              }
+              onClick={(e) => handleEnhancedClick('jocks-house', e)}
+              onMouseEnter={() => {
+                setHovered('jocks-house');
+                user && handleEnhancedHover('jocks-house');
+              }}
+              onMouseLeave={() => {
+                setHovered(null);
+                handleEnhancedLeave();
+              }}
+              onTouchStart={() => user && handleTouchEnter('jocks-house')}
+              onTouchEnd={handleTouchLeave}
+            >
+            </DynamicHouseIcon>
+
+            <DynamicHouseIcon
+              houseId="freaks-house"
+              className={`${styles["nav-icon"]} ${styles['freaks-house-nav']}`}
+              onDoubleClick={() =>
+                handleCliqueHouseAccess(
+                  'FREAK',
+                  WINDOW_IDS.FREAKS_HOUSE_MAIN,
+                  (
+                    <DraggableResizeableWindow
+                      windowsId={WINDOW_IDS.FREAKS_HOUSE_MAIN}
+                      headerTitle="Freak's House"
+                      onClose={() => closeWindow(WINDOW_IDS.FREAKS_HOUSE_MAIN)}
+                      initialWidth="100%"
+                      initialHeight="100%"
+                      resizable={false}
+                    >
+                      <FreaksHouseMain />
+                    </DraggableResizeableWindow>
+                  ),
+                  "Freak's House"
+                )
+              }
+              onClick={(e) => handleEnhancedClick('freaks-house', e)}
+              onMouseEnter={() => {
+                setHovered('freaks-house');
+                user && handleEnhancedHover('freaks-house');
+              }}
+              onMouseLeave={() => {
+                setHovered(null);
+                handleEnhancedLeave();
+              }}
+              onTouchStart={() => user && handleTouchEnter('freaks-house')}
+              onTouchEnd={handleTouchLeave}
+            >
+            </DynamicHouseIcon>
+
+            <DynamicHouseIcon
+              houseId="geeks-house"
+              className={`${styles["nav-icon"]} ${styles['geeks-house-nav']}`}
+              onDoubleClick={() =>
+                handleCliqueHouseAccess(
+                  'GEEK',
+                  WINDOW_IDS.GEEKS_HOUSE_MAIN,
+                  (
+                    <DraggableResizeableWindow
+                      windowsId={WINDOW_IDS.GEEKS_HOUSE_MAIN}
+                      headerTitle="Geek's House"
+                      onClose={() => closeWindow(WINDOW_IDS.GEEKS_HOUSE_MAIN)}
+                      initialWidth="100%"
+                      initialHeight="100%"
+                      resizable={false}
+                    >
+                      <GeeksHouseMain />
+                    </DraggableResizeableWindow>
+                  ),
+                  "Geek's House"
+                )
+              }
+              onClick={(e) => handleEnhancedClick('geeks-house', e)}
+              onMouseEnter={() => {
+                setHovered('geeks-house');
+                user && handleEnhancedHover('geeks-house');
+              }}
+              onMouseLeave={() => {
+                setHovered(null);
+                handleEnhancedLeave();
+              }}
+              onTouchStart={() => user && handleTouchEnter('geeks-house')}
+              onTouchEnd={handleTouchLeave}
+            >
+            </DynamicHouseIcon>
+
+            <DynamicHouseIcon
+              houseId="preps-house"
+              className={`${styles["nav-icon"]} ${styles['preps-house-nav']}`}
+              onClick={(e) => handleEnhancedClick('preps-house', e)}
+              onMouseEnter={() => {
+                setHovered('preps-house');
+                user && handleEnhancedHover('preps-house');
+              }}
+              onMouseLeave={() => {
+                setHovered(null);
+                handleEnhancedLeave();
+              }}
+              onTouchStart={() => user && handleTouchEnter('preps-house')}
+              onTouchEnd={handleTouchLeave}
+              onDoubleClick={() =>
+                handleCliqueHouseAccess(
+                  'PREP',
+                  WINDOW_IDS.PREPS_HOUSE_MAIN,
+                  (
+                    <DraggableResizeableWindow
+                      windowsId={WINDOW_IDS.PREPS_HOUSE_MAIN}
+                      headerTitle="Prep's House"
+                      onClose={() => closeWindow(WINDOW_IDS.PREPS_HOUSE_MAIN)}
+                      initialWidth="100%"
+                      initialHeight="100%"
+                      resizable={false}
+                    >
+                      <PrepsHouseMain />
+                    </DraggableResizeableWindow>
+                  ),
+                  "Prep's House"
+                )
+              }
+            >
+            </DynamicHouseIcon>
+          </div>
+        </div>
+      </div>
+
+      {/* Enhanced Hover Overlay - Shows enlarged icon over dimmed map */}
       {enhancedHover && locationData[enhancedHover as keyof typeof locationData] && (
         <div 
           className={styles["enhanced-hover-overlay"]}
           onClick={handleEnhancedClose}
         >
+          {/* Dimmed map background */}
+          <div className={styles["dimmed-map-background"]} />
+          
+          {/* Large transparent PNG icon centered over the map */}
           <div 
-            className={`${styles["expanded-icon"]} ${styles["png-icon"]}`}
+            className={`${styles["enlarged-icon-overlay"]} ${enhancedHover === 'high-school' ? styles["high-school-enlarged"] : ''}`}
             style={{ 
               backgroundImage: `url(/images/icons/${enhancedHover}-icon.png)`,
               cursor: 'pointer'
@@ -651,67 +894,69 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                     ),
                   });
                 });
-              } else if (enhancedHover === 'freaks-house') {
-                handleCliqueHouseAccess('FREAK', WINDOW_IDS.FREAKS_HOUSE_MAIN, (
-                  <DraggableResizeableWindow
-                    windowsId={WINDOW_IDS.FREAKS_HOUSE_MAIN}
-                    headerTitle="Freak's House"
-                    onClose={() => closeWindow(WINDOW_IDS.FREAKS_HOUSE_MAIN)}
-                    initialWidth="100%"
-                    initialHeight="100%"
-                    resizable={false}
-                  >
-                    <FreaksHouseMain />
-                  </DraggableResizeableWindow>
-                ), "Freak's House");
-              } else if (enhancedHover === 'geeks-house') {
-                handleCliqueHouseAccess('GEEK', WINDOW_IDS.GEEKS_HOUSE_MAIN, (
-                  <DraggableResizeableWindow
-                    windowsId={WINDOW_IDS.GEEKS_HOUSE_MAIN}
-                    headerTitle="Geek's House"
-                    onClose={() => closeWindow(WINDOW_IDS.GEEKS_HOUSE_MAIN)}
-                    initialWidth="100%"
-                    initialHeight="100%"
-                    resizable={false}
-                  >
-                    <GeeksHouseMain />
-                  </DraggableResizeableWindow>
-                ), "Geek's House");
-              } else if (enhancedHover === 'jocks-house') {
-                handleCliqueHouseAccess('JOCK', WINDOW_IDS.JOCKS_HOUSE_MAIN, (
-                  <DraggableResizeableWindow
-                    windowsId={WINDOW_IDS.JOCKS_HOUSE_MAIN}
-                    headerTitle="Jock's House"
-                    onClose={() => closeWindow(WINDOW_IDS.JOCKS_HOUSE_MAIN)}
-                    initialWidth="100%"
-                    initialHeight="100%"
-                    resizable={false}
-                  >
-                    <JocksHouseMain />
-                  </DraggableResizeableWindow>
-                ), "Jock's House");
-              } else if (enhancedHover === 'preps-house') {
-                handleCliqueHouseAccess('PREP', WINDOW_IDS.PREPS_HOUSE_MAIN, (
-                  <DraggableResizeableWindow
-                    windowsId={WINDOW_IDS.PREPS_HOUSE_MAIN}
-                    headerTitle="Prep's House"
-                    onClose={() => closeWindow(WINDOW_IDS.PREPS_HOUSE_MAIN)}
-                    initialWidth="100%"
-                    initialHeight="100%"
-                    resizable={false}
-                  >
-                    <PrepsHouseMain />
-                  </DraggableResizeableWindow>
-                ), "Prep's House");
+              } else {
+                // Handle clique house access
+                const cliqueMap: { [key: string]: CliqueType } = {
+                  'jocks-house': 'JOCK',
+                  'freaks-house': 'FREAK',
+                  'geeks-house': 'GEEK',
+                  'preps-house': 'PREP'
+                };
+                
+                const windowMap: { [key: string]: string } = {
+                  'jocks-house': WINDOW_IDS.JOCKS_HOUSE_MAIN,
+                  'freaks-house': WINDOW_IDS.FREAKS_HOUSE_MAIN,
+                  'geeks-house': WINDOW_IDS.GEEKS_HOUSE_MAIN,
+                  'preps-house': WINDOW_IDS.PREPS_HOUSE_MAIN
+                };
+                
+                const componentMap: { [key: string]: React.ComponentType } = {
+                  'jocks-house': JocksHouseMain,
+                  'freaks-house': FreaksHouseMain,
+                  'geeks-house': GeeksHouseMain,
+                  'preps-house': PrepsHouseMain
+                };
+                
+                const titleMap: { [key: string]: string } = {
+                  'jocks-house': "Jock's House",
+                  'freaks-house': "Freak's House", 
+                  'geeks-house': "Geek's House",
+                  'preps-house': "Prep's House"
+                };
+
+                if (cliqueMap[enhancedHover] && windowMap[enhancedHover] && componentMap[enhancedHover]) {
+                  const clique = cliqueMap[enhancedHover];
+                  const windowId = windowMap[enhancedHover];
+                  const Component = componentMap[enhancedHover];
+                  const title = titleMap[enhancedHover];
+
+                  handleCliqueHouseAccess(
+                    clique,
+                    windowId,
+                    (
+                      <DraggableResizeableWindow
+                        windowsId={windowId}
+                        headerTitle={title}
+                        onClose={() => closeWindow(windowId)}
+                        initialWidth="100%"
+                        initialHeight="100%"
+                        resizable={false}
+                      >
+                        <Component />
+                      </DraggableResizeableWindow>
+                    ),
+                    title
+                  );
+                }
               }
               // Close the enhanced hover after opening location
               handleEnhancedClose();
             }}
-          >
-          </div>
+          />
           
+          {/* Location info panel (bottom right) */}
           <div 
-            className={styles["location-preview"]}
+            className={styles["location-info-panel"]}
             onClick={(e) => e.stopPropagation()}
           >
             <button 
