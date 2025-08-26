@@ -57,61 +57,64 @@ const JocksHouseMain = () => {
         {timeBasedInfo.currentTime}
       </div>
 
-      {/* Living Room */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.JOCKS_HOUSE_LIVING_ROOM,
-            "Living Room",
-            "Sports trophies line the shelves. A worn football sits on the coffee table."
-          )
-        }
-        className="absolute top-4 left-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
-      >
-        🏆 Living Room
-      </button>
+      {/* Bottom Navigation Bar */}
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-4 z-10">
+        {/* Garage */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.JOCKS_HOUSE_GARAGE,
+              "Garage",
+              "Weight sets and exercise equipment fill the space. Motivational posters on the walls."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          💪 Garage
+        </button>
 
-      {/* Bedroom */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.JOCKS_HOUSE_BEDROOM,
-            "Bedroom",
-            "Letterman jackets hang in the closet. Team photos cover the walls."
-          )
-        }
-        className="absolute top-4 right-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
-      >
-        🛏️ Bedroom
-      </button>
+        {/* Kitchen */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.JOCKS_HOUSE_KITCHEN,
+              "Kitchen",
+              "Protein shakes and energy bars stack the counter. A meal prep schedule is taped to the fridge."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          🥤 Kitchen
+        </button>
 
-      {/* Garage/Workout Area */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.JOCKS_HOUSE_GARAGE,
-            "Garage",
-            "Weight sets and exercise equipment fill the space. Motivational posters on the walls."
-          )
-        }
-        className="absolute bottom-4 left-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
-      >
-        💪 Garage
-      </button>
+        {/* Living Room */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.JOCKS_HOUSE_LIVING_ROOM,
+              "Living Room",
+              "Sports trophies line the shelves. A worn football sits on the coffee table."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          🏆 Living Room
+        </button>
 
-      {/* Kitchen */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.JOCKS_HOUSE_KITCHEN,
-            "Kitchen",
-            "Protein shakes and energy bars stack the counter. A meal prep schedule is taped to the fridge."
-          )
-        }
-        className="absolute bottom-4 right-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
-      >
-        🥤 Kitchen
-      </button>
+        {/* Bedroom */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.JOCKS_HOUSE_BEDROOM,
+              "Bedroom",
+              "Letterman jackets hang in the closet. Team photos cover the walls."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          🛏️ Bedroom
+        </button>
+      </div>
     </div>
   );
 };

@@ -33,85 +33,91 @@ const FreaksHouseMain = () => {
   };
 
   return (
-    <div className="relative w-full h-full">
-      <img
-        src={timeBasedInfo.currentImage}
-        alt={`Freak's House Background - ${timeBasedInfo.isDay ? 'Day' : 'Night'}`}
-        className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-500"
-        onError={(e) => {
-          e.currentTarget.src = "/images/backdrops/BLANK.png";
-        }}
-      />
+    <div className="relative w-full h-full flex items-center justify-center bg-gray-900">
+      {/* Container for the house image - shrunk to show full house */}
+      <div className="relative w-4/5 h-4/5 max-w-4xl max-h-4xl">
+        <img
+          src={timeBasedInfo.currentImage}
+          alt={`Freak's House Background - ${timeBasedInfo.isDay ? 'Day' : 'Night'}`}
+          className="w-full h-full object-contain z-0 transition-opacity duration-500"
+          onError={(e) => {
+            e.currentTarget.src = "/images/backdrops/BLANK.png";
+          }}
+        />
 
-      {/* Day/Night Atmospheric Overlay */}
-      <div 
-        className={`absolute inset-0 z-1 transition-all duration-500 ${
-          !timeBasedInfo.isDay 
-            ? 'bg-purple-900 bg-opacity-30' 
-            : 'bg-red-100 bg-opacity-10'
-        }`}
-      />
+        {/* Day/Night Atmospheric Overlay */}
+        <div 
+          className={`absolute inset-0 z-1 transition-all duration-500 ${
+            !timeBasedInfo.isDay 
+              ? 'bg-purple-900 bg-opacity-30' 
+              : 'bg-red-100 bg-opacity-10'
+          }`}
+        />
+      </div>
 
       {/* Time Info Display */}
       <div className="absolute top-4 right-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded text-sm z-20">
         {timeBasedInfo.currentTime}
       </div>
 
-      {/* Bedroom */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.FREAKS_HOUSE_BEDROOM,
-            "Bedroom",
-            "Black curtains block out the light. Band posters and dark artwork cover every inch of the walls."
-          )
-        }
-        className="absolute top-4 left-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
-      >
-        🖤 Bedroom
-      </button>
+      {/* Bottom Navigation Bar */}
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-4 z-10">
+        {/* Bedroom */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.FREAKS_HOUSE_BEDROOM,
+              "Bedroom",
+              "Black curtains block out the light. Band posters and dark artwork cover every inch of the walls."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          🖤 Bedroom
+        </button>
 
-      {/* Basement */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.FREAKS_HOUSE_BASEMENT,
-            "Basement",
-            "A makeshift recording studio with amplifiers and instruments scattered around."
-          )
-        }
-        className="absolute top-4 right-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
-      >
-        🎸 Basement
-      </button>
+        {/* Basement */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.FREAKS_HOUSE_BASEMENT,
+              "Basement",
+              "A makeshift recording studio with amplifiers and instruments scattered around."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          🎸 Basement
+        </button>
 
-      {/* Attic */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.FREAKS_HOUSE_ATTIC,
-            "Attic",
-            "Dusty old books about the occult and conspiracy theories line makeshift shelves."
-          )
-        }
-        className="absolute bottom-4 left-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
-      >
-        📚 Attic
-      </button>
+        {/* Attic */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.FREAKS_HOUSE_ATTIC,
+              "Attic",
+              "Dusty old books about the occult and conspiracy theories line makeshift shelves."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          📚 Attic
+        </button>
 
-      {/* Kitchen */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.FREAKS_HOUSE_KITCHEN,
-            "Kitchen",
-            "Energy drinks and instant noodles stack the counter. A coffee pot that never gets cleaned."
-          )
-        }
-        className="absolute bottom-4 right-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
-      >
-        ☕ Kitchen
-      </button>
+        {/* Kitchen */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.FREAKS_HOUSE_KITCHEN,
+              "Kitchen",
+              "Energy drinks and instant noodles stack the counter. A coffee pot that never gets cleaned."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          ☕ Kitchen
+        </button>
+      </div>
     </div>
   );
 };

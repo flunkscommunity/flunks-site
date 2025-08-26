@@ -1,29 +1,15 @@
 import { useWindowsContext } from "contexts/WindowsContext";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { WINDOW_IDS } from "fixed";
-import { useState } from "react";
 import { useTimeBasedImage } from "utils/timeBasedImages";
 
 const ArcadeMain = () => {
   const { openWindow, closeWindow } = useWindowsContext();
-  const [isNightMode, setIsNightMode] = useState(false);
-
-  const toggleDayNight = () => {
-    setIsNightMode(!isNightMode);
-  };
-
-  const getCurrentBackground = () => {
-    // Use your uploaded day/night images
-    const dayImage = "/images/icons/arcade-day.png";
-    const nightImage = "/images/icons/arcade-night.png";
-    
-    return isNightMode ? nightImage : dayImage;
-  };
-
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    // Fallback to blank image if day/night specific images don't exist
-    e.currentTarget.src = "/images/backdrops/BLANK.png";
-  };
+  
+  // Use your uploaded day/night images for Arcade
+  const dayImage = "/images/icons/arcade-day.png";
+  const nightImage = "/images/icons/arcade-night.png";
+  const timeBasedInfo = useTimeBasedImage(dayImage, nightImage);
 
   const openRoom = (roomKey: string, title: string, content: string) => {
     openWindow({
@@ -47,92 +33,91 @@ const ArcadeMain = () => {
   };
 
   return (
-    <div className="relative w-full h-full">
-      <img
-        src={getCurrentBackground()}
-        alt={`Arcade Background - ${isNightMode ? 'Night' : 'Day'}`}
-        className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-500"
-        onError={handleImageError}
-      />
+    <div className="relative w-full h-full flex items-center justify-center bg-gray-900">
+      {/* Container for the arcade image - shrunk to show full arcade */}
+      <div className="relative w-4/5 h-4/5 max-w-4xl max-h-4xl">
+        <img
+          src={timeBasedInfo.currentImage}
+          alt={`Arcade Background - ${timeBasedInfo.isDay ? 'Day' : 'Night'}`}
+          className="w-full h-full object-contain z-0 transition-opacity duration-500"
+          onError={(e) => {
+            e.currentTarget.src = "/images/backdrops/BLANK.png";
+          }}
+        />
 
-      {/* Day/Night Atmospheric Overlay */}
-      <div 
-        className={`absolute inset-0 z-1 transition-all duration-500 ${
-          isNightMode 
-            ? 'bg-purple-900 bg-opacity-20' 
-            : 'bg-yellow-100 bg-opacity-5'
-        }`}
-        style={{
-          background: isNightMode 
-            ? 'linear-gradient(180deg, rgba(75, 0, 130, 0.2) 0%, rgba(0, 0, 0, 0.3) 100%)'
-            : 'linear-gradient(180deg, rgba(255, 255, 224, 0.05) 0%, rgba(255, 215, 0, 0.03) 100%)'
-        }}
-      />
+        {/* Day/Night Atmospheric Overlay */}
+        <div 
+          className={`absolute inset-0 z-1 transition-all duration-500 ${
+            !timeBasedInfo.isDay 
+              ? 'bg-purple-900 bg-opacity-20' 
+              : 'bg-yellow-100 bg-opacity-5'
+          }`}
+        />
+      </div>
 
-      {/* Day/Night Toggle Button */}
-      <button
-        onClick={toggleDayNight}
-        className="absolute top-4 right-4 bg-gray-900 text-white px-4 py-2 rounded z-20 hover:bg-gray-700 transition-all duration-200 hover:scale-105 border border-gray-600"
-        title={`Switch to ${isNightMode ? 'Day' : 'Night'} mode`}
-      >
-        {isNightMode ? '☀️ Day' : '🌙 Night'}
-      </button>
+      {/* Time Info Display */}
+      <div className="absolute top-4 right-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded text-sm z-20">
+        {timeBasedInfo.currentTime}
+      </div>
 
-      {/* Top Left */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.ARCADE_TOP_LEFT,
-            "Front Area",
-            "Old cabinets blink with forgotten high scores."
-          )
-        }
-        className="absolute top-4 left-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
-      >
-        🎮 Front Area
-      </button>
+      {/* Bottom Navigation Bar */}
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-4 z-10">
+        {/* Front Area */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.ARCADE_TOP_LEFT,
+              "Front Area",
+              "Old cabinets blink with forgotten high scores."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          🎮 Front Area
+        </button>
 
-      {/* Top Right */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.ARCADE_TOP_RIGHT,
-            "Prize Booth",
-            "Dusty plush toys watch from behind the glass."
-          )
-        }
-        className="absolute top-4 right-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
-      >
-        🎁 Prize Booth
-      </button>
+        {/* Prize Booth */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.ARCADE_TOP_RIGHT,
+              "Prize Booth",
+              "Dusty plush toys watch from behind the glass."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          🎁 Prize Booth
+        </button>
 
-      {/* Bottom Left */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.ARCADE_BOTTOM_LEFT,
-            "Snack Corner",
-            "The popcorn machine hums softly in the dark."
-          )
-        }
-        className="absolute bottom-4 left-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
-      >
-        🍿 Snack Corner
-      </button>
+        {/* Snack Corner */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.ARCADE_BOTTOM_LEFT,
+              "Snack Corner",
+              "The popcorn machine hums softly in the dark."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          🍿 Snack Corner
+        </button>
 
-      {/* Bottom Right */}
-      <button
-        onClick={() =>
-          openRoom(
-            WINDOW_IDS.ARCADE_BOTTOM_RIGHT,
-            "Back Room",
-            "A locked door hides the real secrets of the arcade."
-          )
-        }
-        className="absolute bottom-4 right-4 bg-gray-900 text-white px-3 py-2 rounded z-10 hover:bg-gray-700 transition-transform duration-200 hover:scale-105"
-      >
-        🚪 Back Room
-      </button>
+        {/* Back Room */}
+        <button
+          onClick={() =>
+            openRoom(
+              WINDOW_IDS.ARCADE_BOTTOM_RIGHT,
+              "Back Room",
+              "A locked door hides the real secrets of the arcade."
+            )
+          }
+          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+        >
+          🚪 Back Room
+        </button>
+      </div>
     </div>
   );
 };
