@@ -1,9 +1,15 @@
 import { useWindowsContext } from "contexts/WindowsContext";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { WINDOW_IDS } from "fixed";
+import { useTimeBasedImage } from "utils/timeBasedImages";
 
 const GeeksHouseMain = () => {
   const { openWindow, closeWindow } = useWindowsContext();
+  
+  // Use your uploaded day/night images for Geeks House
+  const dayImage = "/images/icons/geeks-house-day.png";
+  const nightImage = "/images/icons/geeks-house-night.png";
+  const timeBasedInfo = useTimeBasedImage(dayImage, nightImage);
 
   const openRoom = (roomKey: string, title: string, content: string) => {
     openWindow({
@@ -29,10 +35,27 @@ const GeeksHouseMain = () => {
   return (
     <div className="relative w-full h-full">
       <img
-        src="/images/backdrops/BLANK.png"
-        alt="Geek's House Background"
-        className="absolute inset-0 w-full h-full object-cover z-0"
+        src={timeBasedInfo.currentImage}
+        alt={`Geek's House Background - ${timeBasedInfo.isDay ? 'Day' : 'Night'}`}
+        className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-500"
+        onError={(e) => {
+          e.currentTarget.src = "/images/backdrops/BLANK.png";
+        }}
       />
+
+      {/* Day/Night Atmospheric Overlay */}
+      <div 
+        className={`absolute inset-0 z-1 transition-all duration-500 ${
+          !timeBasedInfo.isDay 
+            ? 'bg-green-900 bg-opacity-20' 
+            : 'bg-cyan-100 bg-opacity-5'
+        }`}
+      />
+
+      {/* Time Info Display */}
+      <div className="absolute top-4 right-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded text-sm z-20">
+        {timeBasedInfo.currentTime}
+      </div>
 
       {/* Lab */}
       <button

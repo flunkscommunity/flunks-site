@@ -167,7 +167,7 @@ export async function updateTimeConfig(config: Partial<TimeConfig>): Promise<boo
  */
 export function useHouseImage(
   houseId: string,
-  refreshInterval: number = 60000 // Check every minute
+  refreshInterval: number = 7200000 // Check every 2 hours
 ) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);

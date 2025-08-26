@@ -2,6 +2,7 @@ import { useWindowsContext } from "contexts/WindowsContext";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { WINDOW_IDS } from "fixed";
 import { useState } from "react";
+import { useTimeBasedImage } from "utils/timeBasedImages";
 
 const ArcadeMain = () => {
   const { openWindow, closeWindow } = useWindowsContext();
@@ -12,9 +13,9 @@ const ArcadeMain = () => {
   };
 
   const getCurrentBackground = () => {
-    const dayImage = "/images/backgrounds/locations/arcade/cover-day.png";
-    const nightImage = "/images/backgrounds/locations/arcade/cover-night.png";
-    const fallbackImage = "/images/backdrops/BLANK.png";
+    // Use your uploaded day/night images
+    const dayImage = "/images/icons/arcade-day.png";
+    const nightImage = "/images/icons/arcade-night.png";
     
     return isNightMode ? nightImage : dayImage;
   };

@@ -87,7 +87,7 @@ export function useTimeBasedImage(
   dayImage: string,
   nightImage: string,
   config: TimeConfig = DEFAULT_TIME_CONFIG,
-  refreshInterval: number = 60000 // Check every minute
+  refreshInterval: number = 7200000 // Check every 2 hours
 ) {
   const [imageInfo, setImageInfo] = useState(() => 
     getTimeBasedImageInfo(dayImage, nightImage, config)

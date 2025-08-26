@@ -2,26 +2,42 @@ import { useWindowsContext } from "contexts/WindowsContext";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { WINDOW_IDS } from "fixed";
 import { useState } from "react";
+import { useTimeBasedImage, isDayTime } from "utils/timeBasedImages";
 
 const HighSchoolMain = () => {
   const { openWindow, closeWindow } = useWindowsContext();
+  const [manualMode, setManualMode] = useState(false);
   const [isNightMode, setIsNightMode] = useState(false);
 
+  // Use time-based images with your uploaded day/night photos
+  const dayImage = "/images/icons/school-day.png";
+  const nightImage = "/images/icons/school-night.png";
+  const fallbackImage = "/images/backdrops/BLANK.png";
+
+  // Get time-based image info
+  const timeBasedInfo = useTimeBasedImage(dayImage, nightImage);
+
+  // Get current background - use manual override if set, otherwise use time-based
+  const getCurrentBackground = () => {
+    if (manualMode) {
+      return isNightMode ? nightImage : dayImage;
+    }
+    return timeBasedInfo.currentImage;
+  };
+
   const toggleDayNight = () => {
+    setManualMode(true);
     setIsNightMode(!isNightMode);
   };
 
-  const getCurrentBackground = () => {
-    const dayImage = "/images/backgrounds/locations/high-school/cover-day.png";
-    const nightImage = "/images/backgrounds/locations/high-school/cover-night.png";
-    const fallbackImage = "/images/backgrounds/locations/high-school/cover.png";
-    
-    return isNightMode ? nightImage : dayImage;
+  const resetToAutoMode = () => {
+    setManualMode(false);
+    setIsNightMode(false);
   };
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    // Fallback to original image if day/night specific images don't exist
-    e.currentTarget.src = "/images/backgrounds/locations/high-school/cover.png";
+    // Fallback to blank image if day/night specific images don't exist
+    e.currentTarget.src = fallbackImage;
   };
 
   const openRoom = (roomKey: string, title: string, content: string) => {
@@ -49,7 +65,7 @@ const HighSchoolMain = () => {
     <div className="relative w-full h-full">
       <img
         src={getCurrentBackground()}
-        alt={`High School Background - ${isNightMode ? 'Night' : 'Day'}`}
+        alt={`High School Background - ${manualMode ? (isNightMode ? 'Night' : 'Day') : (timeBasedInfo.isDay ? 'Day' : 'Night')}`}
         className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-500"
         onError={handleImageError}
       />
@@ -57,25 +73,41 @@ const HighSchoolMain = () => {
       {/* Day/Night Atmospheric Overlay */}
       <div 
         className={`absolute inset-0 z-1 transition-all duration-500 ${
-          isNightMode 
+          (manualMode ? isNightMode : !timeBasedInfo.isDay)
             ? 'bg-blue-900 bg-opacity-30' 
             : 'bg-yellow-100 bg-opacity-10'
         }`}
         style={{
-          background: isNightMode 
+          background: (manualMode ? isNightMode : !timeBasedInfo.isDay)
             ? 'linear-gradient(180deg, rgba(25, 25, 112, 0.3) 0%, rgba(0, 0, 0, 0.4) 100%)'
             : 'linear-gradient(180deg, rgba(255, 255, 224, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%)'
         }}
       />
 
+      {/* Time Info Display */}
+      <div className="absolute top-4 left-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded text-sm z-20">
+        {manualMode ? 'Manual Mode' : `Auto: ${timeBasedInfo.currentTime}`}
+      </div>
+
       {/* Day/Night Toggle Button */}
       <button
         onClick={toggleDayNight}
-        className="absolute top-4 right-4 bg-gray-900 text-white px-4 py-2 rounded z-20 hover:bg-gray-700 transition-all duration-200 hover:scale-105 border border-gray-600"
-        title={`Switch to ${isNightMode ? 'Day' : 'Night'} mode`}
+        className="absolute top-4 right-16 bg-gray-900 text-white px-4 py-2 rounded z-20 hover:bg-gray-700 transition-all duration-200 hover:scale-105 border border-gray-600"
+        title={`Switch to ${(manualMode ? isNightMode : !timeBasedInfo.isDay) ? 'Day' : 'Night'} mode`}
       >
-        {isNightMode ? '☀️ Day' : '🌙 Night'}
+        {(manualMode ? isNightMode : !timeBasedInfo.isDay) ? '☀️ Day' : '🌙 Night'}
       </button>
+
+      {/* Reset to Auto Mode Button */}
+      {manualMode && (
+        <button
+          onClick={resetToAutoMode}
+          className="absolute top-16 right-16 bg-blue-900 text-white px-3 py-1 rounded text-sm z-20 hover:bg-blue-700 transition-all duration-200"
+          title="Reset to automatic time-based switching"
+        >
+          🕒 Auto
+        </button>
+      )}
 
       {/* Hallway */}
       <button
