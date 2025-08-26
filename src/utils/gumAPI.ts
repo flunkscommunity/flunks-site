@@ -202,9 +202,36 @@ export async function checkGumCooldown(
 }
 
 /**
- * Get user's current gum balance only
+ * Get user's current gum balance only - Direct database query
  */
 export async function getUserGumBalance(walletAddress: string): Promise<number> {
+  try {
+    const { data, error } = await supabase
+      .from('user_gum_balances')
+      .select('total_gum')
+      .eq('wallet_address', walletAddress)
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        // No record found, return 0
+        return 0;
+      }
+      console.error('Error getting gum balance from database:', error);
+      return 0;
+    }
+
+    return data?.total_gum || 0;
+  } catch (error) {
+    console.error('Error in getUserGumBalance:', error);
+    return 0;
+  }
+}
+
+/**
+ * Get user's current gum balance via API (for frontend use)
+ */
+export async function getUserGumBalanceAPI(walletAddress: string): Promise<number> {
   try {
     const response = await fetch('/api/gum-balance', {
       method: 'POST',
@@ -226,7 +253,7 @@ export async function getUserGumBalance(walletAddress: string): Promise<number> 
       return 0;
     }
   } catch (error) {
-    console.error('Error in getUserGumBalance:', error);
+    console.error('Error in getUserGumBalanceAPI:', error);
     return 0;
   }
 }
