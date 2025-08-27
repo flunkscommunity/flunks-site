@@ -1,36 +1,56 @@
-// Utility to replace Lilico branding with Flow Wallet in Dynamic Labs modals
-export const replaceLilicoBranding = () => {
-  if (typeof window === 'undefined') return;
-
+// Wallet branding fix utilities with error handling
+export const replaceLilicoBranding = (): MutationObserver | null => {
   try {
-    const replaceTextInElement = (element: Element) => {
+    if (typeof window === 'undefined' || !document) return null;
+
+    console.log('🔧 Setting up aggressive Lilico → Flow Wallet text replacement...');
+    
+    const applyBrandingFix = () => {
       try {
-        // Handle text nodes
+        // Replace all instances of "Lilico" with "Flow Wallet" in text content
         const walker = document.createTreeWalker(
-          element,
-          NodeFilter.SHOW_TEXT,
-          null
+          document.body,
+          NodeFilter.SHOW_TEXT
         );
 
         const textNodes: Text[] = [];
         let node;
         while (node = walker.nextNode()) {
-          textNodes.push(node as Text);
+          if (node.textContent && node.textContent.includes('Lilico')) {
+            textNodes.push(node as Text);
+          }
         }
 
         textNodes.forEach(textNode => {
-          if (textNode.textContent?.includes('Lilico')) {
+          if (textNode.textContent) {
             textNode.textContent = textNode.textContent.replace(/Lilico/g, 'Flow Wallet');
           }
-          if (textNode.textContent?.includes('lilico')) {
-            textNode.textContent = textNode.textContent.replace(/lilico/g, 'Flow Wallet');
-          }
         });
+        
+        console.log(`🔧 Replaced Lilico branding in ${textNodes.length} text nodes`);
+      } catch (error) {
+        console.warn('Error in applyBrandingFix:', error);
+      }
+    };
 
-        // Also handle attribute replacements (alt text, aria-labels, etc.)
-        if (element instanceof Element) {
-          const allElements = element.querySelectorAll('*');
-          allElements.forEach(el => {
+    const replaceTextInElement = (element: Element) => {
+      try {
+        if (element.textContent?.includes('Lilico')) {
+          // Replace text content
+          const walker = document.createTreeWalker(
+            element,
+            NodeFilter.SHOW_TEXT
+          );
+
+          let node;
+          while (node = walker.nextNode()) {
+            if (node.textContent && node.textContent.includes('Lilico')) {
+              node.textContent = node.textContent.replace(/Lilico/g, 'Flow Wallet');
+            }
+          }
+
+          // Replace attributes
+          element.querySelectorAll('*').forEach(el => {
             // Replace alt text
             if (el.getAttribute('alt')?.includes('Lilico')) {
               el.setAttribute('alt', el.getAttribute('alt')!.replace(/Lilico/g, 'Flow Wallet'));
@@ -108,30 +128,42 @@ export const replaceLilicoBranding = () => {
 let observer: MutationObserver | null = null;
 
 export const startWalletBrandingFix = () => {
-  if (observer) {
-    observer.disconnect();
-  }
-  console.log('🔧 Starting aggressive wallet branding fix...');
-  observer = replaceLilicoBranding();
-  
-  // Also do periodic checks to catch any missed instances
-  const periodicCheck = setInterval(() => {
-    if (document.querySelector('[data-testid*="lilico"], [class*="lilico"], [id*="lilico"]')) {
-      console.log('🔧 Found Lilico branding - applying fix...');
-      if (observer) observer.disconnect();
-      observer = replaceLilicoBranding();
+  try {
+    if (observer) {
+      observer.disconnect();
     }
-  }, 1000);
+    console.log('🔧 Starting aggressive wallet branding fix...');
+    observer = replaceLilicoBranding();
+    
+    // Also do periodic checks to catch any missed instances
+    const periodicCheck = setInterval(() => {
+      try {
+        if (document.querySelector('[data-testid*="lilico"], [class*="lilico"], [id*="lilico"]')) {
+          console.log('🔧 Found Lilico branding - applying fix...');
+          if (observer) observer.disconnect();
+          observer = replaceLilicoBranding();
+        }
+      } catch (error) {
+        console.warn('Error in periodic branding check:', error);
+      }
+    }, 1000);
 
-  // Clean up after 30 seconds to avoid running forever
-  setTimeout(() => {
-    clearInterval(periodicCheck);
-  }, 30000);
+    // Clean up after 30 seconds to avoid running forever
+    setTimeout(() => {
+      clearInterval(periodicCheck);
+    }, 30000);
+  } catch (error) {
+    console.error('Error starting wallet branding fix:', error);
+  }
 };
 
 export const stopWalletBrandingFix = () => {
-  if (observer) {
-    observer.disconnect();
-    observer = null;
+  try {
+    if (observer) {
+      observer.disconnect();
+      observer = null;
+    }
+  } catch (error) {
+    console.error('Error stopping wallet branding fix:', error);
   }
 };
