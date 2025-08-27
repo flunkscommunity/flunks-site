@@ -68,6 +68,18 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID ||
                       "53675303-5e80-4fe5-88a4-e6caae677432",
                     walletConnectors: [FlowWalletConnectors],
+                    // Debug what wallets are available in v3
+                    walletsFilter: (wallets) => {
+                      console.log('🔍 Dynamic v3 available wallets:', wallets.map(w => ({ 
+                        key: w.key, 
+                        name: w.name,
+                        mobile: (w as any).mobile,
+                        installed: (w as any).isInstalled
+                      })));
+                      
+                      // Return all wallets for now to see what's available
+                      return wallets;
+                    },
                     // Simplified configuration for mobile compatibility
                     initialAuthenticationMode: 'connect-only',
                     overrides: {
