@@ -68,16 +68,44 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID ||
                       "53675303-5e80-4fe5-88a4-e6caae677432",
                     walletConnectors: [FlowWalletConnectors],
-                    // Debug what wallets are available in v3
+                    // Force Flow Wallet/Lilico to appear on mobile
                     walletsFilter: (wallets) => {
-                      console.log('🔍 Dynamic v3 available wallets:', wallets.map(w => ({ 
+                      console.log('🔍 Dynamic v3 detected wallets:', wallets.map(w => ({ 
                         key: w.key, 
                         name: w.name,
                         mobile: (w as any).mobile,
                         installed: (w as any).isInstalled
                       })));
                       
-                      // Return all wallets for now to see what's available
+                      // Add Flow Wallet/Lilico if missing
+                      const hasFlowWallet = wallets.some(w => 
+                        w.key.toLowerCase().includes('flow') || 
+                        w.key.toLowerCase().includes('lilico')
+                      );
+                      
+                      if (!hasFlowWallet) {
+                        console.log('📱 Adding Flow Wallet and Lilico manually for mobile...');
+                        // Create synthetic wallet entries
+                        const flowWallet = {
+                          key: 'flowwallet',
+                          name: 'Flow Wallet',
+                          mobile: true,
+                          isInstalled: false,
+                          icon: 'https://wallet.flow.com/favicon.ico'
+                        };
+                        
+                        const lilicoWallet = {
+                          key: 'lilico',
+                          name: 'Lilico',
+                          mobile: true,
+                          isInstalled: false,
+                          icon: 'https://lilico.app/favicon.ico'
+                        };
+                        
+                        wallets.push(flowWallet as any, lilicoWallet as any);
+                      }
+                      
+                      console.log('🎯 Final wallet list:', wallets.map(w => w.key));
                       return wallets;
                     },
                     // Simplified configuration for mobile compatibility
