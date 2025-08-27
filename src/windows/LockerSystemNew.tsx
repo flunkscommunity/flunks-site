@@ -705,7 +705,8 @@ const LockerSystemNew: React.FC = () => {
 
                     {/* Section 2: Middle (Letter Jacket with Enhanced Effects) */}
                     <div className="locker-section" style={{
-                      height: '140vh',
+                      height: 'max(100vh, 800px)',
+                      minHeight: '100vh',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -715,11 +716,11 @@ const LockerSystemNew: React.FC = () => {
                       <div style={{
                         background: 'rgba(0,0,0,0.8)',
                         color: 'white',
-                        padding: '40px',
+                        padding: 'min(40px, 5vw)',
                         borderRadius: '20px',
                         textAlign: 'center',
-                        width: '75%',
-                        maxWidth: '800px',
+                        width: 'min(95%, 800px)',
+                        maxWidth: '100%',
                         backdropFilter: 'blur(10px)',
                         border: '1px solid rgba(255,255,255,0.1)'
                       }}>
@@ -744,20 +745,21 @@ const LockerSystemNew: React.FC = () => {
                             onClick={() => switchJacket('left')}
                             style={{
                               position: 'absolute',
-                              left: '20px',
+                              left: '10px',
                               background: 'rgba(255,255,255,0.2)',
                               border: '2px solid #4299e1',
                               borderRadius: '50%',
-                              width: '50px',
-                              height: '50px',
+                              width: '60px',
+                              height: '60px',
                               color: 'white',
-                              fontSize: '20px',
+                              fontSize: '24px',
                               cursor: 'pointer',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
                               transition: 'all 0.2s ease',
-                              zIndex: 10
+                              zIndex: 10,
+                              touchAction: 'manipulation'
                             }}
                             onMouseOver={(e) => {
                               e.currentTarget.style.background = 'rgba(66, 153, 225, 0.5)';
@@ -774,9 +776,9 @@ const LockerSystemNew: React.FC = () => {
                           {/* Jacket Display */}
                           <div style={{
                             position: 'relative',
-                            width: '800px',
-                            height: '960px',
-                            margin: '0 20px',
+                            width: 'min(800px, 95vw)',
+                            height: 'min(960px, 80vh)',
+                            margin: '0 10px',
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
@@ -785,8 +787,9 @@ const LockerSystemNew: React.FC = () => {
                             
                             {/* Jacket Image or Placeholder */}
                             <div style={{
-                              width: '700px',
-                              height: '840px',
+                              width: 'min(700px, 90vw)',
+                              height: 'min(840px, 60vh)',
+                              minHeight: '300px',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
@@ -827,20 +830,21 @@ const LockerSystemNew: React.FC = () => {
                             onClick={() => switchJacket('right')}
                             style={{
                               position: 'absolute',
-                              right: '20px',
+                              right: '10px',
                               background: 'rgba(255,255,255,0.2)',
                               border: '2px solid #4299e1',
                               borderRadius: '50%',
-                              width: '50px',
-                              height: '50px',
+                              width: '60px',
+                              height: '60px',
                               color: 'white',
-                              fontSize: '20px',
+                              fontSize: '24px',
                               cursor: 'pointer',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
                               transition: 'all 0.2s ease',
-                              zIndex: 10
+                              zIndex: 10,
+                              touchAction: 'manipulation'
                             }}
                             onMouseOver={(e) => {
                               e.currentTarget.style.background = 'rgba(66, 153, 225, 0.5)';

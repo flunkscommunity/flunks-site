@@ -61,6 +61,49 @@ const HighSchoolMain = () => {
     });
   };
 
+  const openCafeteria = () => {
+    openWindow({
+      key: WINDOW_IDS.HIGH_SCHOOL_CAFETERIA,
+      window: (
+        <DraggableResizeableWindow
+          windowsId={WINDOW_IDS.HIGH_SCHOOL_CAFETERIA}
+          headerTitle="Cafeteria"
+          onClose={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_CAFETERIA)}
+          initialWidth="70vw"
+          initialHeight="70vh"
+          resizable={true}
+        >
+          <div className="relative w-full h-full bg-[#1a1a1a] text-white overflow-hidden">
+            {/* Cafeteria Background Image */}
+            <img
+              src="/images/locations/cafeteria.png"
+              alt="Cafeteria Interior"
+              className="absolute inset-0 w-full h-full object-cover z-0"
+              onError={(e) => {
+                e.currentTarget.src = "/images/backdrops/BLANK.png";
+              }}
+            />
+            
+            {/* Content Overlay */}
+            <div className="absolute inset-0 z-10 bg-black bg-opacity-50 p-6 flex flex-col justify-end">
+              <div className="bg-black bg-opacity-80 p-4 rounded">
+                <h1 className="text-2xl mb-3 font-bold">🍽️ Cafeteria</h1>
+                <p className="text-sm leading-relaxed">
+                  The heart of student life at Flunks High School. Long tables stretch across the room, 
+                  each telling stories of friendships, rivalries, and teenage drama. The lunch counter 
+                  still has mysterious stains from the last day before semester zero began. Empty lunch 
+                  trays sit abandoned on tables, and a suspicious smell lingers in the air - is it from 
+                  the mystery meat or something more sinister? The vending machines hum ominously in 
+                  the corner, their lights flickering with an otherworldly glow.
+                </p>
+              </div>
+            </div>
+          </div>
+        </DraggableResizeableWindow>
+      ),
+    });
+  };
+
   return (
     <div className="relative w-full h-full">
       <img
@@ -141,13 +184,7 @@ const HighSchoolMain = () => {
 
         {/* Cafeteria */}
         <button
-          onClick={() =>
-            openRoom(
-              WINDOW_IDS.HIGH_SCHOOL_CAFETERIA,
-              "Cafeteria",
-              "Empty lunch trays still sit on tables. A suspicious smell lingers in the air."
-            )
-          }
+          onClick={openCafeteria}
           className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
         >
           🍽️ Cafeteria

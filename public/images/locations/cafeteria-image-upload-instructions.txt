@@ -1,0 +1,16 @@
+CAFETERIA IMAGE UPLOAD INSTRUCTIONS
+====================================
+
+To complete the cafeteria enhancement for Week 1 of Semester Zero:
+
+1. Upload your cafeteria image as: cafeteria.png
+2. Place it in this exact location: /public/images/locations/cafeteria.png
+3. Recommended image dimensions: 1920x1080 or similar wide aspect ratio
+4. Image should show an interior view of a high school cafeteria
+
+The image will be displayed as a full background in the cafeteria pop-up window, which now opens at the same large size (70vw x 70vh) as the Geeks House, Freaks House, and Arcade windows.
+
+Current file path expected by the code:
+/public/images/locations/cafeteria.png
+
+If the image fails to load, it will fallback to a blank image automatically.
