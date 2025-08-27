@@ -28,6 +28,7 @@ import { GumProvider } from "contexts/GumContext";
 import { AuthProvider } from "contexts/AuthContext";
 import { GumDisplay } from "components/GumDisplay";
 import UserProfilePrompt from "components/UserProfile/UserProfilePrompt";
+import AutoWalletAccessGrant from "components/AutoWalletAccessGrant";
 // Removed mobile wallet components to show standard Dynamic installation
 // import SmartWalletDetection from "components/SmartWalletDetection";
 // import CleanMobileWalletSelector from "components/CleanMobileWalletSelector";
@@ -148,6 +149,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                             <Component {...pageProps} />
                           </div>
                           <Analytics />
+                          {/* Auto-grant access level for wallet connections */}
+                          <AutoWalletAccessGrant />
                           {/* Global Profile Creation Prompt - only show when needed */}
                           <UserProfilePrompt autoShow={false} showToast={false} />
                           {/* Removed all mobile wallet helper components to show standard Dynamic installation */}

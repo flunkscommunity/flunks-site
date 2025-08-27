@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import DesktopAppIcon from './DesktopAppIcon';
 import { hasAppPermission, getUserAccessLevel, AccessLevel } from 'utils/appPermissions';
 
@@ -20,7 +20,29 @@ const ConditionalAppIcon: React.FC<ConditionalAppIconProps> = ({
   onDoubleClick,
   requiredLevel
 }) => {
-  const userAccessLevel = getUserAccessLevel();
+  const [userAccessLevel, setUserAccessLevel] = useState<AccessLevel | null>(null);
+  
+  // Update access level when it changes
+  useEffect(() => {
+    const updateAccessLevel = () => {
+      setUserAccessLevel(getUserAccessLevel());
+    };
+    
+    // Initial check
+    updateAccessLevel();
+    
+    // Listen for access level updates
+    const handleAccessUpdate = () => {
+      console.log(`🔄 Access level updated - rechecking permissions for ${appId}`);
+      updateAccessLevel();
+    };
+    
+    window.addEventListener('flunks-access-updated', handleAccessUpdate);
+    
+    return () => {
+      window.removeEventListener('flunks-access-updated', handleAccessUpdate);
+    };
+  }, [appId]);
   
   // Check if user has permission to see this app
   const hasPermission = hasAppPermission(appId, userAccessLevel);
