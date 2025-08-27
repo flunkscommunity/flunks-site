@@ -16,9 +16,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // Award daily login bonus using the existing gum system
-    const result = await awardGum(wallet, 'daily_login', {
-      source: 'locker_checkin',
+    // Award daily check-in bonus using the separate daily_checkin source
+    const result = await awardGum(wallet, 'daily_checkin', {
+      source: 'locker_checkin_button',
       timestamp: new Date().toISOString()
     });
 

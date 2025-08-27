@@ -990,7 +990,7 @@ const LockerSystemNew: React.FC = () => {
                             <div style={{ margin: '8px 0', fontSize: '14px' }}>
                               <GumCooldownTimer
                                 walletAddress={primaryWallet.address}
-                                source="daily_login"
+                                source="daily_checkin"
                                 onCanClaim={(canClaim) => {
                                   // Update button state based on cooldown
                                   setCanClaimDaily(canClaim);
