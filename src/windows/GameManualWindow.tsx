@@ -188,6 +188,10 @@ const pages = [
     content: "cover"
   },
   {
+    title: "Welcome",
+    content: "welcome"
+  },
+  {
     title: "Table of Contents",
     content: "toc"
   },
@@ -252,14 +256,225 @@ const GameManualWindow: React.FC = () => {
           </div>
         );
         
+      case "welcome":
+        return (
+          <div style={{
+            width: '100%',
+            height: '500px',
+            background: 'linear-gradient(45deg, #ff00ff 0%, #00ffff 25%, #ffff00 50%, #ff6b9d 75%, #9d6bff 100%)',
+            padding: '20px',
+            position: 'relative',
+            overflow: 'hidden',
+            fontFamily: 'Comic Sans MS, cursive, sans-serif'
+          }}>
+            {/* 90's Doodles and Decorations */}
+            <div style={{
+              position: 'absolute',
+              top: '10px',
+              left: '20px',
+              fontSize: '40px',
+              transform: 'rotate(-15deg)',
+              textShadow: '3px 3px 0px #000'
+            }}>⭐</div>
+            
+            <div style={{
+              position: 'absolute',
+              top: '30px',
+              right: '30px',
+              fontSize: '35px',
+              transform: 'rotate(25deg)',
+              textShadow: '3px 3px 0px #000'
+            }}>🌈</div>
+            
+            <div style={{
+              position: 'absolute',
+              bottom: '40px',
+              left: '10px',
+              fontSize: '45px',
+              transform: 'rotate(-10deg)',
+              textShadow: '3px 3px 0px #000'
+            }}>🎵</div>
+            
+            <div style={{
+              position: 'absolute',
+              bottom: '20px',
+              right: '20px',
+              fontSize: '38px',
+              transform: 'rotate(15deg)',
+              textShadow: '3px 3px 0px #000'
+            }}>⚡</div>
+            
+            <div style={{
+              position: 'absolute',
+              top: '50%',
+              left: '5%',
+              fontSize: '30px',
+              transform: 'rotate(-20deg)',
+              textShadow: '2px 2px 0px #000'
+            }}>💫</div>
+            
+            <div style={{
+              position: 'absolute',
+              top: '70%',
+              right: '8%',
+              fontSize: '32px',
+              transform: 'rotate(30deg)',
+              textShadow: '2px 2px 0px #000'
+            }}>🚀</div>
+            
+            {/* Geometric Shapes */}
+            <div style={{
+              position: 'absolute',
+              top: '80px',
+              left: '80px',
+              width: '20px',
+              height: '20px',
+              background: '#ff00ff',
+              transform: 'rotate(45deg)',
+              border: '2px solid #000'
+            }}></div>
+            
+            <div style={{
+              position: 'absolute',
+              top: '150px',
+              right: '90px',
+              width: '25px',
+              height: '25px',
+              background: '#00ffff',
+              borderRadius: '50%',
+              border: '3px solid #000'
+            }}></div>
+            
+            <div style={{
+              position: 'absolute',
+              bottom: '120px',
+              left: '60px',
+              width: '0',
+              height: '0',
+              borderLeft: '15px solid transparent',
+              borderRight: '15px solid transparent',
+              borderBottom: '25px solid #ffff00',
+              borderTop: '2px solid #000'
+            }}></div>
+            
+            {/* Zigzag Pattern */}
+            <div style={{
+              position: 'absolute',
+              top: '120px',
+              left: '0',
+              width: '100%',
+              height: '8px',
+              background: `repeating-linear-gradient(
+                90deg,
+                #ff00ff 0px,
+                #ff00ff 10px,
+                #00ffff 10px,
+                #00ffff 20px,
+                #ffff00 20px,
+                #ffff00 30px
+              )`,
+              clipPath: 'polygon(0 0, 8% 100%, 16% 0, 24% 100%, 32% 0, 40% 100%, 48% 0, 56% 100%, 64% 0, 72% 100%, 80% 0, 88% 100%, 96% 0, 100% 100%, 100% 0)'
+            }}></div>
+            
+            {/* Main Welcome Message */}
+            <div style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              textAlign: 'center',
+              background: 'rgba(255, 255, 255, 0.95)',
+              padding: '30px 40px',
+              borderRadius: '20px',
+              border: '4px solid #000',
+              boxShadow: '8px 8px 0px #ff00ff',
+              maxWidth: '400px'
+            }}>
+              <h1 style={{
+                fontSize: '32px',
+                margin: '0 0 15px 0',
+                color: '#ff00ff',
+                textShadow: '3px 3px 0px #00ffff',
+                letterSpacing: '2px',
+                textTransform: 'uppercase'
+              }}>
+                Welcome!
+              </h1>
+              
+              <h2 style={{
+                fontSize: '22px',
+                margin: '0 0 20px 0',
+                color: '#9d6bff',
+                textShadow: '2px 2px 0px #ffff00',
+                fontWeight: 'bold'
+              }}>
+                to Semester Zero:
+              </h2>
+              
+              <h3 style={{
+                fontSize: '28px',
+                margin: '0 0 20px 0',
+                color: '#ff6b9d',
+                textShadow: '2px 2px 0px #000',
+                fontWeight: 'bold',
+                textTransform: 'uppercase'
+              }}>
+                Finding Flunko
+              </h3>
+              
+              <div style={{
+                fontSize: '16px',
+                color: '#333',
+                lineHeight: '1.4',
+                marginBottom: '15px'
+              }}>
+                🎒 Get ready for an epic adventure! <br/>
+                🏫 Explore the wildest high school ever! <br/>
+                🍬 Collect GUM, make friends, and find Flunko! <br/>
+              </div>
+              
+              <div style={{
+                fontSize: '14px',
+                color: '#666',
+                fontStyle: 'italic'
+              }}>
+                Turn the page to begin your journey! →
+              </div>
+            </div>
+            
+            {/* Corner Decorations */}
+            <div style={{
+              position: 'absolute',
+              top: '10px',
+              left: '10px',
+              width: '40px',
+              height: '40px',
+              background: 'repeating-conic-gradient(#ff00ff 0deg, #00ffff 30deg, #ffff00 60deg)',
+              borderRadius: '50%',
+              border: '3px solid #000'
+            }}></div>
+            
+            <div style={{
+              position: 'absolute',
+              bottom: '10px',
+              right: '10px',
+              width: '40px',
+              height: '40px',
+              background: 'repeating-conic-gradient(#ff6b9d 0deg, #9d6bff 30deg, #00ffff 60deg)',
+              borderRadius: '50%',
+              border: '3px solid #000'
+            }}></div>
+          </div>
+        );
+        
       case "toc":
         return (
           <PageContent>
             <PageHeader>📚 Table of Contents</PageHeader>
-            {pages.slice(2).map((page, index) => (
-              <TOCItem key={index} onClick={() => setCurrentPage(index + 2)}>
+            {pages.slice(3).map((page, index) => (
+              <TOCItem key={index} onClick={() => setCurrentPage(index + 3)}>
                 <span>{page.title}</span>
-                <span>{index + 3}</span>
+                <span>{index + 4}</span>
               </TOCItem>
             ))}
             <div style={{ marginTop: 20, padding: 10, background: '#ffffcc', border: '1px solid #cccc00' }}>
@@ -1081,10 +1296,26 @@ const GameManualWindow: React.FC = () => {
               }}>
                 <p><strong style={{ color: '#2c5aa0' }}>🌅 Daily Login System:</strong> Automated reward distribution</p>
                 <ul style={{ marginLeft: '20px', color: '#1e3a72' }}>
-                  <li><strong>Reward:</strong> 15 GUM points daily</li>
+                  <li><strong>Reward:</strong> 5 GUM points daily</li>
                   <li><strong>Mechanism:</strong> Automatically processed when wallet connects</li>
                   <li><strong>Cooldown:</strong> 24-hour cycle</li>
                   <li><strong>Notification:</strong> System notification upon processing</li>
+                </ul>
+              </div>
+
+              <div style={{ 
+                background: 'linear-gradient(90deg, #ffe6f3 0%, #ffccf0 100%)', 
+                padding: '10px', 
+                borderRadius: '8px', 
+                border: '1px solid #d63384',
+                marginBottom: '10px'
+              }}>
+                <p><strong style={{ color: '#d63384' }}>🎯 Daily Check-in System:</strong> Manual engagement rewards</p>
+                <ul style={{ marginLeft: '20px', color: '#b02a5b' }}>
+                  <li><strong>Reward:</strong> 15 GUM points daily</li>
+                  <li><strong>Location:</strong> Navigate to "My Locker" → Click daily check-in button</li>
+                  <li><strong>Cooldown:</strong> 24-hour cycle (independent from login)</li>
+                  <li><strong>Combined Potential:</strong> 20 GUM per day (5 login + 15 check-in)</li>
                 </ul>
               </div>
               
@@ -1095,12 +1326,12 @@ const GameManualWindow: React.FC = () => {
                 border: '1px solid #357abd',
                 marginBottom: '10px'
               }}>
-                <p><strong style={{ color: '#1e3a72' }}>🧥 Locker Interaction System:</strong> Manual engagement rewards</p>
+                <p><strong style={{ color: '#1e3a72' }}>🧥 Locker Interaction System:</strong> Interactive engagement rewards</p>
                 <ul style={{ marginLeft: '20px', color: '#1e3a72' }}>
                   <li><strong>Reward:</strong> 3 GUM points per interaction</li>
-                  <li><strong>Location:</strong> Navigate to "My Locker" → Interact with jacket area</li>
+                  <li><strong>Location:</strong> Navigate to "My Locker" → Click jacket button</li>
                   <li><strong>Cooldown:</strong> 5-hour intervals between interactions</li>
-                  <li><strong>Daily Maximum:</strong> 15 GUM per day (5 interactions)</li>
+                  <li><strong>Daily Maximum:</strong> 15 GUM per day (5 interactions max)</li>
                 </ul>
               </div>
               
@@ -1135,7 +1366,7 @@ const GameManualWindow: React.FC = () => {
                 <li><strong>Persistent Storage:</strong> Data linked to wallet address</li>
               </ul>
               
-              <p style={{ marginTop: '10px' }}><strong>System Access:</strong> Click the 🍬 Gum Center icon to view detailed statistics and mechanics!</p>
+              <p style={{ marginTop: '10px' }}><strong>System Access:</strong> Click the 🍬 Gum Center icon in the taskbar to access detailed GUM statistics, transaction history, and manage your rewards!</p>
             </div>
             
             <div style={{ 
@@ -1150,6 +1381,11 @@ const GameManualWindow: React.FC = () => {
                 <div style={{ background: 'rgba(255, 255, 255, 0.9)', padding: '10px', borderRadius: '8px', minWidth: '120px' }}>
                   <div style={{ fontSize: '24px' }}>🌅</div>
                   <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#1e3a72' }}>Daily Login</div>
+                  <div style={{ fontSize: '14px', color: '#2c5aa0' }}>+5 GUM</div>
+                </div>
+                <div style={{ background: 'rgba(255, 255, 255, 0.9)', padding: '10px', borderRadius: '8px', minWidth: '120px' }}>
+                  <div style={{ fontSize: '24px' }}>🎯</div>
+                  <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#1e3a72' }}>Daily Check-in</div>
                   <div style={{ fontSize: '14px', color: '#2c5aa0' }}>+15 GUM</div>
                 </div>
                 <div style={{ background: 'rgba(255, 255, 255, 0.9)', padding: '10px', borderRadius: '8px', minWidth: '120px' }}>
@@ -1164,7 +1400,7 @@ const GameManualWindow: React.FC = () => {
                 </div>
               </div>
               <p style={{ margin: '10px 0 0 0', fontSize: '12px', fontWeight: 'bold', color: '#ffffff' }}>
-                � Maximum Daily Yield: 30+ GUM with systematic engagement �
+                🍬 Maximum Daily Yield: 35+ GUM with systematic engagement 🍬
               </p>
             </div>
             
@@ -1176,7 +1412,7 @@ const GameManualWindow: React.FC = () => {
               borderRadius: '8px',
               textAlign: 'center'
             }}>
-              <strong style={{ color: '#1e3a72' }}>🔧 System Administration:</strong> Press <code>Ctrl + G</code> to access the GUM admin panel for detailed system analytics!
+              <strong style={{ color: '#1e3a72' }}>🔧 System Administration:</strong> Press <code>Ctrl + G</code> (or <code>Cmd + G</code> on Mac) to access the GUM admin panel for detailed system analytics and transaction monitoring!
             </div>
           </PageContent>
         );
