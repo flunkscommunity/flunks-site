@@ -261,9 +261,11 @@ const windowsMemod = useMemo(() => (
                       <div style={{ 
                         background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)',
                         minHeight: '400px',
+                        maxHeight: '95vh',
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center'
+                        justifyContent: 'center',
+                        overflow: 'hidden'
                       }}>
                         <RPGProfileForm 
                           onComplete={() => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Frame } from 'react95';
 import styled from 'styled-components';
 
@@ -25,6 +25,14 @@ const IconSelectionContainer = styled.div`
   text-align: center;
   color: #fff;
   font-family: 'Courier New', monospace;
+  max-height: 90vh;
+  overflow-y: auto;
+  
+  @media (max-width: 768px) {
+    padding: 15px;
+    max-height: 95vh;
+    margin: 10px;
+  }
 `;
 
 const IconGrid = styled.div`
@@ -37,6 +45,18 @@ const IconGrid = styled.div`
   background: rgba(0, 0, 0, 0.3);
   border-radius: 8px;
   border: 2px solid #333;
+  
+  @media (max-width: 768px) {
+    max-width: 280px;
+    gap: 6px;
+    padding: 10px;
+    margin: 15px auto;
+  }
+  
+  @media (max-width: 480px) {
+    max-width: 250px;
+    gap: 4px;
+  }
 `;
 
 const IconButton = styled.button<{ $selected: boolean }>`
@@ -61,6 +81,18 @@ const IconButton = styled.button<{ $selected: boolean }>`
   
   &:active {
     transform: scale(0.95);
+  }
+  
+  @media (max-width: 768px) {
+    width: 45px;
+    height: 45px;
+    font-size: 22px;
+  }
+  
+  @media (max-width: 480px) {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
   }
 `;
 
@@ -103,17 +135,37 @@ const ProfileIconSelector: React.FC<ProfileIconSelectorProps> = ({
   onConfirm,
   onBack
 }) => {
+  console.log('🎨 ProfileIconSelector: Render with selectedIcon:', selectedIcon);
+  console.log('🎨 ProfileIconSelector: Username:', username);
+  
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
   return (
     <IconSelectionContainer>
-      <h2 style={{ margin: '0 0 10px 0', fontSize: '24px', color: '#4a90e2' }}>
+            <h2 style={{ 
+        margin: '0 0 10px 0', 
+        fontSize: isMobile ? '20px' : '24px', 
+        color: '#4a90e2'
+      }}>
         🎨 Choose Your Profile Icon
       </h2>
       
       <p style={{ 
         margin: '0 0 20px 0', 
         color: '#ccc', 
-        fontSize: '14px',
-        lineHeight: '1.4'
+        fontSize: isMobile ? '12px' : '14px',
+        lineHeight: '1.4',
+        padding: '0 10px'
       }}>
         Select an icon that will appear next to your username<br/>
         on scoreboards and throughout the site
@@ -125,9 +177,10 @@ const ProfileIconSelector: React.FC<ProfileIconSelectorProps> = ({
             key={index}
             $selected={selectedIcon === icon}
             onClick={() => {
-              console.log('ProfileIconSelector: Icon clicked:', icon);
-              console.log('ProfileIconSelector: Current selectedIcon:', selectedIcon);
+              console.log('🎨 ProfileIconSelector: Icon clicked:', icon);
+              console.log('🎨 ProfileIconSelector: Current selectedIcon before change:', selectedIcon);
               onIconChange(icon);
+              console.log('🎨 ProfileIconSelector: Icon change callback called for:', icon);
             }}
             title={`Select ${icon} as your profile icon`}
           >
@@ -154,18 +207,35 @@ const ProfileIconSelector: React.FC<ProfileIconSelectorProps> = ({
         </div>
       </PreviewSection>
 
-      <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '20px' }}>
-        <Button onClick={onBack}>
+      <div style={{ 
+        display: 'flex', 
+        gap: '10px', 
+        justifyContent: 'center', 
+        marginTop: '20px',
+        flexWrap: 'wrap'
+      }}>
+        <Button onClick={onBack} style={{
+          minWidth: '120px',
+          fontSize: '14px',
+          padding: '8px 16px'
+        }}>
           ← Back to Profile
         </Button>
         
         <Button 
-          onClick={onConfirm}
+          onClick={() => {
+            console.log('🎨 ProfileIconSelector: Confirm button clicked');
+            console.log('🎨 ProfileIconSelector: Selected icon at confirm:', selectedIcon);
+            onConfirm();
+          }}
           disabled={!selectedIcon}
           style={{
             background: selectedIcon ? '#4a90e2' : '#666',
             color: 'white',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            minWidth: '120px',
+            fontSize: '14px',
+            padding: '8px 16px'
           }}
         >
           Confirm Icon ✨

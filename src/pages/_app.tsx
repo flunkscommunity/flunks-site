@@ -29,6 +29,7 @@ import { AuthProvider } from "contexts/AuthContext";
 import { GumDisplay } from "components/GumDisplay";
 import UserProfilePrompt from "components/UserProfile/UserProfilePrompt";
 import AutoWalletAccessGrant from "components/AutoWalletAccessGrant";
+import ErrorBoundary from "components/ErrorBoundary";
 // Removed mobile wallet components to show standard Dynamic installation
 // import SmartWalletDetection from "components/SmartWalletDetection";
 // import CleanMobileWalletSelector from "components/CleanMobileWalletSelector";
@@ -40,20 +41,74 @@ const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const memodGlobalStyles = React.useMemo(() => <GlobalStyles />, []);
+  const [isClient, setIsClient] = React.useState(false);
+
+  // Ensure client-side rendering for Dynamic Labs
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Start wallet branding fix and enhance detection on component mount
   React.useEffect(() => {
-    startWalletBrandingFix();
+    if (!isClient) return;
     
-    // Enhance Flow Wallet detection for Dynamic Labs
-    const enhanceDetection = async () => {
-      // Wait a bit for extensions to load
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      enhanceFlowWalletDetection();
-    };
-    
-    enhanceDetection();
-  }, []);
+    try {
+      startWalletBrandingFix();
+      
+      // Enhance Flow Wallet detection for Dynamic Labs
+      const enhanceDetection = async () => {
+        try {
+          // Wait a bit for extensions to load
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          enhanceFlowWalletDetection();
+        } catch (error) {
+          console.warn('Flow wallet detection enhancement failed:', error);
+        }
+      };
+      
+      enhanceDetection();
+    } catch (error) {
+      console.error('Wallet initialization failed:', error);
+    }
+  }, [isClient]);
+
+  // Show loading screen during SSR/hydration
+  if (!isClient) {
+    return (
+      <>
+        {memodGlobalStyles}
+        <ThemeWrapper>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '100vh',
+            backgroundColor: '#f0f0f0',
+            fontFamily: 'Arial, sans-serif'
+          }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{
+                width: '40px',
+                height: '40px',
+                border: '4px solid #e0e0e0',
+                borderTop: '4px solid #007bff',
+                borderRadius: '50%',
+                animation: 'spin 1s linear infinite',
+                margin: '0 auto 20px'
+              }}></div>
+              <p>Loading Flunks...</p>
+              <style jsx>{`
+                @keyframes spin {
+                  0% { transform: rotate(0deg); }
+                  100% { transform: rotate(360deg); }
+                }
+              `}</style>
+            </div>
+          </div>
+        </ThemeWrapper>
+      </>
+    );
+  }
 
   return (
     <>
@@ -63,51 +118,91 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           <RadioProvider>
             <WindowsProvider>
               <ClaimBackpackProvider>
-                <DynamicContextProvider
-                  settings={{
-                    environmentId:
-                      process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID ||
-                      "53675303-5e80-4fe5-88a4-e6caae677432",
-                    walletConnectors: [FlowWalletConnectors],
+                <ErrorBoundary fallback={
+                  <div style={{
+                    padding: '40px',
+                    textAlign: 'center',
+                    backgroundColor: '#f5f5f5',
+                    color: '#333',
+                    fontFamily: 'Arial, sans-serif'
+                  }}>
+                    <h2>🔌 Wallet Connection Error</h2>
+                    <p>There was an issue initializing the wallet system.</p>
+                    <button 
+                      onClick={() => window.location.reload()}
+                      style={{
+                        padding: '12px 24px',
+                        backgroundColor: '#007bff',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontSize: '16px'
+                      }}
+                    >
+                      Reload Page
+                    </button>
+                  </div>
+                }>
+                  <DynamicContextProvider
+                    settings={{
+                      environmentId:
+                        process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID ||
+                        "53675303-5e80-4fe5-88a4-e6caae677432",
+                      walletConnectors: [FlowWalletConnectors],
                     // Force Flow Wallet/Lilico to appear on mobile
                     walletsFilter: (wallets) => {
-                      console.log('🔍 Dynamic v3 detected wallets:', wallets.map(w => ({ 
-                        key: w.key, 
-                        name: w.name,
-                        mobile: (w as any).mobile,
-                        installed: (w as any).isInstalled
-                      })));
-                      
-                      // Add Flow Wallet/Lilico if missing
-                      const hasFlowWallet = wallets.some(w => 
-                        w.key.toLowerCase().includes('flow') || 
-                        w.key.toLowerCase().includes('lilico')
-                      );
-                      
-                      if (!hasFlowWallet) {
-                        console.log('📱 Adding Flow Wallet and Lilico manually for mobile...');
-                        // Create synthetic wallet entries
-                        const flowWallet = {
-                          key: 'flowwallet',
-                          name: 'Flow Wallet',
-                          mobile: true,
-                          isInstalled: false,
-                          icon: 'https://wallet.flow.com/favicon.ico'
-                        };
+                      try {
+                        // Check if we're on mobile
+                        const isMobile = typeof window !== 'undefined' && 
+                          (window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
                         
-                        const lilicoWallet = {
-                          key: 'lilico',
-                          name: 'Lilico',
-                          mobile: true,
-                          isInstalled: false,
-                          icon: 'https://lilico.app/favicon.ico'
-                        };
+                        console.log('🔍 Dynamic v3 detected wallets:', wallets.map(w => ({ 
+                          key: w?.key || 'unknown', 
+                          name: w?.name || 'unknown',
+                          mobile: (w as any)?.mobile,
+                          installed: (w as any)?.isInstalled
+                        })));
                         
-                        wallets.push(flowWallet as any, lilicoWallet as any);
+                        // On mobile, be more aggressive about adding Flow wallets
+                        if (isMobile) {
+                          const hasFlowWallet = wallets.some(w => 
+                            w?.key?.toLowerCase().includes('flow') || 
+                            w?.key?.toLowerCase().includes('lilico')
+                          );
+                          
+                          if (!hasFlowWallet) {
+                            console.log('📱 Adding Flow Wallet and Lilico manually for mobile...');
+                            
+                            // Only add if we can safely push to the array
+                            if (Array.isArray(wallets)) {
+                              const flowWallet = {
+                                key: 'flowwallet',
+                                name: 'Flow Wallet',
+                                mobile: true,
+                                isInstalled: false,
+                                icon: 'https://wallet.flow.com/favicon.ico'
+                              };
+                              
+                              const lilicoWallet = {
+                                key: 'lilico',
+                                name: 'Lilico',
+                                mobile: true,
+                                isInstalled: false,
+                                icon: 'https://lilico.app/favicon.ico'
+                              };
+                              
+                              wallets.push(flowWallet as any, lilicoWallet as any);
+                            }
+                          }
+                        }
+                        
+                        console.log('🎯 Final wallet list:', wallets.map(w => w?.key || 'unknown'));
+                        return wallets || []; // Ensure we always return an array
+                      } catch (error) {
+                        console.error('Error in walletsFilter:', error);
+                        return wallets || []; // Return original wallets or empty array if error occurs
                       }
-                      
-                      console.log('🎯 Final wallet list:', wallets.map(w => w.key));
-                      return wallets;
                     },
                     // Simplified configuration for mobile compatibility
                     initialAuthenticationMode: 'connect-only',
@@ -127,16 +222,32 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                     },
                     events: {
                       onAuthSuccess: (args) => {
-                        console.log("🎉 Dynamic Auth success", args);
+                        try {
+                          console.log("🎉 Dynamic Auth success", args);
+                        } catch (error) {
+                          console.error("Error handling auth success:", error);
+                        }
                       },
                       onAuthFailure: (args) => {
-                        console.log("❌ Dynamic Auth failure", args);
+                        try {
+                          console.log("❌ Dynamic Auth failure", args);
+                        } catch (error) {
+                          console.error("Error handling auth failure:", error);
+                        }
                       },
                       onAuthFlowOpen: () => {
-                        console.log("🔓 Dynamic Auth flow opened");
+                        try {
+                          console.log("🔓 Dynamic Auth flow opened");
+                        } catch (error) {
+                          console.error("Error handling auth flow open:", error);
+                        }
                       },
                       onAuthFlowClose: () => {
-                        console.log("🔒 Dynamic Auth flow closed");
+                        try {
+                          console.log("🔒 Dynamic Auth flow closed");
+                        } catch (error) {
+                          console.error("Error handling auth flow close:", error);
+                        }
                       },
                     },
                   }}
@@ -162,6 +273,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                     </PaginatedItemsProvider>
                   </UserProfileProvider>
                 </DynamicContextProvider>
+                </ErrorBoundary>
               </ClaimBackpackProvider>
             </WindowsProvider>
           </RadioProvider>

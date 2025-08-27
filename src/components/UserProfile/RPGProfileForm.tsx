@@ -62,10 +62,23 @@ const RPGContainer = styled.div<{ $backgroundPattern: string }>`
   background-position: ${props => backgroundPositions[props.$backgroundPattern as keyof typeof backgroundPositions]};
   background-color: ${props => props.$backgroundPattern === 'circuit' ? '#c084fc' : 'transparent'};
   min-height: 400px;
+  max-height: 95vh;
   padding: 20px;
   font-family: 'Courier New', monospace;
   position: relative;
   transition: background 0.3s ease;
+  overflow-y: auto;
+  
+  @media (max-width: 768px) {
+    min-height: 350px;
+    max-height: 100vh;
+    padding: 15px;
+  }
+  
+  @media (max-width: 480px) {
+    min-height: 300px;
+    padding: 10px;
+  }
 `;
 
 const DialogueBox = styled(Frame)`
@@ -88,6 +101,20 @@ const DialogueBox = styled(Frame)`
     right: 16px;
     animation: bounce 1s infinite;
     color: #ccc;
+  }
+  
+  @media (max-width: 768px) {
+    margin: 15px auto;
+    padding: 12px;
+    font-size: 16px;
+    max-width: 90%;
+  }
+  
+  @media (max-width: 480px) {
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 14px;
+    max-width: 95%;
   }
 `;
 
@@ -301,6 +328,13 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
     }
   }, [isEditMode, profile, currentStep]);
 
+  // Debug effect to monitor form data changes
+  useEffect(() => {
+    console.log('🔍 FormData changed:', formData);
+    console.log('🔍 Current step:', currentStep);
+    console.log('🔍 Profile icon in formData:', formData.profile_icon);
+  }, [formData, currentStep]);
+
   const keyboards = {
     upper: [
       'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
@@ -472,6 +506,9 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
   };
 
   const handleSubmit = async () => {
+    console.log('🚀 Starting handleSubmit with formData:', formData);
+    console.log('🚀 Profile icon before submission:', formData.profile_icon);
+    
     setIsSubmitting(true);
     const sessionId = generateSessionId();
     const walletAddress = primaryWallet?.address;
@@ -479,6 +516,8 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
     try {
       // Show confirmation screen for 2 seconds
       setTimeout(async () => {
+        console.log('🚀 Inside timeout, formData at submission time:', formData);
+        
         // Track profile activation start
         await trackProfileActivation(
           walletAddress || null,
@@ -548,7 +587,11 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
     }
   };
 
-  const renderConfirmationScreen = () => (
+  const renderConfirmationScreen = () => {
+    console.log('🔍 Confirmation screen - formData:', formData);
+    console.log('🔍 Confirmation screen - profile_icon:', formData.profile_icon);
+    
+    return (
     <UsernameContainer>
       <AstroLogo src="/images/icons/astro-mascot.png" alt="Flunks Astronaut" />
       <NameBox>
@@ -576,11 +619,19 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
         </div>
       </NameBox>
     </UsernameContainer>
-  );
+    );
+  };
 
   const renderSuccessScreen = () => {
-    console.log('Success screen formData:', formData);
-    console.log('Selected profile icon:', formData.profile_icon);
+    console.log('🎉 Success screen rendering with formData:', formData);
+    console.log('🎉 Selected profile icon from formData:', formData.profile_icon);
+    console.log('🎉 All form fields:', {
+      username: formData.username,
+      profile_icon: formData.profile_icon,
+      discord_id: formData.discord_id,
+      email: formData.email
+    });
+    
     return (
     <UsernameContainer>
       <AstroLogo src="/images/icons/astro-mascot.png" alt="Flunks Astronaut" />
@@ -746,14 +797,16 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
           username={formData.username}
           selectedIcon={formData.profile_icon}
           onIconChange={(icon) => {
-            console.log('Icon selected:', icon);
+            console.log('🎨 RPGProfileForm: Icon selection changed to:', icon);
+            console.log('🎨 RPGProfileForm: Current formData before change:', formData);
             setFormData(prev => {
               const updated = { ...prev, profile_icon: icon };
-              console.log('Updated formData:', updated);
+              console.log('🎨 RPGProfileForm: Updated formData after icon change:', updated);
               return updated;
             });
           }}
           onConfirm={() => {
+            console.log('🎨 RPGProfileForm: Icon confirm clicked, current formData:', formData);
             const steps: FormStep[] = ['username', 'icon', 'discord', 'email', 'confirm'];
             const currentIndex = steps.indexOf(currentStep);
             if (currentIndex < steps.length - 1) {
