@@ -416,6 +416,10 @@ const windowsMemod = useMemo(() => (
                 initialHeight="500px"
                 headerTitle="Chat Rooms"
                 headerIcon="/images/icons/chat-rooms.png"
+                style={{
+                  top: '80px',   // Ensure it's well below any top UI elements  
+                  left: '100px'  // Keep it away from the edge
+                }}
               >
                 <FlunksMessenger />
               </DraggableResizeableWindow>

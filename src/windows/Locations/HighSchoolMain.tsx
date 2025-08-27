@@ -3,11 +3,15 @@ import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { WINDOW_IDS } from "fixed";
 import { useState } from "react";
 import { useTimeBasedImage, isDayTime } from "utils/timeBasedImages";
+import { useAuth } from "contexts/AuthContext";
+import { trackCafeteriaButtonClick } from "utils/cafeteriaButtonTracking";
 
 const HighSchoolMain = () => {
   const { openWindow, closeWindow } = useWindowsContext();
+  const { walletAddress, user } = useAuth();
   const [manualMode, setManualMode] = useState(false);
   const [isNightMode, setIsNightMode] = useState(false);
+  const [buttonClickLoading, setButtonClickLoading] = useState(false);
 
   // Use time-based images with your uploaded day/night photos
   const dayImage = "/images/icons/school-day.png";
@@ -33,6 +37,37 @@ const HighSchoolMain = () => {
   const resetToAutoMode = () => {
     setManualMode(false);
     setIsNightMode(false);
+  };
+
+  // Handle cafeteria button click
+  const handleCafeteriaButtonClick = async () => {
+    if (!walletAddress) {
+      alert('Please connect your wallet first to use this feature!');
+      return;
+    }
+
+    setButtonClickLoading(true);
+    
+    try {
+      // Get username - could be from user object or wallet address as fallback
+      const username = user?.email || walletAddress.slice(0, 8) + '...';
+      
+      const success = await trackCafeteriaButtonClick({
+        walletAddress,
+        username
+      });
+
+      if (success) {
+        alert('🍽️ Your cafeteria visit has been recorded!');
+      } else {
+        alert('❌ Failed to record visit. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error clicking cafeteria button:', error);
+      alert('❌ Something went wrong. Please try again.');
+    } finally {
+      setButtonClickLoading(false);
+    }
   };
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -85,10 +120,37 @@ const HighSchoolMain = () => {
             />
             
             {/* Content Overlay */}
-            <div className="absolute inset-0 z-10 bg-black bg-opacity-50 p-6 flex flex-col justify-end">
+            <div className="absolute inset-0 z-10 bg-black bg-opacity-50 p-6 flex flex-col justify-between">
+              {/* Top Section - Interactive Button */}
+              <div className="flex justify-center pt-8">
+                <button
+                  onClick={handleCafeteriaButtonClick}
+                  disabled={!walletAddress || buttonClickLoading}
+                  className={`
+                    px-6 py-3 rounded-lg font-bold text-white text-lg shadow-lg transition-all duration-200
+                    ${walletAddress 
+                      ? 'bg-green-600 hover:bg-green-700 hover:scale-105 cursor-pointer' 
+                      : 'bg-gray-600 cursor-not-allowed opacity-50'
+                    }
+                    ${buttonClickLoading ? 'animate-pulse' : ''}
+                  `}
+                  title={walletAddress ? 'Click to record your cafeteria visit!' : 'Connect wallet to use this feature'}
+                >
+                  {buttonClickLoading ? (
+                    <span className="flex items-center gap-2">
+                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                      Recording...
+                    </span>
+                  ) : (
+                    '🍽️ Check In to Cafeteria'
+                  )}
+                </button>
+              </div>
+
+              {/* Bottom Section - Description */}
               <div className="bg-black bg-opacity-80 p-4 rounded">
                 <h1 className="text-2xl mb-3 font-bold">🍽️ Cafeteria</h1>
-                <p className="text-sm leading-relaxed">
+                <p className="text-sm leading-relaxed mb-3">
                   The heart of student life at Flunks High School. Long tables stretch across the room, 
                   each telling stories of friendships, rivalries, and teenage drama. The lunch counter 
                   still has mysterious stains from the last day before semester zero began. Empty lunch 
@@ -96,6 +158,15 @@ const HighSchoolMain = () => {
                   the mystery meat or something more sinister? The vending machines hum ominously in 
                   the corner, their lights flickering with an otherworldly glow.
                 </p>
+                
+                {/* Status indicator */}
+                <div className="text-xs text-gray-300">
+                  {walletAddress ? (
+                    <span className="text-green-400">✅ Wallet connected - You can check in!</span>
+                  ) : (
+                    <span className="text-yellow-400">⚠️ Connect your wallet to record visits</span>
+                  )}
+                </div>
               </div>
             </div>
           </div>
