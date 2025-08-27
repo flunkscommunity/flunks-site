@@ -192,6 +192,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                                 installed: true,
                                 available: true,
                                 canConnect: true,
+                                isEmbeddedWallet: false,
+                                isConnectorWallet: true,
                                 iconUrl: 'https://wallet.flow.com/favicon.ico'
                               },
                               {
@@ -202,6 +204,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                                 installed: true,
                                 available: true,
                                 canConnect: true,
+                                isEmbeddedWallet: false,
+                                isConnectorWallet: true,
                                 iconUrl: 'https://lilico.app/favicon.ico'
                               }
                             ];
@@ -226,6 +230,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                               installed: true,
                               available: true,
                               canConnect: true,
+                              isEmbeddedWallet: false,
+                              isConnectorWallet: true,
                               iconUrl: 'https://accounts.meetdapper.com/favicon.ico'
                             } as any);
                           }

@@ -58,9 +58,15 @@ const EnhancedMobileWalletAuth: React.FC = () => {
       if (!(window as any).flowWallet) {
         (window as any).flowWallet = {
           name: 'Flow Wallet',
+          key: 'flowwallet',
           isInstalled: true,
           isMobile: true,
           canConnect: true,
+          available: true,
+          mobile: true,
+          installed: true,
+          isEmbeddedWallet: false,
+          isConnectorWallet: true,
           version: '1.0.0',
           connect: async () => {
             console.log('🌊 Flow Wallet mobile connect initiated');
@@ -95,9 +101,15 @@ const EnhancedMobileWalletAuth: React.FC = () => {
       if (!(window as any).lilico) {
         (window as any).lilico = {
           name: 'Lilico',
+          key: 'lilico',
           isInstalled: true,
           isMobile: true,
           canConnect: true,
+          available: true,
+          mobile: true,
+          installed: true,
+          isEmbeddedWallet: false,
+          isConnectorWallet: true,
           version: '1.0.0',
           connect: async () => {
             console.log('🦄 Lilico mobile connect initiated');
@@ -129,9 +141,15 @@ const EnhancedMobileWalletAuth: React.FC = () => {
       if (!(window as any).dapper) {
         (window as any).dapper = {
           name: 'Dapper',
+          key: 'dapper',
           isInstalled: true,
           isMobile: true,
           canConnect: true,
+          available: true,
+          mobile: true,
+          installed: true,
+          isEmbeddedWallet: false,
+          isConnectorWallet: true,
           version: '1.0.0',
           connect: async () => {
             console.log('💳 Dapper mobile connect initiated');
