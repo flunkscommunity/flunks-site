@@ -26,7 +26,7 @@ const EnhancedMobileWalletAuth: React.FC = () => {
 
     console.log('🔧 EnhancedMobileWalletAuth: Setting up mobile environment...');
 
-    // Enhanced mobile wallet setup
+    // Enhanced mobile wallet setup with deep linking support
     const setupMobileWallets = () => {
       // Clear any existing problematic state
       try {
@@ -52,8 +52,9 @@ const EnhancedMobileWalletAuth: React.FC = () => {
       (window as any).FORCE_SHOW_ALL_WALLETS = true;
       (window as any).MOBILE_WALLET_OVERRIDE = true;
       (window as any).ENHANCED_MOBILE_AUTH = true;
+      (window as any).FORCE_MOBILE_WALLET_MODE = true;
       
-      // Create comprehensive wallet objects
+      // Create comprehensive wallet objects with mobile deep linking
       if (!(window as any).flowWallet) {
         (window as any).flowWallet = {
           name: 'Flow Wallet',
@@ -63,6 +64,25 @@ const EnhancedMobileWalletAuth: React.FC = () => {
           version: '1.0.0',
           connect: async () => {
             console.log('🌊 Flow Wallet mobile connect initiated');
+            
+            // Try mobile app deep link
+            const callback = encodeURIComponent(window.location.href);
+            const deepLink = `flowwallet://connect?callback=${callback}`;
+            const webLink = `https://wallet.flow.com/connect?callback=${callback}`;
+            
+            try {
+              // Try deep link first
+              window.location.href = deepLink;
+              
+              // Fallback to web link after delay
+              setTimeout(() => {
+                window.open(webLink, '_self');
+              }, 2000);
+            } catch (e) {
+              console.log('Deep link failed, using web fallback');
+              window.open(webLink, '_self');
+            }
+            
             return { address: 'flow-mobile-address' };
           },
           authenticate: async () => {
@@ -81,6 +101,21 @@ const EnhancedMobileWalletAuth: React.FC = () => {
           version: '1.0.0',
           connect: async () => {
             console.log('🦄 Lilico mobile connect initiated');
+            
+            // Try mobile app deep link
+            const callback = encodeURIComponent(window.location.href);
+            const deepLink = `lilico://connect?callback=${callback}`;
+            const webLink = `https://lilico.app/connect?callback=${callback}`;
+            
+            try {
+              window.location.href = deepLink;
+              setTimeout(() => {
+                window.open(webLink, '_self');
+              }, 2000);
+            } catch (e) {
+              window.open(webLink, '_self');
+            }
+            
             return { address: 'lilico-mobile-address' };
           },
           authenticate: async () => {
@@ -100,12 +135,18 @@ const EnhancedMobileWalletAuth: React.FC = () => {
           version: '1.0.0',
           connect: async () => {
             console.log('💳 Dapper mobile connect initiated');
+            
+            // Dapper uses web-based flow for mobile
+            const callback = encodeURIComponent(window.location.href);
+            const webLink = `https://accounts.meetdapper.com/connect?callback=${callback}`;
+            window.open(webLink, '_self');
+            
             return { address: 'dapper-mobile-address' };
           }
         };
       }
 
-      console.log('✅ Enhanced mobile wallet objects created');
+      console.log('✅ Enhanced mobile wallet objects with deep linking created');
     };
 
     // Setup with a small delay to ensure Dynamic is initialized
