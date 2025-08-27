@@ -48,6 +48,53 @@ button[data-testid*="flow"]:hover {
 
 /* Override Lilico branding to Flow Wallet in buttons */
 button[data-testid*="lilico"] span,
+button[data-testid*="lilico"] .wallet-name {
+  color: #00D4AA !important;
+}
+
+/* Flow Wallet branding colors */
+button[data-testid*="flowwallet"],
+button[data-testid*="flow-wallet"] {
+  border: 1px solid #00D4AA !important;
+}
+
+/* Recommended wallet badge styling */
+:root {
+  --dynamic-badge-primary-background: #00D4AA !important;
+  --dynamic-badge-primary-color: #ffffff !important;
+}
+
+/* Enhanced mobile wallet styling */
+@media (max-width: 768px) {
+  /* Make wallet buttons more prominent on mobile */
+  button[data-testid*="wallet"] {
+    min-height: 60px !important;
+    font-size: 16px !important;
+    border-radius: 12px !important;
+  }
+  
+  /* Flow ecosystem wallet highlighting */
+  button[data-testid*="flowwallet"],
+  button[data-testid*="lilico"],
+  button[data-testid*="blocto"],
+  button[data-testid*="dapper"] {
+    background: linear-gradient(135deg, #00D4AA, #4A90E2) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(0, 212, 170, 0.3) !important;
+  }
+  
+  /* Popular badge styling for mobile */
+  .wallet-recommendation-badge,
+  [data-testid*="recommended"],
+  [data-testid*="popular"] {
+    background: #FF6B35 !important;
+    color: white !important;
+    font-weight: bold !important;
+    font-size: 12px !important;
+    padding: 4px 8px !important;
+    border-radius: 12px !important;
+  }
+}
 button[data-testid*="lilico"] div {
   font-size: 0 !important;
 }

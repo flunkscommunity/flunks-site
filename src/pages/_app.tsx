@@ -12,6 +12,7 @@ import {
   DynamicContextProvider,
   DynamicUserProfile,
   DynamicWidget,
+  SortWallets,
 } from "@dynamic-labs/sdk-react-core";
 import { SdkViewSectionType, SdkViewType } from "@dynamic-labs/sdk-api";
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
@@ -68,28 +69,24 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID ||
                       "53675303-5e80-4fe5-88a4-e6caae677432",
                     walletConnectors: [FlowWalletConnectors],
+                    // Recommended wallets for mobile - will show at top with icons
+                    recommendedWallets: [
+                      { walletKey: "flowwallet", label: "Popular" },
+                      { walletKey: "lilico", label: "Popular" },
+                      { walletKey: "blocto", label: "Popular" },
+                      { walletKey: "dapper" }
+                    ],
+                    // New to Web3 configuration - for users without wallets
+                    newToWeb3WalletChainMap: {
+                      primary_chain: 'flow',
+                      wallets: {
+                        flow: 'flowwallet' // Primary recommendation for new users
+                      }
+                    },
                     // Simplified wallet detection for reliability
                     initialAuthenticationMode: 'connect-only',
-                    walletsFilter: (wallets) => {
-                      console.log('� NO RESTRICTIONS - Standard Dynamic CLI Installation');
-                      console.log('📋 All available wallets (unfiltered):', wallets.map(w => ({ 
-                        key: w.key, 
-                        name: w.name,
-                        isInstalled: (w as any).isInstalled,
-                        mobile: (w as any).mobile,
-                        available: (w as any).available
-                      })));
-                      
-                      // Store wallet list for debugging
-                      if (typeof window !== "undefined") {
-                        (window as any).LAST_DYNAMIC_WALLETS = wallets;
-                        (window as any).ALL_WALLETS_VISIBLE = true;
-                      }
-                      
-                      // Return ALL wallets exactly as Dynamic CLI would provide them
-                      // No filtering, no mobile/desktop detection, no restrictions
-                      return wallets;
-                    },
+                    // Enhanced mobile wallet configuration
+                    walletsFilter: SortWallets(['flowwallet', 'lilico', 'blocto', 'dapper']),
                     overrides: {
                       views: [
                         {
