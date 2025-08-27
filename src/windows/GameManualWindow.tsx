@@ -1381,9 +1381,8 @@ const GameManualWindow: React.FC = () => {
             <h3>📞 Getting Help</h3>
             <p>Still having issues? Contact support:</p>
             <ul>
-              <li>🐦 Twitter: @FlunksCommunity</li>
+              <li>🐦 Twitter/X: @flunksnft</li>
               <li>💬 Discord: Join our community server</li>
-              <li>📧 Email: support@flunks.community</li>
             </ul>
             
             <Screenshot>[HELP DESK CONTACT INFO]</Screenshot>

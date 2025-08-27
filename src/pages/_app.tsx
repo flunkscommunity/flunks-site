@@ -173,54 +173,73 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         // Ensure wallets is an array
                         const walletsArray = Array.isArray(wallets) ? wallets : [];
                         
-                        // On mobile, be more aggressive about Flow wallet availability
+                        // On mobile, force-inject Flow Wallet & Lilico consistently (not only when both missing)
                         if (isMobile) {
-                          const flowWalletKeys = ['flowwallet', 'lilico', 'flow-wallet', 'flow_wallet'];
-                          const hasAnyFlowWallet = walletsArray.some(w => 
-                            flowWalletKeys.some(key => w?.key?.toLowerCase().includes(key.toLowerCase()))
-                          );
-                          
-                          if (!hasAnyFlowWallet) {
-                            console.log('📱 Adding Flow ecosystem wallets for mobile...');
-                            
-                            const mobileFlowWallets = [
-                              {
-                                key: 'flowwallet',
-                                name: 'Flow Wallet',
-                                mobile: true,
-                                isInstalled: true,
-                                installed: true,
-                                available: true,
-                                canConnect: true,
-                                isEmbeddedWallet: false,
-                                isConnectorWallet: true,
-                                iconUrl: 'https://wallet.flow.com/favicon.ico'
-                              },
-                              {
-                                key: 'lilico',
-                                name: 'Lilico',
-                                mobile: true,
-                                isInstalled: true,
-                                installed: true,
-                                available: true,
-                                canConnect: true,
-                                isEmbeddedWallet: false,
-                                isConnectorWallet: true,
-                                iconUrl: 'https://lilico.app/favicon.ico'
-                              }
-                            ];
-                            
-                            // Safely add wallets
-                            mobileFlowWallets.forEach(wallet => {
-                              walletsArray.push(wallet as any);
-                            });
+                          const hasFlowWallet = walletsArray.some(w => w?.key?.toLowerCase() === 'flowwallet');
+                          const hasLilico = walletsArray.some(w => w?.key?.toLowerCase() === 'lilico');
+                          const hasDapper = walletsArray.some(w => w?.key?.toLowerCase() === 'dapper');
+
+                          if (!hasFlowWallet) {
+                            console.log('📱 Injecting Flow Wallet (mobile)');
+                            walletsArray.push({
+                              key: 'flowwallet',
+                              name: 'Flow Wallet',
+                              mobile: true,
+                              isInstalled: true,
+                              installed: true,
+                              available: true,
+                              canConnect: true,
+                              isEmbeddedWallet: false,
+                              isConnectorWallet: true,
+                              iconUrl: 'https://wallet.flow.com/favicon.ico'
+                            } as any);
                           }
-                          
-                          // Also ensure Dapper is available on mobile
-                          const hasDapper = walletsArray.some(w => 
-                            w?.key?.toLowerCase().includes('dapper')
-                          );
-                          
+
+                          if (!hasLilico) {
+                            console.log('📱 Injecting Lilico (Flow Wallet legacy)');
+                            walletsArray.push({
+                              key: 'lilico',
+                              name: 'Lilico',
+                              mobile: true,
+                              isInstalled: true,
+                              installed: true,
+                              available: true,
+                              canConnect: true,
+                              isEmbeddedWallet: false,
+                              isConnectorWallet: true,
+                              iconUrl: 'https://lilico.app/favicon.ico'
+                            } as any);
+                          }
+
+                          // If only one exists, create an alias-style entry so both appear in UI ordering
+                          if (hasFlowWallet && !hasLilico) {
+                            walletsArray.push({
+                              key: 'lilico',
+                              name: 'Lilico',
+                              mobile: true,
+                              isInstalled: true,
+                              installed: true,
+                              available: true,
+                              canConnect: true,
+                              isEmbeddedWallet: false,
+                              isConnectorWallet: true,
+                              iconUrl: 'https://lilico.app/favicon.ico'
+                            } as any);
+                          } else if (hasLilico && !hasFlowWallet) {
+                            walletsArray.push({
+                              key: 'flowwallet',
+                              name: 'Flow Wallet',
+                              mobile: true,
+                              isInstalled: true,
+                              installed: true,
+                              available: true,
+                              canConnect: true,
+                              isEmbeddedWallet: false,
+                              isConnectorWallet: true,
+                              iconUrl: 'https://wallet.flow.com/favicon.ico'
+                            } as any);
+                          }
+
                           if (!hasDapper) {
                             walletsArray.push({
                               key: 'dapper',
@@ -235,6 +254,23 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                               iconUrl: 'https://accounts.meetdapper.com/favicon.ico'
                             } as any);
                           }
+
+                          // (Optional) Blocto injection – currently deprioritized per request; uncomment if needed
+                          // const hasBlocto = walletsArray.some(w => w?.key?.toLowerCase() === 'blocto');
+                          // if (!hasBlocto) {
+                          //   walletsArray.push({
+                          //     key: 'blocto',
+                          //     name: 'Blocto',
+                          //     mobile: true,
+                          //     isInstalled: true,
+                          //     installed: true,
+                          //     available: true,
+                          //     canConnect: true,
+                          //     isEmbeddedWallet: false,
+                          //     isConnectorWallet: true,
+                          //     iconUrl: 'https://blocto.portto.io/favicon.ico'
+                          //   } as any);
+                          // }
                         }
                         
                         const finalWallets = walletsArray.filter(Boolean); // Remove any null/undefined entries

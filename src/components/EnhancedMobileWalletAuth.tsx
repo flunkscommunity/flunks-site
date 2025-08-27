@@ -54,7 +54,7 @@ const EnhancedMobileWalletAuth: React.FC = () => {
       (window as any).ENHANCED_MOBILE_AUTH = true;
       (window as any).FORCE_MOBILE_WALLET_MODE = true;
       
-      // Create comprehensive wallet objects with mobile deep linking
+  // Create comprehensive wallet objects with mobile deep linking
       if (!(window as any).flowWallet) {
         (window as any).flowWallet = {
           name: 'Flow Wallet',
@@ -164,7 +164,36 @@ const EnhancedMobileWalletAuth: React.FC = () => {
         };
       }
 
-      console.log('✅ Enhanced mobile wallet objects with deep linking created');
+      // Alias bridging: ensure both keys exist even if only one injected by extension / app
+      try {
+        if ((window as any).lilico && !(window as any).flowWallet) {
+          (window as any).flowWallet = { ...(window as any).lilico, key: 'flowwallet', name: 'Flow Wallet' };
+          console.log('🔁 Created Flow Wallet alias from Lilico');
+        }
+        if ((window as any).flowWallet && !(window as any).lilico) {
+          (window as any).lilico = { ...(window as any).flowWallet, key: 'lilico', name: 'Lilico' };
+          console.log('🔁 Created Lilico alias from Flow Wallet');
+        }
+      } catch (e) {
+        console.log('⚠️ Alias bridging issue:', e);
+      }
+
+      // Trigger Dynamic refresh if possible
+      const refreshDynamic = () => {
+        try {
+          if ((window as any).dynamic?.sdk?.refreshWallets) {
+            (window as any).dynamic.sdk.refreshWallets();
+            console.log('🔄 Called dynamic.sdk.refreshWallets()');
+          }
+          window.dispatchEvent(new CustomEvent('dynamic:refreshWallets', { detail: { ts: Date.now() } }));
+        } catch (e) {
+          console.log('⚠️ Dynamic refresh attempt failed:', e);
+        }
+      };
+      setTimeout(refreshDynamic, 300);
+      setTimeout(refreshDynamic, 1200); // second pass after any network responses
+
+      console.log('✅ Enhanced mobile wallet objects with deep linking created & refresh scheduled');
     };
 
     // Setup with a small delay to ensure Dynamic is initialized

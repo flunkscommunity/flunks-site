@@ -34,12 +34,12 @@ const FreaksHouseMain = () => {
 
   return (
     <div className="relative w-full h-full flex items-center justify-center bg-gray-900">
-      {/* Container for the house image - shrunk to show full house */}
-      <div className="relative w-4/5 h-4/5 max-w-4xl max-h-4xl">
+      {/* Full screen container for the house image */}
+      <div className="absolute inset-0 w-full h-full">
         <img
           src={timeBasedInfo.currentImage}
           alt={`Freak's House Background - ${timeBasedInfo.isDay ? 'Day' : 'Night'}`}
-          className="w-full h-full object-contain z-0 transition-opacity duration-500"
+          className="w-full h-full object-cover z-0 transition-opacity duration-500"
           onError={(e) => {
             e.currentTarget.src = "/images/backdrops/BLANK.png";
           }}
