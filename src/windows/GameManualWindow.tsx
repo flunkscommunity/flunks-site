@@ -261,122 +261,17 @@ const GameManualWindow: React.FC = () => {
           <div style={{
             width: '100%',
             height: '500px',
-            background: 'linear-gradient(45deg, #ff00ff 0%, #00ffff 25%, #ffff00 50%, #ff6b9d 75%, #9d6bff 100%)',
+            backgroundImage: 'url(/images/backdrops/pixel-static.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
             padding: '20px',
             position: 'relative',
             overflow: 'hidden',
-            fontFamily: 'Comic Sans MS, cursive, sans-serif'
+            fontFamily: 'Arial, sans-serif',
+            fontWeight: 'bold'
           }}>
-            {/* 90's Doodles and Decorations */}
-            <div style={{
-              position: 'absolute',
-              top: '10px',
-              left: '20px',
-              fontSize: '40px',
-              transform: 'rotate(-15deg)',
-              textShadow: '3px 3px 0px #000'
-            }}>⭐</div>
-            
-            <div style={{
-              position: 'absolute',
-              top: '30px',
-              right: '30px',
-              fontSize: '35px',
-              transform: 'rotate(25deg)',
-              textShadow: '3px 3px 0px #000'
-            }}>🌈</div>
-            
-            <div style={{
-              position: 'absolute',
-              bottom: '40px',
-              left: '10px',
-              fontSize: '45px',
-              transform: 'rotate(-10deg)',
-              textShadow: '3px 3px 0px #000'
-            }}>🎵</div>
-            
-            <div style={{
-              position: 'absolute',
-              bottom: '20px',
-              right: '20px',
-              fontSize: '38px',
-              transform: 'rotate(15deg)',
-              textShadow: '3px 3px 0px #000'
-            }}>⚡</div>
-            
-            <div style={{
-              position: 'absolute',
-              top: '50%',
-              left: '5%',
-              fontSize: '30px',
-              transform: 'rotate(-20deg)',
-              textShadow: '2px 2px 0px #000'
-            }}>💫</div>
-            
-            <div style={{
-              position: 'absolute',
-              top: '70%',
-              right: '8%',
-              fontSize: '32px',
-              transform: 'rotate(30deg)',
-              textShadow: '2px 2px 0px #000'
-            }}>🚀</div>
-            
-            {/* Geometric Shapes */}
-            <div style={{
-              position: 'absolute',
-              top: '80px',
-              left: '80px',
-              width: '20px',
-              height: '20px',
-              background: '#ff00ff',
-              transform: 'rotate(45deg)',
-              border: '2px solid #000'
-            }}></div>
-            
-            <div style={{
-              position: 'absolute',
-              top: '150px',
-              right: '90px',
-              width: '25px',
-              height: '25px',
-              background: '#00ffff',
-              borderRadius: '50%',
-              border: '3px solid #000'
-            }}></div>
-            
-            <div style={{
-              position: 'absolute',
-              bottom: '120px',
-              left: '60px',
-              width: '0',
-              height: '0',
-              borderLeft: '15px solid transparent',
-              borderRight: '15px solid transparent',
-              borderBottom: '25px solid #ffff00',
-              borderTop: '2px solid #000'
-            }}></div>
-            
-            {/* Zigzag Pattern */}
-            <div style={{
-              position: 'absolute',
-              top: '120px',
-              left: '0',
-              width: '100%',
-              height: '8px',
-              background: `repeating-linear-gradient(
-                90deg,
-                #ff00ff 0px,
-                #ff00ff 10px,
-                #00ffff 10px,
-                #00ffff 20px,
-                #ffff00 20px,
-                #ffff00 30px
-              )`,
-              clipPath: 'polygon(0 0, 8% 100%, 16% 0, 24% 100%, 32% 0, 40% 100%, 48% 0, 56% 100%, 64% 0, 72% 100%, 80% 0, 88% 100%, 96% 0, 100% 100%, 100% 0)'
-            }}></div>
-            
-            {/* Main Welcome Message */}
+            {/* Main Welcome Message Box */}
             <div style={{
               position: 'absolute',
               top: '50%',
@@ -384,86 +279,74 @@ const GameManualWindow: React.FC = () => {
               transform: 'translate(-50%, -50%)',
               textAlign: 'center',
               background: 'rgba(255, 255, 255, 0.95)',
-              padding: '30px 40px',
-              borderRadius: '20px',
+              padding: '30px 50px',
+              borderRadius: '15px',
               border: '4px solid #000',
-              boxShadow: '8px 8px 0px #ff00ff',
-              maxWidth: '400px'
+              boxShadow: '6px 6px 0px #FFB3D9',
+              maxWidth: '580px',
+              width: '90%',
+              zIndex: 10
             }}>
               <h1 style={{
                 fontSize: '32px',
-                margin: '0 0 15px 0',
-                color: '#ff00ff',
-                textShadow: '3px 3px 0px #00ffff',
-                letterSpacing: '2px',
-                textTransform: 'uppercase'
+                margin: '0 0 8px 0',
+                color: '#6366B3',
+                textShadow: '2px 2px 0px #FFB3D9',
+                letterSpacing: '1px',
+                textTransform: 'uppercase',
+                fontWeight: 'bold',
+                lineHeight: '1.1'
               }}>
-                Welcome!
+                Welcome to Semester Zero
               </h1>
               
               <h2 style={{
-                fontSize: '22px',
-                margin: '0 0 20px 0',
-                color: '#9d6bff',
-                textShadow: '2px 2px 0px #ffff00',
-                fontWeight: 'bold'
-              }}>
-                to Semester Zero:
-              </h2>
-              
-              <h3 style={{
                 fontSize: '28px',
                 margin: '0 0 20px 0',
-                color: '#ff6b9d',
+                color: '#FF8A95',
                 textShadow: '2px 2px 0px #000',
                 fontWeight: 'bold',
-                textTransform: 'uppercase'
+                textTransform: 'uppercase',
+                letterSpacing: '1px'
               }}>
                 Finding Flunko
-              </h3>
+              </h2>
               
               <div style={{
                 fontSize: '16px',
                 color: '#333',
-                lineHeight: '1.4',
-                marginBottom: '15px'
+                lineHeight: '1.7',
+                marginBottom: '15px',
+                fontFamily: 'Georgia, serif',
+                fontWeight: '600',
+                fontStyle: 'italic',
+                textAlign: 'left',
+                textShadow: '1px 1px 1px rgba(255, 179, 217, 0.3)'
               }}>
-                🎒 Get ready for an epic adventure! <br/>
-                🏫 Explore the wildest high school ever! <br/>
-                🍬 Collect GUM, make friends, and find Flunko! <br/>
+                You did it! You've gotten this far. If you're new, welcome in. If you're an OG, mad respect for sticking around through thick and thin.
               </div>
               
               <div style={{
-                fontSize: '14px',
-                color: '#666',
-                fontStyle: 'italic'
+                fontSize: '15px',
+                color: '#333',
+                lineHeight: '1.6',
+                marginBottom: '15px',
+                fontWeight: 'normal',
+                textAlign: 'left'
+              }}>
+                Semester zero is only the beginning. Sit back and enjoy the ride as we dive into the small town of Arcadia and all the shenanigans that will ensue.
+              </div>
+              
+              <div style={{
+                fontSize: '13px',
+                color: '#6366B3',
+                fontStyle: 'italic',
+                fontWeight: 'bold',
+                marginTop: '20px'
               }}>
                 Turn the page to begin your journey! →
               </div>
             </div>
-            
-            {/* Corner Decorations */}
-            <div style={{
-              position: 'absolute',
-              top: '10px',
-              left: '10px',
-              width: '40px',
-              height: '40px',
-              background: 'repeating-conic-gradient(#ff00ff 0deg, #00ffff 30deg, #ffff00 60deg)',
-              borderRadius: '50%',
-              border: '3px solid #000'
-            }}></div>
-            
-            <div style={{
-              position: 'absolute',
-              bottom: '10px',
-              right: '10px',
-              width: '40px',
-              height: '40px',
-              background: 'repeating-conic-gradient(#ff6b9d 0deg, #9d6bff 30deg, #00ffff 60deg)',
-              borderRadius: '50%',
-              border: '3px solid #000'
-            }}></div>
           </div>
         );
         

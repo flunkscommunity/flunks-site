@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import index from "react95/dist/themes/index";
 import { Theme } from "react95/dist/types";
@@ -53,7 +53,16 @@ const useThemeSettings = create<useThemeSettings>()(
     },
     {
       name: "THEME_SETTINGS",
-      getStorage: () => localStorage,
+      storage: {
+        getItem: (name) => {
+          const str = localStorage.getItem(name);
+          return str ? JSON.parse(str) : null;
+        },
+        setItem: (name, value) => {
+          localStorage.setItem(name, JSON.stringify(value));
+        },
+        removeItem: (name) => localStorage.removeItem(name),
+      },
     }
   )
 );
