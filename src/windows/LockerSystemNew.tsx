@@ -1061,33 +1061,6 @@ const LockerSystemNew: React.FC = () => {
                           </button>
                         </div>
 
-                        {/* Quick Stats */}
-                        <div style={{
-                          display: 'grid',
-                          gridTemplateColumns: '1fr 1fr',
-                          gap: '10px',
-                          marginBottom: '15px'
-                        }}>
-                          <div style={{
-                            background: 'rgba(255,255,255,0.08)',
-                            padding: '8px',
-                            borderRadius: '6px',
-                            fontSize: '11px'
-                          }}>
-                            <div style={{ color: '#90ee90' }}>📈 Today</div>
-                            <div style={{ fontWeight: 'bold' }}>+{todayGum} GUM</div>
-                          </div>
-                          <div style={{
-                            background: 'rgba(255,255,255,0.08)',
-                            padding: '8px',
-                            borderRadius: '6px',
-                            fontSize: '11px'
-                          }}>
-                            <div style={{ color: '#ffd700' }}>🎯 Streak</div>
-                            <div style={{ fontWeight: 'bold' }}>{streak} days</div>
-                          </div>
-                        </div>
-                        
                         {/* Interactive Gum Activities */}
                         <div style={{
                           display: 'flex',

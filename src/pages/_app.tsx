@@ -12,7 +12,6 @@ import {
   DynamicContextProvider,
   DynamicUserProfile,
   DynamicWidget,
-  SortWallets,
 } from "@dynamic-labs/sdk-react-core";
 import { SdkViewSectionType, SdkViewType } from "@dynamic-labs/sdk-api";
 import { FlowWalletConnectors } from "@dynamic-labs/flow";
@@ -69,24 +68,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID ||
                       "53675303-5e80-4fe5-88a4-e6caae677432",
                     walletConnectors: [FlowWalletConnectors],
-                    // Recommended wallets for mobile - will show at top with icons
-                    recommendedWallets: [
-                      { walletKey: "flowwallet", label: "Popular" },
-                      { walletKey: "lilico", label: "Popular" },
-                      { walletKey: "blocto", label: "Popular" },
-                      { walletKey: "dapper" }
-                    ],
-                    // New to Web3 configuration - for users without wallets
-                    newToWeb3WalletChainMap: {
-                      primary_chain: 'flow',
-                      wallets: {
-                        flow: 'flowwallet' // Primary recommendation for new users
-                      }
-                    },
-                    // Simplified wallet detection for reliability
+                    // Simplified configuration for mobile compatibility
                     initialAuthenticationMode: 'connect-only',
-                    // Enhanced mobile wallet configuration
-                    walletsFilter: SortWallets(['flowwallet', 'lilico', 'blocto', 'dapper']),
                     overrides: {
                       views: [
                         {
