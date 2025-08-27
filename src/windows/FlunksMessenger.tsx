@@ -241,6 +241,15 @@ interface OnlineUser {
 
 const FlunksMessenger: React.FC = () => {
   const { user } = useDynamicContext();
+  
+  // Add debugging for user state
+  useEffect(() => {
+    console.log('🔍 FlunksMessenger - Dynamic context update:', { 
+      user: user ? { id: user.userId, email: user.email } : null, 
+      timestamp: new Date().toISOString()
+    });
+  }, [user]);
+
   const { closeWindow } = useWindowsContext();
   const { profile, hasProfile } = useUserProfile();
   const sounds = useMessengerSounds();
@@ -249,6 +258,17 @@ const FlunksMessenger: React.FC = () => {
   // Auto-use profile username if available, otherwise require manual entry
   const [username, setUsername] = useState('');
   const [tempUsername, setTempUsername] = useState('');
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  
+  // Handle initial auth check with a small delay to allow Dynamic context to populate
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsCheckingAuth(false);
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
   const [currentMessage, setCurrentMessage] = useState('');
   const [selectedContact, setSelectedContact] = useState<string>('💬 General Chat');
   const [isTyping, setIsTyping] = useState(false);
@@ -582,6 +602,15 @@ const FlunksMessenger: React.FC = () => {
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
+
+  if (!user && isCheckingAuth) {
+    return (
+      <UserSetup>
+        <h2>⏳ Checking authentication...</h2>
+        <p>Please wait while we verify your connection...</p>
+      </UserSetup>
+    );
+  }
 
   if (!user) {
     return (

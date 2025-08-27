@@ -30,10 +30,7 @@ import { GumDisplay } from "components/GumDisplay";
 import UserProfilePrompt from "components/UserProfile/UserProfilePrompt";
 import AutoWalletAccessGrant from "components/AutoWalletAccessGrant";
 import ErrorBoundary from "components/ErrorBoundary";
-import EnhancedMobileWalletAuth from "components/EnhancedMobileWalletAuth";
-// Removed mobile wallet components to show standard Dynamic installation
-// import SmartWalletDetection from "components/SmartWalletDetection";
-// import CleanMobileWalletSelector from "components/CleanMobileWalletSelector";
+// Removed all mobile wallet override components for clean Dynamic Labs behavior
 
 const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme } = useThemeSettings();
@@ -151,192 +148,18 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID ||
                         "53675303-5e80-4fe5-88a4-e6caae677432",
                       walletConnectors: [FlowWalletConnectors],
-                    // Enhanced walletsFilter for better mobile support
-                    walletsFilter: (wallets) => {
-                      try {
-                        // Enhanced mobile detection
-                        const isMobile = typeof window !== 'undefined' && 
-                          (window.innerWidth <= 768 || 
-                           /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-                           'ontouchstart' in window || 
-                           navigator.maxTouchPoints > 0);
-                        
-                        console.log('🔍 Dynamic Enhanced walletsFilter - Mobile:', isMobile);
-                        console.log('🔍 Dynamic Enhanced walletsFilter - Original wallets:', wallets.map(w => ({ 
+                      // Basic walletsFilter - let Dynamic handle mobile detection
+                      walletsFilter: (wallets) => {
+                        console.log('🔍 Dynamic walletsFilter - Available wallets:', wallets.map(w => ({ 
                           key: w?.key || 'unknown', 
-                          name: w?.name || 'unknown',
-                          mobile: (w as any)?.mobile,
-                          installed: (w as any)?.isInstalled || (w as any)?.installed,
-                          available: (w as any)?.available
+                          name: w?.name || 'unknown'
                         })));
                         
-                        // Ensure wallets is an array
-                        const walletsArray = Array.isArray(wallets) ? wallets : [];
-                        
-                        // On mobile, force-inject Flow Wallet & Lilico consistently (not only when both missing)
-                        if (isMobile) {
-                          const hasFlowWallet = walletsArray.some(w => w?.key?.toLowerCase() === 'flowwallet');
-                          const hasLilico = walletsArray.some(w => w?.key?.toLowerCase() === 'lilico');
-                          const hasDapper = walletsArray.some(w => w?.key?.toLowerCase() === 'dapper');
-
-                          if (!hasFlowWallet) {
-                            console.log('📱 Injecting Flow Wallet (mobile)');
-                            walletsArray.push({
-                              key: 'flowwallet',
-                              name: 'Flow Wallet',
-                              mobile: true,
-                              isInstalled: true,
-                              installed: true,
-                              available: true,
-                              canConnect: true,
-                              isEmbeddedWallet: false,
-                              isConnectorWallet: true,
-                              iconUrl: 'https://wallet.flow.com/favicon.ico'
-                            } as any);
-                          }
-
-                          if (!hasLilico) {
-                            console.log('📱 Injecting Lilico (Flow Wallet legacy)');
-                            walletsArray.push({
-                              key: 'lilico',
-                              name: 'Lilico',
-                              mobile: true,
-                              isInstalled: true,
-                              installed: true,
-                              available: true,
-                              canConnect: true,
-                              isEmbeddedWallet: false,
-                              isConnectorWallet: true,
-                              iconUrl: 'https://lilico.app/favicon.ico'
-                            } as any);
-                          }
-
-                          // If only one exists, create an alias-style entry so both appear in UI ordering
-                          if (hasFlowWallet && !hasLilico) {
-                            walletsArray.push({
-                              key: 'lilico',
-                              name: 'Lilico',
-                              mobile: true,
-                              isInstalled: true,
-                              installed: true,
-                              available: true,
-                              canConnect: true,
-                              isEmbeddedWallet: false,
-                              isConnectorWallet: true,
-                              iconUrl: 'https://lilico.app/favicon.ico'
-                            } as any);
-                          } else if (hasLilico && !hasFlowWallet) {
-                            walletsArray.push({
-                              key: 'flowwallet',
-                              name: 'Flow Wallet',
-                              mobile: true,
-                              isInstalled: true,
-                              installed: true,
-                              available: true,
-                              canConnect: true,
-                              isEmbeddedWallet: false,
-                              isConnectorWallet: true,
-                              iconUrl: 'https://wallet.flow.com/favicon.ico'
-                            } as any);
-                          }
-
-                          if (!hasDapper) {
-                            walletsArray.push({
-                              key: 'dapper',
-                              name: 'Dapper',
-                              mobile: true,
-                              isInstalled: true,
-                              installed: true,
-                              available: true,
-                              canConnect: true,
-                              isEmbeddedWallet: false,
-                              isConnectorWallet: true,
-                              iconUrl: 'https://accounts.meetdapper.com/favicon.ico'
-                            } as any);
-                          }
-
-                          // (Optional) Blocto injection – currently deprioritized per request; uncomment if needed
-                          // const hasBlocto = walletsArray.some(w => w?.key?.toLowerCase() === 'blocto');
-                          // if (!hasBlocto) {
-                          //   walletsArray.push({
-                          //     key: 'blocto',
-                          //     name: 'Blocto',
-                          //     mobile: true,
-                          //     isInstalled: true,
-                          //     installed: true,
-                          //     available: true,
-                          //     canConnect: true,
-                          //     isEmbeddedWallet: false,
-                          //     isConnectorWallet: true,
-                          //     iconUrl: 'https://blocto.portto.io/favicon.ico'
-                          //   } as any);
-                          // }
-                        }
-                        
-                        const finalWallets = walletsArray.filter(Boolean); // Remove any null/undefined entries
-                        console.log('🎯 Dynamic Enhanced walletsFilter - Final wallet list:', 
-                          finalWallets.map(w => ({ 
-                            key: w?.key, 
-                            name: w?.name, 
-                            mobile: (w as any)?.mobile,
-                            available: (w as any)?.available || (w as any)?.isInstalled
-                          }))
-                        );
-                        
-                        return finalWallets;
-                      } catch (error) {
-                        console.error('❌ Enhanced walletsFilter error:', error);
+                        // Return wallets as-is, let Dynamic Labs handle mobile/desktop logic
                         return Array.isArray(wallets) ? wallets : [];
                       }
-                    },
-                    // Simplified configuration for mobile compatibility
-                    initialAuthenticationMode: 'connect-only',
-                    overrides: {
-                      views: [
-                        {
-                          type: SdkViewType.Login,
-                          sections: [
-                            {
-                              type: SdkViewSectionType.Wallet,
-                              // No default wallet selection - let Dynamic Labs choose naturally
-                              defaultItem: undefined,
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                    events: {
-                      onAuthSuccess: (args) => {
-                        try {
-                          console.log("🎉 Dynamic Auth success", args);
-                        } catch (error) {
-                          console.error("Error handling auth success:", error);
-                        }
-                      },
-                      onAuthFailure: (args) => {
-                        try {
-                          console.log("❌ Dynamic Auth failure", args);
-                        } catch (error) {
-                          console.error("Error handling auth failure:", error);
-                        }
-                      },
-                      onAuthFlowOpen: () => {
-                        try {
-                          console.log("🔓 Dynamic Auth flow opened");
-                        } catch (error) {
-                          console.error("Error handling auth flow open:", error);
-                        }
-                      },
-                      onAuthFlowClose: () => {
-                        try {
-                          console.log("🔒 Dynamic Auth flow closed");
-                        } catch (error) {
-                          console.error("Error handling auth flow close:", error);
-                        }
-                      },
-                    },
-                  }}
-                >
+                    }}
+                  >
                   <UserProfileProvider>
                     <PaginatedItemsProvider>
                       <AuthProvider>
@@ -345,15 +168,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                             <Component {...pageProps} />
                           </div>
                           <Analytics />
-                          {/* Enhanced mobile wallet authentication */}
-                          <EnhancedMobileWalletAuth />
-                          {/* Auto-grant access level for wallet connections */}
                           <AutoWalletAccessGrant />
-                          {/* Global Profile Creation Prompt - only show when needed */}
                           <UserProfilePrompt autoShow={false} showToast={false} />
-                          {/* Removed all mobile wallet helper components to show standard Dynamic installation */}
-                          {/* <SmartWalletDetection /> */}
-                          {/* <CleanMobileWalletSelector /> */}
                           <DynamicUserProfile />
                         </GumProvider>
                       </AuthProvider>
