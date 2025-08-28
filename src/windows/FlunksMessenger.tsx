@@ -24,7 +24,6 @@ import {
   Toolbar,
   Avatar
 } from 'react95';
-import '../styles/mobile-chat.css';
 
 const MessengerContainer = styled.div`
   display: flex;

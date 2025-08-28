@@ -4,7 +4,7 @@ import { WINDOW_IDS } from "fixed";
 import { useState } from "react";
 import { useTimeBasedImage, isDayTime } from "utils/timeBasedImages";
 import { useAuth } from "contexts/AuthContext";
-import { trackCafeteriaButtonClick } from "utils/cafeteriaButtonTracking";
+import { awardGum } from "utils/gumAPI";
 import DigitalLock from "components/DigitalLock";
 
 const HighSchoolMain = () => {
@@ -38,13 +38,14 @@ const HighSchoolMain = () => {
       // Get username - could be from user object or wallet address as fallback
       const username = user?.email || walletAddress.slice(0, 8) + '...';
       
-      const success = await trackCafeteriaButtonClick({
+      const result = await awardGum(
         walletAddress,
-        username
-      });
+        "cafeteria_visit",
+        { username }
+      );
 
-      if (success) {
-        alert('🍽️ Your cafeteria visit has been recorded!');
+      if (result.success) {
+        alert(`🍽️ Your cafeteria visit has been recorded! +${result.earned} gum awarded!`);
       } else {
         alert('❌ Failed to record visit. Please try again.');
       }

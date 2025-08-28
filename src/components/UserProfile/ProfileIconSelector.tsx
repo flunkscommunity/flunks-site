@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Button, Frame } from 'react95';
 import styled from 'styled-components';
 
-// Profile icon collection - 5x5 grid (25 icons total)
+// Profile icon collection - 5x5 grid (25 icons total) - NEW EMOJI SET
 const PROFILE_ICONS = [
   // Row 1 - Face Characters
-  '🤓', '�', '🥶', '🤡', '�',
+  '🤓', '🥸', '🥶', '🤡', '😈',
   // Row 2 - Creatures  
-  '👻', '�', '�', '👾', '🤖',
+  '👻', '👽', '💩', '👾', '🤖',
   // Row 3 - Professionals
-  '🕵🏼‍♂️', '�🏽‍⚕️', '👨�‍🍳', '�🏽‍🌾', '👨🏼‍🎤',
+  '🕵🏼‍♂️', '👨🏽‍⚕️', '👨🏽‍🍳', '👨🏽‍🌾', '👨🏼‍🎤',
   // Row 4 - More Professionals
-  '👨🏽‍�', '�🏽‍🎨', '🧑🏽‍�', '🥷', '🧙�‍♂️',
+  '👨🏽‍🏫', '👨🏽‍🎨', '🧑🏽‍🚀', '🥷', '🧙🏼‍♂️',
   // Row 5 - Fantasy Characters
-  '🧌', '🧛', '🧞‍♂️', '🧜�‍♂️', '🎮'
+  '🧌', '🧛', '🧞‍♂️', '🧜🏽‍♂️', '🎮'
 ];
 
 const IconSelectionContainer = styled.div`
@@ -54,35 +54,43 @@ const IconGrid = styled.div`
   }
   
   @media (max-width: 480px) {
-    max-width: 250px;
+    max-width: 260px;
     gap: 4px;
+    padding: 8px;
   }
 `;
 
-const IconButton = styled.button<{ $selected: boolean }>`
+const IconButton = styled.button<{ $isSelected: boolean }>`
   width: 50px;
   height: 50px;
-  border: ${props => props.$selected ? '3px solid #4a90e2' : '2px solid #666'};
+  border: 2px solid ${props => props.$isSelected ? '#4a90e2' : '#666'};
   border-radius: 8px;
-  background: ${props => props.$selected ? 'rgba(74, 144, 226, 0.2)' : 'rgba(255, 255, 255, 0.1)'};
+  background: ${props => props.$isSelected ? 
+    'linear-gradient(135deg, #4a90e2 0%, #357abd 100%)' : 
+    'linear-gradient(135deg, #2c2c2c 0%, #1e1e1e 100%)'
+  };
+  color: white;
   font-size: 24px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  
+  box-shadow: ${props => props.$isSelected ? 
+    '0 0 15px rgba(74, 144, 226, 0.6)' : 
+    '0 2px 4px rgba(0, 0, 0, 0.3)'
+  };
+
   &:hover {
     border-color: #4a90e2;
-    background: rgba(74, 144, 226, 0.1);
-    transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(74, 144, 226, 0.4);
+    box-shadow: 0 0 15px rgba(74, 144, 226, 0.4);
+    transform: translateY(-1px);
   }
-  
+
   &:active {
-    transform: scale(0.95);
+    transform: translateY(0);
   }
-  
+
   @media (max-width: 768px) {
     width: 45px;
     height: 45px;
@@ -117,27 +125,24 @@ const UsernamePreview = styled.div`
 
 const IconDisplay = styled.span`
   font-size: 24px;
-  filter: drop-shadow(0 0 4px rgba(74, 144, 226, 0.6));
+  display: inline-block;
 `;
 
 interface ProfileIconSelectorProps {
-  username: string;
   selectedIcon: string;
-  onIconChange: (icon: string) => void;
-  onConfirm: () => void;
+  onIconSelect: (icon: string) => void;
   onBack: () => void;
+  onNext: () => void;
+  username: string;
 }
 
 const ProfileIconSelector: React.FC<ProfileIconSelectorProps> = ({
-  username,
   selectedIcon,
-  onIconChange,
-  onConfirm,
-  onBack
+  onIconSelect,
+  onBack,
+  onNext,
+  username
 }) => {
-  console.log('🎨 ProfileIconSelector: Render with selectedIcon:', selectedIcon);
-  console.log('🎨 ProfileIconSelector: Username:', username);
-  
   const [isMobile, setIsMobile] = useState(false);
   
   useEffect(() => {
@@ -147,41 +152,40 @@ const ProfileIconSelector: React.FC<ProfileIconSelectorProps> = ({
     
     checkMobile();
     window.addEventListener('resize', checkMobile);
+    
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-  
+
+  const handleIconClick = (icon: string) => {
+    console.log('🎨 NEW ProfileIconSelector: Icon clicked:', icon);
+    onIconSelect(icon);
+  };
+
   return (
     <IconSelectionContainer>
-            <h2 style={{ 
-        margin: '0 0 10px 0', 
-        fontSize: isMobile ? '20px' : '24px', 
-        color: '#4a90e2'
+      <h2 style={{ 
+        fontSize: isMobile ? '18px' : '20px', 
+        margin: '0 0 10px 0',
+        textShadow: '0 0 10px rgba(74, 144, 226, 0.8)'
       }}>
-        🎨 Choose Your Profile Icon
+        🎨 Choose Your Avatar
       </h2>
-      
       <p style={{ 
-        margin: '0 0 20px 0', 
-        color: '#ccc', 
-        fontSize: isMobile ? '12px' : '14px',
-        lineHeight: '1.4',
-        padding: '0 10px'
+        fontSize: '12px', 
+        color: '#b0c4de', 
+        margin: '0 0 20px 0',
+        fontStyle: 'italic'
       }}>
-        Select an icon that will appear next to your username<br/>
-        on scoreboards and throughout the site
+        Select from our NEW emoji collection! 🆕
       </p>
-
+      
       <IconGrid>
         {PROFILE_ICONS.map((icon, index) => (
           <IconButton
-            key={index}
-            $selected={selectedIcon === icon}
-            onClick={() => {
-              console.log('🎨 ProfileIconSelector: Icon clicked:', icon);
-              console.log('🎨 ProfileIconSelector: Current selectedIcon before change:', selectedIcon);
-              onIconChange(icon);
-              console.log('🎨 ProfileIconSelector: Icon change callback called for:', icon);
-            }}
+            key={`${icon}-${index}`}
+            $isSelected={selectedIcon === icon}
+            onClick={() => handleIconClick(icon)}
+            type="button"
             title={`Select ${icon} as your profile icon`}
           >
             {icon}
@@ -203,7 +207,7 @@ const ProfileIconSelector: React.FC<ProfileIconSelectorProps> = ({
           marginTop: '8px',
           fontStyle: 'italic'
         }}>
-          This is how your name will appear on leaderboards
+          This is how your name will appear in chat and leaderboards
         </div>
       </PreviewSection>
 
@@ -219,26 +223,20 @@ const ProfileIconSelector: React.FC<ProfileIconSelectorProps> = ({
           fontSize: '14px',
           padding: '8px 16px'
         }}>
-          ← Back to Profile
+          ← Back
         </Button>
-        
         <Button 
-          onClick={() => {
-            console.log('🎨 ProfileIconSelector: Confirm button clicked');
-            console.log('🎨 ProfileIconSelector: Selected icon at confirm:', selectedIcon);
-            onConfirm();
-          }}
+          onClick={onNext}
           disabled={!selectedIcon}
           style={{
-            background: selectedIcon ? '#4a90e2' : '#666',
-            color: 'white',
-            fontWeight: 'bold',
             minWidth: '120px',
             fontSize: '14px',
-            padding: '8px 16px'
+            padding: '8px 16px',
+            background: selectedIcon ? '#4a90e2' : undefined,
+            color: selectedIcon ? 'white' : undefined
           }}
         >
-          Confirm Icon ✨
+          Continue →
         </Button>
       </div>
     </IconSelectionContainer>
