@@ -8,6 +8,7 @@ import { useUserProfile } from 'contexts/UserProfileContext';
 const GlobalSuccessStyle = styled.div`
   width: 100%;
   height: 100%;
+  overflow-y: auto;
   
   /* Override any parent backgrounds */
   * {
@@ -17,6 +18,13 @@ const GlobalSuccessStyle = styled.div`
   /* Force dark background on container */
   && {
     background: #2a2a2a !important;
+  }
+  
+  /* Mobile scrolling fix */
+  @media (max-width: 768px) {
+    height: 100vh;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
   }
 `;
 
@@ -72,6 +80,10 @@ const SuccessContainer = styled.div`
     padding: 20px;
     min-height: 400px;
     border-radius: 10px;
+    overflow-y: auto;
+    justify-content: flex-start;
+    height: auto;
+    max-height: 100%;
   }
 `;
 

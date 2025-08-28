@@ -34,8 +34,8 @@ const ArcadeMain = () => {
 
   return (
     <div className="relative w-full h-full flex items-center justify-center bg-gray-900">
-      {/* Container for the arcade image - shrunk to show full arcade */}
-      <div className="relative w-4/5 h-4/5 max-w-4xl max-h-4xl">
+      {/* Container for the arcade image - full screen on mobile, shrunk on desktop */}
+      <div className="relative w-4/5 h-4/5 max-w-4xl max-h-4xl md:w-4/5 md:h-4/5 sm:w-full sm:h-full">
         <img
           src={timeBasedInfo.currentImage}
           alt={`Arcade Background - ${timeBasedInfo.isDay ? 'Day' : 'Night'}`}
