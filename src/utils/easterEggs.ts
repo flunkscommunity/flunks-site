@@ -13,6 +13,7 @@ Available commands:
 • flunks.fix()         - Fix access issues (if apps don't show)
 • flunks.crackTest()   - Test the crack-the-code tracking system
 • flunks.wtfTest()     - Test the WTF command tracking system
+• flunks.fettyWapTest() - Test the Fetty Wap command tracking system
 • flunks.credits()     - Show development credits
 
 Try typing one of these commands!
@@ -220,6 +221,35 @@ ${Object.entries(info.environment).map(([key, value]) =>
       })
       .catch(error => {
         console.error('❌ WTF Test Error:', error);
+      });
+    },
+
+    fettyWapTest: () => {
+      console.log('🎵 Testing Fetty Wap command tracking...');
+      
+      // Mock test data
+      const testData = {
+        walletAddress: 'test-wallet-' + Date.now(),
+        username: 'TestUser',
+        command: 'fetty wap'
+      };
+      
+      fetch('/api/fetty-wap-tracking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(testData)
+      })
+      .then(res => res.json())
+      .then(result => {
+        console.log('✅ Fetty Wap Tracking Test Result:', result);
+        if (result.success) {
+          console.log('🎉 Fetty Wap command successfully tracked! 1738! 🎤');
+        } else {
+          console.log('❌ Fetty Wap tracking failed:', result.message);
+        }
+      })
+      .catch(error => {
+        console.error('❌ Fetty Wap Test Error:', error);
       });
     },
 

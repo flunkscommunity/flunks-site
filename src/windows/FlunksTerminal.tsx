@@ -108,6 +108,25 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
       });
     }
 
+    // Special logging for Fetty Wap command (non-blocking for better UX)
+    if (input.toLowerCase().trim() === 'fetty wap' && validCommand) {
+      // Fire and forget - don't await this to avoid UI delay
+      fetch('/api/fetty-wap-tracking', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          walletAddress: user?.verifiedCredentials?.[0]?.address || null,
+          username: profile?.username || null,
+          command: input.trim()
+        })
+      }).catch(error => {
+        console.error('Failed to track Fetty Wap command:', error);
+        // Don't show error to user, just log it
+      });
+    }
+
     // Special logging for Magic Carpet command (non-blocking for better UX)
     if (input.toLowerCase().trim() === 'magic carpet' && validCommand) {
       // Fire and forget - don't await this to avoid UI delay
