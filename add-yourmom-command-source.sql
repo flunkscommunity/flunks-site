@@ -19,9 +19,9 @@ CREATE INDEX IF NOT EXISTS idx_yourmom_command_usage_used_at ON yourmom_command_
 ALTER TABLE yourmom_command_usage ENABLE ROW LEVEL SECURITY;
 
 -- Allow read access to authenticated users
-CREATE POLICY IF NOT EXISTS "Allow read access to yourmom command usage" ON yourmom_command_usage
+CREATE POLICY IF NOT EXISTS "Allow read access to yourmom usage" ON yourmom_command_usage
     FOR SELECT USING (true);
 
 -- Allow insert access to authenticated users for their own records
-CREATE POLICY IF NOT EXISTS "Allow insert access to yourmom command usage" ON yourmom_command_usage
+CREATE POLICY IF NOT EXISTS "Allow insert access to yourmom usage" ON yourmom_command_usage
     FOR INSERT WITH CHECK (true);
