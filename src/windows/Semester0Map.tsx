@@ -387,45 +387,46 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   }, []);
 
   return (
-    <div className={styles["map-window"]} ref={mapRef}>
-      {loading && (
-        <div className={styles["loader-overlay"]}>
-          <SemesterZeroCSSLoader />
-        </div>
-      )}
-      
-      {/* Map is always visible - access restrictions handled at location level */}
-      
-      {/* Opening animation for school icon */}
-      {showOpeningAnimation && !loading && (
-        <div className={styles["opening-animation-overlay"]}>
-          <div className={styles["opening-school-icon"]}></div>
-        </div>
-      )}
+    <div className={styles["map-container"]}>
+      <div className={styles["map-window"]} ref={mapRef}>
+        {loading && (
+          <div className={styles["loader-overlay"]}>
+            <SemesterZeroCSSLoader />
+          </div>
+        )}
+        
+        {/* Map is always visible - access restrictions handled at location level */}
+        
+        {/* Opening animation for school icon */}
+        {showOpeningAnimation && !loading && (
+          <div className={styles["opening-animation-overlay"]}>
+            <div className={styles["opening-school-icon"]}></div>
+          </div>
+        )}
 
-      {/* Wallet Status Indicator */}
-      {!loading && (
-        <div style={{
-          position: 'absolute',
-          top: '20px',
-          right: '20px',
-          background: isAuthenticated ? (hasFlunks ? '#4CAF50' : '#FF9800') : '#f44336',
-          color: 'white',
-          padding: '8px 16px',
-          borderRadius: '20px',
-          fontSize: '12px',
-          fontWeight: 'bold',
-          zIndex: 1000,
-          boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
-          fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif'
-        }}>
-          {isAuthenticated ? (
-            hasFlunks ? `✅ ${flunksCount} Flunks - Full Access` : `⚠️ Connected - Need Flunks for Access`
-          ) : `❌ No Wallet Connected`}
-        </div>
-      )}
-      
-  <div className={styles["map-inner"]} ref={mapInnerRef}>
+        {/* Wallet Status Indicator */}
+        {!loading && (
+          <div style={{
+            position: 'absolute',
+            top: '20px',
+            right: '20px',
+            background: isAuthenticated ? (hasFlunks ? '#4CAF50' : '#FF9800') : '#f44336',
+            color: 'white',
+            padding: '8px 16px',
+            borderRadius: '20px',
+            fontSize: '12px',
+            fontWeight: 'bold',
+            zIndex: 1000,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+            fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif'
+          }}>
+            {isAuthenticated ? (
+              hasFlunks ? `✅ ${flunksCount} Flunks - Full Access` : `⚠️ Connected - Need Flunks for Access`
+            ) : `❌ No Wallet Connected`}
+          </div>
+        )}
+        
+    <div className={styles["map-inner"]} ref={mapInnerRef}>
         <img
           src="/images/season-zero-map.png"
           className={styles["background-map"]}
@@ -447,11 +448,41 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         />
       )}
 
-      {/* Remove old scattered icons - now using bottom navigation */}
-      {/* 
+      {/* Key location icons on the map - centered and larger */}
+      <DynamicHouseIcon
+        houseId="high-school"
+        className={`${styles.icon} ${styles['extra-large']} ${styles['high-school']}`}
+        onDoubleClick={() =>
+          handleLocationAccess('high-school', () => 
+            openWindow({
+              key: WINDOW_IDS.HIGH_SCHOOL_MAIN,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.HIGH_SCHOOL_MAIN}
+                  headerTitle="High School"
+                  onClose={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_MAIN)}
+                  initialWidth="100%"
+                  initialHeight="100%"
+                  resizable={false}
+                >
+                  <HighSchoolMain />
+                </DraggableResizeableWindow>
+              ),
+            })
+          )
+        }
+        onClick={(e) => handleEnhancedClick('high-school', e)}
+        onMouseEnter={() => user && handleEnhancedHover('high-school')}
+        onMouseLeave={handleEnhancedLeave}
+        onTouchStart={() => user && handleTouchEnter('high-school')}
+        onTouchEnd={handleTouchLeave}
+      >
+        🏫
+      </DynamicHouseIcon>
+
       <DynamicHouseIcon
         houseId="arcade"
-        className={`${styles.icon} ${styles.arcade}`}
+        className={`${styles.icon} ${styles['extra-large']} ${styles.arcade}`}
         onDoubleClick={() =>
           handleLocationAccess('arcade', () => 
             openWindow({
@@ -481,7 +512,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <DynamicHouseIcon
         houseId="jocks-house"
-        className={`${styles.icon} ${styles['jocks-house']}`}
+        className={`${styles.icon} ${styles['extra-large']} ${styles['jocks-house']}`}
         onDoubleClick={() =>
           handleCliqueHouseAccess(
             'JOCK',
@@ -511,7 +542,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <DynamicHouseIcon
         houseId="freaks-house"
-        className={`${styles.icon} ${styles.large} ${styles['freaks-house']}`}
+        className={`${styles.icon} ${styles['extra-large']} ${styles['freaks-house']}`}
         onDoubleClick={() =>
           handleCliqueHouseAccess(
             'FREAK',
@@ -541,7 +572,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <DynamicHouseIcon
         houseId="geeks-house"
-        className={`${styles.icon} ${styles.large} ${styles['geeks-house']}`}
+        className={`${styles.icon} ${styles['extra-large']} ${styles['geeks-house']}`}
         onDoubleClick={() =>
           handleCliqueHouseAccess(
             'GEEK',
@@ -572,7 +603,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
       <DynamicHouseIcon
         houseId="preps-house"
-        className={`${styles.icon} ${styles['preps-house']}`}
+        className={`${styles.icon} ${styles['extra-large']} ${styles['preps-house']}`}
         onClick={(e) => handleEnhancedClick('preps-house', e)}
         onMouseEnter={() => user && handleEnhancedHover('preps-house')}
         onMouseLeave={handleEnhancedLeave}
@@ -601,42 +632,89 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         💅
       </DynamicHouseIcon>
 
-      <DynamicHouseIcon
-        houseId="high-school"
-        className={`${styles.icon} ${styles['high-school']}`}
-        onDoubleClick={() =>
-          handleLocationAccess('high-school', () => 
-            openWindow({
-              key: WINDOW_IDS.HIGH_SCHOOL_MAIN,
-              window: (
-                <DraggableResizeableWindow
-                  windowsId={WINDOW_IDS.HIGH_SCHOOL_MAIN}
-                  headerTitle="High School"
-                  onClose={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_MAIN)}
-                  initialWidth="100%"
-                  initialHeight="100%"
-                  resizable={false}
-                >
-                  <HighSchoolMain />
-                </DraggableResizeableWindow>
-              ),
-            })
-          )
-        }
-        onClick={(e) => handleEnhancedClick('high-school', e)}
-        onMouseEnter={() => user && handleEnhancedHover('high-school')}
-        onMouseLeave={handleEnhancedLeave}
-        onTouchStart={() => user && handleTouchEnter('high-school')}
-        onTouchEnd={handleTouchLeave}
-      >
-        🏫
-      </DynamicHouseIcon>
-      */}
-
       <button className={styles["close-btn"]} onClick={onClose}>✖</button>
       </div>
 
-      {/* Bottom Navigation Bar */}
+      {/* Enhanced Hover Overlay - Shows enlarged icon over dimmed map */}
+      {/* Removed - reverting to simple hover only */}
+
+      {/* Room Fullscreen Overlay (retro pop-up) */}
+      {activeRoom && (
+        <div className={styles["room-overlay"]} onClick={() => setActiveRoom(null)}>
+          <div
+            className={styles["room-image"]}
+            style={{ backgroundImage: getRoomBackgrounds(activeRoom.location, activeRoom.roomName) }}
+            onClick={(e) => e.stopPropagation()}
+          />
+          <div className={styles["room-info-bar"]} onClick={(e) => e.stopPropagation()}>
+            <div className={styles["room-title"]}>
+              {locationData[activeRoom.location as keyof typeof locationData]?.title}
+              <span className={styles["room-sep"]}> • </span>
+              {activeRoom.roomName}
+            </div>
+            <button className={styles["room-close"]} onClick={() => setActiveRoom(null)} aria-label="Close room">
+              ✖
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Pause Overlay */}
+      {isPaused && (
+        <div
+          onClick={togglePause}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            height: '100%',
+            width: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 50,
+          }}
+        >
+          <img
+    src="/images/pause-screen.png"
+    alt="Paused"
+    style={{
+      maxWidth: '80%',
+      maxHeight: '80%',
+      borderRadius: '8px',
+      boxShadow: '0 0 20px black',
+      backgroundColor: '#fff',
+      WebkitMaskImage: 'radial-gradient(ellipse closest-side, black 60%, transparent 100%)',
+      maskImage: 'radial-gradient(ellipse closest-side, black 60%, transparent 100%)',
+      WebkitMaskRepeat: 'no-repeat',
+      maskRepeat: 'no-repeat',
+      WebkitMaskPosition: 'center',
+      maskPosition: 'center',
+    }}
+    onClick={(e) => e.stopPropagation()}
+  />
+        </div>
+      )}
+
+      {/* Pause Button */}
+      <div style={{
+        position: 'absolute',
+        top: 20,
+        left: 20,
+        zIndex: 40,
+      }}>
+        <Button
+          onClick={togglePause}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#c0c0c0'}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
+        >
+          Pause
+        </Button>
+      </div>
+    </div>
+
+      {/* Bottom Navigation Bar - Now outside map window */}
       <div className={styles["bottom-nav"]}>
         <div className={styles["nav-section"]}>
           <h3>Main Locations</h3>
@@ -845,84 +923,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             </DynamicHouseIcon>
           </div>
         </div>
-      </div>
-
-      {/* Enhanced Hover Overlay - Shows enlarged icon over dimmed map */}
-      {/* Removed - reverting to simple hover only */}
-
-      {/* Room Fullscreen Overlay (retro pop-up) */}
-      {activeRoom && (
-        <div className={styles["room-overlay"]} onClick={() => setActiveRoom(null)}>
-          <div
-            className={styles["room-image"]}
-            style={{ backgroundImage: getRoomBackgrounds(activeRoom.location, activeRoom.roomName) }}
-            onClick={(e) => e.stopPropagation()}
-          />
-          <div className={styles["room-info-bar"]} onClick={(e) => e.stopPropagation()}>
-            <div className={styles["room-title"]}>
-              {locationData[activeRoom.location as keyof typeof locationData]?.title}
-              <span className={styles["room-sep"]}> • </span>
-              {activeRoom.roomName}
-            </div>
-            <button className={styles["room-close"]} onClick={() => setActiveRoom(null)} aria-label="Close room">
-              ✖
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Pause Overlay */}
-      {isPaused && (
-        <div
-          onClick={togglePause}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            height: '100%',
-            width: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 50,
-          }}
-        >
-          <img
-  src="/images/pause-screen.png"
-  alt="Paused"
-  style={{
-    maxWidth: '80%',
-    maxHeight: '80%',
-    borderRadius: '8px',
-    boxShadow: '0 0 20px black',
-    backgroundColor: '#fff',
-    WebkitMaskImage: 'radial-gradient(ellipse closest-side, black 60%, transparent 100%)',
-    maskImage: 'radial-gradient(ellipse closest-side, black 60%, transparent 100%)',
-    WebkitMaskRepeat: 'no-repeat',
-    maskRepeat: 'no-repeat',
-    WebkitMaskPosition: 'center',
-    maskPosition: 'center',
-  }}
-  onClick={(e) => e.stopPropagation()}
-/>
-        </div>
-      )}
-
-      {/* Pause Button */}
-      <div style={{
-        position: 'absolute',
-        top: 20,
-        left: 20,
-        zIndex: 40,
-      }}>
-        <Button
-          onClick={togglePause}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#c0c0c0'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
-        >
-          Pause
-        </Button>
       </div>
     </div>
   );

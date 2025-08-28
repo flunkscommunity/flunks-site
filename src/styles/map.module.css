@@ -1,16 +1,22 @@
+/* Map Container - holds both map and navigation */
+.map-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .map-window {
   position: relative;
   width: 100%;
-  height: 100%; /* Changed from 100vh to 100% to fit within parent container */
+  flex: 1; /* Take remaining space above navigation */
   overflow: hidden; /* no scrollbars on desktop */
   background-color: black;
   font-family: sans-serif;
   touch-action: none;
   cursor: grab;
   overscroll-behavior: contain; /* prevent rubber-band scroll while dragging */
-  /* Ensure the map fills the window properly */
-  display: flex;
-  flex-direction: column;
 }
 
 .dragging {
@@ -79,6 +85,12 @@
   width: 80px;
   height: 80px;
   font-size: 32px;
+}
+
+.icon.extra-large {
+  width: 100px;
+  height: 100px;
+  font-size: 40px;
 }
 
 .icon.small {
@@ -583,21 +595,21 @@
 }
 
 .arcade {
-  top: 45%;
-  left: 50%;
+  top: 50%;  /* More centered */
+  left: 48%;  /* More centered */
   background-image: url('/images/icons/arcade-icon.png');
 }
 
-/* New map locations */
+/* Clique houses - centered and larger */
 .jocks-house {
-  top: 72%;
-  left: 15%;
+  top: 55%;  /* More centered */
+  left: 45%;  /* More centered */
   background-image: url('/images/icons/jocks-house-icon.png');
 }
 
 .freaks-house {
-  top: 35%;
-  left: 26%;
+  top: 40%;  /* More centered */
+  left: 52%;  /* More centered */
   background-image: url('/images/icons/freaks-house-icon.png');
 }
 
@@ -608,8 +620,8 @@
 }
 
 .geeks-house {
-  top: 17%;
-  left: 30%;
+  top: 35%;  /* More centered */
+  left: 48%;  /* More centered */
   background-image: url('/images/icons/geeks-house-icon.png');
 }
 
@@ -644,8 +656,8 @@
 }
 
 .high-school {
-  top: 32%;
-  left: 60%;
+  top: 45%;  /* More centered vertically */
+  left: 50%; /* More centered horizontally */
   background-image: url('/images/icons/high-school-icon.png');
 }
 
@@ -712,8 +724,8 @@
 }
 
 .preps-house {
-  top: 30%;
-  left: 53%;
+  top: 42%;  /* More centered */
+  left: 50%;  /* More centered */
   background-image: url('/images/icons/preps-house-icon.png');
 }
 
@@ -761,38 +773,38 @@
 
 /* Positioning for each location's large hover icon on the actual map */
 .map-location-hover.high-school {
-  top: 32%;
-  left: 66%;
+  top: 45%;  /* Match new icon position */
+  left: 50%;  /* Match new icon position */
   background-image: url('/images/icons/high-school-icon.png');
 }
 
 .map-location-hover.arcade {
-  top: 38%;
-  left: 46%;
+  top: 50%;  /* Match new icon position */
+  left: 48%;  /* Match new icon position */
   background-image: url('/images/icons/arcade-icon.png');
 }
 
 .map-location-hover.jocks-house {
-  top: 45%;
-  left: 20%;
+  top: 55%;  /* Match new icon position */
+  left: 45%;  /* Match new icon position */
   background-image: url('/images/icons/jocks-house-icon.png');
 }
 
 .map-location-hover.freaks-house {
-  top: 25%;
-  left: 15%;
+  top: 40%;  /* Match new icon position */
+  left: 52%;  /* Match new icon position */
   background-image: url('/images/icons/freaks-house-icon.png');
 }
 
 .map-location-hover.geeks-house {
-  top: 20%;
-  left: 45%;
+  top: 35%;  /* Match new icon position */
+  left: 48%;  /* Match new icon position */
   background-image: url('/images/icons/geeks-house-icon.png');
 }
 
 .map-location-hover.preps-house {
-  top: 35%;
-  left: 65%;
+  top: 42%;  /* Match new icon position */
+  left: 50%;  /* Match new icon position */
   background-image: url('/images/icons/preps-house-icon.png');
 }
 
@@ -913,6 +925,12 @@
     width: 90px;
     height: 90px;
     font-size: 36px;
+  }
+  
+  .icon.extra-large {
+    width: 110px;
+    height: 110px;
+    font-size: 44px;
   }
   
   .icon.small {
@@ -1267,12 +1285,9 @@
   }
 }
 
-/* Bottom Navigation Bar */
+/* Bottom Navigation Bar - Now positioned below the map */
 .bottom-nav {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  position: relative; /* Changed from absolute */
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 0.3) 100%);
   backdrop-filter: blur(10px);
   border-top: 2px solid rgba(0, 255, 156, 0.3);
@@ -1283,6 +1298,7 @@
   justify-content: center;
   align-items: flex-end;
   box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0; /* Don't shrink the navigation */
 }
 
 .nav-section {
@@ -1401,6 +1417,7 @@
     padding: 20px 15px 15px 15px;
     gap: 30px;
     flex-direction: column;
+    position: relative; /* Ensure it stays below map on mobile too */
   }
   
   .nav-section {
@@ -1424,7 +1441,7 @@
   }
 
   .location-info-panel {
-    bottom: 200px;
+    bottom: 20px; /* Adjusted since nav is now below map */
     right: 15px;
     left: 15px;
     width: auto;
@@ -1436,10 +1453,10 @@
     height: 300px;
   }
   
-  /* Mobile hover preview positioning - fix to bottom of screen instead of floating */
+  /* Mobile hover preview positioning - fix to bottom of map instead of floating */
   .hover-png-preview {
     position: fixed !important;
-    bottom: 250px !important;
+    bottom: 20px !important; /* Adjusted for new nav position */
     left: 50% !important;
     top: auto !important;
     transform: translateX(-50%) !important;
