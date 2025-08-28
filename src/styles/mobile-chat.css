@@ -1,0 +1,105 @@
+/* Mobile-specific chat optimizations */
+
+/* Make React95 MenuList scrollable on mobile */
+@media (max-width: 768px) {
+  .flunks-messenger-container .react95-menu-list {
+    max-height: 80px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  
+  /* Better touch targets for mobile */
+  .flunks-messenger-container .react95-menu-list-item {
+    min-height: 32px !important;
+    padding: 6px 8px !important;
+    font-size: 11px !important;
+  }
+  
+  /* Optimize TextField for mobile */
+  .flunks-messenger-container input[type="text"] {
+    font-size: 16px !important; /* Prevent iOS zoom */
+    padding: 8px !important;
+    border-radius: 2px !important;
+  }
+  
+  /* Make buttons more touch-friendly */
+  .flunks-messenger-container button {
+    min-height: 32px !important;
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+  }
+  
+  /* Optimize emoji toolbar for mobile */
+  .flunks-messenger-emoji-toolbar {
+    padding: 8px !important;
+    font-size: 18px !important;
+  }
+  
+  .flunks-messenger-emoji-toolbar span {
+    min-width: 36px !important;
+    min-height: 36px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-right: 8px !important;
+    padding: 6px !important;
+    border-radius: 6px !important;
+  }
+  
+  /* Better message display on mobile */
+  .flunks-messenger-message {
+    margin-bottom: 8px !important;
+    line-height: 1.4 !important;
+  }
+  
+  .flunks-messenger-message .message-text {
+    word-wrap: break-word !important;
+    overflow-wrap: anywhere !important;
+    hyphens: auto !important;
+  }
+  
+  /* Optimize UserDisplay component for mobile chat */
+  .flunks-messenger-user-display {
+    font-size: 11px !important;
+    gap: 4px !important;
+  }
+  
+  .flunks-messenger-user-display .profile-icon {
+    font-size: 14px !important;
+  }
+}
+
+/* Improve scrolling performance */
+.flunks-messenger-messages {
+  scrollbar-width: thin;
+  scrollbar-color: #999 #f0f0f0;
+}
+
+.flunks-messenger-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.flunks-messenger-messages::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.flunks-messenger-messages::-webkit-scrollbar-thumb {
+  background: #999;
+  border-radius: 4px;
+}
+
+.flunks-messenger-messages::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+/* Mobile landscape orientation adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  .flunks-messenger-container .contact-list {
+    height: 80px !important;
+  }
+  
+  .flunks-messenger-container .chat-area {
+    height: calc(100% - 80px) !important;
+  }
+}

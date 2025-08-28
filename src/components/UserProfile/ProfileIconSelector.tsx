@@ -4,16 +4,16 @@ import styled from 'styled-components';
 
 // Profile icon collection - 5x5 grid (25 icons total)
 const PROFILE_ICONS = [
-  // Row 1 - Characters
-  '🎭', '🤖', '👑', '🎨', '🔥',
-  // Row 2 - Animals
-  '🦊', '🐺', '🐲', '🦄', '🐸',
-  // Row 3 - Objects
-  '⚡', '💎', '🎯', '🚀', '⚔️',
-  // Row 4 - Symbols  
-  '🌟', '💫', '🔮', '🎪', '🎲',
-  // Row 5 - Special
-  '🏆', '🎖️', '👾', '🎮', '🔱'
+  // Row 1 - Face Characters
+  '🤓', '�', '🥶', '🤡', '�',
+  // Row 2 - Creatures  
+  '👻', '�', '�', '👾', '🤖',
+  // Row 3 - Professionals
+  '🕵🏼‍♂️', '�🏽‍⚕️', '👨�‍🍳', '�🏽‍🌾', '👨🏼‍🎤',
+  // Row 4 - More Professionals
+  '👨🏽‍�', '�🏽‍🎨', '🧑🏽‍�', '🥷', '🧙�‍♂️',
+  // Row 5 - Fantasy Characters
+  '🧌', '🧛', '🧞‍♂️', '🧜�‍♂️', '🎮'
 ];
 
 const IconSelectionContainer = styled.div`

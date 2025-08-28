@@ -616,7 +616,7 @@ const LockerSystemNew: React.FC = () => {
                       zIndex: 1000,
                       backdropFilter: 'blur(10px)'
                     }}>
-                      � ←→: Switch jackets in section 2
+                      {isMobileDevice() ? '↑↓: Switch jackets in section 2' : '←→: Switch jackets in section 2'}
                     </div>
 
                     {/* Navigation Controls */}
@@ -736,42 +736,79 @@ const LockerSystemNew: React.FC = () => {
                           maxWidth: '1000px',
                           margin: '20px auto',
                           display: 'flex',
+                          flexDirection: isMobileDevice() ? 'column' : 'row',
                           alignItems: 'center',
-                          justifyContent: 'center'
+                          justifyContent: 'center',
+                          gap: isMobileDevice() ? '20px' : '0'
                         }}>
                           
-                          {/* Left Arrow */}
-                          <button
-                            onClick={() => switchJacket('left')}
-                            style={{
-                              position: 'absolute',
-                              left: '10px',
-                              background: 'rgba(255,255,255,0.2)',
-                              border: '2px solid #4299e1',
-                              borderRadius: '50%',
-                              width: '60px',
-                              height: '60px',
-                              color: 'white',
-                              fontSize: '24px',
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              transition: 'all 0.2s ease',
-                              zIndex: 10,
-                              touchAction: 'manipulation'
-                            }}
-                            onMouseOver={(e) => {
-                              e.currentTarget.style.background = 'rgba(66, 153, 225, 0.5)';
-                              e.currentTarget.style.transform = 'scale(1.1)';
-                            }}
-                            onMouseOut={(e) => {
-                              e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
-                              e.currentTarget.style.transform = 'scale(1)';
-                            }}
-                          >
-                            ←
-                          </button>
+                          {/* Mobile: Top Arrow */}
+                          {isMobileDevice() && (
+                            <button
+                              onClick={() => switchJacket('left')}
+                              style={{
+                                background: 'rgba(255,255,255,0.2)',
+                                border: '2px solid #4299e1',
+                                borderRadius: '50%',
+                                width: '60px',
+                                height: '60px',
+                                color: 'white',
+                                fontSize: '24px',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                transition: 'all 0.2s ease',
+                                zIndex: 10,
+                                touchAction: 'manipulation'
+                              }}
+                              onMouseOver={(e) => {
+                                e.currentTarget.style.background = 'rgba(66, 153, 225, 0.5)';
+                                e.currentTarget.style.transform = 'scale(1.1)';
+                              }}
+                              onMouseOut={(e) => {
+                                e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
+                                e.currentTarget.style.transform = 'scale(1)';
+                              }}
+                            >
+                              ↑
+                            </button>
+                          )}
+                          
+                          {/* Desktop: Left Arrow */}
+                          {!isMobileDevice() && (
+                            <button
+                              onClick={() => switchJacket('left')}
+                              style={{
+                                position: 'absolute',
+                                left: '10px',
+                                background: 'rgba(255,255,255,0.2)',
+                                border: '2px solid #4299e1',
+                                borderRadius: '50%',
+                                width: '60px',
+                                height: '60px',
+                                color: 'white',
+                                fontSize: '24px',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                transition: 'all 0.2s ease',
+                                zIndex: 10,
+                                touchAction: 'manipulation'
+                              }}
+                              onMouseOver={(e) => {
+                                e.currentTarget.style.background = 'rgba(66, 153, 225, 0.5)';
+                                e.currentTarget.style.transform = 'scale(1.1)';
+                              }}
+                              onMouseOut={(e) => {
+                                e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
+                                e.currentTarget.style.transform = 'scale(1)';
+                              }}
+                            >
+                              ←
+                            </button>
+                          )}
 
                           {/* Jacket Display */}
                           <div style={{
@@ -825,38 +862,73 @@ const LockerSystemNew: React.FC = () => {
                             </div>
                           </div>
 
-                          {/* Right Arrow */}
-                          <button
-                            onClick={() => switchJacket('right')}
-                            style={{
-                              position: 'absolute',
-                              right: '10px',
-                              background: 'rgba(255,255,255,0.2)',
-                              border: '2px solid #4299e1',
-                              borderRadius: '50%',
-                              width: '60px',
-                              height: '60px',
-                              color: 'white',
-                              fontSize: '24px',
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              transition: 'all 0.2s ease',
-                              zIndex: 10,
-                              touchAction: 'manipulation'
-                            }}
-                            onMouseOver={(e) => {
-                              e.currentTarget.style.background = 'rgba(66, 153, 225, 0.5)';
-                              e.currentTarget.style.transform = 'scale(1.1)';
-                            }}
-                            onMouseOut={(e) => {
-                              e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
-                              e.currentTarget.style.transform = 'scale(1)';
-                            }}
-                          >
-                            →
-                          </button>
+                          {/* Desktop: Right Arrow */}
+                          {!isMobileDevice() && (
+                            <button
+                              onClick={() => switchJacket('right')}
+                              style={{
+                                position: 'absolute',
+                                right: '10px',
+                                background: 'rgba(255,255,255,0.2)',
+                                border: '2px solid #4299e1',
+                                borderRadius: '50%',
+                                width: '60px',
+                                height: '60px',
+                                color: 'white',
+                                fontSize: '24px',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                transition: 'all 0.2s ease',
+                                zIndex: 10,
+                                touchAction: 'manipulation'
+                              }}
+                              onMouseOver={(e) => {
+                                e.currentTarget.style.background = 'rgba(66, 153, 225, 0.5)';
+                                e.currentTarget.style.transform = 'scale(1.1)';
+                              }}
+                              onMouseOut={(e) => {
+                                e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
+                                e.currentTarget.style.transform = 'scale(1)';
+                              }}
+                            >
+                              →
+                            </button>
+                          )}
+                          
+                          {/* Mobile: Bottom Arrow */}
+                          {isMobileDevice() && (
+                            <button
+                              onClick={() => switchJacket('right')}
+                              style={{
+                                background: 'rgba(255,255,255,0.2)',
+                                border: '2px solid #4299e1',
+                                borderRadius: '50%',
+                                width: '60px',
+                                height: '60px',
+                                color: 'white',
+                                fontSize: '24px',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                transition: 'all 0.2s ease',
+                                zIndex: 10,
+                                touchAction: 'manipulation'
+                              }}
+                              onMouseOver={(e) => {
+                                e.currentTarget.style.background = 'rgba(66, 153, 225, 0.5)';
+                                e.currentTarget.style.transform = 'scale(1.1)';
+                              }}
+                              onMouseOut={(e) => {
+                                e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
+                                e.currentTarget.style.transform = 'scale(1)';
+                              }}
+                            >
+                              ↓
+                            </button>
+                          )}
 
                           {/* Selection Indicator Dots */}
                           <div style={{

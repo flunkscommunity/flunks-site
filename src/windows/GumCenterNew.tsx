@@ -227,13 +227,13 @@ const GumballMachine: React.FC = () => {
             </Frame>
           )}
 
-          {/* Locker Jacket Reminder */}
+          {/* Daily Activities Reminder */}
           <Frame variant="well" style={{ padding: '16px' }}>
             <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              🧥 Locker Interactions
+              🎯 Daily Activities
             </h3>
             <p style={{ margin: '0 0 8px 0', fontSize: '14px' }}>
-              Visit your locker and interact with your jacket customizations to earn 3 GUM every 5 hours!
+              Don't forget to visit your locker daily for check-ins and explore special events to maximize your GUM earnings!
             </p>
             <Button 
               onClick={() => {

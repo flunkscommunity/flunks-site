@@ -24,11 +24,16 @@ import {
   Toolbar,
   Avatar
 } from 'react95';
+import '../styles/mobile-chat.css';
 
 const MessengerContainer = styled.div`
   display: flex;
   height: 100%;
   background: #c0c0c0;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const ContactList = styled.div`
@@ -36,11 +41,31 @@ const ContactList = styled.div`
   border-right: 2px inset #c0c0c0;
   display: flex;
   flex-direction: column;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 120px;
+    border-right: none;
+    border-bottom: 2px inset #c0c0c0;
+    flex-shrink: 0;
+    
+    /* Add scrollable room list for mobile */
+    .react95-menu-list {
+      max-height: 80px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+  }
 `;
 
 const OnlineUsersSection = styled.div`
   border-top: 1px inset #c0c0c0;
   background: #f0f0f0;
+  
+  @media (max-width: 768px) {
+    display: none; /* Hide online users on mobile to save space */
+  }
 `;
 
 const OnlineUsersHeader = styled.div`
@@ -90,6 +115,11 @@ const ContactListHeader = styled.div`
   font-weight: bold;
   font-size: 11px;
   text-align: center;
+  
+  @media (max-width: 768px) {
+    padding: 6px;
+    font-size: 10px;
+  }
 `;
 
 const ContactItem = styled.div<{ online?: boolean; isSelected?: boolean }>`
@@ -116,12 +146,28 @@ const ContactItem = styled.div<{ online?: boolean; isSelected?: boolean }>`
     border: 1px solid #333;
     box-shadow: 0 0 3px rgba(0,0,0,0.3);
   }
+  
+  @media (max-width: 768px) {
+    padding: 4px 8px;
+    font-size: 9px;
+    
+    &::before {
+      width: 6px;
+      height: 6px;
+      margin-right: 6px;
+    }
+  }
 `;
 
 const ChatArea = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 0; /* Allow flex child to shrink below content size */
+  
+  @media (max-width: 768px) {
+    height: calc(100% - 120px); /* Subtract contact list height on mobile */
+  }
 `;
 
 const ChatHeader = styled.div`
@@ -133,6 +179,13 @@ const ChatHeader = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
+  
+  @media (max-width: 768px) {
+    padding: 6px 8px;
+    font-size: 10px;
+    gap: 6px;
+  }
 `;
 
 const ChatMessages = styled.div`
@@ -142,6 +195,15 @@ const ChatMessages = styled.div`
   overflow-y: auto;
   font-size: 11px;
   font-family: 'Tahoma', sans-serif;
+  min-height: 0; /* Allow scrolling within flex container */
+  
+  @media (max-width: 768px) {
+    padding: 6px;
+    font-size: 10px;
+    /* Optimize for mobile scrolling */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
 `;
 
 const MessageBubble = styled.div<{ isOwn?: boolean; isSystem?: boolean }>`
@@ -151,17 +213,41 @@ const MessageBubble = styled.div<{ isOwn?: boolean; isSystem?: boolean }>`
     font-weight: bold;
     color: ${props => props.isSystem ? '#666' : props.isOwn ? '#0066cc' : '#cc0000'};
     margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
   }
   
   .message-text {
     color: ${props => props.isSystem ? '#666' : '#000'};
     font-style: ${props => props.isSystem ? 'italic' : 'normal'};
+    word-wrap: break-word;
+    line-height: 1.3;
   }
   
   .message-time {
     font-size: 9px;
     color: #999;
     margin-left: 4px;
+  }
+  
+  @media (max-width: 768px) {
+    margin-bottom: 6px;
+    
+    .message-header {
+      gap: 3px;
+    }
+    
+    .message-text {
+      font-size: 10px;
+      line-height: 1.4;
+    }
+    
+    .message-time {
+      font-size: 8px;
+      margin-left: 2px;
+    }
   }
 `;
 
@@ -172,6 +258,23 @@ const ChatInput = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
+  flex-shrink: 0;
+  
+  @media (max-width: 768px) {
+    padding: 6px;
+    gap: 6px;
+    
+    /* Make input touch-friendly on mobile */
+    input {
+      font-size: 16px; /* Prevent zoom on iOS */
+      padding: 8px;
+    }
+    
+    button {
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+  }
 `;
 
 const EmojiToolbar = styled.div`
@@ -179,14 +282,35 @@ const EmojiToolbar = styled.div`
   padding: 4px 8px;
   background: #f0f0f0;
   font-size: 16px;
+  flex-shrink: 0;
+  overflow-x: auto;
+  white-space: nowrap;
   
   span {
     cursor: pointer;
     margin-right: 8px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    display: inline-block;
     
     &:hover {
       background: #ddd;
-      border-radius: 2px;
+    }
+    
+    &:active {
+      background: #bbb;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    padding: 6px 8px;
+    font-size: 18px; /* Larger emojis for easier touch targets */
+    
+    span {
+      margin-right: 10px;
+      padding: 4px 6px;
+      min-width: 32px;
+      text-align: center;
     }
   }
 `;
@@ -375,6 +499,10 @@ const FlunksMessenger: React.FC = () => {
     aiAgentId?: string,
     customUsername?: string
   ) => {
+    const currentProfileIcon = isAI ? '🤖' : profile?.profile_icon;
+    console.log('💬 postChatMessage: Attempting to post with icon:', currentProfileIcon, 'isAI:', isAI);
+    console.log('💬 postChatMessage: Profile context:', profile);
+    
     if (isRoomPersistent && persistentChat.postMessage) {
       // Save to database for persistent rooms
       return await persistentChat.postMessage(messageText, walletAddress, isAI, aiAgentId, customUsername);
@@ -382,9 +510,10 @@ const FlunksMessenger: React.FC = () => {
       // Use local state for AI rooms
       const displayUsername = customUsername || username;
       const isOwn = displayUsername === username && !isAI;
-      return localChat.addMessage(messageText, displayUsername, isAI, isOwn, isAI ? '🤖' : profile?.profile_icon);
+      console.log('💬 postChatMessage: Adding local message with icon:', currentProfileIcon);
+      return localChat.addMessage(messageText, displayUsername, isAI, isOwn, currentProfileIcon);
     }
-  }, [isRoomPersistent, persistentChat.postMessage, localChat.addMessage, username]);
+  }, [isRoomPersistent, persistentChat.postMessage, localChat.addMessage, username, profile]);
 
   // Function to post message to a specific room (for AI greetings)
   const postMessageToRoom = useCallback(async (
@@ -433,6 +562,7 @@ const FlunksMessenger: React.FC = () => {
       // Add welcome message when profile username is auto-loaded
       setTimeout(async () => {
         if (profile.username) {
+          console.log('💬 Adding welcome message with profile icon:', profile.profile_icon);
           await postChatMessage(
             `Welcome back to Flunks Messenger, ${profile.username}! 🎉`,
             user?.userId,
@@ -466,6 +596,8 @@ const FlunksMessenger: React.FC = () => {
         setTimeout(() => sounds.userOnline(), 500);
       }
       
+      console.log('💬 Manual username submit - no profile, so no profile icon');
+      
       // Add welcome message to database
       postChatMessage(
         `Welcome to Flunks Messenger, ${tempUsername}! 🎉`,
@@ -481,6 +613,8 @@ const FlunksMessenger: React.FC = () => {
       if (soundsEnabled) sounds.messageSend();
       
       const userMessage = currentMessage.trim();
+      
+      console.log('💬 Sending message with profile icon:', profile?.profile_icon);
       
       // Post user message to database
       await postChatMessage(userMessage, user?.userId, false);
@@ -676,18 +810,26 @@ const FlunksMessenger: React.FC = () => {
   }
 
   return (
-    <MessengerContainer>
-      <ContactList>
+    <MessengerContainer className="flunks-messenger-container">
+      <ContactList className="contact-list">
         <ContactListHeader>
           Chat Rooms ({chatRooms.filter(r => r.online).length} active)
         </ContactListHeader>
-        <MenuList>
+        <MenuList className="react95-menu-list" style={{ 
+          overflow: 'hidden',
+          '@media (max-width: 768px)': {
+            maxHeight: '80px',
+            overflowY: 'auto',
+            WebkitOverflowScrolling: 'touch'
+          }
+        } as React.CSSProperties}>
           {chatRooms.map((room) => (
             <ContactItem
               key={room.username}
               online={room.online}
               isSelected={selectedContact === room.username}
               onClick={() => switchToContact(room.username)}
+              className="react95-menu-list-item"
             >
               {room.username}
             </ContactItem>
@@ -727,7 +869,7 @@ const FlunksMessenger: React.FC = () => {
         </OnlineUsersSection>
       </ContactList>
 
-      <ChatArea>
+      <ChatArea className="chat-area">
         <ChatHeader>
           <span>💬</span>
           <span>{selectedContact}</span>
@@ -751,14 +893,20 @@ const FlunksMessenger: React.FC = () => {
           </Button>
         </ChatHeader>
 
-        <ChatMessages>
+        <ChatMessages className="flunks-messenger-messages">
           {messages.map((message) => (
-            <MessageBubble key={message.id} isOwn={message.isOwn} isSystem={message.isSystem}>
+            <MessageBubble 
+              key={message.id} 
+              isOwn={message.isOwn} 
+              isSystem={message.isSystem}
+              className="flunks-messenger-message"
+            >
               <div className="message-header">
                 <UserDisplay
                   username={message.username}
                   profileIcon={message.profileIcon}
                   size="small"
+                  className="flunks-messenger-user-display"
                   style={{
                     color: message.isSystem ? '#666' : message.isOwn ? '#0066cc' : '#cc0000'
                   }}
@@ -769,14 +917,14 @@ const FlunksMessenger: React.FC = () => {
             </MessageBubble>
           ))}
           {isTyping && (
-            <MessageBubble isSystem={true}>
+            <MessageBubble isSystem={true} className="flunks-messenger-message">
               <div className="message-text" style={{ fontStyle: 'italic', color: '#666' }}>
                 You are typing...
               </div>
             </MessageBubble>
           )}
           {isAiTyping && (
-            <MessageBubble isSystem={true}>
+            <MessageBubble isSystem={true} className="flunks-messenger-message">
               <div className="message-text" style={{ fontStyle: 'italic', color: '#666' }}>
                 {(() => {
                   const room = chatRooms.find(r => r.username === selectedContact);
@@ -792,7 +940,7 @@ const FlunksMessenger: React.FC = () => {
           <div ref={messagesEndRef} />
         </ChatMessages>
 
-        <EmojiToolbar>
+        <EmojiToolbar className="flunks-messenger-emoji-toolbar">
           {emojis.map((emoji) => (
             <span key={emoji} onClick={() => addEmoji(emoji)}>
               {emoji}

@@ -288,7 +288,7 @@ const GameManualWindow: React.FC = () => {
               zIndex: 10
             }}>
               <h1 style={{
-                fontSize: '32px',
+                fontSize: window.innerWidth <= 768 ? '24px' : '32px',
                 margin: '0 0 8px 0',
                 color: '#6366B3',
                 textShadow: '2px 2px 0px #FFB3D9',
@@ -301,7 +301,7 @@ const GameManualWindow: React.FC = () => {
               </h1>
               
               <h2 style={{
-                fontSize: '28px',
+                fontSize: window.innerWidth <= 768 ? '20px' : '28px',
                 margin: '0 0 20px 0',
                 color: '#FF8A95',
                 textShadow: '2px 2px 0px #000',
@@ -313,26 +313,26 @@ const GameManualWindow: React.FC = () => {
               </h2>
               
               <div style={{
-                fontSize: '16px',
+                fontSize: window.innerWidth <= 768 ? '14px' : '16px',
                 color: '#333',
                 lineHeight: '1.7',
                 marginBottom: '15px',
                 fontFamily: 'Georgia, serif',
                 fontWeight: '600',
                 fontStyle: 'italic',
-                textAlign: 'left',
+                textAlign: 'center',
                 textShadow: '1px 1px 1px rgba(255, 179, 217, 0.3)'
               }}>
                 You did it! You've gotten this far. If you're new, welcome in. If you're an OG, mad respect for sticking around through thick and thin.
               </div>
               
               <div style={{
-                fontSize: '15px',
+                fontSize: window.innerWidth <= 768 ? '13px' : '15px',
                 color: '#333',
                 lineHeight: '1.6',
                 marginBottom: '15px',
                 fontWeight: 'normal',
-                textAlign: 'left'
+                textAlign: 'center'
               }}>
                 Semester zero is only the beginning. Sit back and enjoy the ride as we dive into the small town of Arcadia and all the shenanigans that will ensue.
               </div>
@@ -1203,18 +1203,18 @@ const GameManualWindow: React.FC = () => {
               </div>
               
               <div style={{ 
-                background: 'linear-gradient(90deg, #f0f4ff 0%, #e0e8ff 100%)', 
+                background: 'linear-gradient(90df, #f0f4ff 0%, #e0e8ff 100%)', 
                 padding: '10px', 
                 borderRadius: '8px', 
                 border: '1px solid #357abd',
                 marginBottom: '10px'
               }}>
-                <p><strong style={{ color: '#1e3a72' }}>🧥 Locker Interaction System:</strong> Interactive engagement rewards</p>
+                <p><strong style={{ color: '#1e3a72' }}>💡 Pro Tip:</strong> Daily engagement rewards</p>
                 <ul style={{ marginLeft: '20px', color: '#1e3a72' }}>
-                  <li><strong>Reward:</strong> 3 GUM points per interaction</li>
-                  <li><strong>Location:</strong> Navigate to "My Locker" → Click jacket button</li>
-                  <li><strong>Cooldown:</strong> 5-hour intervals between interactions</li>
-                  <li><strong>Daily Maximum:</strong> 15 GUM per day (5 interactions max)</li>
+                  <li><strong>Best Practice:</strong> Log in daily for consistent rewards</li>
+                  <li><strong>Strategy:</strong> Check in manually for bonus points</li>
+                  <li><strong>Timing:</strong> 24-hour cycles for optimal earning</li>
+                  <li><strong>Maximum Potential:</strong> 20 GUM per day with both bonuses</li>
                 </ul>
               </div>
               
@@ -1253,37 +1253,15 @@ const GameManualWindow: React.FC = () => {
             </div>
             
             <div style={{ 
-              background: 'linear-gradient(45deg, #4a90e2 0%, #357abd 100%)', 
+              background: 'linear-gradient(45deg, #ff6b9d 0%, #ff8e9b 100%)', 
               padding: '15px', 
               borderRadius: '10px', 
-              border: '2px solid #2c5aa0',
+              border: '2px solid #e91e63',
               textAlign: 'center'
             }}>
-              <h4 style={{ color: '#ffffff', fontSize: '16px', marginBottom: '10px' }}>⚙️ Daily Optimization Strategy</h4>
-              <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: '10px' }}>
-                <div style={{ background: 'rgba(255, 255, 255, 0.9)', padding: '10px', borderRadius: '8px', minWidth: '120px' }}>
-                  <div style={{ fontSize: '24px' }}>🌅</div>
-                  <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#1e3a72' }}>Daily Login</div>
-                  <div style={{ fontSize: '14px', color: '#2c5aa0' }}>+5 GUM</div>
-                </div>
-                <div style={{ background: 'rgba(255, 255, 255, 0.9)', padding: '10px', borderRadius: '8px', minWidth: '120px' }}>
-                  <div style={{ fontSize: '24px' }}>🎯</div>
-                  <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#1e3a72' }}>Daily Check-in</div>
-                  <div style={{ fontSize: '14px', color: '#2c5aa0' }}>+15 GUM</div>
-                </div>
-                <div style={{ background: 'rgba(255, 255, 255, 0.9)', padding: '10px', borderRadius: '8px', minWidth: '120px' }}>
-                  <div style={{ fontSize: '24px' }}>🧥</div>
-                  <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#1e3a72' }}>Locker System</div>
-                  <div style={{ fontSize: '14px', color: '#2c5aa0' }}>+15 GUM/day</div>
-                </div>
-                <div style={{ background: 'rgba(255, 255, 255, 0.9)', padding: '10px', borderRadius: '8px', minWidth: '120px' }}>
-                  <div style={{ fontSize: '24px' }}>🎉</div>
-                  <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#1e3a72' }}>Event System</div>
-                  <div style={{ fontSize: '14px', color: '#2c5aa0' }}>+25-100 GUM</div>
-                </div>
-              </div>
-              <p style={{ margin: '10px 0 0 0', fontSize: '12px', fontWeight: 'bold', color: '#ffffff' }}>
-                🍬 Maximum Daily Yield: 35+ GUM with systematic engagement 🍬
+              <h4 style={{ color: '#ffffff', fontSize: '16px', marginBottom: '10px' }}>🎯 Quick Start Guide</h4>
+              <p style={{ margin: '10px 0 0 0', fontSize: '14px', fontWeight: 'bold', color: '#ffffff' }}>
+                🍬 Connect your wallet and start earning GUM today! 🍬
               </p>
             </div>
             

@@ -724,7 +724,7 @@ const UserProfile: React.FC = () => {
                   </div>
                 )}
 
-                {/* Locker Jacket Button Info */}
+                {/* Daily Activities Info */}
                 <div style={{
                   background: 'rgba(0,0,0,0.8)',
                   color: '#90EE90',
@@ -735,9 +735,9 @@ const UserProfile: React.FC = () => {
                   width: '100%',
                   maxWidth: '400px'
                 }}>
-                  <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#9370DB' }}>🧥 Locker Rewards</h3>
+                  <h3 style={{ margin: '0 0 10px 0', fontSize: '18px', color: '#9370DB' }}>🎯 Daily Activities</h3>
                   <div style={{ fontSize: '14px', color: '#CCC' }}>
-                    Click your jacket button above for 3 GUM every 5 hours!
+                    Don't forget your daily check-in for GUM rewards!
                   </div>
                 </div>
               </div>

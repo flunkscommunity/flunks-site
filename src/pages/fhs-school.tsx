@@ -196,10 +196,10 @@ const FHSSchoolPage: React.FC = () => {
               <div className="bg-blue-100 border-2 border-blue-400 p-3 text-center">
                 <h3 className="font-bold text-lg">📊 Quick Stats</h3>
                 <p className="text-sm mt-2">
-                  <strong>Students:</strong> 1,200<br/>
-                  <strong>Teachers:</strong> 85<br/>
-                  <strong>Established:</strong> 1985<br/>
-                  <strong>Graduation Rate:</strong> 96%
+                  <strong>Students:</strong> 1,738<br/>
+                  <strong>Teachers:</strong> not enough<br/>
+                  <strong>Established:</strong> 1986<br/>
+                  <strong>Graduation Rate:</strong> 69%
                 </p>
               </div>
             </div>

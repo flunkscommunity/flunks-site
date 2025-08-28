@@ -70,13 +70,23 @@ const RPGContainer = styled.div<{ $backgroundPattern: string }>`
   overflow-y: auto;
   
   @media (max-width: 768px) {
-    min-height: 350px;
-    max-height: 100vh;
+    min-height: 100vh;
+    max-height: none;
     padding: 15px;
+    /* Fix mobile viewport and scrolling */
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    /* Enable smooth scrolling on mobile */
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
   
   @media (max-width: 480px) {
-    min-height: 300px;
     padding: 10px;
   }
 `;
@@ -156,6 +166,14 @@ const NameInput = styled.input`
   &:focus {
     background: rgba(255, 255, 255, 0.05);
   }
+  
+  /* Mobile-specific improvements */
+  @media (max-width: 768px) {
+    font-size: 16px; /* Prevent zoom on iOS */
+    -webkit-appearance: none;
+    border-radius: 0;
+    transform: translateZ(0); /* Hardware acceleration */
+  }
 `;
 
 const UsernameContainer = styled.div`
@@ -225,6 +243,23 @@ const KeyboardGrid = styled.div`
   padding: 8px;
   background: rgba(0, 0, 0, 0.7);
   border: 3px solid #666;
+  
+  @media (max-width: 768px) {
+    /* Ensure keyboard is always visible and scrollable on mobile */
+    position: sticky;
+    bottom: 60px;
+    z-index: 100;
+    max-width: 90vw;
+    gap: 2px;
+    padding: 6px;
+    margin: 10px auto;
+  }
+  
+  @media (max-width: 480px) {
+    bottom: 50px;
+    gap: 1px;
+    padding: 4px;
+  }
 `;
 
 const KeyButton = styled.button`
@@ -312,12 +347,47 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
 
   const isEditMode = !!profile;
 
+  // Mobile viewport handling for keyboard
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleViewportChange = () => {
+        // Force viewport recalculation on mobile
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      };
+
+      // Set initial viewport
+      handleViewportChange();
+      
+      // Update on resize (keyboard show/hide)
+      window.addEventListener('resize', handleViewportChange);
+      window.addEventListener('orientationchange', handleViewportChange);
+      
+      // Specific handling for iOS
+      if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+        window.addEventListener('focusin', () => {
+          setTimeout(() => {
+            const activeElement = document.activeElement;
+            if (activeElement && activeElement.tagName === 'INPUT') {
+              activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }, 300);
+        });
+      }
+
+      return () => {
+        window.removeEventListener('resize', handleViewportChange);
+        window.removeEventListener('orientationchange', handleViewportChange);
+      };
+    }
+  }, []);
+
   // Initialize with existing profile data if editing
   useEffect(() => {
     if (isEditMode && profile) {
       setFormData({
         username: profile.username || '',
-        profile_icon: profile.profile_icon || '🎭',
+        profile_icon: profile.profile_icon || '🤓',
         discord_id: profile.discord_id || '',
         email: profile.email || ''
       });
@@ -641,35 +711,37 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
         animation: 'rainbow 3s ease infinite',
         border: '4px solid #fff',
         borderRadius: '12px',
-        padding: '30px',
+        padding: '20px',
         textAlign: 'center',
         boxShadow: '0 0 20px rgba(255, 255, 255, 0.5)',
         width: '100%',
-        minWidth: '320px',
         maxWidth: '90vw',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        margin: '0 auto'
       }}>
         <div style={{ 
-          fontSize: '48px', 
-          marginBottom: '20px',
+          fontSize: '32px', 
+          marginBottom: '15px',
           textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
           color: '#fff',
-          fontWeight: 'bold'
+          fontWeight: 'bold',
+          lineHeight: '1.2'
         }}>
           🎉 SUCCESS! 🎉
         </div>
         <div style={{ 
-          fontSize: '24px', 
-          marginBottom: '15px',
+          fontSize: '18px', 
+          marginBottom: '10px',
           color: '#fff',
           fontWeight: 'bold',
-          textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+          textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+          lineHeight: '1.3'
         }}>
-          WELCOME TO THE FLUNKS UNIVERSE!
+          WELCOME TO THE<br/>FLUNKS UNIVERSE!
         </div>
         <div style={{ 
-          fontSize: '18px', 
-          marginBottom: '25px',
+          fontSize: '14px', 
+          marginBottom: '20px',
           color: '#fff',
           textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
           lineHeight: '1.4'
@@ -678,36 +750,36 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
           You're now part of the community! 🚀
         </div>
         <div style={{
-          background: 'rgba(255,255,255,0.9)',
+          background: 'rgba(255,255,255,0.95)',
           border: '2px solid #000',
           borderRadius: '8px',
-          padding: '20px',
+          padding: '15px',
           color: '#000',
-          fontSize: '14px',
+          fontSize: '12px',
           fontWeight: 'bold',
-          marginBottom: '20px',
+          marginBottom: '15px',
           wordWrap: 'break-word',
           maxWidth: '100%',
-          minWidth: '300px'
+          lineHeight: '1.4'
         }}>
           ✨ Profile Details ✨<br/>
           <UserDisplay 
             username={formData.username} 
             profileIcon={formData.profile_icon || '❓'}
             size="medium"
-            style={{ margin: '8px 0', fontSize: '16px' }}
+            style={{ margin: '8px 0', fontSize: '14px', justifyContent: 'center' }}
           /><br/>
           {formData.discord_id && <>🎮 {formData.discord_id}<br/></>}
           {formData.email && <>📧 {formData.email}<br/></>}
           💰 {primaryWallet?.address?.slice(0, 6)}...{primaryWallet?.address?.slice(-4)}
         </div>
         <div style={{ 
-          fontSize: '16px', 
+          fontSize: '14px', 
           color: '#fff',
           fontWeight: 'bold',
           textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
           animation: 'blink 1s infinite',
-          marginBottom: '20px'
+          marginBottom: '15px'
         }}>
           GET READY TO EXPLORE! 🌟
         </div>
@@ -717,21 +789,22 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
             background: '#00aa00',
             border: '3px solid #00ff00',
             color: '#fff',
-            fontSize: '16px',
+            fontSize: '14px',
             fontWeight: 'bold',
-            padding: '12px 24px',
+            padding: '10px 16px',
             borderRadius: '8px',
             cursor: 'pointer',
             boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
             textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
             width: '100%',
-            maxWidth: '320px',
-            minHeight: '48px',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden'
+            maxWidth: '280px',
+            minHeight: '44px',
+            whiteSpace: 'normal',
+            lineHeight: '1.2',
+            overflow: 'visible'
           }}
         >
-          🚀 Continue to Flunks Universe!
+          🚀 Continue to Flunks<br/>Universe!
         </Button>
       </div>
     </UsernameContainer>
@@ -953,7 +1026,10 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
         padding: '8px',
         background: 'rgba(0,0,0,0.7)',
         border: '2px solid #666',
-        borderRadius: '8px'
+        borderRadius: '8px',
+        position: 'sticky',
+        bottom: '10px',
+        zIndex: 50
       }}>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', flexWrap: 'wrap' }}>
           {!stepConfig[currentStep].required && currentStep !== 'confirm' && (
@@ -1050,6 +1126,22 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
         
         .cursor {
           animation: blink 1s infinite;
+        }
+        
+        /* Mobile-specific CSS for better viewport handling */
+        @media (max-width: 768px) {
+          body {
+            height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+            height: calc(var(--vh, 1vh) * 100);
+          }
+          
+          /* Prevent zoom on input focus for iOS */
+          input[type="text"], input[type="email"] {
+            font-size: 16px !important;
+            transform: translateZ(0);
+            -webkit-appearance: none;
+            border-radius: 0;
+          }
         }
       `}</style>
 

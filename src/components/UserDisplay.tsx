@@ -4,34 +4,19 @@ import styled from 'styled-components';
 const UsernameContainer = styled.div<{ $size?: 'small' | 'medium' | 'large' }>`
   display: inline-flex;
   align-items: center;
-  gap: ${props => 
-    props.$size === 'small' ? '4px' : 
-    props.$size === 'large' ? '8px' : '6px'
-  };
   font-weight: ${props => 
     props.$size === 'small' ? 'normal' : 'bold'
   };
-`;
-
-const ProfileIcon = styled.span<{ $size?: 'small' | 'medium' | 'large' }>`
-  font-size: ${props => 
-    props.$size === 'small' ? '14px' : 
-    props.$size === 'large' ? '24px' : '18px'
-  };
-  filter: ${props => 
-    props.$size === 'large' ? 'drop-shadow(0 0 4px rgba(74, 144, 226, 0.6))' : 'none'
-  };
-  line-height: 1;
-  user-select: none;
-`;
-
-const Username = styled.span<{ $size?: 'small' | 'medium' | 'large' }>`
   font-size: ${props => 
     props.$size === 'small' ? '12px' : 
     props.$size === 'large' ? '20px' : '14px'
   };
-  color: inherit;
-  user-select: text;
+  /* Ensure emoji icons render properly on all platforms */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  /* Force hardware acceleration for better emoji rendering */
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 `;
 
 interface UserDisplayProps {
@@ -44,6 +29,11 @@ interface UserDisplayProps {
   walletAddress?: string;
 }
 
+/**
+ * Simplified approach: Display icon+username as a single string.
+ * This makes it easy to show consistently across scoreboards, chat, etc.
+ * Format: "🎮 Username" or "👤 Username" (fallback)
+ */
 const UserDisplay: React.FC<UserDisplayProps> = ({
   username,
   profileIcon,
@@ -53,30 +43,24 @@ const UserDisplay: React.FC<UserDisplayProps> = ({
   showWalletFallback = false,
   walletAddress
 }) => {
-  // If no profile icon and showWalletFallback is true, use default icon
-  const displayIcon = profileIcon || (showWalletFallback ? '👤' : '');
-  
   // If no username and we have wallet address, show truncated wallet
   const displayName = username || (walletAddress ? 
     `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : 
     'Unknown'
   );
 
+  // Create the display string with icon prefix
+  const displayIcon = profileIcon || (showWalletFallback ? '👤' : '');
+  const fullDisplayName = displayIcon ? `${displayIcon} ${displayName}` : displayName;
+
   return (
     <UsernameContainer 
       $size={size} 
       className={className} 
       style={style}
-      title={username ? `${displayIcon} ${username}` : displayName}
+      title={fullDisplayName}
     >
-      {displayIcon && (
-        <ProfileIcon $size={size}>
-          {displayIcon}
-        </ProfileIcon>
-      )}
-      <Username $size={size}>
-        {displayName}
-      </Username>
+      {fullDisplayName}
     </UsernameContainer>
   );
 };
