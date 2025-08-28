@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 // PRIVATE: Terminal commands stored only on backend
 const TERMINAL_COMMANDS = {
   'help': {
-    response: 'Available commands: help, whoami, flunks, wtf, fetty wap, magic carpet, flow, clear',
+    response: 'Available commands: whoami, flunks',
     type: 'SYSTEM'
   },
   'whoami': {
