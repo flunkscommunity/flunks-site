@@ -82,7 +82,7 @@ const FreaksHouseMain = () => {
             openRoom(
               WINDOW_IDS.FREAKS_HOUSE_BASEMENT,
               "Basement",
-              "A makeshift recording studio with amplifiers and instruments scattered around."
+              "A makeshift recording studio with amplifiers and instruments scattered around. 8-tracks line the floor and cassettes are stacked to the ceiling."
             )
           }
           className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
