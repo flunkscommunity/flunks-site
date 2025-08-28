@@ -55,7 +55,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [zoom, setZoom] = useState(1);
   const zoomRef = useRef(1);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   // Clique access hooks
   const { hasAccess } = useCliqueAccess();
@@ -161,29 +160,14 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
     setHovered(null);
   };
 
-  // Debounced version for navigation icons to prevent rapid toggling
+  // Simple hover handlers for navigation icons - just show map location hover
   const handleNavHover = (locationKey: string) => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-    }
     setHovered(locationKey);
-    if (user) {
-      // Small delay to prevent rapid toggling
-      hoverTimeoutRef.current = setTimeout(() => {
-        setEnhancedHover(locationKey);
-      }, 100);
-    }
+    // Don't set enhancedHover - we only want the simple map location hover
   };
 
   const handleNavLeave = () => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-      hoverTimeoutRef.current = null;
-    }
-    // Only clear if not already in enhanced mode to prevent flickering
-    if (!enhancedHover) {
-      setHovered(null);
-    }
+    setHovered(null);
   };
 
   const handleEnhancedClick = (locationKey: string, e: React.MouseEvent) => {
@@ -275,10 +259,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
     }, 5000);
     return () => {
       clearTimeout(t);
-      // Also cleanup hover timeout
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current);
-      }
     };
   }, []);
 
@@ -453,7 +433,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         />
 
       {/* Screen dimming overlay - appears when hovering over any target location */}
-      {!isMobile && (hovered === 'high-school' || hovered === 'arcade' || hovered === 'freaks-house' || hovered === 'geeks-house' || hovered === 'jocks-house' || hovered === 'preps-house') && (
+      {!isMobile && (hovered === 'high-school' || hovered === 'arcade') && (
         <div className={styles["map-overlay"]} />
       )}
 
@@ -685,10 +665,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
               }
               onMouseEnter={() => {
                 setHovered('high-school');
-                user && handleNavHover('high-school');
               }}
               onMouseLeave={() => {
-                handleNavLeave();
+                setHovered(null);
               }}
               onTouchStart={() => user && handleTouchEnter('high-school')}
               onTouchEnd={handleTouchLeave}
@@ -719,10 +698,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
               }
               onMouseEnter={() => {
                 setHovered('arcade');
-                user && handleNavHover('arcade');
               }}
               onMouseLeave={() => {
-                handleNavLeave();
+                setHovered(null);
               }}
               onTouchStart={() => user && handleTouchEnter('arcade')}
               onTouchEnd={handleTouchLeave}
@@ -758,10 +736,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
               }
               onMouseEnter={() => {
                 setHovered('jocks-house');
-                user && handleNavHover('jocks-house');
               }}
               onMouseLeave={() => {
-                handleNavLeave();
+                setHovered(null);
               }}
               onTouchStart={() => user && handleTouchEnter('jocks-house')}
               onTouchEnd={handleTouchLeave}
@@ -792,10 +769,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
               }
               onMouseEnter={() => {
                 setHovered('freaks-house');
-                user && handleNavHover('freaks-house');
               }}
               onMouseLeave={() => {
-                handleNavLeave();
+                setHovered(null);
               }}
               onTouchStart={() => user && handleTouchEnter('freaks-house')}
               onTouchEnd={handleTouchLeave}
@@ -826,10 +802,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
               }
               onMouseEnter={() => {
                 setHovered('geeks-house');
-                user && handleNavHover('geeks-house');
               }}
               onMouseLeave={() => {
-                handleNavLeave();
+                setHovered(null);
               }}
               onTouchStart={() => user && handleTouchEnter('geeks-house')}
               onTouchEnd={handleTouchLeave}
@@ -860,10 +835,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
               }
               onMouseEnter={() => {
                 setHovered('preps-house');
-                user && handleNavHover('preps-house');
               }}
               onMouseLeave={() => {
-                handleNavLeave();
+                setHovered(null);
               }}
               onTouchStart={() => user && handleTouchEnter('preps-house')}
               onTouchEnd={handleTouchLeave}
@@ -874,153 +848,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       </div>
 
       {/* Enhanced Hover Overlay - Shows enlarged icon over dimmed map */}
-      {enhancedHover && locationData[enhancedHover as keyof typeof locationData] && (
-        <div 
-          className={styles["enhanced-hover-overlay"]}
-          onClick={handleEnhancedClose}
-          onMouseLeave={(e) => {
-            // Only close if not moving to the navigation area
-            const rect = e.currentTarget.getBoundingClientRect();
-            const bottomNavHeight = rect.height * 0.15; // Bottom 15% of the screen
-            if (e.clientY < rect.bottom - bottomNavHeight) {
-              handleEnhancedClose();
-            }
-          }}
-        >
-          {/* Dimmed map background */}
-          <div className={styles["dimmed-map-background"]} />
-          
-          {/* Large transparent PNG icon centered over the map */}
-          <div 
-            className={`${styles["enlarged-icon-overlay"]} ${enhancedHover === 'high-school' ? styles["high-school-enlarged"] : ''}`}
-            style={{ 
-              backgroundImage: `url(/images/icons/${enhancedHover}-icon.png)`,
-              cursor: 'pointer'
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              // Handle opening the location based on type
-              if (enhancedHover === 'high-school' || enhancedHover === 'arcade') {
-                handleLocationAccess(enhancedHover, () => {
-                  const windowId = enhancedHover === 'high-school' ? WINDOW_IDS.HIGH_SCHOOL_MAIN : WINDOW_IDS.ARCADE_MAIN;
-                  const title = enhancedHover === 'high-school' ? 'High School' : 'Arcade';
-                  const MainComponent = enhancedHover === 'high-school' ? HighSchoolMain : ArcadeMain;
-                  
-                  openWindow({
-                    key: windowId,
-                    window: (
-                      <DraggableResizeableWindow
-                        windowsId={windowId}
-                        headerTitle={title}
-                        onClose={() => closeWindow(windowId)}
-                        initialWidth="100%"
-                        initialHeight="100%"
-                        resizable={false}
-                      >
-                        <MainComponent />
-                      </DraggableResizeableWindow>
-                    ),
-                  });
-                });
-              } else {
-                // Handle clique house access
-                const cliqueMap: { [key: string]: CliqueType } = {
-                  'jocks-house': 'JOCK',
-                  'freaks-house': 'FREAK',
-                  'geeks-house': 'GEEK',
-                  'preps-house': 'PREP'
-                };
-                
-                const windowMap: { [key: string]: string } = {
-                  'jocks-house': WINDOW_IDS.JOCKS_HOUSE_MAIN,
-                  'freaks-house': WINDOW_IDS.FREAKS_HOUSE_MAIN,
-                  'geeks-house': WINDOW_IDS.GEEKS_HOUSE_MAIN,
-                  'preps-house': WINDOW_IDS.PREPS_HOUSE_MAIN
-                };
-                
-                const componentMap: { [key: string]: React.ComponentType } = {
-                  'jocks-house': JocksHouseMain,
-                  'freaks-house': FreaksHouseMain,
-                  'geeks-house': GeeksHouseMain,
-                  'preps-house': PrepsHouseMain
-                };
-                
-                const titleMap: { [key: string]: string } = {
-                  'jocks-house': "Jock's House",
-                  'freaks-house': "Freak's House", 
-                  'geeks-house': "Geek's House",
-                  'preps-house': "Prep's House"
-                };
-
-                if (cliqueMap[enhancedHover] && windowMap[enhancedHover] && componentMap[enhancedHover]) {
-                  const clique = cliqueMap[enhancedHover];
-                  const windowId = windowMap[enhancedHover];
-                  const Component = componentMap[enhancedHover];
-                  const title = titleMap[enhancedHover];
-
-                  handleCliqueHouseAccess(
-                    clique,
-                    windowId,
-                    (
-                      <DraggableResizeableWindow
-                        windowsId={windowId}
-                        headerTitle={title}
-                        onClose={() => closeWindow(windowId)}
-                        initialWidth="100%"
-                        initialHeight="100%"
-                        resizable={false}
-                      >
-                        <Component />
-                      </DraggableResizeableWindow>
-                    ),
-                    title
-                  );
-                }
-              }
-              // Close the enhanced hover after opening location
-              handleEnhancedClose();
-            }}
-          />
-          
-          {/* Location info panel (bottom right) */}
-          <div 
-            className={styles["location-info-panel"]}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button 
-              className={styles["close-button"]}
-              onClick={handleEnhancedClose}
-              aria-label="Close preview"
-            >
-              ×
-            </button>
-            <h2>{locationData[enhancedHover as keyof typeof locationData].title}</h2>
-            <div className={styles["location-preview-content"]}>
-              <p>{locationData[enhancedHover as keyof typeof locationData].description}</p>
-              <div className={styles["location-preview-rooms"]}>
-                {locationData[enhancedHover as keyof typeof locationData].rooms.map((room, index) => (
-                  <div
-                    key={index}
-                    className={styles["preview-room"]}
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => setActiveRoom({ location: enhancedHover, roomName: room.name })}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        setActiveRoom({ location: enhancedHover, roomName: room.name });
-                      }
-                    }}
-                  >
-                    <h4>{room.name}</h4>
-                    <p>{room.description}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Removed - reverting to simple hover only */}
 
       {/* Room Fullscreen Overlay (retro pop-up) */}
       {activeRoom && (

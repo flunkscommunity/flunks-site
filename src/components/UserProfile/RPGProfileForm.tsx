@@ -869,7 +869,7 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
         <ProfileIconSelector
           username={formData.username}
           selectedIcon={formData.profile_icon}
-          onIconChange={(icon) => {
+          onIconSelect={(icon) => {
             console.log('🎨 RPGProfileForm: Icon selection changed to:', icon);
             console.log('🎨 RPGProfileForm: Current formData before change:', formData);
             setFormData(prev => {
@@ -878,7 +878,7 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
               return updated;
             });
           }}
-          onConfirm={() => {
+          onNext={() => {
             console.log('🎨 RPGProfileForm: Icon confirm clicked, current formData:', formData);
             const steps: FormStep[] = ['username', 'icon', 'discord', 'email', 'confirm'];
             const currentIndex = steps.indexOf(currentStep);
