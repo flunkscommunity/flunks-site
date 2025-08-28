@@ -872,9 +872,9 @@
   
   .map-inner {
   /* Make the map wider than the viewport and allow tall height */
-  width: 320vw;
+  width: 400vw; /* Increased from 320vw to 400vw for larger map */
   height: auto;
-  min-width: 320vw;
+  min-width: 400vw;
   min-height: 100vh;
   touch-action: none; /* enable JS-driven panning */
   cursor: grab;
@@ -892,6 +892,8 @@
   height: auto;
   display: block;
   min-width: 100%;
+  object-fit: cover; /* Changed from contain to cover for larger images */
+  min-height: 100vh;
   }
 
   /* Zoom is controlled by JS by resizing width for proper scroll scaling */

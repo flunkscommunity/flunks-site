@@ -33,13 +33,13 @@ const PrepsHouseMain = () => {
   };
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center bg-gray-900">
-      {/* Container for the house image - full screen on mobile, shrunk on desktop */}
-      <div className="relative w-4/5 h-4/5 max-w-4xl max-h-4xl md:w-4/5 md:h-4/5 sm:w-full sm:h-full">
+    <div className="relative w-full h-full flex flex-col">
+      {/* Image Section */}
+      <div className="relative flex-1">
         <img
           src={timeBasedInfo.currentImage}
           alt={`Prep's House Background - ${timeBasedInfo.isDay ? 'Day' : 'Night'}`}
-          className="w-full h-full object-contain z-0 transition-opacity duration-500"
+          className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-500"
           onError={(e) => {
             e.currentTarget.src = "/images/backdrops/BLANK.png";
           }}
@@ -53,15 +53,16 @@ const PrepsHouseMain = () => {
               : 'bg-pink-100 bg-opacity-5'
           }`}
         />
+
+        {/* Time Info Display */}
+        <div className="absolute top-4 right-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded text-sm z-20">
+          {timeBasedInfo.currentTime}
+        </div>
       </div>
 
-      {/* Time Info Display */}
-      <div className="absolute top-4 right-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded text-sm z-20">
-        {timeBasedInfo.currentTime}
-      </div>
-
-      {/* Bottom Navigation Bar */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-4 z-10 flex-wrap justify-center max-w-4xl px-4">
+      {/* Room Buttons Section */}
+      <div className="bg-gray-800 p-4 border-t border-gray-600">
+        <div className="flex gap-4 flex-wrap justify-center max-w-4xl mx-auto">
         {/* Back Porch */}
         <button
           onClick={() =>
@@ -87,7 +88,7 @@ const PrepsHouseMain = () => {
           }
           className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
         >
-          �️ Bedroom
+          🛏️ Bedroom
         </button>
 
         {/* Living Room */}
@@ -101,7 +102,7 @@ const PrepsHouseMain = () => {
           }
           className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
         >
-          �️ Living Room
+          🏛️ Living Room
         </button>
 
         {/* Basement */}
@@ -115,8 +116,9 @@ const PrepsHouseMain = () => {
           }
           className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
         >
-          � Basement
+          🎬 Basement
         </button>
+        </div>
       </div>
     </div>
   );

@@ -217,35 +217,39 @@ const HighSchoolMain = () => {
   };
 
   return (
-    <div className="relative w-full h-full">
-      <img
-        src={getCurrentBackground()}
-        alt={`High School Background - ${timeBasedInfo.isDay ? 'Day' : 'Night'}`}
-        className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-500"
-        onError={handleImageError}
-      />
+    <div className="relative w-full h-full flex flex-col">
+      {/* Image Section */}
+      <div className="relative flex-1">
+        <img
+          src={getCurrentBackground()}
+          alt={`High School Background - ${timeBasedInfo.isDay ? 'Day' : 'Night'}`}
+          className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-500"
+          onError={handleImageError}
+        />
 
-      {/* Day/Night Atmospheric Overlay */}
-      <div 
-        className={`absolute inset-0 z-1 transition-all duration-500 ${
-          !timeBasedInfo.isDay
-            ? 'bg-blue-900 bg-opacity-30' 
-            : 'bg-yellow-100 bg-opacity-10'
-        }`}
-        style={{
-          background: !timeBasedInfo.isDay
-            ? 'linear-gradient(180deg, rgba(25, 25, 112, 0.3) 0%, rgba(0, 0, 0, 0.4) 100%)'
-            : 'linear-gradient(180deg, rgba(255, 255, 224, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%)'
-        }}
-      />
+        {/* Day/Night Atmospheric Overlay */}
+        <div 
+          className={`absolute inset-0 z-1 transition-all duration-500 ${
+            !timeBasedInfo.isDay
+              ? 'bg-blue-900 bg-opacity-30' 
+              : 'bg-yellow-100 bg-opacity-10'
+          }`}
+          style={{
+            background: !timeBasedInfo.isDay
+              ? 'linear-gradient(180deg, rgba(25, 25, 112, 0.3) 0%, rgba(0, 0, 0, 0.4) 100%)'
+              : 'linear-gradient(180deg, rgba(255, 255, 224, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%)'
+          }}
+        />
 
-      {/* Time Info Display */}
-      <div className="absolute top-4 left-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded text-sm z-20">
-        Auto: {timeBasedInfo.currentTime}
+        {/* Time Info Display */}
+        <div className="absolute top-4 left-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded text-sm z-20">
+          Auto: {timeBasedInfo.currentTime}
+        </div>
       </div>
 
-      {/* Bottom Navigation Bar */}
-      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-4 z-10 flex-wrap justify-center max-w-4xl px-4">
+      {/* Room Buttons Section */}
+      <div className="bg-gray-800 p-4 border-t border-gray-600">
+        <div className="flex gap-4 flex-wrap justify-center max-w-4xl mx-auto">
         {/* Hallway */}
         <button
           onClick={() =>
@@ -317,6 +321,7 @@ const HighSchoolMain = () => {
         >
           🏢 Office
         </button>
+        </div>
       </div>
     </div>
   );
