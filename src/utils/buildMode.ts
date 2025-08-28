@@ -22,6 +22,9 @@ export interface BuildModeConfig {
   showIconAnimation: boolean;
   showReportCard: boolean;
   
+  // Special Announcements
+  flappyFlunkWeekend: boolean;
+  
   // ADMIN-only features
   showPocketJuniors: boolean;
   showFlunkCreator: boolean;
@@ -55,6 +58,9 @@ const BUILD_MODE_CONFIGS: Record<BuildMode, BuildModeConfig> = {
     showIconAnimation: false,
     showReportCard: false,
     
+    // Special Announcements - visible on public site
+    flappyFlunkWeekend: true,
+    
     // ADMIN-only features - hidden from public/beta
     showPocketJuniors: false,
     showFlunkCreator: false,
@@ -85,6 +91,9 @@ const BUILD_MODE_CONFIGS: Record<BuildMode, BuildModeConfig> = {
     showBulletinBoard: true,
     showIconAnimation: true,
     showReportCard: true,
+    
+    // Special Announcements - visible in build mode
+    flappyFlunkWeekend: true,
     
     // ADMIN-only features - visible in build mode
     showPocketJuniors: true,

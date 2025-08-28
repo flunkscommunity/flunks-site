@@ -3,6 +3,7 @@ import DraggableResizeableWindow from '../components/DraggableResizeableWindow';
 import { useWindowsContext } from '../contexts/WindowsContext';
 import { WINDOW_IDS } from 'fixed';
 import styled from 'styled-components';
+import { isFeatureEnabled } from '../utils/buildMode';
 
 const BulletinBoardContainer = styled.div`
   position: relative;
@@ -195,7 +196,11 @@ const BulletinBoard: React.FC = () => {
               </BulletinItem>
               
               <BulletinItem>
-                Coming Soon... 🔮
+                {isFeatureEnabled('flappyFlunkWeekend') ? (
+                  <>🎮 Flappy Flunk - this weekend only! 🎮</>
+                ) : (
+                  <>Coming Soon... 🔮</>
+                )}
               </BulletinItem>
             </BulletinList>
           </BulletinContent>
