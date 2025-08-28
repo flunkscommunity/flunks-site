@@ -92,20 +92,18 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
     // Special logging for WTF command (non-blocking for better UX)
     if (input.toLowerCase().trim() === 'wtf' && validCommand) {
       // Fire and forget - don't await this to avoid UI delay
-      fetch('/api/log-wtf-command', {
+      fetch('/api/wtf-tracking', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          wallet: user?.verifiedCredentials?.[0]?.address || null,
+          walletAddress: user?.verifiedCredentials?.[0]?.address || null,
           username: profile?.username || null,
-          accessLevel: 'BETA', // Users with terminal access have BETA level
-          sessionId: sessionId,
-          command: input
+          command: input.trim()
         })
       }).catch(error => {
-        console.error('Failed to log WTF command:', error);
+        console.error('Failed to track WTF command:', error);
         // Don't show error to user, just log it
       });
     }

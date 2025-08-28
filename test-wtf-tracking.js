@@ -1,0 +1,79 @@
+// Test script to create and test WTF tracking
+const { createClient } = require('@supabase/supabase-js')
+
+const supabaseUrl = 'https://jejycbxxdsrcsobmvbbz.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImplanljYnh4ZHNyY3NvYm12YmJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwOTk1NjksImV4cCI6MjA2NTY3NTU2OX0.J14zg5h4W_d7SjTN97RbDqCmdAYS9q7x7ZoSxLz0dkE'
+
+const supabase = createClient(supabaseUrl, supabaseKey)
+
+async function testWTFTracking() {
+  console.log('🔍 Testing WTF tracking system...')
+  
+  // Test if table exists by trying to insert a record
+  const { data, error } = await supabase
+    .from('wtf_command_usage')
+    .insert([
+      {
+        wallet_address: '0x1234567890abcdef',
+        username: 'test_user',
+        command_used: 'wtf'
+      }
+    ])
+    .select()
+
+  if (error) {
+    console.log('❌ Table does not exist yet. Error:', error.message)
+    console.log('')
+    console.log('📝 Please create the wtf_command_usage table in your Supabase dashboard:')
+    console.log('Go to: https://supabase.com/dashboard/project/jejycbxxdsrcsobmvbbz/editor')
+    console.log('')
+    console.log('Run this SQL:')
+    console.log('─'.repeat(60))
+    console.log(`CREATE TABLE wtf_command_usage (
+  id SERIAL PRIMARY KEY,
+  wallet_address TEXT NOT NULL,
+  username TEXT,
+  command_used TEXT NOT NULL CHECK (command_used IN ('wtf', 'WTF')),
+  executed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  session_info JSONB,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX idx_wtf_wallet_address ON wtf_command_usage(wallet_address);
+CREATE INDEX idx_wtf_executed_at ON wtf_command_usage(executed_at);
+CREATE INDEX idx_wtf_command_used ON wtf_command_usage(command_used);
+
+ALTER TABLE wtf_command_usage ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public read" ON wtf_command_usage FOR SELECT USING (true);
+CREATE POLICY "Allow public insert" ON wtf_command_usage FOR INSERT WITH CHECK (true);`)
+    console.log('─'.repeat(60))
+    console.log('')
+    console.log('After running the SQL, test again with: node test-wtf-tracking.js')
+  } else {
+    console.log('✅ wtf_command_usage table exists and working!')
+    console.log('Test record inserted:', data)
+    
+    // Clean up test record
+    await supabase
+      .from('wtf_command_usage')
+      .delete()
+      .eq('wallet_address', '0x1234567890abcdef')
+    
+    console.log('🧹 Test record cleaned up')
+    
+    // Show usage stats
+    const { data: stats } = await supabase
+      .from('wtf_command_usage')
+      .select('*')
+      .limit(5)
+    
+    console.log('📊 Recent WTF usage:', stats)
+  }
+}
+
+// Add this to global flunks object for testing
+console.log('🎯 Adding flunks.wtfTest() function for testing...')
+console.log('Use: flunks.wtfTest() to test WTF tracking from console')
+
+testWTFTracking()

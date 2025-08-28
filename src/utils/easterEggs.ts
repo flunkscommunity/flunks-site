@@ -12,6 +12,7 @@ Available commands:
 • flunks.permissions() - Show app permissions debug info
 • flunks.fix()         - Fix access issues (if apps don't show)
 • flunks.crackTest()   - Test the crack-the-code tracking system
+• flunks.wtfTest()     - Test the WTF command tracking system
 • flunks.credits()     - Show development credits
 
 Try typing one of these commands!
@@ -190,6 +191,35 @@ ${Object.entries(info.environment).map(([key, value]) =>
       })
       .catch(error => {
         console.error('❌ API Test Error:', error);
+      });
+    },
+
+    wtfTest: () => {
+      console.log('🧪 Testing WTF command tracking...');
+      
+      // Mock test data
+      const testData = {
+        walletAddress: 'test-wallet-' + Date.now(),
+        username: 'TestUser',
+        command: 'wtf'
+      };
+      
+      fetch('/api/wtf-tracking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(testData)
+      })
+      .then(res => res.json())
+      .then(result => {
+        console.log('✅ WTF Tracking Test Result:', result);
+        if (result.success) {
+          console.log('🎉 WTF command successfully tracked!');
+        } else {
+          console.log('❌ WTF tracking failed:', result.message);
+        }
+      })
+      .catch(error => {
+        console.error('❌ WTF Test Error:', error);
       });
     },
 
