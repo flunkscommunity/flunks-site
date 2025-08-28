@@ -169,6 +169,24 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
       });
     }
 
+    // Special logging for YourmMom command (non-blocking for better UX)
+    if (input.toLowerCase().trim() === 'yourmom' && validCommand) {
+      // Fire and forget - don't await this to avoid UI delay
+      fetch('/api/yourmom-tracking', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          walletAddress: user?.verifiedCredentials?.[0]?.address || null,
+          username: profile?.username || null
+        })
+      }).catch(error => {
+        console.error('Failed to track YourMom command:', error);
+        // Don't show error to user, just log it
+      });
+    }
+
     if (validCommand && successSound) {
       successSound.currentTime = 0;
       successSound.play();

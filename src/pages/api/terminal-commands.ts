@@ -30,6 +30,10 @@ const TERMINAL_COMMANDS = {
     response: "🌊 The Flow blockchain awakens! ⚡ Digital currents surge through the network, and your wallet resonates with the power of decentralized possibilities. You've tapped into the flow state... 💫",
     type: 'CODE'
   },
+  'yourmom': {
+    response: "🤣 Oh snap! You went there! 💀 Your mom jokes are eternal - they transcend time, space, and blockchain networks. Even in the metaverse, your mom's cooking is still better than the cafeteria! 👩‍🍳✨",
+    type: 'CODE'
+  },
   'clear': {
     response: '__CLEAR__', // Special response to indicate clear action
     type: 'SYSTEM'
