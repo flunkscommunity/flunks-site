@@ -62,60 +62,60 @@ const PrepsHouseMain = () => {
 
       {/* Bottom Navigation Bar */}
       <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-4 z-10">
-        {/* Salon */}
+        {/* Back Porch */}
         <button
           onClick={() =>
             openRoom(
               WINDOW_IDS.PREPS_HOUSE_SALON,
-              "Beauty Salon",
-              "Professional hair styling tools and premium makeup palettes line the vanity mirrors."
+              "Back Porch",
+              "A pristine covered porch with white wicker furniture and perfectly arranged potted plants. The view overlooks an immaculate garden."
             )
           }
           className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
         >
-          💄 Salon
+          🌸 Back Porch
         </button>
 
-        {/* Walk-in Closet */}
+        {/* Bedroom */}
         <button
           onClick={() =>
             openRoom(
               WINDOW_IDS.PREPS_HOUSE_WALK_IN_CLOSET,
-              "Walk-in Closet",
-              "Designer clothes organized by color and season. Shoes displayed like a boutique."
+              "Bedroom",
+              "A canopy bed with silk sheets and decorative pillows. Vanity table with antique mirrors and jewelry boxes."
             )
           }
           className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
         >
-          👗 Closet
+          �️ Bedroom
         </button>
 
-        {/* Study */}
+        {/* Living Room */}
         <button
           onClick={() =>
             openRoom(
               WINDOW_IDS.PREPS_HOUSE_STUDY,
-              "Study Room",
-              "Perfectly organized textbooks and color-coded notes. Awards and certificates on the walls."
+              "Living Room",
+              "Elegant furniture arranged around a marble fireplace. Fresh flowers in crystal vases and art books on polished coffee tables."
             )
           }
           className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
         >
-          📝 Study
+          �️ Living Room
         </button>
 
-        {/* Pool Area */}
+        {/* Basement */}
         <button
           onClick={() =>
             openRoom(
               WINDOW_IDS.PREPS_HOUSE_POOL_AREA,
-              "Pool Area",
-              "Crystal clear water reflects the manicured garden. Poolside furniture arranged perfectly."
+              "Basement",
+              "A finished basement with a home theater system and plush seating. Wine cellar and exercise equipment in separate sections."
             )
           }
           className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
         >
-          🏊 Pool
+          � Basement
         </button>
       </div>
     </div>
