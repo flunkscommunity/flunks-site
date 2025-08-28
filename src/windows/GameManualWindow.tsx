@@ -1218,21 +1218,6 @@ const GameManualWindow: React.FC = () => {
                   <li><strong>Maximum Potential:</strong> 20 GUM per day with both bonuses</li>
                 </ul>
               </div>
-              
-              <div style={{ 
-                background: 'linear-gradient(90deg, #fff8e6 0%, #ffefcc 100%)', 
-                padding: '10px', 
-                borderRadius: '8px', 
-                border: '1px solid #d4a017'
-              }}>
-                <p><strong style={{ color: '#b8860b' }}>🎉 Special Event System:</strong> Time-limited bonus distributions</p>
-                <ul style={{ marginLeft: '20px', color: '#8b6914' }}>
-                  <li><strong>Weekend Events:</strong> 25 GUM bonus (Saturday-Sunday)</li>
-                  <li><strong>Welcome Bonus:</strong> 100 GUM (first-time user incentive)</li>
-                  <li><strong>Seasonal Events:</strong> Holiday-themed reward cycles</li>
-                  <li><strong>Access:</strong> Monitor Gum Center for active events</li>
-                </ul>
-              </div>
             </div>
             
             <div style={{ 
