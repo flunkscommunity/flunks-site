@@ -109,8 +109,8 @@ const HighSchoolMain = () => {
                     windowsId={WINDOW_IDS.HIGH_SCHOOL_OFFICE_SUCCESS}
                     headerTitle="🎉 ACCESS GRANTED!"
                     onClose={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_OFFICE_SUCCESS)}
-                    initialWidth="500px"
-                    initialHeight="600px"
+                    initialWidth="min(500px, 95vw)"
+                    initialHeight="min(600px, 90vh)"
                     resizable={true}
                     style={{ background: '#2a2a2a' }}
                   >

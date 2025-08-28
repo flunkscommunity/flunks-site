@@ -583,14 +583,14 @@
 }
 
 .arcade {
-  top: 38%;
-  left: 46%;
+  top: 45%;
+  left: 50%;
   background-image: url('/images/icons/arcade-icon.png');
 }
 
 /* New map locations */
 .jocks-house {
-  top: 58%;
+  top: 72%;
   left: 15%;
   background-image: url('/images/icons/jocks-house-icon.png');
 }
@@ -645,7 +645,7 @@
 
 .high-school {
   top: 32%;
-  left: 66%;
+  left: 60%;
   background-image: url('/images/icons/high-school-icon.png');
 }
 
@@ -1432,5 +1432,15 @@
   .enlarged-icon-overlay {
     width: 300px;
     height: 300px;
+  }
+  
+  /* Mobile hover preview positioning - fix to bottom of screen instead of floating */
+  .hover-png-preview {
+    position: fixed !important;
+    bottom: 250px !important;
+    left: 50% !important;
+    top: auto !important;
+    transform: translateX(-50%) !important;
+    z-index: 25 !important;
   }
 }

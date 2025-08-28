@@ -66,6 +66,13 @@ const SuccessContainer = styled.div`
     0%, 100% { transform: translateX(-100%); }
     50% { transform: translateX(100%); }
   }
+  
+  /* Mobile responsive adjustments */
+  @media (max-width: 768px) {
+    padding: 20px;
+    min-height: 400px;
+    border-radius: 10px;
+  }
 `;
 
 const SuccessTitle = styled.h1`
@@ -100,6 +107,13 @@ const SuccessTitle = styled.h1`
         0 0 60px #00ff00;
     }
   }
+  
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    font-size: 32px;
+    margin: 15px 0;
+    letter-spacing: 2px;
+  }
 `;
 
 const SecurityBadge = styled.div`
@@ -130,6 +144,15 @@ const SuccessMessage = styled.div`
   border-radius: 10px;
   border: 1px solid rgba(51, 255, 51, 0.2);
   backdrop-filter: blur(5px);
+  
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    font-size: 16px;
+    margin: 20px 0;
+    padding: 20px;
+    max-width: 100%;
+    line-height: 1.6;
+  }
 `;
 
 const CelebrationButton = styled(Button)`
@@ -179,6 +202,14 @@ const CelebrationButton = styled(Button)`
   &:active {
     transform: translateY(-1px) scale(1.02);
   }
+  
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    font-size: 20px;
+    padding: 20px 30px;
+    margin: 25px 0;
+    letter-spacing: 1px;
+  }
 `;
 
 const FloatingIcon = styled.div`
@@ -192,6 +223,12 @@ const FloatingIcon = styled.div`
     25% { transform: translateY(-10px) rotate(2deg); }
     50% { transform: translateY(-5px) rotate(-1deg); }
     75% { transform: translateY(-8px) rotate(1deg); }
+  }
+  
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    font-size: 80px;
+    margin-bottom: 20px;
   }
 `;
 
@@ -245,10 +282,15 @@ const SuccessWindow: React.FC<SuccessWindowProps> = ({ onContinue }) => {
 
   const handleCelebration = async () => {
     setIsTracking(true);
-
-    // Track the completion if wallet is connected
+    
+    console.log('🎯 SuccessWindow: Starting achievement tracking...');
+    console.log('🎯 Wallet Address:', primaryWallet?.address);
+    console.log('🎯 Username:', profile?.username);
+    
+    // Track the successful code crack in crack_the_code table
     if (primaryWallet?.address) {
       try {
+        console.log('🎯 Making API call to /api/crack-the-code...');
         const response = await fetch('/api/crack-the-code', {
           method: 'POST',
           headers: {
@@ -261,6 +303,7 @@ const SuccessWindow: React.FC<SuccessWindowProps> = ({ onContinue }) => {
         });
 
         const result = await response.json();
+        console.log('🎯 API Response:', result);
         
         if (result.success) {
           console.log('🎉 Achievement tracked!', result.message);
@@ -273,13 +316,13 @@ const SuccessWindow: React.FC<SuccessWindowProps> = ({ onContinue }) => {
       } catch (error) {
         console.error('Error tracking code crack completion:', error);
       }
+    } else {
+      console.warn('🎯 No wallet address available for tracking');
     }
 
     setIsTracking(false);
     onContinue();
-  };
-
-  return (
+  };  return (
     <GlobalSuccessStyle>
       <SuccessContainer>
         <MatrixRain />
