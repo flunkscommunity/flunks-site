@@ -19,8 +19,8 @@ const PrepsHouseMain = () => {
           windowsId={roomKey}
           headerTitle={title}
           onClose={() => closeWindow(roomKey)}
-          initialWidth="400px"
-          initialHeight="300px"
+          initialWidth="min(400px, 90vw)"
+          initialHeight="min(300px, 60vh)"
           resizable={false}
         >
           <div className="p-4 text-sm leading-relaxed bg-[#1a1a1a] text-white w-full h-full">
@@ -61,7 +61,7 @@ const PrepsHouseMain = () => {
       </div>
 
       {/* Bottom Navigation Bar */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-4 z-10">
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-4 z-10 flex-wrap justify-center max-w-4xl px-4">
         {/* Back Porch */}
         <button
           onClick={() =>

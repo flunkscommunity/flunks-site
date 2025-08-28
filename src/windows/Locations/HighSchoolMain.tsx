@@ -71,8 +71,8 @@ const HighSchoolMain = () => {
           windowsId={roomKey}
           headerTitle={title}
           onClose={() => closeWindow(roomKey)}
-          initialWidth="30vw"
-          initialHeight="30vh"
+          initialWidth="min(30vw, 90vw)"
+          initialHeight="min(30vh, 60vh)"
           resizable={true}
         >
           <div className="p-3 text-sm leading-relaxed bg-[#1a1a1a] text-white w-full h-full overflow-hidden">
@@ -245,7 +245,7 @@ const HighSchoolMain = () => {
       </div>
 
       {/* Bottom Navigation Bar */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-4 z-10 flex-wrap justify-center max-w-4xl px-4">
+      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-4 z-10 flex-wrap justify-center max-w-4xl px-4">
         {/* Hallway */}
         <button
           onClick={() =>
