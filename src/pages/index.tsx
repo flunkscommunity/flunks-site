@@ -417,7 +417,7 @@ const windowsMemod = useMemo(() => (
                 headerTitle="Chat Rooms"
                 headerIcon="/images/icons/chat-rooms.png"
                 style={{
-                  top: '80px',   // Ensure it's well below any top UI elements  
+                  top: '50px',   // Position below any potential top navigation
                   left: '100px'  // Keep it away from the edge
                 }}
               >

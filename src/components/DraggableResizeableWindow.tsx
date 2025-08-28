@@ -177,7 +177,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
       handle="strong"
       bounds={{
         left: 0,
-        top: 48,     // Minimum top position - keeps windows below taskbar/header
+        top: 0,      // Allow windows to go to the very top (header will still be visible)
         right: width - 100,  // Leave some space on the right
         bottom: height - 48  // Leave some space at bottom
       }}
@@ -185,12 +185,12 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
       disabled={width < 768}
       position={
         props.openCentered && !isMobile
-          ? { x: width / 2 - 200, y: Math.max(height / 2 - 200, 60) }  // Ensure centered windows aren't too high
+          ? { x: width / 2 - 200, y: Math.max(height / 2 - 200, 10) }  // Ensure centered windows have some top margin
           : undefined
       }
       defaultPosition={{
         x: width / 2 - windowRef.current?.clientWidth! / 2,
-        y: Math.max(height / 2 - windowRef.current?.clientHeight! / 2 - offSetHeight, 60), // Ensure default position isn't too high
+        y: Math.max(height / 2 - windowRef.current?.clientHeight! / 2 - offSetHeight, 10), // Small top margin instead of 60px
       }}
       cancel="#action"
     >
