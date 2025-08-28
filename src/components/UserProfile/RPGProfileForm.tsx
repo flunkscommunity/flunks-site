@@ -4,7 +4,6 @@ import { useUserProfile } from 'contexts/UserProfileContext';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import styled from 'styled-components';
 import { trackProfileActivation, generateSessionId, PROFILE_STEPS } from 'utils/activityTracking';
-import ProfileIconSelector from './ProfileIconSelector';
 import UserDisplay from '../UserDisplay';
 
 // Background pattern definitions
@@ -322,7 +321,7 @@ interface RPGProfileFormProps {
   onCancel?: () => void;
 }
 
-type FormStep = 'username' | 'icon' | 'discord' | 'email' | 'confirm' | 'success';
+type FormStep = 'username' | 'discord' | 'email' | 'confirm' | 'success';
 
 const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel }) => {
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
@@ -332,7 +331,7 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
   const [backgroundPattern, setBackgroundPattern] = useState<keyof typeof backgroundPatterns>('checkerboard');
   const [formData, setFormData] = useState({
     username: '',
-    profile_icon: '', // No default icon - user must select one
+    profile_icon: '👤', // Set default icon instead of user selection
     discord_id: '',
     email: ''
   });
@@ -387,7 +386,7 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
     if (isEditMode && profile) {
       setFormData({
         username: profile.username || '',
-        profile_icon: profile.profile_icon || '🤓',
+        profile_icon: profile.profile_icon || '👤', // Use default icon if none exists
         discord_id: profile.discord_id || '',
         email: profile.email || ''
       });
@@ -431,13 +430,6 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
       prompt: 'What do you want to be called in the Flunks universe?',
       placeholder: 'FlunkMaster2024',
       maxLength: 32,
-      required: true
-    },
-    icon: {
-      title: 'Profile Icon',
-      prompt: 'Choose an icon that will represent you on leaderboards and throughout the site!',
-      placeholder: '',
-      maxLength: 0,
       required: true
     },
     discord: {
@@ -549,7 +541,7 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
     }));
 
     // Move to next step
-    const steps: FormStep[] = ['username', 'icon', 'discord', 'email', 'confirm'];
+    const steps: FormStep[] = ['username', 'discord', 'email', 'confirm'];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex < steps.length - 1) {
       setCurrentStep(steps[currentIndex + 1]);
@@ -559,14 +551,14 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
   };
 
   const handleSkip = () => {
-    if (currentStep === 'username' || currentStep === 'icon') return; // Username and icon are required
+    if (currentStep === 'username') return; // Username is required
     
     setFormData(prev => ({
       ...prev,
       [currentStep === 'discord' ? 'discord_id' : currentStep]: ''
     }));
 
-    const steps: FormStep[] = ['username', 'icon', 'discord', 'email', 'confirm'];
+    const steps: FormStep[] = ['username', 'discord', 'email', 'confirm'];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex < steps.length - 1) {
       setCurrentStep(steps[currentIndex + 1]);
@@ -871,34 +863,6 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
         renderConfirmationScreen()
       ) : currentStep === 'success' ? (
         renderSuccessScreen()
-      ) : currentStep === 'icon' ? (
-        <ProfileIconSelector
-          username={formData.username}
-          selectedIcon={formData.profile_icon}
-          onIconSelect={(icon) => {
-            console.log('🎨 RPGProfileForm: Icon selection changed to:', icon);
-            console.log('🎨 RPGProfileForm: Current formData before change:', formData);
-            setFormData(prev => {
-              const updated = { ...prev, profile_icon: icon };
-              console.log('🎨 RPGProfileForm: Updated formData after icon change:', updated);
-              return updated;
-            });
-          }}
-          onNext={() => {
-            console.log('🎨 RPGProfileForm: Icon confirm clicked, current formData:', formData);
-            const steps: FormStep[] = ['username', 'icon', 'discord', 'email', 'confirm'];
-            const currentIndex = steps.indexOf(currentStep);
-            if (currentIndex < steps.length - 1) {
-              setCurrentStep(steps[currentIndex + 1]);
-              setCurrentInput('');
-              setValidationMessage('');
-            }
-          }}
-          onBack={() => {
-            setCurrentStep('username');
-            setCurrentInput(formData.username);
-          }}
-        />
       ) : (
         <>
           {currentStep === 'username' ? (
