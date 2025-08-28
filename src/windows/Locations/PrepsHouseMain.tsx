@@ -82,7 +82,7 @@ const PrepsHouseMain = () => {
             openRoom(
               WINDOW_IDS.PREPS_HOUSE_WALK_IN_CLOSET,
               "Bedroom",
-              "A canopy bed with silk sheets and decorative pillows. Vanity table with antique mirrors and jewelry boxes."
+              "A Four post bed with silk sheets and decorative pillows. Vanity table with antique mirrors and jewelry boxes."
             )
           }
           className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
