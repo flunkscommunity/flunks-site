@@ -299,99 +299,17 @@
   font-size: 0 !important; /* Hide emoji completely when PNG class is present */
 }
 
-/* Hover PNG Preview - shows enlarged PNG on simple hover */
+/* Hover PNG Preview - shows enlarged PNG on simple hover - CENTERED */
 .hover-png-preview {
   position: absolute;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   z-index: 20;
   pointer-events: none;
 }
 
-/* Individual positioning for each location */
-.hover-png-preview.treehouse {
-  top: 74%;
-  left: 23%;
-}
-
-.hover-png-preview.arcade {
-  top: 38%;
-  left: 46%;
-}
-
-.hover-png-preview.jocks-house {
-  top: 58%;
-  left: 15%;
-}
-
-.hover-png-preview.freaks-house {
-  top: 35%;
-  left: 26%;
-}
-
-.hover-png-preview.flunk-fm {
-  top: 31%;
-  left: 41%;
-}
-
-.hover-png-preview.geeks-house {
-  top: 17%;
-  left: 30%;
-}
-
-.hover-png-preview.junkyard {
-  top: 55%;
-  left: 84%;
-}
-
-.hover-png-preview.lake-tree {
-  top: 85%;
-  left: 53%;
-}
-
-.hover-png-preview.snack-shack {
-  top: 76%;
-  left: 45%;
-}
-
-.hover-png-preview.rug-doctor {
-  top: 45%;
-  left: 40%;
-}
-
-.hover-png-preview.four-thieves-bar {
-  top: 55%;
-  left: 44%;
-}
-
-.hover-png-preview.high-school {
-  top: 34%;
-  left: 69%;
-}
-
-.hover-png-preview.paradise-motel {
-  top: 18%;
-  left: 44%;
-}
-
-.hover-png-preview.shed {
-  top: 20%;
-  left: 68%;
-}
-
-.hover-png-preview.police-station {
-  top: 12%;
-  left: 54%;
-}
-
-.hover-png-preview.preps-house {
-  top: 30%;
-  left: 53%;
-}
-
-.hover-png-preview.football-field {
-  top: 25%;
-  left: 75%;
-}
+/* All hover previews now centered - no individual positioning needed */
 
 .hover-enlarged-icon {
   width: 300px;
@@ -746,17 +664,20 @@
 }
 
 /* Large PNG icons that appear over their actual map locations when hovering bottom nav */
+/* Large PNG icons that appear when hovering bottom nav - CENTERED ON SCREEN */
 .map-location-hover {
   position: absolute;
-  width: 120px;
-  height: 120px;
+  width: 200px;
+  height: 200px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   z-index: 15;
   pointer-events: none;
-  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.6));
   animation: mapLocationPulse 2s ease-in-out infinite;
+  /* Center the icon on screen */
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
 }
 
@@ -772,42 +693,6 @@
 }
 
 /* Positioning for each location's large hover icon on the actual map */
-.map-location-hover.high-school {
-  top: 45%;  /* Match new icon position */
-  left: 50%;  /* Match new icon position */
-  background-image: url('/images/icons/high-school-icon.png');
-}
-
-.map-location-hover.arcade {
-  top: 50%;  /* Match new icon position */
-  left: 48%;  /* Match new icon position */
-  background-image: url('/images/icons/arcade-icon.png');
-}
-
-.map-location-hover.jocks-house {
-  top: 55%;  /* Match new icon position */
-  left: 45%;  /* Match new icon position */
-  background-image: url('/images/icons/jocks-house-icon.png');
-}
-
-.map-location-hover.freaks-house {
-  top: 40%;  /* Match new icon position */
-  left: 52%;  /* Match new icon position */
-  background-image: url('/images/icons/freaks-house-icon.png');
-}
-
-.map-location-hover.geeks-house {
-  top: 35%;  /* Match new icon position */
-  left: 48%;  /* Match new icon position */
-  background-image: url('/images/icons/geeks-house-icon.png');
-}
-
-.map-location-hover.preps-house {
-  top: 42%;  /* Match new icon position */
-  left: 50%;  /* Match new icon position */
-  background-image: url('/images/icons/preps-house-icon.png');
-}
-
 /* Special heartbeat animation for high school when hovering */
 .map-location-hover.high-school {
   animation: mapLocationPulse 2s ease-in-out infinite, heartbeat 2.4s ease-in-out infinite;
@@ -880,6 +765,16 @@
   overflow: auto; /* allow programmatic scroll for drag-to-pan */
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+  }
+  
+  /* Hide map icons on mobile - use navigation only */
+  .high-school,
+  .arcade,
+  .jocks-house,
+  .freaks-house,
+  .geeks-house,
+  .preps-house {
+    display: none !important;
   }
   
   .map-inner {
@@ -1453,13 +1348,12 @@
     height: 300px;
   }
   
-  /* Mobile hover preview positioning - fix to bottom of map instead of floating */
+  /* Mobile hover preview positioning - centered on screen */
   .hover-png-preview {
     position: fixed !important;
-    bottom: 20px !important; /* Adjusted for new nav position */
+    top: 50% !important;
     left: 50% !important;
-    top: auto !important;
-    transform: translateX(-50%) !important;
+    transform: translate(-50%, -50%) !important;
     z-index: 25 !important;
   }
 }

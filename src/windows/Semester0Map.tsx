@@ -55,6 +55,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [zoom, setZoom] = useState(1);
   const zoomRef = useRef(1);
+  const [touchedLocation, setTouchedLocation] = useState<string | null>(null);
   
   // Clique access hooks
   const { hasAccess } = useCliqueAccess();
@@ -196,9 +197,36 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
     setHovered(null);
   };
 
-  // Disable hover-on-touch; mobile will be click-to-enter
-  const handleTouchEnter = (_key: string) => {};
-  const handleTouchLeave = () => {};
+  // Mobile two-tap functionality: first tap shows hover, second tap enters
+  const handleTouchEnter = (key: string) => {
+    if (touchedLocation === key) {
+      // Second tap - clear the hover and proceed with click
+      setTouchedLocation(null);
+      setHovered(null);
+      return; // Let the onClick handler take over
+    } else {
+      // First tap - show hover effect
+      setTouchedLocation(key);
+      setHovered(key);
+      // Clear after 5 seconds to reset state
+      setTimeout(() => {
+        setTouchedLocation(null);
+        setHovered(null);
+      }, 5000);
+    }
+  };
+  
+  const handleTouchLeave = () => {
+    // Don't clear on touch leave to maintain the first-tap state
+  };
+
+  // Clear touched location when clicking elsewhere on mobile
+  const handleMapClick = () => {
+    if (isMobile && touchedLocation) {
+      setTouchedLocation(null);
+      setHovered(null);
+    }
+  };
 
   // Helper: slugify a room/location name for file paths
   const slugify = (s: string) =>
@@ -426,14 +454,12 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           </div>
         )}
         
-    <div className={styles["map-inner"]} ref={mapInnerRef}>
-        <img
-          src="/images/season-zero-map.png"
-          className={styles["background-map"]}
-          alt="Semester 0 Map"
-        />
-
-      {/* Screen dimming overlay - appears when hovering over any target location */}
+    <div className={styles["map-inner"]} ref={mapInnerRef} onClick={handleMapClick}>
+          <img
+            src="/images/season-zero-map.png"
+            className={styles["background-map"]}
+            alt="Semester 0 Map"
+          />      {/* Screen dimming overlay - appears when hovering over any target location */}
       {!isMobile && (hovered === 'high-school' || hovered === 'arcade' || hovered === 'freaks-house' || hovered === 'geeks-house' || hovered === 'jocks-house' || hovered === 'preps-house') && (
         <div className={styles["map-overlay"]} />
       )}
@@ -722,25 +748,50 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             <DynamicHouseIcon
               houseId="high-school"
               className={`${styles["nav-icon"]} ${styles['high-school-nav']}`}
-              onClick={() =>
-                handleLocationAccess('high-school', () => 
-                  openWindow({
-                    key: WINDOW_IDS.HIGH_SCHOOL_MAIN,
-                    window: (
-                      <DraggableResizeableWindow
-                        windowsId={WINDOW_IDS.HIGH_SCHOOL_MAIN}
-                        headerTitle="High School"
-                        onClose={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_MAIN)}
-                        initialWidth="70vw"
-                        initialHeight="70vh"
-                        resizable={true}
-                      >
-                        <HighSchoolMain />
-                      </DraggableResizeableWindow>
-                    ),
-                  })
-                )
-              }
+              onClick={() => {
+                // On mobile, if this is the second tap, proceed with opening
+                if (isMobile && touchedLocation === 'high-school') {
+                  setTouchedLocation(null);
+                  setHovered(null);
+                  handleLocationAccess('high-school', () => 
+                    openWindow({
+                      key: WINDOW_IDS.HIGH_SCHOOL_MAIN,
+                      window: (
+                        <DraggableResizeableWindow
+                          windowsId={WINDOW_IDS.HIGH_SCHOOL_MAIN}
+                          headerTitle="High School"
+                          onClose={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_MAIN)}
+                          initialWidth="70vw"
+                          initialHeight="70vh"
+                          resizable={true}
+                        >
+                          <HighSchoolMain />
+                        </DraggableResizeableWindow>
+                      ),
+                    })
+                  );
+                } else if (!isMobile) {
+                  // Desktop behavior - immediate open
+                  handleLocationAccess('high-school', () => 
+                    openWindow({
+                      key: WINDOW_IDS.HIGH_SCHOOL_MAIN,
+                      window: (
+                        <DraggableResizeableWindow
+                          windowsId={WINDOW_IDS.HIGH_SCHOOL_MAIN}
+                          headerTitle="High School"
+                          onClose={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_MAIN)}
+                          initialWidth="70vw"
+                          initialHeight="70vh"
+                          resizable={true}
+                        >
+                          <HighSchoolMain />
+                        </DraggableResizeableWindow>
+                      ),
+                    })
+                  );
+                }
+                // First tap on mobile is handled by handleTouchEnter
+              }}
               onMouseEnter={() => {
                 setHovered('high-school');
               }}
@@ -755,25 +806,49 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             <DynamicHouseIcon
               houseId="arcade"
               className={`${styles["nav-icon"]} ${styles['arcade-nav']}`}
-              onClick={() =>
-                handleLocationAccess('arcade', () => 
-                  openWindow({
-                    key: WINDOW_IDS.ARCADE_MAIN,
-                    window: (
-                      <DraggableResizeableWindow
-                        windowsId={WINDOW_IDS.ARCADE_MAIN}
-                        headerTitle="Arcade"
-                        onClose={() => closeWindow(WINDOW_IDS.ARCADE_MAIN)}
-                        initialWidth="70vw"
-                        initialHeight="70vh"
-                        resizable={true}
-                      >
-                        <ArcadeMain />
-                      </DraggableResizeableWindow>
-                    ),
-                  })
-                )
-              }
+              onClick={() => {
+                // On mobile, if this is the second tap, proceed with opening
+                if (isMobile && touchedLocation === 'arcade') {
+                  setTouchedLocation(null);
+                  setHovered(null);
+                  handleLocationAccess('arcade', () => 
+                    openWindow({
+                      key: WINDOW_IDS.ARCADE_MAIN,
+                      window: (
+                        <DraggableResizeableWindow
+                          windowsId={WINDOW_IDS.ARCADE_MAIN}
+                          headerTitle="Arcade"
+                          onClose={() => closeWindow(WINDOW_IDS.ARCADE_MAIN)}
+                          initialWidth="70vw"
+                          initialHeight="70vh"
+                          resizable={true}
+                        >
+                          <ArcadeMain />
+                        </DraggableResizeableWindow>
+                      ),
+                    })
+                  );
+                } else if (!isMobile) {
+                  // Desktop behavior - immediate open
+                  handleLocationAccess('arcade', () => 
+                    openWindow({
+                      key: WINDOW_IDS.ARCADE_MAIN,
+                      window: (
+                        <DraggableResizeableWindow
+                          windowsId={WINDOW_IDS.ARCADE_MAIN}
+                          headerTitle="Arcade"
+                          onClose={() => closeWindow(WINDOW_IDS.ARCADE_MAIN)}
+                          initialWidth="70vw"
+                          initialHeight="70vh"
+                          resizable={true}
+                        >
+                          <ArcadeMain />
+                        </DraggableResizeableWindow>
+                      ),
+                    })
+                  );
+                }
+              }}
               onMouseEnter={() => {
                 setHovered('arcade');
               }}
@@ -793,25 +868,49 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             <DynamicHouseIcon
               houseId="jocks-house"
               className={`${styles["nav-icon"]} ${styles['jocks-house-nav']}`}
-              onClick={() =>
-                handleCliqueHouseAccess(
-                  'JOCK',
-                  WINDOW_IDS.JOCKS_HOUSE_MAIN,
-                  (
-                    <DraggableResizeableWindow
-                      windowsId={WINDOW_IDS.JOCKS_HOUSE_MAIN}
-                      headerTitle="Jock's House"
-                      onClose={() => closeWindow(WINDOW_IDS.JOCKS_HOUSE_MAIN)}
-                      initialWidth="70vw"
-                      initialHeight="70vh"
-                      resizable={true}
-                    >
-                      <JocksHouseMain />
-                    </DraggableResizeableWindow>
-                  ),
-                  "Jock's House"
-                )
-              }
+              onClick={() => {
+                // On mobile, if this is the second tap, proceed with opening
+                if (isMobile && touchedLocation === 'jocks-house') {
+                  setTouchedLocation(null);
+                  setHovered(null);
+                  handleCliqueHouseAccess(
+                    'JOCK',
+                    WINDOW_IDS.JOCKS_HOUSE_MAIN,
+                    (
+                      <DraggableResizeableWindow
+                        windowsId={WINDOW_IDS.JOCKS_HOUSE_MAIN}
+                        headerTitle="Jock's House"
+                        onClose={() => closeWindow(WINDOW_IDS.JOCKS_HOUSE_MAIN)}
+                        initialWidth="70vw"
+                        initialHeight="70vh"
+                        resizable={true}
+                      >
+                        <JocksHouseMain />
+                      </DraggableResizeableWindow>
+                    ),
+                    "Jock's House"
+                  );
+                } else if (!isMobile) {
+                  // Desktop behavior - immediate open
+                  handleCliqueHouseAccess(
+                    'JOCK',
+                    WINDOW_IDS.JOCKS_HOUSE_MAIN,
+                    (
+                      <DraggableResizeableWindow
+                        windowsId={WINDOW_IDS.JOCKS_HOUSE_MAIN}
+                        headerTitle="Jock's House"
+                        onClose={() => closeWindow(WINDOW_IDS.JOCKS_HOUSE_MAIN)}
+                        initialWidth="70vw"
+                        initialHeight="70vh"
+                        resizable={true}
+                      >
+                        <JocksHouseMain />
+                      </DraggableResizeableWindow>
+                    ),
+                    "Jock's House"
+                  );
+                }
+              }}
               onMouseEnter={() => {
                 setHovered('jocks-house');
               }}
@@ -826,25 +925,49 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             <DynamicHouseIcon
               houseId="freaks-house"
               className={`${styles["nav-icon"]} ${styles['freaks-house-nav']}`}
-              onClick={() =>
-                handleCliqueHouseAccess(
-                  'FREAK',
-                  WINDOW_IDS.FREAKS_HOUSE_MAIN,
-                  (
-                    <DraggableResizeableWindow
-                      windowsId={WINDOW_IDS.FREAKS_HOUSE_MAIN}
-                      headerTitle="Freak's House"
-                      onClose={() => closeWindow(WINDOW_IDS.FREAKS_HOUSE_MAIN)}
-                      initialWidth="70vw"
-                      initialHeight="70vh"
-                      resizable={true}
-                    >
-                      <FreaksHouseMain />
-                    </DraggableResizeableWindow>
-                  ),
-                  "Freak's House"
-                )
-              }
+              onClick={() => {
+                // On mobile, if this is the second tap, proceed with opening
+                if (isMobile && touchedLocation === 'freaks-house') {
+                  setTouchedLocation(null);
+                  setHovered(null);
+                  handleCliqueHouseAccess(
+                    'FREAK',
+                    WINDOW_IDS.FREAKS_HOUSE_MAIN,
+                    (
+                      <DraggableResizeableWindow
+                        windowsId={WINDOW_IDS.FREAKS_HOUSE_MAIN}
+                        headerTitle="Freak's House"
+                        onClose={() => closeWindow(WINDOW_IDS.FREAKS_HOUSE_MAIN)}
+                        initialWidth="70vw"
+                        initialHeight="70vh"
+                        resizable={true}
+                      >
+                        <FreaksHouseMain />
+                      </DraggableResizeableWindow>
+                    ),
+                    "Freak's House"
+                  );
+                } else if (!isMobile) {
+                  // Desktop behavior - immediate open
+                  handleCliqueHouseAccess(
+                    'FREAK',
+                    WINDOW_IDS.FREAKS_HOUSE_MAIN,
+                    (
+                      <DraggableResizeableWindow
+                        windowsId={WINDOW_IDS.FREAKS_HOUSE_MAIN}
+                        headerTitle="Freak's House"
+                        onClose={() => closeWindow(WINDOW_IDS.FREAKS_HOUSE_MAIN)}
+                        initialWidth="70vw"
+                        initialHeight="70vh"
+                        resizable={true}
+                      >
+                        <FreaksHouseMain />
+                      </DraggableResizeableWindow>
+                    ),
+                    "Freak's House"
+                  );
+                }
+              }}
               onMouseEnter={() => {
                 setHovered('freaks-house');
               }}
@@ -859,25 +982,49 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             <DynamicHouseIcon
               houseId="geeks-house"
               className={`${styles["nav-icon"]} ${styles['geeks-house-nav']}`}
-              onClick={() =>
-                handleCliqueHouseAccess(
-                  'GEEK',
-                  WINDOW_IDS.GEEKS_HOUSE_MAIN,
-                  (
-                    <DraggableResizeableWindow
-                      windowsId={WINDOW_IDS.GEEKS_HOUSE_MAIN}
-                      headerTitle="Geek's House"
-                      onClose={() => closeWindow(WINDOW_IDS.GEEKS_HOUSE_MAIN)}
-                      initialWidth="70vw"
-                      initialHeight="70vh"
-                      resizable={true}
-                    >
-                      <GeeksHouseMain />
-                    </DraggableResizeableWindow>
-                  ),
-                  "Geek's House"
-                )
-              }
+              onClick={() => {
+                // On mobile, if this is the second tap, proceed with opening
+                if (isMobile && touchedLocation === 'geeks-house') {
+                  setTouchedLocation(null);
+                  setHovered(null);
+                  handleCliqueHouseAccess(
+                    'GEEK',
+                    WINDOW_IDS.GEEKS_HOUSE_MAIN,
+                    (
+                      <DraggableResizeableWindow
+                        windowsId={WINDOW_IDS.GEEKS_HOUSE_MAIN}
+                        headerTitle="Geek's House"
+                        onClose={() => closeWindow(WINDOW_IDS.GEEKS_HOUSE_MAIN)}
+                        initialWidth="70vw"
+                        initialHeight="70vh"
+                        resizable={true}
+                      >
+                        <GeeksHouseMain />
+                      </DraggableResizeableWindow>
+                    ),
+                    "Geek's House"
+                  );
+                } else if (!isMobile) {
+                  // Desktop behavior - immediate open
+                  handleCliqueHouseAccess(
+                    'GEEK',
+                    WINDOW_IDS.GEEKS_HOUSE_MAIN,
+                    (
+                      <DraggableResizeableWindow
+                        windowsId={WINDOW_IDS.GEEKS_HOUSE_MAIN}
+                        headerTitle="Geek's House"
+                        onClose={() => closeWindow(WINDOW_IDS.GEEKS_HOUSE_MAIN)}
+                        initialWidth="70vw"
+                        initialHeight="70vh"
+                        resizable={true}
+                      >
+                        <GeeksHouseMain />
+                      </DraggableResizeableWindow>
+                    ),
+                    "Geek's House"
+                  );
+                }
+              }}
               onMouseEnter={() => {
                 setHovered('geeks-house');
               }}
@@ -892,25 +1039,49 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             <DynamicHouseIcon
               houseId="preps-house"
               className={`${styles["nav-icon"]} ${styles['preps-house-nav']}`}
-              onClick={() =>
-                handleCliqueHouseAccess(
-                  'PREP',
-                  WINDOW_IDS.PREPS_HOUSE_MAIN,
-                  (
-                    <DraggableResizeableWindow
-                      windowsId={WINDOW_IDS.PREPS_HOUSE_MAIN}
-                      headerTitle="Prep's House"
-                      onClose={() => closeWindow(WINDOW_IDS.PREPS_HOUSE_MAIN)}
-                      initialWidth="70vw"
-                      initialHeight="70vh"
-                      resizable={true}
-                    >
-                      <PrepsHouseMain />
-                    </DraggableResizeableWindow>
-                  ),
-                  "Prep's House"
-                )
-              }
+              onClick={() => {
+                // On mobile, if this is the second tap, proceed with opening
+                if (isMobile && touchedLocation === 'preps-house') {
+                  setTouchedLocation(null);
+                  setHovered(null);
+                  handleCliqueHouseAccess(
+                    'PREP',
+                    WINDOW_IDS.PREPS_HOUSE_MAIN,
+                    (
+                      <DraggableResizeableWindow
+                        windowsId={WINDOW_IDS.PREPS_HOUSE_MAIN}
+                        headerTitle="Prep's House"
+                        onClose={() => closeWindow(WINDOW_IDS.PREPS_HOUSE_MAIN)}
+                        initialWidth="70vw"
+                        initialHeight="70vh"
+                        resizable={true}
+                      >
+                        <PrepsHouseMain />
+                      </DraggableResizeableWindow>
+                    ),
+                    "Prep's House"
+                  );
+                } else if (!isMobile) {
+                  // Desktop behavior - immediate open
+                  handleCliqueHouseAccess(
+                    'PREP',
+                    WINDOW_IDS.PREPS_HOUSE_MAIN,
+                    (
+                      <DraggableResizeableWindow
+                        windowsId={WINDOW_IDS.PREPS_HOUSE_MAIN}
+                        headerTitle="Prep's House"
+                        onClose={() => closeWindow(WINDOW_IDS.PREPS_HOUSE_MAIN)}
+                        initialWidth="70vw"
+                        initialHeight="70vh"
+                        resizable={true}
+                      >
+                        <PrepsHouseMain />
+                      </DraggableResizeableWindow>
+                    ),
+                    "Prep's House"
+                  );
+                }
+              }}
               onMouseEnter={() => {
                 setHovered('preps-house');
               }}
