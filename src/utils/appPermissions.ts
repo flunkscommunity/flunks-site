@@ -1,7 +1,9 @@
 /**
  * App Permissions System
- * Controls which desktop apps are visible based on user access level
+ * Controls which desktop apps are visible based on user access level and build mode
  */
+
+import { isFeatureEnabled, getCurrentBuildMode, type BuildMode } from './buildMode';
 
 export type AccessLevel = 'ADMIN' | 'BETA' | 'COMMUNITY';
 
@@ -10,6 +12,7 @@ export interface AppPermission {
   title: string;
   requiredLevel: AccessLevel[];
   description?: string;
+  buildModeFeature?: string; // Maps to BuildModeConfig key
 }
 
 // Define which apps require which access levels
@@ -57,13 +60,15 @@ export const APP_PERMISSIONS: AppPermission[] = [
     id: 'terminal',
     title: 'Terminal',
     requiredLevel: ['ADMIN', 'BETA'],
-    description: 'Advanced terminal access for beta testers'
+    description: 'Advanced terminal access for beta testers',
+    buildModeFeature: 'showTerminal'
   },
   {
     id: 'clique-access',
     title: 'Clique Access',
     requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
-    description: 'Check NFT-based access rights'
+    description: 'Check NFT-based access rights',
+    buildModeFeature: 'showCliqueAccess'
   },
   {
     id: 'fhs-school',
@@ -77,31 +82,36 @@ export const APP_PERMISSIONS: AppPermission[] = [
     id: 'semester-zero',
     title: 'Semester Zero',
     requiredLevel: ['ADMIN'],
-    description: 'Explore the virtual campus'
+    description: 'Explore the virtual campus',
+    buildModeFeature: 'showSemesterZero'
   },
   {
     id: 'game-manual',
     title: 'Game Manual',
     requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
-    description: 'How to use the platform'
+    description: 'How to use the platform',
+    buildModeFeature: 'showGameManual'
   },
   {
     id: 'meme-manager',
     title: 'Meme Manager',
     requiredLevel: ['ADMIN'],
-    description: 'Manage memes and content'
+    description: 'Manage memes and content',
+    buildModeFeature: 'showMemeManager'
   },
   {
     id: 'myplace',
     title: 'MyPlace',
     requiredLevel: ['ADMIN'],
-    description: 'Social networking features'
+    description: 'Social networking features',
+    buildModeFeature: 'showMyPlace'
   },
   {
     id: 'flappyflunk',
     title: 'Flappy Flunk',
     requiredLevel: ['ADMIN'],
-    description: 'Play Flappy Flunk game'
+    description: 'Play Flappy Flunk game',
+    buildModeFeature: 'showFlappyFlunk'
   },
   {
     id: 'pocket-juniors',
@@ -125,7 +135,8 @@ export const APP_PERMISSIONS: AppPermission[] = [
     id: 'yearbook',
     title: 'Flunks Yearbook',
     requiredLevel: ['ADMIN'],
-    description: 'Browse student yearbook entries'
+    description: 'Browse student yearbook entries',
+    buildModeFeature: 'showYearbook'
   },
   
   // Icon Animation Lab (dev/admin for now)
@@ -133,7 +144,8 @@ export const APP_PERMISSIONS: AppPermission[] = [
     id: 'icon-animation',
     title: 'Icon Animation',
     requiredLevel: ['ADMIN'],
-    description: 'Preview desktop icon animations'
+    description: 'Preview desktop icon animations',
+    buildModeFeature: 'showIconAnimation'
   },
   
   // External links - available to all
@@ -168,6 +180,12 @@ export const hasAppPermission = (appId: string, userAccessLevel?: AccessLevel): 
   
   // If app not in permissions list, allow by default (for backwards compatibility)
   if (!appPermission) return true;
+  
+  // Check build mode feature flag first
+  if (appPermission.buildModeFeature) {
+    const featureEnabled = isFeatureEnabled(appPermission.buildModeFeature as any);
+    if (!featureEnabled) return false;
+  }
   
   // Check if user's access level is in the required levels
   return appPermission.requiredLevel.includes(userAccessLevel);
@@ -224,4 +242,35 @@ export const getAccessLevelInfo = (level: AccessLevel) => {
         description: 'Limited access'
       };
   }
+};
+
+/**
+ * Debug function to show current permissions and build mode status
+ */
+export const debugPermissions = () => {
+  const buildMode = getCurrentBuildMode();
+  const userLevel = getUserAccessLevel();
+  const visibleApps = getVisibleApps();
+  
+  console.log(`
+🔧 PERMISSIONS DEBUG
+================
+
+Build Mode: ${buildMode}
+User Access Level: ${userLevel || 'None'}
+Visible Apps: ${visibleApps.length}
+
+Apps Available:
+${visibleApps.map(app => `  • ${app.title} (${app.id})`).join('\n')}
+
+Build Mode Features:
+${Object.entries({
+  'Semester Zero': isFeatureEnabled('showSemesterZero'),
+  'Meme Manager': isFeatureEnabled('showMemeManager'),
+  'MyPlace': isFeatureEnabled('showMyPlace'),
+  'Flappy Flunk': isFeatureEnabled('showFlappyFlunk'),
+  'Terminal': isFeatureEnabled('showTerminal'),
+  'Admin Panel': isFeatureEnabled('showGumAdminPanel'),
+}).map(([name, enabled]) => `  • ${name}: ${enabled ? '✅' : '❌'}`).join('\n')}
+  `);
 };

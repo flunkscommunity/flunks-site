@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:public": "cp .env.production .env.production.local && next build",
+    "build:build-mode": "cp .env.build .env.production.local && next build",
     "start": "next start",
     "lint": "next lint",
     "fetch:openApiSpec": "node ./swagger/fetchApiSpec.ts",

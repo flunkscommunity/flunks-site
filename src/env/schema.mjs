@@ -16,6 +16,8 @@ export const serverSchema = z.object({
  */
 export const clientSchema = z.object({
   // NEXT_PUBLIC_CLIENTVAR: z.string(),
+  NEXT_PUBLIC_BUILD_MODE: z.enum(["public", "build"]).optional(),
+  NEXT_PUBLIC_ACCESS_REQUIRED: z.string().optional(),
 });
 
 /**
@@ -26,4 +28,6 @@ export const clientSchema = z.object({
  */
 export const clientEnv = {
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+  NEXT_PUBLIC_BUILD_MODE: process.env.NEXT_PUBLIC_BUILD_MODE,
+  NEXT_PUBLIC_ACCESS_REQUIRED: process.env.NEXT_PUBLIC_ACCESS_REQUIRED,
 };

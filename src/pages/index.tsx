@@ -664,6 +664,10 @@ const Home: NextPage = () => {
   useEffect(() => {
     setIsMounted(true);
     
+    // Check build mode and environment variables
+    const buildMode = process.env.NEXT_PUBLIC_BUILD_MODE || 'public';
+    const accessRequired = process.env.NEXT_PUBLIC_ACCESS_REQUIRED !== 'false';
+    
     // Check if user already has access
     const accessGranted = sessionStorage.getItem('flunks-access-granted');
     const isLocalhost = typeof window !== 'undefined' && 
@@ -677,6 +681,8 @@ const Home: NextPage = () => {
       process.env.NODE_ENV === 'production';
     
     console.log('🔍 Access Check:', { 
+      buildMode,
+      accessRequired,
       accessGranted, 
       isLocalhost, 
       isDev, 
@@ -685,9 +691,12 @@ const Home: NextPage = () => {
       hostname: typeof window !== 'undefined' ? window.location.hostname : 'server' 
     });
     
-    // Access logic: Always require access code for beta testing
-    // Only grant access if user has entered valid access code
-    if (accessGranted === 'true') {
+    // Access logic based on build mode and environment
+    if (!accessRequired || (isLocalhost && isDev)) {
+      // Skip access gate if explicitly disabled or in local dev
+      setHasAccess(true);
+    } else if (accessGranted === 'true') {
+      // User has already entered valid access code
       setHasAccess(true);
     }
     

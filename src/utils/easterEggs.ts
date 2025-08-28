@@ -1,5 +1,19 @@
 /**
- * Easter Egg System - Console Commands and Hidden Features
+ * Easter Egg System - Console Comman    help: () => {
+      console.log(`
+🎓 FLUNKS HIGH SCHOOL CONSOLE COMMANDS 🎓
+
+Available commands:
+• flunks.help()        - Show this help menu
+• flunks.codes()       - Get access code hints
+• flunks.unlock()      - Show access codes (dev only)
+• flunks.status()      - Show your current access level
+• flunks.buildMode()   - Show build mode and feature status
+• flunks.permissions() - Show app permissions debug info
+• flunks.credits()     - Show development credits
+
+Try typing one of these commands!
+      `); Features
  * Users can discover access codes through various means
  */
 
@@ -113,6 +127,36 @@ You haven't entered an access code yet.
 Type flunks.codes() for hints on how to get one!
         `);
       }
+    },
+
+    buildMode: () => {
+      // Import build mode utilities
+      import('./buildMode').then(({ getBuildModeInfo }) => {
+        const info = getBuildModeInfo();
+        console.log(`
+🔧 BUILD MODE STATUS 🔧
+
+Current Mode: ${info.mode.toUpperCase()}
+Environment: ${info.environment.NODE_ENV}
+
+Feature Flags:
+${Object.entries(info.config).map(([key, value]) => 
+  `  • ${key}: ${value ? '✅' : '❌'}`
+).join('\n')}
+
+Environment Variables:
+${Object.entries(info.environment).map(([key, value]) => 
+  `  • ${key}: ${value || 'not set'}`
+).join('\n')}
+        `);
+      });
+    },
+
+    permissions: () => {
+      // Import permissions utilities  
+      import('./appPermissions').then(({ debugPermissions }) => {
+        debugPermissions();
+      });
     },
 
     credits: () => {
