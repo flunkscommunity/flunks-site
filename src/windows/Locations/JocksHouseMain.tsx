@@ -65,7 +65,7 @@ const JocksHouseMain = () => {
             openRoom(
               WINDOW_IDS.JOCKS_HOUSE_GARAGE,
               "Basement",
-              "Weight sets and exercise equipment fill the space. Motivational posters cover the walls with bold messages: 'NO EXCUSES', 'WINNERS NEVER QUIT', and 'THERE ARE NO SHORTCUTS TO ANY PLACE WORTH GOING'. The constant reminder that there are no excuses for failure drives every workout."
+              "Weight sets and exercise equipment fill the space. Motivational posters cover the walls with bold messages: 'ZERO EXCUSES', 'WINNERS NEVER QUIT', and 'THERE ARE NO SHORTCUTS TO ANY PLACE WORTH GOING'. The constant reminder that there are zero excuses for failure drives every workout."
             )
           }
           className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
