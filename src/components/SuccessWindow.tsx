@@ -4,13 +4,30 @@ import { Button } from 'react95';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useUserProfile } from 'contexts/UserProfileContext';
 
+// Global style override for this specific success window
+const GlobalSuccessStyle = styled.div`
+  width: 100%;
+  height: 100%;
+  
+  /* Override any parent backgrounds */
+  * {
+    background: transparent !important;
+  }
+  
+  /* Force dark background on container */
+  && {
+    background: #2a2a2a !important;
+  }
+`;
+
 const SuccessContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 40px;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #0d2818 50%, #1a4d1a 75%, #0d3d0d 100%);
+  background: #2a2a2a !important;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 25%, #1e2a1e 50%, #2a3a2a 75%, #252525 100%) !important;
   border: 2px solid #33ff33;
   border-radius: 15px;
   font-family: 'Courier New', monospace;
@@ -263,55 +280,57 @@ const SuccessWindow: React.FC<SuccessWindowProps> = ({ onContinue }) => {
   };
 
   return (
-    <SuccessContainer>
-      <MatrixRain />
-      
-      <SecurityBadge>
-        🏆 SECURITY BREACH SUCCESSFUL 🏆
-      </SecurityBadge>
-      
-      <FloatingIcon>
-        🎉
-      </FloatingIcon>
-      
-      <SuccessTitle>
-        ACCESS GRANTED!
-      </SuccessTitle>
-      
-      <SuccessMessage>
-        🔓 <strong>DIGITAL LOCK COMPROMISED</strong><br/>
-        <br/>
-        The Principal's Office security system has been bypassed.<br/>
-        You've successfully infiltrated the restricted zone!<br/>
-        <br/>
-        <span style={{ color: '#ffaa00' }}>⚡ Elite hacker status achieved ⚡</span>
-      </SuccessMessage>
-      
-      <CelebrationButton onClick={handleCelebration} disabled={isTracking}>
-        {isTracking ? '📊 LOGGING BREACH...' : '🚀 ENTER THE OFFICE 🚀'}
-      </CelebrationButton>
-      
-      <div style={{ 
-        color: '#ffaa00', 
-        fontSize: '16px',
-        fontWeight: 'bold',
-        marginTop: '25px',
-        textShadow: '0 0 10px rgba(255, 170, 0, 0.8)'
-      }}>
-        🕵️‍♂️ Mission Status: COMPLETE 🕵️‍♂️
-      </div>
-      
-      <div style={{ 
-        color: '#666', 
-        textAlign: 'center', 
-        marginTop: '20px', 
-        fontSize: '12px',
-        textTransform: 'uppercase',
-        letterSpacing: '2px'
-      }}>
-        FLUNKS SECURITY SYSTEM v2.0 - BREACH DETECTED
-      </div>
-    </SuccessContainer>
+    <GlobalSuccessStyle>
+      <SuccessContainer>
+        <MatrixRain />
+        
+        <SecurityBadge>
+          🏆 SECURITY BREACH SUCCESSFUL 🏆
+        </SecurityBadge>
+        
+        <FloatingIcon>
+          🎉
+        </FloatingIcon>
+        
+        <SuccessTitle>
+          ACCESS GRANTED!
+        </SuccessTitle>
+        
+        <SuccessMessage>
+          🔓 <strong>DIGITAL LOCK COMPROMISED</strong><br/>
+          <br/>
+          The Principal's Office security system has been bypassed.<br/>
+          You've successfully infiltrated the restricted zone!<br/>
+          <br/>
+          <span style={{ color: '#ffaa00' }}>⚡ Elite hacker status achieved ⚡</span>
+        </SuccessMessage>
+        
+        <CelebrationButton onClick={handleCelebration} disabled={isTracking}>
+          {isTracking ? '📊 LOGGING BREACH...' : '🚀 ENTER THE OFFICE 🚀'}
+        </CelebrationButton>
+        
+        <div style={{ 
+          color: '#ffaa00', 
+          fontSize: '16px',
+          fontWeight: 'bold',
+          marginTop: '25px',
+          textShadow: '0 0 10px rgba(255, 170, 0, 0.8)'
+        }}>
+          🕵️‍♂️ Mission Status: COMPLETE 🕵️‍♂️
+        </div>
+        
+        <div style={{ 
+          color: '#666', 
+          textAlign: 'center', 
+          marginTop: '20px', 
+          fontSize: '12px',
+          textTransform: 'uppercase',
+          letterSpacing: '2px'
+        }}>
+          FLUNKS SECURITY SYSTEM v2.0 - BREACH DETECTED
+        </div>
+      </SuccessContainer>
+    </GlobalSuccessStyle>
   );
 };
 

@@ -197,6 +197,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
       <Window
         ref={windowRef}
         className={`${windowClassName} !flex !flex-col cursor-win95-default`}
+        data-window-id={props.windowsId}
         style={{
           position: "absolute",
           resize: resizable ? "both" : "none",
@@ -209,6 +210,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           maxHeight: "calc(100% - 48px)",
           left: width < 768 ? 0 : undefined,
           top: width < 768 ? 0 : undefined,
+          background: props.windowsId === 'HIGH_SCHOOL_OFFICE_SUCCESS' ? '#2a2a2a' : undefined,
           ...props.style,
         }}
         onClick={_bringWindowToFront}
@@ -298,6 +300,8 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
             flexGrow: 1,
             height: "100%",
             minHeight: 0,
+            background: props.windowsId === 'HIGH_SCHOOL_OFFICE_SUCCESS' ? '#2a2a2a' : undefined,
+            padding: props.windowsId === 'HIGH_SCHOOL_OFFICE_SUCCESS' ? '0' : undefined,
           }}
         >
           {children}

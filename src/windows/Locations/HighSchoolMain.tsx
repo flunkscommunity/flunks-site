@@ -112,8 +112,10 @@ const HighSchoolMain = () => {
                     initialWidth="500px"
                     initialHeight="600px"
                     resizable={true}
+                    style={{ background: '#2a2a2a' }}
                   >
-                    <SuccessWindow 
+                    <div style={{ background: '#2a2a2a', width: '100%', height: '100%' }}>
+                      <SuccessWindow 
                       onContinue={() => {
                         closeWindow(WINDOW_IDS.HIGH_SCHOOL_OFFICE_SUCCESS);
                         openRoom(
@@ -123,6 +125,7 @@ const HighSchoolMain = () => {
                         );
                       }}
                     />
+                    </div>
                   </DraggableResizeableWindow>
                 ),
               });
