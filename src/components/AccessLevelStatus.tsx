@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Frame } from 'react95';
 import { getUserAccessLevel, getAccessLevelInfo } from 'utils/appPermissions';
+import { getCurrentBuildMode } from 'utils/buildMode';
 
 const StatusContainer = styled.div`
   position: fixed;
@@ -42,6 +43,10 @@ const StatusText = styled.span`
 
 const AccessLevelStatus: React.FC = () => {
   const accessLevel = getUserAccessLevel();
+  const buildMode = getCurrentBuildMode();
+  
+  // Hide access level status in public mode
+  if (buildMode === 'public') return null;
   
   if (!accessLevel) return null;
   

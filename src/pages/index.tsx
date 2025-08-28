@@ -666,41 +666,44 @@ const Home: NextPage = () => {
     
     // Check build mode and environment variables
     const buildMode = process.env.NEXT_PUBLIC_BUILD_MODE || 'public';
-    const accessRequired = process.env.NEXT_PUBLIC_ACCESS_REQUIRED !== 'false';
     
-    // Check if user already has access
-    const accessGranted = sessionStorage.getItem('flunks-access-granted');
-    const isLocalhost = typeof window !== 'undefined' && 
-      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-    const isDev = process.env.NODE_ENV === 'development' || !process.env.NODE_ENV;
-    const isDevDomain = typeof window !== 'undefined' && 
-      window.location.hostname.startsWith('dev.');
-    const isProductionMainSite = typeof window !== 'undefined' && 
-      !window.location.hostname.startsWith('dev.') && 
-      !isLocalhost && 
-      process.env.NODE_ENV === 'production';
-    
-    console.log('🔍 Access Check:', { 
-      buildMode,
-      accessRequired,
-      accessGranted, 
-      isLocalhost, 
-      isDev, 
-      isDevDomain, 
-      isProductionMainSite, 
-      hostname: typeof window !== 'undefined' ? window.location.hostname : 'server' 
-    });
-    
-    // Access logic based on build mode and environment
-    if (!accessRequired || (isLocalhost && isDev)) {
-      // Skip access gate if explicitly disabled or in local dev
+    // Import build mode utilities
+    import('../utils/buildMode').then(({ shouldShowAccessGate, getDefaultAccessLevel }) => {
+      const needsAccessGate = shouldShowAccessGate();
+      const defaultAccessLevel = getDefaultAccessLevel();
+      
+      // Check if user already has access
+      const accessGranted = sessionStorage.getItem('flunks-access-granted');
+      const isLocalhost = typeof window !== 'undefined' && 
+        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+      const isDev = process.env.NODE_ENV === 'development' || !process.env.NODE_ENV;
+      
+      console.log('🔍 Access Check:', { 
+        buildMode,
+        needsAccessGate,
+        defaultAccessLevel,
+        accessGranted, 
+        isLocalhost, 
+        isDev,
+        hostname: typeof window !== 'undefined' ? window.location.hostname : 'server' 
+      });
+      
+    // Access logic based on build mode
+    if (!needsAccessGate || (isLocalhost && isDev)) {
+      // Skip access gate - automatically grant access
+      if (defaultAccessLevel) {
+        // Auto-grant access level for public mode
+        sessionStorage.setItem('flunks-access-granted', 'true');
+        sessionStorage.setItem('flunks-access-level', defaultAccessLevel);
+        sessionStorage.setItem('flunks-access-code', 'AUTO-GRANTED-PUBLIC');
+        console.log(`🎯 Auto-granted ${defaultAccessLevel} access for ${buildMode} mode`);
+      }
       setHasAccess(true);
     } else if (accessGranted === 'true') {
       // User has already entered valid access code
       setHasAccess(true);
-    }
-    
-    setCheckingAccess(false);
+    }      setCheckingAccess(false);
+    });
   }, []);
 
   const handleAccessGranted = () => {

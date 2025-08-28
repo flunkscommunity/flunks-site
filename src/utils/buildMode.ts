@@ -56,9 +56,9 @@ const BUILD_MODE_CONFIGS: Record<BuildMode, BuildModeConfig> = {
     showTimeAdmin: false,
     showDebugEndpoints: false,
     
-    // Access control settings
-    requireAccessCode: true,
-    showAccessGate: true,
+    // Public mode should NOT require access codes
+    requireAccessCode: false,
+    showAccessGate: false,
   },
   
   // Build mode - full admin access with all features
@@ -129,6 +129,32 @@ export const getBuildModeInfo = () => {
       NEXT_PUBLIC_ACCESS_REQUIRED: process.env.NEXT_PUBLIC_ACCESS_REQUIRED,
     }
   };
+};
+
+/**
+ * Get default access level for current build mode
+ */
+export const getDefaultAccessLevel = (): string | null => {
+  const mode = getCurrentBuildMode();
+  const config = getBuildModeConfig(mode);
+  
+  // In public mode, automatically grant beta access
+  if (mode === 'public' && !config.requireAccessCode) {
+    return 'BETA';
+  }
+  
+  return null;
+};
+
+/**
+ * Check if access gate should be shown
+ */
+export const shouldShowAccessGate = (): boolean => {
+  const config = getBuildModeConfig();
+  const accessRequired = process.env.NEXT_PUBLIC_ACCESS_REQUIRED !== 'false';
+  
+  // Show access gate only if both build mode and env var require it
+  return config.requireAccessCode && accessRequired;
 };
 
 /**
