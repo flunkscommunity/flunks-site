@@ -286,13 +286,7 @@ const HighSchoolMain = () => {
 
         {/* Principal's Office */}
         <button
-          onClick={() =>
-            openRoom(
-              WINDOW_IDS.HIGH_SCHOOL_OFFICE,
-              "Principal's Office",
-              "The desk drawers are slightly open. Student files are scattered about with red marks and strange symbols."
-            )
-          }
+          onClick={openOfficeWithLock}
           className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
         >
           🏢 Office
