@@ -22,6 +22,10 @@ export interface BuildModeConfig {
   showIconAnimation: boolean;
   showReportCard: boolean;
   
+  // ADMIN-only features
+  showPocketJuniors: boolean;
+  showFlunkCreator: boolean;
+  
   // Admin Features
   showGumAdminPanel: boolean;
   showTimeAdmin: boolean;
@@ -51,6 +55,10 @@ const BUILD_MODE_CONFIGS: Record<BuildMode, BuildModeConfig> = {
     showIconAnimation: false,
     showReportCard: false,
     
+    // ADMIN-only features - hidden from public/beta
+    showPocketJuniors: false,
+    showFlunkCreator: false,
+    
     // No admin features in public mode
     showGumAdminPanel: false,
     showTimeAdmin: false,
@@ -77,6 +85,10 @@ const BUILD_MODE_CONFIGS: Record<BuildMode, BuildModeConfig> = {
     showBulletinBoard: true,
     showIconAnimation: true,
     showReportCard: true,
+    
+    // ADMIN-only features - visible in build mode
+    showPocketJuniors: true,
+    showFlunkCreator: true,
     
     // Full admin features
     showGumAdminPanel: true,

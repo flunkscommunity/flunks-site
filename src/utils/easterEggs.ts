@@ -10,6 +10,7 @@ Available commands:
 • flunks.status()      - Show your current access level
 • flunks.buildMode()   - Show build mode and feature status
 • flunks.permissions() - Show app permissions debug info
+• flunks.fix()         - Fix access issues (if apps don't show)
 • flunks.credits()     - Show development credits
 
 Try typing one of these commands!
@@ -157,6 +158,15 @@ ${Object.entries(info.environment).map(([key, value]) =>
       import('./appPermissions').then(({ debugPermissions }) => {
         debugPermissions();
       });
+    },
+
+    fix: () => {
+      console.log('🔧 Fixing access issues...');
+      sessionStorage.setItem('flunks-access-level', 'COMMUNITY');
+      sessionStorage.setItem('flunks-access-granted', 'true');
+      sessionStorage.setItem('flunks-access-code', 'AUTO-GRANTED-PUBLIC');
+      window.dispatchEvent(new CustomEvent('flunks-access-updated'));
+      console.log('✅ Access fixed! You should now see all the desktop apps. Refresh if needed.');
     },
 
     credits: () => {

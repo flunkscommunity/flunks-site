@@ -6,6 +6,7 @@ import { WINDOW_IDS } from '../fixed';
 import { CliqueAccessPanel } from '../components/CliqueAccess/CliqueAccessPanel';
 import { useCliqueAccess } from '../hooks/useCliqueAccess';
 import { useWindowsContext } from '../contexts/WindowsContext';
+import { getCurrentBuildMode, isFeatureEnabled } from '../utils/buildMode';
 
 const ManualContainer = styled.div`
   display: flex;
@@ -1273,7 +1274,15 @@ const GameManualWindow: React.FC = () => {
               borderRadius: '8px',
               textAlign: 'center'
             }}>
-              <strong style={{ color: '#1e3a72' }}>🔧 System Administration:</strong> Press <code>Ctrl + G</code> (or <code>Cmd + G</code> on Mac) to access the GUM admin panel for detailed system analytics and transaction monitoring!
+              {isFeatureEnabled('showGumAdminPanel') ? (
+                <>
+                  <strong style={{ color: '#1e3a72' }}>🔧 System Administration:</strong> Press <code>Ctrl + G</code> (or <code>Cmd + G</code> on Mac) to access the GUM admin panel for detailed system analytics and transaction monitoring!
+                </>
+              ) : (
+                <>
+                  <strong style={{ color: '#1e3a72' }}>🎯 Quick Tip:</strong> Use the GUM system daily to earn rewards and track your progress in the Flunks ecosystem!
+                </>
+              )}
             </div>
           </PageContent>
         );
@@ -1285,9 +1294,11 @@ const GameManualWindow: React.FC = () => {
             <h3>Flunks Terminal - Your Command Center</h3>
             <p>The Terminal is a powerful tool that lets you interact with the Flunks High School system using text commands, just like a real computer terminal!</p>
             
-            <div style={{ marginTop: 15, padding: 10, background: '#ffeeee', border: '1px solid #cc0000' }}>
-              <strong>🔐 Beta Access Required:</strong> This feature requires SEMESTER0 access code or higher.
-            </div>
+            {isFeatureEnabled('showGumAdminPanel') && (
+              <div style={{ marginTop: 15, padding: 10, background: '#ffeeee', border: '1px solid #cc0000' }}>
+                <strong>🔐 Beta Access Required:</strong> This feature requires SEMESTER0 access code or higher.
+              </div>
+            )}
             
             <h4>🚀 Opening the Terminal</h4>
             <p>Double-click the <strong>Terminal</strong> icon on your desktop to open the command interface.</p>
@@ -1315,7 +1326,9 @@ const GameManualWindow: React.FC = () => {
               <li><strong>Wallet Integration:</strong> Commands automatically detect your connected wallet</li>
               <li><strong>Access Control:</strong> Some commands require specific access levels</li>
               <li><strong>Safe Execution:</strong> All commands run in a secure environment</li>
-              <li><strong>Beta Testing:</strong> Available to beta access holders</li>
+              {isFeatureEnabled('showGumAdminPanel') && (
+                <li><strong>Beta Testing:</strong> Available to beta access holders</li>
+              )}
             </ul>
             
             <div style={{ marginTop: 15, padding: 10, background: '#fff0e6', border: '1px solid #ff8800' }}>

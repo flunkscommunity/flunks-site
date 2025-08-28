@@ -697,12 +697,17 @@ const Home: NextPage = () => {
         sessionStorage.setItem('flunks-access-level', defaultAccessLevel);
         sessionStorage.setItem('flunks-access-code', 'AUTO-GRANTED-PUBLIC');
         console.log(`🎯 Auto-granted ${defaultAccessLevel} access for ${buildMode} mode`);
+        
+        // Dispatch access update event to update all components
+        window.dispatchEvent(new CustomEvent('flunks-access-updated'));
       }
       setHasAccess(true);
     } else if (accessGranted === 'true') {
       // User has already entered valid access code
       setHasAccess(true);
-    }      setCheckingAccess(false);
+    }
+    
+    setCheckingAccess(false);
     });
   }, []);
 

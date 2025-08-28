@@ -117,13 +117,15 @@ export const APP_PERMISSIONS: AppPermission[] = [
     id: 'pocket-juniors',
     title: 'Pocket Juniors',
     requiredLevel: ['ADMIN'],
-    description: 'Project Junior management'
+    description: 'Project Junior management',
+    buildModeFeature: 'showPocketJuniors'
   },
   {
     id: 'flunk-creator',
     title: 'Flunk Creator',
     requiredLevel: ['ADMIN'],
-    description: 'Create custom Flunks'
+    description: 'Create custom Flunks',
+    buildModeFeature: 'showFlunkCreator'
   },
   {
     id: 'graduation',
