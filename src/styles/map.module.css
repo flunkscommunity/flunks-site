@@ -114,6 +114,8 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(2px);
+  /* Exclude the bottom navigation area from pointer events to prevent hover flickering */
+  clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 0% 85%);
 }
 
 /* Large enlarged icon overlay in center of screen */

@@ -55,6 +55,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [zoom, setZoom] = useState(1);
   const zoomRef = useRef(1);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   // Clique access hooks
   const { hasAccess } = useCliqueAccess();
@@ -160,6 +161,31 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
     setHovered(null);
   };
 
+  // Debounced version for navigation icons to prevent rapid toggling
+  const handleNavHover = (locationKey: string) => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    setHovered(locationKey);
+    if (user) {
+      // Small delay to prevent rapid toggling
+      hoverTimeoutRef.current = setTimeout(() => {
+        setEnhancedHover(locationKey);
+      }, 100);
+    }
+  };
+
+  const handleNavLeave = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    // Only clear if not already in enhanced mode to prevent flickering
+    if (!enhancedHover) {
+      setHovered(null);
+    }
+  };
+
   const handleEnhancedClick = (locationKey: string, e: React.MouseEvent) => {
     if (!user) {
       // User not signed in - do nothing
@@ -247,7 +273,13 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       // Hide opening animation after it completes
       setTimeout(() => setShowOpeningAnimation(false), 2000);
     }, 5000);
-    return () => clearTimeout(t);
+    return () => {
+      clearTimeout(t);
+      // Also cleanup hover timeout
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
   }, []);
 
   const togglePause = () => setIsPaused(prev => !prev);
@@ -653,11 +685,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
               }
               onMouseEnter={() => {
                 setHovered('high-school');
-                user && handleEnhancedHover('high-school');
+                user && handleNavHover('high-school');
               }}
               onMouseLeave={() => {
-                setHovered(null);
-                handleEnhancedLeave();
+                handleNavLeave();
               }}
               onTouchStart={() => user && handleTouchEnter('high-school')}
               onTouchEnd={handleTouchLeave}
@@ -688,11 +719,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
               }
               onMouseEnter={() => {
                 setHovered('arcade');
-                user && handleEnhancedHover('arcade');
+                user && handleNavHover('arcade');
               }}
               onMouseLeave={() => {
-                setHovered(null);
-                handleEnhancedLeave();
+                handleNavLeave();
               }}
               onTouchStart={() => user && handleTouchEnter('arcade')}
               onTouchEnd={handleTouchLeave}
@@ -728,11 +758,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
               }
               onMouseEnter={() => {
                 setHovered('jocks-house');
-                user && handleEnhancedHover('jocks-house');
+                user && handleNavHover('jocks-house');
               }}
               onMouseLeave={() => {
-                setHovered(null);
-                handleEnhancedLeave();
+                handleNavLeave();
               }}
               onTouchStart={() => user && handleTouchEnter('jocks-house')}
               onTouchEnd={handleTouchLeave}
@@ -763,11 +792,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
               }
               onMouseEnter={() => {
                 setHovered('freaks-house');
-                user && handleEnhancedHover('freaks-house');
+                user && handleNavHover('freaks-house');
               }}
               onMouseLeave={() => {
-                setHovered(null);
-                handleEnhancedLeave();
+                handleNavLeave();
               }}
               onTouchStart={() => user && handleTouchEnter('freaks-house')}
               onTouchEnd={handleTouchLeave}
@@ -798,11 +826,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
               }
               onMouseEnter={() => {
                 setHovered('geeks-house');
-                user && handleEnhancedHover('geeks-house');
+                user && handleNavHover('geeks-house');
               }}
               onMouseLeave={() => {
-                setHovered(null);
-                handleEnhancedLeave();
+                handleNavLeave();
               }}
               onTouchStart={() => user && handleTouchEnter('geeks-house')}
               onTouchEnd={handleTouchLeave}
@@ -833,11 +860,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
               }
               onMouseEnter={() => {
                 setHovered('preps-house');
-                user && handleEnhancedHover('preps-house');
+                user && handleNavHover('preps-house');
               }}
               onMouseLeave={() => {
-                setHovered(null);
-                handleEnhancedLeave();
+                handleNavLeave();
               }}
               onTouchStart={() => user && handleTouchEnter('preps-house')}
               onTouchEnd={handleTouchLeave}
@@ -852,6 +878,14 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         <div 
           className={styles["enhanced-hover-overlay"]}
           onClick={handleEnhancedClose}
+          onMouseLeave={(e) => {
+            // Only close if not moving to the navigation area
+            const rect = e.currentTarget.getBoundingClientRect();
+            const bottomNavHeight = rect.height * 0.15; // Bottom 15% of the screen
+            if (e.clientY < rect.bottom - bottomNavHeight) {
+              handleEnhancedClose();
+            }
+          }}
         >
           {/* Dimmed map background */}
           <div className={styles["dimmed-map-background"]} />
