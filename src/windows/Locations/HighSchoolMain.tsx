@@ -91,8 +91,8 @@ const HighSchoolMain = () => {
           windowsId={WINDOW_IDS.HIGH_SCHOOL_OFFICE_LOCK}
           headerTitle="Security Access - Principal's Office"
           onClose={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_OFFICE_LOCK)}
-          initialWidth="400px"
-          initialHeight="600px"
+          initialWidth="450px"
+          initialHeight="700px"
           resizable={true}
         >
           <DigitalLock 
