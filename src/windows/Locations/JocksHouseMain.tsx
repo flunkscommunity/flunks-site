@@ -59,18 +59,18 @@ const JocksHouseMain = () => {
 
       {/* Bottom Navigation Bar */}
       <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-4 z-10">
-        {/* Garage */}
+        {/* Basement */}
         <button
           onClick={() =>
             openRoom(
               WINDOW_IDS.JOCKS_HOUSE_GARAGE,
-              "Garage",
-              "Weight sets and exercise equipment fill the space. Motivational posters on the walls."
+              "Basement",
+              "Weight sets and exercise equipment fill the space. Motivational posters cover the walls with bold messages: 'NO EXCUSES', 'WINNERS NEVER QUIT', and 'THERE ARE NO SHORTCUTS TO ANY PLACE WORTH GOING'. The constant reminder that there are no excuses for failure drives every workout."
             )
           }
           className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
         >
-          💪 Garage
+          🏠 Basement
         </button>
 
         {/* Kitchen */}
