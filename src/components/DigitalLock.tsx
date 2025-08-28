@@ -336,17 +336,6 @@ const DigitalLock: React.FC<DigitalLockProps> = ({ onUnlock, onCancel }) => {
       
       <DoorFrame>
         <DoorHandle />
-        <div style={{
-          position: 'absolute',
-          top: '20px',
-          left: '20px',
-          color: '#FFD700',
-          fontSize: '12px',
-          fontWeight: 'bold',
-          textShadow: '0 1px 2px rgba(0,0,0,0.8)'
-        }}>
-          RESTRICTED
-        </div>
       </DoorFrame>
 
       <LockPanel>
