@@ -216,8 +216,8 @@ const DigitalLock: React.FC<DigitalLockProps> = ({ onUnlock, onCancel }) => {
 
   // Hidden code verification using hash comparison
   const verifyCode = (code: string): boolean => {
-    // Hash of "8004" - the correct code
-    const correctHashedCode = "c8a3f1d2e5b7a4c9f2e6d8b1a7c4f3e9";
+    // Hash of "8004" - the correct code (using the actual hash from our function)
+    const correctHashedCode = "83650000000000000000000000000000";
     
     // Simple hash function for the input
     const hashInput = (input: string): string => {

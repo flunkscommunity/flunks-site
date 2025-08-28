@@ -6,6 +6,7 @@ import { useTimeBasedImage, isDayTime } from "utils/timeBasedImages";
 import { useAuth } from "contexts/AuthContext";
 import { awardGum } from "utils/gumAPI";
 import DigitalLock from "components/DigitalLock";
+import SuccessWindow from "components/SuccessWindow";
 
 const HighSchoolMain = () => {
   const { openWindow, closeWindow } = useWindowsContext();
@@ -97,12 +98,34 @@ const HighSchoolMain = () => {
         >
           <DigitalLock 
             onUnlock={() => {
+              // Close the lock window
               closeWindow(WINDOW_IDS.HIGH_SCHOOL_OFFICE_LOCK);
-              openRoom(
-                WINDOW_IDS.HIGH_SCHOOL_OFFICE,
-                "Principal's Office",
-                "🔓 ACCESS GRANTED! The desk drawers are slightly open. Student files are scattered about with red marks and strange symbols. You notice a hidden compartment behind the filing cabinet..."
-              );
+              
+              // Show success window
+              openWindow({
+                key: WINDOW_IDS.HIGH_SCHOOL_OFFICE_SUCCESS,
+                window: (
+                  <DraggableResizeableWindow
+                    windowsId={WINDOW_IDS.HIGH_SCHOOL_OFFICE_SUCCESS}
+                    headerTitle="🎉 ACCESS GRANTED!"
+                    onClose={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_OFFICE_SUCCESS)}
+                    initialWidth="500px"
+                    initialHeight="600px"
+                    resizable={true}
+                  >
+                    <SuccessWindow 
+                      onContinue={() => {
+                        closeWindow(WINDOW_IDS.HIGH_SCHOOL_OFFICE_SUCCESS);
+                        openRoom(
+                          WINDOW_IDS.HIGH_SCHOOL_OFFICE,
+                          "Principal's Office",
+                          "🔓 ACCESS GRANTED! The desk drawers are slightly open. Student files are scattered about with red marks and strange symbols. You notice a hidden compartment behind the filing cabinet..."
+                        );
+                      }}
+                    />
+                  </DraggableResizeableWindow>
+                ),
+              });
             }}
             onCancel={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_OFFICE_LOCK)}
           />

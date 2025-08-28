@@ -90,6 +90,7 @@ export const WINDOW_IDS = {
   HIGH_SCHOOL_LIBRARY: "high_school_library",
   HIGH_SCHOOL_OFFICE: "high_school_office",
   HIGH_SCHOOL_OFFICE_LOCK: "high_school_office_lock",
+  HIGH_SCHOOL_OFFICE_SUCCESS: "high_school_office_success",
   
   // Paradise Motel rooms
   PARADISE_MOTEL_LOBBY: "paradise_motel_lobby",
