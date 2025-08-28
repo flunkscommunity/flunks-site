@@ -433,7 +433,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         />
 
       {/* Screen dimming overlay - appears when hovering over any target location */}
-      {!isMobile && (hovered === 'high-school' || hovered === 'arcade') && (
+      {!isMobile && (hovered === 'high-school' || hovered === 'arcade' || hovered === 'freaks-house' || hovered === 'geeks-house' || hovered === 'jocks-house' || hovered === 'preps-house') && (
         <div className={styles["map-overlay"]} />
       )}
 

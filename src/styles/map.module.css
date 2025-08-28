@@ -773,26 +773,26 @@
 }
 
 .map-location-hover.jocks-house {
-  top: 58%;
-  left: 15%;
+  top: 45%;
+  left: 20%;
   background-image: url('/images/icons/jocks-house-icon.png');
 }
 
 .map-location-hover.freaks-house {
-  top: 35%;
-  left: 26%;
+  top: 25%;
+  left: 15%;
   background-image: url('/images/icons/freaks-house-icon.png');
 }
 
 .map-location-hover.geeks-house {
-  top: 17%;
-  left: 30%;
+  top: 20%;
+  left: 45%;
   background-image: url('/images/icons/geeks-house-icon.png');
 }
 
 .map-location-hover.preps-house {
-  top: 30%;
-  left: 53%;
+  top: 35%;
+  left: 65%;
   background-image: url('/images/icons/preps-house-icon.png');
 }
 

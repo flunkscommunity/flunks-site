@@ -326,7 +326,7 @@ type FormStep = 'username' | 'icon' | 'discord' | 'email' | 'confirm' | 'success
 
 const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel }) => {
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
-  const { createProfile, updateProfile, checkUsername, profile } = useUserProfile();
+  const { createProfile, updateProfile, checkUsername, profile, refreshProfile } = useUserProfile();
   
   const [currentStep, setCurrentStep] = useState<FormStep>('username');
   const [backgroundPattern, setBackgroundPattern] = useState<keyof typeof backgroundPatterns>('checkerboard');
@@ -606,6 +606,9 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
           : await createProfile(formData);
 
         if (success) {
+          // Refresh the profile context to get the updated profile data
+          await refreshProfile();
+          
           // Track successful profile completion
           await trackProfileActivation(
             walletAddress || null,
@@ -789,19 +792,22 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
             background: '#00aa00',
             border: '3px solid #00ff00',
             color: '#fff',
-            fontSize: '14px',
+            fontSize: '13px',
             fontWeight: 'bold',
-            padding: '10px 16px',
+            padding: '12px 16px',
             borderRadius: '8px',
             cursor: 'pointer',
             boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
             textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
             width: '100%',
             maxWidth: '280px',
-            minHeight: '44px',
+            minHeight: '48px',
             whiteSpace: 'normal',
-            lineHeight: '1.2',
-            overflow: 'visible'
+            lineHeight: '1.1',
+            overflow: 'visible',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
         >
           🚀 Continue to Flunks<br/>Universe!
