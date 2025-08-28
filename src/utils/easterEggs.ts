@@ -11,6 +11,7 @@ Available commands:
 • flunks.buildMode()   - Show build mode and feature status
 • flunks.permissions() - Show app permissions debug info
 • flunks.fix()         - Fix access issues (if apps don't show)
+• flunks.crackTest()   - Test the crack-the-code tracking system
 • flunks.credits()     - Show development credits
 
 Try typing one of these commands!
@@ -167,6 +168,29 @@ ${Object.entries(info.environment).map(([key, value]) =>
       sessionStorage.setItem('flunks-access-code', 'AUTO-GRANTED-PUBLIC');
       window.dispatchEvent(new CustomEvent('flunks-access-updated'));
       console.log('✅ Access fixed! You should now see all the desktop apps. Refresh if needed.');
+    },
+
+    crackTest: () => {
+      console.log('🧪 Testing crack-the-code API...');
+      
+      // Mock test data
+      const testData = {
+        walletAddress: 'test-wallet-' + Date.now(),
+        username: 'TestUser'
+      };
+      
+      fetch('/api/crack-the-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(testData)
+      })
+      .then(res => res.json())
+      .then(result => {
+        console.log('✅ API Test Result:', result);
+      })
+      .catch(error => {
+        console.error('❌ API Test Error:', error);
+      });
     },
 
     credits: () => {

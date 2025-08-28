@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button } from 'react95';
+import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
+import { useUserProfile } from 'contexts/UserProfileContext';
 
 const SuccessContainer = styled.div`
   display: flex;
@@ -75,6 +77,46 @@ interface SuccessWindowProps {
 }
 
 const SuccessWindow: React.FC<SuccessWindowProps> = ({ onContinue }) => {
+  const { primaryWallet } = useDynamicContext();
+  const { profile } = useUserProfile();
+  const [isTracking, setIsTracking] = useState(false);
+
+  const handleCelebration = async () => {
+    setIsTracking(true);
+
+    // Track the completion if wallet is connected
+    if (primaryWallet?.address) {
+      try {
+        const response = await fetch('/api/crack-the-code', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            walletAddress: primaryWallet.address,
+            username: profile?.username || primaryWallet.address.slice(0, 8) + '...'
+          })
+        });
+
+        const result = await response.json();
+        
+        if (result.success) {
+          console.log('🎉 Achievement tracked!', result.message);
+          if (result.isFirstTime) {
+            console.log('🏆 First time code cracker!');
+          }
+        } else {
+          console.error('Failed to track achievement:', result.message);
+        }
+      } catch (error) {
+        console.error('Error tracking code crack completion:', error);
+      }
+    }
+
+    setIsTracking(false);
+    onContinue();
+  };
+
   return (
     <SuccessContainer>
       <div style={{ fontSize: '72px', marginBottom: '20px' }}>
@@ -91,8 +133,8 @@ const SuccessWindow: React.FC<SuccessWindowProps> = ({ onContinue }) => {
         You've successfully cracked the security system!
       </SuccessMessage>
       
-      <CelebrationButton onClick={onContinue}>
-        🚀 YOU DID IT! 🚀
+      <CelebrationButton onClick={handleCelebration} disabled={isTracking}>
+        {isTracking ? '📊 Recording Achievement...' : '🚀 YOU DID IT! 🚀'}
       </CelebrationButton>
       
       <div style={{ 
