@@ -493,7 +493,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         onTouchStart={() => user && handleTouchEnter('high-school')}
         onTouchEnd={handleTouchLeave}
       >
-        🏫
       </DynamicHouseIcon>
 
       <DynamicHouseIcon
@@ -614,7 +613,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         onTouchStart={() => user && handleTouchEnter('geeks-house')}
         onTouchEnd={handleTouchLeave}
       >
-        🤓
       </DynamicHouseIcon>
 
       <DynamicHouseIcon
@@ -645,7 +643,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           )
         }
       >
-        💅
       </DynamicHouseIcon>
 
       <button className={styles["close-btn"]} onClick={onClose}>✖</button>

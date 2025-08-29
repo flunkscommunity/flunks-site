@@ -105,61 +105,12 @@
   font-size: 36px;
 }
 
-/* Enhanced hover effect with 3x expansion and side panel */
-.enhanced-hover-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 30;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: auto;
-  animation: fadeInOverlay 0.3s ease-out;
-}
-
 /* Dimmed background for the map */
 .dimmed-map-background {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(2px);
-}
-
-/* Large enlarged icon overlay in center of screen */
-.enlarged-icon-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 400px;
-  height: 400px;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.3));
-  animation: enlargedIconAppear 0.4s ease-out;
-  pointer-events: auto;
-  cursor: pointer;
-}
-
-/* Special animation for high school enlarged icon */
-.enlarged-icon-overlay.high-school-enlarged {
-  animation: enlargedIconAppear 0.4s ease-out, heartbeat 2.4s ease-in-out infinite;
-  filter: drop-shadow(0 0 40px rgba(255, 255, 156, 0.5));
-}
-
-@keyframes enlargedIconAppear {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.5);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
 }
 
 /* Location info panel (replaces the old location-preview) */
