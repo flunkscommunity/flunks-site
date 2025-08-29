@@ -9,6 +9,7 @@ import { useDynamicContext, DynamicConnectButton } from '@dynamic-labs/sdk-react
 import { getUserGumBalance, getUserGumTransactions } from '../utils/gumAPI';
 import { useUserProfile } from '../contexts/UserProfileContext';
 import { useGum } from '../contexts/GumContext';
+import WeeklyObjectives from '../components/WeeklyObjectives';
 // WINDOW_IDS lives in src/fixed.ts (baseUrl set to src)
 import { WINDOW_IDS } from 'fixed';
 
@@ -1176,6 +1177,9 @@ const LockerSystemNew: React.FC = () => {
                           🍬 Your personal gum stash! Earn daily bonuses, complete challenges, 
                           and manage your gum collection from your locker.
                         </div>
+                        
+                        {/* Weekly Objectives Section */}
+                        <WeeklyObjectives />
                         
                         {/* Back to top scroll indicator removed */}
                         {/*
