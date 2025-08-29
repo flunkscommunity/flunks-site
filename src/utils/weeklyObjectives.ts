@@ -24,6 +24,7 @@ export const checkCafeteriaObjective = async (walletAddress: string): Promise<bo
   }
 
   try {
+    console.log('🔍 Checking cafeteria objective for wallet:', walletAddress);
     const { data, error } = await supabase
       .from('cafeteria_button_clicks')
       .select('*')
@@ -35,7 +36,10 @@ export const checkCafeteriaObjective = async (walletAddress: string): Promise<bo
       return false;
     }
 
-    return data && data.length > 0;
+    console.log('📊 Cafeteria data found:', data);
+    const hasClicked = data && data.length > 0;
+    console.log('✅ Cafeteria objective completed:', hasClicked);
+    return hasClicked;
   } catch (err) {
     console.error('Failed to check cafeteria objective:', err);
     return false;
@@ -50,6 +54,7 @@ export const checkCrackCodeObjective = async (walletAddress: string): Promise<bo
   }
 
   try {
+    console.log('🔍 Checking crack code objective for wallet:', walletAddress);
     const { data, error } = await supabase
       .from('crack_the_code')
       .select('*')
@@ -61,7 +66,10 @@ export const checkCrackCodeObjective = async (walletAddress: string): Promise<bo
       return false;
     }
 
-    return data && data.length > 0;
+    console.log('📊 Crack code data found:', data);
+    const hasCracked = data && data.length > 0;
+    console.log('✅ Crack code objective completed:', hasCracked);
+    return hasCracked;
   } catch (err) {
     console.error('Failed to check crack code objective:', err);
     return false;

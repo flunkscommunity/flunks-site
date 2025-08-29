@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useTimeBasedImage, isDayTime } from "utils/timeBasedImages";
 import { useAuth } from "contexts/AuthContext";
 import { awardGum } from "utils/gumAPI";
+import { trackCafeteriaButtonClick } from "utils/cafeteriaButtonTracking";
 import DigitalLock from "components/DigitalLock";
 import SuccessWindow from "components/SuccessWindow";
 
@@ -37,16 +38,32 @@ const HighSchoolMain = () => {
     
     try {
       // Get username - could be from user object or wallet address as fallback
-      const username = user?.email || walletAddress.slice(0, 8) + '...';
+      const username = user?.email || user?.username || walletAddress.slice(0, 8) + '...';
       
-      const result = await awardGum(
+      // Track the cafeteria button click in the proper table
+      const trackingResult = await trackCafeteriaButtonClick({
         walletAddress,
-        "cafeteria_visit",
-        { username }
-      );
+        username
+      });
 
-      if (result.success) {
-        alert(`🍽️ Your cafeteria visit has been recorded! +${result.earned} gum awarded!`);
+      if (trackingResult) {
+        // Also award gum for the click
+        const gumResult = await awardGum(
+          walletAddress,
+          "cafeteria_visit",
+          { username }
+        );
+
+        // Dispatch event to update objectives immediately
+        window.dispatchEvent(new CustomEvent('cafeteriaButtonClicked', { 
+          detail: { walletAddress, username } 
+        }));
+
+        if (gumResult.success) {
+          alert(`🍽️ Your cafeteria visit has been recorded! +${gumResult.earned} gum awarded!`);
+        } else {
+          alert('🍽️ Cafeteria visit recorded successfully!');
+        }
       } else {
         alert('❌ Failed to record visit. Please try again.');
       }

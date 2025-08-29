@@ -28,9 +28,12 @@ const WeeklyObjectives: React.FC<WeeklyObjectivesProps> = ({ onObjectiveComplete
   useEffect(() => {
     loadObjectives();
     
+    // Refresh every 10 seconds to catch any missed updates
+    const interval = setInterval(loadObjectives, 10000);
+    
     // Listen for objective updates
     const handleObjectiveUpdate = () => {
-      loadObjectives();
+      setTimeout(loadObjectives, 1000); // Small delay to ensure DB is updated
     };
 
     window.addEventListener('cafeteriaButtonClicked', handleObjectiveUpdate);
@@ -38,6 +41,7 @@ const WeeklyObjectives: React.FC<WeeklyObjectivesProps> = ({ onObjectiveComplete
     window.addEventListener('gumBalanceUpdated', handleObjectiveUpdate); // Also listen to gum updates
     
     return () => {
+      clearInterval(interval);
       window.removeEventListener('cafeteriaButtonClicked', handleObjectiveUpdate);
       window.removeEventListener('codeAccessed', handleObjectiveUpdate);
       window.removeEventListener('gumBalanceUpdated', handleObjectiveUpdate);
