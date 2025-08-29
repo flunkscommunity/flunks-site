@@ -263,14 +263,33 @@ const DigitalLock: React.FC<DigitalLockProps> = ({ onUnlock, onCancel }) => {
     setTimeout(async () => {
       const isSuccess = verifyCode(code);
       
-      // Track the attempt in Supabase
-      if (walletAddress) {
-        await trackDigitalLockAttempt(
-          walletAddress,
-          user?.username || null,
-          code,
-          isSuccess
-        );
+      // If successful, record in the crack_the_code table
+      if (isSuccess && walletAddress) {
+        try {
+          const response = await fetch('/api/crack-the-code', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              walletAddress,
+              username: user?.username || null,
+            }),
+          });
+
+          const result = await response.json();
+          if (result.success) {
+            console.log('✅ Code crack recorded successfully!');
+            // Dispatch event to update objectives
+            window.dispatchEvent(new CustomEvent('codeAccessed', { 
+              detail: { walletAddress, username: user?.username } 
+            }));
+          } else {
+            console.error('Failed to record code crack:', result.message);
+          }
+        } catch (error) {
+          console.error('Error recording code crack:', error);
+        }
       }
       
       if (isSuccess) {

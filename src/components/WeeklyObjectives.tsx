@@ -35,10 +35,12 @@ const WeeklyObjectives: React.FC<WeeklyObjectivesProps> = ({ onObjectiveComplete
 
     window.addEventListener('cafeteriaButtonClicked', handleObjectiveUpdate);
     window.addEventListener('codeAccessed', handleObjectiveUpdate);
+    window.addEventListener('gumBalanceUpdated', handleObjectiveUpdate); // Also listen to gum updates
     
     return () => {
       window.removeEventListener('cafeteriaButtonClicked', handleObjectiveUpdate);
       window.removeEventListener('codeAccessed', handleObjectiveUpdate);
+      window.removeEventListener('gumBalanceUpdated', handleObjectiveUpdate);
     };
   }, [primaryWallet?.address]);
 
