@@ -81,7 +81,7 @@ export const APP_PERMISSIONS: AppPermission[] = [
   {
     id: 'semester-zero',
     title: 'Semester Zero',
-    requiredLevel: ['ADMIN'],
+    requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
     description: 'Explore the virtual campus',
     buildModeFeature: 'showSemesterZero'
   },
