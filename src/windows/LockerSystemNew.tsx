@@ -984,7 +984,7 @@ const LockerSystemNew: React.FC = () => {
 
                     {/* Section 3: Bottom - GUM MANAGEMENT CENTER */}
                     <div className="locker-section" style={{
-                      height: '80vh',
+                      height: '70vh',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -1178,9 +1178,6 @@ const LockerSystemNew: React.FC = () => {
                           and manage your gum collection from your locker.
                         </div>
                         
-                        {/* Weekly Objectives Section */}
-                        <WeeklyObjectives />
-                        
                         {/* Back to top scroll indicator removed */}
                         {/*
                         <div style={{ 
@@ -1204,6 +1201,33 @@ const LockerSystemNew: React.FC = () => {
                           ⬆️ Back to top
                         </div>
                         */}
+                      </div>
+                    </div>
+
+                    {/* Section 4: Weekly Objectives Section */}
+                    <div className="locker-section" style={{
+                      height: 'auto',
+                      minHeight: '60vh',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: 'linear-gradient(180deg, rgba(74, 144, 226, 0.2) 0%, rgba(52, 73, 94, 0.1) 100%)',
+                      position: 'relative',
+                      padding: '40px 20px'
+                    }}>
+                      <div style={{
+                        background: 'rgba(52, 73, 94, 0.95)',
+                        color: 'white',
+                        padding: '25px',
+                        borderRadius: '15px',
+                        textAlign: 'center',
+                        maxWidth: '500px',
+                        width: '100%',
+                        backdropFilter: 'blur(10px)',
+                        border: '2px solid rgba(74, 144, 226, 0.3)',
+                        boxShadow: '0 8px 32px rgba(74, 144, 226, 0.3)'
+                      }}>
+                        <WeeklyObjectives />
                       </div>
                     </div>
                   </div>
