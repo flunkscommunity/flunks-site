@@ -464,186 +464,25 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         <div className={styles["map-overlay"]} />
       )}
 
-      {/* Key location icons on the map - centered and larger */}
-      <DynamicHouseIcon
-        houseId="high-school"
-        className={`${styles.icon} ${styles['extra-large']} ${styles['high-school']}`}
-        onDoubleClick={() =>
-          handleLocationAccess('high-school', () => 
-            openWindow({
-              key: WINDOW_IDS.HIGH_SCHOOL_MAIN,
-              window: (
-                <DraggableResizeableWindow
-                  windowsId={WINDOW_IDS.HIGH_SCHOOL_MAIN}
-                  headerTitle="High School"
-                  onClose={() => closeWindow(WINDOW_IDS.HIGH_SCHOOL_MAIN)}
-                  initialWidth="100%"
-                  initialHeight="100%"
-                  resizable={false}
-                >
-                  <HighSchoolMain />
-                </DraggableResizeableWindow>
-              ),
-            })
-          )
-        }
-        onClick={(e) => handleEnhancedClick('high-school', e)}
-        onMouseEnter={() => user && handleEnhancedHover('high-school')}
-        onMouseLeave={handleEnhancedLeave}
-        onTouchStart={() => user && handleTouchEnter('high-school')}
-        onTouchEnd={handleTouchLeave}
-      >
-      </DynamicHouseIcon>
-
-      <DynamicHouseIcon
-        houseId="arcade"
-        className={`${styles.icon} ${styles['extra-large']} ${styles.arcade}`}
-        onDoubleClick={() =>
-          handleLocationAccess('arcade', () => 
-            openWindow({
-              key: WINDOW_IDS.ARCADE_MAIN,
-              window: (
-                <DraggableResizeableWindow
-                  windowsId={WINDOW_IDS.ARCADE_MAIN}
-                  headerTitle="Arcade"
-                  onClose={() => closeWindow(WINDOW_IDS.ARCADE_MAIN)}
-                  initialWidth="100%"
-                  initialHeight="100%"
-                  resizable={false}
-                >
-                  <ArcadeMain />
-                </DraggableResizeableWindow>
-              ),
-            })
-          )
-        }
-        onClick={(e) => handleEnhancedClick('arcade', e)}
-        onMouseEnter={() => user && handleEnhancedHover('arcade')}
-        onMouseLeave={handleEnhancedLeave}
-        onTouchStart={() => user && handleTouchEnter('arcade')}
-        onTouchEnd={handleTouchLeave}
-      >
-      </DynamicHouseIcon>
-
-      <DynamicHouseIcon
-        houseId="jocks-house"
-        className={`${styles.icon} ${styles['extra-large']} ${styles['jocks-house']}`}
-        onDoubleClick={() =>
-          handleCliqueHouseAccess(
-            'JOCK',
-            WINDOW_IDS.JOCKS_HOUSE_MAIN,
-            (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.JOCKS_HOUSE_MAIN}
-                headerTitle="Jock's House"
-                onClose={() => closeWindow(WINDOW_IDS.JOCKS_HOUSE_MAIN)}
-                initialWidth="100%"
-                initialHeight="100%"
-                resizable={false}
-              >
-                <JocksHouseMain />
-              </DraggableResizeableWindow>
-            ),
-            "Jock's House"
-          )
-        }
-        onClick={(e) => handleEnhancedClick('jocks-house', e)}
-        onMouseEnter={() => user && handleEnhancedHover('jocks-house')}
-        onMouseLeave={handleEnhancedLeave}
-        onTouchStart={() => user && handleTouchEnter('jocks-house')}
-        onTouchEnd={handleTouchLeave}
-      >
-      </DynamicHouseIcon>
-
-      <DynamicHouseIcon
-        houseId="freaks-house"
-        className={`${styles.icon} ${styles['extra-large']} ${styles['freaks-house']}`}
-        onDoubleClick={() =>
-          handleCliqueHouseAccess(
-            'FREAK',
-            WINDOW_IDS.FREAKS_HOUSE_MAIN,
-            (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.FREAKS_HOUSE_MAIN}
-                headerTitle="Freak's House"
-                onClose={() => closeWindow(WINDOW_IDS.FREAKS_HOUSE_MAIN)}
-                initialWidth="100%"
-                initialHeight="100%"
-                resizable={false}
-              >
-                <FreaksHouseMain />
-              </DraggableResizeableWindow>
-            ),
-            "Freak's House"
-          )
-        }
-        onClick={(e) => handleEnhancedClick('freaks-house', e)}
-        onMouseEnter={() => user && handleEnhancedHover('freaks-house')}
-        onMouseLeave={handleEnhancedLeave}
-        onTouchStart={() => user && handleTouchEnter('freaks-house')}
-        onTouchEnd={handleTouchLeave}
-      >
-      </DynamicHouseIcon>
-
-      <DynamicHouseIcon
-        houseId="geeks-house"
-        className={`${styles.icon} ${styles['extra-large']} ${styles['geeks-house']}`}
-        onDoubleClick={() =>
-          handleCliqueHouseAccess(
-            'GEEK',
-            WINDOW_IDS.GEEKS_HOUSE_MAIN,
-            (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.GEEKS_HOUSE_MAIN}
-                headerTitle="Geek's House"
-                onClose={() => closeWindow(WINDOW_IDS.GEEKS_HOUSE_MAIN)}
-                initialWidth="100%"
-                initialHeight="100%"
-                resizable={false}
-              >
-                <GeeksHouseMain />
-              </DraggableResizeableWindow>
-            ),
-            "Geek's House"
-          )
-        }
-        onClick={(e) => handleEnhancedClick('geeks-house', e)}
-        onMouseEnter={() => user && handleEnhancedHover('geeks-house')}
-        onMouseLeave={handleEnhancedLeave}
-        onTouchStart={() => user && handleTouchEnter('geeks-house')}
-        onTouchEnd={handleTouchLeave}
-      >
-      </DynamicHouseIcon>
-
-      <DynamicHouseIcon
-        houseId="preps-house"
-        className={`${styles.icon} ${styles['extra-large']} ${styles['preps-house']}`}
-        onClick={(e) => handleEnhancedClick('preps-house', e)}
-        onMouseEnter={() => user && handleEnhancedHover('preps-house')}
-        onMouseLeave={handleEnhancedLeave}
-        onTouchStart={() => user && handleTouchEnter('preps-house')}
-        onTouchEnd={handleTouchLeave}
-        onDoubleClick={() =>
-          handleCliqueHouseAccess(
-            'PREP',
-            WINDOW_IDS.PREPS_HOUSE_MAIN,
-            (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.PREPS_HOUSE_MAIN}
-                headerTitle="Prep's House"
-                onClose={() => closeWindow(WINDOW_IDS.PREPS_HOUSE_MAIN)}
-                initialWidth="100%"
-                initialHeight="100%"
-                resizable={false}
-              >
-                <PrepsHouseMain />
-              </DraggableResizeableWindow>
-            ),
-            "Prep's House"
-          )
-        }
-      >
-      </DynamicHouseIcon>
+      {/* Large centered icons that appear when hovering bottom navigation */}
+      {!isMobile && hovered === 'high-school' && (
+        <div className={`${styles["map-location-hover"]} ${styles["high-school"]}`} />
+      )}
+      {!isMobile && hovered === 'arcade' && (
+        <div className={`${styles["map-location-hover"]} ${styles["arcade"]}`} />
+      )}
+      {!isMobile && hovered === 'jocks-house' && (
+        <div className={`${styles["map-location-hover"]} ${styles["jocks-house"]}`} />
+      )}
+      {!isMobile && hovered === 'freaks-house' && (
+        <div className={`${styles["map-location-hover"]} ${styles["freaks-house"]}`} />
+      )}
+      {!isMobile && hovered === 'geeks-house' && (
+        <div className={`${styles["map-location-hover"]} ${styles["geeks-house"]}`} />
+      )}
+      {!isMobile && hovered === 'preps-house' && (
+        <div className={`${styles["map-location-hover"]} ${styles["preps-house"]}`} />
+      )}
 
       <button className={styles["close-btn"]} onClick={onClose}>✖</button>
       </div>

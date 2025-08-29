@@ -593,6 +593,32 @@
   transform: translate(-50%, -50%);
 }
 
+/* Background images for each location */
+.map-location-hover.high-school {
+  background-image: url('/images/icons/high-school-icon.png');
+  animation: mapLocationPulse 2s ease-in-out infinite, heartbeat 2.4s ease-in-out infinite;
+}
+
+.map-location-hover.arcade {
+  background-image: url('/images/icons/arcade-icon.png');
+}
+
+.map-location-hover.jocks-house {
+  background-image: url('/images/icons/jocks-house-icon.png');
+}
+
+.map-location-hover.freaks-house {
+  background-image: url('/images/icons/freaks-house-icon.png');
+}
+
+.map-location-hover.geeks-house {
+  background-image: url('/images/icons/geeks-house-icon.png');
+}
+
+.map-location-hover.preps-house {
+  background-image: url('/images/icons/preps-house-icon.png');
+}
+
 @keyframes mapLocationPulse {
   0%, 100% { 
     transform: translate(-50%, -50%) scale(1);
@@ -602,12 +628,6 @@
     transform: translate(-50%, -50%) scale(1.1);
     filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.8));
   }
-}
-
-/* Positioning for each location's large hover icon on the actual map */
-/* Special heartbeat animation for high school when hovering */
-.map-location-hover.high-school {
-  animation: mapLocationPulse 2s ease-in-out infinite, heartbeat 2.4s ease-in-out infinite;
 }
 
 .map-overlay.dimmed {
@@ -875,6 +895,7 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  background-image: url('/images/icons/high-school-icon.png');
   z-index: 2;
   animation: highSchoolPulse 2s ease-in-out infinite, highSchoolAppear 0.4s ease-out;
   filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.6));
@@ -892,6 +913,7 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  background-image: url('/images/icons/arcade-icon.png');
   z-index: 2;
   animation: arcadePulse 2s ease-in-out infinite, arcadeAppear 0.4s ease-out;
   filter: drop-shadow(0 0 20px rgba(147, 51, 234, 0.6));
@@ -899,6 +921,78 @@
 }
 
 .large-arcade-icon:hover {
+  transform: scale(1.05);
+}
+
+.large-jocks-house-icon {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('/images/icons/jocks-house-icon.png');
+  z-index: 2;
+  animation: jocksHousePulse 2s ease-in-out infinite, jocksHouseAppear 0.4s ease-out;
+  filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.6));
+  transition: transform 0.2s ease;
+}
+
+.large-jocks-house-icon:hover {
+  transform: scale(1.05);
+}
+
+.large-freaks-house-icon {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('/images/icons/freaks-house-icon.png');
+  z-index: 2;
+  animation: freaksHousePulse 2s ease-in-out infinite, freaksHouseAppear 0.4s ease-out;
+  filter: drop-shadow(0 0 20px rgba(128, 0, 128, 0.6));
+  transition: transform 0.2s ease;
+}
+
+.large-freaks-house-icon:hover {
+  transform: scale(1.05);
+}
+
+.large-geeks-house-icon {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('/images/icons/geeks-house-icon.png');
+  z-index: 2;
+  animation: geeksHousePulse 2s ease-in-out infinite, geeksHouseAppear 0.4s ease-out;
+  filter: drop-shadow(0 0 20px rgba(76, 175, 80, 0.6));
+  transition: transform 0.2s ease;
+}
+
+.large-geeks-house-icon:hover {
+  transform: scale(1.05);
+}
+
+.large-preps-house-icon {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('/images/icons/preps-house-icon.png');
+  z-index: 2;
+  animation: prepsHousePulse 2s ease-in-out infinite, prepsHouseAppear 0.4s ease-out;
+  filter: drop-shadow(0 0 20px rgba(33, 150, 243, 0.6));
+  transition: transform 0.2s ease;
+}
+
+.large-preps-house-icon:hover {
   transform: scale(1.05);
 }
 
@@ -936,6 +1030,94 @@
 }
 
 @keyframes arcadeAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes jocksHousePulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.6));
+  }
+  50% {
+    transform: scale(1.02);
+    filter: drop-shadow(0 0 30px rgba(255, 165, 0, 0.8));
+  }
+}
+
+@keyframes jocksHouseAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes freaksHousePulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 20px rgba(128, 0, 128, 0.6));
+  }
+  50% {
+    transform: scale(1.02);
+    filter: drop-shadow(0 0 30px rgba(128, 0, 128, 0.8));
+  }
+}
+
+@keyframes freaksHouseAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes geeksHousePulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 20px rgba(76, 175, 80, 0.6));
+  }
+  50% {
+    transform: scale(1.02);
+    filter: drop-shadow(0 0 30px rgba(76, 175, 80, 0.8));
+  }
+}
+
+@keyframes geeksHouseAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes prepsHousePulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 20px rgba(33, 150, 243, 0.6));
+  }
+  50% {
+    transform: scale(1.02);
+    filter: drop-shadow(0 0 30px rgba(33, 150, 243, 0.8));
+  }
+}
+
+@keyframes prepsHouseAppear {
   0% {
     opacity: 0;
     transform: scale(0.8);
