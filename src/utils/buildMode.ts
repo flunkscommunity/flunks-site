@@ -44,7 +44,7 @@ const BUILD_MODE_CONFIGS: Record<BuildMode, BuildModeConfig> = {
   // Public mode - what beta users see (limited feature set)
   public: {
     // Core apps that should be visible to public/beta users
-    showSemesterZero: false,
+    showSemesterZero: true,
     showMemeManager: false,
     showMyPlace: false,
     showFlappyFlunk: false,
