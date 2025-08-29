@@ -91,12 +91,34 @@ const WeeklyObjectives: React.FC<WeeklyObjectivesProps> = ({ onObjectiveComplete
         marginBottom: '20px'
       }}>
         <div style={{
-          fontSize: '20px',
-          fontWeight: 'bold',
-          color: '#4a90e2',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           marginBottom: '8px'
         }}>
-          📋 Semester Zero: Finding Flunko
+          <div style={{
+            fontSize: '20px',
+            fontWeight: 'bold',
+            color: '#4a90e2'
+          }}>
+            📋 Semester Zero: Finding Flunko
+          </div>
+          <button
+            onClick={loadObjectives}
+            disabled={loading}
+            style={{
+              background: 'rgba(74, 144, 226, 0.2)',
+              border: '1px solid #4a90e2',
+              borderRadius: '4px',
+              color: '#4a90e2',
+              padding: '4px 8px',
+              fontSize: '12px',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              opacity: loading ? 0.5 : 1
+            }}
+          >
+            {loading ? '⏳' : '🔄'} Refresh
+          </button>
         </div>
         <div style={{
           fontSize: '14px',

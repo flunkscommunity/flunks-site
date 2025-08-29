@@ -295,43 +295,13 @@ const SuccessWindow: React.FC<SuccessWindowProps> = ({ onContinue }) => {
   const handleCelebration = async () => {
     setIsTracking(true);
     
-    console.log('🎯 SuccessWindow: Starting achievement tracking...');
+    console.log('🎯 SuccessWindow: Code crack celebration!');
     console.log('🎯 Wallet Address:', primaryWallet?.address);
     console.log('🎯 Username:', profile?.username);
     
-    // Track the successful code crack in crack_the_code table
-    if (primaryWallet?.address) {
-      try {
-        console.log('🎯 Making API call to /api/crack-the-code...');
-        const response = await fetch('/api/crack-the-code', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            walletAddress: primaryWallet.address,
-            username: profile?.username || primaryWallet.address.slice(0, 8) + '...'
-          })
-        });
-
-        const result = await response.json();
-        console.log('🎯 API Response:', result);
-        
-        if (result.success) {
-          console.log('🎉 Achievement tracked!', result.message);
-          if (result.isFirstTime) {
-            console.log('🏆 First time code cracker!');
-          }
-        } else {
-          console.error('Failed to track achievement:', result.message);
-        }
-      } catch (error) {
-        console.error('Error tracking code crack completion:', error);
-      }
-    } else {
-      console.warn('🎯 No wallet address available for tracking');
-    }
-
+    // Note: Tracking is handled by DigitalLock component, not here
+    // This prevents duplicate API calls and conflicts
+    
     setIsTracking(false);
     onContinue();
   };  return (
