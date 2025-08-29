@@ -106,44 +106,10 @@ export function useTimeBasedImage(
 
 // Semester Zero location configurations with day/night switching
 export const HOUSE_CONFIGS: Record<string, TimeBasedImage> = {
-  'jocks-house': {
-    id: 'jocks-house',
-    dayImage: '/images/icons/jocks-house-day.png',
-    nightImage: '/images/icons/jocks-house-night.png',
-    description: 'Jocks House - Day & Night'
-  },
-  'preps-house': {
-    id: 'preps-house',
-    dayImage: '/images/icons/preps-house-day.png',
-    nightImage: '/images/icons/preps-house-night.png',
-    description: 'Preps House - Day & Night'
-  },
-  'geeks-house': {
-    id: 'geeks-house',
-    dayImage: '/images/icons/geeks-house-day.png',
-    nightImage: '/images/icons/geeks-house-night.png',
-    description: 'Geeks House - Day & Night'
-  },
-  'freaks-house': {
-    id: 'freaks-house',
-    dayImage: '/images/icons/freaks-house-day.png',
-    nightImage: '/images/icons/freaks-house-night.png',
-    description: 'Freaks House - Day & Night'
-  }
+  // Removed all house configs to use standard 300x300 icons instead
 };
 
 // Building configurations with day/night switching
 export const BUILDING_CONFIGS: Record<string, TimeBasedImage> = {
-  'arcade': {
-    id: 'arcade',
-    dayImage: '/images/icons/arcade-day.png',
-    nightImage: '/images/icons/arcade-night.png',
-    description: 'Arcade - Day & Night'
-  },
-  'high-school': {
-    id: 'high-school',
-    dayImage: '/images/icons/school-day.png',
-    nightImage: '/images/icons/school-night.png',
-    description: 'High School - Day & Night'
-  }
+  // Removed all building configs to use standard 300x300 icons instead
 };

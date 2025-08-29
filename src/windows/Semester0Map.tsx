@@ -464,16 +464,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
         <div className={styles["map-overlay"]} />
       )}
 
-      {/* Large PNG icons over their actual map locations when hovering bottom nav */}
-      {!isMobile && hovered && !enhancedHover && (
-        <div 
-          className={`${styles["map-location-hover"]} ${styles[hovered]}`}
-          style={{ 
-            backgroundImage: `url(/images/icons/${hovered}-icon.png)`,
-          }}
-        />
-      )}
-
       {/* Key location icons on the map - centered and larger */}
       <DynamicHouseIcon
         houseId="high-school"
