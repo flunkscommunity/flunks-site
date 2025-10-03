@@ -125,7 +125,7 @@ const PlayIcon = styled.div`
 // Sample chapter data - this would come from your game state/progress
 const sampleChapters: Chapter[] = [
   {
-    id: 'homecoming',
+    id: 'story-so-far',
     title: 'The Story So Far 📖',
     subtitle: 'The sky looked different back then. Maybe it was brighter… or maybe I just had younger eyes.',
     unlocked: true,
