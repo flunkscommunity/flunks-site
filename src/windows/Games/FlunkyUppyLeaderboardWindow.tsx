@@ -1,4 +1,5 @@
 import useSWR from 'swr';
+import { useEffect } from 'react';
 import {
   Frame,
   Table,
@@ -34,7 +35,19 @@ const FlunkyUppyLeaderboardWindow: React.FC = () => {
     data: response,
     error,
     isValidating,
-  } = useSWR<LeaderboardResponse>('/api/flunky-uppy-leaderboard', fetcher);
+    mutate,
+  } = useSWR<LeaderboardResponse>('/api/flunky-uppy-leaderboard', fetcher, {
+    revalidateOnFocus: true,
+    dedupingInterval: 2000,
+  });
+
+  // Lightweight polling to keep the board current after repeated submissions
+  useEffect(() => {
+    const id = setInterval(() => {
+      mutate();
+    }, 10000); // every 10s
+    return () => clearInterval(id);
+  }, [mutate]);
 
   const isLoading = !response && !error;
   const scores = response?.leaderboard || [];

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSWRConfig } from 'swr';
 import * as fcl from '@onflow/fcl';
 import styled from 'styled-components';
 import { useWindowsContext } from 'contexts/WindowsContext';
@@ -161,6 +162,7 @@ const FlunkJumpWindow = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [sfxEnabled, setSfxEnabled] = useState(true);
   const { openWindow, closeWindow } = useWindowsContext();
+  const { mutate } = useSWRConfig();
 
   const openLeaderboard = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent triggering the start game
@@ -223,6 +225,13 @@ const FlunkJumpWindow = () => {
           })
           .then(data => {
             console.log('✅ Flunky Uppy score submitted successfully to leaderboard:', data);
+            // Proactively refresh the leaderboard cache so repeated higher scores appear immediately
+            try {
+              mutate('/api/flunky-uppy-leaderboard');
+              console.log('🔄 Leaderboard revalidated after score submission');
+            } catch (e) {
+              console.log('⚠️ Failed to trigger leaderboard refresh:', e);
+            }
           })
           .catch(error => {
             console.error('❌ Flunky Uppy score submission failed:', error);
