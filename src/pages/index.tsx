@@ -798,7 +798,7 @@ const windowsMemod = useMemo(() => (
         {/* 24. Alexandria Library - On-Chain Books */}
         <ConditionalAppIcon
           appId="alexandria-library"
-          title="Library"
+          title="Alexandria Library"
           icon="/images/icons/alexandria-library-icon.png"
           onDoubleClick={() => openWindow({
             key: WINDOW_IDS.ALEXANDRIA_LIBRARY,
