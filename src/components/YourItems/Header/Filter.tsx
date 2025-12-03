@@ -26,6 +26,8 @@ const YourItemsGridFilter = () => {
         backgroundPosition: "center",
         backgroundSize: "cover",
         backgroundImage: BG_IMG_PATTERN,
+        position: 'relative',
+        zIndex: 10,
       }}
     >
       <Select

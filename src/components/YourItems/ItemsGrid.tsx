@@ -595,13 +595,13 @@ const ItemsGrid: React.FC = () => {
       {!activeItem && !noItems && (
         <CustomStyledScrollView
           ref={scrollViewRef}
-          className="!p-0 !w-full max-w-full !m-0 [&>div]:!p-0 relative"
+          className="!p-0 !w-full max-w-full !m-0 [&>div]:!p-0 relative flex-1 min-h-0"
           data-scroll-container="true"
           style={{
-            height: activeItem ? "100%" : "calc(100% - 152px)",
+            overflow: 'auto',
           }}
         >
-          <ScrollViewWithBackground>
+          <ScrollViewWithBackground style={{ minHeight: '100%' }}>
             {viewType === "grid" && (
               <GridedView
                 // @ts-ignore - Type conversion handled in component

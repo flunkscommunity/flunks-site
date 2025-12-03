@@ -79,14 +79,9 @@ async function fetchBackpackFromBlockchain(tokenId: number): Promise<ClaimedBack
       };
     }
     
-    // If not found in admin account, construct a fallback URL
-    // Backpacks use IPFS URLs typically
-    return {
-      templateId: String(tokenId),
-      metadata: {
-        uri: `https://flunks.mypinata.cloud/ipfs/QmBackpack/${tokenId}.png`
-      }
-    };
+    // If not found in admin account, return null to indicate no data available
+    // The UI will show a loading/placeholder state
+    return null;
   } catch (error) {
     console.error('Error fetching backpack metadata:', error);
     // Return a placeholder so the UI doesn't hang
