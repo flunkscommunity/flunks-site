@@ -1,5 +1,4 @@
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
-import { useUsersControllerGetUserNftsByWalletAddress } from "generated/api/users/users";
 import {
   Anchor,
   Frame,

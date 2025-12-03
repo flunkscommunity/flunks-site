@@ -1,4 +1,3 @@
-import { MarketplaceIndividualNftDto } from "generated/models";
 import { Button, Frame, Separator } from "react95";
 import NavMenu from "./ItemNavMenu";
 import ImageDisplay from "./ItemImageDisplay";

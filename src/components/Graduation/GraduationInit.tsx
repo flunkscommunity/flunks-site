@@ -13,7 +13,6 @@ import {
   CustomScrollArea,
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
-import { MarketplaceIndividualNftDto } from "generated/models";
 import { NftItem } from "components/YourItems/ItemsGrid";
 import { ObjectDetails } from "contexts/StakingContext";
 import { usePaginatedItems } from "contexts/UserPaginatedItems";

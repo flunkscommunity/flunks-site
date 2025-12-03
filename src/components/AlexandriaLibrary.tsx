@@ -393,6 +393,37 @@ const Paragraph = styled.p`
   animation: ${fadeIn} 0.5s ease-out;
 `;
 
+const MangaImage = styled.img`
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 10px auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+`;
+
+const MangaContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+`;
+
+// Helper: Check if a string is base64 encoded image data
+function isBase64Image(str: string): boolean {
+  if (!str || str.length < 100) return false;
+  const base64Pattern = /^[A-Za-z0-9+/=]+$/;
+  // Images when base64 encoded are typically > 1KB
+  return base64Pattern.test(str) && str.length > 1000;
+}
+
+// Helper: Detect image format from base64
+function detectImageFormat(base64: string): 'jpeg' | 'png' {
+  if (base64.startsWith('/9j/')) return 'jpeg';
+  if (base64.startsWith('iVBORw0KGgo')) return 'png';
+  return 'jpeg'; // Default
+}
+
 const LoadingText = styled.div`
   text-align: center;
   padding: 40px;
@@ -488,6 +519,9 @@ fun main(bookTitle: String, chapterTitle: String, paragraphIndex: Int): String  
 }   
 `;
 
+// Genres to exclude (manga/comics require special image loading)
+const EXCLUDED_GENRES = ['Manga', 'Comics', 'Graphic Novel'];
+
 // Main Component
 const AlexandriaLibrary: React.FC = () => {
   const [genresWithCounts, setGenresWithCounts] = useState<GenreWithCount[]>([]);
@@ -545,16 +579,21 @@ const AlexandriaLibrary: React.FC = () => {
         }));
         
         // Sort genres: ones with books first, then alphabetically
-        genreData.sort((a, b) => {
+        // Also filter out excluded genres (manga etc)
+        const filteredGenres = genreData.filter(g => !EXCLUDED_GENRES.includes(g.name));
+        filteredGenres.sort((a, b) => {
           if (a.bookCount > 0 && b.bookCount === 0) return -1;
           if (a.bookCount === 0 && b.bookCount > 0) return 1;
           return a.name.localeCompare(b.name);
         });
         
-        setGenresWithCounts(genreData);
-        setAllBooks(allBooksData);
+        setGenresWithCounts(filteredGenres);
         
-        console.log('📚 Alexandria: Total books loaded:', allBooksData.length);
+        // Filter out books from excluded genres
+        const filteredBooks = allBooksData.filter(b => !EXCLUDED_GENRES.includes(b.genre));
+        setAllBooks(filteredBooks);
+        
+        console.log('📚 Alexandria: Total books loaded:', filteredBooks.length, '(excluded manga/comics)');
         
       } catch (error) {
         console.error('📚 Alexandria: Error fetching data:', error);
@@ -696,9 +735,27 @@ const AlexandriaLibrary: React.FC = () => {
             ) : currentChapter.paragraphs && currentChapter.paragraphs.length > 0 ? (
               <>
                 <ChapterTitle>{currentChapter.title}</ChapterTitle>
-                {currentChapter.paragraphs.map((para, idx) => (
-                  <Paragraph key={idx}>{para}</Paragraph>
-                ))}
+                {/* Check if this is image content (manga) */}
+                {currentChapter.paragraphs.length > 0 && isBase64Image(currentChapter.paragraphs[0]) ? (
+                  <MangaContainer>
+                    {currentChapter.paragraphs.map((para, idx) => {
+                      const format = detectImageFormat(para);
+                      const mimeType = format === 'png' ? 'image/png' : 'image/jpeg';
+                      return (
+                        <MangaImage
+                          key={idx}
+                          src={`data:${mimeType};base64,${para}`}
+                          alt={`${currentChapter.title} - Page ${idx + 1}`}
+                          loading="lazy"
+                        />
+                      );
+                    })}
+                  </MangaContainer>
+                ) : (
+                  currentChapter.paragraphs.map((para, idx) => (
+                    <Paragraph key={idx}>{para}</Paragraph>
+                  ))
+                )}
               </>
             ) : (
               <EmptyState>

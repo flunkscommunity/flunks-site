@@ -11,9 +11,93 @@ import {
   CustomScrollArea,
   CustomStyledScrollView,
 } from "components/CustomStyledScrollView";
-import { MarketplaceIndividualNftDto } from "generated/models";
 import { NftItem } from "components/YourItems/ItemsGrid";
 import { ObjectDetails } from "contexts/StakingContext";
+import * as fcl from "@onflow/fcl";
+
+// Type for claimed backpack display data
+interface ClaimedBackpackData {
+  templateId: string;
+  metadata: {
+    uri: string;
+  };
+}
+
+// Script to fetch backpack metadata directly from the blockchain
+const GET_BACKPACK_METADATA_SCRIPT = `
+import Backpack from 0x807c3d470888cc48
+import MetadataViews from 0x1d7e57aa55817448
+
+access(all) fun main(tokenID: UInt64): {String: String}? {
+    // The admin account holds all minted backpacks before they're claimed
+    let adminAddress: Address = 0x807c3d470888cc48
+    let account = getAccount(adminAddress)
+    
+    let collectionRef = account.capabilities.borrow<&Backpack.Collection>(Backpack.CollectionPublicPath)
+    
+    if collectionRef == nil {
+        return nil
+    }
+    
+    let ids = collectionRef!.getIDs()
+    if !ids.contains(tokenID) {
+        return nil
+    }
+    
+    let nft = collectionRef!.borrowNFT(tokenID)
+    if nft == nil {
+        return nil
+    }
+    
+    var result: {String: String} = {}
+    result["tokenID"] = tokenID.toString()
+    
+    if let display = nft!.resolveView(Type<MetadataViews.Display>()) as? MetadataViews.Display {
+        result["name"] = display.name
+        result["description"] = display.description
+        result["thumbnail"] = display.thumbnail.uri()
+    }
+    
+    return result
+}
+`;
+
+// Function to fetch backpack data from blockchain
+async function fetchBackpackFromBlockchain(tokenId: number): Promise<ClaimedBackpackData | null> {
+  try {
+    const result = await fcl.query({
+      cadence: GET_BACKPACK_METADATA_SCRIPT,
+      args: (arg: any, t: any) => [arg(String(tokenId), t.UInt64)]
+    });
+    
+    if (result && result.thumbnail) {
+      return {
+        templateId: result.tokenID || String(tokenId),
+        metadata: {
+          uri: result.thumbnail
+        }
+      };
+    }
+    
+    // If not found in admin account, construct a fallback URL
+    // Backpacks use IPFS URLs typically
+    return {
+      templateId: String(tokenId),
+      metadata: {
+        uri: `https://flunks.mypinata.cloud/ipfs/QmBackpack/${tokenId}.png`
+      }
+    };
+  } catch (error) {
+    console.error('Error fetching backpack metadata:', error);
+    // Return a placeholder so the UI doesn't hang
+    return {
+      templateId: String(tokenId),
+      metadata: {
+        uri: '/images/backpack-placeholder.png'
+      }
+    };
+  }
+}
 
 interface Props {
   nft: ObjectDetails & { pixelUrl: string };
@@ -49,7 +133,7 @@ const ClaimFormForm: React.FC<Props> = (props) => {
   } = nft;
   const { url: uri } = metadata.thumbnail;
   const { flunksData, refreshClaimData } = useBackpackClaimed();
-  const [claimedItem, setClaimedItem] = useState<MarketplaceIndividualNftDto>();
+  const [claimedItem, setClaimedItem] = useState<ClaimedBackpackData>();
 
   const { executeTx, state, resetState } = useFclTransactionContext();
   const [loading, setLoading] = useState(false);
@@ -63,12 +147,11 @@ const ClaimFormForm: React.FC<Props> = (props) => {
     setLoading(true);
     setTimeout(
       () =>
-        collectionControllerGetNftByCollectionNameAndTokenId(
-          "backpack",
-          Number(claimedEvent.backpackTokenID)
-        )
+        fetchBackpackFromBlockchain(Number(claimedEvent.backpackTokenID))
           .then((res) => {
-            setClaimedItem(res.data);
+            if (res) {
+              setClaimedItem(res);
+            }
           })
           .finally(() => {
             setLoading(false);

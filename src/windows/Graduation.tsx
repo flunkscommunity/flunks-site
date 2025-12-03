@@ -4,7 +4,6 @@ import { NftItem } from "components/YourItems/ItemsGrid";
 import { FclTransactionProvider } from "contexts/FclTransactionContext";
 import { ObjectDetails } from "contexts/StakingContext";
 import { useWindowsContext } from "contexts/WindowsContext";
-import { MarketplaceIndividualNftDto } from "generated/models";
 
 interface Props {
   flunk: ObjectDetails & { pixelUrl: string };

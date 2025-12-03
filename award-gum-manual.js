@@ -11,7 +11,7 @@ const supabase = createClient(
 );
 
 async function awardGum() {
-  const wallet = '0x74f3df83a9a511a0';
+  const wallet = '0x1bd0081d0cc23e56';
   const amount = 500;
   
   console.log('💰 Awarding 500 GUM to:', wallet);
