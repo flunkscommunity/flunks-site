@@ -625,9 +625,51 @@ const AlexandriaLibrary: React.FC = () => {
         args: (arg: any, t: any) => [arg(book.title, t.String)]
       });
       
-      console.log('📚 Alexandria: Chapters:', result);
+      console.log('📚 Alexandria: Raw chapters:', result);
       
-      const chapterList = (result || []).map((title: string) => ({
+      // Sort chapters - handle various naming formats
+      const sortedTitles = [...(result || [])].sort((a: string, b: string) => {
+        // Extract chapter numbers from various formats
+        // "Chapter 1", "Chapter 01", "1", "01", "Ch. 1", "Part 1", etc.
+        const extractNumber = (str: string): number => {
+          // Look for various patterns with numbers
+          const patterns = [
+            /chapter\s*(\d+)/i,
+            /ch\.?\s*(\d+)/i,
+            /part\s*(\d+)/i,
+            /^(\d+)$/,
+            /^(\d+)[.:]/,
+            /(\d+)/  // Fallback: just find any number
+          ];
+          
+          for (const pattern of patterns) {
+            const match = str.match(pattern);
+            if (match) {
+              return parseInt(match[1], 10);
+            }
+          }
+          return Infinity; // No number found, sort to end
+        };
+        
+        const numA = extractNumber(a);
+        const numB = extractNumber(b);
+        
+        // If both have numbers, sort numerically
+        if (numA !== Infinity && numB !== Infinity) {
+          return numA - numB;
+        }
+        
+        // If only one has a number, prioritize the one with number
+        if (numA !== Infinity) return -1;
+        if (numB !== Infinity) return 1;
+        
+        // Fallback to alphabetical
+        return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+      });
+      
+      console.log('📚 Alexandria: Sorted chapters:', sortedTitles);
+      
+      const chapterList = sortedTitles.map((title: string) => ({
         title,
         paragraphs: null
       }));
@@ -641,12 +683,19 @@ const AlexandriaLibrary: React.FC = () => {
     }
   }, []);
 
-  // Fetch chapter content
+  // Fetch chapter content when chapter selection changes
   useEffect(() => {
-    if (!selectedBook || selectedChapterIdx === null || !chapters[selectedChapterIdx]) return;
+    // Early returns for invalid state
+    if (!selectedBook || selectedChapterIdx === null) return;
+    if (chapters.length === 0 || !chapters[selectedChapterIdx]) return;
     
     const chapter = chapters[selectedChapterIdx];
     if (chapter.paragraphs !== null) return; // Already loaded
+    
+    // Capture the current values to use in the async function
+    const currentChapterIdx = selectedChapterIdx;
+    const currentChapterTitle = chapter.title;
+    const currentBookTitle = selectedBook.title;
     
     const fetchContent = async () => {
       setLoadingChapter(true);
@@ -655,14 +704,14 @@ const AlexandriaLibrary: React.FC = () => {
       let index = 0;
       
       try {
-        console.log('📚 Alexandria: Loading paragraphs for:', chapter.title);
+        console.log('📚 Alexandria: Loading paragraphs for:', currentChapterTitle);
         while (consecutiveEmpty < 3 && index < 200) {  // Max 200 paragraphs safety limit
           try {
             const para = await fcl.query({
               cadence: getChapterParagraphScript,
               args: (arg: any, t: any) => [
-                arg(selectedBook.title, t.String),
-                arg(chapter.title, t.String),
+                arg(currentBookTitle, t.String),
+                arg(currentChapterTitle, t.String),
                 arg(String(index), t.Int)
               ]
             });
@@ -679,14 +728,16 @@ const AlexandriaLibrary: React.FC = () => {
           index++;
         }
         
-        console.log('📚 Alexandria: Loaded', paragraphs.length, 'paragraphs');
+        console.log('📚 Alexandria: Loaded', paragraphs.length, 'paragraphs for', currentChapterTitle);
         
         setChapters(prev => {
           const updated = [...prev];
-          updated[selectedChapterIdx] = {
-            ...updated[selectedChapterIdx],
-            paragraphs
-          };
+          if (updated[currentChapterIdx]) {
+            updated[currentChapterIdx] = {
+              ...updated[currentChapterIdx],
+              paragraphs
+            };
+          }
           return updated;
         });
       } catch (error) {
@@ -697,7 +748,7 @@ const AlexandriaLibrary: React.FC = () => {
     };
     
     fetchContent();
-  }, [selectedBook, selectedChapterIdx, chapters]);
+  }, [selectedBook, selectedChapterIdx, chapters.length]); // Use chapters.length to trigger when chapters are loaded
 
   // Render Reader View
   if (selectedBook) {
