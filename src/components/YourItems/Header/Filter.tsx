@@ -2,6 +2,23 @@ import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { usePaginatedItems } from "contexts/UserPaginatedItems";
 import { useState } from "react";
 import { Button, Frame, Select } from "react95";
+import styled from "styled-components";
+
+// Styled wrapper to ensure dropdown appears above other content
+const SelectWrapper = styled.div`
+  position: relative;
+  z-index: 1000;
+  
+  /* Ensure the dropdown menu appears above everything */
+  & > div {
+    position: relative;
+  }
+  
+  /* Target the react95 Select dropdown */
+  ul {
+    z-index: 9999 !important;
+  }
+`;
 
 const YourItemsGridFilter = () => {
   const [activeCollection, setActiveCollection] = useState({
@@ -27,9 +44,10 @@ const YourItemsGridFilter = () => {
         backgroundSize: "cover",
         backgroundImage: BG_IMG_PATTERN,
         position: 'relative',
-        zIndex: 10,
+        zIndex: 100,
       }}
     >
+      <SelectWrapper>
       <Select
         defaultValue={activeCollection.value}
         options={[
@@ -46,6 +64,7 @@ const YourItemsGridFilter = () => {
         disabled={isDisabled}
         variant="default"
       />
+      </SelectWrapper>
 
       <div className="h-full flex gap-1">
         <Button

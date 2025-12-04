@@ -599,6 +599,7 @@ const ItemsGrid: React.FC = () => {
           data-scroll-container="true"
           style={{
             overflow: 'auto',
+            zIndex: 1,
           }}
         >
           <ScrollViewWithBackground style={{ minHeight: '100%' }}>

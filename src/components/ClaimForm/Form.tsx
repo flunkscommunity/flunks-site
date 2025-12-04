@@ -159,7 +159,11 @@ const ClaimFormForm: React.FC<Props> = (props) => {
     if (state.txStatus === TX_STATUS.SUCCESS) {
       refreshClaimData();
     }
-  }, [state]);
+    // If we get an "already claimed" error, refresh the data to show the claimed backpack
+    if (state.txStatus === TX_STATUS.ERROR && state.error?.message?.includes('already claimed')) {
+      refreshClaimData();
+    }
+  }, [state, refreshClaimData]);
 
   const locations = {
     geek: "Computer lab",
@@ -362,7 +366,7 @@ const ClaimFormForm: React.FC<Props> = (props) => {
                 </div>
               </Stack>
 
-              {!claimedItem && !loading && (
+              {!claimedItem && !loading && !claimedEvent && (
                 <div
                   style={{
                     marginTop: "2rem",
@@ -382,11 +386,28 @@ const ClaimFormForm: React.FC<Props> = (props) => {
                     <P
                       style={{
                         color: "red",
+                        marginTop: "0.5rem",
                       }}
                     >
-                      Something went wrong, please try again..
+                      {state.error?.message?.includes('already claimed') 
+                        ? 'This backpack has already been claimed! Refreshing data...'
+                        : 'Something went wrong, please try again..'}
                     </P>
                   )}
+                </div>
+              )}
+              {claimedEvent && !claimedItem && !loading && (
+                <div
+                  style={{
+                    marginTop: "1rem",
+                    padding: "1rem",
+                    background: "rgba(0,128,0,0.1)",
+                    border: "2px solid green",
+                  }}
+                >
+                  <P style={{ color: "green" }}>
+                    ✓ Backpack already claimed! Loading details...
+                  </P>
                 </div>
               )}
             </GroupBox>
