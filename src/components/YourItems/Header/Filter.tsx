@@ -1,30 +1,10 @@
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { usePaginatedItems } from "contexts/UserPaginatedItems";
 import { useState } from "react";
-import { Button, Frame, Select } from "react95";
-import styled from "styled-components";
-
-// Styled wrapper to ensure dropdown appears above other content
-const SelectWrapper = styled.div`
-  position: relative;
-  z-index: 1000;
-  
-  /* Ensure the dropdown menu appears above everything */
-  & > div {
-    position: relative;
-  }
-  
-  /* Target the react95 Select dropdown */
-  ul {
-    z-index: 9999 !important;
-  }
-`;
+import { Button, Frame, SelectNative } from "react95";
 
 const YourItemsGridFilter = () => {
-  const [activeCollection, setActiveCollection] = useState({
-    value: 0,
-    label: "Flunks",
-  });
+  const [activeCollection, setActiveCollection] = useState("flunks");
   const { setFilter, flunksCount, backpacksCount, viewType, setViewType } =
     usePaginatedItems();
   const { primaryWallet } = useDynamicContext();
@@ -43,28 +23,22 @@ const YourItemsGridFilter = () => {
         backgroundPosition: "center",
         backgroundSize: "cover",
         backgroundImage: BG_IMG_PATTERN,
-        position: 'relative',
-        zIndex: 100,
       }}
     >
-      <SelectWrapper>
-      <Select
-        defaultValue={activeCollection.value}
+      <SelectNative
+        value={activeCollection}
         options={[
-          { value: 0, label: "Flunks" },
-          { value: 1, label: "Backpacks" },
+          { value: "flunks", label: "Flunks" },
+          { value: "backpacks", label: "Backpacks" },
         ]}
-        width={140}
         onChange={(e) => {
-          // @ts-ignore
-          setActiveCollection(e);
-
-          setFilter(e.label.toLowerCase() as "flunks" | "backpacks");
+          const value = e.target.value as "flunks" | "backpacks";
+          setActiveCollection(value);
+          setFilter(value);
         }}
         disabled={isDisabled}
-        variant="default"
+        style={{ width: 140 }}
       />
-      </SelectWrapper>
 
       <div className="h-full flex gap-1">
         <Button

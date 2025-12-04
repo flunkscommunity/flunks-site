@@ -23,15 +23,13 @@ interface ClaimedBackpackData {
   };
 }
 
-// Script to fetch backpack metadata directly from the blockchain
+// Script to fetch backpack metadata from the owner's wallet (after claim)
 const GET_BACKPACK_METADATA_SCRIPT = `
 import Backpack from 0x807c3d470888cc48
 import MetadataViews from 0x1d7e57aa55817448
 
-access(all) fun main(tokenID: UInt64): {String: String}? {
-    // The admin account holds all minted backpacks before they're claimed
-    let adminAddress: Address = 0x807c3d470888cc48
-    let account = getAccount(adminAddress)
+access(all) fun main(ownerAddress: Address, tokenID: UInt64): {String: String}? {
+    let account = getAccount(ownerAddress)
     
     let collectionRef = account.capabilities.borrow<&Backpack.Collection>(Backpack.CollectionPublicPath)
     
@@ -62,13 +60,19 @@ access(all) fun main(tokenID: UInt64): {String: String}? {
 }
 `;
 
-// Function to fetch backpack data from blockchain
-async function fetchBackpackFromBlockchain(tokenId: number): Promise<ClaimedBackpackData | null> {
+// Function to fetch backpack data from the owner's blockchain wallet
+async function fetchBackpackFromBlockchain(tokenId: number, ownerAddress: string): Promise<ClaimedBackpackData | null> {
   try {
+    console.log(`🎒 Fetching backpack #${tokenId} from wallet ${ownerAddress}`);
     const result = await fcl.query({
       cadence: GET_BACKPACK_METADATA_SCRIPT,
-      args: (arg: any, t: any) => [arg(String(tokenId), t.UInt64)]
+      args: (arg: any, t: any) => [
+        arg(ownerAddress, t.Address),
+        arg(String(tokenId), t.UInt64)
+      ]
     });
+    
+    console.log('🎒 Backpack metadata result:', result);
     
     if (result && result.thumbnail) {
       return {
@@ -79,11 +83,11 @@ async function fetchBackpackFromBlockchain(tokenId: number): Promise<ClaimedBack
       };
     }
     
-    // If not found in admin account, return null to indicate no data available
-    // The UI will show a loading/placeholder state
+    // If not found, return null to indicate no data available
+    console.log('🎒 Backpack not found in wallet, returning null');
     return null;
   } catch (error) {
-    console.error('Error fetching backpack metadata:', error);
+    console.error('🎒 Error fetching backpack metadata:', error);
     // Return a placeholder so the UI doesn't hang
     return {
       templateId: String(tokenId),
@@ -142,7 +146,7 @@ const ClaimFormForm: React.FC<Props> = (props) => {
     setLoading(true);
     setTimeout(
       () =>
-        fetchBackpackFromBlockchain(Number(claimedEvent.backpackTokenID))
+        fetchBackpackFromBlockchain(Number(claimedEvent.backpackTokenID), claimedEvent.signer)
           .then((res) => {
             if (res) {
               setClaimedItem(res);
