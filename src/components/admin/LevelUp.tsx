@@ -553,6 +553,15 @@ const EvolvedDisplay = styled.div`
   
   @media (max-width: 480px) {
     padding: 12px;
+    /* Ensure the evolved display is always visible on mobile */
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #000000;
+    border: 3px solid #ffff00;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 20px rgba(255, 255, 0, 0.5);
   }
   
   img {
@@ -562,6 +571,7 @@ const EvolvedDisplay = styled.div`
     border-radius: 15px;
     box-shadow: 0 0 30px #ffff00, 0 0 60px #ff00ff;
     margin-bottom: 15px;
+    animation: ${evolveAnimation} 2s ease-in-out;
     
     @media (max-width: 480px) {
       max-width: 160px;
@@ -575,6 +585,7 @@ const EvolvedDisplay = styled.div`
     color: #ffff00;
     font-size: 20px;
     margin-bottom: 10px;
+    animation: ${arcadeBlink} 1.5s ease-in-out infinite;
     
     @media (max-width: 480px) {
       font-size: 16px;
@@ -807,6 +818,11 @@ const LevelUp: React.FC = () => {
           transactionId: result.transactionId,
           explorerUrl: result.explorerUrl,
         });
+        
+        // Scroll to top on mobile to show the evolved result
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 100);
         
         // Refresh GUM balance
         refreshBalance();

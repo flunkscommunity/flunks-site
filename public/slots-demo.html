@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flunks Slots Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 100%);
+            color: white;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slot-container {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 4px solid #ffd700;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 900px;
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.3);
+            position: relative;
+        }
+
+        .slot-container::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 20px;
+            background: linear-gradient(90deg, #ff6b6b 0%, #ffd700 50%, #ff6b6b 100%);
+            border-radius: 10px;
+        }
+
+        .title {
+            text-align: center;
+            color: #ffd700;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+        }
+
+        .status {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .status-item {
+            display: inline-block;
+            margin: 0 20px;
+        }
+
+        .status-label {
+            color: #ffd700;
+            font-size: 0.9rem;
+        }
+
+        .status-value {
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .reels-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 30px 0;
+            perspective: 1000px;
+        }
+
+        .reel {
+            width: 120px;
+            height: 360px;
+            background: #000;
+            border: 3px solid #ffd700;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .reel.spinning {
+            animation: reelShake 0.1s linear infinite;
+        }
+
+        @keyframes reelShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+
+        .reel-symbols {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .symbol {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            background: linear-gradient(135deg, #2a2a4e 0%, #1a1a3e 100%);
+            border-bottom: 2px solid #333;
+        }
+
+        .controls {
+            text-align: center;
+        }
+
+        .bet-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .bet-button {
+            padding: 10px 20px;
+            background: #444;
+            color: #ffd700;
+            border: 2px solid #ffd700;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .bet-button:hover:not(:disabled) {
+            background: #ffd700;
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        .bet-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .bet-amount {
+            font-size: 2rem;
+            color: #ffd700;
+            font-weight: bold;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .spin-button {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff0000 100%);
+            color: #fff;
+            font-size: 2rem;
+            font-weight: bold;
+            border: 6px solid #ffd700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.5);
+            margin: 0 auto;
+            display: block;
+        }
+
+        .spin-button:hover:not(:disabled) {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.7);
+        }
+
+        .spin-button:active:not(:disabled) {
+            transform: scale(1.05);
+        }
+
+        .spin-button:disabled {
+            background: linear-gradient(135deg, #666 0%, #444 100%);
+            border-color: #888;
+            cursor: not-allowed;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .win-display {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(0, 0, 0, 0.95);
+            border: 4px solid #ffd700;
+            border-radius: 20px;
+            padding: 40px 60px;
+            font-size: 3rem;
+            color: #ffd700;
+            font-weight: bold;
+            z-index: 1000;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            transition: transform 0.3s;
+        }
+
+        .win-display.show {
+            transform: translate(-50%, -50%) scale(1);
+            animation: winPulse 0.5s ease-in-out infinite;
+        }
+
+        @keyframes winPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        .info {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+            border: 1px solid #ffd700;
+        }
+
+        .info h3 {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .info p {
+            color: #ccc;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .paylines {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .payline {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 1.5rem;
+            padding: 10px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 5px;
+            border: 1px solid #ffd700;
+        }
+
+        .payout {
+            font-size: 0.8rem;
+            color: #ffd700;
+            margin-left: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="slot-container">
+        <div class="title">🎰 FLUNKS SLOTS 🎰</div>
+
+        <div class="status">
+            <div class="status-item">
+                <div class="status-label">GUM Balance</div>
+                <div class="status-value" id="balance">1000</div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">Total Spins</div>
+                <div class="status-value" id="spins">0</div>
+            </div>
+            <div class="status-item">
+                <div class="status-label">Total Won</div>
+                <div class="status-value" id="totalWon">0</div>
+            </div>
+        </div>
+
+        <div class="reels-container" id="reels">
+            <!-- Reels will be generated by JS -->
+        </div>
+
+        <div class="win-display" id="winDisplay">
+            🎉 WIN: <span id="winAmount">0</span> GUM! 🎉
+        </div>
+
+        <div class="controls">
+            <div class="bet-controls">
+                <button class="bet-button" onclick="adjustBet(-10)">-10</button>
+                <button class="bet-button" onclick="adjustBet(-1)">-1</button>
+                <div class="bet-amount"><span id="betAmount">10</span> GUM</div>
+                <button class="bet-button" onclick="adjustBet(1)">+1</button>
+                <button class="bet-button" onclick="adjustBet(10)">+10</button>
+            </div>
+
+            <button class="spin-button" id="spinButton" onclick="spin()">SPIN</button>
+        </div>
+
+        <div class="paylines">
+            <div class="payline">🎓🎓🎓 <span class="payout">×100</span></div>
+            <div class="payline">📚📚📚 <span class="payout">×50</span></div>
+            <div class="payline">🏆🏆🏆 <span class="payout">×200</span></div>
+            <div class="payline">⭐⭐⭐ <span class="payout">×30</span></div>
+            <div class="payline">💎💎💎 <span class="payout">×500</span></div>
+            <div class="payline">🔥🔥🔥 <span class="payout">×75</span></div>
+            <div class="payline">🎯🎯🎯 <span class="payout">×40</span></div>
+            <div class="payline">🎪🎪🎪 <span class="payout">×20</span></div>
+        </div>
+
+        <div class="info">
+            <h3>🎮 Demo Mode - Slotopol Integration Test</h3>
+            <p>
+                This is a frontend demo of the Flunks slot machine interface.<br>
+                To enable real gameplay, install Docker and run: <code>docker compose -f docker-compose.slots.yml up -d</code><br>
+                305+ real slot games with proper RTP calculations will be available!
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const SYMBOLS = ['🎓', '📚', '🏆', '⭐', '💎', '🔥', '🎯', '🎪'];
+        const PAYOUTS = {
+            '🎓': 100, '📚': 50, '🏆': 200, '⭐': 30,
+            '💎': 500, '🔥': 75, '🎯': 40, '🎪': 20
+        };
+
+        let balance = 1000;
+        let bet = 10;
+        let totalSpins = 0;
+        let totalWon = 0;
+        let spinning = false;
+
+        // Initialize reels
+        const reelsContainer = document.getElementById('reels');
+        const reelElements = [];
+
+        for (let i = 0; i < 5; i++) {
+            const reel = document.createElement('div');
+            reel.className = 'reel';
+            
+            const symbols = document.createElement('div');
+            symbols.className = 'reel-symbols';
+            
+            // Create extended symbol list for spinning effect
+            for (let j = 0; j < 20; j++) {
+                const symbol = document.createElement('div');
+                symbol.className = 'symbol';
+                symbol.textContent = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+                symbols.appendChild(symbol);
+            }
+            
+            reel.appendChild(symbols);
+            reelsContainer.appendChild(reel);
+            reelElements.push({ reel, symbols });
+        }
+
+        function adjustBet(amount) {
+            if (spinning) return;
+            bet = Math.max(1, Math.min(balance, bet + amount));
+            document.getElementById('betAmount').textContent = bet;
+        }
+
+        function updateDisplay() {
+            document.getElementById('balance').textContent = balance;
+            document.getElementById('spins').textContent = totalSpins;
+            document.getElementById('totalWon').textContent = totalWon;
+        }
+
+        function checkWin(reelSymbols) {
+            // Simple win check: all symbols match
+            const firstSymbol = reelSymbols[0];
+            const allMatch = reelSymbols.every(s => s === firstSymbol);
+            
+            if (allMatch) {
+                return PAYOUTS[firstSymbol] * bet;
+            }
+
+            // Three of a kind
+            const symbolCounts = {};
+            reelSymbols.forEach(s => {
+                symbolCounts[s] = (symbolCounts[s] || 0) + 1;
+            });
+
+            for (const [symbol, count] of Object.entries(symbolCounts)) {
+                if (count >= 3) {
+                    return (PAYOUTS[symbol] * bet) / 5;
+                }
+            }
+
+            return 0;
+        }
+
+        async function spin() {
+            if (spinning || balance < bet) return;
+
+            spinning = true;
+            balance -= bet;
+            totalSpins++;
+            updateDisplay();
+
+            const spinButton = document.getElementById('spinButton');
+            spinButton.disabled = true;
+
+            // Animate reels
+            reelElements.forEach(({ reel, symbols }, index) => {
+                reel.classList.add('spinning');
+                
+                // Random spin animation
+                let position = 0;
+                const spinInterval = setInterval(() => {
+                    position += 120;
+                    symbols.style.transform = `translateY(-${position}px)`;
+                    
+                    // Update symbols during spin
+                    const symbolDivs = symbols.children;
+                    for (let i = 0; i < symbolDivs.length; i++) {
+                        symbolDivs[i].textContent = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+                    }
+                }, 50);
+
+                setTimeout(() => {
+                    clearInterval(spinInterval);
+                    reel.classList.remove('spinning');
+                    
+                    // Final position
+                    const finalSymbol = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+                    const finalPosition = Math.floor(Math.random() * 10) * 120;
+                    symbols.style.transform = `translateY(-${finalPosition}px)`;
+                    
+                    // Set final symbols
+                    const symbolDivs = symbols.children;
+                    for (let i = 0; i < symbolDivs.length; i++) {
+                        symbolDivs[i].textContent = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+                    }
+                    // Ensure middle is our target
+                    symbolDivs[Math.floor(finalPosition / 120) + 1].textContent = finalSymbol;
+                    
+                    // Check for win when all reels stop
+                    if (index === reelElements.length - 1) {
+                        setTimeout(checkForWin, 300);
+                    }
+                }, 1000 + (index * 300));
+            });
+        }
+
+        function checkForWin() {
+            // Get middle symbols from each reel
+            const reelSymbols = reelElements.map(({ symbols }) => {
+                const middleIndex = Math.floor((parseInt(symbols.style.transform.match(/\d+/)[0]) / 120)) + 1;
+                return symbols.children[middleIndex].textContent;
+            });
+
+            const winAmount = checkWin(reelSymbols);
+
+            if (winAmount > 0) {
+                balance += winAmount;
+                totalWon += winAmount;
+                showWin(winAmount);
+            }
+
+            updateDisplay();
+            spinning = false;
+            document.getElementById('spinButton').disabled = false;
+        }
+
+        function showWin(amount) {
+            const winDisplay = document.getElementById('winDisplay');
+            document.getElementById('winAmount').textContent = amount;
+            winDisplay.classList.add('show');
+
+            setTimeout(() => {
+                winDisplay.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+</html>

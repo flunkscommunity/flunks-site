@@ -65,6 +65,7 @@ export const SetupCollectionButton: React.FC<SetupCollectionButtonProps> = ({
     try {
       const script = `
         import SemesterZeroV3 from 0xce9dd43888d99574
+        import NonFungibleToken from 0x1d7e57aa55817448
         
         access(all) fun main(address: Address): Bool {
           let account = getAccount(address)
@@ -139,7 +140,7 @@ export const SetupCollectionButton: React.FC<SetupCollectionButtonProps> = ({
                   /storage/SemesterZeroV3Collection
                 )
                 
-                // Publish the new capability
+                // Publish the capability
                 signer.capabilities.publish(newCap, at: /public/SemesterZeroV3Collection)
                 log("✅ Public capability published!")
               }

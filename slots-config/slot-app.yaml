@@ -1,0 +1,32 @@
+# Flunks Slots Server Configuration
+
+server:
+  host: "0.0.0.0"
+  port: 8080
+  cors: true
+  allowed_origins:
+    - "http://localhost:3000"
+    - "https://flunks.net"
+    - "https://www.flunks.net"
+
+database:
+  type: sqlite
+  path: /app/data/slots.db
+  max_connections: 50
+
+club:
+  default_club_id: 1
+  default_bank: 1000000
+  default_fund: 100000
+  jackpot_rate: 2.0
+
+game:
+  default_mrtp: 95.0
+  max_spin_attempts: 1000
+  min_jackpot: 1000
+  club_update_buffer: 10
+
+auth:
+  jwt_secret: "${JWT_SECRET:-your-secret-key-change-in-production}"
+  access_token_ttl: 3600
+  refresh_token_ttl: 604800
