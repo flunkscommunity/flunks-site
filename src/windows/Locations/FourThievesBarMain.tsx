@@ -8,7 +8,10 @@ import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useUnifiedWallet } from 'contexts/UnifiedWalletContext';
 import SlotMachine from "components/games/SlotMachine";
 import VideoPoker from "components/games/VideoPoker";
+import VideoPokerBattleTested from "components/games/VideoPokerBattleTested";
 import ScratchCard from "components/games/ScratchCard";
+import { useNpcEvents } from "hooks/useNpcEvents";
+import { NpcEventModal } from "components/NpcEventModal";
 
 const FourThievesBarMain = () => {
   const { openWindow, closeWindow } = useWindowsContext();
@@ -29,6 +32,52 @@ const FourThievesBarMain = () => {
   // Background music
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isMuted, setIsMuted] = useState(false);
+
+  // Secret word system for Underground access
+  const [showPasswordPrompt, setShowPasswordPrompt] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [hasUndergroundAccess, setHasUndergroundAccess] = useState(false);
+  
+  // The secret word - 90s gambling/nostalgia themed
+  const SECRET_WORDS = [
+    'rainman',      // Dustin Hoffman counting cards
+    'vegas',        // Classic destination
+    'highroller',   // 90s casino term
+    'blackjack',    // The game
+    'royale',       // Casino Royale vibes
+    'maverick',     // 1994 Mel Gibson poker movie
+    'rounders',     // 1998 poker classic
+    'aces',         // Cards
+    'snake eyes',   // Craps reference / 1998 movie
+    'dealer',       // Classic
+  ];
+  const CURRENT_SECRET = 'snake eyes'; // Craps reference / 1998 Nicolas Cage movie
+
+  // Night time check (6 PM to 6 AM)
+  const hour = new Date().getHours();
+  const isNightTime = hour >= 18 || hour < 6;
+  // For localhost testing, allow access anytime
+  const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
+  const canAccessBackDoor = isNightTime || isLocalhost;
+
+  // NPC Events System - The Underground!
+  const [npcState, npcActions] = useNpcEvents({
+    room: "underground",
+    walletAddress: walletAddress || "anonymous",
+    gumBalance: gumBalance,
+    autoTrigger: true, // Trigger on room entry
+    onGumChange: (delta, newBalance) => {
+      // Update GUM balance from NPC events
+      setGumBalance(newBalance);
+      console.log(`[NPC] GUM changed by ${delta}, new balance: ${newBalance}`);
+    },
+    onEffectApplied: (effect) => {
+      console.log(`[NPC] Effect applied:`, effect);
+      // TODO: Handle other effects (items, flags, reputation)
+    },
+    debug: true, // Enable for development
+  });
 
   useEffect(() => {
     // Initialize bar music
@@ -73,6 +122,36 @@ const FourThievesBarMain = () => {
 
   const getCurrentBackground = () => {
     return isDay ? dayImage : nightImage;
+  };
+
+  // Check password for Underground access
+  const checkPassword = () => {
+    const input = passwordInput.toLowerCase().trim();
+    if (SECRET_WORDS.includes(input)) {
+      setHasUndergroundAccess(true);
+      setShowPasswordPrompt(false);
+      setPasswordError('');
+      setPasswordInput('');
+      // Open the Underground!
+      openUnderground();
+    } else {
+      setPasswordError('The bouncer shakes his head slowly...');
+      setPasswordInput('');
+    }
+  };
+
+  // Handle back door click
+  const handleBackDoorClick = () => {
+    if (!canAccessBackDoor) {
+      // Shouldn't happen since button is hidden, but just in case
+      return;
+    }
+    if (hasUndergroundAccess) {
+      openUnderground();
+    } else {
+      setShowPasswordPrompt(true);
+      setPasswordError('');
+    }
   };
 
   // Generic room opener for text-based rooms
@@ -124,7 +203,7 @@ const FourThievesBarMain = () => {
     });
   };
 
-  // Open Video Poker
+  // Open Video Poker (Battle-Tested version)
   const openVideoPoker = () => {
     openWindow({
       key: WINDOW_IDS.FOUR_THIEVES_BAR_VIDEO_POKER,
@@ -133,11 +212,11 @@ const FourThievesBarMain = () => {
           windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_VIDEO_POKER}
           headerTitle="🃏 Jacks or Better - 4 Thieves"
           onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_VIDEO_POKER)}
-          initialWidth="540px"
-          initialHeight="900px"
+          initialWidth="480px"
+          initialHeight="700px"
           resizable={true}
         >
-          <VideoPoker 
+          <VideoPokerBattleTested 
             walletAddress={walletAddress}
             gumBalance={gumBalance}
             onGumChange={handleGumChange}
@@ -196,6 +275,17 @@ const FourThievesBarMain = () => {
                   e.currentTarget.src = "/images/backdrops/BLANK.png";
                 }}
               />
+              {/* Hidden NPC trigger - subtle corner shadow that's clickable */}
+              <button
+                onClick={() => npcActions.triggerEventCheck()}
+                className="absolute bottom-4 right-4 w-12 h-12 rounded-full bg-black bg-opacity-20 hover:bg-opacity-40 transition-all duration-500 cursor-pointer"
+                style={{ 
+                  boxShadow: '0 0 20px rgba(128, 0, 128, 0.3)',
+                }}
+                title="Something catches your eye in the shadows..."
+              >
+                <span className="opacity-30 hover:opacity-70 transition-opacity text-lg">👁️</span>
+              </button>
             </div>
             
             {/* Interior Buttons */}
@@ -338,6 +428,106 @@ const FourThievesBarMain = () => {
     });
   };
 
+  // Open the Underground - Secret speakeasy with shady characters
+  const openUnderground = () => {
+    openWindow({
+      key: WINDOW_IDS.FOUR_THIEVES_BAR_UNDERGROUND,
+      window: (
+        <DraggableResizeableWindow
+          windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_UNDERGROUND}
+          headerTitle="🌙 The Underground"
+          onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_UNDERGROUND)}
+          initialWidth="900px"
+          initialHeight="80vh"
+          resizable={true}
+        >
+          <div className="relative w-full h-full flex flex-col overflow-hidden">
+            {/* Underground Ambiance Image */}
+            <div className="relative flex-1 flex items-center justify-center min-h-0 bg-black">
+              <img
+                src="/images/locations/four-thieves/underground.png"
+                alt="The Underground"
+                className="max-w-full max-h-full object-contain"
+                onError={(e) => {
+                  e.currentTarget.src = "/images/backdrops/BLANK.png";
+                }}
+              />
+              {/* Smoky overlay effect */}
+              <div 
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: 'radial-gradient(ellipse at 50% 100%, rgba(128, 0, 128, 0.2) 0%, transparent 70%)',
+                }}
+              />
+            </div>
+            
+            {/* Underground Buttons */}
+            <div className="w-full bg-gradient-to-r from-purple-950 via-black to-purple-950 p-4 border-t-4 border-purple-500 shadow-2xl flex-shrink-0">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto">
+                {/* Talk to Someone - Main NPC Event Trigger */}
+                <button
+                  onClick={() => npcActions.triggerEventCheck()}
+                  className="bg-gradient-to-br from-purple-700 to-purple-900 hover:from-purple-600 hover:to-purple-800 text-white px-4 py-3 rounded-lg border-3 border-purple-400 hover:border-purple-300 transition-all duration-300 hover:scale-105 text-center text-sm font-black shadow-lg animate-pulse col-span-2"
+                  style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
+                  title="Approach a shady character..."
+                >
+                  🎭 Talk to Someone
+                </button>
+
+                {/* High Stakes Poker */}
+                <button
+                  onClick={openVideoPoker}
+                  className="bg-gradient-to-br from-green-800 to-green-950 hover:from-green-700 hover:to-green-900 text-white px-4 py-3 rounded-lg border-3 border-green-500 hover:border-green-400 transition-all duration-300 hover:scale-105 text-center text-sm font-black shadow-lg"
+                  style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
+                >
+                  🃏 High Stakes
+                </button>
+
+                {/* Back to Bar */}
+                <button
+                  onClick={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_UNDERGROUND)}
+                  className="bg-gradient-to-br from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-800 text-white px-4 py-3 rounded-lg border-3 border-gray-500 hover:border-gray-400 transition-all duration-300 hover:scale-105 text-center text-sm font-black shadow-lg"
+                  style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
+                >
+                  🚪 Leave
+                </button>
+              </div>
+
+              {/* GUM Balance Display */}
+              <div className="mt-3 text-center">
+                <span 
+                  className="px-4 py-2 rounded-lg inline-block"
+                  style={{
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    color: '#c084fc',
+                    fontFamily: 'monospace',
+                    border: '2px solid #9333ea',
+                  }}
+                >
+                  💰 GUM: {gumBalance}
+                </span>
+              </div>
+            </div>
+
+            {/* NPC Event Modal - Shared with main component */}
+            <NpcEventModal
+              event={npcState.activeEvent}
+              outcome={npcState.currentOutcome}
+              awaitingChoice={npcState.awaitingChoice}
+              isLoading={npcState.isLoading}
+              gumBalance={gumBalance}
+              onChoice={npcActions.makeChoice}
+              onDismiss={npcActions.dismissEvent}
+              canAfford={npcActions.canAfford}
+              getChoiceCost={npcActions.getChoiceCost}
+              error={npcState.error}
+            />
+          </div>
+        </DraggableResizeableWindow>
+      ),
+    });
+  };
+
   // Main component render - Exterior view
   return (
     <div className="relative w-full h-full flex flex-col overflow-hidden">
@@ -376,13 +566,27 @@ const FourThievesBarMain = () => {
           </button>
 
           {/* Back Door */}
-          <button
-            onClick={openBackRoom}
-            className="bg-gradient-to-br from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-800 text-white px-6 py-3 rounded-xl border-4 border-gray-500 hover:border-gray-400 transition-all duration-300 hover:scale-105 text-center text-base font-black shadow-lg hover:shadow-xl whitespace-nowrap"
-            style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
-          >
-            🚪 Back Door
-          </button>
+          {canAccessBackDoor ? (
+            <button
+              onClick={handleBackDoorClick}
+              className="bg-gradient-to-br from-purple-900 to-black hover:from-purple-800 hover:to-gray-900 text-white px-6 py-3 rounded-xl border-4 border-purple-500 hover:border-purple-400 transition-all duration-300 hover:scale-105 text-center text-base font-black shadow-lg hover:shadow-xl whitespace-nowrap animate-pulse"
+              style={{ 
+                fontFamily: 'Cooper Black, Georgia, serif',
+                boxShadow: '0 0 20px rgba(128, 0, 128, 0.5)',
+              }}
+            >
+              🌙 Back Door
+            </button>
+          ) : (
+            <button
+              disabled
+              className="bg-gradient-to-br from-gray-800 to-gray-900 text-gray-500 px-6 py-3 rounded-xl border-4 border-gray-700 text-center text-base font-black shadow-lg whitespace-nowrap cursor-not-allowed opacity-50"
+              style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
+              title="..."
+            >
+              🔒 Back Door
+            </button>
+          )}
         </div>
         
         {/* Location Title */}
@@ -407,6 +611,93 @@ const FourThievesBarMain = () => {
       >
         {isMuted ? '🔇' : '🔊'}
       </button>
+
+      {/* NPC Event Modal */}
+      <NpcEventModal
+        event={npcState.activeEvent}
+        outcome={npcState.currentOutcome}
+        awaitingChoice={npcState.awaitingChoice}
+        isLoading={npcState.isLoading}
+        gumBalance={gumBalance}
+        onChoice={npcActions.makeChoice}
+        onDismiss={npcActions.dismissEvent}
+        canAfford={npcActions.canAfford}
+        getChoiceCost={npcActions.getChoiceCost}
+        error={npcState.error}
+      />
+
+      {/* Secret Word Password Prompt Modal */}
+      {showPasswordPrompt && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
+          onClick={() => setShowPasswordPrompt(false)}
+        >
+          <div 
+            className="bg-gradient-to-br from-purple-950 via-black to-purple-950 p-6 rounded-xl border-4 border-purple-500 max-w-md w-full mx-4 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              boxShadow: '0 0 40px rgba(128, 0, 128, 0.5)',
+            }}
+          >
+            {/* Bouncer Icon */}
+            <div className="text-center mb-4">
+              <span className="text-6xl">🚪</span>
+            </div>
+            
+            {/* Title */}
+            <h2 
+              className="text-purple-300 text-xl font-black text-center mb-2"
+              style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
+            >
+              The Back Door
+            </h2>
+            
+            {/* Description */}
+            <p className="text-gray-400 text-sm text-center mb-4">
+              A large figure blocks your path. He leans in close and whispers...
+            </p>
+            <p className="text-purple-400 text-center mb-4 italic">
+              "What's the word?"
+            </p>
+            
+            {/* Password Input */}
+            <div className="space-y-3">
+              <input
+                type="text"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && checkPassword()}
+                placeholder="Enter the secret word..."
+                className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-purple-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-400 text-center"
+                autoFocus
+              />
+              
+              {/* Error Message */}
+              {passwordError && (
+                <p className="text-red-400 text-sm text-center animate-pulse">
+                  {passwordError}
+                </p>
+              )}
+              
+              {/* Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowPasswordPrompt(false)}
+                  className="flex-1 bg-gray-700 hover:bg-gray-600 text-gray-300 px-4 py-2 rounded-lg transition-all"
+                >
+                  Leave
+                </button>
+                <button
+                  onClick={checkPassword}
+                  className="flex-1 bg-purple-700 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition-all font-bold"
+                >
+                  Enter
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
