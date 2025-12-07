@@ -572,7 +572,7 @@ const windowsMemod = useMemo(() => (
         )} */}
         
         {/* 15. Report Card */}
-        <ConditionalAppIcon
+        {/* <ConditionalAppIcon
           appId="report-card"
           title="Report Card"
           icon="/images/icons/report-card.png"
@@ -580,7 +580,7 @@ const windowsMemod = useMemo(() => (
             key: WINDOW_IDS.REPORT_CARD,
             window: <ReportCard />
           })}
-        />
+        /> */}
 
         {/* 16. Icon Animation */}
         <ConditionalAppIcon
@@ -607,7 +607,7 @@ const windowsMemod = useMemo(() => (
         />
 
         {/* 17. Bulletin Board */}
-        <ConditionalAppIcon
+        {/* <ConditionalAppIcon
           appId="bulletin-board"
           title="Bulletin Board"
           icon="/images/icons/bulletin-board-icon.png"
@@ -617,7 +617,7 @@ const windowsMemod = useMemo(() => (
               window: <BulletinBoard />
             })
           }
-        />
+        /> */}
 
         {/* 18. Yearbook */}
         <ConditionalAppIcon
@@ -795,7 +795,17 @@ const windowsMemod = useMemo(() => (
           />
         </a>
 
-        {/* 24. Alexandria Library - On-Chain Books */}
+        {/* 24. Slot Machine */}
+        <ConditionalAppIcon
+          appId="slot-machine"
+          title="Slot Machine"
+          icon="/images/icons/slot-machine.png"
+          onDoubleClick={() => {
+            window.location.href = '/slots-play';
+          }}
+        />
+
+        {/* 25. Alexandria Library - On-Chain Books */}
         <ConditionalAppIcon
           appId="alexandria-library"
           title="Alexandria Library"

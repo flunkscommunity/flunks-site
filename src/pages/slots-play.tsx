@@ -3,18 +3,14 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import styled from 'styled-components';
 import { getTotalWin, PAYLINES, FLUNKS_SYMBOLS } from '../lib/slots/flunksPaytable';
+import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 
 const Container = styled.div`
   min-height: 100vh;
-  background: url('/slots/images/haunted_background.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   color: white;
   padding: 20px;
-  overflow-y: auto;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
 `;
@@ -58,10 +54,24 @@ const SlotMachine = styled.div`
   gap: 20px;
 `;
 
+const SlotContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: url('/slots/images/haunted_background.png');
+  background-size: cover;
+  background-position: center;
+  min-height: 100%;
+  overflow-y: auto;
+`;
+
 const CabinetTop = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
+  align-items: center;
+  width: 100%;
 `;
 
 const Screen = styled.div`
@@ -71,14 +81,52 @@ const Screen = styled.div`
 
 const PayoutDisplay = styled.div`
   text-align: center;
-  padding: 10px 20px;
-  background: rgba(0,0,0,0.7);
-  border-radius: 10px;
+  padding: 15px 30px;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(0,0,0,0.95) 0px,
+      rgba(10,10,10,0.95) 1px,
+      rgba(0,0,0,0.95) 2px
+    ),
+    #000;
+  border-radius: 0;
+  border: 4px solid #222;
+  border-bottom-color: #444;
+  border-right-color: #444;
+  box-shadow: 
+    inset 0 0 30px rgba(255,255,0,0.1),
+    inset 0 4px 10px rgba(0,0,0,0.9),
+    0 4px 15px rgba(0,0,0,0.8);
   
   h2 {
-    color: #fbbf24;
-    font-size: 1.3em;
+    color: #ffff00;
+    font-size: 1.5em;
     margin: 0;
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 
+      0 0 10px #ffff00,
+      0 0 20px #ffff00,
+      2px 2px 0px rgba(0,0,0,0.8);
+    animation: glow 2s ease-in-out infinite;
+  }
+  
+  @keyframes glow {
+    0%, 100% { 
+      text-shadow: 
+        0 0 10px #ffff00,
+        0 0 20px #ffff00,
+        2px 2px 0px rgba(0,0,0,0.8);
+    }
+    50% { 
+      text-shadow: 
+        0 0 15px #ffff00,
+        0 0 30px #ffff00,
+        0 0 40px #ff9900,
+        2px 2px 0px rgba(0,0,0,0.8);
+    }
   }
 `;
 
@@ -176,51 +224,116 @@ const Controls = styled.div`
   margin-top: 40px;
 `;
 
-const SpinButton = styled.button`
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #FF4444 0%, #CC0000 50%, #AA0000 100%);
-  border: 12px solid #FFD700;
-  color: white;
-  font-size: 1.8em;
+const CenterSection = styled.div`
+  grid-column: 2;
+  grid-row: 1 / 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  justify-self: center;
+`;
+
+const GumBump = styled.div`
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(0,0,0,0.95) 0px,
+      rgba(10,0,0,0.95) 1px,
+      rgba(0,0,0,0.95) 2px
+    ),
+    radial-gradient(ellipse at center, #1a0000 0%, #000000 100%);
+  color: #ff3300;
+  padding: 6px 16px;
+  font-size: 0.9em;
   font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 2px;
+  border: 2px solid #333;
+  border-top-color: #1a1a1a;
+  border-left-color: #1a1a1a;
+  border-bottom-color: #555;
+  border-right-color: #555;
+  border-radius: 3px;
+  text-shadow: 
+    0 0 8px #ff3300,
+    0 0 15px #ff3300,
+    0 0 2px #fff;
   box-shadow: 
-    0 10px 30px rgba(255,68,68,0.5),
-    inset 0 5px 15px rgba(255,255,255,0.3),
-    inset 0 -5px 15px rgba(0,0,0,0.5);
+    inset 0 0 20px rgba(255,51,0,0.2),
+    inset 0 2px 5px rgba(0,0,0,0.8),
+    0 0 5px rgba(0,0,0,0.8);
+  animation: flicker 3s infinite;
+`;
+
+const LeftControls = styled.div`
+  grid-column: 1;
+  grid-row: 1 / 3;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+`;
+
+const RightControls = styled.div`
+  grid-column: 3;
+  grid-row: 1 / 3;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+`;
+
+const SpinButton = styled.button`
+  padding: 10px 35px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #CC0000 0%, #FF4444 50%, #CC0000 100%);
+  border: 3px solid #FFD700;
+  border-bottom: 4px solid #8B6914;
+  border-right: 4px solid #8B6914;
+  color: white;
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  font-size: 1.2em;
+  font-weight: bold;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: 
+    0 6px 15px rgba(255,68,68,0.4),
+    inset 0 2px 8px rgba(255,255,255,0.3),
+    inset 0 -2px 8px rgba(0,0,0,0.5);
   position: relative;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  text-shadow: 
+    2px 2px 4px rgba(0,0,0,0.8),
+    0 0 10px rgba(255,255,255,0.3);
   
-  &::before {
+  &::after {
     content: '';
     position: absolute;
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 30px;
-    height: 50px;
-    background: linear-gradient(180deg, #8B4513 0%, #654321 100%);
-    border-radius: 10px 10px 0 0;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+    top: 3px;
+    left: 3px;
+    right: 3px;
+    height: 40%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+    border-radius: 2px;
+    pointer-events: none;
   }
   
   &:hover {
-    background: radial-gradient(circle, #FF5555 0%, #DD0000 50%, #BB0000 100%);
-    transform: scale(1.05);
+    background: linear-gradient(135deg, #DD0000 0%, #FF5555 50%, #DD0000 100%);
+    transform: translateY(-2px);
     box-shadow: 
-      0 15px 40px rgba(255,68,68,0.7),
-      inset 0 5px 15px rgba(255,255,255,0.4),
-      inset 0 -5px 15px rgba(0,0,0,0.5);
+      0 8px 20px rgba(255,68,68,0.6),
+      inset 0 2px 10px rgba(255,255,255,0.4),
+      inset 0 -2px 10px rgba(0,0,0,0.5);
   }
   
   &:active {
-    transform: scale(0.95) translateY(5px);
+    transform: translateY(2px);
+    border-bottom: 2px solid #8B6914;
     box-shadow: 
-      0 5px 20px rgba(255,68,68,0.5),
-      inset 0 3px 10px rgba(0,0,0,0.7);
+      0 2px 8px rgba(255,68,68,0.4),
+      inset 0 2px 8px rgba(0,0,0,0.7);
   }
   
   &:disabled {
@@ -265,54 +378,158 @@ const Button = styled.button`
 `;
 
 const BetControls = styled.div`
-  display: flex;
-  gap: 15px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 10px;
   align-items: center;
-  justify-content: center;
-  padding: 15px;
-  background: rgba(0,0,0,0.7);
-  border-radius: 10px;
+  padding: 12px 20px;
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      rgba(60,60,60,0.9) 0px,
+      rgba(70,70,70,0.9) 2px,
+      rgba(60,60,60,0.9) 4px
+    ),
+    linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+  border-radius: 0;
+  border: 3px solid #1a1a1a;
+  border-top: 3px solid #555;
+  box-shadow: 
+    inset 0 4px 12px rgba(0,0,0,0.8),
+    inset 0 -2px 4px rgba(255,255,255,0.05),
+    0 6px 20px rgba(0,0,0,0.7);
+  position: relative;
+  width: fit-content;
+  margin: 15px auto 0;
+  
+  /* Scratches and wear */
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 20px,
+        rgba(255,255,255,0.01) 20px,
+        rgba(255,255,255,0.01) 21px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 30px,
+        rgba(0,0,0,0.02) 30px,
+        rgba(0,0,0,0.02) 31px
+      );
+    pointer-events: none;
+  }
 `;
 
 const BetButton = styled.button`
-  background: #fbbf24;
-  color: #1a1a1a;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
+  background: 
+    linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 50%, rgba(0,0,0,0.4) 100%),
+    linear-gradient(135deg, #c9a227 0%, #8b7500 50%, #c9a227 100%);
+  color: #000;
+  border: 3px solid #555;
+  border-top-color: #777;
+  border-left-color: #777;
+  border-bottom-color: #222;
+  border-right-color: #222;
+  padding: 12px 24px;
+  border-radius: 3px;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 1em;
-  transition: all 0.2s;
+  font-weight: 900;
+  font-size: 1.1em;
+  font-family: 'Arial Black', sans-serif;
+  text-shadow: 
+    1px 1px 0px rgba(255,255,255,0.3),
+    -1px -1px 0px rgba(0,0,0,0.5);
+  box-shadow: 
+    inset 0 1px 0 rgba(255,255,255,0.3),
+    inset 0 -2px 3px rgba(0,0,0,0.3),
+    0 4px 8px rgba(0,0,0,0.6);
+  transition: all 0.1s;
   
   &:hover {
-    background: #f59e0b;
-    transform: scale(1.05);
+    background: 
+      linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 50%, rgba(0,0,0,0.4) 100%),
+      linear-gradient(135deg, #d4af37 0%, #9d8420 50%, #d4af37 100%);
+    box-shadow: 
+      inset 0 1px 0 rgba(255,255,255,0.4),
+      inset 0 -2px 3px rgba(0,0,0,0.3),
+      0 4px 12px rgba(201,162,39,0.4);
   }
   
   &:active {
-    transform: scale(0.95);
+    transform: translateY(2px);
+    box-shadow: 
+      inset 0 2px 5px rgba(0,0,0,0.5),
+      0 2px 4px rgba(0,0,0,0.4);
   }
 `;
 
 const BetDisplay = styled.div`
-  font-size: 1.5em;
+  font-size: 1.3em;
   font-weight: bold;
-  padding: 10px 30px;
-  background: rgba(0,0,0,0.5);
-  border-radius: 8px;
-  color: #fbbf24;
-  border: 2px solid #fbbf24;
+  padding: 10px 25px;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(0,0,0,0.9) 0px,
+      rgba(20,20,20,0.9) 1px,
+      rgba(0,0,0,0.9) 2px
+    ),
+    #0a0a0a;
+  border-radius: 0;
+  color: #ff3300;
+  border: 4px solid #333;
+  border-top-color: #1a1a1a;
+  border-left-color: #1a1a1a;
+  border-bottom-color: #555;
+  border-right-color: #555;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 4px;
+  text-shadow: 
+    0 0 10px #ff3300,
+    0 0 20px #ff3300,
+    0 0 2px #fff;
+  box-shadow: 
+    inset 0 0 30px rgba(255,51,0,0.2),
+    inset 0 4px 8px rgba(0,0,0,0.8),
+    0 0 5px rgba(0,0,0,0.8);
+  position: relative;
+  
+  /* Flickering LED effect */
+  animation: flicker 3s infinite;
+  
+  @keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.98; }
+    51% { opacity: 1; }
+  }
 `;
 
 const BalanceDisplay = styled.div`
   text-align: center;
-  font-size: 1.2em;
-  color: white;
+  font-size: 1.3em;
+  color: #ddd;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
   
   span {
-    color: #10b981;
-    font-weight: bold;
+    color: #00ff00;
+    font-weight: 900;
+    font-family: 'Courier New', monospace;
+    text-shadow: 
+      0 0 8px #00ff00,
+      0 0 15px #00ff00,
+      1px 1px 2px rgba(0,0,0,0.8);
   }
 `;
 
@@ -534,10 +751,8 @@ export default function SlotsPlay() {
     [SYMBOL_KEYS[0], SYMBOL_KEYS[1], SYMBOL_KEYS[2]], // Column 1 (3 rows)
     [SYMBOL_KEYS[3], SYMBOL_KEYS[4], SYMBOL_KEYS[5]], // Column 2
     [SYMBOL_KEYS[6], SYMBOL_KEYS[7], SYMBOL_KEYS[8]], // Column 3
-    [SYMBOL_KEYS[9], SYMBOL_KEYS[10], SYMBOL_KEYS[0]], // Column 4
-    [SYMBOL_KEYS[1], SYMBOL_KEYS[2], SYMBOL_KEYS[3]], // Column 5
   ]);
-  const [numReels, setNumReels] = useState(5);
+  const [numReels, setNumReels] = useState(3);
   const [spinning, setSpinning] = useState(false);
   const [balance, setBalance] = useState(1000);
   const [bet, setBet] = useState(10);
@@ -547,7 +762,7 @@ export default function SlotsPlay() {
   const [lastResult, setLastResult] = useState<any>(null);
   const [winningLines, setWinningLines] = useState<number[]>([]);
   const [freeSpins, setFreeSpins] = useState(0);
-  const [stoppedReels, setStoppedReels] = useState<boolean[]>([false, false, false, false, false]);
+  const [stoppedReels, setStoppedReels] = useState<boolean[]>([false, false, false]);
 
   useEffect(() => {
     // Set serverless mode message
@@ -563,7 +778,7 @@ export default function SlotsPlay() {
     setSpinning(true);
     setShowWin(false);
     setBalance(prev => prev - bet);
-    setStoppedReels([false, false, false, false, false]);
+    setStoppedReels([false, false, false]);
     
     // Animate reels - generate random 3x5 grid during spin
     const SYMBOL_KEYS = [
@@ -572,9 +787,9 @@ export default function SlotsPlay() {
       'wild_flunk', 'flunks_logo', 'scatter_keyhole'
     ];
     
-    const spinDuration = 2000;
+    const spinDuration = 1500;
     const spinInterval = setInterval(() => {
-      const randomGrid = Array(5).fill(null).map(() => 
+      const randomGrid = Array(3).fill(null).map(() => 
         Array(3).fill(null).map(() => 
           SYMBOL_KEYS[Math.floor(Math.random() * SYMBOL_KEYS.length)]
         )
@@ -598,10 +813,10 @@ export default function SlotsPlay() {
         clearInterval(spinInterval);
         
         // Use result from serverless API (already has symbols as strings)
-        const gridByRows = result.screen; // 3 rows x 5 columns of symbol keys
+        const gridByRows = result.screen; // 3 rows x 3 columns of symbol keys
         
         // Transpose to columns for display
-        const finalGrid: string[][] = Array(5).fill(null).map((_, col) => 
+        const finalGrid: string[][] = Array(3).fill(null).map((_, col) => 
           Array(3).fill(null).map((_, row) => gridByRows[row][col])
         );
         
@@ -695,91 +910,89 @@ export default function SlotsPlay() {
       </Head>
       
       <Container>
-        <BackButton onClick={() => router.push('/slot-api-preview.html')}>
-          ← Back to Games
-        </BackButton>
-      
-      <Header>
-        <Title>🎰 {gameName || 'Slot Machine'}</Title>
-        {gameInfo && (
-          <div style={{ opacity: 0.8, marginTop: '10px' }}>
-            <p>Game ID: {gameId} | Provider: {gameInfo.aliases[0]?.prov}</p>
-            <p>RTP: {gameInfo.rtp?.[0]?.toFixed(2)}% | Reels: {gameInfo.sx}</p>
-          </div>
-        )}
-      </Header>
+        <DraggableResizeableWindow
+          windowsId="slot-machine"
+          headerTitle="🎰 Flunks Slot Machine"
+          onClose={() => router.push('/')}
+          initialWidth="700px"
+          initialHeight="750px"
+          resizable={true}
+          openCentered={false}
+        >
+          <SlotContent>
+            <BalanceDisplay style={{ marginBottom: '20px' }}>
+              Balance: <span>{balance} GUM</span>
+            </BalanceDisplay>
 
-      <GameInfo>
-        <BalanceDisplay>
-          Balance: <span>{balance} GUM</span>
-        </BalanceDisplay>
-        {message && <p style={{ textAlign: 'center', color: '#fbbf24' }}>{message}</p>}
-        {lastResult && (
-          <p style={{ textAlign: 'center', fontSize: '0.9em', opacity: 0.7 }}>
-            Last spin: {lastResult.gain > 0 ? `WIN ${lastResult.gain.toFixed(2)}` : 'No win'} 
-            {lastResult.lines && ` | Paylines: ${lastResult.lines.length}`}
-          </p>
-        )}
-      </GameInfo>
+            <CabinetTop>
+              <PayoutDisplay>
+                <h2>{winAmount > 0 ? `🎉 WIN: ${winAmount} GUM!` : '🎰 Spin to Win!'}</h2>
+              </PayoutDisplay>
+              
+              <Screen>
+                <ReelsContainer>
+                  {reels.map((column, colIndex) => (
+                    <Reel key={colIndex} spinning={spinning && !stoppedReels[colIndex]} stopped={stoppedReels[colIndex]}>
+                      {Array.isArray(column) ? column.map((symbolKey, rowIndex) => (
+                        <img 
+                          key={rowIndex} 
+                          src={SYMBOL_IMAGES[symbolKey] || '/slots/images/beetle.png'}
+                          alt={symbolKey}
+                          style={{ 
+                            width: '70px', 
+                            height: '70px', 
+                            objectFit: 'contain',
+                            filter: spinning ? 'blur(3px)' : 'none',
+                            transition: 'filter 0.3s'
+                          }}
+                        />
+                      )) : (
+                        <div style={{ fontSize: '3em' }}>{column}</div>
+                      )}
+                    </Reel>
+                  ))}
+                </ReelsContainer>
+              </Screen>
 
-      <SlotMachine>
-        <CabinetTop>
-          <PayoutDisplay>
-            <h2>{winAmount > 0 ? `🎉 WIN: ${winAmount} GUM!` : '🎰 Spin to Win!'}</h2>
-          </PayoutDisplay>
-          
-          <Screen>
-            <ReelsContainer>
-              {reels.map((column, colIndex) => (
-                <Reel key={colIndex} spinning={spinning && !stoppedReels[colIndex]} stopped={stoppedReels[colIndex]}>
-                  {Array.isArray(column) ? column.map((symbolKey, rowIndex) => (
-                    <img 
-                      key={rowIndex} 
-                      src={SYMBOL_IMAGES[symbolKey] || '/slots/images/beetle.png'}
-                      alt={symbolKey}
-                      style={{ 
-                        width: '70px', 
-                        height: '70px', 
-                        objectFit: 'contain',
-                        filter: spinning ? 'blur(3px)' : 'none',
-                        transition: 'filter 0.3s',
-                        ...(typeof window !== 'undefined' && window.innerWidth <= 768 && { 
-                          width: '50px',
-                          height: '50px'
-                        })
-                      }}
-                    />
-                  )) : (
-                    <div style={{ fontSize: '3em' }}>{column}</div>
-                  )}
-                </Reel>
-              ))}
-            </ReelsContainer>
-          </Screen>
-        </CabinetTop>
+              <WinMessage show={showWin}>
+                🎉 JACKPOT! 🎉
+              </WinMessage>
 
-        <WinMessage show={showWin}>
-          🎉 JACKPOT! 🎉
-        </WinMessage>
+              <BetControls>
+                <LeftControls>
+                  <BetButton onClick={() => adjustBet(-5)}>−5</BetButton>
+                  <BetButton onClick={() => adjustBet(-1)}>−1</BetButton>
+                </LeftControls>
+                
+                <CenterSection>
+                  <GumBump>{balance} GUM</GumBump>
+                  <SpinButton 
+                    onClick={spinReels} 
+                    disabled={spinning || balance < bet}
+                  >
+                    {spinning ? '🎰 SPINNING...' : 'SPIN'}
+                  </SpinButton>
+                </CenterSection>
+                
+                <RightControls>
+                  <BetButton onClick={() => adjustBet(1)}>+1</BetButton>
+                  <BetButton onClick={() => adjustBet(5)}>+5</BetButton>
+                </RightControls>
+                
+                <BetDisplay style={{ gridColumn: '1 / 4', gridRow: '2', justifySelf: 'center', marginTop: '5px' }}>
+                  BET: {bet} GUM
+                </BetDisplay>
+              </BetControls>
+            </CabinetTop>
 
-        <BetControls>
-          <BetButton onClick={() => adjustBet(-5)}>−5</BetButton>
-          <BetButton onClick={() => adjustBet(-1)}>−1</BetButton>
-          <BetDisplay>{bet} GUM</BetDisplay>
-          <BetButton onClick={() => adjustBet(1)}>+1</BetButton>
-          <BetButton onClick={() => adjustBet(5)}>+5</BetButton>
-        </BetControls>
-
-        <Controls>
-          <SpinButton 
-            onClick={spinReels} 
-            disabled={spinning || balance < bet}
-          >
-            {spinning ? '🎰 SPINNING...' : 'SPIN'}
-          </SpinButton>
-        </Controls>
-      </SlotMachine>
-    </Container>
+            {message && (
+              <div style={{ textAlign: 'center', color: '#fbbf24', marginTop: '15px', fontSize: '0.9em' }}>
+                {message}
+              </div>
+            )}
+          </SlotContent>
+        </DraggableResizeableWindow>
+      </Container>
     </>
   );
 }

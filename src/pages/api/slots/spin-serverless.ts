@@ -37,14 +37,14 @@ function getRandomSymbol(): string {
   return WEIGHTED_SYMBOLS[Math.floor(Math.random() * WEIGHTED_SYMBOLS.length)];
 }
 
-// Generate a 3x5 grid of symbols
+// Generate a 3x3 grid of symbols (3 reels, 3 rows)
 function generateGrid(): string[][] {
   const grid: string[][] = [];
   
   // Generate 3 rows
   for (let row = 0; row < 3; row++) {
     const rowSymbols: string[] = [];
-    for (let col = 0; col < 5; col++) {
+    for (let col = 0; col < 3; col++) {
       rowSymbols.push(getRandomSymbol());
     }
     grid.push(rowSymbols);

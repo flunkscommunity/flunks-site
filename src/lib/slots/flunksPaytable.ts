@@ -25,51 +25,38 @@ export const FLUNKS_SYMBOLS = {
   scatter_keyhole: { name: 'Keyhole Scatter', tier: 'scatter', payouts: {} }
 };
 
-// 10 classic paylines (same as haunted house)
-// Each array shows the row index [0=top, 1=middle, 2=bottom] for each of 5 reels
+// 5 classic paylines for 3-reel slot
+// Each array shows the row index [0=top, 1=middle, 2=bottom] for each of 3 reels
 export const PAYLINES = [
-  [1, 1, 1, 1, 1],  // Line 1: Middle row (straight)
-  [0, 0, 0, 0, 0],  // Line 2: Top row (straight)
-  [2, 2, 2, 2, 2],  // Line 3: Bottom row (straight)
-  [0, 1, 2, 1, 0],  // Line 4: V shape
-  [2, 1, 0, 1, 2],  // Line 5: Inverted V
-  [0, 0, 1, 2, 2],  // Line 6: Rising diagonal
-  [2, 2, 1, 0, 0],  // Line 7: Falling diagonal
-  [0, 1, 1, 1, 2],  // Line 8: Mountain
-  [2, 1, 1, 1, 0],  // Line 9: Valley
-  [1, 0, 1, 2, 1],  // Line 10: W shape
+  [1, 1, 1],  // Line 1: Middle row (straight)
+  [0, 0, 0],  // Line 2: Top row (straight)
+  [2, 2, 2],  // Line 3: Bottom row (straight)
+  [0, 1, 2],  // Line 4: Diagonal down
+  [2, 1, 0],  // Line 5: Diagonal up
 ];
 
 // Calculate win for a specific payline
 export function calculatePaylineWin(
-  symbols: string[], // 5 symbols along the payline
+  symbols: string[], // 3 symbols along the payline
   bet: number,
   symbolKey: string
 ): { win: number; count: number } | null {
   const symbol = FLUNKS_SYMBOLS[symbolKey as keyof typeof FLUNKS_SYMBOLS];
   if (!symbol || symbol.tier === 'scatter') return null;
 
-  // Count matching symbols from left to right
+  // All 3 must match for 3-reel slot
   const firstSymbol = symbols[0];
-  let count = 1;
+  const allMatch = symbols.every(s => s === firstSymbol);
   
-  for (let i = 1; i < 5; i++) {
-    if (symbols[i] === firstSymbol) {
-      count++;
-    } else {
-      break;
-    }
-  }
+  if (!allMatch) return null;
 
-  // Need at least 3 matching
-  if (count < 3) return null;
-
-  const multiplier = symbol.payouts[count as 3 | 4 | 5];
+  // Use the 3-of-a-kind payout
+  const multiplier = symbol.payouts[3];
   if (!multiplier) return null;
 
   return {
     win: bet * multiplier,
-    count
+    count: 3
   };
 }
 
