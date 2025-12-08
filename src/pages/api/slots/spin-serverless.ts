@@ -10,17 +10,17 @@ const SYMBOL_KEYS = [
 
 // Weighted symbol distribution (lower tier symbols appear more often)
 const SYMBOL_WEIGHTS = {
-  pencil: 20,           // Most common
-  notebook: 18,
-  backpack: 16,
-  flunk_basic: 14,
+  pencil: 30,           // Most common
+  notebook: 28,
+  backpack: 25,
+  flunk_basic: 15,
   diploma: 12,
   trophy: 10,
-  flunk_evolved: 8,
-  gum_pile: 6,
-  golden_ticket: 5,
-  wild_flunk: 3,
-  flunks_logo: 2,      // Rarest (80x payout!)
+  flunk_evolved: 5,
+  gum_pile: 4,
+  golden_ticket: 3,
+  wild_flunk: 2,
+  flunks_logo: 2,      // Rarest (1000x payout!)
   scatter_keyhole: 4
 };
 

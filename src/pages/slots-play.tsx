@@ -58,7 +58,7 @@ const SlotContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 5px;
   background: url('/slots/images/haunted_background.png');
   background-size: cover;
   background-position: center;
@@ -69,7 +69,7 @@ const SlotContent = styled.div`
 const CabinetTop = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 0px;
   align-items: center;
   width: 100%;
 `;
@@ -81,7 +81,7 @@ const Screen = styled.div`
 
 const PayoutDisplay = styled.div`
   text-align: center;
-  padding: 15px 30px;
+  padding: 10px 20px;
   background: 
     repeating-linear-gradient(
       0deg,
@@ -101,10 +101,10 @@ const PayoutDisplay = styled.div`
   
   h2 {
     color: #ffff00;
-    font-size: 1.5em;
+    font-size: 1em;
     margin: 0;
     font-family: 'Impact', 'Arial Black', sans-serif;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     text-transform: uppercase;
     text-shadow: 
       0 0 10px #ffff00,
@@ -132,7 +132,7 @@ const PayoutDisplay = styled.div`
 
 const ReelsContainer = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 15px;
   justify-content: center;
   
   @media (max-width: 768px) {
@@ -158,7 +158,7 @@ const ReelsContainer = styled.div`
 `;
 
 const Reel = styled.div<{ spinning: boolean; stopped?: boolean }>`
-  width: 120px;
+  width: 110px;
   background: rgba(0,0,0,0.8);
   border-radius: 8px;
   display: flex;
@@ -235,17 +235,10 @@ const CenterSection = styled.div`
 `;
 
 const GumBump = styled.div`
-  background: 
-    repeating-linear-gradient(
-      0deg,
-      rgba(0,0,0,0.95) 0px,
-      rgba(10,0,0,0.95) 1px,
-      rgba(0,0,0,0.95) 2px
-    ),
-    radial-gradient(ellipse at center, #1a0000 0%, #000000 100%);
+  background: #000;
   color: #ff3300;
-  padding: 6px 16px;
-  font-size: 0.9em;
+  padding: 8px 18px;
+  font-size: 1em;
   font-weight: bold;
   font-family: 'Courier New', monospace;
   letter-spacing: 2px;
@@ -285,19 +278,20 @@ const RightControls = styled.div`
 `;
 
 const SpinButton = styled.button`
-  padding: 10px 35px;
-  border-radius: 4px;
+  padding: 18px 50px;
+  border-radius: 6px;
   background: linear-gradient(135deg, #CC0000 0%, #FF4444 50%, #CC0000 100%);
-  border: 3px solid #FFD700;
-  border-bottom: 4px solid #8B6914;
-  border-right: 4px solid #8B6914;
+  border: 4px solid #FFD700;
+  border-bottom: 6px solid #8B6914;
+  border-right: 6px solid #8B6914;
   color: white;
   font-family: 'Impact', 'Arial Black', sans-serif;
-  font-size: 1.2em;
+  font-size: 1.8em;
   font-weight: bold;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   cursor: pointer;
   transition: all 0.15s;
+  animation: pulse 2s ease-in-out infinite;
   box-shadow: 
     0 6px 15px rgba(255,68,68,0.4),
     inset 0 2px 8px rgba(255,255,255,0.3),
@@ -340,10 +334,26 @@ const SpinButton = styled.button`
     opacity: 0.5;
     cursor: not-allowed;
     transform: none;
-    animation: pulse 1s ease-in-out infinite;
+    animation: disabledPulse 1s ease-in-out infinite;
   }
   
   @keyframes pulse {
+    0%, 100% { 
+      transform: scale(1);
+      box-shadow: 0 6px 15px rgba(255,68,68,0.4),
+                  inset 0 2px 8px rgba(255,255,255,0.3),
+                  inset 0 -2px 8px rgba(0,0,0,0.5);
+    }
+    50% { 
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(255,68,68,0.7),
+                  0 0 30px rgba(255,215,0,0.5),
+                  inset 0 2px 8px rgba(255,255,255,0.4),
+                  inset 0 -2px 8px rgba(0,0,0,0.5);
+    }
+  }
+  
+  @keyframes disabledPulse {
     0%, 100% { opacity: 0.5; }
     50% { opacity: 0.7; }
   }
@@ -383,25 +393,18 @@ const BetControls = styled.div`
   grid-template-rows: auto auto;
   gap: 10px;
   align-items: center;
-  padding: 12px 20px;
-  background: 
-    repeating-linear-gradient(
-      90deg,
-      rgba(60,60,60,0.9) 0px,
-      rgba(70,70,70,0.9) 2px,
-      rgba(60,60,60,0.9) 4px
-    ),
-    linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+  padding: 15px 20px;
+  background: linear-gradient(180deg, #1a1a1a 0%, #000000 50%, #1a1a1a 100%);
   border-radius: 0;
-  border: 3px solid #1a1a1a;
-  border-top: 3px solid #555;
+  border: 4px solid #2a2a2a;
+  border-top: 4px solid #444;
   box-shadow: 
     inset 0 4px 12px rgba(0,0,0,0.8),
     inset 0 -2px 4px rgba(255,255,255,0.05),
     0 6px 20px rgba(0,0,0,0.7);
   position: relative;
   width: fit-content;
-  margin: 15px auto 0;
+  margin: 5px auto 0;
   
   /* Scratches and wear */
   &::after {
@@ -477,15 +480,8 @@ const BetDisplay = styled.div`
   font-size: 1.3em;
   font-weight: bold;
   padding: 10px 25px;
-  background: 
-    repeating-linear-gradient(
-      0deg,
-      rgba(0,0,0,0.9) 0px,
-      rgba(20,20,20,0.9) 1px,
-      rgba(0,0,0,0.9) 2px
-    ),
-    #0a0a0a;
-  border-radius: 0;
+  background: #000;
+  border-radius: 3px;
   color: #ff3300;
   border: 4px solid #333;
   border-top-color: #1a1a1a;
@@ -899,7 +895,11 @@ export default function SlotsPlay() {
   };
 
   const adjustBet = (delta: number) => {
-    setBet(prev => Math.max(1, Math.min(100, prev + delta)));
+    setBet(prev => Math.max(1, Math.min(25, prev + delta)));
+  };
+
+  const setMaxBet = () => {
+    setBet(25);
   };
 
   return (
@@ -914,21 +914,13 @@ export default function SlotsPlay() {
           windowsId="slot-machine"
           headerTitle="🎰 Flunks Slot Machine"
           onClose={() => router.push('/')}
-          initialWidth="700px"
-          initialHeight="750px"
+          initialWidth="650px"
+          initialHeight="600px"
           resizable={true}
           openCentered={false}
         >
           <SlotContent>
-            <BalanceDisplay style={{ marginBottom: '20px' }}>
-              Balance: <span>{balance} GUM</span>
-            </BalanceDisplay>
-
             <CabinetTop>
-              <PayoutDisplay>
-                <h2>{winAmount > 0 ? `🎉 WIN: ${winAmount} GUM!` : '🎰 Spin to Win!'}</h2>
-              </PayoutDisplay>
-              
               <Screen>
                 <ReelsContainer>
                   {reels.map((column, colIndex) => (
@@ -939,8 +931,8 @@ export default function SlotsPlay() {
                           src={SYMBOL_IMAGES[symbolKey] || '/slots/images/beetle.png'}
                           alt={symbolKey}
                           style={{ 
-                            width: '70px', 
-                            height: '70px', 
+                            width: '75px', 
+                            height: '75px', 
                             objectFit: 'contain',
                             filter: spinning ? 'blur(3px)' : 'none',
                             transition: 'filter 0.3s'
@@ -961,10 +953,12 @@ export default function SlotsPlay() {
               <BetControls>
                 <LeftControls>
                   <BetButton onClick={() => adjustBet(-5)}>−5</BetButton>
-                  <BetButton onClick={() => adjustBet(-1)}>−1</BetButton>
                 </LeftControls>
                 
                 <CenterSection>
+                  <BetDisplay style={{ marginBottom: '5px' }}>
+                    BET: {bet} GUM
+                  </BetDisplay>
                   <GumBump>{balance} GUM</GumBump>
                   <SpinButton 
                     onClick={spinReels} 
@@ -972,16 +966,14 @@ export default function SlotsPlay() {
                   >
                     {spinning ? '🎰 SPINNING...' : 'SPIN'}
                   </SpinButton>
+                  <BetButton onClick={setMaxBet} style={{ marginTop: '5px', fontSize: '0.85em', padding: '6px 12px' }}>
+                    MAX BET
+                  </BetButton>
                 </CenterSection>
                 
                 <RightControls>
-                  <BetButton onClick={() => adjustBet(1)}>+1</BetButton>
                   <BetButton onClick={() => adjustBet(5)}>+5</BetButton>
                 </RightControls>
-                
-                <BetDisplay style={{ gridColumn: '1 / 4', gridRow: '2', justifySelf: 'center', marginTop: '5px' }}>
-                  BET: {bet} GUM
-                </BetDisplay>
               </BetControls>
             </CabinetTop>
 
