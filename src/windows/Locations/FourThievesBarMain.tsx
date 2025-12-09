@@ -66,7 +66,7 @@ const FourThievesBarMain = () => {
     room: "underground",
     walletAddress: walletAddress || "anonymous",
     gumBalance: gumBalance,
-    autoTrigger: true, // Trigger on room entry
+    autoTrigger: false, // DON'T trigger on main page - only in Underground
     onGumChange: (delta, newBalance) => {
       // Update GUM balance from NPC events
       setGumBalance(newBalance);
@@ -430,6 +430,9 @@ const FourThievesBarMain = () => {
 
   // Open the Underground - Secret speakeasy with shady characters
   const openUnderground = () => {
+    // Trigger NPC event when entering Underground
+    npcActions.triggerEventCheck();
+    
     openWindow({
       key: WINDOW_IDS.FOUR_THIEVES_BAR_UNDERGROUND,
       window: (
