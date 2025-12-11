@@ -600,8 +600,8 @@ transaction() {
       <div className="relative flex-1 flex items-center justify-center min-h-0 px-0">
         <img
           src={isDayTime 
-            ? "/images/locations/paradise motel/paradise-motel-day.png"
-            : "/images/locations/paradise motel/paradise-motel-night.png"
+            ? "/images/locations/paradise motel/paradise-motel-day-snow.png"
+            : "/images/locations/paradise motel/paradise-motel-night-snow.png"
           }
           alt="Paradise Motel"
           className="w-full h-full object-cover"

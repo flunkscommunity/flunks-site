@@ -21,8 +21,8 @@ const FourThievesBarMain = () => {
   const walletAddress = unifiedAddress || primaryWallet?.address;
 
   // Day/night images
-  const dayImage = "/images/locations/four-thieves/four-thieves-day.png";
-  const nightImage = "/images/locations/four-thieves/four-thieves-night.png";
+  const dayImage = "/images/locations/snow locations/4-thieves-snow-day.png";
+  const nightImage = "/images/locations/snow locations/4-thieves-snow-night.png";
   const timeBasedInfo = useTimeBasedImage(dayImage, nightImage);
   const isDay = timeBasedInfo.isDay;
 
@@ -38,6 +38,7 @@ const FourThievesBarMain = () => {
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [hasUndergroundAccess, setHasUndergroundAccess] = useState(false);
+  const [showingBackView, setShowingBackView] = useState(false);
   
   // The secret word - 90s gambling/nostalgia themed
   const SECRET_WORDS = [
@@ -121,6 +122,12 @@ const FourThievesBarMain = () => {
   };
 
   const getCurrentBackground = () => {
+    if (showingBackView) {
+      // Show the back of the building (day/night versions)
+      return isDay 
+        ? "/images/locations/snow locations/4-thieves-back-day-snow.png"
+        : "/images/locations/snow locations/4-thieves-back-night-snow.png";
+    }
     return isDay ? dayImage : nightImage;
   };
 
@@ -140,12 +147,17 @@ const FourThievesBarMain = () => {
     }
   };
 
-  // Handle back door click
+  // Handle back door click - go to back view
   const handleBackDoorClick = () => {
     if (!canAccessBackDoor) {
       // Shouldn't happen since button is hidden, but just in case
       return;
     }
+    setShowingBackView(true);
+  };
+
+  // Handle underground entrance from back view
+  const handleUndergroundEntrance = () => {
     if (hasUndergroundAccess) {
       openUnderground();
     } else {
@@ -286,79 +298,6 @@ const FourThievesBarMain = () => {
               >
                 <span className="opacity-30 hover:opacity-70 transition-opacity text-lg">👁️</span>
               </button>
-            </div>
-            
-            {/* Interior Buttons */}
-            <div className="w-full bg-gradient-to-r from-amber-900 via-red-900 to-amber-900 p-4 border-t-4 border-yellow-600 shadow-2xl flex-shrink-0">
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-3 max-w-5xl mx-auto">
-                {/* Slot Machine */}
-                <button
-                  onClick={openSlotMachine}
-                  className="bg-gradient-to-br from-purple-600 to-purple-900 hover:from-purple-500 hover:to-purple-800 text-white px-3 py-3 rounded-lg border-3 border-yellow-400 hover:border-yellow-300 transition-all duration-300 hover:scale-105 text-center text-sm font-black shadow-lg whitespace-nowrap animate-pulse"
-                  style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
-                >
-                  🎰 Slots
-                </button>
-
-                {/* Video Poker */}
-                <button
-                  onClick={openVideoPoker}
-                  className="bg-gradient-to-br from-green-700 to-green-900 hover:from-green-600 hover:to-green-800 text-white px-3 py-3 rounded-lg border-3 border-yellow-400 hover:border-yellow-300 transition-all duration-300 hover:scale-105 text-center text-sm font-black shadow-lg whitespace-nowrap"
-                  style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
-                >
-                  🃏 Poker
-                </button>
-
-                {/* Scratch Cards */}
-                <button
-                  onClick={openScratchCards}
-                  className="bg-gradient-to-br from-pink-600 to-pink-900 hover:from-pink-500 hover:to-pink-800 text-white px-3 py-3 rounded-lg border-3 border-yellow-400 hover:border-yellow-300 transition-all duration-300 hover:scale-105 text-center text-sm font-black shadow-lg whitespace-nowrap"
-                  style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
-                >
-                  🎟️ Scratchers
-                </button>
-
-                {/* Bar Counter */}
-                <button
-                  onClick={() => openRoom(
-                    WINDOW_IDS.FOUR_THIEVES_BAR_MAIN_BAR,
-                    "The Bar",
-                    "Sticky mahogany stretches the length of the room. The bartender, a grizzled old-timer with a missing pinky, polishes glasses that are already spotless. Four mismatched bar stools are permanently claimed by regulars who speak only in whispers when outsiders enter. The tap selection includes some drinks you've never heard of."
-                  )}
-                  className="bg-gradient-to-br from-amber-600 to-amber-800 hover:from-amber-500 hover:to-amber-700 text-white px-3 py-3 rounded-lg border-3 border-yellow-400 hover:border-yellow-300 transition-all duration-300 hover:scale-105 text-center text-sm font-black shadow-lg whitespace-nowrap"
-                  style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
-                >
-                  🥃 The Bar
-                </button>
-
-                {/* Pool Room */}
-                <button
-                  onClick={() => openRoom(
-                    WINDOW_IDS.FOUR_THIEVES_BAR_POOL_ROOM,
-                    "Pool Room",
-                    "The green felt is scarred with cigarette burns, and the cue rack is missing two sticks. Someone carved a warning into the table: 'Don't break unless you're ready to lose.' A group of bikers in the corner eye you suspiciously."
-                  )}
-                  className="bg-gradient-to-br from-emerald-600 to-emerald-800 hover:from-emerald-500 hover:to-emerald-700 text-white px-3 py-3 rounded-lg border-3 border-yellow-400 hover:border-yellow-300 transition-all duration-300 hover:scale-105 text-center text-sm font-black shadow-lg whitespace-nowrap"
-                  style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
-                >
-                  🎱 Pool Room
-                </button>
-              </div>
-
-              {/* GUM Balance Display */}
-              <div className="mt-3 text-center">
-                <span 
-                  className="px-4 py-2 rounded-lg inline-block"
-                  style={{
-                    background: 'rgba(0, 0, 0, 0.5)',
-                    color: '#ffd700',
-                    fontFamily: 'monospace',
-                    border: '2px solid #ffd700',
-                  }}
-                >
-                  💰 Your GUM: {gumBalance}
-                </span>
-              </div>
             </div>
           </div>
         </DraggableResizeableWindow>
@@ -535,11 +474,11 @@ const FourThievesBarMain = () => {
   return (
     <div className="relative w-full h-full flex flex-col overflow-hidden">
       {/* Background Image */}
-      <div className="relative flex-1 flex items-center justify-center min-h-0 px-0">
+      <div className="relative flex-1 flex items-center justify-center min-h-0">
         <img
           src={getCurrentBackground()}
           alt={`4 Thieves Bar & Grill - ${isDay ? 'Day' : 'Night'}`}
-          className="w-full h-full object-cover"
+          className="max-w-full max-h-full object-contain"
           onError={(e) => {
             e.currentTarget.src = "/images/backdrops/BLANK.png";
           }}
@@ -557,63 +496,66 @@ const FourThievesBarMain = () => {
       </div>
 
       {/* Bottom Buttons - Bar style with warm colors */}
-      <div className="w-full bg-gradient-to-r from-amber-800 via-red-900 to-amber-800 p-4 border-t-4 border-yellow-600 shadow-2xl flex-shrink-0">
-        <div className="grid grid-cols-2 gap-4 max-w-3xl mx-auto">
-          {/* Front Door */}
-          <button
-            onClick={openInterior}
-            className="bg-gradient-to-br from-amber-600 to-orange-800 hover:from-amber-500 hover:to-orange-700 text-white px-6 py-3 rounded-xl border-4 border-yellow-400 hover:border-yellow-300 transition-all duration-300 hover:scale-105 text-center text-base font-black shadow-lg hover:shadow-xl whitespace-nowrap"
-            style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
-          >
-            🚪 Front Door
-          </button>
-
-          {/* Back Door */}
-          {canAccessBackDoor ? (
+      <div className="w-full bg-gradient-to-r from-amber-800 via-red-900 to-amber-800 p-2 border-t-2 border-yellow-600 shadow-xl flex-shrink-0">
+        {showingBackView ? (
+          <div className="grid grid-cols-2 gap-2 max-w-2xl mx-auto">
+            {/* Back to Front */}
             <button
-              onClick={handleBackDoorClick}
-              className="bg-gradient-to-br from-purple-900 to-black hover:from-purple-800 hover:to-gray-900 text-white px-6 py-3 rounded-xl border-4 border-purple-500 hover:border-purple-400 transition-all duration-300 hover:scale-105 text-center text-base font-black shadow-lg hover:shadow-xl whitespace-nowrap animate-pulse"
+              onClick={() => setShowingBackView(false)}
+              className="bg-gradient-to-br from-gray-600 to-gray-800 hover:from-gray-500 hover:to-gray-700 text-white px-4 py-2 rounded-lg border-2 border-gray-400 hover:border-gray-300 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl whitespace-nowrap"
+              style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
+            >
+              ← Back to Front
+            </button>
+
+            {/* Back Door */}
+            <button
+              onClick={handleUndergroundEntrance}
+              className="bg-gradient-to-br from-purple-900 to-black hover:from-purple-800 hover:to-gray-900 text-white px-4 py-2 rounded-lg border-2 border-purple-500 hover:border-purple-400 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl whitespace-nowrap animate-pulse"
               style={{ 
                 fontFamily: 'Cooper Black, Georgia, serif',
                 boxShadow: '0 0 20px rgba(128, 0, 128, 0.5)',
               }}
             >
-              🌙 Back Door
+              🚪 Back Door
             </button>
-          ) : (
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-2 max-w-2xl mx-auto">
+            {/* Front Door */}
             <button
-              disabled
-              className="bg-gradient-to-br from-gray-800 to-gray-900 text-gray-500 px-6 py-3 rounded-xl border-4 border-gray-700 text-center text-base font-black shadow-lg whitespace-nowrap cursor-not-allowed opacity-50"
+              onClick={openInterior}
+              className="bg-gradient-to-br from-amber-600 to-orange-800 hover:from-amber-500 hover:to-orange-700 text-white px-4 py-2 rounded-lg border-2 border-yellow-400 hover:border-yellow-300 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl whitespace-nowrap"
               style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
-              title="..."
             >
-              🔒 Back Door
+              🚪 Front Door
             </button>
-          )}
-        </div>
-        
-        {/* Location Title */}
-        <div className="text-center mt-3">
-          <span 
-            className="text-yellow-300 text-lg font-black"
-            style={{ 
-              fontFamily: 'Cooper Black, Georgia, serif',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255, 200, 50, 0.3)',
-            }}
-          >
-            🍺 4 THIEVES BAR & GRILL 🍺
-          </span>
-        </div>
-      </div>
 
-      {/* Music Toggle */}
-      <button
-        onClick={() => setIsMuted(!isMuted)}
-        className="absolute top-4 right-4 p-2 rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 transition-all"
-        style={{ zIndex: 20 }}
-      >
-        {isMuted ? '🔇' : '🔊'}
-      </button>
+            {/* Back Door */}
+            {canAccessBackDoor ? (
+              <button
+                onClick={handleBackDoorClick}
+                className="bg-gradient-to-br from-purple-900 to-black hover:from-purple-800 hover:to-gray-900 text-white px-4 py-2 rounded-lg border-2 border-purple-500 hover:border-purple-400 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl whitespace-nowrap animate-pulse"
+                style={{ 
+                  fontFamily: 'Cooper Black, Georgia, serif',
+                  boxShadow: '0 0 20px rgba(128, 0, 128, 0.5)',
+                }}
+              >
+                🌙 Back Door
+              </button>
+            ) : (
+              <button
+                disabled
+                className="bg-gradient-to-br from-gray-800 to-gray-900 text-gray-500 px-4 py-2 rounded-lg border-2 border-gray-700 text-center text-sm font-bold shadow-lg whitespace-nowrap cursor-not-allowed opacity-50"
+                style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
+                title="..."
+              >
+                🔒 Back Door
+              </button>
+            )}
+          </div>
+        )}
+      </div>
 
       {/* NPC Event Modal */}
       <NpcEventModal

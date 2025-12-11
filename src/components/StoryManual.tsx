@@ -376,7 +376,7 @@ const sampleChapters: Chapter[] = [
     title: 'Paradise Motel 🏨',
     subtitle: 'Room 7... The night is waiting.',
     unlocked: true,
-    thumbnail: '/images/locations/paradise%20motel/paradise-motel-night.png',
+    thumbnail: '/images/locations/paradise%20motel/paradise-motel-night-snow.png',
     scenes: [
       {
         id: 'room-7-night-1',

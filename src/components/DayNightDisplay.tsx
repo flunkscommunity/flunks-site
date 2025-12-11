@@ -32,8 +32,8 @@ interface DayNightDisplayProps {
 
 export default function DayNightDisplay({ 
   locationName = 'Paradise Motel',
-  dayImage = '/images/paradise-motel-day.png',
-  nightImage = '/images/paradise-motel-night.png'
+  dayImage = '/images/paradise-motel-day-snow.png',
+  nightImage = '/images/paradise-motel-night-snow.png'
 }: DayNightDisplayProps) {
   const { primaryWallet } = useDynamicContext();
   const [status, setStatus] = useState<DayNightStatus | null>(null);

@@ -829,7 +829,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                             headerTitle="4 Thieves Bar"
                             onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_MAIN)}
                             initialWidth="60vw"
-                            initialHeight="60vh"
+                            initialHeight="75vh"
                             resizable={true}
                           >
                             <FourThievesBarMain />

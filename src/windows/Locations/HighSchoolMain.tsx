@@ -20,13 +20,10 @@ const HighSchoolMain = () => {
 
   // State for debugging homecoming story
   const [showHomecomingStory, setShowHomecomingStory] = useState(false);
-  
-  // State for school lockdown investigation popup
-  const [showInvestigationPopup, setShowInvestigationPopup] = useState(false);
 
   // Use time-based images with your uploaded day/night photos
-  const dayImage = "/images/icons/schooltapeday.png";
-  const nightImage = "/images/icons/schooltapenight.png";
+  const dayImage = "/images/locations/snow locations/school-day-snow.png";
+  const nightImage = "/images/locations/snow locations/school-night-snow.png";
   const fallbackImage = "/images/backdrops/BLANK.png";
 
   // Get time-based image info
@@ -238,116 +235,14 @@ const HighSchoolMain = () => {
         <div className="absolute top-4 left-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded text-sm z-20">
           Auto: {timeBasedInfo.currentTime}
         </div>
-
-        {/* LOCKDOWN BANNER */}
-        <div className="absolute top-4 right-4 bg-red-600 border-2 border-yellow-400 text-white px-4 py-2 rounded-lg text-sm font-bold z-20 animate-pulse shadow-lg">
-          🚨 SCHOOL LOCKDOWN 🚨
-        </div>
-        
-        {/* Police Tape Overlay */}
-        <div className="absolute inset-x-0 top-0 h-12 z-10 pointer-events-none"
-             style={{
-               background: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(251, 191, 36, 0.8) 10px, rgba(251, 191, 36, 0.8) 20px)',
-               borderBottom: '3px solid #fbbf24'
-             }}></div>
-        <div className="absolute inset-x-0 bottom-0 h-12 z-10 pointer-events-none"
-             style={{
-               background: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(251, 191, 36, 0.8) 10px, rgba(251, 191, 36, 0.8) 20px)',
-               borderTop: '3px solid #fbbf24'
-             }}></div>
       </div>
 
-      {/* Room Buttons Section - SCHOOL LOCKDOWN */}
-      <div className="bg-red-900 p-4 border-t border-yellow-400 border-t-4 relative" style={{
-        background: 'repeating-linear-gradient(45deg, #7f1d1d, #7f1d1d 10px, #fbbf24 10px, #fbbf24 20px)',
-        borderImage: 'repeating-linear-gradient(90deg, #000 0%, #fbbf24 50%, #000 100%) 1'
-      }}>
+      {/* Room Buttons Section */}
+      <div className="bg-gray-800 p-4 border-t border-gray-600">
         <div className="flex gap-4 flex-wrap justify-center max-w-4xl mx-auto">
-        {/* Hallway - LOCKDOWN */}
-        <button
-          onClick={showInvestigationWarning}
-          className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-600 transition-all duration-200 hover:scale-105 min-w-[120px] text-center border-2 border-yellow-400 shadow-lg"
-        >
-          ☠️ DO NOT ENTER
-        </button>
-
-        {/* Classroom - LOCKDOWN */}
-        <button
-          onClick={showInvestigationWarning}
-          className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-600 transition-all duration-200 hover:scale-105 min-w-[120px] text-center border-2 border-yellow-400 shadow-lg"
-        >
-          ☠️ DO NOT ENTER
-        </button>
-
-        {/* Cafeteria - LOCKDOWN */}
-        <button
-          onClick={showInvestigationWarning}
-          className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-600 transition-all duration-200 hover:scale-105 min-w-[120px] text-center border-2 border-yellow-400 shadow-lg"
-        >
-          ☠️ DO NOT ENTER
-        </button>
-
-        {/* Gymnasium - LOCKDOWN */}
-        <button
-          onClick={showInvestigationWarning}
-          className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-600 transition-all duration-200 hover:scale-105 min-w-[120px] text-center border-2 border-yellow-400 shadow-lg"
-        >
-          ☠️ DO NOT ENTER
-        </button>
-
-        {/* Locker Room - LOCKDOWN */}
-        <button
-          onClick={showInvestigationWarning}
-          className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-600 transition-all duration-200 hover:scale-105 min-w-[120px] text-center border-2 border-yellow-400 shadow-lg"
-        >
-          ☠️ DO NOT ENTER
-        </button>
-
-        {/* Library - LOCKDOWN */}
-        <button
-          onClick={showInvestigationWarning}
-          className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-600 transition-all duration-200 hover:scale-105 min-w-[120px] text-center border-2 border-yellow-400 shadow-lg"
-        >
-          ☠️ DO NOT ENTER
-        </button>
-
-        {/* Principal's Office - LOCKDOWN */}
-        <button
-          onClick={showInvestigationWarning}
-          className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-600 transition-all duration-200 hover:scale-105 min-w-[120px] text-center border-2 border-yellow-400 shadow-lg"
-        >
-          ☠️ DO NOT ENTER
-        </button>
+        {/* Room buttons can be added here in the future */}
         </div>
       </div>
-
-      {/* Investigation Lockdown Popup */}
-      {showInvestigationPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
-          <div className="bg-red-900 border-4 border-yellow-400 rounded-lg p-8 max-w-md text-center shadow-2xl" 
-               style={{
-                 background: 'linear-gradient(45deg, #7f1d1d, #991b1b)',
-                 boxShadow: '0 0 30px rgba(251, 191, 36, 0.5)'
-               }}>
-            <div className="text-6xl mb-4 animate-pulse">🚨</div>
-            <h2 className="text-2xl font-bold text-yellow-400 mb-4">SCHOOL UNDER INVESTIGATION</h2>
-            <div className="text-4xl mb-4">☠️⚠️☠️</div>
-            <p className="text-white text-lg mb-6 leading-relaxed">
-              Seriously, stop clicking! The school is locked down due to mysterious circumstances surrounding 
-              Flunko's disappearance. Federal agents have sealed off all rooms until further notice.
-            </p>
-            <p className="text-yellow-300 text-sm mb-6 italic">
-              "Do not attempt entry. We mean it!"
-            </p>
-            <button 
-              onClick={() => setShowInvestigationPopup(false)}
-              className="bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3 px-6 rounded-lg transition-all duration-200 hover:scale-105 shadow-lg"
-            >
-              🏃‍♂️ RUN AWAY!
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

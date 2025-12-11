@@ -18,8 +18,8 @@ const ArcadeMain = () => {
   const [isEntranceMuted, setIsEntranceMuted] = useState(false);
 
   // Use the "Flunko missing" themed day/night images for Arcade
-  const dayImage = "/images/icons/arcade-flunko-day.png";
-  const nightImage = "/images/icons/arcade-flunko-night.png";
+  const dayImage = "/images/locations/snow locations/arcade-day-snow.png";
+  const nightImage = "/images/locations/snow locations/arcade-night-snow.png";
   const timeBasedInfo = useTimeBasedImage(dayImage, nightImage);
 
   // Initialize background music for arcade entrance
@@ -746,7 +746,7 @@ const ArcadeMain = () => {
           windowsId={WINDOW_IDS.ARCADE_LOBBY}
           onClose={() => closeWindow(WINDOW_IDS.ARCADE_LOBBY)}
           headerTitle="🧙‍♂️ Wizard's Arcade Lobby"
-          headerIcon="/images/icons/arcade-day.png"
+          headerIcon="/images/icons/arcade-day-snow.png"
           initialWidth="1050px"
           initialHeight="800px"
           resizable={true}

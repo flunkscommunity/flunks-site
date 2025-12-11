@@ -165,8 +165,8 @@ const ParadiseMotelMain = () => {
   const effectiveWallet = isDevelopment ? mockWallet : (unifiedAddress ? { address: unifiedAddress } : primaryWallet);
   
   // Use day/night images for Paradise Motel
-  const dayImage = "/images/locations/paradise motel/paradise-motel-day.png";
-  const nightImage = "/images/locations/paradise motel/paradise-motel-night.png";
+  const dayImage = "/images/locations/paradise motel/paradise-motel-day-snow.png";
+  const nightImage = "/images/locations/paradise motel/paradise-motel-night-snow.png";
   const timeBasedInfo = useTimeBasedImage(dayImage, nightImage);
   const isDay = timeBasedInfo.isDay;
 
