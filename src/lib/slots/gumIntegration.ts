@@ -1,10 +1,8 @@
 /**
  * GUM Currency Integration with Slot Machines
- * Syncs GUM balance with slot server wallet
  */
 
 import { createClient } from '@supabase/supabase-js';
-import { slotopolClient } from './slotopolClient';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -151,8 +149,6 @@ export async function convertGumToSlotCredits(
       return false;
     }
 
-    // TODO: Update slot server wallet balance
-    // This would sync with the slot server's internal wallet
     console.log(`Converted ${gumAmount} GUM to slot credits for ${walletAddress}`);
 
     return true;
@@ -181,7 +177,6 @@ export async function convertSlotCreditsToGum(
       return false;
     }
 
-    // TODO: Deduct from slot server wallet balance
     console.log(`Cashed out ${creditAmount} slot credits to GUM for ${walletAddress}`);
 
     return true;
@@ -196,9 +191,7 @@ export async function convertSlotCreditsToGum(
  */
 export async function getSlotBalanceStatus(walletAddress: string): Promise<GumSlotBalance> {
   const gumBalance = await getGumBalance(walletAddress);
-
-  // TODO: Get actual slot balance from server
-  const slotBalance = 0; // Placeholder
+  const slotBalance = 0;
 
   return {
     walletAddress,
@@ -226,17 +219,12 @@ export async function processSlotSpin(
     // 2. Deduct bet amount from GUM
     await deductGumForSlots(walletAddress, betAmount, `Slot spin bet: ${betAmount} GUM`);
 
-    // 3. Call slot server to spin
-    const spinResult = await slotopolClient.spin(walletAddress, gameId);
-
-    // 4. Award winnings if any
-    if (spinResult.gain > 0) {
-      await awardGumFromSlots(walletAddress, spinResult.gain, `Slot win: ${spinResult.gain} GUM`);
-    }
-
+    // 3. Spin is handled by serverless spin API
+    // This function is for reference - actual spins use /api/slots/spin-serverless
+    
     return {
       success: true,
-      winAmount: spinResult.gain,
+      winAmount: 0,
     };
   } catch (error) {
     console.error('Error processing slot spin:', error);

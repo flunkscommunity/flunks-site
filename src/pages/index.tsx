@@ -57,6 +57,7 @@ import LoadingScreenPreview from "windows/LoadingScreenPreview";
 import { GumAdminPanel } from "components/GumAdminPanel";
 import { TimeConfigAdmin } from "components/DayNightHouse";
 import SemesterZeroSetup from "components/SemesterZeroSetup";
+import SemesterZeroVarsityDisplay from "components/SemesterZeroVarsityDisplay";
 import RevealTester from "components/admin/RevealTester";
 import LevelUp from "components/admin/LevelUp";
 import BurnNFT from "components/admin/BurnNFT";
@@ -645,12 +646,12 @@ const windowsMemod = useMemo(() => (
                   windowsId={WINDOW_IDS.SEMESTER_ZERO_SETUP}
                   onClose={() => closeWindow(WINDOW_IDS.SEMESTER_ZERO_SETUP)}
                   headerTitle="Flunks: Semester Zero NFT"
-                  initialWidth="450px"
-                  initialHeight="600px"
+                  initialWidth="850px"
+                  initialHeight="750px"
                   headerIcon="/images/icons/semester-zero-nft.png"
-                  resizable={false}
+                  resizable={true}
                 >
-                  <SemesterZeroSetup onClose={() => closeWindow(WINDOW_IDS.SEMESTER_ZERO_SETUP)} />
+                  <SemesterZeroVarsityDisplay onClose={() => closeWindow(WINDOW_IDS.SEMESTER_ZERO_SETUP)} />
                 </DraggableResizeableWindow>
               ),
             })

@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import { slotopolClient } from '@/lib/slots/slotopolClient';
 import { processSlotSpin, getGumBalance } from '@/lib/slots/gumIntegration';
 
 const SlotMachineContainer = styled.div`
@@ -238,9 +237,8 @@ const FlunksSlotMachine: React.FC<FlunksSlotMachineProps> = ({
         const balance = await getGumBalance(walletAddress);
         setGumBalance(balance);
 
-        // Create game instance
-        const game = await slotopolClient.createGame(walletAddress, gameAlias, betAmount);
-        setGameId(game.gid);
+        // Game uses serverless spin API now
+        setGameId(1); // Default game ID
       } catch (error) {
         console.error('Failed to initialize slot game:', error);
       }
