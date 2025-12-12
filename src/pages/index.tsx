@@ -797,15 +797,17 @@ const windowsMemod = useMemo(() => (
           />
         </a>
 
-        {/* 24. Slot Machine */}
-        <ConditionalAppIcon
-          appId="slot-machine"
-          title="Slot Machine"
-          icon="/images/slot-machine.png"
-          onDoubleClick={() => {
-            window.location.href = '/slots-play';
-          }}
-        />
+        {/* 24. Slot Machine - build mode only */}
+        {isFeatureEnabled('showSlotMachine') && (
+          <ConditionalAppIcon
+            appId="slot-machine"
+            title="Slot Machine"
+            icon="/images/slot-machine.png"
+            onDoubleClick={() => {
+              window.location.href = '/slots-play';
+            }}
+          />
+        )}
 
         {/* 25. Flunky Bash - Launcher Game */}
         <ConditionalAppIcon

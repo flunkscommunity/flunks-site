@@ -4,6 +4,7 @@ import Head from 'next/head';
 import styled from 'styled-components';
 import { getTotalWin, PAYLINES, FLUNKS_SYMBOLS } from '../lib/slots/flunksPaytable';
 import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
+import { isFeatureEnabled } from 'utils/buildMode';
 
 const Container = styled.div`
   min-height: 100vh;
@@ -741,6 +742,13 @@ const SYMBOL_IMAGES: Record<string, string> = {
 export default function SlotsPlay() {
   const router = useRouter();
   const { gameId, gameName } = router.query;
+  
+  // Redirect to home if slot machine is disabled (live site)
+  useEffect(() => {
+    if (!isFeatureEnabled('showSlotMachine')) {
+      router.push('/');
+    }
+  }, [router]);
   
   const [gameInfo, setGameInfo] = useState<any>(null);
   const [reels, setReels] = useState<string[][]>([
