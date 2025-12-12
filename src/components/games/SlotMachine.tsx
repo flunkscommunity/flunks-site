@@ -221,38 +221,43 @@ const SlotMachine: React.FC<SlotMachineProps> = ({
           boxShadow: '0 0 30px rgba(255, 215, 0, 0.5), inset 0 0 30px rgba(0, 0, 0, 0.5)',
         }}
       >
-        {/* Title */}
-        <div 
-          className="text-center mb-4"
-          style={{
-            fontFamily: 'Cooper Black, Georgia, serif',
-            fontSize: '24px',
-            color: '#ffd700',
-            textShadow: '2px 2px 4px #000, 0 0 10px #ffd700',
-          }}
-        >
-          🎰 LUCKY SLOTS 🎰
-        </div>
-
-        {/* Reels Container */}
-        <div 
-          className="flex gap-2 p-4 rounded-lg mb-4"
-          style={{
-            background: '#0a0a0a',
-            border: '4px solid #333',
-            boxShadow: 'inset 0 0 20px rgba(0, 0, 0, 0.8)',
-          }}
-        >
-          {reels.map((symbol, index) => (
-            <div key={index} style={getReelStyle(index, spinning[index])}>
-              <span style={{ 
-                filter: spinning[index] ? 'blur(2px)' : 'none',
-                animation: spinning[index] ? 'symbol-flash 0.1s linear infinite' : 'none',
-              }}>
-                {spinning[index] ? SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)] : symbol}
-              </span>
-            </div>
-          ))}
+        {/* Slot Machine Image with Reels */}
+        <div className="relative mb-4">
+          {/* Reels positioned behind the slot machine image */}
+          <div 
+            className="absolute flex gap-3 justify-center"
+            style={{
+              top: '45%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 1,
+              width: '70%',
+            }}
+          >
+            {reels.map((symbol, index) => (
+              <div key={index} style={getReelStyle(index, spinning[index])}>
+                <span style={{ 
+                  filter: spinning[index] ? 'blur(2px)' : 'none',
+                  animation: spinning[index] ? 'symbol-flash 0.1s linear infinite' : 'none',
+                }}>
+                  {spinning[index] ? SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)] : symbol}
+                </span>
+              </div>
+            ))}
+          </div>
+          
+          {/* Slot Machine Frame Image */}
+          <img 
+            src="/images/slot-machine.png" 
+            alt="Slot Machine"
+            style={{
+              position: 'relative',
+              zIndex: 2,
+              width: '100%',
+              height: 'auto',
+              pointerEvents: 'none',
+            }}
+          />
         </div>
 
         {/* Message Display */}

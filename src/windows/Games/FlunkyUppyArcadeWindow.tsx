@@ -47,7 +47,7 @@ const FlunkyUppyArcadeWindow: React.FC = () => {
   return (
     <div className="w-full h-full bg-black text-white flex flex-col overflow-hidden">
       {/* Coming Soon Image - Fixed height to prevent cutoff */}
-      <div className="flex-shrink-0 flex items-center justify-center w-full" style={{ height: '60%' }}>
+      <div className="flex-shrink-0 flex items-center justify-center w-full" style={{ height: '40%' }}>
         <img 
           src="/images/coming-soon.png"
           alt="Coming Soon"

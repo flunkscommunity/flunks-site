@@ -922,28 +922,47 @@ export default function SlotsPlay() {
           <SlotContent>
             <CabinetTop>
               <Screen>
-                <ReelsContainer>
-                  {reels.map((column, colIndex) => (
-                    <Reel key={colIndex} spinning={spinning && !stoppedReels[colIndex]} stopped={stoppedReels[colIndex]}>
-                      {Array.isArray(column) ? column.map((symbolKey, rowIndex) => (
-                        <img 
-                          key={rowIndex} 
-                          src={SYMBOL_IMAGES[symbolKey] || '/slots/images/beetle.png'}
-                          alt={symbolKey}
-                          style={{ 
-                            width: '75px', 
-                            height: '75px', 
-                            objectFit: 'contain',
-                            filter: spinning ? 'blur(3px)' : 'none',
-                            transition: 'filter 0.3s'
-                          }}
-                        />
-                      )) : (
-                        <div style={{ fontSize: '3em' }}>{column}</div>
-                      )}
-                    </Reel>
-                  ))}
-                </ReelsContainer>
+                <div style={{ position: 'relative' }}>
+                  {/* Reels behind */}
+                  <ReelsContainer style={{ position: 'relative', zIndex: 1 }}>
+                    {reels.map((column, colIndex) => (
+                      <Reel key={colIndex} spinning={spinning && !stoppedReels[colIndex]} stopped={stoppedReels[colIndex]}>
+                        {Array.isArray(column) ? column.map((symbolKey, rowIndex) => (
+                          <img 
+                            key={rowIndex} 
+                            src={SYMBOL_IMAGES[symbolKey] || '/slots/images/beetle.png'}
+                            alt={symbolKey}
+                            style={{ 
+                              width: '75px', 
+                              height: '75px', 
+                              objectFit: 'contain',
+                              filter: spinning ? 'blur(3px)' : 'none',
+                              transition: 'filter 0.3s'
+                            }}
+                          />
+                        )) : (
+                          <div style={{ fontSize: '3em' }}>{column}</div>
+                        )}
+                      </Reel>
+                    ))}
+                  </ReelsContainer>
+                  
+                  {/* Slot machine frame overlay on top */}
+                  <img 
+                    src="/images/slot-machine.png" 
+                    alt="Slot Machine Frame"
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      pointerEvents: 'none',
+                      zIndex: 2,
+                      objectFit: 'contain'
+                    }}
+                  />
+                </div>
               </Screen>
 
               <WinMessage show={showWin}>

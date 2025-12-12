@@ -202,6 +202,9 @@ export const WINDOW_IDS = {
   
   // Alexandria Library
   ALEXANDRIA_LIBRARY: "alexandria-library",
+  
+  // Flunky Bash Game
+  FLUNKY_BASH: "flunky-bash",
 };
 
 export const WINDOW_APP_INFO_TO_WINDOW_ID = {

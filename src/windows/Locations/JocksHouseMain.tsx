@@ -383,8 +383,8 @@ const JocksHouseMain = () => {
   const { hasBackpackBase, backpackAccess } = useBackpackAccess();
   
   // Use your uploaded day/night images for Jocks House
-  const dayImage = "/images/icons/jocks-house-day.png";
-  const nightImage = "/images/icons/jocks-house-night.png";
+  const dayImage = "/images/locations/snow locations/jocks-house-snow-day.png";
+  const nightImage = "/images/locations/snow locations/jocks-house-snow-night.png";
   const timeBasedInfo = useTimeBasedImage(dayImage, nightImage);
 
   const openRoom = (roomKey: string, title: string, content: string) => {

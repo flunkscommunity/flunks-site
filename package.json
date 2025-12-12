@@ -7,6 +7,10 @@
     "build": "next build",
     "build:public": "cp .env.production .env.production.local && next build",
     "build:build-mode": "cp .env.build .env.production.local && next build",
+    "export": "next build",
+    "mobile:sync": "npm run export && npx cap sync",
+    "mobile:android": "npm run mobile:sync && npx cap open android",
+    "mobile:ios": "npm run mobile:sync && npx cap open ios",
     "start": "next start",
     "lint": "next lint",
     "fetch:openApiSpec": "node ./swagger/fetchApiSpec.ts",
@@ -18,6 +22,10 @@
     "test-mobile-wallets": "node ./scripts/test-mobile-wallets.js"
   },
   "dependencies": {
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/cli": "^8.0.0",
+    "@capacitor/core": "^8.0.0",
+    "@capacitor/ios": "^8.0.0",
     "@dynamic-labs/flow": "^4.47.0",
     "@dynamic-labs/sdk-api": "^0.0.824",
     "@dynamic-labs/sdk-react-core": "^4.47.0",

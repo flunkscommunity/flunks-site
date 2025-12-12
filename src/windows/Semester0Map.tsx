@@ -826,9 +826,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                         window: (
                           <DraggableResizeableWindow
                             windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_MAIN}
-                            headerTitle="4 Thieves Bar"
+                            headerTitle="🍺 4 Thieves Bar"
                             onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_MAIN)}
-                            initialWidth="60vw"
+                            initialWidth="800px"
                             initialHeight="75vh"
                             resizable={true}
                           >

@@ -22,6 +22,7 @@ import AccessGate from "components/AccessGate";
 import FlappyFlunkWindow from "windows/Games/FlappyFlunkWindow";
 import FlunkyUppyArcadeWindow from "windows/Games/FlunkyUppyArcadeWindow";
 import FlunkJumpWindow from "windows/Games/FlunkJumpWindow";
+import FlunkyBash from "components/games/FlunkyBash";
 import HiddenRiffWindow from "windows/Games/HiddenRiffWindow";
 import RadioPlayer from "components/RadioPlayer";
 import FHSSchool from "windows/FHSSchool";
@@ -800,13 +801,36 @@ const windowsMemod = useMemo(() => (
         <ConditionalAppIcon
           appId="slot-machine"
           title="Slot Machine"
-          icon="/images/icons/slot-machine.png"
+          icon="/images/slot-machine.png"
           onDoubleClick={() => {
             window.location.href = '/slots-play';
           }}
         />
 
-        {/* 25. Alexandria Library - On-Chain Books */}
+        {/* 25. Flunky Bash - Launcher Game */}
+        <ConditionalAppIcon
+          appId="flunky-bash"
+          title="Flunky Bash"
+          icon="/images/icons/game-manual-icon.png"
+          onDoubleClick={() => openWindow({
+            key: WINDOW_IDS.FLUNKY_BASH,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.FLUNKY_BASH}
+                onClose={() => closeWindow(WINDOW_IDS.FLUNKY_BASH)}
+                headerTitle="🎯 Flunky Bash"
+                initialWidth="650px"
+                initialHeight="580px"
+                headerIcon="/images/icons/game-manual-icon.png"
+                resizable={true}
+              >
+                <FlunkyBash />
+              </DraggableResizeableWindow>
+            )
+          })}
+        />
+
+        {/* 26. Alexandria Library - On-Chain Books */}
         <ConditionalAppIcon
           appId="alexandria-library"
           title="Alexandria Library"

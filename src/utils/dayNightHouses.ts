@@ -199,9 +199,35 @@ export function useHouseImage(
       }
 
       function tryLocalFallback() {
+        // Try snow locations first, then regular icons
+        const timeOfDay = dayTime ? 'day' : 'night';
+        
+        // Map house IDs to their snow location image names
+        const snowLocationMap: { [key: string]: string | null } = {
+          'high-school': `school-${timeOfDay}-snow.png`,
+          'arcade': `arcade-${timeOfDay}-snow.png`,
+          'paradise-motel': `paradise-motel-${timeOfDay}-snow.png`,
+          'four-thieves-bar': `4-thieves-snow-${timeOfDay}.png`,
+          'jocks-house': null, // No snow image yet
+          'freaks-house': `freaks-house-snow-${timeOfDay}.png`,
+          'geeks-house': `geeks-house-snow-${timeOfDay}.png`,
+          'preps-house': `preps-house-snow-${timeOfDay}.png`
+        };
+        
+        const snowFileName = snowLocationMap[houseId];
+        const snowPath = snowFileName 
+          ? `/images/locations/snow locations/${snowFileName}`
+          : null;
+        
         const iconPath = `/images/icons/${houseId}-icon.png`;
         
-        const pathsToTry = [iconPath];
+        const pathsToTry = snowPath ? [snowPath, iconPath] : [iconPath];
+        
+        console.log(`🏠 Loading image for ${houseId}:`, {
+          timeOfDay,
+          snowPath,
+          pathsToTry
+        });
 
         let currentIndex = 0;
 
