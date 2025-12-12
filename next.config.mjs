@@ -7,7 +7,7 @@
 
 /** @type {import("next").NextConfig} */
 const config = {
-  output: 'export',
+  // Note: Removed 'output: export' to enable API routes on Vercel
   images: { unoptimized: true },
   reactStrictMode: false,
   swcMinify: true,

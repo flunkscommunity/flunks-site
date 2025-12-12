@@ -87,7 +87,15 @@ export const useLockerAssignment = () => {
         })
       });
 
-      const data = await response.json();
+      // Handle empty or non-JSON responses
+      const text = await response.text();
+      let data;
+      try {
+        data = text ? JSON.parse(text) : { error: 'Empty response from server' };
+      } catch (parseError) {
+        console.error('Failed to parse response:', text);
+        throw new Error('Server returned invalid response. Please try again.');
+      }
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to assign locker');
