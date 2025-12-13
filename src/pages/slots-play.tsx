@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { getTotalWin, PAYLINES, FLUNKS_SYMBOLS } from '../lib/slots/flunksPaytable';
 import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 import { isFeatureEnabled } from 'utils/buildMode';
+import { useGum } from 'contexts/GumContext';
+import { useUnifiedWallet } from 'contexts/UnifiedWalletContext';
 
 const Container = styled.div`
   min-height: 100vh;
@@ -60,9 +62,7 @@ const SlotContent = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 5px;
-  background: url('/slots/images/haunted_background.png');
-  background-size: cover;
-  background-position: center;
+  background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 50%, #1a1a2e 100%);
   min-height: 100%;
   overflow-y: auto;
 `;
@@ -743,12 +743,41 @@ export default function SlotsPlay() {
   const router = useRouter();
   const { gameId, gameName } = router.query;
   
+  // GUM integration
+  const { balance: gumBalance, refreshBalance, canAfford } = useGum();
+  const { address: walletAddress } = useUnifiedWallet();
+  
   // Redirect to home if slot machine is disabled (live site)
   useEffect(() => {
     if (!isFeatureEnabled('showSlotMachine')) {
       router.push('/');
     }
   }, [router]);
+  
+  // Slot transaction helper
+  const slotTransaction = async (type: 'bet' | 'win' | 'refund', amount: number, metadata?: any) => {
+    if (!walletAddress) return { success: false, error: 'No wallet connected' };
+    
+    try {
+      const response = await fetch('/api/slots/transaction', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ wallet_address: walletAddress, type, amount, metadata })
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        // Refresh the GUM balance in context
+        await refreshBalance();
+      }
+      
+      return result;
+    } catch (error) {
+      console.error('Slot transaction error:', error);
+      return { success: false, error: 'Transaction failed' };
+    }
+  };
   
   const [gameInfo, setGameInfo] = useState<any>(null);
   const [reels, setReels] = useState<string[][]>([
@@ -758,8 +787,7 @@ export default function SlotsPlay() {
   ]);
   const [numReels, setNumReels] = useState(3);
   const [spinning, setSpinning] = useState(false);
-  const [balance, setBalance] = useState(1000);
-  const [bet, setBet] = useState(10);
+  const [bet, setBet] = useState(15);
   const [winAmount, setWinAmount] = useState(0);
   const [showWin, setShowWin] = useState(false);
   const [message, setMessage] = useState('');
@@ -777,12 +805,33 @@ export default function SlotsPlay() {
 
 
   const spinReels = async () => {
-    if (spinning || balance < bet) return;
+    if (spinning) return;
+    
+    // Check if user can afford the bet
+    if (!canAfford(bet)) {
+      setMessage('Not enough GUM! 💔');
+      setTimeout(() => setMessage(''), 2000);
+      return;
+    }
+    
+    if (!walletAddress) {
+      setMessage('Connect wallet to play! 🔗');
+      setTimeout(() => setMessage(''), 2000);
+      return;
+    }
     
     setSpinning(true);
     setShowWin(false);
-    setBalance(prev => prev - bet);
     setStoppedReels([false, false, false]);
+    
+    // Spend GUM for the bet
+    const spendResult = await slotTransaction('bet', bet, { bet_amount: bet });
+    if (!spendResult.success) {
+      setMessage(spendResult.error || 'Failed to place bet! Try again.');
+      setSpinning(false);
+      setTimeout(() => setMessage(''), 2000);
+      return;
+    }
     
     // Animate reels - generate random 3x5 grid during spin
     const SYMBOL_KEYS = [
@@ -806,7 +855,7 @@ export default function SlotsPlay() {
       const response = await fetch('/api/slots/spin-serverless', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bet }),
+        body: JSON.stringify({ bet, walletAddress }),
       });
       
       const result = await response.json();
@@ -859,15 +908,23 @@ export default function SlotsPlay() {
         
         // Wait for all reels to reveal before showing win
         const totalRevealTime = finalGrid.length * revealDelay + 200;
-        setTimeout(() => {
+        setTimeout(async () => {
           if (winResult.totalWin > 0 || winResult.scatterWin) {
-            const totalGain = winResult.totalWin;
+            const totalGain = Math.floor(winResult.totalWin);
             setWinAmount(totalGain);
-            setBalance(prev => prev + totalGain);
             setShowWin(true);
-            setWinningLines(winResult.paylineWins.map(w => w.payline));
+            setWinningLines(winResult.paylineWins.map((w: any) => w.payline));
             
-            let msg = `🎉 WIN ${totalGain.toFixed(2)} GUM!`;
+            // Award GUM winnings
+            if (totalGain > 0) {
+              await slotTransaction('win', totalGain, { 
+                win_amount: totalGain, 
+                bet_amount: bet,
+                multiplier: totalGain / bet 
+              });
+            }
+            
+            let msg = `🎉 WIN ${totalGain} GUM!`;
             if (winResult.paylineWins.length > 1) {
               msg += ` (${winResult.paylineWins.length} lines)`;
             }
@@ -897,8 +954,10 @@ export default function SlotsPlay() {
       console.error('Spin error:', error);
       clearInterval(spinInterval);
       setSpinning(false);
-      setBalance(prev => prev + bet); // Refund on error
+      // Refund the bet on error
+      await slotTransaction('refund', bet, { refund_amount: bet, reason: 'spin_error' });
       setMessage('Error spinning - bet refunded');
+      setTimeout(() => setMessage(''), 3000);
     }
   };
 
@@ -922,91 +981,214 @@ export default function SlotsPlay() {
           windowsId="slot-machine"
           headerTitle="🎰 Flunks Slot Machine"
           onClose={() => router.push('/')}
-          initialWidth="650px"
-          initialHeight="600px"
+          initialWidth="420px"
+          initialHeight="720px"
           resizable={true}
           openCentered={false}
         >
           <SlotContent>
-            <CabinetTop>
-              <Screen>
-                <div style={{ position: 'relative' }}>
-                  {/* Reels behind */}
-                  <ReelsContainer style={{ position: 'relative', zIndex: 1 }}>
-                    {reels.map((column, colIndex) => (
-                      <Reel key={colIndex} spinning={spinning && !stoppedReels[colIndex]} stopped={stoppedReels[colIndex]}>
-                        {Array.isArray(column) ? column.map((symbolKey, rowIndex) => (
-                          <img 
-                            key={rowIndex} 
-                            src={SYMBOL_IMAGES[symbolKey] || '/slots/images/beetle.png'}
-                            alt={symbolKey}
-                            style={{ 
-                              width: '75px', 
-                              height: '75px', 
-                              objectFit: 'contain',
-                              filter: spinning ? 'blur(3px)' : 'none',
-                              transition: 'filter 0.3s'
-                            }}
-                          />
-                        )) : (
-                          <div style={{ fontSize: '3em' }}>{column}</div>
-                        )}
-                      </Reel>
-                    ))}
-                  </ReelsContainer>
-                  
-                  {/* Slot machine frame overlay on top */}
-                  <img 
-                    src="/images/slot-machine.png" 
-                    alt="Slot Machine Frame"
+            {/* Main slot machine container with frame as background */}
+            <div style={{ 
+              position: 'relative', 
+              width: '100%',
+              maxWidth: '380px',
+              aspectRatio: '1741 / 2879',
+              margin: '0 auto'
+            }}>
+              {/* Slot machine frame image */}
+              <img 
+                src="/slots/images/slot-machine.png" 
+                alt="Slot Machine"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  zIndex: 2,
+                  pointerEvents: 'none'
+                }}
+              />
+              
+              {/* Win announcement display - positioned at the very top brown area */}
+              <div style={{
+                position: 'absolute',
+                top: '1%',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '80%',
+                height: '4%',
+                zIndex: 3,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: showWin ? '#fbbf24' : 'transparent',
+                fontSize: '1em',
+                fontWeight: 'bold',
+                textShadow: showWin ? '0 0 10px rgba(251, 191, 36, 0.8), 0 0 20px rgba(251, 191, 36, 0.5)' : 'none',
+                transition: 'all 0.3s ease'
+              }}>
+                {showWin && winAmount > 0 && (
+                  <>
+                    {winAmount >= bet * 10 ? '🔥 KILLTACULAR! 🔥' :
+                     winAmount >= bet * 7 ? '⚡ KILLING SPREE! ⚡' :
+                     winAmount >= bet * 5 ? '💀 TRIPLE KILL! 💀' :
+                     winAmount >= bet * 3 ? '🎯 DOUBLE KILL! 🎯' :
+                     winAmount >= bet * 2 ? '✨ NICE WIN! ✨' :
+                     '🍬 WIN!'} +{winAmount}
+                  </>
+                )}
+              </div>
+              
+              {/* GUM Balance display - positioned next to "GUM" text */}
+              <div style={{
+                position: 'absolute',
+                top: '5.8%',
+                left: '32%',
+                width: '30%',
+                height: '3.5%',
+                zIndex: 3,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fbbf24',
+                fontSize: '1.1em',
+                fontWeight: 'bold',
+                textShadow: '0 0 5px rgba(251, 191, 36, 0.5)'
+              }}>
+                {gumBalance}
+              </div>
+              
+              {/* Bet amount display - positioned in the dark circle by character's head */}
+              <div style={{
+                position: 'absolute',
+                top: '26%',
+                right: '8%',
+                width: '14%',
+                height: '9%',
+                zIndex: 3,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fbbf24',
+                fontSize: '1.8em',
+                fontWeight: 'bold',
+                textShadow: '0 0 10px rgba(251, 191, 36, 0.8)'
+              }}>
+                {bet}
+              </div>
+              
+              {/* Reels container - positioned to align with the 3 white windows */}
+              <div style={{
+                position: 'absolute',
+                top: '53%',
+                left: '7%',
+                width: '86%',
+                height: '28%',
+                zIndex: 1,
+                display: 'flex',
+                justifyContent: 'space-between',
+                gap: '3%'
+              }}>
+                {reels.map((column, colIndex) => (
+                  <div 
+                    key={colIndex}
                     style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '100%',
-                      pointerEvents: 'none',
-                      zIndex: 2,
-                      objectFit: 'contain'
+                      flex: 1,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-around',
+                      alignItems: 'center',
+                      overflow: 'hidden',
+                      backgroundColor: 'rgba(255,255,255,0.9)',
+                      borderRadius: '4px'
                     }}
-                  />
-                </div>
-              </Screen>
-
-              <WinMessage show={showWin}>
-                🎉 JACKPOT! 🎉
-              </WinMessage>
-
-              <BetControls>
-                <LeftControls>
-                  <BetButton onClick={() => adjustBet(-5)}>−5</BetButton>
-                </LeftControls>
-                
-                <CenterSection>
-                  <BetDisplay style={{ marginBottom: '5px' }}>
-                    BET: {bet} GUM
-                  </BetDisplay>
-                  <GumBump>{balance} GUM</GumBump>
-                  <SpinButton 
-                    onClick={spinReels} 
-                    disabled={spinning || balance < bet}
                   >
-                    {spinning ? '🎰 SPINNING...' : 'SPIN'}
-                  </SpinButton>
-                  <BetButton onClick={setMaxBet} style={{ marginTop: '5px', fontSize: '0.85em', padding: '6px 12px' }}>
-                    MAX BET
-                  </BetButton>
-                </CenterSection>
-                
-                <RightControls>
-                  <BetButton onClick={() => adjustBet(5)}>+5</BetButton>
-                </RightControls>
-              </BetControls>
-            </CabinetTop>
+                    {Array.isArray(column) ? column.map((symbolKey, rowIndex) => (
+                      <img 
+                        key={rowIndex} 
+                        src={SYMBOL_IMAGES[symbolKey] || '/slots/images/beetle.png'}
+                        alt={symbolKey}
+                        style={{ 
+                          width: '85%',
+                          height: '30%',
+                          objectFit: 'contain',
+                          filter: spinning && !stoppedReels[colIndex] ? 'blur(3px)' : 'none',
+                          transition: 'filter 0.3s'
+                        }}
+                      />
+                    )) : (
+                      <div style={{ fontSize: '2em' }}>{column}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              
+              {/* -5 Button - positioned over the frame's -5 button */}
+              <button
+                onClick={() => adjustBet(-5)}
+                style={{
+                  position: 'absolute',
+                  bottom: '2%',
+                  left: '5%',
+                  width: '22%',
+                  height: '6%',
+                  zIndex: 3,
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              />
+              
+              {/* SPIN Button - positioned over the frame's SPIN WHEEL button */}
+              <button
+                onClick={spinReels}
+                disabled={spinning || !canAfford(bet)}
+                style={{
+                  position: 'absolute',
+                  bottom: '2%',
+                  left: '30%',
+                  width: '40%',
+                  height: '6%',
+                  zIndex: 3,
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: spinning || !canAfford(bet) ? 'not-allowed' : 'pointer',
+                  opacity: spinning || !canAfford(bet) ? 0.5 : 1
+                }}
+              />
+              
+              {/* +5 Button - positioned over the frame's +5 button */}
+              <button
+                onClick={() => adjustBet(5)}
+                style={{
+                  position: 'absolute',
+                  bottom: '2%',
+                  right: '5%',
+                  width: '22%',
+                  height: '6%',
+                  zIndex: 3,
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              />
+            </div>
+            
+            {/* Win message */}
+            <WinMessage show={showWin}>
+              🎉 WIN! 🎉
+            </WinMessage>
 
             {message && (
-              <div style={{ textAlign: 'center', color: '#fbbf24', marginTop: '15px', fontSize: '0.9em' }}>
+              <div style={{ textAlign: 'center', color: '#fbbf24', marginTop: '10px', fontSize: '0.9em' }}>
                 {message}
+              </div>
+            )}
+            
+            {!walletAddress && (
+              <div style={{ textAlign: 'center', color: '#ff6b6b', marginTop: '10px', fontSize: '0.85em' }}>
+                Connect your wallet to play!
               </div>
             )}
           </SlotContent>

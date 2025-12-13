@@ -10,8 +10,8 @@ const GeeksHouseMain = () => {
   const { openWindow, closeWindow } = useWindowsContext();
   
   // Use your uploaded day/night images for Geeks House
-  const dayImage = "/images/icons/geeks-house-day.png";
-  const nightImage = "/images/icons/geeks-house-night.png";
+  const dayImage = "/images/locations/snow locations/geeks-house-snow-day.png";
+  const nightImage = "/images/locations/snow locations/geeks-house-snow-night.png";
   const timeBasedInfo = useTimeBasedImage(dayImage, nightImage);
 
   const openRoom = (roomKey: string, title: string, content: string) => {

@@ -16,8 +16,8 @@ const FreaksHouseMain = () => {
   const { openWindow, closeWindow } = useWindowsContext();
   
   // Use day/night images for Freaks House
-  const dayImage = "/images/icons/freaks-house-day.png";
-  const nightImage = "/images/icons/freaks-house-night.png";
+  const dayImage = "/images/locations/snow locations/freaks-house-snow-day.png";
+  const nightImage = "/images/locations/snow locations/freaks-house-snow-night.png";
   const timeBasedInfo = useTimeBasedImage(dayImage, nightImage);
 
   const getCurrentBackground = () => {

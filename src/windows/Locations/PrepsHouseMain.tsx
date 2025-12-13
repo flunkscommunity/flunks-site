@@ -9,8 +9,8 @@ const PrepsHouseMain = () => {
   const { openWindow, closeWindow } = useWindowsContext();
   
   // Use your uploaded day/night images for Preps House
-  const dayImage = "/images/icons/preps-house-day.png";
-  const nightImage = "/images/icons/preps-house-night.png";
+  const dayImage = "/images/locations/snow locations/preps-house-snow-day.png";
+  const nightImage = "/images/locations/snow locations/preps-house-snow-night.png";
   const timeBasedInfo = useTimeBasedImage(dayImage, nightImage);
 
   const openRoom = (roomKey: string, title: string, content: string) => {
