@@ -25,11 +25,16 @@ interface BackpackItemProps extends ObjectDetails {
 const BackpackItem: React.FC<BackpackItemProps> = (props) => {
 
   const _traitsObject = useMemo(() => {
+    // Defensive: handle missing or malformed traits data
+    if (!props.traits?.traits || !Array.isArray(props.traits.traits)) {
+      console.warn('BackpackItem: Missing traits data for tokenID:', props.tokenID);
+      return {};
+    }
     return props.traits.traits.reduce((acc, trait) => {
       acc[trait.name] = trait.value;
       return acc;
-    }, {});
-  }, [props.traits]);
+    }, {} as Record<string, string>);
+  }, [props.traits, props.tokenID]);
 
   return (
     <div className="w-full h-full relative">

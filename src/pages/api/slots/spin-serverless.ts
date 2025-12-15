@@ -1,27 +1,25 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getTotalWin } from '../../../lib/slots/flunksPaytable';
 
-// Symbol keys matching our paytable
+// Symbol keys matching our paytable (9 symbols, Vegas-style 38 stops)
 const SYMBOL_KEYS = [
-  'pencil', 'notebook', 'backpack', 'flunk_basic', 'diploma', 
-  'trophy', 'flunk_evolved', 'gum_pile', 'golden_ticket', 
-  'wild_flunk', 'flunks_logo', 'scatter_keyhole'
+  'pencil', 'eraser', 'notebook', 'backpack', 'calculator',
+  'trophy', 'diploma', 'gum_pile', 'flunks_logo'
 ];
 
-// Weighted symbol distribution (lower tier symbols appear more often)
+// Vegas-style 38 stops per reel distribution
+// Total = 38 stops, makes wins much rarer
+// Jackpot odds: (1/38)^3 = 1 in 54,872 per line
 const SYMBOL_WEIGHTS = {
-  pencil: 30,           // Most common
-  notebook: 28,
-  backpack: 25,
-  flunk_basic: 15,
-  diploma: 12,
-  trophy: 10,
-  flunk_evolved: 5,
-  gum_pile: 4,
-  golden_ticket: 3,
-  wild_flunk: 2,
-  flunks_logo: 2,      // Rarest (1000x payout!)
-  scatter_keyhole: 4
+  pencil: 8,        // Common - 21% - 3x payout
+  eraser: 7,        // Common - 18% - 4x payout  
+  notebook: 6,      // Common - 16% - 5x payout
+  backpack: 5,      // Uncommon - 13% - 10x payout
+  calculator: 4,    // Uncommon - 11% - 15x payout
+  trophy: 3,        // Rare - 8% - 30x payout
+  diploma: 2,       // Rare - 5% - 50x payout
+  gum_pile: 2,      // Epic - 5% - 150x payout
+  flunks_logo: 1    // Jackpot - 2.6% - 500x (1 in 54,872!)
 };
 
 // Create weighted array for random selection

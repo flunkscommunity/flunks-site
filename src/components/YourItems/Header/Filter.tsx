@@ -1,17 +1,21 @@
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { usePaginatedItems } from "contexts/UserPaginatedItems";
-import { useState } from "react";
-import { Button, Frame, SelectNative } from "react95";
+import { Button, Frame } from "react95";
 
 const YourItemsGridFilter = () => {
-  const [activeCollection, setActiveCollection] = useState("flunks");
-  const { setFilter, flunksCount, backpacksCount, viewType, setViewType } =
+  const { setFilter, setPage, filter, flunksCount, backpacksCount, viewType, setViewType } =
     usePaginatedItems();
   const { primaryWallet } = useDynamicContext();
   const walletAddress = primaryWallet?.address || null;
 
   const isDisabled =
     !walletAddress || (flunksCount === 0 && backpacksCount === 0);
+
+  const handleCollectionChange = (value: "flunks" | "backpacks") => {
+    console.log('🔄 Switching collection to:', value);
+    setPage(0); // Reset to first page when switching collections
+    setFilter(value);
+  };
 
   return (
     <Frame
@@ -23,22 +27,34 @@ const YourItemsGridFilter = () => {
         backgroundPosition: "center",
         backgroundSize: "cover",
         backgroundImage: BG_IMG_PATTERN,
+        position: 'relative',
+        zIndex: 100,
       }}
     >
-      <SelectNative
-        value={activeCollection}
-        options={[
-          { value: "flunks", label: "Flunks" },
-          { value: "backpacks", label: "Backpacks" },
-        ]}
-        onChange={(e) => {
-          const value = e.target.value as "flunks" | "backpacks";
-          setActiveCollection(value);
-          setFilter(value);
-        }}
-        disabled={isDisabled}
-        style={{ width: 140 }}
-      />
+      <div className="flex gap-1">
+        <Button
+          onClick={() => handleCollectionChange("flunks")}
+          disabled={isDisabled}
+          active={filter === "flunks"}
+          style={{ 
+            minWidth: 80,
+            fontWeight: filter === "flunks" ? 'bold' : 'normal'
+          }}
+        >
+          Flunks
+        </Button>
+        <Button
+          onClick={() => handleCollectionChange("backpacks")}
+          disabled={isDisabled}
+          active={filter === "backpacks"}
+          style={{ 
+            minWidth: 90,
+            fontWeight: filter === "backpacks" ? 'bold' : 'normal'
+          }}
+        >
+          Backpacks
+        </Button>
+      </div>
 
       <div className="h-full flex gap-1">
         <Button

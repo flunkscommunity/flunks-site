@@ -145,16 +145,16 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
             // CRITICAL FIX: Create minimal NFT objects even when metadata fails
             // This allows OnlyFlunks/MyPlace to show NFTs even if trait data is unavailable
             const minimalFlunksPages = tokenDataPage.flunks.map((pageTokenIds) =>
-              pageTokenIds.map((tokenId: string, index: number) => ({
+              pageTokenIds.map((tokenId: string) => ({
                 owner: walletAddress,
                 tokenID: tokenId,
                 MetadataViewsDisplay: {
                   name: `Flunk #${tokenId}`,
                   description: '',
-                  thumbnail: { url: '' }
+                  thumbnail: { url: '/flunks-logo.png' }  // Fallback image
                 },
                 traits: { traits: [] }, // Empty traits, but structure exists
-                serialNumber: index.toString(),
+                serialNumber: tokenId,  // Use tokenId as serialNumber
                 stakingInfo: null,
                 collection: 'Flunks',
                 rewards: 0
@@ -173,16 +173,16 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
             
             // CRITICAL FIX: Create minimal NFT objects even when metadata fails
             const minimalBackpackPages = tokenDataPage.backpack.map((pageTokenIds) =>
-              pageTokenIds.map((tokenId: string, index: number) => ({
+              pageTokenIds.map((tokenId: string) => ({
                 owner: walletAddress,
                 tokenID: tokenId,
                 MetadataViewsDisplay: {
                   name: `Backpack #${tokenId}`,
                   description: '',
-                  thumbnail: { url: '' }
+                  thumbnail: { url: '/images/icons/backpack.png' }  // Fallback image
                 },
                 traits: { traits: [] }, // Empty traits, but structure exists
-                serialNumber: index.toString(),
+                serialNumber: tokenId,  // Use tokenId as serialNumber
                 stakingInfo: null,
                 collection: 'Backpack',
                 rewards: 0

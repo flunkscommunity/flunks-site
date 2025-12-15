@@ -717,26 +717,23 @@ const ReelWindow = styled.div`
 const SYMBOLS = ['🎓', '📚', '🏆', '⭐', '💎', '🔥', '🎯', '🎪'];
 
 // Symbol keys matching our paytable
+// 9 symbols Vegas-style (38 stops per reel)
 const SYMBOL_KEYS = [
-  'pencil', 'notebook', 'backpack', 'flunk_basic', 'diploma', 
-  'trophy', 'flunk_evolved', 'gum_pile', 'golden_ticket', 
-  'wild_flunk', 'flunks_logo', 'scatter_keyhole'
+  'pencil', 'eraser', 'notebook', 'backpack', 'calculator',
+  'trophy', 'diploma', 'gum_pile', 'flunks_logo'
 ];
 
-// Map to actual haunted house images (you'll replace with Flunks assets later)
+// Map to slot images (9 symbols needed)
 const SYMBOL_IMAGES: Record<string, string> = {
-  pencil: '/slots/images/beetle.png',
-  notebook: '/slots/images/spider.png',
-  backpack: '/slots/images/bat.png',
-  flunk_basic: '/slots/images/ghost.png',
-  diploma: '/slots/images/goblin.png',
-  trophy: '/slots/images/skeleton.png',
-  flunk_evolved: '/slots/images/mummy.png',
-  gum_pile: '/slots/images/vampire.png',
-  golden_ticket: '/slots/images/werewolf.png',
-  wild_flunk: '/slots/images/haunted_house.png',
-  flunks_logo: '/slots/images/haunted_house.png',
-  scatter_keyhole: '/slots/images/freespins.png'
+  pencil: '/slots/images/beetle.png',        // Common - 3x
+  eraser: '/slots/images/spider.png',        // Common - 4x
+  notebook: '/slots/images/bat.png',         // Common - 5x
+  backpack: '/slots/images/ghost.png',       // Uncommon - 10x
+  calculator: '/slots/images/goblin.png',    // Uncommon - 15x
+  trophy: '/slots/images/skeleton.png',      // Rare - 30x
+  diploma: '/slots/images/mummy.png',        // Rare - 50x
+  gum_pile: '/slots/images/vampire.png',     // Epic - 150x
+  flunks_logo: '/slots/images/werewolf.png'  // JACKPOT - 500x
 };
 
 export default function SlotsPlay() {
@@ -747,6 +744,15 @@ export default function SlotsPlay() {
   const { balance: gumBalance, refreshBalance, canAfford } = useGum();
   const { address: walletAddress } = useUnifiedWallet();
   
+  // DEV MODE: Use a test wallet address when no wallet is connected
+  const DEV_MODE = true; // Set to false for production
+  const DEV_WALLET = '0xDEV_TEST_WALLET';
+  const effectiveWallet = walletAddress || (DEV_MODE ? DEV_WALLET : null);
+  
+  // Dev mode GUM balance (starts at 500)
+  const [devGumBalance, setDevGumBalance] = useState(500);
+  const effectiveGumBalance = walletAddress ? gumBalance : devGumBalance;
+  
   // Redirect to home if slot machine is disabled (live site)
   useEffect(() => {
     if (!isFeatureEnabled('showSlotMachine')) {
@@ -756,13 +762,23 @@ export default function SlotsPlay() {
   
   // Slot transaction helper
   const slotTransaction = async (type: 'bet' | 'win' | 'refund', amount: number, metadata?: any) => {
-    if (!walletAddress) return { success: false, error: 'No wallet connected' };
+    // Dev mode: handle locally without API
+    if (DEV_MODE && !walletAddress) {
+      if (type === 'bet') {
+        setDevGumBalance(prev => prev - amount);
+      } else if (type === 'win' || type === 'refund') {
+        setDevGumBalance(prev => prev + amount);
+      }
+      return { success: true, balance: devGumBalance };
+    }
+    
+    if (!effectiveWallet) return { success: false, error: 'No wallet connected' };
     
     try {
       const response = await fetch('/api/slots/transaction', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wallet_address: walletAddress, type, amount, metadata })
+        body: JSON.stringify({ wallet_address: effectiveWallet, type, amount, metadata })
       });
       
       const result = await response.json();
@@ -807,14 +823,15 @@ export default function SlotsPlay() {
   const spinReels = async () => {
     if (spinning) return;
     
-    // Check if user can afford the bet
-    if (!canAfford(bet)) {
+    // Check if user can afford the bet (dev mode or real wallet)
+    const canAffordBet = DEV_MODE && !walletAddress ? devGumBalance >= bet : canAfford(bet);
+    if (!canAffordBet) {
       setMessage('Not enough GUM! 💔');
       setTimeout(() => setMessage(''), 2000);
       return;
     }
     
-    if (!walletAddress) {
+    if (!effectiveWallet) {
       setMessage('Connect wallet to play! 🔗');
       setTimeout(() => setMessage(''), 2000);
       return;
@@ -855,7 +872,7 @@ export default function SlotsPlay() {
       const response = await fetch('/api/slots/spin-serverless', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bet, walletAddress }),
+        body: JSON.stringify({ bet, walletAddress: effectiveWallet }),
       });
       
       const result = await response.json();
@@ -974,6 +991,7 @@ export default function SlotsPlay() {
       <Head>
         <title>🎰 Flunks Slot Machine</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet" />
       </Head>
       
       <Container>
@@ -1016,54 +1034,60 @@ export default function SlotsPlay() {
                 top: '1%',
                 left: '50%',
                 transform: 'translateX(-50%)',
-                width: '80%',
+                width: '85%',
+                height: '5%',
+                zIndex: 3,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                overflow: 'hidden',
+                color: showWin ? '#fbbf24' : 'transparent',
+                fontFamily: "'Lilita One', cursive",
+                fontSize: 'clamp(0.8em, 2.5vw, 1.4em)',
+                fontWeight: 'normal',
+                textShadow: showWin ? '0 0 10px rgba(251, 191, 36, 0.8), 0 0 20px rgba(251, 191, 36, 0.5), 2px 2px 0 #b45309' : 'none',
+                transition: 'all 0.3s ease',
+                whiteSpace: 'nowrap'
+              }}>
+                {showWin && winAmount > 0 && (
+                  <>
+                    {winAmount >= bet * 10 ? 'BOOM GOES THE DYNAMITE!' :
+                     winAmount >= bet * 7 ? 'HE\'S ON FIRE!' :
+                     winAmount >= bet * 5 ? 'BOOMSHAKALAKA!' :
+                     winAmount >= bet * 3 ? 'FROM DOWNTOWN!' :
+                     winAmount >= bet * 2 ? 'TIGHT!' :
+                     winAmount >= bet * 1.5 ? 'SICK!' :
+                     winAmount >= bet ? 'FLY!' :
+                     'DOPE!'} +{winAmount}
+                  </>
+                )}
+              </div>
+              
+              {/* GUM Balance display - positioned in the dark pill area to the right of "GUM" */}
+              <div style={{
+                position: 'absolute',
+                top: '16.7%',
+                left: '59.5%',
+                width: '25%',
                 height: '4%',
                 zIndex: 3,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: showWin ? '#fbbf24' : 'transparent',
-                fontSize: '1em',
-                fontWeight: 'bold',
-                textShadow: showWin ? '0 0 10px rgba(251, 191, 36, 0.8), 0 0 20px rgba(251, 191, 36, 0.5)' : 'none',
-                transition: 'all 0.3s ease'
-              }}>
-                {showWin && winAmount > 0 && (
-                  <>
-                    {winAmount >= bet * 10 ? '🔥 KILLTACULAR! 🔥' :
-                     winAmount >= bet * 7 ? '⚡ KILLING SPREE! ⚡' :
-                     winAmount >= bet * 5 ? '💀 TRIPLE KILL! 💀' :
-                     winAmount >= bet * 3 ? '🎯 DOUBLE KILL! 🎯' :
-                     winAmount >= bet * 2 ? '✨ NICE WIN! ✨' :
-                     '🍬 WIN!'} +{winAmount}
-                  </>
-                )}
-              </div>
-              
-              {/* GUM Balance display - positioned next to "GUM" text */}
-              <div style={{
-                position: 'absolute',
-                top: '5.8%',
-                left: '32%',
-                width: '30%',
-                height: '3.5%',
-                zIndex: 3,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
                 color: '#fbbf24',
-                fontSize: '1.1em',
-                fontWeight: 'bold',
-                textShadow: '0 0 5px rgba(251, 191, 36, 0.5)'
+                fontFamily: "'Lilita One', cursive",
+                fontSize: '1.8em',
+                fontWeight: 'normal',
+                textShadow: '0 0 5px rgba(251, 191, 36, 0.5), 1px 1px 0 #b45309'
               }}>
-                {gumBalance}
+                {effectiveGumBalance}
               </div>
               
               {/* Bet amount display - positioned in the dark circle by character's head */}
               <div style={{
                 position: 'absolute',
-                top: '26%',
-                right: '8%',
+                top: '28%',
+                right: '11%',
                 width: '14%',
                 height: '9%',
                 zIndex: 3,
@@ -1071,9 +1095,10 @@ export default function SlotsPlay() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: '#fbbf24',
-                fontSize: '1.8em',
-                fontWeight: 'bold',
-                textShadow: '0 0 10px rgba(251, 191, 36, 0.8)'
+                fontFamily: "'Lilita One', cursive",
+                fontSize: '2em',
+                fontWeight: 'normal',
+                textShadow: '0 0 10px rgba(251, 191, 36, 0.8), 2px 2px 0 #b45309'
               }}>
                 {bet}
               </div>
@@ -1081,14 +1106,14 @@ export default function SlotsPlay() {
               {/* Reels container - positioned to align with the 3 white windows */}
               <div style={{
                 position: 'absolute',
-                top: '53%',
-                left: '7%',
-                width: '86%',
-                height: '28%',
+                top: '48%',
+                left: '5%',
+                width: '90%',
+                height: '38%',
                 zIndex: 1,
                 display: 'flex',
                 justifyContent: 'space-between',
-                gap: '3%'
+                gap: '2%'
               }}>
                 {reels.map((column, colIndex) => (
                   <div 
@@ -1100,8 +1125,8 @@ export default function SlotsPlay() {
                       justifyContent: 'space-around',
                       alignItems: 'center',
                       overflow: 'hidden',
-                      backgroundColor: 'rgba(255,255,255,0.9)',
-                      borderRadius: '4px'
+                      backgroundColor: 'rgba(255,255,255,0.95)',
+                      borderRadius: '6px'
                     }}
                   >
                     {Array.isArray(column) ? column.map((symbolKey, rowIndex) => (
@@ -1110,8 +1135,8 @@ export default function SlotsPlay() {
                         src={SYMBOL_IMAGES[symbolKey] || '/slots/images/beetle.png'}
                         alt={symbolKey}
                         style={{ 
-                          width: '85%',
-                          height: '30%',
+                          width: '95%',
+                          height: '32%',
                           objectFit: 'contain',
                           filter: spinning && !stoppedReels[colIndex] ? 'blur(3px)' : 'none',
                           transition: 'filter 0.3s'
@@ -1126,52 +1151,96 @@ export default function SlotsPlay() {
               
               {/* -5 Button - positioned over the frame's -5 button */}
               <button
-                onClick={() => adjustBet(-5)}
+                onClick={() => { console.log('🔽 -5 clicked'); adjustBet(-5); }}
                 style={{
                   position: 'absolute',
-                  bottom: '2%',
-                  left: '5%',
-                  width: '22%',
-                  height: '6%',
-                  zIndex: 3,
+                  top: '80%',
+                  left: '7%',
+                  width: '18%',
+                  height: '9%',
+                  zIndex: 10,
                   background: 'transparent',
                   border: 'none',
-                  cursor: 'pointer'
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  WebkitTapHighlightColor: 'transparent',
+                  touchAction: 'manipulation',
+                  transition: 'all 0.2s'
                 }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(0,0,0,0.4)';
+                  e.currentTarget.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+                onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
+                onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
               />
               
               {/* SPIN Button - positioned over the frame's SPIN WHEEL button */}
               <button
-                onClick={spinReels}
-                disabled={spinning || !canAfford(bet)}
+                onClick={() => { console.log('🎰 SPIN clicked'); spinReels(); }}
+                disabled={spinning || (DEV_MODE && !walletAddress ? devGumBalance < bet : !canAfford(bet))}
                 style={{
                   position: 'absolute',
-                  bottom: '2%',
-                  left: '30%',
-                  width: '40%',
-                  height: '6%',
-                  zIndex: 3,
+                  top: '83%',
+                  left: '14%',
+                  width: '34%',
+                  height: '11%',
+                  zIndex: 10,
                   background: 'transparent',
                   border: 'none',
-                  cursor: spinning || !canAfford(bet) ? 'not-allowed' : 'pointer',
-                  opacity: spinning || !canAfford(bet) ? 0.5 : 1
+                  borderRadius: '8px',
+                  cursor: spinning || effectiveGumBalance < bet ? 'not-allowed' : 'pointer',
+                  opacity: spinning || effectiveGumBalance < bet ? 0.7 : 1,
+                  WebkitTapHighlightColor: 'transparent',
+                  touchAction: 'manipulation',
+                  transition: 'all 0.2s'
                 }}
+                onMouseEnter={(e) => {
+                  if (!spinning) {
+                    e.currentTarget.style.background = 'rgba(0,0,0,0.4)';
+                    e.currentTarget.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+                onMouseDown={(e) => { if (!spinning) e.currentTarget.style.transform = 'scale(0.95)'; }}
+                onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
               />
               
               {/* +5 Button - positioned over the frame's +5 button */}
               <button
-                onClick={() => adjustBet(5)}
+                onClick={() => { console.log('🔼 +5 clicked'); adjustBet(5); }}
                 style={{
                   position: 'absolute',
-                  bottom: '2%',
-                  right: '5%',
-                  width: '22%',
-                  height: '6%',
-                  zIndex: 3,
+                  top: '80%',
+                  left: '25%',
+                  width: '18%',
+                  height: '9%',
+                  zIndex: 10,
                   background: 'transparent',
                   border: 'none',
-                  cursor: 'pointer'
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  WebkitTapHighlightColor: 'transparent',
+                  touchAction: 'manipulation',
+                  transition: 'all 0.2s'
                 }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(0,0,0,0.4)';
+                  e.currentTarget.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+                onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
+                onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
               />
             </div>
             
@@ -1186,9 +1255,15 @@ export default function SlotsPlay() {
               </div>
             )}
             
-            {!walletAddress && (
+            {!effectiveWallet && (
               <div style={{ textAlign: 'center', color: '#ff6b6b', marginTop: '10px', fontSize: '0.85em' }}>
                 Connect your wallet to play!
+              </div>
+            )}
+            
+            {DEV_MODE && !walletAddress && (
+              <div style={{ textAlign: 'center', color: '#00ff00', marginTop: '5px', fontSize: '0.75em' }}>
+                🛠️ DEV MODE: Using test wallet with {devGumBalance} GUM
               </div>
             )}
           </SlotContent>

@@ -381,17 +381,26 @@ const GridedView: React.FC<{
   return (
     <RetroGrid>
       {items.map((nft: NftItem) => {
+        // Fallback URLs for when metadata is missing
+        const fallbackUrl = nft.collection === "Backpack" 
+          ? '/images/icons/backpack.png' 
+          : '/flunks-logo.png';
+        const thumbnailUrl = nft.MetadataViewsDisplay?.thumbnail?.url && nft.MetadataViewsDisplay.thumbnail.url.trim() !== '' 
+          ? nft.MetadataViewsDisplay.thumbnail.url 
+          : fallbackUrl;
+        const displayUrl = pixelMode ? (nft.pixelUrl || thumbnailUrl) : thumbnailUrl;
+        
         return (
           <RetroItemFrame key={nft.tokenID} variant="window" className="p-2">
             <RetroImageFrame variant="field" className="relative !flex !flex-col flex-1">
               <Frame variant="well" className="!w-full !flex-1 !flex !items-center !justify-center overflow-hidden">
                 <CustomImage
-                  src={pixelMode ? nft.pixelUrl || nft.MetadataViewsDisplay.thumbnail.url : nft.MetadataViewsDisplay.thumbnail.url}
+                  src={displayUrl}
                   className="w-full h-full object-contain max-h-[150px]"
                   alt={`${nft.collection} #${nft.serialNumber}`}
                   onError={(e) => {
-                    // Fallback to main thumbnail if pixel version fails
-                    e.currentTarget.src = nft.MetadataViewsDisplay.thumbnail.url;
+                    // Fallback on error
+                    e.currentTarget.src = fallbackUrl;
                   }}
                 />
               </Frame>
@@ -484,44 +493,59 @@ const TableView: React.FC<{
 }> = ({ items, setActiveItem, pixelMode }) => {
   return (
     <div className="grid grid-cols-[repeat(auto-fill,_minmax(240px,_1fr))]">
-      {items.map((nft: NftItem) => (
-        <button
-          className="flex h-full group !p-0"
-          onClick={() => {
-            setActiveItem(nft);
-          }}
-        >
-          <Frame variant="field" className="h-full flex-shrink-0">
-            <img
-              src={pixelMode ? nft.pixelUrl || nft.MetadataViewsDisplay.thumbnail.url : nft.MetadataViewsDisplay.thumbnail.url}
-              className="h-full max-h-[40px]"
-            />
-          </Frame>
-          <Frame variant="well" className="w-full h-full ">
-            <div className="max-h-[40px] h-[40px] !flex flex-col items-start justify-start">
-              <div className="w-full h-full flex">
-                <Frame
-                  variant="status"
-                  className="w-full h-full px-3 !flex items-center"
-                >
-                  {nft.collection === "Flunks" ? "Flunk" : "Backpack"} #
-                  {nft.serialNumber}
-                </Frame>
+      {items.map((nft: NftItem) => {
+        // Fallback URLs for when metadata is missing
+        const fallbackUrl = nft.collection === "Backpack" 
+          ? '/images/icons/backpack.png' 
+          : '/flunks-logo.png';
+        const thumbnailUrl = nft.MetadataViewsDisplay?.thumbnail?.url && nft.MetadataViewsDisplay.thumbnail.url.trim() !== '' 
+          ? nft.MetadataViewsDisplay.thumbnail.url 
+          : fallbackUrl;
+        const displayUrl = pixelMode ? (nft.pixelUrl || thumbnailUrl) : thumbnailUrl;
+        
+        return (
+          <button
+            key={nft.tokenID}
+            className="flex h-full group !p-0"
+            onClick={() => {
+              setActiveItem(nft);
+            }}
+          >
+            <Frame variant="field" className="h-full flex-shrink-0">
+              <img
+                src={displayUrl}
+                className="h-full max-h-[40px]"
+                onError={(e) => {
+                  e.currentTarget.src = fallbackUrl;
+                }}
+              />
+            </Frame>
+            <Frame variant="well" className="w-full h-full ">
+              <div className="max-h-[40px] h-[40px] !flex flex-col items-start justify-start">
+                <div className="w-full h-full flex">
+                  <Frame
+                    variant="status"
+                    className="w-full h-full px-3 !flex items-center"
+                  >
+                    {nft.collection === "Flunks" ? "Flunk" : "Backpack"} #
+                    {nft.serialNumber}
+                  </Frame>
 
-                <Frame
-                  variant="field"
-                  className="w-auto h-full px-3 !flex items-center"
-                >
-                  <img
-                    src="/images/icons/arrow-right.png"
-                    className="h-4 w-auto group-hover:translate-x-1 transition-transform"
-                  />
-                </Frame>
+                  <Frame
+                    variant="field"
+                    className="w-auto h-full px-3 !flex items-center"
+                  >
+                    <img
+                      src="/images/icons/arrow-right.png"
+                      className="h-4 w-auto group-hover:translate-x-1 transition-transform"
+                    />
+                  </Frame>
+                </div>
               </div>
-            </div>
-          </Frame>
-        </button>
-      ))}
+            </Frame>
+          </button>
+        );
+      })}
     </div>
   );
 };
@@ -589,7 +613,9 @@ const ItemsGrid: React.FC = () => {
 
   return (
     <div className="!w-full !h-full max-w-full max-h-full flex flex-col">
-      <YourItemsGridHeader pixelMode={pixelMode} setPixelMode={setPixelMode} />
+      <div style={{ position: 'relative', zIndex: 100 }}>
+        <YourItemsGridHeader pixelMode={pixelMode} setPixelMode={setPixelMode} />
+      </div>
 
       {noItems && <NoItemsMessage />}
       {!activeItem && !noItems && (

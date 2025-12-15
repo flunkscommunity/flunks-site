@@ -1,28 +1,25 @@
 // Flunks Slot Machine Paytable
-// Adapted from Harry's Haunted House - 11 symbols, 10 paylines
+// 9 symbols, 38 stops per reel, 5 paylines, ~65% RTP (house-friendly)
 
 export const FLUNKS_SYMBOLS = {
-  // Low-tier symbols (frequent small wins)
-  pencil: { name: 'Pencil', tier: 'low', payouts: { 3: 2.0, 4: 1.0, 5: 2.0 } },
-  notebook: { name: 'Notebook', tier: 'low', payouts: { 3: 3.0, 4: 1.5, 5: 3.0 } },
-  backpack: { name: 'Backpack', tier: 'low', payouts: { 3: 5.0, 4: 2.0, 5: 4.0 } },
+  // Common symbols (frequent but low payout)
+  pencil: { name: 'Pencil', tier: 'common', payouts: { 3: 3.0 } },
+  eraser: { name: 'Eraser', tier: 'common', payouts: { 3: 4.0 } },
+  notebook: { name: 'Notebook', tier: 'common', payouts: { 3: 5.0 } },
   
-  // Mid-tier symbols (regular exciting wins)
-  flunk_basic: { name: 'Basic Flunk', tier: 'mid', payouts: { 3: 10.0, 4: 2.5, 5: 5.0 } },
-  diploma: { name: 'Diploma', tier: 'mid', payouts: { 3: 20.0, 4: 3.0, 5: 7.0 } },
-  trophy: { name: 'Trophy', tier: 'mid', payouts: { 3: 40.0, 4: 4.0, 5: 9.0 } },
+  // Uncommon symbols (less frequent, better payout)
+  backpack: { name: 'Backpack', tier: 'uncommon', payouts: { 3: 10.0 } },
+  calculator: { name: 'Calculator', tier: 'uncommon', payouts: { 3: 15.0 } },
   
-  // High-tier symbols (big wins)
-  flunk_evolved: { name: 'Evolved Flunk', tier: 'high', payouts: { 3: 75.0, 4: 5.0, 5: 12.0 } },
-  gum_pile: { name: 'GUM Pile', tier: 'high', payouts: { 3: 150.0, 4: 7.0, 5: 15.0 } },
-  golden_ticket: { name: 'Golden Ticket', tier: 'high', payouts: { 3: 300.0, 4: 10.0, 5: 25.0 } },
+  // Rare symbols (hard to hit, good payout)
+  trophy: { name: 'Trophy', tier: 'rare', payouts: { 3: 30.0 } },
+  diploma: { name: 'Diploma', tier: 'rare', payouts: { 3: 50.0 } },
   
-  // Premium symbols (jackpot territory)
-  wild_flunk: { name: 'Wild Flunk', tier: 'premium', payouts: { 3: 500.0, 4: 15.0, 5: 40.0 } },
-  flunks_logo: { name: 'Flunks Logo', tier: 'premium', payouts: { 3: 1000.0, 4: 25.0, 5: 80.0 } },
+  // Epic symbol (very rare)
+  gum_pile: { name: 'GUM Pile', tier: 'epic', payouts: { 3: 150.0 } },
   
-  // Scatter (free spins trigger - doesn't pay on lines)
-  scatter_keyhole: { name: 'Keyhole Scatter', tier: 'scatter', payouts: {} }
+  // Jackpot symbol (ultra rare - 1 in ~55,000 per line)
+  flunks_logo: { name: 'Flunks Logo', tier: 'jackpot', payouts: { 3: 500.0 } }
 };
 
 // 5 classic paylines for 3-reel slot

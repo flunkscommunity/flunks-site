@@ -18,14 +18,23 @@ const ImageDisplay: React.FC<ImageDisplayProps> = React.memo(({
   templateId,
 }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  
+  // Fallback image for backpacks when no thumbnail available
+  const fallbackUrl = collectionItemName === "Backpack" 
+    ? '/images/icons/backpack.png' 
+    : '/flunks-logo.png';
+  
+  const imageSrc = src && src.trim() !== '' ? src : fallbackUrl;
 
   const handleImageLoad = useCallback(() => {
     setImageLoaded(true);
   }, []);
 
-  const handleImageError = useCallback(() => {
-    console.warn(`Failed to load image: ${src}`);
-  }, [src]);
+  const handleImageError = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
+    console.warn(`Failed to load image: ${src}, using fallback`);
+    // Use fallback on error
+    e.currentTarget.src = fallbackUrl;
+  }, [src, fallbackUrl]);
   return (
     <Frame
       className="!w-full h-auto p-4 !flex !items-center !justify-center !flex-col"
@@ -42,7 +51,7 @@ const ImageDisplay: React.FC<ImageDisplayProps> = React.memo(({
         <Frame className="w-auto h-auto !flex flex-col relative min-w-full min-h-full max-w-[250px] lg:max-w-[500px] p-2">
           <Frame variant="well">
             <img 
-              src={src} 
+              src={imageSrc} 
               className="w-full h-full flex-shrink" 
               loading="lazy"
               decoding="async"
