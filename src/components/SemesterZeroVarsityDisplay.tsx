@@ -155,21 +155,23 @@ const JacketImage = styled.div<{ $active: boolean }>`
   }
 `;
 
-const PinOverlay = styled.div<{ $x: number; $y: number; $pinImage: string }>`
+const PinOverlay = styled.div<{ $x: number; $y: number }>`
   position: absolute;
   left: ${props => props.$x}%;
   top: ${props => props.$y}%;
   transform: translate(-50%, -50%);
   width: 90px;
   height: 90px;
-  background-image: url(${props => props.$pinImage});
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
   cursor: move;
   filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6));
   transition: transform 0.2s ease;
   z-index: 10;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
   
   &:hover {
     transform: translate(-50%, -50%) scale(1.15);
@@ -612,6 +614,9 @@ const SemesterZeroVarsityDisplay: React.FC<SemesterZeroVarsityDisplayProps> = ({
       const canvas = await html2canvas(jacketRef.current, {
         backgroundColor: null,
         scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
       });
       
       const link = document.createElement('a');
@@ -685,7 +690,6 @@ const SemesterZeroVarsityDisplay: React.FC<SemesterZeroVarsityDisplayProps> = ({
                     key={pin.id}
                     $x={pin.x!}
                     $y={pin.y!}
-                    $pinImage={pin.image}
                     onMouseDown={(e) => {
                       e.stopPropagation();
                       handlePlacedPinMouseDown(pin);
@@ -695,7 +699,9 @@ const SemesterZeroVarsityDisplay: React.FC<SemesterZeroVarsityDisplayProps> = ({
                       handleRemovePin(pin.id);
                     }}
                     title={isDraggingPlaced ? 'Click on F to place' : `${pin.name} - Double-click to remove, drag to move`}
-                  />
+                  >
+                    <img src={pin.image} alt={pin.name} crossOrigin="anonymous" />
+                  </PinOverlay>
                 ))}
               </JacketDisplay>
 

@@ -160,7 +160,7 @@ const ReelsContainer = styled.div`
 
 const Reel = styled.div<{ spinning: boolean; stopped?: boolean }>`
   width: 110px;
-  background: rgba(0,0,0,0.8);
+  background: rgba(20, 40, 80, 0.9);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -723,17 +723,18 @@ const SYMBOL_KEYS = [
   'trophy', 'diploma', 'gum_pile', 'flunks_logo'
 ];
 
-// Map to slot images (9 symbols needed)
+// Map to slot images (9 symbols needed) - 4 Thieves Underground theme
 const SYMBOL_IMAGES: Record<string, string> = {
-  pencil: '/slots/images/beetle.png',        // Common - 3x
-  eraser: '/slots/images/spider.png',        // Common - 4x
-  notebook: '/slots/images/bat.png',         // Common - 5x
-  backpack: '/slots/images/ghost.png',       // Uncommon - 10x
-  calculator: '/slots/images/goblin.png',    // Uncommon - 15x
-  trophy: '/slots/images/skeleton.png',      // Rare - 30x
-  diploma: '/slots/images/mummy.png',        // Rare - 50x
-  gum_pile: '/slots/images/vampire.png',     // Epic - 150x
-  flunks_logo: '/slots/images/werewolf.png'  // JACKPOT - 500x
+  pencil: '/images/icons/slot-icons/cd.png',           // Common - 3x
+  eraser: '/images/icons/slot-icons/vhs.png',          // Common - 4x
+  notebook: '/images/icons/slot-icons/walkman.png',    // Common - 5x
+  backpack: '/images/icons/slot-icons/pogs.png',       // Uncommon - 10x
+  calculator: '/images/icons/slot-icons/talkboy.png',  // Uncommon - 15x
+  trophy: '/images/icons/slot-icons/sun.png',          // Rare - 30x
+  diploma: '/images/icons/slot-icons/hoverboard.png',  // Rare - 50x
+  gum_pile: '/images/icons/slot-icons/powerglove.png', // Epic - 150x
+  flunks_logo: '/images/icons/slot-icons/jackpot.png', // JACKPOT - 500x
+  scatter_keyhole: '/images/icons/slot-icons/freespin.png' // Scatter - Free Spins
 };
 
 export default function SlotsPlay() {
@@ -744,14 +745,14 @@ export default function SlotsPlay() {
   const { balance: gumBalance, refreshBalance, canAfford } = useGum();
   const { address: walletAddress } = useUnifiedWallet();
   
-  // DEV MODE: Use a test wallet address when no wallet is connected
-  const DEV_MODE = true; // Set to false for production
+  // DEV MODE: Auto-detect based on environment (true locally, false in production)
+  const DEV_MODE = process.env.NODE_ENV === 'development';
   const DEV_WALLET = '0xDEV_TEST_WALLET';
   const effectiveWallet = walletAddress || (DEV_MODE ? DEV_WALLET : null);
   
   // Dev mode GUM balance (starts at 500)
   const [devGumBalance, setDevGumBalance] = useState(500);
-  const effectiveGumBalance = walletAddress ? gumBalance : devGumBalance;
+  const effectiveGumBalance = DEV_MODE ? devGumBalance : gumBalance;
   
   // Redirect to home if slot machine is disabled (live site)
   useEffect(() => {
@@ -762,8 +763,8 @@ export default function SlotsPlay() {
   
   // Slot transaction helper
   const slotTransaction = async (type: 'bet' | 'win' | 'refund', amount: number, metadata?: any) => {
-    // Dev mode: handle locally without API
-    if (DEV_MODE && !walletAddress) {
+    // Dev mode: handle locally without API (always use local balance in dev mode)
+    if (DEV_MODE) {
       if (type === 'bet') {
         setDevGumBalance(prev => prev - amount);
       } else if (type === 'win' || type === 'refund') {
@@ -1125,7 +1126,7 @@ export default function SlotsPlay() {
                       justifyContent: 'space-around',
                       alignItems: 'center',
                       overflow: 'hidden',
-                      backgroundColor: 'rgba(255,255,255,0.95)',
+                      backgroundColor: 'transparent',
                       borderRadius: '6px'
                     }}
                   >
@@ -1219,7 +1220,7 @@ export default function SlotsPlay() {
                 style={{
                   position: 'absolute',
                   top: '80%',
-                  left: '25%',
+                  left: '23%',
                   width: '18%',
                   height: '9%',
                   zIndex: 10,
