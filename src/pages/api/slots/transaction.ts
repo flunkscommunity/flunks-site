@@ -43,19 +43,19 @@ export default async function handler(
   }
 
   try {
-    // Get current balance
-    const { data: profile, error: profileError } = await supabase
-      .from('user_profiles')
-      .select('gum_balance')
+    // Get current balance from user_gum_balances table (not user_profiles!)
+    const { data: balanceData, error: balanceError } = await supabase
+      .from('user_gum_balances')
+      .select('total_gum')
       .eq('wallet_address', wallet_address)
       .single();
 
-    if (profileError) {
-      console.error('Error fetching profile:', profileError);
-      return res.status(404).json({ success: false, error: 'User not found' });
+    if (balanceError && balanceError.code !== 'PGRST116') {
+      console.error('Error fetching balance:', balanceError);
+      return res.status(500).json({ success: false, error: 'Failed to fetch balance' });
     }
 
-    const currentBalance = profile?.gum_balance || 0;
+    const currentBalance = balanceData?.total_gum || 0;
     let newBalance = currentBalance;
     let amountChanged = 0;
 
@@ -75,33 +75,41 @@ export default async function handler(
       amountChanged = amount;
     }
 
-    // Update balance
+    // Update balance in user_gum_balances
     const { error: updateError } = await supabase
-      .from('user_profiles')
-      .update({ gum_balance: newBalance })
-      .eq('wallet_address', wallet_address);
+      .from('user_gum_balances')
+      .upsert({ 
+        wallet_address, 
+        total_gum: newBalance,
+        updated_at: new Date().toISOString()
+      }, { 
+        onConflict: 'wallet_address' 
+      });
 
     if (updateError) {
       console.error('Error updating balance:', updateError);
       return res.status(500).json({ success: false, error: 'Failed to update balance' });
     }
 
-    // Record transaction in gum_transactions table
+    // Record transaction in user_gum_transactions table
     const transactionData = {
       wallet_address,
-      source: `slots_${type}`,
+      transaction_type: type === 'bet' ? 'spend' : 'earn',
       amount: amountChanged,
-      balance_after: newBalance,
+      source: `slots_${type}`,
+      description: type === 'bet' 
+        ? `Bet ${amount} GUM on slots` 
+        : type === 'win' 
+          ? `Won ${amount} GUM on slots`
+          : `Refund of ${amount} GUM from slots`,
       metadata: {
         ...metadata,
-        transaction_type: type,
         game: 'slots'
-      },
-      created_at: new Date().toISOString()
+      }
     };
 
     const { error: txError } = await supabase
-      .from('gum_transactions')
+      .from('user_gum_transactions')
       .insert(transactionData);
 
     if (txError) {
