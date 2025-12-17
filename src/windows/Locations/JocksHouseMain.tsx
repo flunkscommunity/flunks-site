@@ -511,7 +511,7 @@ const JocksHouseMain = () => {
             
             {/* Interactive Buttons section - fixed at bottom */}
             <div className="bg-black bg-opacity-90 p-3 border-t border-gray-600 flex-shrink-0">
-              <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
+              <div className="grid grid-cols-3 gap-3 max-w-md mx-auto">
                 <button className="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-2 rounded-lg font-bold transition-all duration-200 hover:scale-105 shadow-lg text-sm min-h-[44px] flex items-center justify-center">
                   📻 Cassette Box
                 </button>
@@ -524,12 +524,6 @@ const JocksHouseMain = () => {
                   title="Access teddy backpack content"
                 >
                   🎒 Teddy Backpack
-                </button>
-                <button 
-                  onClick={() => openTimeBasedAccessDemo()}
-                  className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg font-bold transition-all duration-200 hover:scale-105 shadow-lg text-sm min-h-[44px] flex items-center justify-center"
-                >
-                  ⏰ Time
                 </button>
               </div>
             </div>
@@ -699,33 +693,11 @@ const JocksHouseMain = () => {
                   
                   <button
                     onClick={() => 
-                      openStudyDesk()
-                    }
-                    className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 sm:px-4 sm:py-3 rounded-lg font-bold transition-all duration-200 hover:scale-105 shadow-lg text-sm sm:text-base min-h-[44px]"
-                  >
-                    📚 Desk
-                  </button>
-                  
-                  <button
-                    onClick={() => 
                       openUnderBed()
                     }
                     className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 sm:px-4 sm:py-3 rounded-lg font-bold transition-all duration-200 hover:scale-105 shadow-lg text-sm sm:text-base min-h-[44px]"
                   >
                     🛏️ Under the Bed
-                  </button>
-                  
-                  <button
-                    onClick={() => 
-                      openRoom(
-                        WINDOW_IDS.JOCKS_HOUSE_BEDROOM + '_trophy',
-                        "Trophy Corner",
-                        "A gleaming display of athletic achievements. MVP awards, state championship trophies, and team photos from winning seasons. Each piece represents countless hours of dedication and zero excuses."
-                      )
-                    }
-                    className="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-2 sm:px-4 sm:py-3 rounded-lg font-bold transition-all duration-200 hover:scale-105 shadow-lg text-sm sm:text-base min-h-[44px]"
-                  >
-                    🏆 Trophies
                   </button>
                 </div>
                 
@@ -893,11 +865,6 @@ const JocksHouseMain = () => {
               : 'bg-yellow-100 bg-opacity-5'
           }`}
         />
-
-        {/* Time Info Display */}
-        <div className="absolute top-4 right-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded text-sm z-20">
-          time
-        </div>
       </div>
 
       {/* Room Buttons Section */}

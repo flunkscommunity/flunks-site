@@ -40,20 +40,8 @@ const FourThievesBarMain = () => {
   const [hasUndergroundAccess, setHasUndergroundAccess] = useState(false);
   const [showingBackView, setShowingBackView] = useState(false);
   
-  // The secret word - 90s gambling/nostalgia themed
-  const SECRET_WORDS = [
-    'rainman',      // Dustin Hoffman counting cards
-    'vegas',        // Classic destination
-    'highroller',   // 90s casino term
-    'blackjack',    // The game
-    'royale',       // Casino Royale vibes
-    'maverick',     // 1994 Mel Gibson poker movie
-    'rounders',     // 1998 poker classic
-    'aces',         // Cards
-    'snake eyes',   // Craps reference / 1998 movie
-    'dealer',       // Classic
-  ];
-  const CURRENT_SECRET = 'snake eyes'; // Craps reference / 1998 Nicolas Cage movie
+  // The secret word
+  const SECRET_WORDS = ['snicklefritz'];
 
   // Night time check (6 PM to 6 AM)
   const hour = new Date().getHours();
@@ -298,7 +286,7 @@ const FourThievesBarMain = () => {
     });
   };
 
-  // Open the main interior with slot machine and video poker
+  // Open the main interior view
   const openInterior = () => {
     // Turn up the music when entering the bar
     setIsInsideBar(true);
@@ -455,11 +443,20 @@ const FourThievesBarMain = () => {
                 {/* Talk to Someone - Main NPC Event Trigger */}
                 <button
                   onClick={() => npcActions.triggerEventCheck()}
-                  className="bg-gradient-to-br from-purple-700 to-purple-900 hover:from-purple-600 hover:to-purple-800 text-white px-4 py-3 rounded-lg border-3 border-purple-400 hover:border-purple-300 transition-all duration-300 hover:scale-105 text-center text-sm font-black shadow-lg animate-pulse col-span-2"
+                  className="bg-gradient-to-br from-purple-700 to-purple-900 hover:from-purple-600 hover:to-purple-800 text-white px-4 py-3 rounded-lg border-3 border-purple-400 hover:border-purple-300 transition-all duration-300 hover:scale-105 text-center text-sm font-black shadow-lg animate-pulse"
                   style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
                   title="Approach a shady character..."
                 >
                   🎭 Talk to Someone
+                </button>
+
+                {/* Slot Machine */}
+                <button
+                  onClick={openSlotMachine}
+                  className="bg-gradient-to-br from-amber-700 to-orange-900 hover:from-amber-600 hover:to-orange-800 text-white px-4 py-3 rounded-lg border-3 border-yellow-500 hover:border-yellow-400 transition-all duration-300 hover:scale-105 text-center text-sm font-black shadow-lg"
+                  style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
+                >
+                  🎰 Lucky Slots
                 </button>
 
                 {/* High Stakes Poker */}
@@ -519,12 +516,12 @@ const FourThievesBarMain = () => {
   // Main component render - Exterior view
   return (
     <div className="relative w-full h-full flex flex-col overflow-hidden">
-      {/* Background Image */}
-      <div className="relative flex-1 flex items-center justify-center min-h-0 p-1">
+      {/* Background Image - Full width */}
+      <div className="relative flex-1 flex items-center justify-center min-h-0">
         <img
           src={getCurrentBackground()}
           alt={`4 Thieves Bar & Grill - ${isDay ? 'Day' : 'Night'}`}
-          className="w-full h-full object-contain"
+          className="w-full h-full object-cover"
           onError={(e) => {
             e.currentTarget.src = "/images/backdrops/BLANK.png";
           }}

@@ -828,8 +828,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                             windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_MAIN}
                             headerTitle="🍺 4 Thieves Bar"
                             onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_MAIN)}
-                            initialWidth="800px"
-                            initialHeight="75vh"
+                            initialWidth="95vw"
+                            initialHeight="85vh"
                             resizable={true}
                           >
                             <FourThievesBarMain />
@@ -844,8 +844,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                             windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_MAIN}
                             headerTitle="4 Thieves Bar"
                             onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_MAIN)}
-                            initialWidth="60vw"
-                            initialHeight="60vh"
+                            initialWidth="750px"
+                            initialHeight="85vh"
                             resizable={true}
                           >
                             <FourThievesBarMain />
