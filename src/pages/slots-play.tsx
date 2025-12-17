@@ -742,7 +742,7 @@ export default function SlotsPlay() {
   const { gameId, gameName } = router.query;
   
   // GUM integration
-  const { balance: gumBalance, refreshBalance, canAfford } = useGum();
+  const { balance: gumBalance, refreshBalance, canAfford, updateBalance } = useGum();
   const { address: walletAddress } = useUnifiedWallet();
   
   // DEV MODE: Auto-detect based on environment (true locally, false in production)
@@ -784,9 +784,10 @@ export default function SlotsPlay() {
       
       const result = await response.json();
       
-      if (result.success) {
-        // Refresh the GUM balance in context
-        await refreshBalance();
+      if (result.success && result.new_balance !== undefined) {
+        // Use the new_balance from API response for instant UI update
+        updateBalance(result.new_balance);
+        console.log(`🎰 ${type}: Updated balance to ${result.new_balance}`);
       }
       
       return result;

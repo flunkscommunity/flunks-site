@@ -80,11 +80,33 @@ const FourThievesBarMain = () => {
     debug: true, // Enable for development
   });
 
+  // Track if user is inside the bar
+  const [isInsideBar, setIsInsideBar] = useState(false);
+
   useEffect(() => {
-    // Initialize bar music
-    audioRef.current = new Audio('/music/bar-ambience.mp3');
-    audioRef.current.loop = true;
-    audioRef.current.volume = 0.2;
+    // Initialize 4 Thieves music
+    audioRef.current = new Audio('/music/4thieves.mp3');
+    audioRef.current.loop = false; // We'll manually loop at 1 minute
+    audioRef.current.volume = 0.25; // 25% on landing page
+
+    // Loop at 1 minute (60 seconds)
+    const handleTimeUpdate = () => {
+      if (audioRef.current && audioRef.current.currentTime >= 60) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play().catch(console.log);
+      }
+    };
+
+    // Also handle if the track ends naturally (shouldn't happen with 8 min track, but just in case)
+    const handleEnded = () => {
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play().catch(console.log);
+      }
+    };
+
+    audioRef.current.addEventListener('timeupdate', handleTimeUpdate);
+    audioRef.current.addEventListener('ended', handleEnded);
 
     const playMusic = async () => {
       try {
@@ -100,12 +122,15 @@ const FourThievesBarMain = () => {
 
     return () => {
       if (audioRef.current) {
+        audioRef.current.removeEventListener('timeupdate', handleTimeUpdate);
+        audioRef.current.removeEventListener('ended', handleEnded);
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
       }
     };
   }, []);
 
+  // Handle mute toggle
   useEffect(() => {
     if (audioRef.current) {
       if (isMuted) {
@@ -115,6 +140,16 @@ const FourThievesBarMain = () => {
       }
     }
   }, [isMuted]);
+
+  // Adjust volume based on whether user is inside the bar
+  useEffect(() => {
+    if (audioRef.current && !isMuted) {
+      // Smooth volume transition
+      const targetVolume = isInsideBar ? 0.75 : 0.25;
+      audioRef.current.volume = targetVolume;
+      console.log(`🎵 4 Thieves volume: ${targetVolume * 100}%`);
+    }
+  }, [isInsideBar, isMuted]);
 
   const handleGumChange = (amount: number) => {
     setGumBalance(prev => Math.max(0, prev + amount));
@@ -265,22 +300,33 @@ const FourThievesBarMain = () => {
 
   // Open the main interior with slot machine and video poker
   const openInterior = () => {
+    // Turn up the music when entering the bar
+    setIsInsideBar(true);
+    
+    // Day/night interior images
+    const interiorImage = isDay 
+      ? "/images/locations/4-thieves-inside-day.png"
+      : "/images/locations/4-thieves-inside-night.png";
+    
     openWindow({
       key: WINDOW_IDS.FOUR_THIEVES_BAR_INTERIOR,
       window: (
         <DraggableResizeableWindow
           windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_INTERIOR}
           headerTitle="4 Thieves Bar & Grill - Inside"
-          onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_INTERIOR)}
+          onClose={() => {
+            setIsInsideBar(false); // Turn volume back down when leaving
+            closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_INTERIOR);
+          }}
           initialWidth="900px"
           initialHeight="80vh"
           resizable={true}
         >
           <div className="relative w-full h-full flex flex-col overflow-hidden">
-            {/* Interior Image */}
+            {/* Interior Image - Day/Night Cycle */}
             <div className="relative flex-1 flex items-center justify-center min-h-0">
               <img
-                src="/images/locations/four-thieves/four-thieves-interior.png"
+                src={interiorImage}
                 alt="4 Thieves Bar & Grill Interior"
                 className="max-w-full max-h-full object-contain"
                 onError={(e) => {
