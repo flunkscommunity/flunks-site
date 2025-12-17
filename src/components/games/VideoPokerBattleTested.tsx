@@ -4,6 +4,8 @@
  * 
  * This component separates game logic from UI for easy aesthetic customization.
  * The core poker logic is in /lib/pokersolver.ts
+ * 
+ * Uses real GUM via /api/videopoker/transaction API
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react';
@@ -30,8 +32,8 @@ type GamePhase = 'betting' | 'holding' | 'result';
 interface VideoPokerProps {
   onClose?: () => void;
   walletAddress?: string;
-  gumBalance?: number;
-  onGumChange?: (amount: number) => void;
+  initialBalance?: number;
+  onBalanceUpdate?: (newBalance: number) => void;
 }
 
 // ============================================================================
@@ -48,8 +50,8 @@ const GUM_PER_COIN = 10;            // GUM cost per coin
 const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({ 
   onClose, 
   walletAddress,
-  gumBalance = 0,
-  onGumChange 
+  initialBalance = 0,
+  onBalanceUpdate 
 }) => {
   // Game state
   const [deck, setDeck] = useState<string[]>([]);
@@ -62,8 +64,50 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
   const [winningHand, setWinningHand] = useState('');
   const [message, setMessage] = useState('Place your bet and DEAL!');
   const [isAnimating, setIsAnimating] = useState(false);
+  const [gumBalance, setGumBalance] = useState(initialBalance);
 
   const bet = BET_LEVELS[betLevel] * GUM_PER_COIN;
+
+  // Update local balance when initialBalance prop changes
+  useEffect(() => {
+    setGumBalance(initialBalance);
+  }, [initialBalance]);
+
+  // ============================================================================
+  // GUM API TRANSACTION (same pattern as slots)
+  // ============================================================================
+
+  const pokerTransaction = async (
+    type: 'bet' | 'win' | 'refund', 
+    amount: number, 
+    metadata?: any
+  ): Promise<{ success: boolean; new_balance?: number; error?: string }> => {
+    if (!walletAddress) {
+      return { success: false, error: 'No wallet connected' };
+    }
+
+    try {
+      const response = await fetch('/api/videopoker/transaction', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ wallet_address: walletAddress, type, amount, metadata })
+      });
+
+      const result = await response.json();
+
+      if (result.success && result.new_balance !== undefined) {
+        // Instant UI update with new balance from API
+        setGumBalance(result.new_balance);
+        onBalanceUpdate?.(result.new_balance);
+        console.log(`🃏 Video Poker ${type}: Updated balance to ${result.new_balance}`);
+      }
+
+      return result;
+    } catch (error) {
+      console.error('Video poker transaction error:', error);
+      return { success: false, error: 'Transaction failed' };
+    }
+  };
 
   // Audio refs
   const dealSoundRef = useRef<HTMLAudioElement | null>(null);
@@ -94,14 +138,26 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
 
   const newHand = useCallback(async () => {
     if (gumBalance < bet) {
-      setMessage('❌ Not enough GUM!');
+      setMessage('NOT ENOUGH GUM!');
+      return;
+    }
+
+    if (!walletAddress) {
+      setMessage('CONNECT WALLET!');
       return;
     }
 
     if (!roundEnded) return;
 
     setIsAnimating(true);
-    onGumChange?.(-bet);
+    
+    // Place bet via API
+    const betResult = await pokerTransaction('bet', bet, { bet_level: betLevel + 1 });
+    if (!betResult.success) {
+      setMessage(betResult.error || 'BET FAILED!');
+      setIsAnimating(false);
+      return;
+    }
     
     // Shuffle and deal
     const shuffledDeck = shuffleDeck([...CARD_LIST]);
@@ -130,15 +186,15 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
     // Check initial hand value (for display purposes)
     const result = evaluateVideoPokerHand(newHandCards);
     if (result.name) {
-      setMessage(`${result.name} - Select cards to HOLD`);
+      setMessage(`${result.name} - SELECT HOLD`);
     } else {
-      setMessage('Select cards to HOLD, then DRAW');
+      setMessage('SELECT HOLD THEN DRAW');
     }
 
     setRoundEnded(false);
     setGamePhase('holding');
     setIsAnimating(false);
-  }, [gumBalance, bet, roundEnded, onGumChange]);
+  }, [gumBalance, bet, roundEnded, walletAddress, betLevel]);
 
   const holdCard = useCallback((index: number) => {
     if (gamePhase !== 'holding' || isAnimating) return;
@@ -198,35 +254,57 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
     setGamePhase('result');
 
     if (winAmount > 0) {
-      onGumChange?.(winAmount);
-      winSoundRef.current?.play().catch(() => {});
-      setMessage(`🎉 ${result.name}! Won ${winAmount} GUM!`);
+      // Award winnings via API
+      const winResult = await pokerTransaction('win', winAmount, { 
+        hand: result.name,
+        bet_level: betLevel + 1,
+        cards: handCodes 
+      });
+      
+      if (winResult.success) {
+        winSoundRef.current?.play().catch(() => {});
+        setMessage(`${result.name}! +${winAmount} GUM!`);
+      } else {
+        setMessage(`WIN ERROR: ${winResult.error}`);
+      }
+    } else {
     } else {
       loseSoundRef.current?.play().catch(() => {});
-      setMessage('No win. Try again!');
+      setMessage('NO WIN - TRY AGAIN');
     }
 
     setIsAnimating(false);
-  }, [gamePhase, isAnimating, deck, hand, holdState, betLevel, onGumChange]);
+  }, [gamePhase, isAnimating, deck, hand, holdState, betLevel, walletAddress]);
 
   const startNewGame = useCallback(() => {
     setHand([]);
     setHoldState([false, false, false, false, false]);
     setLastWin(0);
     setWinningHand('');
-    setMessage('Place your bet and DEAL!');
+    setMessage('PLACE BET AND DEAL!');
     setRoundEnded(true);
     setGamePhase('betting');
   }, []);
 
   // ============================================================================
-  // RENDER CARD - Customize this for different aesthetics!
+  // RENDER CARD - Using classic SVG playing cards!
   // ============================================================================
+
+  // Convert card code (e.g., "Ah", "Ts") to SVG filename (e.g., "AH.svg", "10S.svg")
+  const getCardSvgUrl = (cardCode: string): string => {
+    const value = cardCode.charAt(0);
+    const suit = cardCode.charAt(1).toUpperCase();
+    
+    // Handle 10 (T in code)
+    const displayValue = value === 'T' ? '10' : value.toUpperCase();
+    
+    return `/cards/${displayValue}${suit}.svg`;
+  };
 
   const renderCard = (card: CardState | undefined, index: number) => {
     const isEmpty = !card;
+    const isRevealed = card?.revealed ?? false;
     const isHeld = holdState[index];
-    const display = card ? getCardDisplay(card.code) : null;
 
     return (
       <div 
@@ -234,68 +312,65 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
         onClick={() => card && holdCard(index)}
         className="relative cursor-pointer transition-all duration-200"
         style={{
-          width: '70px',
-          height: '100px',
+          width: '80px',
+          height: '112px',
           transform: isHeld ? 'translateY(-12px)' : 'none',
         }}
       >
-        {/* HOLD indicator */}
+        {/* HOLD indicator - old school yellow text */}
         {isHeld && (
           <div 
-            className="absolute -top-6 left-0 right-0 text-center text-xs font-bold animate-pulse"
-            style={{ color: '#00ff00', textShadow: '0 0 8px #00ff00' }}
+            className="absolute -top-6 left-0 right-0 text-center font-bold"
+            style={{ 
+              color: '#ffff00', 
+              textShadow: '1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000',
+              fontFamily: '"Press Start 2P", monospace',
+              fontSize: '10px',
+            }}
           >
             HELD
           </div>
         )}
         
-        {/* Card face */}
+        {/* Card image */}
         <div
-          className="w-full h-full rounded-lg flex flex-col items-center justify-center select-none"
+          className="w-full h-full rounded-lg overflow-hidden select-none"
           style={{
-            background: isEmpty 
-              ? 'linear-gradient(135deg, #2a1a3a 0%, #1a0a2a 100%)' 
-              : 'linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%)',
             border: isHeld 
-              ? '3px solid #00ff00' 
-              : isEmpty 
-                ? '2px solid #444'
-                : '2px solid #333',
+              ? '3px solid #ffff00' 
+              : '2px solid #333',
             boxShadow: isHeld 
-              ? '0 0 20px rgba(0, 255, 0, 0.6), 0 8px 16px rgba(0, 0, 0, 0.4)' 
-              : '0 4px 12px rgba(0, 0, 0, 0.4)',
-            transition: 'all 0.2s ease',
+              ? '0 0 15px rgba(255, 255, 0, 0.6), 0 6px 12px rgba(0, 0, 0, 0.5)' 
+              : '0 4px 8px rgba(0, 0, 0, 0.5)',
+            transition: 'all 0.15s ease',
+            background: '#1a237e',
           }}
         >
-          {display && (
-            <>
-              {/* Top left corner */}
-              <div 
-                className="absolute top-1 left-2 text-sm font-bold"
-                style={{ color: display.color }}
-              >
-                {display.value}
-              </div>
-              
-              {/* Center suit */}
-              <div 
-                className="text-4xl"
-                style={{ color: display.color }}
-              >
-                {display.suit}
-              </div>
-              
-              {/* Bottom right corner (inverted) */}
-              <div 
-                className="absolute bottom-1 right-2 text-sm font-bold rotate-180"
-                style={{ color: display.color }}
-              >
-                {display.value}
-              </div>
-            </>
-          )}
-          {isEmpty && (
-            <div className="text-3xl opacity-20">🃏</div>
+          {isEmpty ? (
+            // Empty slot
+            <div 
+              className="w-full h-full flex items-center justify-center"
+              style={{ background: 'linear-gradient(135deg, #1a237e 0%, #0d1442 100%)' }}
+            >
+              <span className="text-3xl opacity-30">🃏</span>
+            </div>
+          ) : isRevealed && card ? (
+            // Face-up card - use SVG
+            <img 
+              src={getCardSvgUrl(card.code)}
+              alt={card.code}
+              className="w-full h-full object-contain"
+              style={{ background: '#fff' }}
+              draggable={false}
+            />
+          ) : (
+            // Card back
+            <img 
+              src="/cards/BACK.svg"
+              alt="Card back"
+              className="w-full h-full object-cover"
+              draggable={false}
+            />
           )}
         </div>
       </div>
@@ -310,35 +385,37 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
     <div 
       className="w-full h-full flex flex-col p-4 overflow-y-auto"
       style={{
-        background: 'linear-gradient(135deg, #0a1a0a 0%, #1a3a1a 50%, #0a2a0a 100%)',
+        background: 'linear-gradient(180deg, #0000cc 0%, #000066 100%)',
         minHeight: '100%',
+        fontFamily: '"Press Start 2P", "Courier New", monospace',
       }}
     >
-      {/* Pay Table */}
+      {/* Pay Table - Classic Yellow on Dark Blue */}
       <div 
-        className="mb-4 rounded-lg overflow-hidden flex-shrink-0"
+        className="mb-4 rounded overflow-hidden flex-shrink-0"
         style={{
-          background: 'rgba(0, 0, 0, 0.85)',
-          border: '3px solid #ffd700',
+          background: '#000033',
+          border: '3px solid #ffff00',
         }}
       >
         {/* Header */}
         <div 
-          className="grid text-center font-bold text-xs"
+          className="grid text-center font-bold"
           style={{ 
             gridTemplateColumns: '1fr repeat(5, 45px)',
-            background: '#1a1a2a',
-            borderBottom: '2px solid #ffd700',
+            background: '#000044',
+            borderBottom: '2px solid #ffff00',
+            fontSize: '10px',
           }}
         >
-          <div style={{ padding: '6px', color: '#ffd700' }}>HAND</div>
+          <div style={{ padding: '6px', color: '#ffff00' }}>HAND</div>
           {BET_LEVELS.map((level, idx) => (
             <div 
               key={idx}
               style={{ 
                 padding: '6px',
-                color: betLevel === idx ? '#000' : '#ffd700',
-                background: betLevel === idx ? '#ffd700' : 'transparent',
+                color: betLevel === idx ? '#000' : '#ffff00',
+                background: betLevel === idx ? '#ff0000' : 'transparent',
                 fontWeight: 'bold',
               }}
             >
@@ -351,23 +428,23 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
         {PAY_TABLE_DATA.map((row, rowIdx) => (
           <div 
             key={rowIdx}
-            className="grid text-center text-xs"
+            className="grid text-center"
             style={{ 
               gridTemplateColumns: '1fr repeat(5, 45px)',
-              borderBottom: '1px solid #333',
+              borderBottom: '1px solid #333366',
               background: winningHand === row.pokersolver 
-                ? 'rgba(0, 255, 0, 0.4)' 
+                ? 'rgba(255, 255, 255, 0.2)' 
                 : 'transparent',
-              animation: winningHand === row.pokersolver ? 'pulse 0.5s ease-in-out infinite' : 'none',
+              animation: winningHand === row.pokersolver ? 'blink 0.3s ease-in-out infinite' : 'none',
+              fontSize: '9px',
             }}
           >
             <div 
               style={{ 
                 padding: '4px 8px', 
-                color: winningHand === row.pokersolver ? '#00ff00' : '#ffd700',
+                color: winningHand === row.pokersolver ? '#ffffff' : '#ffff00',
                 textAlign: 'left',
                 fontWeight: 'bold',
-                fontSize: '10px',
               }}
             >
               {row.display}
@@ -377,11 +454,11 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
                 key={idx}
                 style={{ 
                   padding: '4px',
-                  color: idx === 4 ? '#ff4444' : '#ffd700',
-                  background: betLevel === idx ? (idx === 4 ? '#ff4444' : '#ffd700') : 'transparent',
+                  color: '#ffff00',
+                  background: betLevel === idx ? '#ff0000' : 'transparent',
                 }}
               >
-                <span style={{ color: betLevel === idx ? '#000' : undefined }}>
+                <span style={{ color: betLevel === idx ? '#ffffff' : undefined }}>
                   {payout}
                 </span>
               </div>
@@ -390,38 +467,34 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
         ))}
       </div>
 
-      {/* Game Area */}
+      {/* Game Area - Classic blue felt look */}
       <div 
-        className="flex-1 rounded-2xl p-4 flex flex-col"
+        className="flex-1 rounded p-4 flex flex-col"
         style={{
-          background: 'linear-gradient(180deg, #1a4a2a 0%, #0d3320 100%)',
-          border: '6px solid #8B4513',
-          boxShadow: 'inset 0 0 40px rgba(0, 0, 0, 0.4)',
+          background: '#000088',
+          border: '4px solid #ffff00',
           minHeight: '320px',
         }}
       >
         {/* Cards */}
         <div 
-          className="flex justify-center gap-2 mb-4 p-4 rounded-lg flex-shrink-0"
+          className="flex justify-center gap-3 mb-4 p-4 flex-shrink-0"
           style={{
-            background: 'rgba(0, 0, 0, 0.3)',
-            minHeight: '130px',
+            minHeight: '140px',
           }}
         >
           {[0, 1, 2, 3, 4].map(i => renderCard(hand[i], i))}
         </div>
 
-        {/* Message */}
+        {/* Message - Red text with yellow stroke like old-school casino */}
         <div 
-          className="text-center p-3 rounded-lg mb-4 flex-shrink-0"
+          className="text-center p-3 mb-4 flex-shrink-0"
           style={{
-            background: '#000',
-            border: '2px solid #ffd700',
-            color: lastWin > 0 ? '#00ff00' : '#ffd700',
-            fontFamily: 'monospace',
-            fontSize: '16px',
+            color: lastWin > 0 ? '#ffffff' : '#ff0000',
+            fontSize: '12px',
             fontWeight: 'bold',
-            textShadow: lastWin > 0 ? '0 0 15px #00ff00' : 'none',
+            textShadow: '2px 2px 0 #ffff00, -1px -1px 0 #ffff00, 1px -1px 0 #ffff00, -1px 1px 0 #ffff00',
+            animation: lastWin > 0 ? 'blink 0.5s ease-in-out infinite' : 'none',
           }}
         >
           {message}
@@ -430,7 +503,7 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
         {/* Bet Selector (only in betting phase) */}
         {gamePhase === 'betting' && (
           <div className="mb-4 flex-shrink-0">
-            <div className="text-center text-sm mb-2" style={{ color: '#ffd700' }}>
+            <div className="text-center text-xs mb-2" style={{ color: '#ffff00' }}>
               SELECT BET
             </div>
             <div className="flex justify-center gap-2">
@@ -438,20 +511,24 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
                 <button
                   key={idx}
                   onClick={() => setBetLevel(idx)}
-                  className="transition-all duration-200"
+                  className="transition-all duration-100"
                   style={{
                     width: '50px',
                     height: '36px',
-                    borderRadius: '6px',
-                    border: betLevel === idx ? '2px solid #fff' : '2px solid #666',
+                    borderRadius: '4px',
+                    border: '2px solid #ffff00',
+                    borderStyle: betLevel === idx ? 'inset' : 'outset',
                     background: betLevel === idx 
-                      ? (idx === 4 ? 'linear-gradient(180deg, #ff4444 0%, #cc0000 100%)' : 'linear-gradient(180deg, #ffd700 0%, #b8860b 100%)')
-                      : 'linear-gradient(180deg, #333 0%, #111 100%)',
-                    color: betLevel === idx ? '#fff' : '#888',
+                      ? '#e0c725'
+                      : 'linear-gradient(180deg, #e0c725 0%, #b8a020 100%)',
+                    color: '#000',
                     fontWeight: 'bold',
-                    fontSize: '14px',
+                    fontSize: '12px',
                     cursor: 'pointer',
-                    transform: betLevel === idx ? 'scale(1.1)' : 'scale(1)',
+                    fontFamily: '"Press Start 2P", monospace',
+                    boxShadow: betLevel === idx 
+                      ? 'inset 2px 2px 4px rgba(0,0,0,0.5)' 
+                      : '0 0 0 1px #9e9f27, 0 0 0 3px black',
                   }}
                 >
                   {level * GUM_PER_COIN}
@@ -459,46 +536,55 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
               ))}
             </div>
             {betLevel === 4 && (
-              <div className="text-center mt-2 text-sm animate-pulse" style={{ color: '#ff4444' }}>
-                ⭐ MAX BET - Royal Flush Bonus! ⭐
+              <div className="text-center mt-2 text-xs" style={{ color: '#ff0000', textShadow: '1px 1px 0 #ffff00' }}>
+                ★ MAX BET BONUS ★
               </div>
             )}
           </div>
         )}
 
-        {/* Balance */}
+        {/* Bottom Row - Credit/Win/Bet like classic machines */}
         <div 
-          className="text-center mb-4 py-2 rounded flex-shrink-0"
-          style={{
-            background: 'rgba(0, 0, 0, 0.5)',
-            color: '#ffd700',
-            fontFamily: 'monospace',
-            fontSize: '14px',
-          }}
+          className="grid grid-cols-3 mb-4 flex-shrink-0"
+          style={{ fontSize: '10px' }}
         >
-          💰 GUM: {gumBalance} | Bet: {bet}
+          <div className="text-center" style={{ color: '#ffff00' }}>
+            <div>BET</div>
+            <div className="text-xl">{BET_LEVELS[betLevel]}</div>
+          </div>
+          <div className="text-center" style={{ color: lastWin > 0 ? '#ffffff' : '#ffff00' }}>
+            <div>WIN</div>
+            <div className="text-xl">{lastWin}</div>
+          </div>
+          <div className="text-center" style={{ color: '#ffff00' }}>
+            <div>CREDIT</div>
+            <div className="text-xl">{gumBalance}</div>
+          </div>
         </div>
 
-        {/* Action Button */}
+        {/* Action Buttons - Classic casino style */}
         <div className="flex-shrink-0">
           {gamePhase === 'betting' && (
             <button
               onClick={newHand}
               disabled={isAnimating || gumBalance < bet}
-              className="w-full py-4 rounded-xl font-black text-xl transition-all duration-300 hover:scale-105"
+              className={`w-full py-3 font-black text-lg transition-all duration-100 ${!isAnimating && gumBalance >= bet ? 'animate-pulse' : ''}`}
               style={{
                 background: gumBalance < bet 
-                  ? 'linear-gradient(180deg, #444 0%, #222 100%)'
-                  : 'linear-gradient(180deg, #4CAF50 0%, #2E7D32 100%)',
-                border: '4px solid #ffd700',
-                color: 'white',
-                fontFamily: 'Georgia, serif',
-                boxShadow: '0 0 20px rgba(76, 175, 80, 0.3), 0 6px 0 #1B5E20',
+                  ? '#444'
+                  : '#e0c725',
+                border: '3px solid #000',
+                borderStyle: 'outset',
+                borderRadius: '4px',
+                color: '#000',
+                fontFamily: '"Press Start 2P", monospace',
+                boxShadow: '0 0 0 1px #9e9f27, 0 0 0 3px black',
                 cursor: gumBalance < bet ? 'not-allowed' : 'pointer',
-                opacity: gumBalance < bet ? 0.6 : 1,
+                opacity: gumBalance < bet ? 0.5 : 1,
+                fontSize: '14px',
               }}
             >
-              🃏 DEAL 🃏
+              DEAL
             </button>
           )}
           
@@ -506,43 +592,50 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
             <button
               onClick={dealNextCards}
               disabled={isAnimating}
-              className="w-full py-4 rounded-xl font-black text-xl transition-all duration-300 hover:scale-105 animate-pulse"
+              className="w-full py-3 font-black text-lg transition-all duration-100 animate-pulse"
               style={{
-                background: 'linear-gradient(180deg, #ff6b35 0%, #e55a25 100%)',
-                border: '4px solid #ffd700',
-                color: 'white',
-                fontFamily: 'Georgia, serif',
-                boxShadow: '0 0 25px rgba(255, 107, 53, 0.5), 0 6px 0 #cc4400',
+                background: '#e0c725',
+                border: '3px solid #000',
+                borderStyle: 'outset',
+                borderRadius: '4px',
+                color: '#000',
+                fontFamily: '"Press Start 2P", monospace',
+                boxShadow: '0 0 0 1px #9e9f27, 0 0 0 3px black',
+                fontSize: '14px',
               }}
             >
-              🃏 DRAW 🃏
+              DRAW
             </button>
           )}
           
           {gamePhase === 'result' && (
             <button
               onClick={startNewGame}
-              className="w-full py-4 rounded-xl font-black text-xl transition-all duration-300 hover:scale-105"
+              className="w-full py-3 font-black text-lg transition-all duration-100"
               style={{
-                background: 'linear-gradient(180deg, #2196F3 0%, #1565C0 100%)',
-                border: '4px solid #ffd700',
-                color: 'white',
-                fontFamily: 'Georgia, serif',
-                boxShadow: '0 0 20px rgba(33, 150, 243, 0.4), 0 6px 0 #0D47A1',
+                background: '#e0c725',
+                border: '3px solid #000',
+                borderStyle: 'outset',
+                borderRadius: '4px',
+                color: '#000',
+                fontFamily: '"Press Start 2P", monospace',
+                boxShadow: '0 0 0 1px #9e9f27, 0 0 0 3px black',
+                fontSize: '14px',
               }}
             >
-              🔄 PLAY AGAIN 🔄
+              PLAY AGAIN
             </button>
           )}
         </div>
       </div>
 
-      {/* CSS for pulse animation */}
+      {/* CSS for blink animation */}
       <style jsx>{`
-        @keyframes pulse {
+        @keyframes blink {
           0%, 100% { opacity: 1; }
-          50% { opacity: 0.7; }
+          50% { opacity: 0.4; }
         }
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
       `}</style>
     </div>
   );

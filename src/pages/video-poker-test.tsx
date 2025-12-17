@@ -129,8 +129,14 @@ export default function VideoPokerTest() {
           {version === 'battle-tested' ? (
             <VideoPokerBattleTested
               walletAddress={devMode ? 'dev-test-wallet' : walletAddress}
-              gumBalance={currentBalance}
-              onGumChange={handleGumChange}
+              initialBalance={currentBalance}
+              onBalanceUpdate={(newBalance) => {
+                if (devMode) {
+                  setDevGumBalance(newBalance);
+                } else {
+                  updateBalance(newBalance);
+                }
+              }}
             />
           ) : (
             <VideoPoker
@@ -147,11 +153,12 @@ export default function VideoPokerTest() {
           <p>Currently: 4 Thieves Bar → Interior → Video Poker button</p>
           <p className="mt-2">Planned: Underground area of Semester Zero (1 of 4 games)</p>
           
-          <h3 className="text-white font-bold mt-4 mb-2">🔧 To Wire Up:</h3>
+          <h3 className="text-white font-bold mt-4 mb-2">✅ GUM Integration:</h3>
           <ul className="list-disc list-inside space-y-1">
-            <li>Create API endpoint (or reuse slots/transaction)</li>
-            <li>Connect to useGum() context</li>
-            <li>Add instant balance updates like slots</li>
+            <li>API endpoint: /api/videopoker/transaction</li>
+            <li>Connected to useGum() context</li>
+            <li>Instant balance updates on bet/win</li>
+            <li>Transaction history logged</li>
           </ul>
         </div>
       </div>

@@ -6,28 +6,30 @@ import { useTimeBasedImage } from "utils/timeBasedImages";
 import { useState, useEffect, useRef } from "react";
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useUnifiedWallet } from 'contexts/UnifiedWalletContext';
-import SlotMachine from "components/games/SlotMachine";
+import { useGum } from 'contexts/GumContext';
 import VideoPoker from "components/games/VideoPoker";
 import VideoPokerBattleTested from "components/games/VideoPokerBattleTested";
 import ScratchCard from "components/games/ScratchCard";
 import { useNpcEvents } from "hooks/useNpcEvents";
 import { NpcEventModal } from "components/NpcEventModal";
+import { useRouter } from 'next/router';
 
 const FourThievesBarMain = () => {
+  const router = useRouter();
   const { openWindow, closeWindow } = useWindowsContext();
   const { primaryWallet } = useDynamicContext();
   const { address: unifiedAddress } = useUnifiedWallet();
   const effectiveWallet = primaryWallet;
   const walletAddress = unifiedAddress || primaryWallet?.address;
 
+  // GUM integration (real balance from API)
+  const { balance: gumBalance, updateBalance } = useGum();
+
   // Day/night images
   const dayImage = "/images/locations/snow locations/4-thieves-snow-day.png";
   const nightImage = "/images/locations/snow locations/4-thieves-snow-night.png";
   const timeBasedInfo = useTimeBasedImage(dayImage, nightImage);
   const isDay = timeBasedInfo.isDay;
-
-  // GUM balance state (would be fetched from API in production)
-  const [gumBalance, setGumBalance] = useState(500); // Starting balance for demo
 
   // Background music
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -57,8 +59,8 @@ const FourThievesBarMain = () => {
     gumBalance: gumBalance,
     autoTrigger: false, // DON'T trigger on main page - only in Underground
     onGumChange: (delta, newBalance) => {
-      // Update GUM balance from NPC events
-      setGumBalance(newBalance);
+      // Update GUM balance from NPC events (triggers context refresh)
+      updateBalance(newBalance);
       console.log(`[NPC] GUM changed by ${delta}, new balance: ${newBalance}`);
     },
     onEffectApplied: (effect) => {
@@ -139,9 +141,10 @@ const FourThievesBarMain = () => {
     }
   }, [isInsideBar, isMuted]);
 
-  const handleGumChange = (amount: number) => {
-    setGumBalance(prev => Math.max(0, prev + amount));
-    // TODO: In production, call API to update GUM balance
+  // Callback when VideoPoker updates balance (for external sync)
+  const handleBalanceUpdate = (newBalance: number) => {
+    updateBalance(newBalance);
+    console.log(`🃏 Video Poker balance update: ${newBalance}`);
   };
 
   const getCurrentBackground = () => {
@@ -214,31 +217,12 @@ const FourThievesBarMain = () => {
     });
   };
 
-  // Open Slot Machine
+  // Open Slot Machine - navigates to the full Flunks Slot Machine page
   const openSlotMachine = () => {
-    openWindow({
-      key: WINDOW_IDS.FOUR_THIEVES_BAR_SLOT_MACHINE,
-      window: (
-        <DraggableResizeableWindow
-          windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_SLOT_MACHINE}
-          headerTitle="🎰 Lucky Slots - 4 Thieves"
-          onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_SLOT_MACHINE)}
-          initialWidth="450px"
-          initialHeight="650px"
-          resizable={false}
-        >
-          <SlotMachine 
-            walletAddress={walletAddress}
-            gumBalance={gumBalance}
-            onGumChange={handleGumChange}
-            onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_SLOT_MACHINE)}
-          />
-        </DraggableResizeableWindow>
-      ),
-    });
+    router.push('/slots-play');
   };
 
-  // Open Video Poker (Battle-Tested version)
+  // Open Video Poker (Battle-Tested version) - uses real GUM via API
   const openVideoPoker = () => {
     openWindow({
       key: WINDOW_IDS.FOUR_THIEVES_BAR_VIDEO_POKER,
@@ -253,8 +237,8 @@ const FourThievesBarMain = () => {
         >
           <VideoPokerBattleTested 
             walletAddress={walletAddress}
-            gumBalance={gumBalance}
-            onGumChange={handleGumChange}
+            initialBalance={gumBalance}
+            onBalanceUpdate={handleBalanceUpdate}
             onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_VIDEO_POKER)}
           />
         </DraggableResizeableWindow>
@@ -276,10 +260,12 @@ const FourThievesBarMain = () => {
           resizable={false}
         >
           <ScratchCard 
-            walletAddress={walletAddress}
             gumBalance={gumBalance}
-            onGumChange={handleGumChange}
-            onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_SCRATCH_CARDS)}
+            onGumChange={(amount) => {
+              // Update via context when scratch card gives GUM
+              const newBalance = Math.max(0, gumBalance + amount);
+              updateBalance(newBalance);
+            }}
           />
         </DraggableResizeableWindow>
       ),
