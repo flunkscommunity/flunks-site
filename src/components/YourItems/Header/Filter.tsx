@@ -1,4 +1,5 @@
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { useUnifiedWallet } from "contexts/UnifiedWalletContext";
 import { usePaginatedItems } from "contexts/UserPaginatedItems";
 import { Button, Frame } from "react95";
 
@@ -6,7 +7,10 @@ const YourItemsGridFilter = () => {
   const { setFilter, setPage, filter, flunksCount, backpacksCount, viewType, setViewType } =
     usePaginatedItems();
   const { primaryWallet } = useDynamicContext();
-  const walletAddress = primaryWallet?.address || null;
+  const { address: unifiedAddress } = useUnifiedWallet();
+  
+  // Use unified wallet address (same as UserPaginatedItems context)
+  const walletAddress = unifiedAddress || primaryWallet?.address || null;
 
   // Debug: log counts
   console.log('🎒 Filter counts - Flunks:', flunksCount, 'Backpacks:', backpacksCount, 'Filter:', filter);

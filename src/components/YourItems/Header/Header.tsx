@@ -1,4 +1,5 @@
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { useUnifiedWallet } from "contexts/UnifiedWalletContext";
 import { usePaginatedItems } from "contexts/UserPaginatedItems";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
@@ -134,7 +135,8 @@ const MemphisFrame = styled(Frame)`
 
 const Counter = ({ label, count }) => {
   const { primaryWallet } = useDynamicContext();
-  const walletAddress = primaryWallet?.address || null;
+  const { address: unifiedAddress } = useUnifiedWallet();
+  const walletAddress = unifiedAddress || primaryWallet?.address || null;
 
   return (
     <div className="flex w-full">
@@ -159,7 +161,8 @@ const YourItemsGridHeader = ({ pixelMode, setPixelMode }: { pixelMode: boolean; 
   // TODO: GUM functionality temporarily disabled - keep for future re-implementation
   // const [gumBalance, setGumBalance] = useState<number>(0);
   const { primaryWallet } = useDynamicContext();
-  const walletAddress = primaryWallet?.address || null;
+  const { address: unifiedAddress } = useUnifiedWallet();
+  const walletAddress = unifiedAddress || primaryWallet?.address || null;
 
   useEffect(() => {
     if (!walletAddress) return;
