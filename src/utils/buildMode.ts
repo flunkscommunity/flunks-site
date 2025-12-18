@@ -90,7 +90,7 @@ const BUILD_MODE_CONFIGS: Record<BuildMode, BuildModeConfig> = {
     showVCREffectsTest: false,
     showZoltarFortune: true,
     showMagicTest: false,
-    showLevelUp: false,
+    showLevelUp: true,
     showBurnNFT: false,
     showSlotMachine: false,
     

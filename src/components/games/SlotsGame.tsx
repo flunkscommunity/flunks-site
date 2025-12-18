@@ -26,9 +26,8 @@ const SlotContent = styled.div`
   align-items: center;
   padding: 5px;
   background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 50%, #1a1a2e 100%);
-  min-height: 100%;
   height: 100%;
-  overflow-y: auto;
+  overflow: hidden;
 `;
 
 const WinMessage = styled.div<{ show: boolean }>`
@@ -225,10 +224,27 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
     setBet(prev => Math.max(5, Math.min(25, prev + delta)));
   };
 
+  // Symbol images mapping (same as slots-play.tsx)
+  const SYMBOL_IMAGES: { [key: string]: string } = {
+    pencil: '/images/icons/slot-icons/cd.png',
+    eraser: '/images/icons/slot-icons/vhs.png',
+    notebook: '/images/icons/slot-icons/walkman.png',
+    backpack: '/images/icons/slot-icons/pogs.png',
+    calculator: '/images/icons/slot-icons/talkboy.png',
+    trophy: '/images/icons/slot-icons/sun.png',
+    diploma: '/images/icons/slot-icons/hoverboard.png',
+    gum_pile: '/images/icons/slot-icons/powerglove.png',
+    flunks_logo: '/images/icons/slot-icons/jackpot.png',
+    scatter_keyhole: '/images/icons/slot-icons/freespin.png',
+    flunk_basic: '/images/icons/slot-icons/cd.png',
+    flunk_evolved: '/images/icons/slot-icons/sun.png',
+    golden_ticket: '/images/icons/slot-icons/jackpot.png',
+    wild_flunk: '/images/icons/slot-icons/powerglove.png',
+  };
+
   // Render symbol image
   const getSymbolImage = (symbolKey: string) => {
-    const symbol = FLUNKS_SYMBOLS[symbolKey];
-    return symbol?.image || '/images/slots/symbols/default.png';
+    return SYMBOL_IMAGES[symbolKey] || '/slots/images/beetle.png';
   };
 
   return (
@@ -239,146 +255,153 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
         width: '100%', 
         maxWidth: '380px',
       }}>
-        {/* Frame background image */}
-        <img 
-          src="/images/slots/slot-machine-frame.png"
-          alt="Slot Machine"
-          style={{ width: '100%', height: 'auto' }}
-          draggable={false}
-        />
-        
-        {/* GUM Balance overlay */}
+        {/* Reels container - positioned BEHIND the frame */}
         <div style={{
           position: 'absolute',
-          top: '6%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          color: '#ffd700',
-          fontFamily: '"Lilita One", cursive',
-          fontSize: '1.4rem',
-          textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+          top: '48%',
+          left: '5%',
+          width: '90%',
+          height: '38%',
+          zIndex: 1,
           display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-        }}>
-          <span style={{ color: '#90EE90', fontWeight: 'bold' }}>GUM</span>
-          <span style={{ 
-            background: 'rgba(0,0,0,0.6)', 
-            padding: '4px 12px', 
-            borderRadius: '8px',
-            border: '2px solid #ffd700'
-          }}>
-            {gumBalance}
-          </span>
-        </div>
-        
-        {/* Bet display */}
-        <div style={{
-          position: 'absolute',
-          top: '6%',
-          right: '10%',
-          color: '#ffd700',
-          fontFamily: '"Lilita One", cursive',
-          fontSize: '1.2rem',
-          textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-          background: 'rgba(0,0,0,0.6)',
-          padding: '4px 10px',
-          borderRadius: '50%',
-          border: '2px solid #ffd700',
-        }}>
-          {bet}
-        </div>
-        
-        {/* Reels overlay */}
-        <div style={{
-          position: 'absolute',
-          top: '31%',
-          left: '12%',
-          width: '73%',
-          height: '35%',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '8px',
+          justifyContent: 'space-between',
+          gap: '2%'
         }}>
           {reels.map((column, colIndex) => (
-            <div key={colIndex} style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '4px',
-              background: 'rgba(0,0,30,0.7)',
-              borderRadius: '8px',
-              padding: '4px',
-            }}>
+            <div 
+              key={colIndex}
+              style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-around',
+                alignItems: 'center',
+                overflow: 'hidden',
+                backgroundColor: 'transparent',
+                borderRadius: '6px'
+              }}
+            >
               {column.map((symbol, rowIndex) => (
-                <div key={rowIndex} style={{
-                  flex: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: stoppedReels[colIndex] 
-                    ? 'rgba(50,30,80,0.8)' 
-                    : 'rgba(30,20,60,0.6)',
-                  borderRadius: '6px',
-                  transition: 'background 0.3s',
-                }}>
-                  <img 
-                    src={getSymbolImage(symbol)}
-                    alt={symbol}
-                    style={{
-                      width: '80%',
-                      height: '80%',
-                      objectFit: 'contain',
-                    }}
-                    draggable={false}
-                  />
-                </div>
+                <img 
+                  key={rowIndex}
+                  src={getSymbolImage(symbol)}
+                  alt={symbol}
+                  style={{
+                    width: '70%',
+                    height: 'auto',
+                    maxHeight: '30%',
+                    objectFit: 'contain',
+                    transition: stoppedReels[colIndex] ? 'transform 0.2s' : 'none',
+                  }}
+                  draggable={false}
+                />
               ))}
             </div>
           ))}
         </div>
+
+        {/* Frame background image - ON TOP of the reels */}
+        <img 
+          src="/slots/images/slot-machine.png"
+          alt="Slot Machine"
+          style={{ 
+            width: '100%', 
+            height: 'auto',
+            position: 'relative',
+            zIndex: 2,
+            pointerEvents: 'none'
+          }}
+          draggable={false}
+        />
+        
+        {/* GUM Balance display - positioned in the dark pill area */}
+        <div style={{
+          position: 'absolute',
+          top: '16.7%',
+          left: '59.5%',
+          width: '25%',
+          height: '4%',
+          zIndex: 3,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#fbbf24',
+          fontFamily: "'Lilita One', cursive",
+          fontSize: '1.4em',
+          fontWeight: 'normal',
+          textShadow: '0 0 5px rgba(251, 191, 36, 0.5), 1px 1px 0 #b45309'
+        }}>
+          {gumBalance}
+        </div>
+        
+        {/* Bet amount display - positioned in the dark circle */}
+        <div style={{
+          position: 'absolute',
+          top: '28%',
+          right: '11%',
+          width: '14%',
+          height: '9%',
+          zIndex: 3,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#fbbf24',
+          fontFamily: "'Lilita One', cursive",
+          fontSize: '1.6em',
+          fontWeight: 'normal',
+          textShadow: '0 0 10px rgba(251, 191, 36, 0.8), 2px 2px 0 #b45309'
+        }}>
+          {bet}
+        </div>
         
         {/* Control buttons - positioned over the frame */}
+        {/* -5 Button (left) */}
         <button
           onClick={() => adjustBet(-5)}
           style={{
             position: 'absolute',
-            top: '80%',
-            left: '7%',
-            width: '18%',
-            height: '9%',
+            bottom: '2%',
+            left: '5%',
+            width: '20%',
+            height: '10%',
             background: 'transparent',
             border: 'none',
             cursor: 'pointer',
+            zIndex: 10,
           }}
         />
         
+        {/* SPIN WHEEL Button (center) */}
         <button
           onClick={spinReels}
           disabled={spinning || gumBalance < bet}
           style={{
             position: 'absolute',
-            top: '83%',
-            left: '14%',
-            width: '34%',
-            height: '11%',
+            bottom: '2%',
+            left: '27%',
+            width: '46%',
+            height: '10%',
             background: 'transparent',
             border: 'none',
             cursor: spinning || gumBalance < bet ? 'not-allowed' : 'pointer',
             opacity: spinning || gumBalance < bet ? 0.7 : 1,
+            zIndex: 10,
           }}
         />
         
+        {/* +5 Button (right) */}
         <button
           onClick={() => adjustBet(5)}
           style={{
             position: 'absolute',
-            top: '80%',
-            left: '23%',
-            width: '18%',
-            height: '9%',
+            bottom: '2%',
+            right: '5%',
+            width: '20%',
+            height: '10%',
             background: 'transparent',
             border: 'none',
             cursor: 'pointer',
+            zIndex: 10,
           }}
         />
       </div>

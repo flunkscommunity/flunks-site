@@ -230,9 +230,9 @@ const FreaksHouseMain = () => {
   };
 
   return (
-    <div className="relative w-full h-full flex flex-col">
-      {/* Image Container - Full screen, no constraints */}
-      <div className="relative w-full" style={{ height: 'calc(100vh - 280px)', minHeight: '400px' }}>
+    <div className="relative w-full h-full flex flex-col overflow-hidden">
+      {/* Image Container */}
+      <div className="relative flex-1 flex items-center justify-center min-h-0">
         <img
           src={getCurrentBackground()}
           alt={`Freak's House Background - ${timeBasedInfo.isDay ? 'Day' : 'Night'}`}
@@ -241,21 +241,25 @@ const FreaksHouseMain = () => {
             e.currentTarget.src = "/images/backdrops/BLANK.png";
           }}
         />
+        
+        {/* Day/Night Atmospheric Overlay */}
+        <div 
+          className={`absolute inset-0 pointer-events-none transition-all duration-500 ${
+            !timeBasedInfo.isDay 
+              ? 'bg-purple-900 bg-opacity-20' 
+              : 'bg-gray-100 bg-opacity-5'
+          }`}
+        />
       </div>
 
       {/* Bottom Buttons - BELOW the image */}
-      <div className="w-full bg-gradient-to-r from-purple-900 via-gray-900 to-black p-3 border-t-4 border-purple-600 shadow-2xl">
+      <div className="w-full bg-gradient-to-r from-purple-900 via-gray-900 to-black p-2 border-t-2 border-purple-600 shadow-xl flex-shrink-0">
         {/* Four room buttons in one horizontal line */}
-        <div className="grid grid-cols-4 gap-3 w-full mx-auto mb-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 max-w-2xl mx-auto mb-2">
           {/* Bedroom */}
           <button
             onClick={openBedroom}
-            className="bg-gradient-to-br from-gray-800 to-gray-950 hover:from-gray-700 hover:to-gray-900 text-white px-3 py-3 sm:py-2 rounded-lg border-3 border-gray-600 hover:border-gray-500 transition-all duration-300 hover:scale-105 text-center text-sm sm:text-sm font-bold shadow-lg hover:shadow-xl min-h-[48px] active:scale-95"
-            style={{ 
-              fontFamily: 'Cooper Black, Georgia, serif',
-              touchAction: 'manipulation',
-              WebkitTapHighlightColor: 'transparent'
-            }}
+            className="bg-gradient-to-br from-gray-800 to-gray-950 hover:from-gray-700 hover:to-gray-900 text-white px-4 py-2 rounded-lg border-2 border-gray-600 hover:border-gray-500 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl whitespace-nowrap"
           >
             🖤 Bedroom
           </button>
@@ -268,14 +272,9 @@ const FreaksHouseMain = () => {
                 window: <FreaksHouseLivingRoom />,
               })
             }
-            className="bg-gradient-to-br from-red-900 to-red-950 hover:from-red-800 hover:to-red-900 text-white px-3 py-3 sm:py-2 rounded-lg border-3 border-red-700 hover:border-red-600 transition-all duration-300 hover:scale-105 text-center text-sm sm:text-sm font-bold shadow-lg hover:shadow-xl min-h-[48px] active:scale-95"
-            style={{ 
-              fontFamily: 'Cooper Black, Georgia, serif',
-              touchAction: 'manipulation',
-              WebkitTapHighlightColor: 'transparent'
-            }}
+            className="bg-gradient-to-br from-red-900 to-red-950 hover:from-red-800 hover:to-red-900 text-white px-4 py-2 rounded-lg border-2 border-red-700 hover:border-red-600 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl whitespace-nowrap"
           >
-            🎸 Living Room
+            🎸 Living
           </button>
 
           {/* Attic */}
@@ -286,12 +285,7 @@ const FreaksHouseMain = () => {
                 window: <FreaksHouseAttic />,
               })
             }
-            className="bg-gradient-to-br from-indigo-900 to-indigo-950 hover:from-indigo-800 hover:to-indigo-900 text-white px-3 py-3 sm:py-2 rounded-lg border-3 border-indigo-700 hover:border-indigo-600 transition-all duration-300 hover:scale-105 text-center text-sm sm:text-sm font-bold shadow-lg hover:shadow-xl min-h-[48px] active:scale-95"
-            style={{ 
-              fontFamily: 'Cooper Black, Georgia, serif',
-              touchAction: 'manipulation',
-              WebkitTapHighlightColor: 'transparent'
-            }}
+            className="bg-gradient-to-br from-indigo-900 to-indigo-950 hover:from-indigo-800 hover:to-indigo-900 text-white px-4 py-2 rounded-lg border-2 border-indigo-700 hover:border-indigo-600 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl whitespace-nowrap"
           >
             📚 Attic
           </button>
@@ -304,12 +298,7 @@ const FreaksHouseMain = () => {
                 window: <FreaksHouseKitchen />,
               })
             }
-            className="bg-gradient-to-br from-green-900 to-green-950 hover:from-green-800 hover:to-green-900 text-white px-3 py-3 sm:py-2 rounded-lg border-3 border-green-700 hover:border-green-600 transition-all duration-300 hover:scale-105 text-center text-sm sm:text-sm font-bold shadow-lg hover:shadow-xl min-h-[48px] active:scale-95"
-            style={{ 
-              fontFamily: 'Cooper Black, Georgia, serif',
-              touchAction: 'manipulation',
-              WebkitTapHighlightColor: 'transparent'
-            }}
+            className="bg-gradient-to-br from-green-900 to-green-950 hover:from-green-800 hover:to-green-900 text-white px-4 py-2 rounded-lg border-2 border-green-700 hover:border-green-600 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl whitespace-nowrap"
           >
             ☕ Kitchen
           </button>
@@ -319,14 +308,7 @@ const FreaksHouseMain = () => {
         <div className="flex justify-center">
           <button
             onClick={openCellarDoorLock}
-            className="bg-gradient-to-br from-purple-900 to-black hover:from-purple-800 hover:to-gray-900 text-purple-200 hover:text-purple-100 px-10 py-3 rounded-xl border-4 border-purple-700 hover:border-purple-500 transition-all duration-300 hover:scale-105 min-w-[280px] text-center shadow-xl hover:shadow-2xl"
-            style={{
-              fontFamily: 'serif',
-              fontSize: '18px',
-              fontWeight: 'bold',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-              letterSpacing: '3px'
-            }}
+            className="bg-gradient-to-br from-purple-900 to-black hover:from-purple-800 hover:to-gray-900 text-purple-200 hover:text-purple-100 px-6 py-2 rounded-lg border-2 border-purple-700 hover:border-purple-500 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl"
           >
             🚪 CELLAR DOOR
           </button>

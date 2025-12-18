@@ -117,10 +117,10 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
 
   useEffect(() => {
     // Preload sounds
-    dealSoundRef.current = new Audio('/sounds/card-deal.mp3');
-    holdSoundRef.current = new Audio('/sounds/card-flip.mp3');
-    winSoundRef.current = new Audio('/sounds/poker-win.mp3');
-    loseSoundRef.current = new Audio('/sounds/poker-lose.mp3');
+    dealSoundRef.current = new Audio('/sounds/ding.mp3');
+    holdSoundRef.current = new Audio('/sounds/bubble.mp3');
+    winSoundRef.current = new Audio('/sounds/correct.mp3');
+    loseSoundRef.current = new Audio('/sounds/incorrect.mp3');
 
     return () => {
       [dealSoundRef, holdSoundRef, winSoundRef, loseSoundRef].forEach(ref => {
@@ -342,7 +342,7 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
           {isEmpty ? (
             // Empty slot - show card back
             <img 
-              src="/cards/BACK.svg"
+              src="/cards/RED_BACK.svg"
               alt="Card back"
               style={{ 
                 width: '100%', 
@@ -368,7 +368,7 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
           ) : (
             // Card back
             <img 
-              src="/cards/BACK.svg"
+              src="/cards/RED_BACK.svg"
               alt="Card back"
               style={{ 
                 width: '100%', 
@@ -551,50 +551,38 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
           EXIT
         </button>
 
-        {/* Bet Buttons (only in betting phase) */}
+        {/* Bet Selection Buttons (only in betting phase) */}
         {gamePhase === 'betting' && (
-          <>
-            <button
-              onClick={() => setBetLevel(prev => prev > 0 ? prev - 1 : prev)}
-              style={{
-                flex: '1',
-                padding: '12px 8px',
-                fontFamily: '"Press Start 2P", cursive',
-                cursor: 'pointer',
-                textAlign: 'center',
-                color: '#000',
-                fontSize: '10px',
-                background: '#e0c725',
-                borderRadius: '2px',
-                borderColor: '#ddd',
-                borderWidth: '2px',
-                borderStyle: 'outset',
-                boxShadow: '0 0 0 1px #9e9f27, 0 0 0 3px black',
-              }}
-            >
-              BET-
-            </button>
-            <button
-              onClick={() => setBetLevel(prev => prev < 4 ? prev + 1 : prev)}
-              style={{
-                flex: '1',
-                padding: '12px 8px',
-                fontFamily: '"Press Start 2P", cursive',
-                cursor: 'pointer',
-                textAlign: 'center',
-                color: '#000',
-                fontSize: '10px',
-                background: '#e0c725',
-                borderRadius: '2px',
-                borderColor: '#ddd',
-                borderWidth: '2px',
-                borderStyle: 'outset',
-                boxShadow: '0 0 0 1px #9e9f27, 0 0 0 3px black',
-              }}
-            >
-              BET+
-            </button>
-          </>
+          <div style={{ display: 'flex', gap: '4px', flex: '3' }}>
+            {BET_LEVELS.map((level, idx) => {
+              const betAmount = level * GUM_PER_COIN;
+              const isSelected = betLevel === idx;
+              return (
+                <button
+                  key={idx}
+                  onClick={() => setBetLevel(idx)}
+                  style={{
+                    flex: '1',
+                    padding: '12px 4px',
+                    fontFamily: '"Press Start 2P", cursive',
+                    cursor: 'pointer',
+                    textAlign: 'center',
+                    fontSize: '9px',
+                    background: isSelected ? '#ffd700' : '#333',
+                    color: isSelected ? '#000' : '#ffd700',
+                    borderRadius: '2px',
+                    borderWidth: isSelected ? '3px' : '2px',
+                    borderStyle: 'solid',
+                    borderColor: isSelected ? '#fff' : '#ffd700',
+                    boxShadow: isSelected ? '0 0 8px rgba(255,215,0,0.6)' : 'none',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  {betAmount}
+                </button>
+              );
+            })}
+          </div>
         )}
 
         {/* Deal/Draw Button */}

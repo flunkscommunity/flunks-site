@@ -110,7 +110,7 @@ const ScratchCard: React.FC<ScratchCardProps> = ({
     // Initialize sounds
     scratchSoundRef.current = new Audio('/sounds/scratch.mp3');
     winSoundRef.current = new Audio('/sounds/jackpot.mp3');
-    loseSoundRef.current = new Audio('/sounds/poker-lose.mp3');
+    loseSoundRef.current = new Audio('/sounds/incorrect.mp3');
   }, [coverImage, width, height, purchased]);
 
   // Calculate percentage scratched

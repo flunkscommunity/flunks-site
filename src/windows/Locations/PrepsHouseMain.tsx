@@ -107,13 +107,13 @@ const PrepsHouseMain = () => {
   };
 
   return (
-    <div className="relative w-full h-full flex flex-col">
+    <div className="relative w-full h-full flex flex-col overflow-hidden">
       {/* Image Section */}
-      <div className="relative flex-1">
+      <div className="relative flex-1 flex items-center justify-center min-h-0">
         <img
           src={timeBasedInfo.currentImage}
           alt={`Prep's House Background - ${timeBasedInfo.isDay ? 'Day' : 'Night'}`}
-          className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-500"
+          className="w-full h-full object-cover transition-opacity duration-500"
           onError={(e) => {
             e.currentTarget.src = "/images/backdrops/BLANK.png";
           }}
@@ -121,7 +121,7 @@ const PrepsHouseMain = () => {
 
         {/* Day/Night Atmospheric Overlay */}
         <div 
-          className={`absolute inset-0 z-1 transition-all duration-500 ${
+          className={`absolute inset-0 pointer-events-none transition-all duration-500 ${
             !timeBasedInfo.isDay 
               ? 'bg-purple-900 bg-opacity-20' 
               : 'bg-pink-100 bg-opacity-5'
@@ -135,8 +135,8 @@ const PrepsHouseMain = () => {
       </div>
 
       {/* Room Buttons Section */}
-      <div className="bg-gray-800 p-4 border-t border-gray-600">
-        <div className="flex gap-4 flex-wrap justify-center max-w-4xl mx-auto">
+      <div className="w-full bg-gradient-to-r from-pink-800 via-purple-900 to-pink-800 p-2 border-t-2 border-pink-400 shadow-xl flex-shrink-0">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 max-w-2xl mx-auto">
         {/* Kitchen */}
         <button
           onClick={() =>
@@ -146,9 +146,9 @@ const PrepsHouseMain = () => {
               "A gourmet kitchen with marble countertops and stainless steel appliances. Fresh herbs grow in designer planters by the window. Only the finest ingredients."
             )
           }
-          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+          className="bg-gradient-to-br from-pink-600 to-purple-800 hover:from-pink-500 hover:to-purple-700 text-white px-4 py-2 rounded-lg border-2 border-pink-400 hover:border-pink-300 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl whitespace-nowrap"
         >
-          �️ Kitchen
+          🍳 Kitchen
         </button>
 
         {/* Bedroom */}
@@ -160,7 +160,7 @@ const PrepsHouseMain = () => {
               "A Four post bed with silk sheets and decorative pillows. Vanity table with antique mirrors and jewelry boxes."
             )
           }
-          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+          className="bg-gradient-to-br from-pink-600 to-purple-800 hover:from-pink-500 hover:to-purple-700 text-white px-4 py-2 rounded-lg border-2 border-pink-400 hover:border-pink-300 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl whitespace-nowrap"
         >
           🛏️ Bedroom
         </button>
@@ -174,9 +174,9 @@ const PrepsHouseMain = () => {
               "Elegant furniture arranged around a marble fireplace. Fresh flowers in crystal vases and art books on polished coffee tables."
             )
           }
-          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+          className="bg-gradient-to-br from-pink-600 to-purple-800 hover:from-pink-500 hover:to-purple-700 text-white px-4 py-2 rounded-lg border-2 border-pink-400 hover:border-pink-300 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl whitespace-nowrap"
         >
-          🏛️ Living Room
+          🏛️ Living
         </button>
 
         {/* Basement */}
@@ -188,7 +188,7 @@ const PrepsHouseMain = () => {
               "A finished basement with a home theater system and plush seating. Wine cellar and exercise equipment in separate sections."
             )
           }
-          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+          className="bg-gradient-to-br from-pink-600 to-purple-800 hover:from-pink-500 hover:to-purple-700 text-white px-4 py-2 rounded-lg border-2 border-pink-400 hover:border-pink-300 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl whitespace-nowrap"
         >
           🎬 Basement
         </button>

@@ -128,9 +128,9 @@ const Blackjack: React.FC<BlackjackProps> = ({
 
   useEffect(() => {
     // Preload sounds
-    dealSoundRef.current = new Audio('/sounds/card-deal.mp3');
-    winSoundRef.current = new Audio('/sounds/poker-win.mp3');
-    loseSoundRef.current = new Audio('/sounds/poker-lose.mp3');
+    dealSoundRef.current = new Audio('/sounds/ding.mp3');
+    winSoundRef.current = new Audio('/sounds/correct.mp3');
+    loseSoundRef.current = new Audio('/sounds/incorrect.mp3');
   }, []);
 
   // ============================================================================
@@ -371,7 +371,7 @@ const Blackjack: React.FC<BlackjackProps> = ({
           />
         ) : (
           <img
-            src="/cards/BACK.svg"
+            src="/cards/RED_BACK.svg"
             alt="Card back"
             className="w-full h-full object-cover"
             draggable={false}

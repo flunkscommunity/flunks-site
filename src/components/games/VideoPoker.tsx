@@ -78,10 +78,10 @@ const VideoPoker: React.FC<VideoPokerProps> = ({
 
   useEffect(() => {
     // Initialize sounds
-    dealSoundRef.current = new Audio('/sounds/card-deal.mp3');
-    holdSoundRef.current = new Audio('/sounds/card-flip.mp3');
-    winSoundRef.current = new Audio('/sounds/poker-win.mp3');
-    loseSoundRef.current = new Audio('/sounds/poker-lose.mp3');
+    dealSoundRef.current = new Audio('/sounds/ding.mp3');
+    holdSoundRef.current = new Audio('/sounds/bubble.mp3');
+    winSoundRef.current = new Audio('/sounds/correct.mp3');
+    loseSoundRef.current = new Audio('/sounds/incorrect.mp3');
 
     return () => {
       [dealSoundRef, holdSoundRef, winSoundRef, loseSoundRef].forEach(ref => {

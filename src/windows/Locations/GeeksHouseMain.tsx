@@ -139,13 +139,13 @@ const GeeksHouseMain = () => {
   };
 
   return (
-    <div className="relative w-full h-full flex flex-col">
+    <div className="relative w-full h-full flex flex-col overflow-hidden">
       {/* Image Section */}
-      <div className="relative flex-1">
+      <div className="relative flex-1 flex items-center justify-center min-h-0">
         <img
           src={timeBasedInfo.currentImage}
           alt={`Geek's House Background - ${timeBasedInfo.isDay ? 'Day' : 'Night'}`}
-          className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-500"
+          className="w-full h-full object-cover transition-opacity duration-500"
           onError={(e) => {
             e.currentTarget.src = "/images/backdrops/BLANK.png";
           }}
@@ -153,7 +153,7 @@ const GeeksHouseMain = () => {
 
         {/* Day/Night Atmospheric Overlay */}
         <div 
-          className={`absolute inset-0 z-1 transition-all duration-500 ${
+          className={`absolute inset-0 pointer-events-none transition-all duration-500 ${
             !timeBasedInfo.isDay 
               ? 'bg-green-900 bg-opacity-20' 
               : 'bg-cyan-100 bg-opacity-5'
@@ -167,8 +167,8 @@ const GeeksHouseMain = () => {
       </div>
 
       {/* Room Buttons Section */}
-      <div className="bg-gray-800 p-4 border-t border-gray-600">
-        <div className="flex gap-4 flex-wrap justify-center max-w-4xl mx-auto">
+      <div className="w-full bg-gradient-to-r from-cyan-800 via-green-900 to-cyan-800 p-2 border-t-2 border-cyan-500 shadow-xl flex-shrink-0">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 max-w-2xl mx-auto">
           {/* Lab */}
           <button
             onClick={() =>
@@ -178,7 +178,7 @@ const GeeksHouseMain = () => {
                 "Beakers bubble with mysterious experiments. Chemistry sets and microscopes cover the workbench."
               )
             }
-            className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+            className="bg-gradient-to-br from-cyan-600 to-green-800 hover:from-cyan-500 hover:to-green-700 text-white px-4 py-2 rounded-lg border-2 border-cyan-400 hover:border-cyan-300 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl whitespace-nowrap"
           >
             🧪 Lab
           </button>
@@ -192,9 +192,9 @@ const GeeksHouseMain = () => {
                 "Multiple monitors glow in the darkness. Lines of code scroll endlessly across the screens."
               )
             }
-            className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+            className="bg-gradient-to-br from-cyan-600 to-green-800 hover:from-cyan-500 hover:to-green-700 text-white px-4 py-2 rounded-lg border-2 border-cyan-400 hover:border-cyan-300 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl whitespace-nowrap"
           >
-            💻 Computer Room
+            💻 Computer
           </button>
 
           {/* Kitchen */}
@@ -206,7 +206,7 @@ const GeeksHouseMain = () => {
                 "Energy drinks and instant ramen dominate the counter space. Multiple coffee makers and a microwave that's seen too much use. Circuit boards double as trivets."
               )
             }
-            className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+            className="bg-gradient-to-br from-cyan-600 to-green-800 hover:from-cyan-500 hover:to-green-700 text-white px-4 py-2 rounded-lg border-2 border-cyan-400 hover:border-cyan-300 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl whitespace-nowrap"
           >
             🍜 Kitchen
           </button>
@@ -220,24 +220,15 @@ const GeeksHouseMain = () => {
                 "Electronic components and half-built gadgets litter the workbench. Soldering irons and circuit boards everywhere. Zero parts go unused here."
               )
             }
-            className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-all duration-200 hover:scale-105 min-w-[120px] text-center"
+            className="bg-gradient-to-br from-cyan-600 to-green-800 hover:from-cyan-500 hover:to-green-700 text-white px-4 py-2 rounded-lg border-2 border-cyan-400 hover:border-cyan-300 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl whitespace-nowrap"
           >
             🔧 Workshop
           </button>
-        </div>
 
-        {/* SHED Button - Longer and Ominous */}
-        <div className="flex justify-center mt-4">
+          {/* SHED Button */}
           <button
             onClick={openShedWithLock}
-            className="bg-gradient-to-b from-red-900 to-black text-red-200 px-8 py-3 rounded-lg hover:from-red-800 hover:to-gray-900 hover:text-red-100 transition-all duration-300 hover:scale-105 min-w-[200px] text-center shadow-lg border-2 border-red-800 hover:border-red-600"
-            style={{
-              fontFamily: 'serif',
-              fontSize: '18px',
-              fontWeight: 'bold',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-              letterSpacing: '2px'
-            }}
+            className="col-span-2 md:col-span-4 bg-gradient-to-br from-red-900 to-black hover:from-red-800 hover:to-gray-900 text-red-200 hover:text-red-100 px-4 py-2 rounded-lg border-2 border-red-600 hover:border-red-500 transition-all duration-300 hover:scale-105 text-center text-sm font-bold shadow-lg hover:shadow-xl"
           >
             🏚️ SHED
           </button>
