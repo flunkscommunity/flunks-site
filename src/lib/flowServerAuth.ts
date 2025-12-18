@@ -17,9 +17,9 @@ import { createHash } from 'crypto';
 // Initialize elliptic curve for P-256 (Flow's curve)
 const ec = new EC('p256');
 
-// Environment variables
-const ADMIN_ADDRESS = process.env.FLOW_ADMIN_ADDRESS || '0xce9dd43888d99574';
-const ADMIN_PRIVATE_KEY = process.env.FLOW_ADMIN_PRIVATE_KEY;
+// Environment variables (trim to remove any trailing newlines from env vars)
+const ADMIN_ADDRESS = (process.env.FLOW_ADMIN_ADDRESS || '0xce9dd43888d99574').trim();
+const ADMIN_PRIVATE_KEY = process.env.FLOW_ADMIN_PRIVATE_KEY?.trim();
 
 // Configure FCL for server-side (mainnet)
 fcl.config()

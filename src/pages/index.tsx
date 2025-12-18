@@ -326,6 +326,56 @@ const windowsMemod = useMemo(() => (
           })}
         />
 
+        {/* 4.5 Level Up - NFT Evolution */}
+        {isFeatureEnabled('showLevelUp') && (
+          <ConditionalAppIcon
+            appId="level-up"
+            title="Level Up"
+            icon="/images/icons/level.png"
+            onDoubleClick={() => openWindow({
+              key: WINDOW_IDS.LEVEL_UP,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.LEVEL_UP}
+                  onClose={() => closeWindow(WINDOW_IDS.LEVEL_UP)}
+                  headerTitle="⚡ LEVEL UP - NFT Upgrade Arcade"
+                  initialWidth="95vw"
+                  initialHeight="95vh"
+                  headerIcon="/images/icons/level.png"
+                  resizable={true}
+                >
+                  <LevelUp />
+                </DraggableResizeableWindow>
+              )
+            })}
+          />
+        )}
+
+        {/* 4.6 Semester Zero NFT Collection */}
+        <ConditionalAppIcon
+          appId="semester-zero-nft"
+          title="Semester Zero NFT"
+          icon="/images/icons/semester-zero-nft.png"
+          onDoubleClick={() =>
+            openWindow({
+              key: WINDOW_IDS.SEMESTER_ZERO_SETUP,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.SEMESTER_ZERO_SETUP}
+                  onClose={() => closeWindow(WINDOW_IDS.SEMESTER_ZERO_SETUP)}
+                  headerTitle="Flunks: Semester Zero NFT"
+                  initialWidth="850px"
+                  initialHeight="750px"
+                  headerIcon="/images/icons/semester-zero-nft.png"
+                  resizable={true}
+                >
+                  <SemesterZeroVarsityDisplay onClose={() => closeWindow(WINDOW_IDS.SEMESTER_ZERO_SETUP)} />
+                </DraggableResizeableWindow>
+              ),
+            })
+          }
+        />
+
         {/* 5. FHS */}
         <ConditionalAppIcon
           appId="fhs-school"
@@ -634,31 +684,6 @@ const windowsMemod = useMemo(() => (
           }
         />
 
-        {/* 19. Semester Zero NFT Collection */}
-        <ConditionalAppIcon
-          appId="semester-zero-setup"
-          title="Semester Zero NFT"
-          icon="/images/icons/semester-zero-nft.png"
-          onDoubleClick={() =>
-            openWindow({
-              key: WINDOW_IDS.SEMESTER_ZERO_SETUP,
-              window: (
-                <DraggableResizeableWindow
-                  windowsId={WINDOW_IDS.SEMESTER_ZERO_SETUP}
-                  onClose={() => closeWindow(WINDOW_IDS.SEMESTER_ZERO_SETUP)}
-                  headerTitle="Flunks: Semester Zero NFT"
-                  initialWidth="850px"
-                  initialHeight="750px"
-                  headerIcon="/images/icons/semester-zero-nft.png"
-                  resizable={true}
-                >
-                  <SemesterZeroVarsityDisplay onClose={() => closeWindow(WINDOW_IDS.SEMESTER_ZERO_SETUP)} />
-                </DraggableResizeableWindow>
-              ),
-            })
-          }
-        />
-
         {/* 20. Picture Day - Build Mode Only */}
         <ConditionalAppIcon
           appId="picture-day"
@@ -732,31 +757,6 @@ const windowsMemod = useMemo(() => (
           />
         )}
 
-        {/* 22.5 Level Up - LOCALHOST + BUILD MODE */}
-        {(typeof window !== 'undefined' && (window.location.hostname === 'localhost' || isFeatureEnabled('showLevelUp'))) && (
-          <ConditionalAppIcon
-            appId="level-up"
-            title="Level Up"
-            icon="/images/icons/level.png"
-            onDoubleClick={() => openWindow({
-              key: WINDOW_IDS.LEVEL_UP,
-              window: (
-                <DraggableResizeableWindow
-                  windowsId={WINDOW_IDS.LEVEL_UP}
-                  onClose={() => closeWindow(WINDOW_IDS.LEVEL_UP)}
-                  headerTitle="⚡ LEVEL UP - NFT Upgrade Arcade"
-                  initialWidth="95vw"
-                  initialHeight="95vh"
-                  headerIcon="/images/icons/level.png"
-                  resizable={true}
-                >
-                  <LevelUp />
-                </DraggableResizeableWindow>
-              )
-            })}
-          />
-        )}
-
         {/* 22.6 Burn NFT - LOCALHOST + BUILD MODE ONLY */}
         {(typeof window !== 'undefined' && (window.location.hostname === 'localhost' || isFeatureEnabled('showBurnNFT'))) && (
           <ConditionalAppIcon
@@ -809,28 +809,30 @@ const windowsMemod = useMemo(() => (
           />
         )}
 
-        {/* 25. Flunky Bash - Launcher Game */}
-        <ConditionalAppIcon
-          appId="flunky-bash"
-          title="Flunky Bash"
-          icon="/images/icons/game-manual-icon.png"
-          onDoubleClick={() => openWindow({
-            key: WINDOW_IDS.FLUNKY_BASH,
-            window: (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.FLUNKY_BASH}
-                onClose={() => closeWindow(WINDOW_IDS.FLUNKY_BASH)}
-                headerTitle="🎯 Flunky Bash"
-                initialWidth="650px"
-                initialHeight="580px"
-                headerIcon="/images/icons/game-manual-icon.png"
-                resizable={true}
-              >
-                <FlunkyBash />
-              </DraggableResizeableWindow>
-            )
-          })}
-        />
+        {/* 25. Flunky Bash - Launcher Game - BUILD MODE ONLY */}
+        {isFeatureEnabled('showFlunkyBash') && (
+          <ConditionalAppIcon
+            appId="flunky-bash"
+            title="Flunky Bash"
+            icon="/images/icons/game-manual-icon.png"
+            onDoubleClick={() => openWindow({
+              key: WINDOW_IDS.FLUNKY_BASH,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.FLUNKY_BASH}
+                  onClose={() => closeWindow(WINDOW_IDS.FLUNKY_BASH)}
+                  headerTitle="🎯 Flunky Bash"
+                  initialWidth="650px"
+                  initialHeight="580px"
+                  headerIcon="/images/icons/game-manual-icon.png"
+                  resizable={true}
+                >
+                  <FlunkyBash />
+                </DraggableResizeableWindow>
+              )
+            })}
+          />
+        )}
 
         {/* 26. Alexandria Library - On-Chain Books */}
         <ConditionalAppIcon

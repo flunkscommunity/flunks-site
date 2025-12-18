@@ -40,6 +40,7 @@ export interface BuildModeConfig {
   showLevelUp: boolean;
   showBurnNFT: boolean;
   showSlotMachine: boolean;
+  showFlunkyBash: boolean;
   
   // Special Announcements
   flappyFlunkWeekend: boolean;
@@ -93,6 +94,7 @@ const BUILD_MODE_CONFIGS: Record<BuildMode, BuildModeConfig> = {
     showLevelUp: true,
     showBurnNFT: false,
     showSlotMachine: false,
+    showFlunkyBash: false,
     
     // Special Announcements - visible on public site
     flappyFlunkWeekend: true,
@@ -144,6 +146,7 @@ const BUILD_MODE_CONFIGS: Record<BuildMode, BuildModeConfig> = {
     showLevelUp: true,
     showBurnNFT: true,
     showSlotMachine: true,
+    showFlunkyBash: true,
     
     // Special Announcements - visible in build mode
     flappyFlunkWeekend: true,
