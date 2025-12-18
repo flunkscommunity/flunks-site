@@ -745,12 +745,12 @@ export default function SlotsPlay() {
   const { balance: gumBalance, refreshBalance, canAfford, updateBalance } = useGum();
   const { address: walletAddress } = useUnifiedWallet();
   
-  // DEV MODE: Auto-detect based on environment (true locally, false in production)
-  const DEV_MODE = process.env.NODE_ENV === 'development';
+  // Use real wallet and GUM balance (DEV_MODE disabled to use real GUM on localhost)
+  const DEV_MODE = false; // Set to true only for testing without wallet
   const DEV_WALLET = '0xDEV_TEST_WALLET';
   const effectiveWallet = walletAddress || (DEV_MODE ? DEV_WALLET : null);
   
-  // Dev mode GUM balance (starts at 500)
+  // Dev mode GUM balance (only used when DEV_MODE is true)
   const [devGumBalance, setDevGumBalance] = useState(500);
   const effectiveGumBalance = DEV_MODE ? devGumBalance : gumBalance;
   

@@ -404,7 +404,7 @@ const GridedView: React.FC<{
                   }}
                 />
               </Frame>
-              <div className="w-full flex flex-col items-center gap-1 pt-2 z-10 relative">
+              <div className="w-full flex flex-col items-center gap-1 pt-2 relative" style={{ zIndex: 10, position: 'relative' }}>
                 <Frame
                   variant="well"
                   className="w-full flex items-center justify-between px-2 py-1"
@@ -416,10 +416,13 @@ const GridedView: React.FC<{
                   <RetroText className="text-xs">#{nft.serialNumber}</RetroText>
                 </Frame>
                 <RetroButton
-                  onClick={() => setActiveItem(nft)}
+                  onClick={() => {
+                    console.log('🔘 Button clicked for:', nft.collection, '#', nft.serialNumber);
+                    setActiveItem(nft);
+                  }}
                   variant="raised"
                   className="w-full py-1"
-                  style={{ fontSize: '10px' }}
+                  style={{ fontSize: '10px', position: 'relative', zIndex: 20 }}
                 >
                   <RetroText style={{ fontSize: '10px' }}>FULL DETAILS</RetroText>
                 </RetroButton>

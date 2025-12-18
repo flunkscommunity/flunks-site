@@ -8,11 +8,14 @@ const YourItemsGridFilter = () => {
   const { primaryWallet } = useDynamicContext();
   const walletAddress = primaryWallet?.address || null;
 
+  // Debug: log counts
+  console.log('🎒 Filter counts - Flunks:', flunksCount, 'Backpacks:', backpacksCount, 'Filter:', filter);
+
   const isDisabled =
     !walletAddress || (flunksCount === 0 && backpacksCount === 0);
 
   const handleCollectionChange = (value: "flunks" | "backpacks") => {
-    console.log('🔄 Switching collection to:', value);
+    console.log('🔄 Switching collection to:', value, 'backpacksCount:', backpacksCount);
     setPage(0); // Reset to first page when switching collections
     setFilter(value);
   };

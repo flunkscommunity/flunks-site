@@ -83,6 +83,7 @@ export const WINDOW_IDS = {
   FOUR_THIEVES_BAR_INTERIOR: "four_thieves_bar_interior",
   FOUR_THIEVES_BAR_SLOT_MACHINE: "four_thieves_bar_slot_machine",
   FOUR_THIEVES_BAR_VIDEO_POKER: "four_thieves_bar_video_poker",
+  FOUR_THIEVES_BAR_BLACKJACK: "four_thieves_bar_blackjack",
   FOUR_THIEVES_BAR_MAIN_BAR: "four_thieves_bar_main_bar",
   FOUR_THIEVES_BAR_POOL_ROOM: "four_thieves_bar_pool_room",
   FOUR_THIEVES_BAR_PRIVATE_BOOTH: "four_thieves_bar_private_booth",

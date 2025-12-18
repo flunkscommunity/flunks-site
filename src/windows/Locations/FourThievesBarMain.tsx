@@ -9,7 +9,9 @@ import { useUnifiedWallet } from 'contexts/UnifiedWalletContext';
 import { useGum } from 'contexts/GumContext';
 import VideoPoker from "components/games/VideoPoker";
 import VideoPokerBattleTested from "components/games/VideoPokerBattleTested";
+import Blackjack from "components/games/Blackjack";
 import ScratchCard from "components/games/ScratchCard";
+import SlotsGame from "components/games/SlotsGame";
 import { useNpcEvents } from "hooks/useNpcEvents";
 import { NpcEventModal } from "components/NpcEventModal";
 import { useRouter } from 'next/router';
@@ -217,9 +219,28 @@ const FourThievesBarMain = () => {
     });
   };
 
-  // Open Slot Machine - navigates to the full Flunks Slot Machine page
+  // Open Slot Machine - opens in a draggable window
   const openSlotMachine = () => {
-    router.push('/slots-play');
+    openWindow({
+      key: WINDOW_IDS.FOUR_THIEVES_BAR_SLOT_MACHINE,
+      window: (
+        <DraggableResizeableWindow
+          windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_SLOT_MACHINE}
+          headerTitle="🎰 Lucky Slots - The Underground"
+          onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_SLOT_MACHINE)}
+          initialWidth="420px"
+          initialHeight="680px"
+          resizable={true}
+        >
+          <SlotsGame 
+            walletAddress={walletAddress}
+            initialBalance={gumBalance}
+            onBalanceUpdate={handleBalanceUpdate}
+            onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_SLOT_MACHINE)}
+          />
+        </DraggableResizeableWindow>
+      ),
+    });
   };
 
   // Open Video Poker (Battle-Tested version) - uses real GUM via API
@@ -240,6 +261,30 @@ const FourThievesBarMain = () => {
             initialBalance={gumBalance}
             onBalanceUpdate={handleBalanceUpdate}
             onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_VIDEO_POKER)}
+          />
+        </DraggableResizeableWindow>
+      ),
+    });
+  };
+
+  // Open Blackjack - uses real GUM via API
+  const openBlackjack = () => {
+    openWindow({
+      key: WINDOW_IDS.FOUR_THIEVES_BAR_BLACKJACK,
+      window: (
+        <DraggableResizeableWindow
+          windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_BLACKJACK}
+          headerTitle="🃏 Blackjack - The Underground"
+          onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_BLACKJACK)}
+          initialWidth="440px"
+          initialHeight="660px"
+          resizable={true}
+        >
+          <Blackjack 
+            walletAddress={walletAddress}
+            initialBalance={gumBalance}
+            onBalanceUpdate={handleBalanceUpdate}
+            onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_BLACKJACK)}
           />
         </DraggableResizeableWindow>
       ),
@@ -425,7 +470,7 @@ const FourThievesBarMain = () => {
             
             {/* Underground Buttons */}
             <div className="w-full bg-gradient-to-r from-purple-950 via-black to-purple-950 p-4 border-t-4 border-purple-500 shadow-2xl flex-shrink-0">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3 max-w-4xl mx-auto">
                 {/* Talk to Someone - Main NPC Event Trigger */}
                 <button
                   onClick={() => npcActions.triggerEventCheck()}
@@ -451,7 +496,16 @@ const FourThievesBarMain = () => {
                   className="bg-gradient-to-br from-green-800 to-green-950 hover:from-green-700 hover:to-green-900 text-white px-4 py-3 rounded-lg border-3 border-green-500 hover:border-green-400 transition-all duration-300 hover:scale-105 text-center text-sm font-black shadow-lg"
                   style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
                 >
-                  🃏 High Stakes
+                  🃏 Video Poker
+                </button>
+
+                {/* Blackjack */}
+                <button
+                  onClick={openBlackjack}
+                  className="bg-gradient-to-br from-red-800 to-red-950 hover:from-red-700 hover:to-red-900 text-white px-4 py-3 rounded-lg border-3 border-red-500 hover:border-red-400 transition-all duration-300 hover:scale-105 text-center text-sm font-black shadow-lg"
+                  style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
+                >
+                  🂡 Blackjack
                 </button>
 
                 {/* Back to Bar */}

@@ -1,10 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+// Validate environment variables
+if (!supabaseUrl || !supabaseServiceKey) {
+  console.error('❌ VideoPoker API: Missing Supabase environment variables');
+}
+
+const supabase = supabaseUrl && supabaseServiceKey 
+  ? createClient(supabaseUrl, supabaseServiceKey)
+  : null;
 
 interface PokerTransactionRequest {
   wallet_address: string;
@@ -43,6 +50,11 @@ export default async function handler(
   }
 
   try {
+    if (!supabase) {
+      console.error('❌ VideoPoker API: Supabase client not initialized');
+      return res.status(500).json({ success: false, error: 'Database not configured' });
+    }
+
     // Get current balance from user_gum_balances table
     const { data: balanceData, error: balanceError } = await supabase
       .from('user_gum_balances')

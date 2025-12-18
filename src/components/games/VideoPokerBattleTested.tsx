@@ -268,7 +268,6 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
         setMessage(`WIN ERROR: ${winResult.error}`);
       }
     } else {
-    } else {
       loseSoundRef.current?.play().catch(() => {});
       setMessage('NO WIN - TRY AGAIN');
     }
@@ -307,60 +306,63 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
     const isHeld = holdState[index];
 
     return (
-      <div 
+      <figure 
         key={index}
         onClick={() => card && holdCard(index)}
-        className="relative cursor-pointer transition-all duration-200"
+        className="cursor-pointer"
         style={{
-          width: '80px',
-          height: '112px',
-          transform: isHeld ? 'translateY(-12px)' : 'none',
+          margin: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
-        {/* HOLD indicator - old school yellow text */}
-        {isHeld && (
-          <div 
-            className="absolute -top-6 left-0 right-0 text-center font-bold"
-            style={{ 
-              color: '#ffff00', 
-              textShadow: '1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000',
-              fontFamily: '"Press Start 2P", monospace',
-              fontSize: '10px',
-            }}
-          >
-            HELD
-          </div>
-        )}
+        {/* HOLD indicator */}
+        <div 
+          style={{ 
+            color: '#fff',
+            fontSize: '10px',
+            height: '20px',
+            paddingBottom: '6px',
+            fontFamily: '"Press Start 2P", cursive',
+            WebkitTextStroke: '0',
+            visibility: isHeld ? 'visible' : 'hidden',
+          }}
+        >
+          HELD
+        </div>
         
         {/* Card image */}
         <div
-          className="w-full h-full rounded-lg overflow-hidden select-none"
           style={{
-            border: isHeld 
-              ? '3px solid #ffff00' 
-              : '2px solid #333',
-            boxShadow: isHeld 
-              ? '0 0 15px rgba(255, 255, 0, 0.6), 0 6px 12px rgba(0, 0, 0, 0.5)' 
-              : '0 4px 8px rgba(0, 0, 0, 0.5)',
-            transition: 'all 0.15s ease',
-            background: '#1a237e',
+            width: '60px',
+            height: '84px',
           }}
         >
           {isEmpty ? (
-            // Empty slot
-            <div 
-              className="w-full h-full flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #1a237e 0%, #0d1442 100%)' }}
-            >
-              <span className="text-3xl opacity-30">🃏</span>
-            </div>
+            // Empty slot - show card back
+            <img 
+              src="/cards/BACK.svg"
+              alt="Card back"
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'contain',
+                cursor: 'pointer',
+              }}
+              draggable={false}
+            />
           ) : isRevealed && card ? (
-            // Face-up card - use SVG
+            // Face-up card
             <img 
               src={getCardSvgUrl(card.code)}
               alt={card.code}
-              className="w-full h-full object-contain"
-              style={{ background: '#fff' }}
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'contain',
+                cursor: 'pointer',
+              }}
               draggable={false}
             />
           ) : (
@@ -368,12 +370,17 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
             <img 
               src="/cards/BACK.svg"
               alt="Card back"
-              className="w-full h-full object-cover"
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'contain',
+                cursor: 'pointer',
+              }}
               draggable={false}
             />
           )}
         </div>
-      </div>
+      </figure>
     );
   };
 
@@ -383,40 +390,43 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
 
   return (
     <div 
-      className="w-full h-full flex flex-col p-4 overflow-y-auto"
+      className="w-full h-full flex flex-col overflow-y-auto"
       style={{
-        background: 'linear-gradient(180deg, #0000cc 0%, #000066 100%)',
+        background: 'blue', // Classic casino blue
         minHeight: '100%',
-        fontFamily: '"Press Start 2P", "Courier New", monospace',
+        fontFamily: '"Press Start 2P", cursive',
+        color: '#ff0000', // Red text default
       }}
     >
       {/* Pay Table - Classic Yellow on Dark Blue */}
       <div 
-        className="mb-4 rounded overflow-hidden flex-shrink-0"
+        className="flex-shrink-0"
         style={{
-          background: '#000033',
+          background: 'darkblue',
           border: '3px solid #ffff00',
+          margin: '8px',
+          marginBottom: '4px',
         }}
       >
         {/* Header */}
         <div 
-          className="grid text-center font-bold"
+          className="grid text-right font-bold"
           style={{ 
-            gridTemplateColumns: '1fr repeat(5, 45px)',
-            background: '#000044',
-            borderBottom: '2px solid #ffff00',
+            gridTemplateColumns: '1fr repeat(5, 40px)',
+            borderBottom: '3px solid #ffff00',
+            color: '#ffff00',
             fontSize: '10px',
           }}
         >
-          <div style={{ padding: '6px', color: '#ffff00' }}>HAND</div>
+          <div style={{ padding: '5px', textAlign: 'left' }}></div>
           {BET_LEVELS.map((level, idx) => (
             <div 
               key={idx}
               style={{ 
-                padding: '6px',
-                color: betLevel === idx ? '#000' : '#ffff00',
-                background: betLevel === idx ? '#ff0000' : 'transparent',
-                fontWeight: 'bold',
+                padding: '5px',
+                color: betLevel === idx ? '#fff' : '#ffff00',
+                background: betLevel === idx ? '#f00000' : 'transparent',
+                borderLeft: '3px solid #ffff00',
               }}
             >
               {level}
@@ -428,23 +438,19 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
         {PAY_TABLE_DATA.map((row, rowIdx) => (
           <div 
             key={rowIdx}
-            className="grid text-center"
+            className="grid text-right"
             style={{ 
-              gridTemplateColumns: '1fr repeat(5, 45px)',
-              borderBottom: '1px solid #333366',
-              background: winningHand === row.pokersolver 
-                ? 'rgba(255, 255, 255, 0.2)' 
-                : 'transparent',
-              animation: winningHand === row.pokersolver ? 'blink 0.3s ease-in-out infinite' : 'none',
-              fontSize: '9px',
+              gridTemplateColumns: '1fr repeat(5, 40px)',
+              color: '#ffff00',
+              fontSize: '10px',
             }}
           >
             <div 
               style={{ 
-                padding: '4px 8px', 
-                color: winningHand === row.pokersolver ? '#ffffff' : '#ffff00',
+                padding: '5px 8px', 
+                color: winningHand === row.pokersolver ? '#fff' : '#ffff00',
                 textAlign: 'left',
-                fontWeight: 'bold',
+                animation: winningHand === row.pokersolver && roundEnded ? 'blink 1s steps(1) infinite' : 'none',
               }}
             >
               {row.display}
@@ -453,187 +459,184 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
               <div 
                 key={idx}
                 style={{ 
-                  padding: '4px',
-                  color: '#ffff00',
-                  background: betLevel === idx ? '#ff0000' : 'transparent',
+                  padding: '5px',
+                  color: winningHand === row.pokersolver && roundEnded ? '#fff' : '#ffff00',
+                  background: betLevel === idx ? '#f00000' : 'transparent',
+                  borderLeft: '3px solid #ffff00',
+                  animation: winningHand === row.pokersolver && roundEnded ? 'blink 1s steps(1) infinite' : 'none',
                 }}
               >
-                <span style={{ color: betLevel === idx ? '#ffffff' : undefined }}>
-                  {payout}
-                </span>
+                {payout}
               </div>
             ))}
           </div>
         ))}
       </div>
 
-      {/* Game Area - Classic blue felt look */}
+      {/* Hand Status - Big red text with yellow stroke */}
       <div 
-        className="flex-1 rounded p-4 flex flex-col"
+        className="text-center flex-shrink-0"
         style={{
-          background: '#000088',
-          border: '4px solid #ffff00',
-          minHeight: '320px',
+          padding: '10px 8px',
+          color: '#ff0000',
+          fontSize: '16px',
+          WebkitTextStroke: '2px #ffff00',
+          lineHeight: '1.4',
+          minHeight: '60px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        {/* Cards */}
-        <div 
-          className="flex justify-center gap-3 mb-4 p-4 flex-shrink-0"
-          style={{
-            minHeight: '140px',
-          }}
-        >
-          {[0, 1, 2, 3, 4].map(i => renderCard(hand[i], i))}
+        <span style={{ animation: lastWin > 0 && roundEnded ? 'blink 1s steps(1) infinite' : 'none' }}>
+          {winningHand || (gamePhase === 'holding' ? 'CLICK CARDS TO HOLD' : ' ')}
+        </span>
+      </div>
+
+      {/* Cards Area */}
+      <div 
+        className="flex justify-center gap-2 flex-shrink-0 px-2"
+        style={{ padding: '8px' }}
+      >
+        {[0, 1, 2, 3, 4].map(i => renderCard(hand[i], i))}
+      </div>
+
+      {/* Bottom Row - Credit/Win/Bet */}
+      <div 
+        className="grid grid-cols-3 flex-shrink-0"
+        style={{ 
+          padding: '10px 15px',
+          fontSize: '16px',
+          WebkitTextStroke: '2px #ffff00',
+          color: '#ff0000',
+        }}
+      >
+        <div className="text-left">
+          BET {BET_LEVELS[betLevel]}
         </div>
-
-        {/* Message - Red text with yellow stroke like old-school casino */}
-        <div 
-          className="text-center p-3 mb-4 flex-shrink-0"
-          style={{
-            color: lastWin > 0 ? '#ffffff' : '#ff0000',
-            fontSize: '12px',
-            fontWeight: 'bold',
-            textShadow: '2px 2px 0 #ffff00, -1px -1px 0 #ffff00, 1px -1px 0 #ffff00, -1px 1px 0 #ffff00',
-            animation: lastWin > 0 ? 'blink 0.5s ease-in-out infinite' : 'none',
-          }}
-        >
-          {message}
+        <div className="text-center">
+          WIN {lastWin}
         </div>
-
-        {/* Bet Selector (only in betting phase) */}
-        {gamePhase === 'betting' && (
-          <div className="mb-4 flex-shrink-0">
-            <div className="text-center text-xs mb-2" style={{ color: '#ffff00' }}>
-              SELECT BET
-            </div>
-            <div className="flex justify-center gap-2">
-              {BET_LEVELS.map((level, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setBetLevel(idx)}
-                  className="transition-all duration-100"
-                  style={{
-                    width: '50px',
-                    height: '36px',
-                    borderRadius: '4px',
-                    border: '2px solid #ffff00',
-                    borderStyle: betLevel === idx ? 'inset' : 'outset',
-                    background: betLevel === idx 
-                      ? '#e0c725'
-                      : 'linear-gradient(180deg, #e0c725 0%, #b8a020 100%)',
-                    color: '#000',
-                    fontWeight: 'bold',
-                    fontSize: '12px',
-                    cursor: 'pointer',
-                    fontFamily: '"Press Start 2P", monospace',
-                    boxShadow: betLevel === idx 
-                      ? 'inset 2px 2px 4px rgba(0,0,0,0.5)' 
-                      : '0 0 0 1px #9e9f27, 0 0 0 3px black',
-                  }}
-                >
-                  {level * GUM_PER_COIN}
-                </button>
-              ))}
-            </div>
-            {betLevel === 4 && (
-              <div className="text-center mt-2 text-xs" style={{ color: '#ff0000', textShadow: '1px 1px 0 #ffff00' }}>
-                ★ MAX BET BONUS ★
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Bottom Row - Credit/Win/Bet like classic machines */}
-        <div 
-          className="grid grid-cols-3 mb-4 flex-shrink-0"
-          style={{ fontSize: '10px' }}
-        >
-          <div className="text-center" style={{ color: '#ffff00' }}>
-            <div>BET</div>
-            <div className="text-xl">{BET_LEVELS[betLevel]}</div>
-          </div>
-          <div className="text-center" style={{ color: lastWin > 0 ? '#ffffff' : '#ffff00' }}>
-            <div>WIN</div>
-            <div className="text-xl">{lastWin}</div>
-          </div>
-          <div className="text-center" style={{ color: '#ffff00' }}>
-            <div>CREDIT</div>
-            <div className="text-xl">{gumBalance}</div>
-          </div>
-        </div>
-
-        {/* Action Buttons - Classic casino style */}
-        <div className="flex-shrink-0">
-          {gamePhase === 'betting' && (
-            <button
-              onClick={newHand}
-              disabled={isAnimating || gumBalance < bet}
-              className={`w-full py-3 font-black text-lg transition-all duration-100 ${!isAnimating && gumBalance >= bet ? 'animate-pulse' : ''}`}
-              style={{
-                background: gumBalance < bet 
-                  ? '#444'
-                  : '#e0c725',
-                border: '3px solid #000',
-                borderStyle: 'outset',
-                borderRadius: '4px',
-                color: '#000',
-                fontFamily: '"Press Start 2P", monospace',
-                boxShadow: '0 0 0 1px #9e9f27, 0 0 0 3px black',
-                cursor: gumBalance < bet ? 'not-allowed' : 'pointer',
-                opacity: gumBalance < bet ? 0.5 : 1,
-                fontSize: '14px',
-              }}
-            >
-              DEAL
-            </button>
-          )}
-          
-          {gamePhase === 'holding' && (
-            <button
-              onClick={dealNextCards}
-              disabled={isAnimating}
-              className="w-full py-3 font-black text-lg transition-all duration-100 animate-pulse"
-              style={{
-                background: '#e0c725',
-                border: '3px solid #000',
-                borderStyle: 'outset',
-                borderRadius: '4px',
-                color: '#000',
-                fontFamily: '"Press Start 2P", monospace',
-                boxShadow: '0 0 0 1px #9e9f27, 0 0 0 3px black',
-                fontSize: '14px',
-              }}
-            >
-              DRAW
-            </button>
-          )}
-          
-          {gamePhase === 'result' && (
-            <button
-              onClick={startNewGame}
-              className="w-full py-3 font-black text-lg transition-all duration-100"
-              style={{
-                background: '#e0c725',
-                border: '3px solid #000',
-                borderStyle: 'outset',
-                borderRadius: '4px',
-                color: '#000',
-                fontFamily: '"Press Start 2P", monospace',
-                boxShadow: '0 0 0 1px #9e9f27, 0 0 0 3px black',
-                fontSize: '14px',
-              }}
-            >
-              PLAY AGAIN
-            </button>
-          )}
+        <div className="text-right">
+          CREDIT {gumBalance}
         </div>
       </div>
 
-      {/* CSS for blink animation */}
+      {/* Button Row */}
+      <div 
+        className="flex gap-2 flex-shrink-0"
+        style={{ 
+          padding: '0 8px 8px 8px',
+        }}
+      >
+        {/* Help Button */}
+        <button
+          onClick={onClose}
+          style={{
+            flex: '1',
+            padding: '12px 8px',
+            fontFamily: '"Press Start 2P", cursive',
+            cursor: 'pointer',
+            textAlign: 'center',
+            color: '#000',
+            fontSize: '10px',
+            background: '#e0c725',
+            borderRadius: '2px',
+            borderColor: '#ddd',
+            borderWidth: '2px',
+            borderStyle: 'outset',
+            boxShadow: '0 0 0 1px #9e9f27, 0 0 0 3px black',
+          }}
+        >
+          EXIT
+        </button>
+
+        {/* Bet Buttons (only in betting phase) */}
+        {gamePhase === 'betting' && (
+          <>
+            <button
+              onClick={() => setBetLevel(prev => prev > 0 ? prev - 1 : prev)}
+              style={{
+                flex: '1',
+                padding: '12px 8px',
+                fontFamily: '"Press Start 2P", cursive',
+                cursor: 'pointer',
+                textAlign: 'center',
+                color: '#000',
+                fontSize: '10px',
+                background: '#e0c725',
+                borderRadius: '2px',
+                borderColor: '#ddd',
+                borderWidth: '2px',
+                borderStyle: 'outset',
+                boxShadow: '0 0 0 1px #9e9f27, 0 0 0 3px black',
+              }}
+            >
+              BET-
+            </button>
+            <button
+              onClick={() => setBetLevel(prev => prev < 4 ? prev + 1 : prev)}
+              style={{
+                flex: '1',
+                padding: '12px 8px',
+                fontFamily: '"Press Start 2P", cursive',
+                cursor: 'pointer',
+                textAlign: 'center',
+                color: '#000',
+                fontSize: '10px',
+                background: '#e0c725',
+                borderRadius: '2px',
+                borderColor: '#ddd',
+                borderWidth: '2px',
+                borderStyle: 'outset',
+                boxShadow: '0 0 0 1px #9e9f27, 0 0 0 3px black',
+              }}
+            >
+              BET+
+            </button>
+          </>
+        )}
+
+        {/* Deal/Draw Button */}
+        <button
+          onClick={gamePhase === 'betting' ? newHand : gamePhase === 'holding' ? dealNextCards : startNewGame}
+          disabled={isAnimating || (gamePhase === 'betting' && gumBalance < bet)}
+          className={gamePhase !== 'result' && !isAnimating && gumBalance >= bet ? 'flash' : ''}
+          style={{
+            flex: '2',
+            padding: '12px 8px',
+            fontFamily: '"Press Start 2P", cursive',
+            cursor: gumBalance < bet && gamePhase === 'betting' ? 'not-allowed' : 'pointer',
+            textAlign: 'center',
+            color: '#000',
+            fontSize: '10px',
+            background: '#e0c725',
+            borderRadius: '2px',
+            borderColor: '#ddd',
+            borderWidth: '2px',
+            borderStyle: 'outset',
+            boxShadow: '0 0 0 1px #9e9f27, 0 0 0 3px black',
+            opacity: gumBalance < bet && gamePhase === 'betting' ? 0.5 : 1,
+          }}
+        >
+          {gamePhase === 'betting' ? 'DEAL' : gamePhase === 'holding' ? 'DRAW' : 'DEAL'}
+        </button>
+      </div>
+
+      {/* CSS for animations */}
       <style jsx>{`
         @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
+          0% { opacity: 1; }
+          50% { opacity: 0; }
+          100% { opacity: 1; }
+        }
+        @keyframes flash {
+          0% { color: white; }
+          50% { color: black; }
+          100% { color: white; }
+        }
+        .flash {
+          animation: flash 1s steps(1) infinite;
         }
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
       `}</style>
