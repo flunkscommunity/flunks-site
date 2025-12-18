@@ -6,6 +6,14 @@ import SetupCollectionButton from './SetupCollectionButton';
 import * as fcl from '@onflow/fcl';
 import '../config/fcl';
 
+// Helper to proxy GCS images to avoid CORS issues
+const proxyImageUrl = (url: string): string => {
+  if (url && url.includes('storage.googleapis.com')) {
+    return `/api/image-proxy?url=${encodeURIComponent(url)}`;
+  }
+  return url;
+};
+
 // Arcade animations
 const arcadeBlink = keyframes`
   0%, 100% { opacity: 1; }
@@ -700,7 +708,7 @@ const SemesterZeroVarsityDisplay: React.FC<SemesterZeroVarsityDisplayProps> = ({
                     }}
                     title={isDraggingPlaced ? 'Click on F to place' : `${pin.name} - Double-click to remove, drag to move`}
                   >
-                    <img src={pin.image} alt={pin.name} crossOrigin="anonymous" />
+                    <img src={proxyImageUrl(pin.image)} alt={pin.name} />
                   </PinOverlay>
                 ))}
               </JacketDisplay>
@@ -754,7 +762,7 @@ const SemesterZeroVarsityDisplay: React.FC<SemesterZeroVarsityDisplayProps> = ({
                       onClick={() => handlePinClick(pin)}
                       title={pin.placed ? 'Already placed - click on F to remove' : 'Click to place on F'}
                     >
-                      <img src={pin.image} alt={pin.name} />
+                      <img src={proxyImageUrl(pin.image)} alt={pin.name} />
                       <p>{pin.name}</p>
                       <p style={{ fontSize: '6px', color: '#999', marginTop: '4px' }}>
                         {pin.type} • {pin.id}
