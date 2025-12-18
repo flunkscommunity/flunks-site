@@ -3,26 +3,15 @@ import styled from 'styled-components';
 import { useDynamicContext, DynamicWidget } from '@dynamic-labs/sdk-react-core';
 import { useWindowsContext } from 'contexts/WindowsContext';
 import { useUserProfile } from 'contexts/UserProfileContext';
-import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 import { WINDOW_IDS } from 'fixed';
-import { AI_AGENTS, getAgentResponse } from 'data/aiAgents';
 import useMessengerSounds from 'hooks/useMessengerSounds';
-import useAIChat from 'hooks/useAIChat';
 import useChatMessages from 'hooks/useChatMessages';
 import useLocalChatMessages from 'hooks/useLocalChatMessages';
 import UserDisplay from 'components/UserDisplay';
 import { 
-  Window, 
-  WindowHeader, 
-  WindowContent, 
   Button, 
   Frame, 
   TextField, 
-  MenuList,
-  MenuListItem,
-  Separator,
-  Toolbar,
-  Avatar
 } from 'react95';
 
 const MessengerContainer = styled.div`
@@ -381,7 +370,6 @@ const FlunksMessenger: React.FC = () => {
   const { closeWindow } = useWindowsContext();
   const { profile, hasProfile } = useUserProfile();
   const sounds = useMessengerSounds();
-  const { sendToAI, isLoading: aiLoading } = useAIChat();
   
   // Auto-use profile username if available, otherwise require manual entry
   const [username, setUsername] = useState('');
@@ -407,7 +395,6 @@ const FlunksMessenger: React.FC = () => {
   const [currentMessage, setCurrentMessage] = useState('');
   const [selectedContact, setSelectedContact] = useState<string>('💬 General Chat');
   const [isTyping, setIsTyping] = useState(false);
-  const [isAiTyping, setIsAiTyping] = useState(false);
   const [soundsEnabled, setSoundsEnabled] = useState(true);
   
   // Use local chat for non-persistent rooms (AI rooms)
@@ -442,7 +429,7 @@ const FlunksMessenger: React.FC = () => {
 
     // Simulate users coming online/offline every 30 seconds
     const interval = setInterval(() => {
-      const additionalUsers = [
+      const additionalUsers: OnlineUser[] = [
         { username: 'ScoobySnax', walletAddress: '0xbeef...cafe' },
         { username: 'Powerbottom69', walletAddress: '0xdead...beef' },
         { username: 'ThunderTwink', walletAddress: '0xfeed...face' },
@@ -451,15 +438,16 @@ const FlunksMessenger: React.FC = () => {
       setOnlineUsers(prev => {
         const shouldAdd = Math.random() > 0.5;
         if (shouldAdd && prev.length < 8) {
-          const randomUser = additionalUsers[Math.floor(Math.random() * additionalUsers.length)];
-          if (!prev.find(u => u.username === randomUser.username)) {
+          const randomIndex = Math.floor(Math.random() * additionalUsers.length);
+          const randomUser = additionalUsers[randomIndex];
+          if (randomUser && !prev.find(u => u.username === randomUser.username)) {
             if (soundsEnabled) sounds.userOnline(); // Play sound when user comes online
             return [...prev, randomUser];
           }
         } else if (prev.length > 3) {
           // Remove a non-current user
           if (soundsEnabled) sounds.userOffline(); // Play sound when user goes offline
-          return prev.filter((u, index) => u.isCurrentUser || index < prev.length - 1);
+          return prev.filter((u) => u.isCurrentUser || prev.indexOf(u) < prev.length - 1);
         }
         return prev;
       });
@@ -468,24 +456,14 @@ const FlunksMessenger: React.FC = () => {
     return () => clearInterval(interval);
   }, [user, primaryWallet, username, soundsEnabled, profile]);
 
-  // Chat rooms - AI agents get their own dedicated rooms
+  // Chat rooms - simplified to just General Chat
   const [chatRooms] = useState<Contact[]>([
-    { username: '🤖 FlunkBot Room', online: true, isAI: true, agentId: 'FlunkBot' },
-    { username: '🧙‍♂️ WZRD Room', online: true, isAI: true, agentId: 'StudyBuddy' },
-    { username: '☕ Town Gossip Room', online: true, isAI: true, agentId: 'TownGossip' },
-    { username: '🏈 Sportscenter', online: true, isAI: true, agentId: 'SportsCenter90s' },
     { username: '💬 General Chat', online: true, isAI: false },
-    { username: '🎮 Gaming Lounge', online: true, isAI: false },
-    { username: '🏫 Study Hall', online: true, isAI: false },
-    { username: '🎵 Music & Chill', online: true, isAI: false },
   ]);
 
   // Define which rooms should be saved to database
   const PERSISTENT_ROOMS = [
     '💬 General Chat',
-    '🎮 Gaming Lounge',
-    '🏫 Study Hall',
-    '🎵 Music & Chill'
   ];
 
   // Check if current room should be persistent
@@ -538,9 +516,6 @@ const FlunksMessenger: React.FC = () => {
   ) => {
     const PERSISTENT_ROOMS = [
       '💬 General Chat',
-      '🎮 Gaming Lounge',
-      '🏫 Study Hall',
-      '🎵 Music & Chill'
     ];
     
     const isPersistent = PERSISTENT_ROOMS.includes(roomName);
@@ -633,72 +608,6 @@ const FlunksMessenger: React.FC = () => {
       
       setCurrentMessage('');
       setIsTyping(false);
-
-      // Handle AI response for AI rooms
-      const room = chatRooms.find(r => r.username === selectedContact);
-      if (room?.isAI && room.agentId) {
-        // Show AI typing indicator
-        setTimeout(() => setIsAiTyping(true), 500);
-        
-        // Add a safety timeout to clear typing indicator if something goes wrong
-        const typingTimeout = setTimeout(() => {
-          console.log('⚠️ AI typing timeout reached, clearing indicator');
-          setIsAiTyping(false);
-        }, 10000); // 10 second timeout
-        
-        try {
-          // Get AI response using the new AI chat hook
-          console.log('🤖 Sending to AI:', { userMessage, agentId: room.agentId, username });
-          const aiResponse = await sendToAI(userMessage, room.agentId, username, messages);
-          console.log('🤖 AI Response received:', aiResponse);
-          
-          // Clear the timeout since we got a response
-          clearTimeout(typingTimeout);
-          setIsAiTyping(false);
-          
-          if (aiResponse) {
-            if (soundsEnabled) sounds.messageReceive(); // Play receive sound for AI response
-            
-            // Post AI response to database
-            await postChatMessage(
-              aiResponse.message,
-              undefined, // No wallet for AI
-              true,
-              room.agentId,
-              AI_AGENTS[room.agentId]?.username || room.agentId
-            );
-          } else {
-            console.log('🤖 No AI response received, using fallback');
-            // If no response, use fallback
-            setTimeout(async () => {
-              if (soundsEnabled) sounds.messageReceive();
-              await postChatMessage(
-                getAgentResponse(room.agentId, userMessage),
-                undefined, // No wallet for AI
-                true,
-                room.agentId,
-                AI_AGENTS[room.agentId]?.username || room.agentId
-              );
-            }, 1000);
-          }
-        } catch (error) {
-          console.error('🚨 AI Response Error:', error);
-          clearTimeout(typingTimeout);
-          setIsAiTyping(false);
-          
-          // Fallback to simple response
-          setTimeout(async () => {
-            if (soundsEnabled) sounds.messageReceive();
-            await postChatMessage(
-              getAgentResponse(room.agentId, userMessage),
-              undefined, // No wallet for AI
-              true,
-              room.agentId,
-              AI_AGENTS[room.agentId]?.username || room.agentId
-            );
-          }, 1000);
-        }
-      }
     }
   };
 
@@ -720,25 +629,6 @@ const FlunksMessenger: React.FC = () => {
 
   const switchToContact = (roomName: string) => {
     setSelectedContact(roomName);
-    
-    // If switching to an AI room, show their greeting
-    const newRoom = chatRooms.find(r => r.username === roomName);
-    if (newRoom?.isAI && newRoom.agentId && AI_AGENTS[newRoom.agentId]) {
-      const agent = AI_AGENTS[newRoom.agentId];
-      const greeting = agent.conversationStarters[Math.floor(Math.random() * agent.conversationStarters.length)];
-      
-      setTimeout(async () => {
-        // Use the room-specific function to ensure greeting goes to the correct room
-        await postMessageToRoom(
-          roomName, // Explicitly pass the room name
-          greeting,
-          undefined, // No wallet for AI
-          true,
-          agent.id,
-          agent.username
-        );
-      }, 500);
-    }
   };
 
   const addEmoji = (emoji: string) => {
@@ -827,34 +717,14 @@ const FlunksMessenger: React.FC = () => {
     <MessengerContainer className="flunks-messenger-container">
       <ContactList className="contact-list">
         <ContactListHeader>
-          Chat Rooms ({chatRooms.filter(r => r.online).length} active)
+          💬 General Chat
         </ContactListHeader>
-        <MenuList className="react95-menu-list" style={{ 
-          overflow: 'hidden',
-          '@media (max-width: 768px)': {
-            maxHeight: '80px',
-            overflowY: 'auto',
-            WebkitOverflowScrolling: 'touch'
-          }
-        } as React.CSSProperties}>
-          {chatRooms.map((room) => (
-            <ContactItem
-              key={room.username}
-              online={room.online}
-              isSelected={selectedContact === room.username}
-              onClick={() => switchToContact(room.username)}
-              className="react95-menu-list-item"
-            >
-              {room.username}
-            </ContactItem>
-          ))}
-        </MenuList>
 
-        <OnlineUsersSection>
+        <OnlineUsersSection style={{ borderTop: 'none', flex: 1 }}>
           <OnlineUsersHeader>
-            Online Users ({onlineUsers.length})
+            Online Now ({onlineUsers.length})
           </OnlineUsersHeader>
-          <div>
+          <div style={{ overflowY: 'auto', maxHeight: 'calc(100% - 30px)' }}>
             {onlineUsers.map((user) => (
               <OnlineUserItem 
                 key={user.walletAddress} 
@@ -870,12 +740,6 @@ const FlunksMessenger: React.FC = () => {
                       fontWeight: user.isCurrentUser ? 'bold' : 'normal'
                     }}
                   />
-                  <span className="wallet">
-                    {user.walletAddress.length > 10 
-                      ? `${user.walletAddress.slice(0, 6)}...${user.walletAddress.slice(-4)}`
-                      : user.walletAddress
-                    }
-                  </span>
                 </div>
               </OnlineUserItem>
             ))}
@@ -886,12 +750,7 @@ const FlunksMessenger: React.FC = () => {
       <ChatArea className="chat-area">
         <ChatHeader>
           <span>💬</span>
-          <span>{selectedContact}</span>
-          {selectedContact !== '💬 General Chat' && (
-            <span style={{ fontSize: '9px', opacity: 0.8 }}>
-              {chatRooms.find(r => r.username === selectedContact)?.online ? '● Active' : '● Inactive'}
-            </span>
-          )}
+          <span>General Chat</span>
           <Button
             size="sm"
             onClick={() => setSoundsEnabled(!soundsEnabled)}
@@ -934,20 +793,6 @@ const FlunksMessenger: React.FC = () => {
             <MessageBubble isSystem={true} className="flunks-messenger-message">
               <div className="message-text" style={{ fontStyle: 'italic', color: '#666' }}>
                 You are typing...
-              </div>
-            </MessageBubble>
-          )}
-          {isAiTyping && (
-            <MessageBubble isSystem={true} className="flunks-messenger-message">
-              <div className="message-text" style={{ fontStyle: 'italic', color: '#666' }}>
-                {(() => {
-                  const room = chatRooms.find(r => r.username === selectedContact);
-                  if (room?.isAI && room.agentId) {
-                    const agent = AI_AGENTS[room.agentId];
-                    return `${agent?.username || room.agentId} is typing...`;
-                  }
-                  return `${selectedContact} is typing...`;
-                })()}
               </div>
             </MessageBubble>
           )}

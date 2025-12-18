@@ -714,7 +714,7 @@ const GameManualWindow: React.FC = () => {
               Communication, tracking, and information apps!
             </p>
             
-            {/* Chat Rooms */}
+            {/* ChatRoom */}
             <div style={{
               background: 'linear-gradient(135deg, #ff9a9e, #fecfef)',
               border: '3px solid #333',
@@ -740,7 +740,7 @@ const GameManualWindow: React.FC = () => {
                 minWidth: '60px',
                 textAlign: 'center'
               }}>
-                <img src="/images/icons/chat-rooms.png" alt="Chat Rooms" style={{ width: '48px', height: '48px' }} />
+                <img src="/images/icons/chat-rooms.png" alt="ChatRoom" style={{ width: '48px', height: '48px' }} />
               </div>
               <div>
                 <h3 style={{ 
@@ -748,7 +748,7 @@ const GameManualWindow: React.FC = () => {
                   textShadow: '1px 1px 0px #fff', 
                   margin: '0 0 10px 0',
                   fontSize: '20px'
-                }}>Chat Rooms</h3>
+                }}>ChatRoom</h3>
                 <p style={{ 
                   color: '#333', 
                   textShadow: '1px 1px 0px #fff',
@@ -756,8 +756,8 @@ const GameManualWindow: React.FC = () => {
                   fontSize: '14px',
                   lineHeight: '1.4'
                 }}>
-                  Connect and chat with other students in real-time messaging rooms. 
-                  Join different conversation topics, make friends, and participate in the school's social community.
+                  Connect and chat with other students in real-time messaging. 
+                  See who's online, make friends, and participate in the school's social community.
                 </p>
               </div>
             </div>

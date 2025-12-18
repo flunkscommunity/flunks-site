@@ -465,10 +465,10 @@ const windowsMemod = useMemo(() => (
           })}
         />
 
-        {/* 8. Chat Rooms */}
+        {/* 8. ChatRoom */}
         <ConditionalAppIcon
-          appId="chat-rooms"
-          title="Chat Rooms"
+          appId="chat-room"
+          title="ChatRoom"
           icon="/images/icons/chat-rooms.png"
           onDoubleClick={() => openWindow({
             key: WINDOW_IDS.FLUNKS_MESSENGER,
@@ -478,7 +478,7 @@ const windowsMemod = useMemo(() => (
                 onClose={() => closeWindow(WINDOW_IDS.FLUNKS_MESSENGER)}
                 initialWidth="600px"
                 initialHeight="500px"
-                headerTitle="Chat Rooms"
+                headerTitle="ChatRoom"
                 headerIcon="/images/icons/chat-rooms.png"
                 style={{
                   top: '50px',   // Position below any potential top navigation

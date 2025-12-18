@@ -276,6 +276,9 @@ export default async function handler(
     } catch (blockchainError: any) {
       // Step 5: REFUND if blockchain fails
       console.error('❌ Blockchain transaction failed:', blockchainError);
+      console.error('❌ Error message:', blockchainError?.message);
+      console.error('❌ Error stack:', blockchainError?.stack);
+      console.error('❌ Full error:', JSON.stringify(blockchainError, Object.getOwnPropertyNames(blockchainError), 2));
       console.log('💰 Refunding GUM...');
 
       // Refund the GUM
