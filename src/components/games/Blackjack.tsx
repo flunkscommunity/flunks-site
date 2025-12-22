@@ -120,17 +120,17 @@ const Blackjack: React.FC<BlackjackProps> = ({
   // Audio refs
   const dealSoundRef = useRef<HTMLAudioElement | null>(null);
   const winSoundRef = useRef<HTMLAudioElement | null>(null);
-  const loseSoundRef = useRef<HTMLAudioElement | null>(null);
+  const blackjackWinSoundRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     setGumBalance(initialBalance);
   }, [initialBalance]);
 
   useEffect(() => {
-    // Preload sounds
-    dealSoundRef.current = new Audio('/sounds/ding.mp3');
-    winSoundRef.current = new Audio('/sounds/correct.mp3');
-    loseSoundRef.current = new Audio('/sounds/incorrect.mp3');
+    // Preload sounds - using original keyeh/videopoker casino sounds
+    dealSoundRef.current = new Audio('/sounds/cardReveal.mp3');
+    winSoundRef.current = new Audio('/sounds/win1.mp3');
+    blackjackWinSoundRef.current = new Audio('/sounds/win2.mp3');
   }, []);
 
   // ============================================================================
@@ -236,11 +236,11 @@ const Blackjack: React.FC<BlackjackProps> = ({
       await blackjackTransaction('win', winAmount, { result: 'player_blackjack' });
       setLastWin(winAmount);
       setMessage('BLACKJACK! YOU WIN!');
-      winSoundRef.current?.play().catch(() => {});
+      blackjackWinSoundRef.current?.play().catch(() => {}); // Special blackjack sound!
     } else {
       // Dealer blackjack
       setMessage('DEALER BLACKJACK!');
-      loseSoundRef.current?.play().catch(() => {});
+      // Silent on loss
     }
     setGamePhase('result');
   };
@@ -261,7 +261,7 @@ const Blackjack: React.FC<BlackjackProps> = ({
     if (total > 21) {
       setMessage('BUST! YOU LOSE!');
       setShowDealerCard(true);
-      loseSoundRef.current?.play().catch(() => {});
+      // Silent on loss
       setGamePhase('result');
     } else if (total === 21) {
       // Auto-stand on 21
@@ -318,7 +318,7 @@ const Blackjack: React.FC<BlackjackProps> = ({
     } else if (playerTotal < dealerTotal) {
       // Dealer wins
       setMessage('DEALER WINS!');
-      loseSoundRef.current?.play().catch(() => {});
+      // Silent on loss
     } else {
       // Push
       await blackjackTransaction('refund', bet, { result: 'push', total: playerTotal });

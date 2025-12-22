@@ -252,7 +252,7 @@ const FourThievesBarMain = () => {
           windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_VIDEO_POKER}
           headerTitle="🃏 Jacks or Better - 4 Thieves"
           onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_VIDEO_POKER)}
-          initialWidth="480px"
+          initialWidth="540px"
           initialHeight="700px"
           resizable={true}
         >

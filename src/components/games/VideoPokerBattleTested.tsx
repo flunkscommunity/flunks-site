@@ -116,11 +116,11 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
   const loseSoundRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Preload sounds
-    dealSoundRef.current = new Audio('/sounds/ding.mp3');
-    holdSoundRef.current = new Audio('/sounds/bubble.mp3');
-    winSoundRef.current = new Audio('/sounds/correct.mp3');
-    loseSoundRef.current = new Audio('/sounds/incorrect.mp3');
+    // Preload sounds - using original keyeh/videopoker sounds
+    dealSoundRef.current = new Audio('/sounds/cardReveal.mp3');
+    holdSoundRef.current = new Audio('/sounds/cardHold.mp3');
+    winSoundRef.current = new Audio('/sounds/win1.mp3');
+    loseSoundRef.current = new Audio('/sounds/win2.mp3');
 
     return () => {
       [dealSoundRef, holdSoundRef, winSoundRef, loseSoundRef].forEach(ref => {
@@ -412,7 +412,7 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
         <div 
           className="grid text-right font-bold"
           style={{ 
-            gridTemplateColumns: '1fr repeat(5, 40px)',
+            gridTemplateColumns: '1fr repeat(5, 50px)',
             borderBottom: '3px solid #ffff00',
             color: '#ffff00',
             fontSize: '10px',
@@ -440,7 +440,7 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
             key={rowIdx}
             className="grid text-right"
             style={{ 
-              gridTemplateColumns: '1fr repeat(5, 40px)',
+              gridTemplateColumns: '1fr repeat(5, 50px)',
               color: '#ffff00',
               fontSize: '10px',
             }}
@@ -512,7 +512,7 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
         }}
       >
         <div className="text-left">
-          BET {BET_LEVELS[betLevel]}
+          BET {bet}
         </div>
         <div className="text-center">
           WIN {lastWin}

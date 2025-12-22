@@ -164,7 +164,32 @@ const windowsMemod = useMemo(() => (
     <>
       <div className="h-full w-full overflow-auto p-4 touch-pan-y">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 lg:gap-8 min-h-full w-full items-start justify-items-center">
-          {/* 1. OnlyFlunks */}
+          {/* 1. Semester Zero - Large 2x2 Featured App */}
+          <div className="col-span-2 row-span-2 sm:col-span-2 sm:row-span-2 md:col-span-2 md:row-span-2 lg:col-span-2 lg:row-span-2">
+            <ConditionalAppIcon
+              appId="semester-zero"
+              title="semester zero"
+              icon="/images/icons/semester0-icon.png"
+              onDoubleClick={() => openWindow({
+                key: WINDOW_IDS.SEMESTER_0,
+                window: (
+                  <DraggableResizeableWindow
+                    windowsId={WINDOW_IDS.SEMESTER_0}
+                    onClose={() => closeWindow(WINDOW_IDS.SEMESTER_0)}
+                    initialWidth="100%"
+                    initialHeight="100%"
+                    resizable={false}
+                    headerTitle="semester zero"
+                    headerIcon="/images/icons/semester0-icon.png"
+                  >
+                    <Semester0Map onClose={() => closeWindow(WINDOW_IDS.SEMESTER_0)} />
+                  </DraggableResizeableWindow>
+                ),
+              })}
+            />
+          </div>
+
+          {/* 2. OnlyFlunks */}
           <ConditionalAppIcon
             appId="onlyflunks"
           title="OnlyFlunks"
@@ -172,7 +197,7 @@ const windowsMemod = useMemo(() => (
           onDoubleClick={() => openWindow({ key: WINDOW_IDS.FLUNKS_HUB, window: <Onlyflunks /> })}
         />
 
-        {/* 2. My Locker */}
+        {/* 3. My Locker */}
         <ConditionalAppIcon
           appId="my-locker"
           title="My Locker"
@@ -394,29 +419,6 @@ const windowsMemod = useMemo(() => (
                 headerIcon="/images/icons/fhs.png"
               >
                 <FHSSchool onClose={() => closeWindow(WINDOW_IDS.FHS_SCHOOL)} />
-              </DraggableResizeableWindow>
-            ),
-          })}
-        />
-
-        {/* 6. Semester Zero */}
-        <ConditionalAppIcon
-          appId="semester-zero"
-          title="semester zero"
-          icon="/images/icons/semester0-icon.png"
-          onDoubleClick={() => openWindow({
-            key: WINDOW_IDS.SEMESTER_0,
-            window: (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.SEMESTER_0}
-                onClose={() => closeWindow(WINDOW_IDS.SEMESTER_0)}
-                initialWidth="100%"
-                initialHeight="100%"
-                resizable={false}
-                headerTitle="semester zero"
-                headerIcon="/images/icons/semester0-icon.png"
-              >
-                <Semester0Map onClose={() => closeWindow(WINDOW_IDS.SEMESTER_0)} />
               </DraggableResizeableWindow>
             ),
           })}
