@@ -570,7 +570,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       {!isMobile && (
         hovered === 'high-school' || hovered === 'arcade' || hovered === 'rug-doctor' ||
         hovered === 'freaks-house' || hovered === 'geeks-house' || hovered === 'jocks-house' || hovered === 'preps-house' ||
-        hovered === 'treehouse' || hovered === 'snack-shack' || hovered === 'four-thieves-bar' || hovered === 'flunk-fm' ||
+        hovered === 'treehouse' || hovered === 'snack-shack' || (buildMode === 'build' && hovered === 'four-thieves-bar') || hovered === 'flunk-fm' ||
         hovered === 'police-station' || hovered === 'shed' || hovered === 'junkyard' || hovered === 'paradise-motel' ||
         hovered === 'wishing-tree' || hovered === 'frenship'
       ) && (
@@ -610,7 +610,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
       {!isMobile && hovered === 'snack-shack' && (
         <div className={`${styles["map-location-hover"]} ${styles["snack-shack"]}`} />
       )}
-      {!isMobile && hovered === 'four-thieves-bar' && (
+      {!isMobile && buildMode === 'build' && hovered === 'four-thieves-bar' && (
         <div className={`${styles["map-location-hover"]} ${styles["four-thieves-bar"]}`} />
       )}
       {!isMobile && hovered === 'flunk-fm' && (

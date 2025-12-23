@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useDynamicContext, DynamicWidget } from '@dynamic-labs/sdk-react-core';
 import { useWindowsContext } from 'contexts/WindowsContext';
 import { useUserProfile } from 'contexts/UserProfileContext';
+import { useUnifiedWallet } from 'contexts/UnifiedWalletContext';
 import { WINDOW_IDS } from 'fixed';
 import useMessengerSounds from 'hooks/useMessengerSounds';
 import useChatMessages from 'hooks/useChatMessages';
@@ -352,20 +353,25 @@ interface OnlineUser {
 }
 
 const FlunksMessenger: React.FC = () => {
-  const { user, primaryWallet } = useDynamicContext();
+  const dynamicContext = useDynamicContext();
+  const { user, primaryWallet } = dynamicContext;
+  const { isConnected, address: walletAddress } = useUnifiedWallet();
   
-  // Check if user is actually authenticated (either user OR primaryWallet exists)
-  const isUserAuthenticated = !!(user || primaryWallet);
+  // Check if user is actually authenticated - use unified wallet which is more reliable
+  const isUserAuthenticated = isConnected || !!(user || primaryWallet);
   
   // Add debugging for user state
   useEffect(() => {
-    console.log('🔍 FlunksMessenger - Dynamic context update:', { 
-      user: user ? { id: user.userId, email: user.email } : null,
-      primaryWallet: primaryWallet?.address ? primaryWallet.address.slice(0, 10) + '...' : null,
+    console.log('🔍 FlunksMessenger - Auth state:', { 
+      unifiedWallet: { isConnected, address: walletAddress },
+      dynamic: {
+        user: user ? { id: user.userId, email: user.email } : null,
+        primaryWallet: primaryWallet?.address ? primaryWallet.address.slice(0, 10) + '...' : null,
+      },
       isUserAuthenticated,
       timestamp: new Date().toISOString()
     });
-  }, [user, primaryWallet, isUserAuthenticated]);
+  }, [user, primaryWallet, isConnected, walletAddress, isUserAuthenticated]);
 
   const { closeWindow } = useWindowsContext();
   const { profile, hasProfile } = useUserProfile();
@@ -375,22 +381,41 @@ const FlunksMessenger: React.FC = () => {
   const [username, setUsername] = useState('');
   const [tempUsername, setTempUsername] = useState('');
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
   
-  // Handle initial auth check - skip delay if already authenticated
+  // Handle initial auth check - use unified wallet for reliable detection
   useEffect(() => {
-    // If already authenticated, no need to wait
-    if (isUserAuthenticated) {
+    console.log('🔍 Auth check running:', { 
+      isConnected,
+      walletAddress,
+      user: !!user, 
+      primaryWallet: !!primaryWallet,
+      hasCheckedAuth 
+    });
+    
+    // If unified wallet is connected OR we have Dynamic auth, we're authenticated
+    if (isConnected || user || primaryWallet) {
+      console.log('✅ User is authenticated - opening chat');
       setIsCheckingAuth(false);
+      setHasCheckedAuth(true);
       return;
     }
     
-    // Otherwise, wait briefly for Dynamic context to populate
-    const timer = setTimeout(() => {
-      setIsCheckingAuth(false);
-    }, 1000);
-    
-    return () => clearTimeout(timer);
-  }, [isUserAuthenticated]);
+    // If we haven't checked yet, give contexts a brief moment to initialize (300ms)
+    if (!hasCheckedAuth) {
+      const timer = setTimeout(() => {
+        if (isConnected || user || primaryWallet) {
+          console.log('✅ User authenticated after wait');
+        } else {
+          console.log('❌ No authentication detected - showing login');
+        }
+        setIsCheckingAuth(false);
+        setHasCheckedAuth(true);
+      }, 300);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [user, primaryWallet, isConnected, walletAddress, hasCheckedAuth]);
 
   const [currentMessage, setCurrentMessage] = useState('');
   const [selectedContact, setSelectedContact] = useState<string>('💬 General Chat');

@@ -12,8 +12,6 @@ import VideoPokerBattleTested from "components/games/VideoPokerBattleTested";
 import Blackjack from "components/games/Blackjack";
 import ScratchCard from "components/games/ScratchCard";
 import SlotsGame from "components/games/SlotsGame";
-import { useNpcEvents } from "hooks/useNpcEvents";
-import { NpcEventModal } from "components/NpcEventModal";
 import { useRouter } from 'next/router';
 
 const FourThievesBarMain = () => {
@@ -53,24 +51,6 @@ const FourThievesBarMain = () => {
   // For localhost testing, allow access anytime
   const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
   const canAccessBackDoor = isNightTime || isLocalhost;
-
-  // NPC Events System - The Underground!
-  const [npcState, npcActions] = useNpcEvents({
-    room: "underground",
-    walletAddress: walletAddress || "anonymous",
-    gumBalance: gumBalance,
-    autoTrigger: false, // DON'T trigger on main page - only in Underground
-    onGumChange: (delta, newBalance) => {
-      // Update GUM balance from NPC events (triggers context refresh)
-      updateBalance(newBalance);
-      console.log(`[NPC] GUM changed by ${delta}, new balance: ${newBalance}`);
-    },
-    onEffectApplied: (effect) => {
-      console.log(`[NPC] Effect applied:`, effect);
-      // TODO: Handle other effects (items, flags, reputation)
-    },
-    debug: true, // Enable for development
-  });
 
   // Track if user is inside the bar
   const [isInsideBar, setIsInsideBar] = useState(false);
@@ -352,17 +332,6 @@ const FourThievesBarMain = () => {
                   e.currentTarget.src = "/images/backdrops/BLANK.png";
                 }}
               />
-              {/* Hidden NPC trigger - subtle corner shadow that's clickable */}
-              <button
-                onClick={() => npcActions.triggerEventCheck()}
-                className="absolute bottom-4 right-4 w-12 h-12 rounded-full bg-black bg-opacity-20 hover:bg-opacity-40 transition-all duration-500 cursor-pointer"
-                style={{ 
-                  boxShadow: '0 0 20px rgba(128, 0, 128, 0.3)',
-                }}
-                title="Something catches your eye in the shadows..."
-              >
-                <span className="opacity-30 hover:opacity-70 transition-opacity text-lg">👁️</span>
-              </button>
             </div>
           </div>
         </DraggableResizeableWindow>
@@ -432,11 +401,8 @@ const FourThievesBarMain = () => {
     });
   };
 
-  // Open the Underground - Secret speakeasy with shady characters
+  // Open the Underground - Secret speakeasy casino
   const openUnderground = () => {
-    // Trigger NPC event when entering Underground
-    npcActions.triggerEventCheck();
-    
     openWindow({
       key: WINDOW_IDS.FOUR_THIEVES_BAR_UNDERGROUND,
       window: (
@@ -470,17 +436,7 @@ const FourThievesBarMain = () => {
             
             {/* Underground Buttons */}
             <div className="w-full bg-gradient-to-r from-purple-950 via-black to-purple-950 p-4 border-t-4 border-purple-500 shadow-2xl flex-shrink-0">
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-3 max-w-4xl mx-auto">
-                {/* Talk to Someone - Main NPC Event Trigger */}
-                <button
-                  onClick={() => npcActions.triggerEventCheck()}
-                  className="bg-gradient-to-br from-purple-700 to-purple-900 hover:from-purple-600 hover:to-purple-800 text-white px-4 py-3 rounded-lg border-3 border-purple-400 hover:border-purple-300 transition-all duration-300 hover:scale-105 text-center text-sm font-black shadow-lg animate-pulse"
-                  style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
-                  title="Approach a shady character..."
-                >
-                  🎭 Talk to Someone
-                </button>
-
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto">
                 {/* Slot Machine */}
                 <button
                   onClick={openSlotMachine}
@@ -533,20 +489,6 @@ const FourThievesBarMain = () => {
                 </span>
               </div>
             </div>
-
-            {/* NPC Event Modal - Shared with main component */}
-            <NpcEventModal
-              event={npcState.activeEvent}
-              outcome={npcState.currentOutcome}
-              awaitingChoice={npcState.awaitingChoice}
-              isLoading={npcState.isLoading}
-              gumBalance={gumBalance}
-              onChoice={npcActions.makeChoice}
-              onDismiss={npcActions.dismissEvent}
-              canAfford={npcActions.canAfford}
-              getChoiceCost={npcActions.getChoiceCost}
-              error={npcState.error}
-            />
           </div>
         </DraggableResizeableWindow>
       ),
@@ -639,20 +581,6 @@ const FourThievesBarMain = () => {
           </div>
         )}
       </div>
-
-      {/* NPC Event Modal */}
-      <NpcEventModal
-        event={npcState.activeEvent}
-        outcome={npcState.currentOutcome}
-        awaitingChoice={npcState.awaitingChoice}
-        isLoading={npcState.isLoading}
-        gumBalance={gumBalance}
-        onChoice={npcActions.makeChoice}
-        onDismiss={npcActions.dismissEvent}
-        canAfford={npcActions.canAfford}
-        getChoiceCost={npcActions.getChoiceCost}
-        error={npcState.error}
-      />
 
       {/* Secret Word Password Prompt Modal */}
       {showPasswordPrompt && (
