@@ -813,51 +813,6 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                   onTouchStart={() => handleTouchEnter('snack-shack')}
                   onTouchEnd={handleTouchLeave}
                 />
-                {/* 4 Thieves Bar */}
-                <DynamicHouseIcon
-                  houseId="four-thieves-bar"
-                  className={`${styles["nav-icon"]} ${styles['four-thieves-bar-nav']}`}
-                  onClick={() => {
-                    if (isMobile && touchedLocation === 'four-thieves-bar') {
-                      setTouchedLocation(null); setHovered(null);
-                      handleLocationAccess('four-thieves-bar', () => openWindow({
-                        key: WINDOW_IDS.FOUR_THIEVES_BAR_MAIN,
-                        window: (
-                          <DraggableResizeableWindow
-                            windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_MAIN}
-                            headerTitle="🍺 4 Thieves Bar"
-                            onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_MAIN)}
-                            initialWidth="95vw"
-                            initialHeight="85vh"
-                            resizable={true}
-                          >
-                            <FourThievesBarMain />
-                          </DraggableResizeableWindow>
-                        ),
-                      }) );
-                    } else if (!isMobile) {
-                      handleLocationAccess('four-thieves-bar', () => openWindow({
-                        key: WINDOW_IDS.FOUR_THIEVES_BAR_MAIN,
-                        window: (
-                          <DraggableResizeableWindow
-                            windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_MAIN}
-                            headerTitle="4 Thieves Bar"
-                            onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_MAIN)}
-                            initialWidth="750px"
-                            initialHeight="85vh"
-                            resizable={true}
-                          >
-                            <FourThievesBarMain />
-                          </DraggableResizeableWindow>
-                        ),
-                      }) );
-                    }
-                  }}
-                  onMouseEnter={() => setHovered('four-thieves-bar')}
-                  onMouseLeave={() => setHovered(null)}
-                  onTouchStart={() => handleTouchEnter('four-thieves-bar')}
-                  onTouchEnd={handleTouchLeave}
-                />
                 <DynamicHouseIcon
                   houseId="flunk-fm"
                   className={`${styles["nav-icon"]} ${styles['flunk-fm-nav']}`}
@@ -1090,6 +1045,52 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
               }}
             >
             </DynamicHouseIcon>
+            
+            {/* 4 Thieves Bar - Always Visible */}
+            <DynamicHouseIcon
+              houseId="four-thieves-bar"
+              className={`${styles["nav-icon"]} ${styles['four-thieves-bar-nav']}`}
+              onClick={() => {
+                if (isMobile && touchedLocation === 'four-thieves-bar') {
+                  setTouchedLocation(null); setHovered(null);
+                  handleLocationAccess('four-thieves-bar', () => openWindow({
+                    key: WINDOW_IDS.FOUR_THIEVES_BAR_MAIN,
+                    window: (
+                      <DraggableResizeableWindow
+                        windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_MAIN}
+                        headerTitle="🍺 4 Thieves Bar"
+                        onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_MAIN)}
+                        initialWidth="95vw"
+                        initialHeight="85vh"
+                        resizable={true}
+                      >
+                        <FourThievesBarMain />
+                      </DraggableResizeableWindow>
+                    ),
+                  }) );
+                } else if (!isMobile) {
+                  handleLocationAccess('four-thieves-bar', () => openWindow({
+                    key: WINDOW_IDS.FOUR_THIEVES_BAR_MAIN,
+                    window: (
+                      <DraggableResizeableWindow
+                        windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_MAIN}
+                        headerTitle="4 Thieves Bar"
+                        onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_MAIN)}
+                        initialWidth="750px"
+                        initialHeight="85vh"
+                        resizable={true}
+                      >
+                        <FourThievesBarMain />
+                      </DraggableResizeableWindow>
+                    ),
+                  }) );
+                }
+              }}
+              onMouseEnter={() => setHovered('four-thieves-bar')}
+              onMouseLeave={() => setHovered(null)}
+              onTouchStart={() => handleTouchEnter('four-thieves-bar')}
+              onTouchEnd={handleTouchLeave}
+            />
             
             <DynamicHouseIcon
               houseId="arcade"
