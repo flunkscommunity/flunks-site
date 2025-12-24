@@ -181,7 +181,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
     'flunk-fm': { title: "Radio Station", description: "The voice of the town broadcasts from here. Radio waves carry secrets across the airwaves.", icon: "📻", rooms: [{ name: "Recording Studio", description: "Microphones and mixing boards" }, { name: "DJ Booth", description: "Where the magic happens live on air" }, { name: "Station Office", description: "Paperwork and ad spots pile to the ceiling" }, { name: "Transmission Tower", description: "Climb ladders to the blinking beacon" }] },
     'police-station': { title: "Police Station", description: "Where authority meets the streets. Case files and evidence tell stories of justice and mystery.", icon: "👮", rooms: [{ name: "Front Desk", description: "First line of law and order" }, { name: "Holding Cells", description: "Cold benches and etched initials" }, { name: "Evidence Locker", description: "Secrets locked away for safekeeping" }, { name: "Interrogation Room", description: "Bright lights and tougher questions" }] },
     'football-field': { title: "Football Field", description: "candles always staying lit on the field with talks of cancelling the big game coming up", icon: "🏈", rooms: [{ name: "50-Yard Line", description: "The heart of game day glory" }, { name: "Locker Room", description: "Pre-game rituals and team talks" }, { name: "Press Box", description: "Bird's eye view of all the action" }, { name: "Equipment Shed", description: "Gear and maintenance supplies" }] },
-    'four-thieves-bar': { title: "4 Thieves Bar", description: "Neon lights and bad bargains. The jukebox only plays requests if it likes you.", icon: "🍺", rooms: [{ name: "Main Bar", description: "Regulars claim the corner stools" }, { name: "Pool Room", description: "Cue balls and whispered side bets" }, { name: "Private Booths", description: "Deals are made in the shadows" }, { name: "Back Alley", description: "Deliveries come through the side door" }] },
+    'four-thieves-bar': { title: "4 Thieves Bar", description: "Neon lights and bad bargains. The jukebox only plays requests if it likes you.", icon: "🥃", rooms: [{ name: "Main Bar", description: "Regulars claim the corner stools" }, { name: "Pool Room", description: "Cue balls and whispered side bets" }, { name: "Private Booths", description: "Deals are made in the shadows" }, { name: "Back Alley", description: "Deliveries come through the side door" }] },
     'junkyard': { title: "Junkyard", description: "Treasures hide among the rust and ruin. Every pile of scrap tells a story of the past.", icon: "🚗", rooms: [{ name: "Car Stacks", description: "Rusted vehicles hold forgotten memories" }, { name: "Crusher", description: "Hydraulics flatten secrets into cubes" }, { name: "Office Trailer", description: "Ledger books and radio scanners hum" }, { name: "Hidden Bunker", description: "What secrets lie underground?" }] },
     'lake-tree': { title: "Lake Tree", description: "A peaceful spot where secrets are carved in bark. The old tree has witnessed many stories.", icon: "🌳", rooms: [{ name: "Tree Base", description: "Carved initials and love letters" }, { name: "Rope Swing", description: "Summer fun and daring leaps" }, { name: "Picnic Spot", description: "Quiet conversations under shade" }, { name: "Hidden Hollow", description: "Secret meetings and whispered confessions" }] },
     'rug-doctor': { title: "Rug Doctor", description: "Making the old look new again. Steam and suds wash away more than just stains.", icon: "🧽", rooms: [{ name: "Front Counter", description: "Customer service with a smile" }, { name: "Cleaning Bay", description: "Industrial machines and chemical solutions" }, { name: "Storage Room", description: "Cleaning supplies and equipment" }, { name: "Back Office", description: "Business records and appointment books" }] },
@@ -1058,7 +1058,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                     window: (
                       <DraggableResizeableWindow
                         windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_MAIN}
-                        headerTitle="🍺 4 Thieves Bar"
+                        headerTitle="🥃 4 Thieves Bar"
                         onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_MAIN)}
                         initialWidth="95vw"
                         initialHeight="85vh"
@@ -1074,7 +1074,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
                     window: (
                       <DraggableResizeableWindow
                         windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_MAIN}
-                        headerTitle="4 Thieves Bar"
+                        headerTitle="🥃 4 Thieves Bar"
                         onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_MAIN)}
                         initialWidth="750px"
                         initialHeight="85vh"

@@ -50,7 +50,7 @@ const FourThievesBarMain = () => {
   const isNightTime = hour >= 18 || hour < 6;
   // For localhost testing, allow access anytime
   const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
-  const canAccessBackDoor = isNightTime || isLocalhost;
+  const canAccessBackDoor = true; // Always allow back door access for all users
 
   // Track if user is inside the bar
   const [isInsideBar, setIsInsideBar] = useState(false);
@@ -569,7 +569,7 @@ const FourThievesBarMain = () => {
                   boxShadow: '0 0 20px rgba(128, 0, 128, 0.5)',
                 }}
               >
-                🌙 Back Door
+                🚪 Back Door
               </button>
             ) : (
               <button
