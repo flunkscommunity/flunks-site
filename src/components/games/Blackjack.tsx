@@ -348,9 +348,10 @@ const Blackjack: React.FC<BlackjackProps> = ({
       key={index}
       className="relative transition-all duration-200"
       style={{
-        width: '65px',
-        height: '91px',
-        marginLeft: index > 0 ? '-25px' : '0',
+        width: window.innerWidth < 768 ? '55px' : '65px',
+        height: window.innerWidth < 768 ? '77px' : '91px',
+        marginLeft: index > 0 ? (window.innerWidth < 768 ? '-20px' : '-25px') : '0',
+        flexShrink: 0,
       }}
     >
       <div
@@ -395,6 +396,7 @@ const Blackjack: React.FC<BlackjackProps> = ({
         background: 'linear-gradient(180deg, #006400 0%, #004d00 100%)',
         fontFamily: '"Press Start 2P", monospace',
         minHeight: '100%',
+        WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
       }}
     >
       {/* Header - Dealer Section */}
@@ -405,12 +407,12 @@ const Blackjack: React.FC<BlackjackProps> = ({
           border: '3px solid #ffd700',
         }}
       >
-        <div className="text-center mb-2" style={{ color: '#ffd700', fontSize: '10px' }}>
+        <div className="text-center mb-2" style={{ color: '#ffd700', fontSize: window.innerWidth < 768 ? '8px' : '10px' }}>
           DEALER {showDealerCard ? `(${dealerValue.total})` : '(??)'}
         </div>
-        <div className="flex justify-center items-center min-h-[100px]">
+        <div className="flex justify-center items-center min-h-[100px]" style={{ overflow: 'hidden' }}>
           {dealerHand.length > 0 ? (
-            <div className="flex">
+            <div className="flex" style={{ maxWidth: '100%', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
               {dealerHand.map((card, i) => renderCard(card, i === 0 && !showDealerCard, i))}
             </div>
           ) : (
@@ -424,7 +426,7 @@ const Blackjack: React.FC<BlackjackProps> = ({
         className="text-center py-3 mb-3"
         style={{
           color: lastWin > 0 ? '#00ff00' : '#ffd700',
-          fontSize: '14px',
+          fontSize: window.innerWidth < 768 ? '10px' : '14px',
           textShadow: lastWin > 0 
             ? '0 0 10px #00ff00' 
             : '2px 2px 0 #000',
@@ -432,7 +434,7 @@ const Blackjack: React.FC<BlackjackProps> = ({
         }}
       >
         {message}
-        {lastWin > 0 && <div className="text-lg mt-1">+{lastWin} GUM!</div>}
+        {lastWin > 0 && <div className="mt-1" style={{ fontSize: window.innerWidth < 768 ? '12px' : '18px' }}>+{lastWin} GUM!</div>}
       </div>
 
       {/* Player Section */}
@@ -443,12 +445,12 @@ const Blackjack: React.FC<BlackjackProps> = ({
           border: '3px solid #ffd700',
         }}
       >
-        <div className="text-center mb-2" style={{ color: '#ffd700', fontSize: '10px' }}>
+        <div className="text-center mb-2" style={{ color: '#ffd700', fontSize: window.innerWidth < 768 ? '8px' : '10px' }}>
           YOUR HAND {playerHand.length > 0 ? `(${playerValue.total}${playerValue.soft ? ' soft' : ''})` : ''}
         </div>
-        <div className="flex justify-center items-center min-h-[100px]">
+        <div className="flex justify-center items-center min-h-[100px]" style={{ overflow: 'hidden' }}>
           {playerHand.length > 0 ? (
-            <div className="flex">
+            <div className="flex" style={{ maxWidth: '100%', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
               {playerHand.map((card, i) => renderCard(card, false, i))}
             </div>
           ) : (
@@ -491,14 +493,14 @@ const Blackjack: React.FC<BlackjackProps> = ({
               disabled={isAnimating || gumBalance < bet}
               className="transition-all duration-100"
               style={{
-                padding: '12px 32px',
+                padding: window.innerWidth < 768 ? '8px 16px' : '12px 32px',
                 borderRadius: '4px',
                 border: '3px solid #000',
                 borderStyle: 'outset',
                 background: gumBalance < bet ? '#666' : '#e0c725',
                 color: '#000',
                 fontFamily: '"Press Start 2P", monospace',
-                fontSize: '14px',
+                fontSize: window.innerWidth < 768 ? '10px' : '14px',
                 cursor: gumBalance < bet ? 'not-allowed' : 'pointer',
                 boxShadow: '0 0 0 1px #9e9f27, 0 0 0 3px black',
               }}
@@ -513,14 +515,14 @@ const Blackjack: React.FC<BlackjackProps> = ({
                 onClick={hit}
                 disabled={isAnimating}
                 style={{
-                  padding: '12px 24px',
+                  padding: window.innerWidth < 768 ? '8px 12px' : '12px 24px',
                   borderRadius: '4px',
                   border: '3px solid #000',
                   borderStyle: 'outset',
                   background: '#4CAF50',
                   color: '#fff',
                   fontFamily: '"Press Start 2P", monospace',
-                  fontSize: '12px',
+                  fontSize: window.innerWidth < 768 ? '10px' : '12px',
                   cursor: 'pointer',
                   boxShadow: '2px 2px 4px rgba(0,0,0,0.5)',
                 }}
@@ -531,14 +533,14 @@ const Blackjack: React.FC<BlackjackProps> = ({
                 onClick={stand}
                 disabled={isAnimating}
                 style={{
-                  padding: '12px 24px',
+                  padding: window.innerWidth < 768 ? '8px 12px' : '12px 24px',
                   borderRadius: '4px',
                   border: '3px solid #000',
                   borderStyle: 'outset',
                   background: '#f44336',
                   color: '#fff',
                   fontFamily: '"Press Start 2P", monospace',
-                  fontSize: '12px',
+                  fontSize: window.innerWidth < 768 ? '10px' : '12px',
                   cursor: 'pointer',
                   boxShadow: '2px 2px 4px rgba(0,0,0,0.5)',
                 }}
@@ -552,14 +554,14 @@ const Blackjack: React.FC<BlackjackProps> = ({
             <button
               onClick={newGame}
               style={{
-                padding: '12px 32px',
+                padding: window.innerWidth < 768 ? '8px 16px' : '12px 32px',
                 borderRadius: '4px',
                 border: '3px solid #000',
                 borderStyle: 'outset',
                 background: '#e0c725',
                 color: '#000',
                 fontFamily: '"Press Start 2P", monospace',
-                fontSize: '14px',
+                fontSize: window.innerWidth < 768 ? '10px' : '14px',
                 cursor: 'pointer',
                 boxShadow: '0 0 0 1px #9e9f27, 0 0 0 3px black',
               }}

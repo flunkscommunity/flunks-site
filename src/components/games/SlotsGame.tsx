@@ -27,7 +27,12 @@ const SlotContent = styled.div`
   padding: 5px;
   background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 50%, #1a1a2e 100%);
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
+  
+  @media (max-width: 768px) {
+    padding: 2px;
+    overflow-y: auto;
+  }
 `;
 
 const WinMessage = styled.div<{ show: boolean }>`
@@ -254,6 +259,7 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
         position: 'relative', 
         width: '100%', 
         maxWidth: '380px',
+        margin: '0 auto',
       }}>
         {/* Reels container - positioned BEHIND the frame */}
         <div style={{

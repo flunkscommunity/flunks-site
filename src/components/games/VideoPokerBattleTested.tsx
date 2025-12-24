@@ -335,8 +335,10 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
         {/* Card image */}
         <div
           style={{
-            width: '60px',
-            height: '84px',
+            width: window.innerWidth < 768 ? '50px' : '60px',
+            height: window.innerWidth < 768 ? '70px' : '84px',
+            minWidth: '45px',
+            flexShrink: 0,
           }}
         >
           {isEmpty ? (
@@ -396,6 +398,7 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
         minHeight: '100%',
         fontFamily: '"Press Start 2P", cursive',
         color: '#ff0000', // Red text default
+        WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
       }}
     >
       {/* Pay Table - Classic Yellow on Dark Blue */}
@@ -412,10 +415,10 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
         <div 
           className="grid text-right font-bold"
           style={{ 
-            gridTemplateColumns: '1fr repeat(5, 50px)',
+            gridTemplateColumns: window.innerWidth < 768 ? '1fr repeat(5, 40px)' : '1fr repeat(5, 50px)',
             borderBottom: '3px solid #ffff00',
             color: '#ffff00',
-            fontSize: '10px',
+            fontSize: window.innerWidth < 768 ? '8px' : '10px',
           }}
         >
           <div style={{ padding: '5px', textAlign: 'left' }}></div>
@@ -440,9 +443,9 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
             key={rowIdx}
             className="grid text-right"
             style={{ 
-              gridTemplateColumns: '1fr repeat(5, 50px)',
+              gridTemplateColumns: window.innerWidth < 768 ? '1fr repeat(5, 40px)' : '1fr repeat(5, 50px)',
               color: '#ffff00',
-              fontSize: '10px',
+              fontSize: window.innerWidth < 768 ? '8px' : '10px',
             }}
           >
             <div 
@@ -496,7 +499,11 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
       {/* Cards Area */}
       <div 
         className="flex justify-center gap-2 flex-shrink-0 px-2"
-        style={{ padding: '8px' }}
+        style={{ 
+          padding: '8px',
+          flexWrap: 'wrap',
+          maxWidth: '100%',
+        }}
       >
         {[0, 1, 2, 3, 4].map(i => renderCard(hand[i], i))}
       </div>

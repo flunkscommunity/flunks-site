@@ -201,6 +201,7 @@ const FourThievesBarMain = () => {
 
   // Open Slot Machine - opens in a draggable window
   const openSlotMachine = () => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
     openWindow({
       key: WINDOW_IDS.FOUR_THIEVES_BAR_SLOT_MACHINE,
       window: (
@@ -208,8 +209,8 @@ const FourThievesBarMain = () => {
           windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_SLOT_MACHINE}
           headerTitle="🎰 Lucky Slots - The Underground"
           onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_SLOT_MACHINE)}
-          initialWidth="420px"
-          initialHeight="680px"
+          initialWidth={isMobile ? "95vw" : "420px"}
+          initialHeight={isMobile ? "90vh" : "680px"}
           resizable={true}
         >
           <SlotsGame 
@@ -225,6 +226,7 @@ const FourThievesBarMain = () => {
 
   // Open Video Poker (Battle-Tested version) - uses real GUM via API
   const openVideoPoker = () => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
     openWindow({
       key: WINDOW_IDS.FOUR_THIEVES_BAR_VIDEO_POKER,
       window: (
@@ -232,8 +234,8 @@ const FourThievesBarMain = () => {
           windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_VIDEO_POKER}
           headerTitle="🃏 Jacks or Better - 4 Thieves"
           onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_VIDEO_POKER)}
-          initialWidth="540px"
-          initialHeight="700px"
+          initialWidth={isMobile ? "95vw" : "540px"}
+          initialHeight={isMobile ? "90vh" : "700px"}
           resizable={true}
         >
           <VideoPokerBattleTested 
@@ -249,6 +251,7 @@ const FourThievesBarMain = () => {
 
   // Open Blackjack - uses real GUM via API
   const openBlackjack = () => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
     openWindow({
       key: WINDOW_IDS.FOUR_THIEVES_BAR_BLACKJACK,
       window: (
@@ -256,8 +259,8 @@ const FourThievesBarMain = () => {
           windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_BLACKJACK}
           headerTitle="🃏 Blackjack - The Underground"
           onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_BLACKJACK)}
-          initialWidth="440px"
-          initialHeight="660px"
+          initialWidth={isMobile ? "95vw" : "440px"}
+          initialHeight={isMobile ? "90vh" : "660px"}
           resizable={true}
         >
           <Blackjack 
