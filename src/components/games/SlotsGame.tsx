@@ -366,7 +366,7 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
           onClick={() => adjustBet(-5)}
           style={{
             position: 'absolute',
-            bottom: '2%',
+            bottom: '15%',
             left: '5%',
             width: '20%',
             height: '10%',
@@ -383,7 +383,7 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
           disabled={spinning || gumBalance < bet}
           style={{
             position: 'absolute',
-            bottom: '2%',
+            bottom: '15%',
             left: '27%',
             width: '46%',
             height: '10%',
@@ -400,7 +400,7 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
           onClick={() => adjustBet(5)}
           style={{
             position: 'absolute',
-            bottom: '2%',
+            bottom: '15%',
             right: '5%',
             width: '20%',
             height: '10%',

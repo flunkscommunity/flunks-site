@@ -8,18 +8,18 @@ const SYMBOL_KEYS = [
 ];
 
 // Vegas-style 38 stops per reel distribution
-// Total = 38 stops, ~90% RTP (very player-friendly)
+// Total = 38 stops, ~90% RTP (player-friendly)
 // Jackpot odds: (1/38)^3 = 1 in 54,872 per line
 const SYMBOL_WEIGHTS = {
-  pencil: 8,        // Common - 21% - 2x payout (CD)
-  eraser: 7,        // Common - 18% - 3x payout (VHS)
-  notebook: 6,      // Common - 16% - 5x payout (Walkman)
-  backpack: 5,      // Uncommon - 13% - 12x payout (Pogs)
-  calculator: 4,    // Uncommon - 11% - 20x payout (Talkboy)
-  trophy: 3,        // Rare - 8% - 50x payout (Sun)
-  diploma: 2,       // Rare - 5% - 80x payout (Hoverboard)
-  gum_pile: 2,      // Epic - 5% - 200x payout (Powerglove)
-  flunks_logo: 1    // Jackpot - 2.6% - 800x (1 in 54,872!)
+  pencil: 8,        // Common - 21% - 4x payout (CD)
+  eraser: 7,        // Common - 18% - 6x payout (VHS)
+  notebook: 6,      // Common - 16% - 10x payout (Walkman)
+  backpack: 5,      // Uncommon - 13% - 25x payout (Pogs)
+  calculator: 4,    // Uncommon - 11% - 40x payout (Talkboy)
+  trophy: 3,        // Rare - 8% - 100x payout (Sun)
+  diploma: 2,       // Rare - 5% - 150x payout (Hoverboard)
+  gum_pile: 2,      // Epic - 5% - 350x payout (Powerglove)
+  flunks_logo: 1    // Jackpot - 2.6% - 1000x (1 in 54,872!)
 };
 
 // Create weighted array for random selection

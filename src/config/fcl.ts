@@ -31,21 +31,24 @@ console.log('🌊 Configuring FCL with access node:', FLOW_ACCESS_NODE);
 console.log('📱 WalletConnect Project ID:', WALLETCONNECT_PROJECT_ID ? 'Set ✅' : 'Missing ❌');
 console.log('🌐 App URL:', APP_URL);
 
-// Simplified FCL configuration following official Flow docs pattern
-// The key: use REST mainnet URL and let FCL/wallet handle the rest
+// Updated FCL configuration to match working FCL demo pattern for mobile support
+// CRITICAL: Mobile wallets require /mainnet/ in discovery endpoints
 config({
   "flow.network": "mainnet",
   "accessNode.api": "https://rest-mainnet.onflow.org",
   
-  // Discovery - use the non-versioned endpoints (no /api/mainnet)
-  "discovery.wallet": "https://fcl-discovery.onflow.org/authn",
+  // Discovery - mobile wallets require /mainnet/ path
+  "discovery.wallet": "https://fcl-discovery.onflow.org/mainnet/authn",
+  "challenge.handshake": "https://fcl-discovery.onflow.org/mainnet/authn",
+  "discovery.authn.endpoint": "https://fcl-discovery.onflow.org/api/mainnet/authn",
+  "discovery.wallet.method": "POP/RPC",
   
-  // App details
+  // App details - shown in wallet approval screens
   "app.detail.title": "Flunks",
   "app.detail.icon": "https://flunks.net/flunks-logo.png",
   "app.detail.url": APP_URL,
   
-  // WalletConnect
+  // WalletConnect - REQUIRED for mobile wallet connections
   "walletconnect.projectId": WALLETCONNECT_PROJECT_ID,
   
   // Contracts
@@ -61,7 +64,7 @@ if (typeof window !== 'undefined') {
     const actualDiscoveryWallet = await config().get('discovery.wallet');
     const actualDiscoveryAuthn = await config().get('discovery.authn.endpoint');
 
-    console.log('✅ FCL Configuration verified (Bypass Discovery Mode):', {
+    console.log('✅ FCL Configuration verified (Mobile Wallet Support Enabled):', {
       accessNode: actualAccessNode,
       network: actualNetwork,
       expectedAccessNode: FLOW_ACCESS_NODE,
@@ -69,7 +72,7 @@ if (typeof window !== 'undefined') {
       walletConnectConfigured: !!WALLETCONNECT_PROJECT_ID,
       discoveryWallet: actualDiscoveryWallet,
       discoveryAuthn: actualDiscoveryAuthn,
-      mode: 'DIRECT_DAPPER_BYPASS'
+      mode: 'MAINNET_WITH_MOBILE_DISCOVERY'
     });
 
     // Alert if there's a mismatch (testnet detected)

@@ -33,7 +33,9 @@ const FourThievesBarMain = () => {
 
   // Background music
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const undergroundAudioRef = useRef<HTMLAudioElement | null>(null);
   const [isMuted, setIsMuted] = useState(false);
+  const [isUndergroundMuted, setIsUndergroundMuted] = useState(false);
 
   // Secret word system for Underground access
   const [showPasswordPrompt, setShowPasswordPrompt] = useState(false);
@@ -406,13 +408,40 @@ const FourThievesBarMain = () => {
 
   // Open the Underground - Secret speakeasy casino
   const openUnderground = () => {
+    // Pause main bar music
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+    
+    // Start Underground music
+    if (!undergroundAudioRef.current) {
+      undergroundAudioRef.current = new Audio('/music/underground.mp3');
+      undergroundAudioRef.current.loop = true;
+      undergroundAudioRef.current.volume = 0.3;
+    }
+    
+    if (!isUndergroundMuted) {
+      undergroundAudioRef.current.play().catch(console.log);
+    }
+    
     openWindow({
       key: WINDOW_IDS.FOUR_THIEVES_BAR_UNDERGROUND,
       window: (
         <DraggableResizeableWindow
           windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_UNDERGROUND}
           headerTitle="🌙 The Underground"
-          onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_UNDERGROUND)}
+          onClose={() => {
+            // Stop Underground music when closing
+            if (undergroundAudioRef.current) {
+              undergroundAudioRef.current.pause();
+              undergroundAudioRef.current.currentTime = 0;
+            }
+            // Resume main bar music
+            if (audioRef.current && !isMuted) {
+              audioRef.current.play().catch(console.log);
+            }
+            closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_UNDERGROUND);
+          }}
           initialWidth="900px"
           initialHeight="80vh"
           resizable={true}
@@ -435,6 +464,32 @@ const FourThievesBarMain = () => {
                   background: 'radial-gradient(ellipse at 50% 100%, rgba(128, 0, 128, 0.2) 0%, transparent 70%)',
                 }}
               />
+              
+              {/* Mute Button - Bottom Right */}
+              <button
+                onClick={() => {
+                  setIsUndergroundMuted(!isUndergroundMuted);
+                  if (undergroundAudioRef.current) {
+                    if (!isUndergroundMuted) {
+                      undergroundAudioRef.current.pause();
+                    } else {
+                      undergroundAudioRef.current.play().catch(console.log);
+                    }
+                  }
+                }}
+                className="absolute bottom-4 right-4 bg-black bg-opacity-70 hover:bg-opacity-90 text-white p-2 sm:p-3 rounded-full border-2 border-purple-500 hover:border-purple-400 transition-all duration-300 hover:scale-110 shadow-lg z-10"
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '18px',
+                }}
+                title={isUndergroundMuted ? "Unmute Music" : "Mute Music"}
+              >
+                {isUndergroundMuted ? '🔇' : '🔊'}
+              </button>
             </div>
             
             {/* Underground Buttons */}
@@ -585,78 +640,205 @@ const FourThievesBarMain = () => {
         )}
       </div>
 
-      {/* Secret Word Password Prompt Modal */}
+      {/* Secret Word Password Prompt Modal - NES Style */}
       {showPasswordPrompt && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black flex items-center justify-center z-50"
           onClick={() => setShowPasswordPrompt(false)}
+          style={{
+            background: 'radial-gradient(circle, #1a1a2e 0%, #000000 100%)',
+          }}
         >
           <div 
-            className="bg-gradient-to-br from-purple-950 via-black to-purple-950 p-6 rounded-xl border-4 border-purple-500 max-w-md w-full mx-4 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
             style={{
-              boxShadow: '0 0 40px rgba(128, 0, 128, 0.5)',
+              maxWidth: '600px',
+              width: '90%',
+              fontFamily: '"Press Start 2P", monospace',
+              imageRendering: 'pixelated',
             }}
           >
-            {/* Bouncer Icon */}
-            <div className="text-center mb-4">
-              <span className="text-6xl">🚪</span>
-            </div>
-            
-            {/* Title */}
-            <h2 
-              className="text-purple-300 text-xl font-black text-center mb-2"
-              style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
+            {/* NES-style Box */}
+            <div 
+              style={{
+                background: '#000',
+                border: '6px solid #90EE90',
+                boxShadow: '0 0 0 6px #000, 0 0 0 12px #FF7F50, 0 0 30px rgba(255, 127, 80, 0.5)',
+                padding: '32px',
+              }}
             >
-              The Back Door
-            </h2>
-            
-            {/* Description */}
-            <p className="text-gray-400 text-sm text-center mb-4">
-              A large figure blocks your path. He leans in close and whispers...
-            </p>
-            <p className="text-purple-400 text-center mb-4 italic">
-              "What's the word?"
-            </p>
-            
-            {/* Password Input */}
-            <div className="space-y-3">
-              <input
-                type="text"
-                value={passwordInput}
-                onChange={(e) => setPasswordInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && checkPassword()}
-                placeholder="Enter the secret word..."
-                className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-purple-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-400 text-center"
-                autoFocus
-              />
+              {/* Door crack visual */}
+              <div className="text-center mb-8">
+                <img 
+                  src="/images/locations/four-thieves/password-icon.png"
+                  alt="Back Door"
+                  style={{
+                    width: '80px',
+                    height: '80px',
+                    margin: '0 auto',
+                    animation: 'doorPulse 2s ease-in-out infinite',
+                    filter: 'drop-shadow(0 0 10px rgba(255, 127, 80, 0.8))',
+                    imageRendering: 'pixelated',
+                  }}
+                  onError={(e) => {
+                    // Fallback to emoji if image not found
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.parentElement!.innerHTML = '<div style="font-size: 64px; animation: doorPulse 2s ease-in-out infinite; filter: drop-shadow(0 0 10px rgba(255, 127, 80, 0.8));">🚪</div>';
+                  }}
+                />
+              </div>
               
-              {/* Error Message */}
+              {/* Title - NES style */}
+              <div 
+                className="text-center mb-8"
+                style={{
+                  color: '#90EE90',
+                  fontSize: '16px',
+                  letterSpacing: '3px',
+                  textShadow: '3px 3px 0 #FF7F50, 6px 6px 0 #000',
+                }}
+              >
+                ≋ THE BACK DOOR ≋
+              </div>
+              
+              {/* Description - NES text box style */}
+              <div 
+                style={{
+                  background: 'linear-gradient(135deg, #FF7F50 0%, #FF6347 100%)',
+                  border: '4px solid #90EE90',
+                  padding: '24px',
+                  marginBottom: '24px',
+                  position: 'relative',
+                  boxShadow: 'inset 0 0 20px rgba(0,0,0,0.3)',
+                }}
+              >
+                <div 
+                  style={{
+                    color: '#fff',
+                    fontSize: '11px',
+                    lineHeight: '2',
+                    textAlign: 'center',
+                    textShadow: '2px 2px 0 #000',
+                  }}
+                >
+                  ◆ THE DOOR SLIGHTLY CRACKS OPEN ◆<br/>
+                  <br/>
+                  A MYSTERIOUS VOICE ECHOES<br/>
+                  FROM THE DARKNESS...<br/>
+                  <br/>
+                  <span style={{ 
+                    color: '#90EE90', 
+                    fontSize: '13px',
+                    textShadow: '2px 2px 0 #000, 0 0 10px #90EE90',
+                  }}>
+                    ★ "PASSWORD?" ★
+                  </span>
+                </div>
+              </div>
+              
+              {/* Password Input - NES name entry style */}
+              <div 
+                style={{
+                  background: '#000',
+                  border: '4px solid #90EE90',
+                  padding: '16px',
+                  marginBottom: '24px',
+                  boxShadow: '0 0 20px rgba(144, 238, 144, 0.3)',
+                }}
+              >
+                <input
+                  type="text"
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value.toLowerCase())}
+                  onKeyDown={(e) => e.key === 'Enter' && checkPassword()}
+                  maxLength={16}
+                  className="w-full bg-transparent text-white text-center outline-none"
+                  style={{
+                    fontFamily: '"Press Start 2P", monospace',
+                    fontSize: '14px',
+                    letterSpacing: '6px',
+                    caretColor: '#90EE90',
+                    textShadow: '0 0 5px #90EE90',
+                  }}
+                  autoFocus
+                  placeholder="_ _ _ _ _ _ _ _ _"
+                />
+              </div>
+              
+              {/* Error Message - NES style */}
               {passwordError && (
-                <p className="text-red-400 text-sm text-center animate-pulse">
-                  {passwordError}
-                </p>
+                <div 
+                  className="text-center mb-6"
+                  style={{
+                    color: '#FF6347',
+                    fontSize: '10px',
+                    animation: 'blink 0.5s steps(1) infinite',
+                    textShadow: '2px 2px 0 #000',
+                  }}
+                >
+                  ✖ {passwordError} ✖
+                </div>
               )}
               
-              {/* Buttons */}
-              <div className="flex gap-3">
+              {/* Buttons - NES style */}
+              <div className="flex gap-6 justify-center">
                 <button
                   onClick={() => setShowPasswordPrompt(false)}
-                  className="flex-1 bg-gray-700 hover:bg-gray-600 text-gray-300 px-4 py-2 rounded-lg transition-all"
+                  style={{
+                    background: 'linear-gradient(180deg, #d0d0d0 0%, #888 100%)',
+                    border: '4px solid #fff',
+                    borderStyle: 'outset',
+                    color: '#000',
+                    padding: '12px 24px',
+                    fontSize: '11px',
+                    fontFamily: '"Press Start 2P", monospace',
+                    cursor: 'pointer',
+                    boxShadow: '0 0 0 4px #000, 0 4px 8px rgba(0,0,0,0.5)',
+                    letterSpacing: '2px',
+                  }}
+                  onMouseDown={(e) => e.currentTarget.style.borderStyle = 'inset'}
+                  onMouseUp={(e) => e.currentTarget.style.borderStyle = 'outset'}
                 >
-                  Leave
+                  ◄ LEAVE
                 </button>
                 <button
                   onClick={checkPassword}
-                  className="flex-1 bg-purple-700 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition-all font-bold"
+                  style={{
+                    background: 'linear-gradient(180deg, #90EE90 0%, #32CD32 100%)',
+                    border: '4px solid #FF7F50',
+                    borderStyle: 'outset',
+                    color: '#000',
+                    padding: '12px 24px',
+                    fontSize: '11px',
+                    fontFamily: '"Press Start 2P", monospace',
+                    cursor: 'pointer',
+                    boxShadow: '0 0 0 4px #000, 0 4px 8px rgba(0,0,0,0.5), 0 0 20px rgba(144, 238, 144, 0.5)',
+                    letterSpacing: '2px',
+                    fontWeight: 'bold',
+                  }}
+                  onMouseDown={(e) => e.currentTarget.style.borderStyle = 'inset'}
+                  onMouseUp={(e) => e.currentTarget.style.borderStyle = 'outset'}
                 >
-                  Enter
+                  ENTER ►
                 </button>
               </div>
             </div>
           </div>
         </div>
       )}
+      
+      {/* NES Style Animations */}
+      <style jsx>{`
+        @keyframes doorPulse {
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+      `}</style>
     </div>
   );
 };

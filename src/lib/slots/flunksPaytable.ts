@@ -1,25 +1,25 @@
 // Flunks Slot Machine Paytable
-// 9 symbols, 38 stops per reel, 5 paylines, ~65% RTP (house-friendly)
+// 9 symbols, 38 stops per reel, 5 paylines, ~90% RTP (player-friendly)
 
 export const FLUNKS_SYMBOLS = {
   // Common symbols (frequent but low payout)
-  pencil: { name: 'CD', tier: 'common', payouts: { 3: 2.0 } },
-  eraser: { name: 'VHS', tier: 'common', payouts: { 3: 3.0 } },
-  notebook: { name: 'Walkman', tier: 'common', payouts: { 3: 5.0 } },
+  pencil: { name: 'CD', tier: 'common', payouts: { 3: 4.0 } },
+  eraser: { name: 'VHS', tier: 'common', payouts: { 3: 6.0 } },
+  notebook: { name: 'Walkman', tier: 'common', payouts: { 3: 10.0 } },
   
   // Uncommon symbols (less frequent, better payout)
-  backpack: { name: 'Pogs', tier: 'uncommon', payouts: { 3: 12.0 } },
-  calculator: { name: 'Talkboy', tier: 'uncommon', payouts: { 3: 20.0 } },
+  backpack: { name: 'Pogs', tier: 'uncommon', payouts: { 3: 25.0 } },
+  calculator: { name: 'Talkboy', tier: 'uncommon', payouts: { 3: 40.0 } },
   
   // Rare symbols (hard to hit, good payout)
-  trophy: { name: 'Sun', tier: 'rare', payouts: { 3: 50.0 } },
-  diploma: { name: 'Hoverboard', tier: 'rare', payouts: { 3: 80.0 } },
+  trophy: { name: 'Sun', tier: 'rare', payouts: { 3: 100.0 } },
+  diploma: { name: 'Hoverboard', tier: 'rare', payouts: { 3: 150.0 } },
   
   // Epic symbol (very rare)
-  gum_pile: { name: 'Powerglove', tier: 'epic', payouts: { 3: 200.0 } },
+  gum_pile: { name: 'Powerglove', tier: 'epic', payouts: { 3: 350.0 } },
   
   // Jackpot symbol (ultra rare - 1 in ~55,000 per line)
-  flunks_logo: { name: 'Jackpot', tier: 'jackpot', payouts: { 3: 800.0 } }
+  flunks_logo: { name: 'Jackpot', tier: 'jackpot', payouts: { 3: 1000.0 } }
 };
 
 // 5 classic paylines for 3-reel slot
