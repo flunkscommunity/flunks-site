@@ -31,24 +31,20 @@ console.log('🌊 Configuring FCL with access node:', FLOW_ACCESS_NODE);
 console.log('📱 WalletConnect Project ID:', WALLETCONNECT_PROJECT_ID ? 'Set ✅' : 'Missing ❌');
 console.log('🌐 App URL:', APP_URL);
 
-// Updated FCL configuration to match working FCL demo pattern for mobile support
-// CRITICAL: Mobile wallets require /mainnet/ in discovery endpoints
+// Simplified FCL configuration - use standard mainnet endpoints
 config({
   "flow.network": "mainnet",
   "accessNode.api": "https://rest-mainnet.onflow.org",
   
-  // Discovery - mobile wallets require /mainnet/ path
-  "discovery.wallet": "https://fcl-discovery.onflow.org/mainnet/authn",
-  "challenge.handshake": "https://fcl-discovery.onflow.org/mainnet/authn",
-  "discovery.authn.endpoint": "https://fcl-discovery.onflow.org/api/mainnet/authn",
-  "discovery.wallet.method": "POP/RPC",
+  // Discovery - use simple authn endpoint
+  "discovery.wallet": "https://fcl-discovery.onflow.org/authn",
   
-  // App details - shown in wallet approval screens
+  // App details
   "app.detail.title": "Flunks",
   "app.detail.icon": "https://flunks.net/flunks-logo.png",
   "app.detail.url": APP_URL,
   
-  // WalletConnect - REQUIRED for mobile wallet connections
+  // WalletConnect
   "walletconnect.projectId": WALLETCONNECT_PROJECT_ID,
   
   // Contracts
@@ -64,7 +60,7 @@ if (typeof window !== 'undefined') {
     const actualDiscoveryWallet = await config().get('discovery.wallet');
     const actualDiscoveryAuthn = await config().get('discovery.authn.endpoint');
 
-    console.log('✅ FCL Configuration verified (Mobile Wallet Support Enabled):', {
+    console.log('✅ FCL Configuration verified (Mainnet):', {
       accessNode: actualAccessNode,
       network: actualNetwork,
       expectedAccessNode: FLOW_ACCESS_NODE,
@@ -72,7 +68,7 @@ if (typeof window !== 'undefined') {
       walletConnectConfigured: !!WALLETCONNECT_PROJECT_ID,
       discoveryWallet: actualDiscoveryWallet,
       discoveryAuthn: actualDiscoveryAuthn,
-      mode: 'MAINNET_WITH_MOBILE_DISCOVERY'
+      mode: 'MAINNET'
     });
 
     // Alert if there's a mismatch (testnet detected)

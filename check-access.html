@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head><title>Check Access</title></head>
+<body>
+<h1>Session Storage Check</h1>
+<pre id="output"></pre>
+<script>
+const data = {
+  accessGranted: sessionStorage.getItem('flunks-access-granted'),
+  accessLevel: sessionStorage.getItem('flunks-access-level'),
+  accessCode: sessionStorage.getItem('flunks-access-code'),
+  allKeys: Object.keys(sessionStorage)
+};
+document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+</script>
+</body>
+</html>
