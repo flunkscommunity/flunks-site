@@ -178,7 +178,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         "53675303-5e80-4fe5-88a4-e6caae677432",
                       walletConnectors: [MainnetFlowWalletConnectors],
                       
-                      // Show ALL Flow wallets - let Dynamic/FCL handle mobile detection
+                      // Filter wallets: Keep Dapper, Flow Wallet (Lilico), exclude Blocto
                       walletsFilter: (wallets) => {
                         console.log('🔍 Dynamic walletsFilter - Available wallets:', wallets.map(w => ({
                           key: w?.key || 'unknown', 
@@ -188,9 +188,23 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         
                         if (!Array.isArray(wallets)) return [];
                         
-                        // Return ALL wallets - FCL's WalletConnect config will handle mobile properly
-                        console.log('✅ Returning all wallets - FCL WalletConnect will handle mobile');
-                        return wallets;
+                        // Filter out Blocto, keep Dapper and Flow Wallet (Lilico)
+                        const filtered = wallets.filter(w => {
+                          const key = w?.key?.toLowerCase() || '';
+                          const name = w?.name?.toLowerCase() || '';
+                          
+                          // Exclude Blocto
+                          if (key.includes('blocto') || name.includes('blocto')) {
+                            console.log('❌ Excluding Blocto wallet');
+                            return false;
+                          }
+                          
+                          // Keep Dapper, Flow Wallet, Lilico
+                          return true;
+                        });
+                        
+                        console.log('✅ Filtered wallets:', filtered.map(w => w?.name || 'unknown'));
+                        return filtered;
                       }
                     }}
                   >

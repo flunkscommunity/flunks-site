@@ -528,14 +528,11 @@ const windowsMemod = useMemo(() => (
               <DraggableResizeableWindow
                 windowsId={WINDOW_IDS.FLUNKS_MESSENGER}
                 onClose={() => closeWindow(WINDOW_IDS.FLUNKS_MESSENGER)}
-                initialWidth="600px"
-                initialHeight="500px"
+                initialWidth="95vw"
+                initialHeight="90vh"
                 headerTitle="ChatRoom"
                 headerIcon="/images/icons/chat-rooms.png"
-                style={{
-                  top: '50px',   // Position below any potential top navigation
-                  left: '100px'  // Keep it away from the edge
-                }}
+                resizable={true}
               >
                 <FlunksMessenger />
               </DraggableResizeableWindow>
