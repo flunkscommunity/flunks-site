@@ -35,22 +35,6 @@ const SlotContent = styled.div`
   }
 `;
 
-const WinMessage = styled.div<{ show: boolean }>`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2rem;
-  color: #ffd700;
-  font-weight: bold;
-  opacity: ${props => props.show ? 1 : 0};
-  pointer-events: none;
-  transition: opacity 0.3s;
-  z-index: 10;
-  text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-  font-family: 'Lilita One', cursive;
-`;
-
 const SlotsGame: React.FC<SlotsGameProps> = ({
   walletAddress,
   initialBalance = 0,
@@ -261,6 +245,32 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
         maxWidth: '380px',
         margin: '0 auto',
       }}>
+        {/* Message display - positioned in the dark area at top of machine */}
+        {message && (
+          <div style={{
+            position: 'absolute',
+            top: '28%',
+            left: '12%',
+            width: '76%',
+            height: '12%',
+            zIndex: 4,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: showWin ? '#ffd700' : '#fbbf24',
+            fontFamily: "'Lilita One', cursive",
+            fontSize: showWin ? '1.8em' : '1.4em',
+            fontWeight: 'bold',
+            textShadow: showWin 
+              ? '0 0 20px rgba(255, 215, 0, 0.8), 2px 2px 0 #b45309'
+              : '0 0 10px rgba(251, 191, 36, 0.5), 1px 1px 0 #b45309',
+            textAlign: 'center',
+            animation: showWin ? 'pulse 0.5s ease-in-out infinite' : 'none'
+          }}>
+            {message}
+          </div>
+        )}
+
         {/* Reels container - positioned BEHIND the frame */}
         <div style={{
           position: 'absolute',
@@ -412,23 +422,6 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
         />
       </div>
       
-      {/* Win message */}
-      <WinMessage show={showWin}>
-        🎉 WIN! 🎉
-      </WinMessage>
-
-      {message && (
-        <div style={{ 
-          textAlign: 'center', 
-          color: '#fbbf24', 
-          marginTop: '10px', 
-          fontSize: '0.9em',
-          fontFamily: '"Lilita One", cursive',
-        }}>
-          {message}
-        </div>
-      )}
-      
       {!walletAddress && (
         <div style={{ 
           textAlign: 'center', 
@@ -442,9 +435,16 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
       
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
+        
+        @keyframes pulse {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.05);
+          }
+        }
       `}</style>
     </SlotContent>
   );
 };
-
-export default SlotsGame;

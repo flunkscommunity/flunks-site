@@ -5,6 +5,7 @@ import { checkFlunkoClicked } from './flunkoClickTracking';
 import { checkParadiseMotelEntered } from './paradiseMotelTracking';
 import { checkParadiseMotelRoom7NightVisit } from './paradiseMotelRoom7Tracking';
 import { checkHiddenRiffCompletion } from './hiddenRiffTracking';
+import { checkFourThievesUndergroundAccess } from './fourThievesUndergroundTracking';
 
 // Initialize Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -388,6 +389,52 @@ export const getChapter5ObjectivesStatus = async (walletAddress: string): Promis
     fridayNightLightsClicked: false, // Not relevant for Chapter 5
     crackedCode: false, // Not relevant for Chapter 5
     votedInPictureDay: false, // Not relevant for Chapter 5
+    completedObjectives
+  };
+};
+
+// Get Chapter 6 objectives status for a user
+export const getChapter6ObjectivesStatus = async (walletAddress: string): Promise<ObjectiveStatus> => {
+  console.log('🎯 [CHAPTER6] getChapter6ObjectivesStatus called for wallet:', walletAddress?.slice(0,10) + '...');
+  
+  // Check if user entered snicklefritz password (Slacker objective)
+  const slackerObjectiveCompleted = await checkFourThievesUndergroundAccess(walletAddress);
+  
+  // Overachiever objective - placeholder for now
+  const overachieverObjectiveCompleted = false;
+
+  console.log('📊 [CHAPTER6] Objectives status:', { 
+    slackerObjectiveCompleted, 
+    overachieverObjectiveCompleted,
+    walletSlice: walletAddress?.slice(0,10) + '...'
+  });
+
+  const completedObjectives: ChapterObjective[] = [
+    {
+      id: 'slacker_chapter6',
+      title: 'The Slacker',
+      description: 'Enter the code to gain access to the Underground',
+      type: 'custom',
+      completed: slackerObjectiveCompleted,
+      reward: 75
+    },
+    {
+      id: 'overachiever_chapter6',
+      title: 'The Overachiever',
+      description: '???',
+      type: 'custom',
+      completed: overachieverObjectiveCompleted,
+      reward: 100
+    }
+  ];
+
+  const progress = calculateObjectiveProgress(completedObjectives);
+  console.log('🎯 Chapter 6 Final progress calculated:', progress + '%');
+  
+  return {
+    fridayNightLightsClicked: false, // Not relevant for Chapter 6
+    crackedCode: false, // Not relevant for Chapter 6
+    votedInPictureDay: false, // Not relevant for Chapter 6
     completedObjectives
   };
 };

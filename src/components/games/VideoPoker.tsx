@@ -475,7 +475,7 @@ const VideoPoker: React.FC<VideoPokerProps> = ({
                   }}
                 >
                   <span style={{ color: betLevel === idx ? '#000' : undefined }}>
-                    {payout}x
+                    {payout * 10}
                   </span>
                 </div>
               ))}

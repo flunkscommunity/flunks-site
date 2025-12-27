@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useUnifiedWallet } from '../contexts/UnifiedWalletContext';
-import { getObjectivesStatus, getChapter2ObjectivesStatus, getChapter3ObjectivesStatus, getChapter4ObjectivesStatus, getChapter5ObjectivesStatus, type ChapterObjective, type ObjectiveStatus, calculateObjectiveProgress } from '../utils/weeklyObjectives';
+import { getObjectivesStatus, getChapter2ObjectivesStatus, getChapter3ObjectivesStatus, getChapter4ObjectivesStatus, getChapter5ObjectivesStatus, getChapter6ObjectivesStatus, type ChapterObjective, type ObjectiveStatus, calculateObjectiveProgress } from '../utils/weeklyObjectives';
 
 interface WeeklyObjectivesProps {
   currentWeek?: number;
@@ -16,12 +16,14 @@ const WeeklyObjectives: React.FC<WeeklyObjectivesProps> = ({ onObjectiveComplete
   const [chapter3ObjectivesStatus, setChapter3ObjectivesStatus] = useState<ObjectiveStatus | null>(null);
   const [chapter4ObjectivesStatus, setChapter4ObjectivesStatus] = useState<ObjectiveStatus | null>(null);
   const [chapter5ObjectivesStatus, setChapter5ObjectivesStatus] = useState<ObjectiveStatus | null>(null);
+  const [chapter6ObjectivesStatus, setChapter6ObjectivesStatus] = useState<ObjectiveStatus | null>(null);
   const [loading, setLoading] = useState(false);
   const [lastWallet, setLastWallet] = useState<string | null>(null);
-  const [currentWeek, setCurrentWeek] = useState<1 | 2 | 3 | 4 | 5>(5); // Default to Chapter 5 - Paradise Motel
+  const [currentWeek, setCurrentWeek] = useState<1 | 2 | 3 | 4 | 5 | 6>(6); // Default to Chapter 6 - Four Thieves
 
   // Get current objectives data based on selected week
-  const currentObjectivesData = currentWeek === 5 ? chapter5ObjectivesStatus :
+  const currentObjectivesData = currentWeek === 6 ? chapter6ObjectivesStatus :
+                              currentWeek === 5 ? chapter5ObjectivesStatus :
                               currentWeek === 4 ? chapter4ObjectivesStatus :
                               currentWeek === 3 ? chapter3ObjectivesStatus : 
                               currentWeek === 2 ? chapter2ObjectivesStatus : 
@@ -38,13 +40,14 @@ const WeeklyObjectives: React.FC<WeeklyObjectivesProps> = ({ onObjectiveComplete
         console.log('🔄 Force refreshing objectives for wallet:', unifiedAddress.slice(0, 10) + '...');
       }
       
-      // Load Chapter 1, Chapter 2, Chapter 3, Chapter 4, and Chapter 5 objectives
-      const [status, chapter2Status, chapter3Status, chapter4Status, chapter5Status] = await Promise.all([
+      // Load Chapter 1, Chapter 2, Chapter 3, Chapter 4, Chapter 5, and Chapter 6 objectives
+      const [status, chapter2Status, chapter3Status, chapter4Status, chapter5Status, chapter6Status] = await Promise.all([
         getObjectivesStatus(unifiedAddress),
         getChapter2ObjectivesStatus(unifiedAddress),
         getChapter3ObjectivesStatus(unifiedAddress),
         getChapter4ObjectivesStatus(unifiedAddress),
-        getChapter5ObjectivesStatus(unifiedAddress)
+        getChapter5ObjectivesStatus(unifiedAddress),
+        getChapter6ObjectivesStatus(unifiedAddress)
       ]);
       
       setObjectivesStatus(status);
@@ -52,6 +55,7 @@ const WeeklyObjectives: React.FC<WeeklyObjectivesProps> = ({ onObjectiveComplete
       setChapter3ObjectivesStatus(chapter3Status);
       setChapter4ObjectivesStatus(chapter4Status);
       setChapter5ObjectivesStatus(chapter5Status);
+      setChapter6ObjectivesStatus(chapter6Status);
       
     } catch (error) {
       console.error('❌ Failed to load objectives:', error);
@@ -221,9 +225,10 @@ const WeeklyObjectives: React.FC<WeeklyObjectivesProps> = ({ onObjectiveComplete
           border: '2px solid #FFD700',
           borderRadius: '8px'
         }}>
-          {[1, 2, 3, 4, 5].map((chapter) => {
+          {[1, 2, 3, 4, 5, 6].map((chapter) => {
             const isSelected = currentWeek === chapter;
-            const chapterData = chapter === 5 ? chapter5ObjectivesStatus :
+            const chapterData = chapter === 6 ? chapter6ObjectivesStatus :
+                              chapter === 5 ? chapter5ObjectivesStatus :
                               chapter === 4 ? chapter4ObjectivesStatus :
                               chapter === 3 ? chapter3ObjectivesStatus : 
                               chapter === 2 ? chapter2ObjectivesStatus : 
@@ -234,7 +239,7 @@ const WeeklyObjectives: React.FC<WeeklyObjectivesProps> = ({ onObjectiveComplete
             return (
               <button
                 key={chapter}
-                onClick={() => setCurrentWeek(chapter as 1 | 2 | 3 | 4 | 5)}
+                onClick={() => setCurrentWeek(chapter as 1 | 2 | 3 | 4 | 5 | 6)}
                 style={{
                   background: isSelected 
                     ? 'linear-gradient(45deg, #FFD700, #FFA500)' 
@@ -260,7 +265,7 @@ const WeeklyObjectives: React.FC<WeeklyObjectivesProps> = ({ onObjectiveComplete
                   fontSize: 'clamp(14px, 3.5vw, 18px)',
                   marginBottom: '4px'
                 }}>
-                  {isComplete ? '👑' : chapter === 1 ? '🏫' : chapter === 2 ? '🏀' : chapter === 3 ? '📸' : chapter === 4 ? '💃' : '🏨'}
+                  {isComplete ? '👑' : chapter === 1 ? '🏫' : chapter === 2 ? '🏀' : chapter === 3 ? '📸' : chapter === 4 ? '💃' : chapter === 5 ? '🏨' : '🍺'}
                 </div>
                 <div style={{
                   fontSize: 'clamp(9px, 2vw, 14px)',
@@ -321,7 +326,8 @@ const WeeklyObjectives: React.FC<WeeklyObjectivesProps> = ({ onObjectiveComplete
              currentWeek === 2 ? '🏀 CHAPTER 2: JOCKS HOUSE' :
              currentWeek === 3 ? '📸 CHAPTER 3: PICTURE DAY' :
              currentWeek === 4 ? '💃 CHAPTER 4: HOMECOMING DANCE' :
-             '🏨 CHAPTER 5: PARADISE MOTEL'}
+             currentWeek === 5 ? '🏨 CHAPTER 5: PARADISE MOTEL' :
+             '🎰 CHAPTER 6: 4 THIEVES'}
           </div>
           <div style={{
             fontSize: 'clamp(11px, 2.5vw, 14px)',
