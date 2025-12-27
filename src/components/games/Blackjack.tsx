@@ -264,12 +264,12 @@ const Blackjack: React.FC<BlackjackProps> = ({
       // Silent on loss
       setGamePhase('result');
     } else if (total === 21) {
-      // Auto-stand on 21
-      await stand();
+      // Auto-stand on 21 - pass the current hand to avoid stale state
+      await stand(newHand, newDeck);
     }
-  }, [gamePhase, isAnimating, deck, playerHand]);
+  }, [gamePhase, isAnimating, deck, playerHand, dealerHand, bet, stand]);
 
-  const stand = useCallback(async () => {
+  const stand = useCallback(async (currentPlayerHand?: Card[], currentDeckOverride?: Card[]) => {
     if (gamePhase !== 'playing' || isAnimating) return;
 
     setIsAnimating(true);
@@ -277,8 +277,9 @@ const Blackjack: React.FC<BlackjackProps> = ({
     setGamePhase('dealer-turn');
     setMessage('DEALER PLAYS...');
 
-    // Dealer draws to 17
-    let currentDeck = [...deck];
+    // Use passed values or fall back to state (for manual stand button)
+    const handToUse = currentPlayerHand || playerHand;
+    let currentDeck = currentDeckOverride ? [...currentDeckOverride] : [...deck];
     let currentDealerHand: Card[] = [...dealerHand];
     
     await new Promise(r => setTimeout(r, 500));
@@ -296,7 +297,7 @@ const Blackjack: React.FC<BlackjackProps> = ({
     }
 
     // Determine winner
-    const playerTotal = calculateHandValue(playerHand).total;
+    const playerTotal = calculateHandValue(handToUse).total;
     const dealerTotal = calculateHandValue(currentDealerHand).total;
 
     await new Promise(r => setTimeout(r, 300));

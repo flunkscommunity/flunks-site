@@ -142,13 +142,42 @@ const FourThievesBarMain = () => {
   };
 
   // Check password for Underground access
-  const checkPassword = () => {
+  const checkPassword = async () => {
     const input = passwordInput.toLowerCase().trim();
     if (SECRET_WORDS.includes(input)) {
       setHasUndergroundAccess(true);
       setShowPasswordPrompt(false);
       setPasswordError('');
       setPasswordInput('');
+      
+      // Record Chapter 6 Slacker completion
+      if (walletAddress) {
+        try {
+          const response = await fetch('/api/four-thieves-underground-access', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              walletAddress: walletAddress,
+              username: 'Anonymous'
+            })
+          });
+          
+          const data = await response.json();
+          
+          if (data.success && !data.alreadyCompleted) {
+            console.log('✅ Chapter 6 Slacker objective completed! +' + (data.gumAwarded || 75) + ' GUM');
+            // Refresh GUM balance
+            window.dispatchEvent(new CustomEvent('gum-balance-updated'));
+            // Refresh objectives
+            window.dispatchEvent(new CustomEvent('objectives-updated'));
+          } else if (data.alreadyCompleted) {
+            console.log('ℹ️ Underground already accessed');
+          }
+        } catch (error) {
+          console.error('❌ Failed to award Underground access GUM:', error);
+        }
+      }
+      
       // Open the Underground!
       openUnderground();
     } else {

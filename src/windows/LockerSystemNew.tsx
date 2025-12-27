@@ -31,6 +31,7 @@ const LockerSystemNew: React.FC = () => {
   const [streak, setStreak] = useState<number>(0);
   const [canClaimDaily, setCanClaimDaily] = useState(false);
   const [hasRoom7Key, setHasRoom7Key] = useState(false);
+  const [hasFourThievesAccess, setHasFourThievesAccess] = useState(false);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   
@@ -70,6 +71,7 @@ const LockerSystemNew: React.FC = () => {
       loadGumBalance();
       loadGumTrackingData();
       checkRoom7Key();
+      checkFourThievesUnderground();
       checkHalloweenDrop(); // Check Halloween GumDrop status
     }
   }, [unifiedAddress]);
@@ -99,14 +101,22 @@ const LockerSystemNew: React.FC = () => {
       checkRoom7Key();
     };
 
+    const handleObjectivesUpdated = () => {
+      // Refresh all objective statuses
+      checkRoom7Key();
+      checkFourThievesUnderground();
+    };
+
     window.addEventListener('gumBalanceUpdated', handleGumUpdate);
     window.addEventListener('dailyLoginClaimed', handleDailyLoginClaimed);
     window.addEventListener('room7KeyObtained', handleRoom7KeyObtained);
+    window.addEventListener('objectives-updated', handleObjectivesUpdated);
     
     return () => {
       window.removeEventListener('gumBalanceUpdated', handleGumUpdate);
       window.removeEventListener('dailyLoginClaimed', handleDailyLoginClaimed);
       window.removeEventListener('room7KeyObtained', handleRoom7KeyObtained);
+      window.removeEventListener('objectives-updated', handleObjectivesUpdated);
     };
   }, []);
 
@@ -189,6 +199,20 @@ const LockerSystemNew: React.FC = () => {
       }
     } catch (error) {
       console.error('Error checking Room 7 key:', error);
+    }
+  };
+
+  // Check if user has Four Thieves Underground access
+  const checkFourThievesUnderground = async () => {
+    if (!unifiedAddress) return;
+    try {
+      const response = await fetch(`/api/check-four-thieves-underground?walletAddress=${unifiedAddress}`);
+      const data = await response.json();
+      if (data.success && data.hasAccess) {
+        setHasFourThievesAccess(true);
+      }
+    } catch (error) {
+      console.error('Error checking Four Thieves Underground access:', error);
     }
   };
 
@@ -1377,9 +1401,65 @@ const LockerSystemNew: React.FC = () => {
                                 </div>
                               </div>
                             )}
+
+                            {/* Four Thieves Underground Access */}
+                            {hasFourThievesAccess && (
+                              <div style={{
+                                background: 'linear-gradient(180deg, #cc3366 0%, #990033 100%)',
+                                border: '3px solid #ff6699',
+                                borderRadius: 0,
+                                padding: '8px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s',
+                                boxShadow: `
+                                  0 4px 0 #660022,
+                                  0 0 10px rgba(255, 102, 153, 0.5)
+                                `,
+                                position: 'relative'
+                              }}
+                              onMouseOver={(e) => {
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                e.currentTarget.style.boxShadow = `
+                                  0 6px 0 #660022,
+                                  0 0 20px rgba(255, 102, 153, 0.8)
+                                `;
+                              }}
+                              onMouseOut={(e) => {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = `
+                                  0 4px 0 #660022,
+                                  0 0 10px rgba(255, 102, 153, 0.5)
+                                `;
+                              }}
+                              title="Underground Access - Secret casino beneath Four Thieves Bar"
+                              onClick={() => setSelectedItem('fourThievesUnderground')}
+                              >
+                                <div style={{
+                                  fontSize: '32px',
+                                  filter: 'drop-shadow(0 0 8px rgba(255, 102, 153, 0.8))'
+                                }}>
+                                  🎰
+                                </div>
+                                <div style={{
+                                  fontFamily: '"Press Start 2P", "Courier New", monospace',
+                                  fontSize: '6px',
+                                  color: '#fff',
+                                  textShadow: '1px 1px 0 #000',
+                                  marginTop: '4px',
+                                  textAlign: 'center',
+                                  lineHeight: '1.4'
+                                }}>
+                                  Secret<br/>Casino
+                                </div>
+                              </div>
+                            )}
                             
                             {/* Mystery box when no items - shows there's something to find! */}
-                            {!hasRoom7Key && (
+                            {!hasRoom7Key && !hasFourThievesAccess && (
                               <div style={{
                                 background: 'linear-gradient(180deg, #666 0%, #333 100%)',
                                 border: '3px solid #999',
@@ -2213,6 +2293,191 @@ const LockerSystemNew: React.FC = () => {
                     lineHeight: '1.6'
                   }}>
                     💡 Return to Paradise Motel<br/>after dark to use this key
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Four Thieves Underground Detail Overlay */}
+        {selectedItem === 'fourThievesUnderground' && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.95)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10000,
+            padding: '20px',
+            animation: 'fadeIn 0.3s ease-in'
+          }}
+          onClick={() => setSelectedItem(null)}
+          >
+            <div style={{
+              background: 'linear-gradient(180deg, #330000 0%, #110000 100%)',
+              border: '4px solid #ff3366',
+              borderRadius: 0,
+              padding: '24px',
+              maxWidth: '600px',
+              width: '100%',
+              position: 'relative',
+              boxShadow: `
+                0 0 0 2px #660033,
+                0 0 0 6px #ff3366,
+                0 10px 0 6px #000,
+                0 0 40px rgba(255, 51, 102, 0.6),
+                inset 0 0 30px rgba(255, 51, 102, 0.1)
+              `,
+              imageRendering: 'pixelated'
+            }}
+            onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button 
+                onClick={() => setSelectedItem(null)}
+                style={{
+                  position: 'absolute',
+                  top: '8px',
+                  right: '8px',
+                  background: 'linear-gradient(180deg, #ff4444 0%, #cc0000 100%)',
+                  border: '2px solid #ff6666',
+                  borderRadius: 0,
+                  color: 'white',
+                  fontFamily: '"Press Start 2P", "Courier New", monospace',
+                  fontSize: '12px',
+                  padding: '8px 12px',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 0 #880000',
+                  transition: 'all 0.1s'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(2px)';
+                  e.currentTarget.style.boxShadow = '0 2px 0 #880000';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 0 #880000';
+                }}
+              >
+                ✕
+              </button>
+
+              {/* Header */}
+              <div style={{
+                fontFamily: '"Press Start 2P", "Courier New", monospace',
+                fontSize: '10px',
+                color: '#ff6699',
+                textTransform: 'uppercase',
+                textShadow: '2px 2px 0 #660033',
+                marginBottom: '16px',
+                textAlign: 'center',
+                letterSpacing: '2px'
+              }}>
+                Four Thieves Bar - Underground
+              </div>
+
+              {/* Main Content Area */}
+              <div style={{
+                display: 'flex',
+                flexDirection: window.innerWidth < 768 ? 'column' : 'row',
+                gap: '24px',
+                alignItems: 'center'
+              }}>
+                {/* Left: Animated Casino Icon */}
+                <div style={{
+                  flex: '0 0 auto',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: '#330000',
+                  border: '3px solid #cc3366',
+                  borderRadius: 0,
+                  padding: '24px',
+                  boxShadow: 'inset 2px 2px 0 rgba(0, 0, 0, 0.5)',
+                  minWidth: '180px',
+                  minHeight: '180px'
+                }}>
+                  <div style={{
+                    fontSize: '80px',
+                    filter: 'drop-shadow(0 0 20px rgba(255, 102, 153, 1))',
+                    animation: 'itemFloat 3s ease-in-out infinite'
+                  }}>
+                    🎰
+                  </div>
+                </div>
+
+                {/* Right: Item Description */}
+                <div style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '16px'
+                }}>
+                  {/* Item Name */}
+                  <div style={{
+                    fontFamily: '"Press Start 2P", "Courier New", monospace',
+                    fontSize: '18px',
+                    color: '#ff6699',
+                    textShadow: '3px 3px 0 #000, 0 0 10px rgba(255, 102, 153, 0.8)',
+                    lineHeight: '1.5'
+                  }}>
+                    Underground Access
+                  </div>
+
+                  {/* Item Category */}
+                  <div style={{
+                    fontFamily: '"Courier New", monospace',
+                    fontSize: '12px',
+                    color: '#ff9933',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px'
+                  }}>
+                    ★ Chapter 6 - Slacker ★
+                  </div>
+
+                  {/* Description Box */}
+                  <div style={{
+                    background: '#330000',
+                    border: '2px solid #cc3366',
+                    borderRadius: 0,
+                    padding: '12px',
+                    boxShadow: 'inset 2px 2px 0 rgba(0, 0, 0, 0.5)'
+                  }}>
+                    <div style={{
+                      fontFamily: '"Courier New", monospace',
+                      fontSize: '13px',
+                      color: '#ffffff',
+                      lineHeight: '1.6',
+                      whiteSpace: 'pre-wrap'
+                    }}>
+                      You discovered the secret password and gained access to the hidden casino beneath Four Thieves Bar.
+                      
+                      The bouncer stepped aside, revealing a dimly lit staircase leading down into the underground.
+                      
+                      Welcome to the real action. 🎲
+                    </div>
+                  </div>
+
+                  {/* Completion Badge */}
+                  <div style={{
+                    background: 'linear-gradient(180deg, #cc3366 0%, #990033 100%)',
+                    border: '2px solid #ff6699',
+                    borderRadius: 0,
+                    padding: '10px',
+                    boxShadow: '0 4px 0 #660022',
+                    fontFamily: '"Press Start 2P", "Courier New", monospace',
+                    fontSize: '9px',
+                    color: '#fff',
+                    textShadow: '1px 1px 0 #000',
+                    textAlign: 'center',
+                    lineHeight: '1.6'
+                  }}>
+                    🎰 Objective Complete!<br/>+75 GUM Awarded
                   </div>
                 </div>
               </div>
