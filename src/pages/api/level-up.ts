@@ -1,5 +1,5 @@
 /**
- * Level Up API - Evolve Paradise Motel NFTs
+ * Level Up API - Evolve Pin NFTs (Paradise Motel, Flunky Uppy, etc.)
  * 
  * This endpoint handles the complete NFT evolution flow:
  * 1. Verify user owns the NFT and it's unrevealed
@@ -17,31 +17,74 @@ import * as fcl from '@onflow/fcl';
 import { supabase } from '../../lib/supabase';
 import { executeAdminTransaction, queryFlow, isAdminConfigured } from '../../lib/flowServerAuth';
 
-// Tier configuration
+// Pin configuration by location
+const PIN_CONFIGS: Record<string, {
+  name: string;
+  tiers: Record<string, {
+    cost: number;
+    contractTier: string;
+    image: string;
+    name: string;
+    description: string;
+  }>;
+}> = {
+  'Paradise Motel': {
+    name: 'Paradise Motel Pin',
+    tiers: {
+      Silver: {
+        cost: 250,
+        contractTier: 'Silver',
+        image: 'https://storage.googleapis.com/flunks_public/images/paradise-motel-pin-silver.png',
+        name: 'Paradise Motel Pin - Silver',
+        description: 'A Silver tier Paradise Motel pin from Flunks: Semester Zero. Awarded for completing Chapter 5.',
+      },
+      Gold: {
+        cost: 500,
+        contractTier: 'Gold',
+        image: 'https://storage.googleapis.com/flunks_public/images/paradise-motel-pin-gold.png',
+        name: 'Paradise Motel Pin - Gold',
+        description: 'A Gold tier Paradise Motel pin from Flunks: Semester Zero. Awarded for completing Chapter 5.',
+      },
+      Special: {
+        cost: 1000,
+        contractTier: 'Special',
+        image: 'https://storage.googleapis.com/flunks_public/images/paradise-motel-pin-special.png',
+        name: 'Paradise Motel Pin - Special',
+        description: 'A Special tier Paradise Motel pin from Flunks: Semester Zero. Awarded for completing Chapter 5.',
+      },
+    },
+  },
+  'Arcade': {
+    name: 'Flunky Uppy Pin',
+    tiers: {
+      Silver: {
+        cost: 250,
+        contractTier: 'Silver',
+        image: 'https://storage.googleapis.com/flunks_public/images/flunky-uppy-pin-silver.png',
+        name: 'Flunky Uppy Pin - Silver',
+        description: 'A Silver tier Flunky Uppy pin from the 2nd volume of the Arcade Challenge in Flunks: Semester Zero.',
+      },
+      Gold: {
+        cost: 500,
+        contractTier: 'Gold',
+        image: 'https://storage.googleapis.com/flunks_public/images/flunky-uppy-pin-gold.png',
+        name: 'Flunky Uppy Pin - Gold',
+        description: 'A Gold tier Flunky Uppy pin from the 2nd volume of the Arcade Challenge in Flunks: Semester Zero.',
+      },
+      Special: {
+        cost: 1000,
+        contractTier: 'Special',
+        image: 'https://storage.googleapis.com/flunks_public/images/flunky-uppy-pin-special.png',
+        name: 'Flunky Uppy Pin - Special',
+        description: 'A Special tier Flunky Uppy pin from the 2nd volume of the Arcade Challenge in Flunks: Semester Zero.',
+      },
+    },
+  },
+};
+
+// Legacy TIERS for backward compatibility
 // Note: Contract accepts: Silver, Gold, Special, Retro, Punk, or Nerdy
-const TIERS = {
-  Silver: {
-    cost: 250,
-    contractTier: 'Silver', // Matches contract validation
-    image: 'https://storage.googleapis.com/flunks_public/images/paradise-motel-pin-silver.png',
-    name: 'Paradise Motel Pin - Silver',
-    description: 'A Silver tier Paradise Motel pin from Flunks: Semester Zero. Awarded for completing Chapter 5.',
-  },
-  Gold: {
-    cost: 500,
-    contractTier: 'Gold', // Matches contract validation
-    image: 'https://storage.googleapis.com/flunks_public/images/paradise-motel-pin-gold.png',
-    name: 'Paradise Motel Pin - Gold',
-    description: 'A Gold tier Paradise Motel pin from Flunks: Semester Zero. Awarded for completing Chapter 5.',
-  },
-  Special: {
-    cost: 1000,
-    contractTier: 'Special', // Matches contract validation (NOT "Special Edition")
-    image: 'https://storage.googleapis.com/flunks_public/images/paradise-motel-pin-special.png',
-    name: 'Paradise Motel Pin - Special',
-    description: 'A Special tier Paradise Motel pin from Flunks: Semester Zero. Awarded for completing Chapter 5.',
-  },
-} as const;
+const TIERS = PIN_CONFIGS['Paradise Motel'].tiers;
 
 type TierName = keyof typeof TIERS;
 
@@ -85,10 +128,16 @@ export default async function handler(
     });
   }
 
-  const tierConfig = TIERS[tier as TierName];
-  const gumCost = tierConfig.cost;
+  // We'll determine the actual tierConfig after fetching NFT data (need location)
+  // For now, just validate the tier name exists
+  if (!TIERS[tier as TierName]) {
+    return res.status(400).json({
+      success: false,
+      error: `Invalid tier. Must be one of: ${Object.keys(TIERS).join(', ')}`,
+    });
+  }
 
-  console.log('🎮 Level Up request:', { walletAddress, nftId, tier, gumCost });
+  console.log('🎮 Level Up request:', { walletAddress, nftId, tier });
 
   try {
     // Step 1: Verify NFT ownership and get current metadata
@@ -120,6 +169,7 @@ export default async function handler(
           }
           result["serialNumber"] = nft!.serialNumber.toString()
           result["evolutionTier"] = nft!.evolutionTier
+          result["location"] = nft!.location
           return result
         }
       `,
@@ -134,6 +184,28 @@ export default async function handler(
     }
 
     console.log('📄 Current NFT metadata:', nftData);
+
+    // Get the pin config based on NFT location
+    const nftLocation = nftData.location || 'Paradise Motel'; // Default for legacy
+    const pinConfig = PIN_CONFIGS[nftLocation];
+    
+    if (!pinConfig) {
+      return res.status(400).json({
+        success: false,
+        error: `Unknown pin location: ${nftLocation}. Cannot evolve this NFT.`,
+      });
+    }
+
+    const tierConfig = pinConfig.tiers[tier as TierName];
+    if (!tierConfig) {
+      return res.status(400).json({
+        success: false,
+        error: `Invalid tier for ${pinConfig.name}. Must be one of: ${Object.keys(pinConfig.tiers).join(', ')}`,
+      });
+    }
+
+    const gumCost = tierConfig.cost;
+    console.log('📍 Pin location:', nftLocation, '| Tier:', tier, '| Cost:', gumCost);
 
     // Check if already revealed/evolved
     if (nftData.evolutionTier && nftData.evolutionTier !== 'Base') {
@@ -236,7 +308,7 @@ export default async function handler(
               "name": "${tierConfig.name}",
               "description": "${tierConfig.description}",
               "image": "${tierConfig.image}",
-              "location": "Paradise Motel",
+              "location": "${nftLocation}",
               "chapter": "5",
               "collection": "Flunks: Semester Zero",
               "serialNumber": "${serialNumber}"

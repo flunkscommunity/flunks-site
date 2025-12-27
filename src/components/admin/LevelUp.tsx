@@ -4,27 +4,66 @@ import { useUnifiedWallet } from '../../contexts/UnifiedWalletContext';
 import { useGum } from '../../contexts/GumContext';
 import * as fcl from '@onflow/fcl';
 
-// Tier configuration - must match API tiers
-const TIERS = {
-  Silver: {
-    cost: 250,
-    image: 'https://storage.googleapis.com/flunks_public/images/paradise-motel-pin-silver.png',
-    color: '#C0C0C0',
-    glow: 'rgba(192, 192, 192, 0.6)',
+// Pin configurations by location
+const PIN_CONFIGS: Record<string, {
+  name: string;
+  tiers: Record<string, {
+    cost: number;
+    image: string;
+    color: string;
+    glow: string;
+  }>;
+}> = {
+  'Paradise Motel': {
+    name: 'Paradise Motel Pin',
+    tiers: {
+      Silver: {
+        cost: 250,
+        image: 'https://storage.googleapis.com/flunks_public/images/paradise-motel-pin-silver.png',
+        color: '#C0C0C0',
+        glow: 'rgba(192, 192, 192, 0.6)',
+      },
+      Gold: {
+        cost: 500,
+        image: 'https://storage.googleapis.com/flunks_public/images/paradise-motel-pin-gold.png',
+        color: '#FFD700',
+        glow: 'rgba(255, 215, 0, 0.6)',
+      },
+      Special: {
+        cost: 1000,
+        image: 'https://storage.googleapis.com/flunks_public/images/paradise-motel-pin-special.png',
+        color: '#FF00FF',
+        glow: 'rgba(255, 0, 255, 0.6)',
+      },
+    },
   },
-  Gold: {
-    cost: 500,
-    image: 'https://storage.googleapis.com/flunks_public/images/paradise-motel-pin-gold.png',
-    color: '#FFD700',
-    glow: 'rgba(255, 215, 0, 0.6)',
+  'Arcade': {
+    name: 'Flunky Uppy Pin',
+    tiers: {
+      Silver: {
+        cost: 250,
+        image: 'https://storage.googleapis.com/flunks_public/images/flunky-uppy-pin-silver.png',
+        color: '#C0C0C0',
+        glow: 'rgba(192, 192, 192, 0.6)',
+      },
+      Gold: {
+        cost: 500,
+        image: 'https://storage.googleapis.com/flunks_public/images/flunky-uppy-pin-gold.png',
+        color: '#FFD700',
+        glow: 'rgba(255, 215, 0, 0.6)',
+      },
+      Special: {
+        cost: 1000,
+        image: 'https://storage.googleapis.com/flunks_public/images/flunky-uppy-pin-special.png',
+        color: '#FF00FF',
+        glow: 'rgba(255, 0, 255, 0.6)',
+      },
+    },
   },
-  Special: {
-    cost: 1000,
-    image: 'https://storage.googleapis.com/flunks_public/images/paradise-motel-pin-special.png',
-    color: '#FF00FF',
-    glow: 'rgba(255, 0, 255, 0.6)',
-  },
-} as const;
+};
+
+// Legacy TIERS for backward compatibility - must match API tiers
+const TIERS = PIN_CONFIGS['Paradise Motel'].tiers;
 
 type TierName = keyof typeof TIERS;
 
@@ -721,6 +760,9 @@ const LevelUp: React.FC = () => {
                   let tier = nft.evolutionTier
                   let isEvolved = tier != "Base"
                   
+                  // Get location from NFT resource
+                  let location = nft.location
+                  
                   // Get serial number
                   var serialNumber: UInt64 = 0
                   if let serial = nft.resolveView(Type<MetadataViews.Serial>()) {
@@ -734,7 +776,8 @@ const LevelUp: React.FC = () => {
                     image: image,
                     serialNumber: serialNumber,
                     revealed: isEvolved,
-                    tier: tier
+                    tier: tier,
+                    location: location
                   ))
                 }
               }
@@ -747,14 +790,16 @@ const LevelUp: React.FC = () => {
               access(all) let serialNumber: UInt64
               access(all) let revealed: Bool
               access(all) let tier: String
+              access(all) let location: String
 
-              init(id: UInt64, name: String, image: String, serialNumber: UInt64, revealed: Bool, tier: String) {
+              init(id: UInt64, name: String, image: String, serialNumber: UInt64, revealed: Bool, tier: String, location: String) {
                 self.id = id
                 self.name = name
                 self.image = image
                 self.serialNumber = serialNumber
                 self.revealed = revealed
                 self.tier = tier
+                self.location = location
               }
             }
           `,
@@ -782,7 +827,15 @@ const LevelUp: React.FC = () => {
     if (!selectedNFT || !selectedTier) return;
     if (!address) return;
 
-    const tierConfig = TIERS[selectedTier];
+    // Get the pin config based on NFT location
+    const nftLocation = selectedNFT.location || 'Paradise Motel';
+    const pinConfig = PIN_CONFIGS[nftLocation] || PIN_CONFIGS['Paradise Motel'];
+    const tierConfig = pinConfig.tiers[selectedTier];
+    
+    if (!tierConfig) {
+      setMessage({ text: `Invalid tier for ${pinConfig.name}`, type: 'error' });
+      return;
+    }
     
     if (balance < tierConfig.cost) {
       setMessage({ text: `Insufficient GUM! You need ${tierConfig.cost} but have ${balance}.`, type: 'error' });
@@ -1014,7 +1067,13 @@ const LevelUp: React.FC = () => {
                 <SectionTitle>⚡ CHOOSE YOUR TIER</SectionTitle>
                 
                 <TierGrid>
-                  {(Object.entries(TIERS) as [TierName, typeof TIERS[TierName]][]).map(([tierName, tierConfig]) => (
+                  {(() => {
+                    // Get the pin config based on selected NFT's location
+                    const nftLocation = selectedNFT.location || 'Paradise Motel';
+                    const pinConfig = PIN_CONFIGS[nftLocation] || PIN_CONFIGS['Paradise Motel'];
+                    const tiers = pinConfig.tiers;
+                    
+                    return (Object.entries(tiers) as [TierName, typeof tiers[TierName]][]).map(([tierName, tierConfig]) => (
                     <TierCard
                       key={tierName}
                       tierColor={tierConfig.color}
@@ -1041,7 +1100,8 @@ const LevelUp: React.FC = () => {
                         </div>
                       )}
                     </TierCard>
-                  ))}
+                    ));
+                  })()}
                 </TierGrid>
 
                 {message && <Message type={message.type}>{message.text}</Message>}
