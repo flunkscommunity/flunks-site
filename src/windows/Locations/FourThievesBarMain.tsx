@@ -557,11 +557,11 @@ const FourThievesBarMain = () => {
   return (
     <div className="relative w-full h-full flex flex-col overflow-hidden">
       {/* Background Image - Full width */}
-      <div className="relative flex-1 flex items-center justify-center min-h-0">
+      <div className="relative flex-1 flex items-center justify-center min-h-0 bg-black">
         <img
           src={getCurrentBackground()}
           alt={`4 Thieves Bar & Grill - ${isDay ? 'Day' : 'Night'}`}
-          className="w-full h-full object-cover"
+          className="max-w-full max-h-full object-contain"
           onError={(e) => {
             e.currentTarget.src = "/images/backdrops/BLANK.png";
           }}
