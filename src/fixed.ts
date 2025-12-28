@@ -91,6 +91,7 @@ export const WINDOW_IDS = {
   FOUR_THIEVES_BAR_BACK_ROOM: "four_thieves_bar_back_room",
   FOUR_THIEVES_BAR_SCRATCH_CARDS: "four_thieves_bar_scratch_cards",
   FOUR_THIEVES_BAR_UNDERGROUND: "four_thieves_bar_underground",
+  UNDERGROUND_PASSWORD: "underground_password",
   SHED_MAIN: "shed_main",
   SHED_WORKBENCH: "shed_workbench",
   SHED_TOOL_WALL: "shed_tool_wall",

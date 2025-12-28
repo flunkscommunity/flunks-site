@@ -63,6 +63,7 @@ import RevealTester from "components/admin/RevealTester";
 import LevelUp from "components/admin/LevelUp";
 import BurnNFT from "components/admin/BurnNFT";
 import AlexandriaLibrary from "components/AlexandriaLibrary";
+import UndergroundPasswordWindow from "windows/UndergroundPasswordWindow";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -851,6 +852,29 @@ const windowsMemod = useMemo(() => (
                 resizable={true}
               >
                 <AlexandriaLibrary />
+              </DraggableResizeableWindow>
+            )
+          })}
+        />
+
+        {/* 27. The Underground - Secret Password Entry */}
+        <ConditionalAppIcon
+          appId="underground"
+          title="The Underground"
+          icon="/images/locations/four-thieves/password-icon.png"
+          onDoubleClick={() => openWindow({
+            key: WINDOW_IDS.UNDERGROUND_PASSWORD,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.UNDERGROUND_PASSWORD}
+                onClose={() => closeWindow(WINDOW_IDS.UNDERGROUND_PASSWORD)}
+                headerTitle="🚪 The Underground"
+                initialWidth="650px"
+                initialHeight="600px"
+                headerIcon="/images/locations/four-thieves/password-icon.png"
+                resizable={false}
+              >
+                <UndergroundPasswordWindow onClose={() => closeWindow(WINDOW_IDS.UNDERGROUND_PASSWORD)} />
               </DraggableResizeableWindow>
             )
           })}

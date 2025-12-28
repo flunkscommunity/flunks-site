@@ -226,6 +226,14 @@ export const APP_PERMISSIONS: AppPermission[] = [
     title: 'Market',
     requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
     description: 'NFT marketplace'
+  },
+  
+  // The Underground - Secret password entry
+  {
+    id: 'underground',
+    title: 'The Underground',
+    requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
+    description: 'Secret underground access - discover the password in Semester Zero'
   }
 ];
 
