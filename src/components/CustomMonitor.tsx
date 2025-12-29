@@ -201,9 +201,9 @@ const MonitorScreenContainer = styled.div`
   overflow: hidden;
   
   @media (max-width: 768px) {
-    /* On mobile, no Appbar so full height, just account for safe areas */
+    /* On mobile, no Appbar so full height - background extends into safe areas */
     height: 100%;
-    padding-top: env(safe-area-inset-top, 0px);
+    /* No padding - let background extend fully into status bar area */
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 `;

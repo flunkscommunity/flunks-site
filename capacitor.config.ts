@@ -31,14 +31,14 @@ const config: CapacitorConfig = {
   
   // iOS-specific configuration
   ios: {
-    // Use modern WKWebView
-    contentInset: 'automatic',
+    // Use modern WKWebView - 'never' extends content into safe areas
+    contentInset: 'never',
     // Allow inline media playback (for sounds, music)
     allowsLinkPreview: false,
     // Scroll behavior
     scrollEnabled: true,
-    // Background color - matches the Win95 gray taskbar
-    backgroundColor: '#c0c0c0',
+    // Background color - transparent to let app content show through
+    backgroundColor: '#00000000',
     // Status bar style
     preferredContentMode: 'mobile'
   },

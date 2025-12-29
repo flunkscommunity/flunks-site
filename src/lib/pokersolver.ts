@@ -134,10 +134,13 @@ export class Hand {
   }
 
   getRankName(rank: number): string {
+    // Map index from VALUES array to display name
+    // VALUES = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']
+    // Index:     0    1    2    3    4    5    6    7    8    9   10   11   12   13
     const names: { [key: number]: string } = {
-      14: 'A', 13: 'K', 12: 'Q', 11: 'J', 10: 'T',
-      9: '9', 8: '8', 7: '7', 6: '6', 5: '5',
-      4: '4', 3: '3', 2: '2', 1: 'A'
+      13: 'A', 12: 'K', 11: 'Q', 10: 'J', 9: 'T',
+      8: '9', 7: '8', 6: '7', 5: '6', 4: '5',
+      3: '4', 2: '3', 1: '2', 0: '1'
     };
     return names[rank] || String(rank);
   }
@@ -330,9 +333,16 @@ export function evaluateVideoPokerHand(hand: string[]): { name: string; win: num
   
   // Special case: Check for Jacks or Better (pair of J, Q, K, or A)
   if (solved.name === 'Pair') {
-    const pairDesc = solved.descr;
-    if (pairDesc.includes("J's") || pairDesc.includes("Q's") || 
-        pairDesc.includes("K's") || pairDesc.includes("A's")) {
+    // Get the pair rank directly from the hand
+    const handObj = new Hand(hand);
+    const pairRank = handObj.getPairRank();
+    
+    // J=10, Q=11, K=12, A=13 in VALUES array
+    const isJacksOrBetter = pairRank >= 10; // J, Q, K, or A
+    
+    console.log('🃏 Pair check - pairRank:', pairRank, 'isJacksOrBetter:', isJacksOrBetter);
+    
+    if (isJacksOrBetter) {
       const jacksBetter = PAY_TABLE_DATA.find(r => r.pokersolver === 'Jacks or Better');
       if (jacksBetter) {
         return { 

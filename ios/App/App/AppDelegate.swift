@@ -8,6 +8,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // Make the web view extend into safe areas (status bar and home indicator)
+        // This allows the app's background to show behind the status bar
+        DispatchQueue.main.async {
+            if let window = self.window,
+               let rootVC = window.rootViewController as? CAPBridgeViewController {
+                // Extend content edges under status bar and home indicator
+                rootVC.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                
+                // Access the web view and make it extend to edges
+                if let webView = rootVC.webView {
+                    webView.scrollView.contentInsetAdjustmentBehavior = .never
+                    webView.isOpaque = false
+                    webView.backgroundColor = .clear
+                    webView.scrollView.backgroundColor = .clear
+                }
+            }
+        }
+        
         return true
     }
 
