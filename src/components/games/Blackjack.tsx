@@ -128,6 +128,12 @@ const Blackjack: React.FC<BlackjackProps> = ({
   
   // Function ref to avoid circular dependency
   const standRef = useRef<(currentPlayerHand?: Card[], currentDeckOverride?: Card[]) => Promise<void>>();
+  
+  // Ref to always have access to current player hand (avoids stale closure issues)
+  const playerHandRef = useRef<Card[]>([]);
+  useEffect(() => {
+    playerHandRef.current = playerHand;
+  }, [playerHand]);
 
   useEffect(() => {
     setGumBalance(initialBalance);
@@ -284,8 +290,8 @@ const Blackjack: React.FC<BlackjackProps> = ({
     setGamePhase('dealer-turn');
     setMessage('DEALER PLAYS...');
 
-    // Use passed values or fall back to state (for manual stand button)
-    const handToUse = currentPlayerHand || playerHand;
+    // Use passed values, or ref for most current state (fixes stale closure bug)
+    const handToUse = currentPlayerHand || playerHandRef.current;
     let currentDeck = currentDeckOverride ? [...currentDeckOverride] : [...deck];
     let currentDealerHand: Card[] = [...dealerHand];
     
@@ -303,9 +309,15 @@ const Blackjack: React.FC<BlackjackProps> = ({
       await new Promise(r => setTimeout(r, 700));
     }
 
-    // Determine winner
-    const playerTotal = calculateHandValue(handToUse).total;
+    // Determine winner - ensure handToUse is always a valid array
+    const finalHand = Array.isArray(handToUse) && handToUse.length > 0 ? handToUse : playerHandRef.current;
+    const playerTotal = calculateHandValue(finalHand).total;
     const dealerTotal = calculateHandValue(currentDealerHand).total;
+
+    console.log('🃏 BLACKJACK RESULT DEBUG:');
+    console.log('  finalHand:', finalHand?.map(c => `${c.rank}${c.suit}`).join(', ') || 'EMPTY');
+    console.log('  playerTotal:', playerTotal);
+    console.log('  dealerTotal:', dealerTotal);
 
     await new Promise(r => setTimeout(r, 300));
 
