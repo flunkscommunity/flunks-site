@@ -33,7 +33,7 @@ import ErrorWindow from 'windows/ErrorWindow';
 import { useHouseImage } from '../utils/dayNightHouses';
 import { DynamicHouseIcon } from '../components/DynamicHouseIcon';
 import { useAuth } from 'contexts/AuthContext';
-import { isFeatureEnabled, getCurrentBuildMode } from '../utils/buildMode';
+import { isFeatureEnabled, getCurrentBuildMode, isDevLocalhost, isMobileApp } from '../utils/buildMode';
 import { useTimeBasedAccess } from '../hooks/useTimeBasedAccess';
 
 interface Props {
@@ -75,12 +75,11 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
 
   // Development bypass for build mode only
   const isDevelopment = process.env.NODE_ENV === 'development';
-  const isLocalhost = typeof window !== 'undefined' && 
-    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+  const isLocalhost = isDevLocalhost(); // Uses helper that excludes mobile apps
   const isBuildSite = typeof window !== 'undefined' && window.location.hostname.includes('vercel.app');
   const buildMode = getCurrentBuildMode();
-  // ⚠️ SIMPLIFIED: Bypass all auth on localhost in build mode for testing
-  const walletBypassEnabled = (isLocalhost && buildMode === 'build') || (isFeatureEnabled('enableWalletBypass') && isDevelopment && isLocalhost);
+  // ⚠️ SIMPLIFIED: Bypass all auth on localhost in build mode for testing (NOT mobile apps)
+  const walletBypassEnabled = !isMobileApp() && ((isLocalhost && buildMode === 'build') || (isFeatureEnabled('enableWalletBypass') && isDevelopment && isLocalhost));
   const houseAccessBypassEnabled = true; // ⚠️ CHANGED: Always allow access to clique houses (no clique requirement)
   const flunkBypassEnabled = isLocalhost || isBuildSite; // Skip Flunk NFT requirement on localhost and build site
   

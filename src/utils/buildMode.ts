@@ -1,14 +1,29 @@
 /**
  * Build Mode System
- * Controls feature visibility between public and     showCutscenes: false,
-    showStoryManual: true,
-    showVCREffectsTest: false,
-    showZoltarFortune: false,
-    
-    // Special Announcements - limited in public mode environments
+ * Controls feature visibility between public and build environments
  */
 
 export type BuildMode = 'public' | 'build';
+
+/**
+ * Check if running inside Capacitor mobile app
+ * Capacitor injects a global object we can detect
+ */
+export const isMobileApp = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  // Capacitor injects this object
+  return !!(window as any).Capacitor?.isNativePlatform?.();
+};
+
+/**
+ * Check if we're truly running on localhost for development (not mobile app)
+ */
+export const isDevLocalhost = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  // Don't consider it localhost if we're in a mobile app
+  if (isMobileApp()) return false;
+  return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+};
 
 // Feature flags for different build modes
 export interface BuildModeConfig {

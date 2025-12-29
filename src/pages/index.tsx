@@ -44,7 +44,7 @@ import ConditionalAppIcon from "components/ConditionalAppIcon";
 import StoryManual from "components/StoryManual";
 import VCREffectsTest from "components/VCREffectsTest";
 import { getUserAccessLevel } from "utils/appPermissions";
-import { isFeatureEnabled } from "utils/buildMode";
+import { isFeatureEnabled, isDevLocalhost } from "utils/buildMode";
 import { BACKGROUND_CONFIG } from "config/backgroundConfig";
 import useThemeSettings from "store/useThemeSettings";
 import { getTimeBasedDesktopBackground } from "utils/timeBasedDesktopBackground";
@@ -402,6 +402,29 @@ const windowsMemod = useMemo(() => (
           }
         />
 
+        {/* 4.7 The Underground - Secret Password Entry */}
+        <ConditionalAppIcon
+          appId="underground"
+          title="The Underground"
+          icon="/images/locations/four-thieves/password-icon.png"
+          onDoubleClick={() => openWindow({
+            key: WINDOW_IDS.UNDERGROUND_PASSWORD,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.UNDERGROUND_PASSWORD}
+                onClose={() => closeWindow(WINDOW_IDS.UNDERGROUND_PASSWORD)}
+                headerTitle="🚪 The Underground"
+                initialWidth="650px"
+                initialHeight="600px"
+                headerIcon="/images/locations/four-thieves/password-icon.png"
+                resizable={false}
+              >
+                <UndergroundPasswordWindow onClose={() => closeWindow(WINDOW_IDS.UNDERGROUND_PASSWORD)} />
+              </DraggableResizeableWindow>
+            )
+          })}
+        />
+
         {/* 5. FHS */}
         <ConditionalAppIcon
           appId="fhs-school"
@@ -732,8 +755,8 @@ const windowsMemod = useMemo(() => (
         )}
 
         {/* 22. Magic Test (Reveal Tester) - Build Mode Only */}
-        {/* Magic Test - LOCALHOST ONLY */}
-        {typeof window !== 'undefined' && window.location.hostname === 'localhost' && (
+        {/* Magic Test - LOCALHOST ONLY (not mobile app) */}
+        {isDevLocalhost() && (
           <ConditionalAppIcon
             appId="magic-test"
             title="Magic Test"
@@ -757,8 +780,8 @@ const windowsMemod = useMemo(() => (
           />
         )}
 
-        {/* 22.6 Burn NFT - LOCALHOST + BUILD MODE ONLY */}
-        {(typeof window !== 'undefined' && (window.location.hostname === 'localhost' || isFeatureEnabled('showBurnNFT'))) && (
+        {/* 22.6 Burn NFT - LOCALHOST + BUILD MODE ONLY (not mobile app) */}
+        {(isDevLocalhost() || isFeatureEnabled('showBurnNFT')) && (
           <ConditionalAppIcon
             appId="burn-nft"
             title="Burn NFT"
@@ -852,29 +875,6 @@ const windowsMemod = useMemo(() => (
                 resizable={true}
               >
                 <AlexandriaLibrary />
-              </DraggableResizeableWindow>
-            )
-          })}
-        />
-
-        {/* 27. The Underground - Secret Password Entry */}
-        <ConditionalAppIcon
-          appId="underground"
-          title="The Underground"
-          icon="/images/locations/four-thieves/password-icon.png"
-          onDoubleClick={() => openWindow({
-            key: WINDOW_IDS.UNDERGROUND_PASSWORD,
-            window: (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.UNDERGROUND_PASSWORD}
-                onClose={() => closeWindow(WINDOW_IDS.UNDERGROUND_PASSWORD)}
-                headerTitle="🚪 The Underground"
-                initialWidth="650px"
-                initialHeight="600px"
-                headerIcon="/images/locations/four-thieves/password-icon.png"
-                resizable={false}
-              >
-                <UndergroundPasswordWindow onClose={() => closeWindow(WINDOW_IDS.UNDERGROUND_PASSWORD)} />
               </DraggableResizeableWindow>
             )
           })}

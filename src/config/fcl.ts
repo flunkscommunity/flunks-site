@@ -1,6 +1,15 @@
 import { config } from "@onflow/fcl";
 import "@onflow/fcl-wc";
 
+/**
+ * Check if running inside Capacitor mobile app
+ * Duplicated here to avoid circular import with buildMode.ts
+ */
+const isMobileApp = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return !!(window as any).Capacitor?.isNativePlatform?.();
+};
+
 // CRITICAL: Clear any cached testnet configuration from localStorage
 // FCL caches config in localStorage, and old testnet settings can persist
 if (typeof window !== 'undefined') {
@@ -31,18 +40,45 @@ console.log('🌊 Configuring FCL with access node:', FLOW_ACCESS_NODE);
 console.log('📱 WalletConnect Project ID:', WALLETCONNECT_PROJECT_ID ? 'Set ✅' : 'Missing ❌');
 console.log('🌐 App URL:', APP_URL);
 
+// Detect if running in mobile app
+const IS_MOBILE_APP = isMobileApp();
+console.log('📱 Mobile App Mode:', IS_MOBILE_APP ? 'YES' : 'NO');
+
+// For mobile apps, go directly to Flow Wallet via WalletConnect
+// Skip the discovery UI which doesn't work well in mobile WebViews
+const DISCOVERY_METHOD = IS_MOBILE_APP ? 'WC/RPC' : 'IFRAME/RPC';
+console.log('🔗 Discovery Method:', DISCOVERY_METHOD);
+
+// Flow Wallet's WalletConnect service endpoint (direct connection)
+const FLOW_WALLET_SERVICE = {
+  "f_type": "Service",
+  "f_vsn": "1.0.0", 
+  "type": "authn",
+  "uid": "flow-wallet",
+  "endpoint": "flow-wallet://",
+  "method": "WC/RPC",
+  "provider": {
+    "name": "Flow Wallet",
+    "icon": "https://lilico.app/logo.png"
+  }
+};
+
 // Simplified FCL configuration - use standard mainnet endpoints
 config({
   "flow.network": "mainnet",
   "accessNode.api": "https://rest-mainnet.onflow.org",
   
-  // Discovery - use simple authn endpoint
-  "discovery.wallet": "https://fcl-discovery.onflow.org/authn",
+  // For mobile: skip discovery, use WalletConnect directly
+  // For web: use the standard discovery UI
+  "discovery.wallet": IS_MOBILE_APP ? undefined : "https://fcl-discovery.onflow.org/authn",
   
-  // App details
+  // Discovery method
+  "discovery.wallet.method": DISCOVERY_METHOD,
+  
+  // App details - use flunks.net URL for WalletConnect callbacks
   "app.detail.title": "Flunks",
   "app.detail.icon": "https://flunks.net/flunks-logo.png",
-  "app.detail.url": APP_URL,
+  "app.detail.url": IS_MOBILE_APP ? "https://flunks.net" : APP_URL,
   
   // WalletConnect
   "walletconnect.projectId": WALLETCONNECT_PROJECT_ID,

@@ -64,6 +64,10 @@ const shuffleDeck = (deck: Card[]): Card[] => {
 };
 
 const calculateHandValue = (cards: Card[]): { total: number; soft: boolean } => {
+  if (!cards || !Array.isArray(cards) || cards.length === 0) {
+    return { total: 0, soft: false };
+  }
+  
   let total = 0;
   let aces = 0;
 
@@ -121,6 +125,9 @@ const Blackjack: React.FC<BlackjackProps> = ({
   const dealSoundRef = useRef<HTMLAudioElement | null>(null);
   const winSoundRef = useRef<HTMLAudioElement | null>(null);
   const blackjackWinSoundRef = useRef<HTMLAudioElement | null>(null);
+  
+  // Function ref to avoid circular dependency
+  const standRef = useRef<(currentPlayerHand?: Card[], currentDeckOverride?: Card[]) => Promise<void>>();
 
   useEffect(() => {
     setGumBalance(initialBalance);
@@ -265,9 +272,9 @@ const Blackjack: React.FC<BlackjackProps> = ({
       setGamePhase('result');
     } else if (total === 21) {
       // Auto-stand on 21 - pass the current hand to avoid stale state
-      await stand(newHand, newDeck);
+      standRef.current?.(newHand, newDeck);
     }
-  }, [gamePhase, isAnimating, deck, playerHand, dealerHand, bet, stand]);
+  }, [gamePhase, isAnimating, deck, playerHand, dealerHand, bet]);
 
   const stand = useCallback(async (currentPlayerHand?: Card[], currentDeckOverride?: Card[]) => {
     if (gamePhase !== 'playing' || isAnimating) return;
@@ -330,6 +337,11 @@ const Blackjack: React.FC<BlackjackProps> = ({
     setGamePhase('result');
     setIsAnimating(false);
   }, [gamePhase, isAnimating, deck, dealerHand, playerHand, bet]);
+
+  // Keep ref updated with latest stand function
+  useEffect(() => {
+    standRef.current = stand;
+  }, [stand]);
 
   const newGame = useCallback(() => {
     setPlayerHand([]);

@@ -8,6 +8,52 @@
   }
 }
 
+/* ================================
+   iOS SAFE AREA STYLES
+   Extends background into Dynamic Island / notch area
+   but keeps interactive content below safe area
+   ================================ */
+
+/* Root background extends into safe areas */
+html {
+  /* On desktop, keep the gray background */
+  background-color: #c0c0c0;
+}
+
+/* On mobile, make html transparent so the desktop purple extends fully */
+@media (max-width: 768px) {
+  html {
+    background-color: transparent;
+  }
+}
+
+body {
+  /* NO padding on body - let content flow edge to edge */
+  /* Individual components will handle safe area insets */
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+}
+
+/* The desktop background should extend fully */
+#__next {
+  min-height: 100vh;
+  /* Use dvh for better mobile support */
+  min-height: 100dvh;
+}
+
+/* Mobile-specific: Gray bar above windows in safe area */
+@supports (padding-top: env(safe-area-inset-top)) {
+  /* When a window is open on mobile, show gray behind the status bar */
+  .react95-window,
+  [class*="Window"] {
+    /* This ensures the gray extends into the safe area above windows */
+  }
+}
+
+/* Create a gray overlay for the safe area when windows are present */
+/* This is handled by the html background color being gray */
+
 /* Success Window Dark Theme Override */
 [data-window-id="HIGH_SCHOOL_OFFICE_SUCCESS"] {
   background: #2a2a2a !important;
@@ -43,13 +89,28 @@ body,
   html, body {
     /* Ensure full height on mobile */
     min-height: 100vh;
+    min-height: 100dvh;
     min-height: -webkit-fill-available;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
     /* Prevent bounce scrolling on iOS */
     overscroll-behavior: none;
     /* Improve touch scrolling */
     -webkit-overflow-scrolling: touch;
     /* Prevent zoom on double tap */
     touch-action: manipulation;
+    /* Remove any potential whitespace */
+    overflow: hidden;
+  }
+  
+  #__next {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
   }
   
   /* Prevent content from overflowing viewport */

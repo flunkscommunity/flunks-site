@@ -42,6 +42,25 @@ const WindowButtons = styled.div`
   }
 `;
 
+// Gray extension that fills the safe area above the window on mobile
+const SafeAreaExtension = styled.div`
+  display: none;
+  
+  @media (max-width: 768px) {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: env(safe-area-inset-top, 0px);
+    /* Use the same gray color as the Windows95 title bar/chrome */
+    background: ${({ theme }) => theme.material || '#c0c0c0'};
+    z-index: 9999;
+    /* Extend slightly into the window to ensure seamless join */
+    box-shadow: 0 1px 0 ${({ theme }) => theme.material || '#c0c0c0'};
+  }
+`;
+
 const DraggableResizeableWindow: React.FC<Props> = (props) => {
   const {
     headerTitle,
@@ -172,28 +191,31 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
   }
 
   return (
-    <Draggable
-      ref={draggableRef}
-      handle="strong"
-      bounds={{
-        left: 0,
-        top: 0,      // Allow windows to go to the very top (header will still be visible)
-        right: width - 100,  // Leave some space on the right
-        bottom: height - 48  // Leave some space at bottom
-      }}
-      onStart={onStart}
-      disabled={width < 768}
-      position={
-        props.openCentered && !isMobile
-          ? { x: width / 2 - 200, y: Math.max(height / 2 - 200, 10) }  // Ensure centered windows have some top margin
-          : undefined
-      }
-      defaultPosition={{
-        x: width / 2 - windowRef.current?.clientWidth! / 2,
-        y: Math.max(height / 2 - windowRef.current?.clientHeight! / 2 - offSetHeight, 10), // Small top margin instead of 60px
-      }}
-      cancel="#action"
-    >
+    <>
+      {/* Gray extension fills the safe area (notch/Dynamic Island) on mobile */}
+      {isMobile && <SafeAreaExtension />}
+      <Draggable
+        ref={draggableRef}
+        handle="strong"
+        bounds={{
+          left: 0,
+          top: 0,      // Allow windows to go to the very top (header will still be visible)
+          right: width - 100,  // Leave some space on the right
+          bottom: height - 48  // Leave some space at bottom
+        }}
+        onStart={onStart}
+        disabled={width < 768}
+        position={
+          props.openCentered && !isMobile
+            ? { x: width / 2 - 200, y: Math.max(height / 2 - 200, 10) }  // Ensure centered windows have some top margin
+            : undefined
+        }
+        defaultPosition={{
+          x: width / 2 - windowRef.current?.clientWidth! / 2,
+          y: Math.max(height / 2 - windowRef.current?.clientHeight! / 2 - offSetHeight, 10), // Small top margin instead of 60px
+        }}
+        cancel="#action"
+      >
       <Window
         ref={windowRef}
         className={`${windowClassName} !flex !flex-col cursor-win95-default`}
@@ -205,11 +227,13 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           width: width < 768 ? "100%" : initialWidth,
           maxWidth: "100%",
           minWidth: width < 768 ? "100%" : "375px",
-          minHeight: width < 768 ? "calc(100% - 48px)" : "",
+          // On mobile, account for safe area at top
+          minHeight: width < 768 ? "calc(100% - 48px - env(safe-area-inset-top, 0px))" : "",
           height: getHeight(),
           maxHeight: "calc(100% - 48px)",
           left: width < 768 ? 0 : undefined,
-          top: width < 768 ? 0 : undefined,
+          // On mobile, start below the safe area (Dynamic Island/notch)
+          top: width < 768 ? "env(safe-area-inset-top, 0px)" : undefined,
           background: props.windowsId === 'HIGH_SCHOOL_OFFICE_SUCCESS' ? '#2a2a2a' : undefined,
           ...props.style,
         }}
@@ -310,6 +334,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
         </WindowContent>
       </Window>
     </Draggable>
+    </>
   );
 };
 

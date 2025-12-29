@@ -20,6 +20,8 @@ const Appbar = () => {
         zIndex: 1000,
         top: "100%",
         transform: "translateY(-100%)",
+        // On mobile, add padding for safe area at bottom
+        paddingBottom: "env(safe-area-inset-bottom, 0px)",
       }}
     >
       <Toolbar

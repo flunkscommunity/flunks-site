@@ -47,5 +47,32 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	
+	<!-- Status bar style - dark content (black text) for light backgrounds -->
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleDarkContent</string>
+	
+	<!-- URL Schemes for deep linking (wallet callbacks) -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>flunks</string>
+				<string>net.flunks.app</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>net.flunks.app</string>
+		</dict>
+	</array>
+	
+	<!-- Allow opening external URLs -->
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>flowwallet</string>
+		<string>blocto</string>
+		<string>dapper</string>
+		<string>wc</string>
+	</array>
 </dict>
 </plist>

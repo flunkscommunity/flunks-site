@@ -25,13 +25,15 @@ const SlotContent = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 5px;
+  padding-bottom: 10%;
   background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 50%, #1a1a2e 100%);
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
   
   @media (max-width: 768px) {
     padding: 2px;
-    overflow-y: auto;
+    padding-bottom: 10%;
+    overflow: hidden;
   }
 `;
 
@@ -238,6 +240,35 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
 
   return (
     <SlotContent>
+      {/* Win/Message display - at the very top of the container */}
+      {message && (
+        <div style={{
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          right: '0',
+          zIndex: 100,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '8px 16px',
+          background: showWin 
+            ? 'linear-gradient(180deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 165, 0, 0.2) 100%)'
+            : 'linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, transparent 100%)',
+          color: showWin ? '#ffd700' : '#fbbf24',
+          fontFamily: "'Lilita One', cursive",
+          fontSize: showWin ? '1.6em' : '1.3em',
+          fontWeight: 'bold',
+          textShadow: showWin 
+            ? '0 0 20px rgba(255, 215, 0, 0.8), 2px 2px 0 #b45309'
+            : '0 0 10px rgba(251, 191, 36, 0.5), 1px 1px 0 #b45309',
+          textAlign: 'center',
+          animation: showWin ? 'pulse 0.5s ease-in-out infinite' : 'none'
+        }}>
+          {message}
+        </div>
+      )}
+
       {/* Slot Machine Frame */}
       <div style={{ 
         position: 'relative', 
@@ -245,32 +276,6 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
         maxWidth: '380px',
         margin: '0 auto',
       }}>
-        {/* Message display - positioned in the dark area at top of machine */}
-        {message && (
-          <div style={{
-            position: 'absolute',
-            top: '28%',
-            left: '12%',
-            width: '76%',
-            height: '12%',
-            zIndex: 4,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: showWin ? '#ffd700' : '#fbbf24',
-            fontFamily: "'Lilita One', cursive",
-            fontSize: showWin ? '1.8em' : '1.4em',
-            fontWeight: 'bold',
-            textShadow: showWin 
-              ? '0 0 20px rgba(255, 215, 0, 0.8), 2px 2px 0 #b45309'
-              : '0 0 10px rgba(251, 191, 36, 0.5), 1px 1px 0 #b45309',
-            textAlign: 'center',
-            animation: showWin ? 'pulse 0.5s ease-in-out infinite' : 'none'
-          }}>
-            {message}
-          </div>
-        )}
-
         {/* Reels container - positioned BEHIND the frame */}
         <div style={{
           position: 'absolute',
@@ -448,3 +453,5 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
     </SlotContent>
   );
 };
+
+export default SlotsGame;

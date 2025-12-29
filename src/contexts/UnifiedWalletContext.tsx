@@ -2,6 +2,12 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import * as fcl from '@onflow/fcl';
 
+// Check if running in Capacitor mobile app
+const isMobileApp = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return !!(window as any).Capacitor?.isNativePlatform?.();
+};
+
 interface UnifiedWalletContextType {
   // Connection state
   isConnected: boolean;
@@ -16,6 +22,10 @@ interface UnifiedWalletContextType {
   
   // FCL user object (for Flow-specific operations)
   fclUser: any;
+  
+  // Mobile-specific
+  isMobile: boolean;
+  isConnecting: boolean;
 }
 
 const UnifiedWalletContext = createContext<UnifiedWalletContextType | undefined>(undefined);
@@ -24,6 +34,47 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
   const { primaryWallet, handleLogOut } = useDynamicContext();
   const [fclUser, setFclUser] = useState<any>(null);
   const [fclAddress, setFclAddress] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
+
+  // Detect mobile app on mount
+  useEffect(() => {
+    const mobile = isMobileApp();
+    setIsMobile(mobile);
+    if (mobile) {
+      console.log('📱 UnifiedWalletContext: Mobile app detected, using TAB/RPC discovery');
+    }
+  }, []);
+
+  // Set up deep link handler for mobile wallet callbacks
+  useEffect(() => {
+    if (!isMobile) return;
+    
+    const setupMobileDeepLinks = async () => {
+      try {
+        // Dynamically import Capacitor App plugin only in mobile context
+        const { App } = await import('@capacitor/app');
+        
+        // Listen for app URL open events (wallet callbacks)
+        await App.addListener('appUrlOpen', (event) => {
+          console.log('📲 Wallet callback received:', event.url);
+          // FCL handles the callback automatically via the WalletConnect integration
+        });
+        
+        // Check if app was opened with a URL (cold start)
+        const launchUrl = await App.getLaunchUrl();
+        if (launchUrl?.url) {
+          console.log('📲 App launched with wallet callback:', launchUrl.url);
+        }
+        
+        console.log('📱 Mobile deep link listeners registered');
+      } catch (error) {
+        console.warn('⚠️ Failed to set up mobile deep links:', error);
+      }
+    };
+    
+    setupMobileDeepLinks();
+  }, [isMobile]);
 
   // Subscribe to FCL auth changes (config is already set in src/config/fcl.ts)
   useEffect(() => {
@@ -36,9 +87,11 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
       if (user?.loggedIn && user?.addr) {
         setFclUser(user);
         setFclAddress(user.addr);
+        setIsConnecting(false); // Reset connecting state when user logs in
       } else {
         setFclUser(null);
         setFclAddress(null);
+        setIsConnecting(false); // Also reset on logout
       }
     });
 
@@ -49,26 +102,47 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Connect to Flow wallet via FCL (explicit user action only)
   const connectFCL = useCallback(async () => {
+    setIsConnecting(true);
     try {
-      console.log('Explicitly connecting to Flow wallet...');
+      console.log(isMobile ? '📱 Connecting to Flow wallet (mobile)...' : '🌊 Connecting to Flow wallet (web)...');
+      
       try {
         const network = await fcl.config().get('flow.network');
         const accessNode = await fcl.config().get('accessNode.api');
         const discovery = await fcl.config().get('discovery.wallet');
+        const method = await fcl.config().get('discovery.wallet.method');
         console.log('🔧 FCL config before authenticate:', {
           network,
           accessNode,
-          discovery
+          discovery,
+          method,
+          isMobile
         });
       } catch (configError) {
         console.warn('⚠️ Unable to read FCL config before authenticate:', configError);
       }
-      await fcl.authenticate();
+      
+      if (isMobile) {
+        // On mobile, authenticate with Flow Wallet directly via WalletConnect
+        // FCL-WC will handle the WalletConnect connection
+        console.log('📱 Using WalletConnect for mobile authentication...');
+        await fcl.authenticate();
+      } else {
+        // On web, use standard FCL discovery
+        await fcl.authenticate();
+      }
+      
+      console.log('✅ Wallet connection initiated');
     } catch (error) {
       console.error('Error connecting to Flow wallet:', error);
       throw error;
+    } finally {
+      // For mobile, keep connecting state until user returns (handled by FCL subscription)
+      if (!isMobile) {
+        setIsConnecting(false);
+      }
     }
-  }, []);
+  }, [isMobile]);
 
   // Unified disconnect
   const disconnect = useCallback(async () => {
@@ -100,6 +174,8 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
     connectFCL,
     disconnect,
     fclUser,
+    isMobile,
+    isConnecting,
   };
 
   return (

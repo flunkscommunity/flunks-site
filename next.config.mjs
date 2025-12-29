@@ -2,12 +2,18 @@
 /**
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
  * This is especially useful for Docker builds.
+ * 
+ * For mobile builds, set MOBILE_BUILD=true to enable static export
  */
 !process.env.SKIP_ENV_VALIDATION && (await import("./src/env/server.mjs"));
 
+// Check if this is a mobile build (Capacitor iOS/Android)
+const isMobileBuild = process.env.MOBILE_BUILD === 'true';
+
 /** @type {import("next").NextConfig} */
 const config = {
-  // Note: Removed 'output: export' to enable API routes on Vercel
+  // Enable static export for mobile builds, disabled for Vercel (needs API routes)
+  ...(isMobileBuild && { output: 'export' }),
   images: { unoptimized: true },
   reactStrictMode: false,
   swcMinify: true,

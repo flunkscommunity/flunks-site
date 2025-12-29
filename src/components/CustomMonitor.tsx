@@ -5,6 +5,7 @@ import styled, { keyframes, css } from "styled-components";
 import Appbar from "./Appbar/Appbar";
 import useThemeSettings from "store/useThemeSettings";
 import ScrollingBackground, { ScrollingPattern } from "./ScrollingBackground";
+import useWindowSize from "hooks/useWindowSize";
 
 // Slow horizontal cloud scroll animation
 const cloudScroll = keyframes`
@@ -43,6 +44,15 @@ export const StyledScrollView = styled.div<Pick<ScrollViewProps, "shadow">>`
     border-bottom-color: ${({ theme }) => theme.borderLight};
     pointer-events: none;
   }
+  
+  /* Remove borders on mobile for infinity-edge look */
+  @media (max-width: 768px) {
+    border: none;
+    padding: 0;
+    &:before {
+      border: none;
+    }
+  }
 `;
 
 type MonitorProps = {
@@ -66,6 +76,17 @@ const Wrapper = styled.div`
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  
+  /* Full viewport on mobile */
+  @media (max-width: 768px) {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
 `;
 
 const Inner = styled.div`
@@ -74,6 +95,12 @@ const Inner = styled.div`
   flex: 1;
   flex-direction: column;
   overflow: hidden;
+  
+  /* Full size on mobile */
+  @media (max-width: 768px) {
+    height: 100%;
+    width: 100%;
+  }
 `;
 
 const MonitorBody = styled.div`
@@ -100,6 +127,18 @@ const MonitorBody = styled.div`
     outline: 1px dotted ${({ theme }) => theme.material};
   }
   box-shadow: 1px 1px 0 1px ${({ theme }) => theme.borderDarkest};
+  
+  /* Remove all borders/chrome on mobile for infinity-edge look */
+  @media (max-width: 768px) {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+    &:before {
+      outline: none;
+    }
+  }
+  
   @media (min-width: 768px) {
     &:after {
       content: "";
@@ -128,9 +167,20 @@ const Background = styled(StyledScrollView).attrs(() => ({
   `}
   
   @media (max-width: 768px) {
-    /* Ensure proper containment on mobile */
-    max-width: 100vw;
-    max-height: 100vh;
+    /* Full screen infinity-edge on mobile */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    /* No padding - extend fully into safe areas */
+    padding: 0;
+    margin: 0;
   }
 `;
 
@@ -149,6 +199,13 @@ const MonitorScreenContainer = styled.div`
   height: calc(100% - 48px);
   width: 100%;
   overflow: hidden;
+  
+  @media (max-width: 768px) {
+    /* On mobile, no Appbar so full height, just account for safe areas */
+    height: 100%;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
 `;
 
 const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
@@ -169,6 +226,8 @@ const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
     const { backgroundColor, backgroundImage, oldMonitorMode, desktopBackground, desktopBackgroundType } =
       useThemeSettings();
     const backgroundRef = useRef<HTMLDivElement>(null);
+    const { width } = useWindowSize();
+    const isMobile = width < 768;
 
     // Use desktop background for main desktop, fallback to regular background for other screens
     const isMainDesktop = showBottomBar; // Main desktop has the bottom bar/taskbar
@@ -235,7 +294,8 @@ const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
                 )}
                 <MonitorScreenContainer>{children}</MonitorScreenContainer>
 
-                {showBottomBar && <Appbar />}
+                {/* Hide Appbar/taskbar on mobile app */}
+                {showBottomBar && !isMobile && <Appbar />}
               </Background>
             </div>
           </MonitorBody>

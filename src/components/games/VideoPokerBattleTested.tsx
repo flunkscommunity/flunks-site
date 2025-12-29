@@ -415,7 +415,7 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
         <div 
           className="grid text-right font-bold"
           style={{ 
-            gridTemplateColumns: window.innerWidth < 768 ? '1fr repeat(5, 40px)' : '1fr repeat(5, 50px)',
+            gridTemplateColumns: window.innerWidth < 768 ? '1fr repeat(5, 48px)' : '1fr repeat(5, 60px)',
             borderBottom: '3px solid #ffff00',
             color: '#ffff00',
             fontSize: window.innerWidth < 768 ? '8px' : '10px',
@@ -432,7 +432,7 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
                 borderLeft: '3px solid #ffff00',
               }}
             >
-              {level}
+              {level * GUM_PER_COIN}
             </div>
           ))}
         </div>
@@ -443,7 +443,7 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
             key={rowIdx}
             className="grid text-right"
             style={{ 
-              gridTemplateColumns: window.innerWidth < 768 ? '1fr repeat(5, 40px)' : '1fr repeat(5, 50px)',
+              gridTemplateColumns: window.innerWidth < 768 ? '1fr repeat(5, 48px)' : '1fr repeat(5, 60px)',
               color: '#ffff00',
               fontSize: window.innerWidth < 768 ? '8px' : '10px',
             }}
@@ -469,7 +469,7 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
                   animation: winningHand === row.pokersolver && roundEnded ? 'blink 1s steps(1) infinite' : 'none',
                 }}
               >
-                {payout}
+                {payout * GUM_PER_COIN}
               </div>
             ))}
           </div>

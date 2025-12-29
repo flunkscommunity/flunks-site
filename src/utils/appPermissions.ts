@@ -237,22 +237,42 @@ export const APP_PERMISSIONS: AppPermission[] = [
   }
 ];
 
+// Apps to hide from non-logged-in users (mobile app default view)
+// These are either dev tools, unfinished features, or require wallet connection
+const GUEST_HIDDEN_APPS = [
+  'flunky-bash',       // Unfinished game
+  'slot-machine',      // Requires GUM/wallet
+  'burn-nft',          // Admin/dev tool
+  'magic-test',        // Dev tool
+  'loading-screen-preview', // Dev tool
+  'picture-day',       // Seasonal feature - can re-enable later
+];
+
 /**
  * Check if user has permission to see an app
  */
-export const hasAppPermission = (appId: string, userAccessLevel?: AccessLevel): boolean => {
+export const hasAppPermission = (appId: string, userAccessLevel?: AccessLevel | null): boolean => {
   const appPermission = APP_PERMISSIONS.find(app => app.id === appId);
   
-  // If no access level (not logged in), deny all except Picture Day for testing
+  // If no access level (not logged in), show COMMUNITY-level apps by default
+  // This allows mobile users to see the desktop before connecting wallet
   if (!userAccessLevel) {
-    if (appId === 'picture-day') {
-      // Still check build mode feature for Picture Day
-      if (appPermission?.buildModeFeature) {
-        return isFeatureEnabled(appPermission.buildModeFeature as any);
-      }
-      return true;
+    // Hide specific apps from guest/non-logged-in users
+    if (GUEST_HIDDEN_APPS.includes(appId)) {
+      return false;
     }
-    return false;
+    
+    // If app not in permissions list, allow by default
+    if (!appPermission) return true;
+    
+    // Check build mode feature flag first
+    if (appPermission.buildModeFeature) {
+      const featureEnabled = isFeatureEnabled(appPermission.buildModeFeature as any);
+      if (!featureEnabled) return false;
+    }
+    
+    // Show apps that are available to COMMUNITY level (most apps)
+    return appPermission.requiredLevel.includes('COMMUNITY');
   }
   
   // If app not in permissions list, allow by default (for backwards compatibility)

@@ -2,6 +2,13 @@ import React, { useState } from 'react';
 import { Window, WindowHeader, WindowContent, Button, Hourglass } from 'react95';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useUnifiedWallet } from '../contexts/UnifiedWalletContext';
+import * as fcl from '@onflow/fcl';
+
+// Check if running in Capacitor mobile app
+const isMobileApp = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return !!(window as any).Capacitor?.isNativePlatform?.();
+};
 
 interface WalletConnectionModalProps {
   onClose: () => void;
@@ -13,8 +20,10 @@ const WalletConnectionModal: React.FC<WalletConnectionModalProps> = ({ onClose }
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Dapper Wallet - uses Dynamic SDK (custodial)
   const handleDynamicConnect = () => {
     try {
+      console.log('💎 Opening Dapper wallet login via Dynamic...');
       setShowAuthFlow(true);
       onClose();
     } catch (err) {
@@ -23,16 +32,26 @@ const WalletConnectionModal: React.FC<WalletConnectionModalProps> = ({ onClose }
     }
   };
 
-  const handleFlowConnect = async () => {
+  // Flow Wallet - direct connection (self-custodial)
+  const handleFlowWalletConnect = async () => {
     setIsConnecting(true);
     setError(null);
     
     try {
+      console.log('🌊 Connecting directly to Flow Wallet...');
+      
+      // For mobile, try to deep link to Flow Wallet app
+      if (isMobileApp()) {
+        console.log('📱 Mobile detected - using WalletConnect for Flow Wallet');
+      }
+      
+      // Use FCL authenticate which will use WalletConnect on mobile
+      // and the discovery UI on web
       await connectFCL();
       onClose();
     } catch (err) {
       console.error('Error connecting to Flow wallet:', err);
-      setError('Failed to connect to Flow wallet. Please try again.');
+      setError('Failed to connect to Flow Wallet. Make sure you have Flow Wallet installed.');
     } finally {
       setIsConnecting(false);
     }
@@ -219,7 +238,7 @@ const WalletConnectionModal: React.FC<WalletConnectionModalProps> = ({ onClose }
 
               {/* Flow Wallet Button */}
               <button
-                onClick={handleFlowConnect}
+                onClick={handleFlowWalletConnect}
                 disabled={isConnecting}
                 style={{
                   background: isConnecting 
@@ -303,7 +322,7 @@ const WalletConnectionModal: React.FC<WalletConnectionModalProps> = ({ onClose }
                   textShadow: '0 0 5px rgba(0,255,0,0.5)',
                   letterSpacing: '1px'
                 }}>
-                  📋 FLOW WALLET OPTIONS:
+                  📋 WALLET INFO:
                 </div>
                 <div style={{
                   fontSize: '10px',
@@ -313,9 +332,8 @@ const WalletConnectionModal: React.FC<WalletConnectionModalProps> = ({ onClose }
                   textShadow: '0 0 3px rgba(0,255,255,0.3)',
                   paddingLeft: '15px'
                 }}>
-                  • Flow Wallet (Browser Extension)<br/>
-                  • Lilico Wallet<br/>
-                  • Blocto Wallet
+                  • <span style={{color: '#0088ff'}}>Dapper</span> - Easy email login (custodial)<br/>
+                  • <span style={{color: '#00d4aa'}}>Flow Wallet</span> - Self-custody wallet app
                 </div>
               </div>
             </div>

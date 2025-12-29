@@ -6,7 +6,12 @@ export default function Document() {
       <Head>
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        {/* black-translucent makes status bar overlay content with light text */}
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        {/* viewport-fit=cover extends content into safe areas (notch, Dynamic Island) */}
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        {/* Theme color for browser chrome */}
+        <meta name="theme-color" content="#c0c0c0" />
         
         {/* Classic Retro Gaming Fonts */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
