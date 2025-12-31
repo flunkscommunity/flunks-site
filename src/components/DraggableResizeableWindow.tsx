@@ -52,12 +52,61 @@ const SafeAreaExtension = styled.div`
     top: 0;
     left: 0;
     right: 0;
-    height: env(safe-area-inset-top, 0px);
+    /* Fallback for Dynamic Island / notch - approximately 59px on modern iPhones */
+    height: 59px;
+    height: constant(safe-area-inset-top); /* iOS 11.0-11.2 */
+    height: env(safe-area-inset-top, 59px); /* iOS 11.2+ */
     /* Use the same gray color as the Windows95 title bar/chrome */
     background: ${({ theme }) => theme.material || '#c0c0c0'};
-    z-index: 9999;
-    /* Extend slightly into the window to ensure seamless join */
-    box-shadow: 0 1px 0 ${({ theme }) => theme.material || '#c0c0c0'};
+    z-index: 10000;
+  }
+`;
+
+// Styled Window with proper positioning below the notch on mobile
+const StyledWindow = styled(Window)`
+  /* Mobile-specific styles */
+  @media (max-width: 768px) {
+    position: fixed !important;
+    /* Fallback for Dynamic Island / notch */
+    top: 59px !important;
+    top: constant(safe-area-inset-top) !important; /* iOS 11.0-11.2 */
+    top: env(safe-area-inset-top, 59px) !important; /* iOS 11.2+ */
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 48px !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+  }
+`;
+
+// Mobile-specific header with centered title and only close button
+const MobileHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 8px 12px;
+  background: linear-gradient(180deg, #000080 0%, #1084d0 100%);
+  min-height: 36px;
+  
+  .mobile-title {
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    flex: 1;
+    padding: 0 40px; /* Leave space for close button */
+  }
+  
+  .mobile-close-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 `;
 
@@ -216,24 +265,23 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
         }}
         cancel="#action"
       >
-      <Window
+      <StyledWindow
         ref={windowRef}
         className={`${windowClassName} !flex !flex-col cursor-win95-default`}
         data-window-id={props.windowsId}
         style={{
-          position: "absolute",
-          resize: resizable ? "both" : "none",
+          position: isMobile ? undefined : "absolute",
+          resize: resizable && !isMobile ? "both" : "none",
           overflow: "hidden",
-          width: width < 768 ? "100%" : initialWidth,
-          maxWidth: "100%",
-          minWidth: width < 768 ? "100%" : "375px",
-          // On mobile, account for safe area at top
-          minHeight: width < 768 ? "calc(100% - 48px - env(safe-area-inset-top, 0px))" : "",
-          height: getHeight(),
-          maxHeight: "calc(100% - 48px)",
-          left: width < 768 ? 0 : undefined,
-          // On mobile, start below the safe area (Dynamic Island/notch)
-          top: width < 768 ? "env(safe-area-inset-top, 0px)" : undefined,
+          width: isMobile ? undefined : initialWidth,
+          maxWidth: isMobile ? undefined : "100%",
+          minWidth: isMobile ? undefined : "375px",
+          minHeight: isMobile ? undefined : "",
+          height: isMobile ? undefined : getHeight(),
+          maxHeight: isMobile ? undefined : "calc(100% - 48px)",
+          left: isMobile ? undefined : undefined,
+          top: isMobile ? undefined : undefined,
+          bottom: isMobile ? undefined : undefined,
           background: props.windowsId === 'HIGH_SCHOOL_OFFICE_SUCCESS' ? '#2a2a2a' : undefined,
           ...props.style,
         }}
@@ -243,7 +291,27 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
         <strong>
           {headerRender ? (
             headerRender
+          ) : isMobile ? (
+            /* Mobile: Centered title with only close button */
+            <MobileHeader>
+              <span className="mobile-title">{headerTitle}</span>
+              {showHeaderActions && (
+                <div className="mobile-close-btn">
+                  <Button
+                    id="action"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onClose?.();
+                    }}
+                    className="pointer-events-auto cursor-win95-pointer"
+                  >
+                    <span className="close-icon" />
+                  </Button>
+                </div>
+              )}
+            </MobileHeader>
           ) : (
+            /* Desktop: Full header with all buttons */
             <WindowHeader
               className="flex !items-center !justify-between !py-1 !px-2 !h-auto cursor-win95-move"
               style={{
@@ -332,7 +400,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
         >
           {children}
         </WindowContent>
-      </Window>
+      </StyledWindow>
     </Draggable>
     </>
   );
