@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flunks Splash Screen Demos</title>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: #1a1a2e;
+      color: white;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .demo-selector {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    
+    .demo-btn {
+      padding: 15px 30px;
+      font-size: 18px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background: #4a4a6a;
+      color: white;
+      transition: all 0.3s;
+    }
+    
+    .demo-btn:hover {
+      background: #6a6a8a;
+      transform: scale(1.05);
+    }
+    
+    .demo-btn.active {
+      background: #007bff;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+    
+    .demo-container {
+      width: 100%;
+      max-width: 400px;
+      height: 800px;
+      margin: 0 auto;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      position: relative;
+      background: #000;
+    }
+    
+    .splash {
+      display: none;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    
+    .splash.active {
+      display: block !important;
+    }
+
+    /* ============================================
+       DEMO 2: Windows 98 Style
+       ============================================ */
+    .win98 {
+      background: #008080 !important;
+      font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
+    }
+    
+    .win98.active {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .win98-dialog {
+      background: #c0c0c0;
+      border: 2px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      box-shadow: 1px 1px 0 0 #000;
+      width: 320px;
+      padding: 2px;
+    }
+    
+    .win98-titlebar {
+      background: linear-gradient(90deg, #000080, #1084d0);
+      color: white;
+      padding: 3px 5px;
+      font-size: 12px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .win98-titlebar img {
+      width: 16px;
+      height: 16px;
+      image-rendering: pixelated;
+    }
+    
+    .win98-content {
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .win98-logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 15px;
+      image-rendering: pixelated;
+      display: block;
+    }
+    
+    .win98-text {
+      font-size: 12px;
+      color: #000;
+      margin-bottom: 15px;
+    }
+    
+    .win98-progress-outer {
+      background: #fff;
+      border: 1px solid;
+      border-color: #808080 #ffffff #ffffff #808080;
+      height: 20px;
+      padding: 2px;
+    }
+    
+    .win98-progress-inner {
+      background: #000080;
+      height: 100%;
+      width: 0%;
+    }
+    
+    .win98-status {
+      font-size: 11px;
+      color: #000;
+      margin-top: 10px;
+      text-align: left;
+    }
+
+    /* ============================================
+       DEMO 3: CRT Terminal Style
+       ============================================ */
+    .crt {
+      background: #0a0a0a !important;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .crt::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%,
+        rgba(0, 0, 0, 0.25) 50%
+      );
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 10;
+    }
+    
+    .crt::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(
+        ellipse at center,
+        transparent 0%,
+        rgba(0, 0, 0, 0.4) 100%
+      );
+      pointer-events: none;
+      z-index: 11;
+    }
+    
+    .crt-screen {
+      padding: 40px 20px;
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      color: #33ff33;
+      text-shadow: 0 0 10px #33ff33;
+      height: 100%;
+      position: relative;
+    }
+    
+    .crt-line {
+      opacity: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      margin-bottom: 5px;
+    }
+    
+    .crt-logo-container {
+      text-align: center;
+      margin: 20px 0;
+      opacity: 0;
+    }
+    
+    .crt-logo {
+      width: 100px;
+      height: 100px;
+      filter: brightness(1.2) drop-shadow(0 0 20px #33ff33) hue-rotate(90deg) saturate(3);
+    }
+    
+    .crt-logo.pulse {
+      animation: pulse-glow 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% {
+        filter: brightness(1.2) drop-shadow(0 0 20px #33ff33) hue-rotate(90deg) saturate(3);
+        transform: scale(1);
+      }
+      50% {
+        filter: brightness(1.5) drop-shadow(0 0 40px #33ff33) drop-shadow(0 0 60px #33ff33) hue-rotate(90deg) saturate(3);
+        transform: scale(1.05);
+      }
+    }
+    
+    .crt-ascii {
+      font-family: 'VT323', monospace;
+      font-size: 11px;
+      color: #33ff33;
+      text-shadow: 0 0 10px #33ff33;
+      white-space: pre;
+      line-height: 1.1;
+      text-align: center;
+      opacity: 0;
+      margin-top: 15px;
+    }
+    
+    .crt-cursor {
+      display: inline-block;
+      width: 12px;
+      height: 20px;
+      background: #33ff33;
+      vertical-align: middle;
+      margin-left: 5px;
+    }
+    
+    .crt-ready {
+      text-align: center;
+      font-size: 28px;
+      margin-top: 20px;
+      opacity: 0;
+      color: #33ff33;
+      text-shadow: 0 0 20px #33ff33;
+    }
+
+    /* ============================================
+       DEMO 4: VHS Glitch Style
+       ============================================ */
+    .vhs {
+      background: #0a0a0a !important;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .vhs-scanlines {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 10;
+    }
+    
+    .vhs-tracking {
+      position: absolute;
+      top: -100px;
+      left: 0;
+      right: 0;
+      height: 100px;
+      background: linear-gradient(
+        transparent,
+        rgba(255, 255, 255, 0.15),
+        transparent
+      );
+      opacity: 0.7;
+      z-index: 15;
+      pointer-events: none;
+    }
+    
+    .vhs-content {
+      position: relative;
+      z-index: 5;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    
+    .vhs-logo {
+      width: 200px;
+      height: 200px;
+      opacity: 0;
+    }
+    
+    .vhs-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 28px;
+      color: #fff;
+      margin-top: 30px;
+      letter-spacing: 4px;
+      opacity: 0;
+      text-shadow: 3px 3px 0 #ff0080, -2px -2px 0 #00ffff;
+    }
+    
+    .vhs-date {
+      position: absolute;
+      bottom: 40px;
+      right: 20px;
+      font-family: 'VT323', monospace;
+      font-size: 24px;
+      color: #fff;
+      text-shadow: 2px 2px 0 #ff0080;
+      z-index: 20;
+    }
+    
+    .vhs-rec {
+      position: absolute;
+      top: 40px;
+      left: 20px;
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      color: #ff0000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 20;
+    }
+    
+    .vhs-rec-dot {
+      width: 12px;
+      height: 12px;
+      background: #ff0000;
+      border-radius: 50%;
+    }
+    
+    .vhs-play {
+      position: absolute;
+      top: 40px;
+      right: 20px;
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      color: #fff;
+      z-index: 20;
+    }
+
+    /* Restart buttons */
+    .restart-btn {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      cursor: pointer;
+      font-size: 12px;
+      border-radius: 4px;
+      z-index: 100;
+    }
+    
+    .restart-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+  </style>
+</head>
+<body>
+  <h1>🎮 Flunks Splash Screen Demos</h1>
+  <p style="text-align: center; margin-bottom: 20px; opacity: 0.7;">Click a style to preview it (3-5 second animations)</p>
+  
+  <div class="demo-selector">
+    <button class="demo-btn" id="btn-win98" onclick="showDemo('win98')">💾 Windows 98</button>
+    <button class="demo-btn" id="btn-crt" onclick="showDemo('crt')">📺 CRT Terminal</button>
+    <button class="demo-btn" id="btn-vhs" onclick="showDemo('vhs')">📼 VHS Glitch</button>
+  </div>
+  
+  <div class="demo-container">
+    <!-- Windows 98 Style -->
+    <div id="win98" class="splash win98">
+      <div class="win98-dialog">
+        <div class="win98-titlebar">
+          <img src="flunks-logo.png" alt="">
+          Flunks Setup
+        </div>
+        <div class="win98-content">
+          <img src="flunks-logo.png" class="win98-logo" alt="Flunks">
+          <div class="win98-text">
+            <strong>Welcome to Flunks</strong><br>
+            Please wait while we set things up...
+          </div>
+          <div class="win98-progress-outer">
+            <div class="win98-progress-inner" id="win98-progress"></div>
+          </div>
+          <div class="win98-status">
+            <span id="win98-status-text">Initializing Flunks...</span>
+          </div>
+        </div>
+      </div>
+      <button class="restart-btn" onclick="showDemo('win98')">↻ Replay</button>
+    </div>
+    
+    <!-- CRT Terminal Style -->
+    <div id="crt" class="splash crt">
+      <div class="crt-screen">
+        <div class="crt-line">FLUNKS OS v2.0.26</div>
+        <div class="crt-line">Copyright (C) 2026 Flunks Community</div>
+        <div class="crt-line">&nbsp;</div>
+        <div class="crt-line">Booting system...</div>
+        <div class="crt-line">[OK] Flow Network: MAINNET</div>
+        <div class="crt-line">[OK] Wallet Services: READY</div>
+        <div class="crt-line">[OK] NFT Collections: LOADED</div>
+        <div class="crt-line">[OK] Backpack System: ONLINE</div>
+        <div class="crt-line">&nbsp;</div>
+        <div class="crt-line">Welcome to FLUNKS HIGH SCHOOL<span class="crt-cursor"></span></div>
+        
+        <div class="crt-logo-container">
+          <img src="flunks-logo.png" class="crt-logo" alt="Flunks">
+          <div class="crt-ascii">
+ ██████╗██╗     ██╗   ██╗███╗   ██╗██╗  ██╗███████╗
+ ██╔════╝██║     ██║   ██║████╗  ██║██║ ██╔╝██╔════╝
+ █████╗  ██║     ██║   ██║██╔██╗ ██║█████╔╝ ███████╗
+ ██╔══╝  ██║     ██║   ██║██║╚██╗██║██╔═██╗ ╚════██║
+ ██║     ███████╗╚██████╔╝██║ ╚████║██║  ██╗███████║
+ ╚═╝     ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
+          </div>
+          <div class="crt-ready">PRESS TO ENTER</div>
+        </div>
+      </div>
+      <button class="restart-btn" onclick="showDemo('crt')">↻ Replay</button>
+    </div>
+    
+    <!-- VHS Glitch Style -->
+    <div id="vhs" class="splash vhs">
+      <div class="vhs-scanlines"></div>
+      <div class="vhs-tracking"></div>
+      
+      <div class="vhs-rec">
+        <span class="vhs-rec-dot"></span>
+        REC
+      </div>
+      
+      <div class="vhs-play">▶ PLAY</div>
+      
+      <div class="vhs-content">
+        <img src="flunks-logo.png" class="vhs-logo" alt="Flunks">
+        <div class="vhs-title">FLUNKS</div>
+      </div>
+      
+      <div class="vhs-date">01.01.2026</div>
+      <button class="restart-btn" onclick="showDemo('vhs')">↻ Replay</button>
+    </div>
+  </div>
+  
+  <script>
+    // Audio context for typing sounds
+    var audioCtx = null;
+    
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+    
+    function playTypeSound() {
+      if (!audioCtx) return;
+      
+      var oscillator = audioCtx.createOscillator();
+      var gainNode = audioCtx.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      
+      // Randomize pitch slightly for variety
+      oscillator.frequency.value = 800 + Math.random() * 400;
+      oscillator.type = 'square';
+      
+      gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+      
+      oscillator.start(audioCtx.currentTime);
+      oscillator.stop(audioCtx.currentTime + 0.05);
+    }
+    
+    function playBeep() {
+      if (!audioCtx) return;
+      
+      var oscillator = audioCtx.createOscillator();
+      var gainNode = audioCtx.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      
+      oscillator.frequency.value = 1200;
+      oscillator.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+      
+      oscillator.start(audioCtx.currentTime);
+      oscillator.stop(audioCtx.currentTime + 0.15);
+    }
+    
+    function playBootSound() {
+      if (!audioCtx) return;
+      
+      // Rising tone
+      var oscillator = audioCtx.createOscillator();
+      var gainNode = audioCtx.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      
+      oscillator.frequency.setValueAtTime(200, audioCtx.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.3);
+      oscillator.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+      
+      oscillator.start(audioCtx.currentTime);
+      oscillator.stop(audioCtx.currentTime + 0.4);
+    }
+    
+    var statusMessages = [
+      "Initializing Flunks...",
+      "Loading assets...",
+      "Connecting to Flow...",
+      "Preparing your backpack...",
+      "Ready!"
+    ];
+    
+    var statusInterval = null;
+    var cursorInterval = null;
+    var trackingInterval = null;
+    var glitchInterval = null;
+    var typeIntervals = [];
+    
+    function clearAllIntervals() {
+      if (statusInterval) clearInterval(statusInterval);
+      if (cursorInterval) clearInterval(cursorInterval);
+      if (trackingInterval) clearInterval(trackingInterval);
+      if (glitchInterval) clearInterval(glitchInterval);
+      typeIntervals.forEach(function(id) { clearTimeout(id); });
+      typeIntervals = [];
+    }
+    
+    function showDemo(id) {
+      // Initialize audio on user interaction
+      initAudio();
+      
+      // Clear all intervals
+      clearAllIntervals();
+      
+      // Hide all demos
+      var splashes = document.querySelectorAll('.splash');
+      for (var i = 0; i < splashes.length; i++) {
+        splashes[i].classList.remove('active');
+      }
+      
+      // Remove active from all buttons
+      var btns = document.querySelectorAll('.demo-btn');
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].classList.remove('active');
+      }
+      
+      // Show selected demo
+      var demo = document.getElementById(id);
+      demo.classList.add('active');
+      document.getElementById('btn-' + id).classList.add('active');
+      
+      // Run demo-specific animations
+      if (id === 'win98') {
+        runWin98();
+      } else if (id === 'crt') {
+        runCRT();
+      } else if (id === 'vhs') {
+        runVHS();
+      }
+    }
+    
+    function runWin98() {
+      var progress = document.getElementById('win98-progress');
+      var statusEl = document.getElementById('win98-status-text');
+      
+      progress.style.width = '0%';
+      statusEl.textContent = statusMessages[0];
+      
+      var width = 0;
+      var msgIndex = 0;
+      
+      statusInterval = setInterval(function() {
+        width += 2;
+        if (width <= 100) {
+          progress.style.width = width + '%';
+          
+          // Change message at certain points
+          if (width === 20 && msgIndex < 1) { msgIndex = 1; statusEl.textContent = statusMessages[1]; }
+          if (width === 40 && msgIndex < 2) { msgIndex = 2; statusEl.textContent = statusMessages[2]; }
+          if (width === 60 && msgIndex < 3) { msgIndex = 3; statusEl.textContent = statusMessages[3]; }
+          if (width === 100) { statusEl.textContent = statusMessages[4]; }
+        } else {
+          clearInterval(statusInterval);
+        }
+      }, 80);
+    }
+    
+    function runCRT() {
+      var lines = document.querySelectorAll('#crt .crt-line');
+      var logoContainer = document.querySelector('#crt .crt-logo-container');
+      var logo = document.querySelector('#crt .crt-logo');
+      var ascii = document.querySelector('#crt .crt-ascii');
+      var ready = document.querySelector('#crt .crt-ready');
+      var cursor = document.querySelector('#crt .crt-cursor');
+      var screen = document.querySelector('#crt .crt-screen');
+      
+      // Reset all
+      for (var i = 0; i < lines.length; i++) {
+        lines[i].style.opacity = '0';
+        lines[i].innerHTML = lines[i].textContent; // Reset any typed content
+      }
+      logoContainer.style.opacity = '0';
+      logo.classList.remove('pulse');
+      ascii.style.opacity = '0';
+      ready.style.opacity = '0';
+      
+      // Play boot sound
+      setTimeout(function() { playBootSound(); }, 100);
+      
+      // Flicker effect
+      var flickerOn = true;
+      setInterval(function() {
+        screen.style.opacity = flickerOn ? '1' : '0.97';
+        flickerOn = !flickerOn;
+      }, 100);
+      
+      // Cursor blink
+      var cursorOn = true;
+      cursorInterval = setInterval(function() {
+        cursor.style.opacity = cursorOn ? '1' : '0';
+        cursorOn = !cursorOn;
+      }, 500);
+      
+      // Type out lines with sound
+      var delay = 200;
+      var lineTexts = [];
+      for (var i = 0; i < lines.length; i++) {
+        lineTexts.push(lines[i].textContent);
+      }
+      
+      for (var i = 0; i < lines.length; i++) {
+        (function(index, d, text) {
+          var tid = setTimeout(function() {
+            typeOutLine(lines[index], text, function() {
+              // Beep on [OK] lines
+              if (text.indexOf('[OK]') !== -1) {
+                playBeep();
+              }
+            });
+          }, d);
+          typeIntervals.push(tid);
+        })(i, delay, lineTexts[i]);
+        delay += 400;
+      }
+      
+      // Show logo with pulse
+      var tid1 = setTimeout(function() {
+        logoContainer.style.opacity = '1';
+        logoContainer.style.transform = 'scale(1)';
+        logo.classList.add('pulse');
+        playBootSound();
+      }, delay + 200);
+      typeIntervals.push(tid1);
+      
+      // Show ASCII art
+      var tid2 = setTimeout(function() {
+        ascii.style.opacity = '1';
+      }, delay + 600);
+      typeIntervals.push(tid2);
+      
+      // Show ready text
+      var tid3 = setTimeout(function() {
+        ready.style.opacity = '1';
+        playBeep();
+      }, delay + 1000);
+      typeIntervals.push(tid3);
+    }
+    
+    function typeOutLine(element, text, callback) {
+      element.style.opacity = '1';
+      element.innerHTML = '';
+      
+      var i = 0;
+      var typeSpeed = 30; // ms per character
+      
+      function typeChar() {
+        if (i < text.length) {
+          // Handle the cursor span specially
+          if (text.substring(i).indexOf('<span') === 0) {
+            element.innerHTML += '<span class="crt-cursor"></span>';
+            i = text.length;
+          } else {
+            element.innerHTML += text.charAt(i);
+            playTypeSound();
+            i++;
+          }
+          var tid = setTimeout(typeChar, typeSpeed + Math.random() * 20);
+          typeIntervals.push(tid);
+        } else {
+          if (callback) callback();
+        }
+      }
+      
+      typeChar();
+    }
+    
+    function runVHS() {
+      var logo = document.querySelector('#vhs .vhs-logo');
+      var title = document.querySelector('#vhs .vhs-title');
+      var tracking = document.querySelector('#vhs .vhs-tracking');
+      var recDot = document.querySelector('#vhs .vhs-rec-dot');
+      var date = document.querySelector('#vhs .vhs-date');
+      
+      // Reset
+      logo.style.opacity = '0';
+      logo.style.transform = 'scale(1.5)';
+      logo.style.filter = 'blur(20px)';
+      title.style.opacity = '0';
+      title.style.transform = 'translateY(30px)';
+      tracking.style.top = '-100px';
+      
+      // REC dot blink
+      var recOn = true;
+      cursorInterval = setInterval(function() {
+        recDot.style.opacity = recOn ? '1' : '0';
+        date.style.opacity = recOn ? '1' : '0.5';
+        recOn = !recOn;
+      }, 500);
+      
+      // Tracking line animation
+      var trackPos = -100;
+      trackingInterval = setInterval(function() {
+        trackPos += 10;
+        if (trackPos > 800) trackPos = -100;
+        tracking.style.top = trackPos + 'px';
+      }, 30);
+      
+      // Logo reveal
+      setTimeout(function() {
+        logo.style.transition = 'all 1s ease-out';
+        logo.style.opacity = '1';
+        logo.style.transform = 'scale(1)';
+        logo.style.filter = 'blur(0) drop-shadow(0 0 30px rgba(255, 0, 128, 0.5))';
+      }, 100);
+      
+      // Title reveal
+      setTimeout(function() {
+        title.style.transition = 'all 0.8s ease-out';
+        title.style.opacity = '1';
+        title.style.transform = 'translateY(0)';
+      }, 600);
+      
+      // Glitch effect on logo
+      glitchInterval = setInterval(function() {
+        var rand = Math.random();
+        if (rand < 0.1) {
+          logo.style.filter = 'drop-shadow(-5px 0 rgba(0, 255, 255, 0.8)) drop-shadow(5px 0 rgba(255, 0, 128, 0.8))';
+          logo.style.transform = 'translate(' + (Math.random() * 10 - 5) + 'px, ' + (Math.random() * 4 - 2) + 'px)';
+          title.style.textShadow = '-3px 3px 0 #ff0080, 2px -2px 0 #00ffff';
+          
+          setTimeout(function() {
+            logo.style.filter = 'drop-shadow(0 0 30px rgba(255, 0, 128, 0.5))';
+            logo.style.transform = 'translate(0, 0)';
+            title.style.textShadow = '3px 3px 0 #ff0080, -2px -2px 0 #00ffff';
+          }, 50);
+        }
+      }, 200);
+    }
+    
+    // Start with CRT on load
+    window.onload = function() {
+      showDemo('crt');
+    };
+  </script>
+</body>
+</html>

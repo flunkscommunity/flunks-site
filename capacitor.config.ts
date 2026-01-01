@@ -22,10 +22,15 @@ const config: CapacitorConfig = {
       'walletconnect.com',
       '*.walletconnect.com',
       '*.walletconnect.org',
+      'relay.walletconnect.com',
+      'relay.walletconnect.org',
       'blocto.app',
       '*.blocto.app',
       'meetdapper.com',
-      '*.meetdapper.com'
+      '*.meetdapper.com',
+      'lilico.app',
+      '*.lilico.app',
+      'frw-link.lilico.app'
     ]
   },
   
@@ -61,10 +66,10 @@ const config: CapacitorConfig = {
       splashFullScreen: true,
       splashImmersive: true
     },
-    // Keyboard behavior
+    // Keyboard behavior - use 'none' to prevent viewport resizing issues with fixed positioning
     Keyboard: {
-      resize: 'body',
-      resizeOnFullScreen: true
+      resize: 'none',
+      resizeOnFullScreen: false
     }
   }
 };

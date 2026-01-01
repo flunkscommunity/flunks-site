@@ -44,10 +44,11 @@ import ConditionalAppIcon from "components/ConditionalAppIcon";
 import StoryManual from "components/StoryManual";
 import VCREffectsTest from "components/VCREffectsTest";
 import { getUserAccessLevel } from "utils/appPermissions";
-import { isFeatureEnabled, isDevLocalhost } from "utils/buildMode";
+import { isFeatureEnabled, isDevLocalhost, isMobileApp } from "utils/buildMode";
 import { BACKGROUND_CONFIG } from "config/backgroundConfig";
 import useThemeSettings from "store/useThemeSettings";
 import { getTimeBasedDesktopBackground } from "utils/timeBasedDesktopBackground";
+import MobileSplashScreen from "components/MobileSplashScreen";
 import RPGProfileForm from "components/UserProfile/RPGProfileForm";
 import DevBypass from "components/DevBypass";
 import { useUserProfile } from "contexts/UserProfileContext";
@@ -113,6 +114,7 @@ const Desktop = () => {
   const { showGettingStartedOnStartup } = useGettingStarted();
   const [showGumAdmin, setShowGumAdmin] = useState(false);
   const [showTimeAdmin, setShowTimeAdmin] = useState(false);
+  const [showSplash, setShowSplash] = useState(() => isMobileApp());
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
   const { hasProfile, profile } = useUserProfile();
 
@@ -134,7 +136,8 @@ const Desktop = () => {
   }, []);
 
 useEffect(() => {
-  if (showGettingStartedOnStartup) {
+  // Only show Getting Started popup on desktop (not mobile app)
+  if (showGettingStartedOnStartup && !isMobileApp()) {
     openWindow({ key: WINDOW_IDS.WELCOME, window: <Welcome /> });
   }
 }, []);
@@ -163,7 +166,18 @@ const windowsMemod = useMemo(() => (
 
   return (
     <>
-      <div className="h-full w-full overflow-auto p-4 touch-pan-y">
+      {/* Mobile Splash Screen */}
+      {showSplash && (
+        <MobileSplashScreen onComplete={() => setShowSplash(false)} />
+      )}
+      
+      <div 
+        className="h-full w-full overflow-auto p-4 touch-pan-y"
+        style={{
+          // Add extra top padding on mobile to account for notch/Dynamic Island
+          paddingTop: 'max(16px, env(safe-area-inset-top, 16px))',
+        }}
+      >
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 lg:gap-8 min-h-full w-full items-start justify-items-center">
           {/* 1. Semester Zero - Large 2x2 Featured App */}
           <div className="col-span-2 row-span-2 sm:col-span-2 sm:row-span-2 md:col-span-2 md:row-span-2 lg:col-span-2 lg:row-span-2">

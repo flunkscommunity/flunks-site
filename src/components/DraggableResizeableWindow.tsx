@@ -52,10 +52,8 @@ const SafeAreaExtension = styled.div`
     top: 0;
     left: 0;
     right: 0;
-    /* Fallback for Dynamic Island / notch - approximately 59px on modern iPhones */
-    height: 59px;
-    height: constant(safe-area-inset-top); /* iOS 11.0-11.2 */
-    height: env(safe-area-inset-top, 59px); /* iOS 11.2+ */
+    /* Cover the notch/Dynamic Island area - use max to ensure minimum height */
+    height: max(59px, env(safe-area-inset-top, 59px));
     /* Use the same gray color as the Windows95 title bar/chrome */
     background: ${({ theme }) => theme.material || '#c0c0c0'};
     z-index: 10000;
@@ -67,13 +65,11 @@ const StyledWindow = styled(Window)`
   /* Mobile-specific styles */
   @media (max-width: 768px) {
     position: fixed !important;
-    /* Fallback for Dynamic Island / notch */
-    top: 59px !important;
-    top: constant(safe-area-inset-top) !important; /* iOS 11.0-11.2 */
-    top: env(safe-area-inset-top, 59px) !important; /* iOS 11.2+ */
+    /* Position window right below the notch - use max to ensure safe positioning */
+    top: max(59px, env(safe-area-inset-top, 59px)) !important;
     left: 0 !important;
     right: 0 !important;
-    bottom: 48px !important;
+    bottom: 0 !important;
     width: 100% !important;
     height: auto !important;
     max-height: none !important;
@@ -396,6 +392,8 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
             WebkitOverflowScrolling: 'touch',
             background: props.windowsId === 'HIGH_SCHOOL_OFFICE_SUCCESS' ? '#2a2a2a' : undefined,
             padding: props.windowsId === 'HIGH_SCHOOL_OFFICE_SUCCESS' ? '0' : undefined,
+            // Add bottom padding on mobile for scroll content to clear the taskbar
+            paddingBottom: isMobile ? '60px' : undefined,
           }}
         >
           {children}

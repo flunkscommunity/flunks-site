@@ -68,19 +68,18 @@ config({
   "flow.network": "mainnet",
   "accessNode.api": "https://rest-mainnet.onflow.org",
   
-  // For mobile: skip discovery, use WalletConnect directly
-  // For web: use the standard discovery UI
-  "discovery.wallet": IS_MOBILE_APP ? undefined : "https://fcl-discovery.onflow.org/authn",
+  // Always use the discovery endpoint - WalletConnect will handle mobile
+  "discovery.wallet": "https://fcl-discovery.onflow.org/authn",
   
-  // Discovery method
+  // Discovery method - WC/RPC for mobile enables WalletConnect
   "discovery.wallet.method": DISCOVERY_METHOD,
   
   // App details - use flunks.net URL for WalletConnect callbacks
   "app.detail.title": "Flunks",
   "app.detail.icon": "https://flunks.net/flunks-logo.png",
-  "app.detail.url": IS_MOBILE_APP ? "https://flunks.net" : APP_URL,
+  "app.detail.url": "https://flunks.net",
   
-  // WalletConnect
+  // WalletConnect - required for mobile wallet connections
   "walletconnect.projectId": WALLETCONNECT_PROJECT_ID,
   
   // Contracts

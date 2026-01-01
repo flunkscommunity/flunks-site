@@ -60,6 +60,7 @@
 			<array>
 				<string>flunks</string>
 				<string>net.flunks.app</string>
+				<string>wc</string>
 			</array>
 			<key>CFBundleURLName</key>
 			<string>net.flunks.app</string>
@@ -70,9 +71,13 @@
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>flowwallet</string>
+		<string>flow-wallet</string>
+		<string>flow-wallet-pro</string>
+		<string>lilico</string>
 		<string>blocto</string>
 		<string>dapper</string>
 		<string>wc</string>
+		<string>https</string>
 	</array>
 </dict>
 </plist>

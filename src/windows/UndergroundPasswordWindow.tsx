@@ -72,6 +72,11 @@ const UndergroundPasswordWindow: React.FC<UndergroundPasswordWindowProps> = ({ o
 
   // Check password
   const checkPassword = async () => {
+    // Blur the input to dismiss keyboard on mobile
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    
     const input = passwordInput.toLowerCase().trim();
     if (SECRET_WORDS.includes(input)) {
       setHasAccess(true);
@@ -235,6 +240,12 @@ const UndergroundPasswordWindow: React.FC<UndergroundPasswordWindowProps> = ({ o
               }}
               autoFocus
               placeholder="_ _ _ _ _ _ _ _ _"
+              enterKeyHint="done"
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
+              data-form-type="other"
             />
           </div>
           
