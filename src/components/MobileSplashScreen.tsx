@@ -110,15 +110,17 @@ const Cursor = styled.span`
 
 const LogoContainer = styled.div<{ $visible: boolean }>`
   text-align: center;
-  margin-top: auto;
-  padding-bottom: 40px;
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   opacity: ${props => props.$visible ? 1 : 0};
   transition: opacity 0.5s ease-out;
 `;
 
 const Logo = styled.img<{ $pulsing: boolean }>`
-  width: 100px;
-  height: 100px;
+  width: min(220px, 55vw);
+  height: auto;
   filter: brightness(1.2) drop-shadow(0 0 20px #33ff33);
   animation: ${props => props.$pulsing ? pulse : 'none'} 1.5s ease-in-out infinite;
 `;
@@ -264,7 +266,10 @@ const MobileSplashScreen: React.FC<MobileSplashScreenProps> = ({ onComplete }) =
     // Type out each line
     let lineIndex = 0;
     let charIndex = 0;
-    let totalDelay = 200;
+    let totalDelay = 120;
+
+    const charDelay = () => 12 + Math.random() * 8;
+    const lineDelay = 70;
     
     const typeNextChar = () => {
       if (lineIndex >= BOOT_LINES.length) {
@@ -306,7 +311,7 @@ const MobileSplashScreen: React.FC<MobileSplashScreenProps> = ({ onComplete }) =
         }
         
         charIndex++;
-        setTimeout(typeNextChar, 25 + Math.random() * 15);
+        setTimeout(typeNextChar, charDelay());
       } else {
         // Line complete
         if (currentLine.includes('[OK]')) {
@@ -314,7 +319,7 @@ const MobileSplashScreen: React.FC<MobileSplashScreenProps> = ({ onComplete }) =
         }
         lineIndex++;
         charIndex = 0;
-        setTimeout(typeNextChar, 150);
+        setTimeout(typeNextChar, lineDelay);
       }
     };
     

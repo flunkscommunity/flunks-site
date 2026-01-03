@@ -20,16 +20,26 @@ const WalletConnectionModal: React.FC<WalletConnectionModalProps> = ({ onClose }
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Dapper Wallet - uses Dynamic SDK (custodial)
-  const handleDynamicConnect = () => {
+  const openDynamicForWallet = (walletKey: 'dapper' | 'flowwallet') => {
     try {
-      console.log('💎 Opening Dapper wallet login via Dynamic...');
+      // Hints used by various mobile wallet fixes to bias Dynamic toward a specific wallet.
+      (window as any).FORCE_SHOW_ALL_WALLETS = true;
+      (window as any).SELECTED_WALLET_TYPE = walletKey;
+      (window as any).SELECTED_WALLET_STRICT = false;
+
+      console.log(`🔐 Opening Dynamic auth flow (preferred=${walletKey})`);
       setShowAuthFlow(true);
       onClose();
     } catch (err) {
       console.error('Error opening Dynamic auth:', err);
-      setError('Failed to open Dapper wallet connection');
+      setError('Failed to open wallet connection');
     }
+  };
+
+  // Dapper Wallet - uses Dynamic SDK (custodial)
+  const handleDynamicConnect = () => {
+    console.log('💎 Opening Dapper wallet login via Dynamic...');
+    openDynamicForWallet('dapper');
   };
 
   // Flow Wallet - direct connection (self-custodial)
@@ -40,13 +50,15 @@ const WalletConnectionModal: React.FC<WalletConnectionModalProps> = ({ onClose }
     try {
       console.log('🌊 Connecting directly to Flow Wallet...');
       
-      // For mobile, try to deep link to Flow Wallet app
+      // In the Capacitor app, Dynamic's Flow connectors tend to deep-link out to the wallet app
+      // more reliably than running the full FCL discovery flow inside a WebView.
       if (isMobileApp()) {
-        console.log('📱 Mobile detected - using WalletConnect for Flow Wallet');
+        console.log('📱 Mobile detected - routing Flow Wallet through Dynamic WalletConnect');
+        openDynamicForWallet('flowwallet');
+        return;
       }
-      
-      // Use FCL authenticate which will use WalletConnect on mobile
-      // and the discovery UI on web
+
+      // Web/desktop: use the existing FCL flow
       await connectFCL();
       onClose();
     } catch (err) {

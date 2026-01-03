@@ -221,6 +221,12 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                               <UserProfilePrompt autoShow={false} showToast={false} />
                               <Chapter5NFTNotification />
                               <DynamicUserProfile />
+                              {/* Mount Dynamic widget so setShowAuthFlow() can render the auth modal.
+                                  Hide the default connect trigger button (we open auth from our own UI). */}
+                              <DynamicWidget
+                                buttonContainerClassName="dynamic-trigger-container-hidden"
+                                buttonClassName="dynamic-trigger-button-hidden"
+                              />
                               <AmbientSoundPlayer />
                             </GumProvider>
                         </AuthProvider>

@@ -2,15 +2,13 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import CustomMonitor from "components/CustomMonitor";
 import DesktopAppIcon from "components/DesktopAppIcon";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import YourStudents from "windows/YourStudents";
 import ProjectJnr from "windows/ProjectJnr";
 import AboutUs from "windows/AboutUs";
 import { ProgressBar } from "react95";
 import { useTheme } from "styled-components";
 import { animated, config, useSpring } from "@react-spring/web";
-import useGettingStarted from "store/useGettingStarted";
-import Welcome from "windows/Welcome";
 import Onlyflunks from "../windows/Onlyflunks";
 import { useRouter } from "next/router";
 import Semester0Map from "windows/Semester0Map";
@@ -111,12 +109,63 @@ const FullScreenLoader = () => {
 const Desktop = () => {
   const router = useRouter();
   const { windows, openWindow, closeWindow, windowApps } = useWindowsContext();
-  const { showGettingStartedOnStartup } = useGettingStarted();
   const [showGumAdmin, setShowGumAdmin] = useState(false);
   const [showTimeAdmin, setShowTimeAdmin] = useState(false);
-  const [showSplash, setShowSplash] = useState(() => isMobileApp());
+  const [showSplash, setShowSplash] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [initComplete, setInitComplete] = useState(false);
+  const splashDismissedRef = useRef(false);
+  const mobileInitRanRef = useRef(false);
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
   const { hasProfile, profile } = useUserProfile();
+
+  const handleSplashComplete = useCallback(() => {
+    splashDismissedRef.current = true;
+    setShowSplash(false);
+  }, []);
+
+  // FIRST: Check for mobile app immediately and set both states atomically
+  useEffect(() => {
+    if (mobileInitRanRef.current) return;
+    mobileInitRanRef.current = true;
+
+    const checkMobile = () => {
+      const mobile = isMobileApp();
+      console.log('📱 Mobile check - isMobileApp:', mobile);
+      
+      if (mobile) {
+        // Set both states together - mobile detected
+        setIsMobile(true);
+        if (!splashDismissedRef.current) {
+          setShowSplash(true);
+        }
+        // Force close Welcome if it somehow opened
+        closeWindow(WINDOW_IDS.WELCOME);
+      }
+      
+      setInitComplete(true);
+    };
+    
+    // Check immediately, then again after delays to be safe
+    checkMobile();
+    const t1 = setTimeout(checkMobile, 50);
+    const t2 = setTimeout(checkMobile, 150);
+    const t3 = setTimeout(checkMobile, 300);
+    
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, [closeWindow]);
+
+  // SECOND: Only show Welcome on desktop AFTER we've confirmed it's not mobile
+  // THIRD: Safety net - always close Welcome if we're showing splash
+  useEffect(() => {
+    if (showSplash || isMobile) {
+      closeWindow(WINDOW_IDS.WELCOME);
+    }
+  }, [showSplash, isMobile, closeWindow]);
 
   // Keyboard shortcut for gum admin panel (Ctrl+G) and time admin (Ctrl+T)
   useEffect(() => {
@@ -134,13 +183,6 @@ const Desktop = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
-
-useEffect(() => {
-  // Only show Getting Started popup on desktop (not mobile app)
-  if (showGettingStartedOnStartup && !isMobileApp()) {
-    openWindow({ key: WINDOW_IDS.WELCOME, window: <Welcome /> });
-  }
-}, []);
 
 const windowsMemod = useMemo(() => (
   <>
@@ -168,14 +210,17 @@ const windowsMemod = useMemo(() => (
     <>
       {/* Mobile Splash Screen */}
       {showSplash && (
-        <MobileSplashScreen onComplete={() => setShowSplash(false)} />
+        <MobileSplashScreen onComplete={handleSplashComplete} />
       )}
       
       <div 
         className="h-full w-full overflow-auto p-4 touch-pan-y"
         style={{
-          // Add extra top padding on mobile to account for notch/Dynamic Island
-          paddingTop: 'max(16px, env(safe-area-inset-top, 16px))',
+          // On iPhone, keep the top-row icons out from under the notch/Dynamic Island.
+          // In the Capacitor app, push the whole icon grid down a bit (~5%).
+          paddingTop: isMobile
+            ? 'calc(max(16px, env(safe-area-inset-top, 16px)) + 5vh)'
+            : 'max(16px, env(safe-area-inset-top, 16px))',
         }}
       >
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 lg:gap-8 min-h-full w-full items-start justify-items-center">

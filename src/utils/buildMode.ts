@@ -1,3 +1,5 @@
+import { Capacitor } from "@capacitor/core";
+
 /**
  * Build Mode System
  * Controls feature visibility between public and build environments
@@ -7,12 +9,30 @@ export type BuildMode = 'public' | 'build';
 
 /**
  * Check if running inside Capacitor mobile app
- * Capacitor injects a global object we can detect
+ * Prefer Capacitor's core helper, fallback to global injection
  */
 export const isMobileApp = (): boolean => {
   if (typeof window === 'undefined') return false;
-  // Capacitor injects this object
-  return !!(window as any).Capacitor?.isNativePlatform?.();
+
+  try {
+    if (Capacitor?.isNativePlatform?.()) {
+      return true;
+    }
+  } catch (error) {
+    // ignore - fall back to window object detection
+  }
+
+  const cap = (window as any).Capacitor;
+  if (cap?.isNativePlatform?.()) {
+    return true;
+  }
+
+  const platform = cap?.getPlatform?.();
+  if (platform && platform !== 'web') {
+    return true;
+  }
+
+  return false;
 };
 
 /**

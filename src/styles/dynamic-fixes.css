@@ -6,6 +6,20 @@
   z-index: 9999 !important;
 }
 
+/* Hide the default DynamicWidget connect trigger (we open auth from our own UI)
+   without hiding the widget container (which can prevent modals from rendering). */
+.dynamic-trigger-container-hidden {
+  position: fixed !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.dynamic-trigger-button-hidden {
+  display: none !important;
+}
+
 .dynamic-widget button,
 .dynamic-modal button,
 .dynamic-connect-wallet button {
