@@ -31,9 +31,11 @@ if (typeof window !== 'undefined') {
 const FLOW_ACCESS_NODE = process.env.NEXT_PUBLIC_FLOW_ACCESS_NODE || "https://rest-mainnet.onflow.org";
 const WALLETCONNECT_PROJECT_ID = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "9b70cfa398b2355a5eb9b1cf99f4a981";
 
-// Use current hostname for WalletConnect metadata
-const APP_URL = typeof window !== 'undefined' 
-  ? window.location.origin 
+// WalletConnect metadata URL
+// On mobile (Capacitor), prefer the app's URL scheme so wallets can return to the app.
+// On web, use the current origin.
+const APP_URL = typeof window !== 'undefined'
+  ? (isMobileApp() ? "flunks://" : window.location.origin)
   : "https://flunks.net";
 
 console.log('🌊 Configuring FCL with access node:', FLOW_ACCESS_NODE);
@@ -74,10 +76,10 @@ config({
   // Discovery method - WC/RPC for mobile enables WalletConnect
   "discovery.wallet.method": DISCOVERY_METHOD,
   
-  // App details - use flunks.net URL for WalletConnect callbacks
+  // App details
   "app.detail.title": "Flunks",
   "app.detail.icon": "https://flunks.net/flunks-logo.png",
-  "app.detail.url": "https://flunks.net",
+  "app.detail.url": APP_URL,
   
   // WalletConnect - required for mobile wallet connections
   "walletconnect.projectId": WALLETCONNECT_PROJECT_ID,

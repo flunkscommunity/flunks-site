@@ -51,12 +51,22 @@ function run(command, options = {}) {
 
 async function main() {
   const target = process.argv[2] || 'all';
+
+  const nodeMajor = Number(String(process.versions.node || '').split('.')[0]);
   
   console.log(`
 ${colors.bright}╔════════════════════════════════════════════════╗
 ║     🎮 FLUNKS MOBILE BUILD SYSTEM 🎮            ║
 ╚════════════════════════════════════════════════╝${colors.reset}
 `);
+
+  log(`Node: ${process.version}`, colors.blue);
+  if (!Number.isNaN(nodeMajor) && nodeMajor !== 20) {
+    log(
+      `⚠ Recommended Node version for this repo is 20.x (detected ${process.version}). If you see weird build failures, switch to Node 20 and retry.`,
+      colors.yellow
+    );
+  }
   
   log(`Target: ${target}`, colors.blue);
   log(`Building for: ${target === 'all' ? 'iOS & Android' : target.toUpperCase()}`, colors.blue);
@@ -72,8 +82,8 @@ ${colors.bright}╔════════════════════�
     log('  ✓ Removed .next/', colors.green);
   }
 
-  // Step 2: Build Next.js with mobile export mode
-  logStep('2/6', 'Building Next.js for mobile (static export)...');
+  // Step 2: Build Next.js
+  logStep('2/6', 'Building Next.js for mobile...');
   run('npm run build', {
     env: { 
       MOBILE_BUILD: 'true',
@@ -83,26 +93,21 @@ ${colors.bright}╔════════════════════�
     }
   });
 
-  // Step 3: Check if out directory was created
-  if (!fs.existsSync(OUT_DIR)) {
-    log('\n⚠️  Static export not generated. Creating from .next/...', colors.yellow);
-    // For Next.js 14+, we need to manually export if output: 'export' isn't in config
-    run('npx next export', {
-      env: { SKIP_ENV_VALIDATION: 'true' }
-    });
-  }
+  // Step 3: Verify static export output
+  // Next.js 14.2+ removed `next export`; for mobile we use `output: 'export'` in next.config.mjs.
+  logStep('3/6', 'Verifying static export output...');
 
   // Verify out directory exists
   if (!fs.existsSync(OUT_DIR) || !fs.existsSync(path.join(OUT_DIR, 'index.html'))) {
     log('\n❌ Build failed: out/index.html not found', colors.red);
-    log('   Make sure MOBILE_BUILD mode is enabled in next.config.mjs', colors.yellow);
+    log('   Make sure MOBILE_BUILD=true enables `output: "export"` in next.config.mjs', colors.yellow);
     process.exit(1);
   }
   
   log('  ✓ Static export created in out/', colors.green);
 
   // Step 4: Copy public assets
-  logStep('3/6', 'Copying public assets...');
+  logStep('4/6', 'Copying public assets...');
   const publicDir = path.join(ROOT_DIR, 'public');
   if (fs.existsSync(publicDir)) {
     // Copy files that might not be included in Next.js export
@@ -126,7 +131,7 @@ ${colors.bright}╔════════════════════�
   }
 
   // Step 5: Sync to native platforms
-  logStep('4/6', 'Syncing to native platforms...');
+  logStep('5/6', 'Syncing to native platforms...');
   
   if (target === 'ios' || target === 'all') {
     log('\n  📱 Syncing iOS...', colors.blue);
@@ -141,7 +146,7 @@ ${colors.bright}╔════════════════════�
   }
 
   // Step 6: Summary
-  logStep('5/6', 'Build complete!');
+  logStep('6/6', 'Build complete!');
   
   console.log(`
 ${colors.green}${colors.bright}✅ Mobile build successful!${colors.reset}
@@ -163,7 +168,7 @@ ${colors.cyan}Next steps:${colors.reset}
 `);
   }
 
-  logStep('6/6', 'Opening Xcode...');
+  logStep('7/7', 'Opening Xcode...');
   if (target === 'ios' || target === 'all') {
     run('npx cap open ios');
   }

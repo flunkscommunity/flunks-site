@@ -48,6 +48,7 @@ import { AuthProvider } from "contexts/AuthContext";
 import { MusicProvider } from "contexts/MusicContext";
 import { UnifiedWalletProvider } from "contexts/UnifiedWalletContext";
 import { GumDisplay } from "components/GumDisplay";
+import WidgetClaimDeepLinkHandler from "components/WidgetClaimDeepLinkHandler";
 import Chapter5NFTNotification from "components/Chapter5NFTNotification";
 import UserProfilePrompt from "components/UserProfile/UserProfilePrompt";
 import AutoWalletAccessGrant from "components/AutoWalletAccessGrant";
@@ -216,6 +217,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                                 <div className="app-container min-h-screen w-full overflow-hidden">
                                 <Component {...pageProps} />
                               </div>
+                              <WidgetClaimDeepLinkHandler />
                               <Analytics />
                               <AutoWalletAccessGrant />
                               <UserProfilePrompt autoShow={false} showToast={false} />

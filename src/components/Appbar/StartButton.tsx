@@ -18,6 +18,7 @@ import YourStudents from "windows/YourStudents";
 import Onlyflunks from "windows/Onlyflunks";
 import SimpleBrowser from "windows/SimpleBrowser";
 import DevPreview from "windows/DevPreview";
+import WalletConnectionModal from "components/WalletConnectionModal";
 
 const CustomMenuListItem = styled(MenuListItem)`
   display: flex;
@@ -27,8 +28,15 @@ const CustomMenuListItem = styled(MenuListItem)`
   position: relative;
 `;
 
-const AuthButton = () => {
+// Check if running in Capacitor mobile app
+const isMobileApp = (): boolean => {
+  if (typeof window === "undefined") return false;
+  return !!(window as any).Capacitor?.isNativePlatform?.();
+};
+
+const AuthButton: React.FC<{ closeStartMenu: () => void }> = ({ closeStartMenu }) => {
   const { user, setShowDynamicUserProfile } = useDynamicContext();
+  const [showWalletModal, setShowWalletModal] = React.useState(false);
 
   // Regular auth flow
   if (user) {
@@ -40,6 +48,28 @@ const AuthButton = () => {
         <img src="/images/icons/user.png" width="32px" height="32px" />
         Open Wallet
       </CustomMenuListItem>
+    );
+  }
+
+  // Native iOS/Android (Capacitor): use our custom wallet modal (FCL WalletConnect)
+  // instead of Dynamic's embedded auth UI.
+  if (isMobileApp()) {
+    return (
+      <>
+        <CustomMenuListItem
+          onClick={() => {
+            closeStartMenu();
+            setShowWalletModal(true);
+          }}
+          className="!text-xl"
+        >
+          <img src="/images/icons/logout.png" width="32px" height="32px" />
+          Sign In
+        </CustomMenuListItem>
+        {showWalletModal && (
+          <WalletConnectionModal onClose={() => setShowWalletModal(false)} />
+        )}
+      </>
     );
   }
 
@@ -123,7 +153,7 @@ const StartMenu: React.FC<{ closeStartMenu: () => void }> = (props) => {
           Settings
         </CustomMenuListItem>
         <Separator />
-        <AuthButton />
+        <AuthButton closeStartMenu={props.closeStartMenu} />
       </div>
     </MenuList>
   );

@@ -1,17 +1,20 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useAuth } from './AuthContext';
+import { useUserProfile } from './UserProfileContext';
 import { 
   getUserGumStats, 
   getUserGumBalance, 
   awardGum,
   spendGum,
+  checkGumCooldown,
   type GumStats, 
   type GumAwardResult,
   type GumSpendResult
 } from '../utils/gumAPI';
 import { autoClaimDailyLogin } from '../services/dailyLoginService';
 import { checkForSpecialEvents } from '../services/specialEventsService';
+import { useWidgetSync } from '../hooks/useWidgetSync';
 
 export interface GumContextType {
   balance: number;
@@ -52,14 +55,42 @@ export const GumProvider: React.FC<GumProviderProps> = ({
 }) => {
   const { primaryWallet } = useDynamicContext();
   const auth = useAuth();
+  const { profile } = useUserProfile();
+  const { syncWidget, clearWidget, isWidgetAvailable } = useWidgetSync();
   const [balance, setBalance] = useState<number>(0);
   const [stats, setStats] = useState<GumStats | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lastBalanceRefresh, setLastBalanceRefresh] = useState<number>(0);
+  const [dailyClaimed, setDailyClaimed] = useState<boolean>(false);
+  const [nextClaimMinutes, setNextClaimMinutes] = useState<number>(0);
+  const [lastDailyStatusRefresh, setLastDailyStatusRefresh] = useState<number>(0);
 
   // Use auth context for wallet address - more reliable
   const walletAddress = auth.walletAddress || primaryWallet?.address;
+
+  const refreshDailyCheckinStatus = useCallback(async () => {
+    if (!walletAddress || !auth.isAuthenticated) {
+      setDailyClaimed(false);
+      setNextClaimMinutes(0);
+      return;
+    }
+
+    const now = Date.now();
+    if (now - lastDailyStatusRefresh < 15000) {
+      return;
+    }
+    setLastDailyStatusRefresh(now);
+
+    try {
+      const cooldown = await checkGumCooldown(walletAddress, 'daily_checkin');
+      const canEarn = cooldown.canEarn;
+      setDailyClaimed(!canEarn);
+      setNextClaimMinutes(canEarn ? 0 : (cooldown.cooldownMinutes ?? 0));
+    } catch (err) {
+      console.warn('🍬 GumProvider: Failed to refresh daily_checkin status:', err);
+    }
+  }, [walletAddress, auth.isAuthenticated, lastDailyStatusRefresh]);
 
   // Refresh balance only
   const refreshBalance = useCallback(async () => {
@@ -84,6 +115,9 @@ export const GumProvider: React.FC<GumProviderProps> = ({
       setBalance(newBalance);
       setLastBalanceRefresh(now);
 
+      // Keep widget daily status reasonably fresh when we refresh balance
+      refreshDailyCheckinStatus();
+
       // Dispatch custom event for other components
       window.dispatchEvent(new CustomEvent('gumBalanceUpdated', { 
         detail: { balance: newBalance, walletAddress: walletAddress }
@@ -92,7 +126,7 @@ export const GumProvider: React.FC<GumProviderProps> = ({
       console.error('🍬 GumProvider: Error refreshing gum balance:', err);
       setError('Failed to refresh balance');
     }
-  }, [walletAddress, auth.isAuthenticated, lastBalanceRefresh]);  // Refresh full stats
+  }, [walletAddress, auth.isAuthenticated, lastBalanceRefresh, refreshDailyCheckinStatus]);  // Refresh full stats
   const refreshStats = useCallback(async () => {
     if (!walletAddress || !auth.isAuthenticated) {
       console.log('🍬 GumProvider: No wallet address or not authenticated, clearing stats');
@@ -111,6 +145,8 @@ export const GumProvider: React.FC<GumProviderProps> = ({
         console.log('🍬 GumProvider: Got stats:', newStats);
         setStats(newStats);
         setBalance(newStats.current_balance);
+
+        refreshDailyCheckinStatus();
         
         // Dispatch custom event
         window.dispatchEvent(new CustomEvent('gumStatsUpdated', { 
@@ -124,6 +160,36 @@ export const GumProvider: React.FC<GumProviderProps> = ({
       setLoading(false);
     }
   }, [walletAddress, auth.isAuthenticated]);
+
+  // Sync iOS widget when balance/status changes
+  useEffect(() => {
+    if (!isWidgetAvailable) return;
+    if (!walletAddress || !auth.isAuthenticated) return;
+
+    void syncWidget({
+      gumBalance: balance,
+      lockerNumber: 0,
+      username: profile?.username || 'Anon',
+      dailyClaimed,
+      nextClaimMinutes,
+    });
+  }, [
+    isWidgetAvailable,
+    walletAddress,
+    auth.isAuthenticated,
+    balance,
+    profile?.username,
+    dailyClaimed,
+    nextClaimMinutes,
+    syncWidget,
+  ]);
+
+  // Clear widget when wallet disconnects
+  useEffect(() => {
+    if (!isWidgetAvailable) return;
+    if (walletAddress && auth.isAuthenticated) return;
+    void clearWidget();
+  }, [isWidgetAvailable, walletAddress, auth.isAuthenticated, clearWidget]);
 
   // Earn gum from a source
   const earnGum = useCallback(async (source: string, metadata?: any): Promise<GumAwardResult> => {

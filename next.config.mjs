@@ -12,11 +12,14 @@ const isMobileBuild = process.env.MOBILE_BUILD === 'true';
 
 /** @type {import("next").NextConfig} */
 const config = {
-  // Enable static export for mobile builds, disabled for Vercel (needs API routes)
+  // Mobile builds produce a fully static export for Capacitor.
+  // Next.js 14.2+ removed `next export`, so we enable static export via config.
   ...(isMobileBuild && { output: 'export' }),
   images: { unoptimized: true },
   reactStrictMode: false,
   swcMinify: true,
+  // Mobile builds only need static output; disable tracing to avoid missing `.nft.json` artifacts.
+  ...(isMobileBuild && { outputFileTracing: false }),
   compiler: {
     // Enables the styled-components SWC transform
     styledComponents: true

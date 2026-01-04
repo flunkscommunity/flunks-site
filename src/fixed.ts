@@ -207,6 +207,9 @@ export const WINDOW_IDS = {
   
   // Flunky Bash Game
   FLUNKY_BASH: "flunky-bash",
+
+  // WalletConnect test (mobile app)
+  TEST_FLOW_WALLET: "test-flow-wallet",
 };
 
 export const WINDOW_APP_INFO_TO_WINDOW_ID = {
@@ -375,6 +378,11 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appName: "Terminal",
     appIcon: "/images/icons/newterminal.png",
     key: WINDOW_IDS.TERMINAL,
+  },
+  [WINDOW_IDS.TEST_FLOW_WALLET]: {
+    appName: "Test Flow Wallet",
+    appIcon: "/images/icons/flowty.png",
+    key: WINDOW_IDS.TEST_FLOW_WALLET,
   },
   [WINDOW_IDS.USER_PROFILE]: {
     appName: "My Locker",

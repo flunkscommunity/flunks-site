@@ -26,6 +26,11 @@ interface UnifiedWalletContextType {
   // Mobile-specific
   isMobile: boolean;
   isConnecting: boolean;
+
+  // Debug / diagnostics
+  lastCallbackUrl: string | null;
+  lastError: string | null;
+  lastAuthStartedAt: number | null;
 }
 
 const UnifiedWalletContext = createContext<UnifiedWalletContextType | undefined>(undefined);
@@ -36,6 +41,9 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
   const [fclAddress, setFclAddress] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
+  const [lastCallbackUrl, setLastCallbackUrl] = useState<string | null>(null);
+  const [lastError, setLastError] = useState<string | null>(null);
+  const [lastAuthStartedAt, setLastAuthStartedAt] = useState<number | null>(null);
 
   // Detect mobile app on mount
   useEffect(() => {
@@ -58,6 +66,7 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
         // Listen for app URL open events (wallet callbacks)
         await App.addListener('appUrlOpen', (event) => {
           console.log('📲 Wallet callback received:', event.url);
+          setLastCallbackUrl(event.url);
           // FCL handles the callback automatically via the WalletConnect integration
         });
         
@@ -65,6 +74,7 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
         const launchUrl = await App.getLaunchUrl();
         if (launchUrl?.url) {
           console.log('📲 App launched with wallet callback:', launchUrl.url);
+          setLastCallbackUrl(launchUrl.url);
         }
         
         console.log('📱 Mobile deep link listeners registered');
@@ -103,6 +113,8 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
   // Connect to Flow wallet via FCL (explicit user action only)
   const connectFCL = useCallback(async () => {
     setIsConnecting(true);
+    setLastError(null);
+    setLastAuthStartedAt(Date.now());
     try {
       console.log(isMobile ? '📱 Connecting to Flow wallet (mobile)...' : '🌊 Connecting to Flow wallet (web)...');
       
@@ -122,19 +134,24 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
         console.warn('⚠️ Unable to read FCL config before authenticate:', configError);
       }
       
+      // IMPORTANT: On mobile WebViews, awaiting `fcl.authenticate()` can hang forever
+      // if the deep-link handoff is blocked. Trigger it and let the callback drive state.
       if (isMobile) {
-        // On mobile, authenticate with Flow Wallet directly via WalletConnect
-        // FCL-WC will handle the WalletConnect connection
         console.log('📱 Using WalletConnect for mobile authentication...');
-        await fcl.authenticate();
+        void fcl.authenticate().catch((error) => {
+          const message = error instanceof Error ? error.message : String(error);
+          console.error('Error connecting to Flow wallet (mobile):', error);
+          setLastError(message);
+          setIsConnecting(false);
+        });
       } else {
-        // On web, use standard FCL discovery
         await fcl.authenticate();
       }
       
       console.log('✅ Wallet connection initiated');
     } catch (error) {
       console.error('Error connecting to Flow wallet:', error);
+      setLastError(error instanceof Error ? error.message : String(error));
       throw error;
     } finally {
       // For mobile, keep connecting state until user returns (handled by FCL subscription)
@@ -146,6 +163,8 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Unified disconnect
   const disconnect = useCallback(async () => {
+    setIsConnecting(false);
+    setLastError(null);
     try {
       // Disconnect from Dynamic if connected
       if (primaryWallet) {
@@ -158,6 +177,7 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     } catch (error) {
       console.error('Error disconnecting:', error);
+      setLastError(error instanceof Error ? error.message : String(error));
       throw error;
     }
   }, [primaryWallet, fclUser, handleLogOut]);
@@ -176,6 +196,9 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
     fclUser,
     isMobile,
     isConnecting,
+    lastCallbackUrl,
+    lastError,
+    lastAuthStartedAt,
   };
 
   return (

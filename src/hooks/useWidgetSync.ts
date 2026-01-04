@@ -21,7 +21,7 @@
  */
 
 import { useCallback, useMemo } from 'react';
-import { FlunksWidgetBridge, WidgetData } from '@/utils/flunksWidgetBridge';
+import { FlunksWidgetBridge, WidgetData } from '../utils/flunksWidgetBridge';
 
 interface UseWidgetSyncOptions {
   debug?: boolean;

@@ -196,6 +196,23 @@ export function useGumBalance() {
 
 ## 🚀 Building & Testing
 
+## 👀 Previewing Widgets (fastest tweak loop)
+
+Widgets can’t truly run from a "localhost" hot-reload loop (WidgetKit renders in its own extension process), but you *can* iterate quickly:
+
+1. Open `ios/App/App.xcworkspace` in Xcode.
+2. Open `ios/FlunksWidget/FlunksWidget.swift`.
+3. Use the SwiftUI canvas previews at the bottom (`#Preview(as: .systemSmall/.systemMedium/.systemLarge)`).
+  - Any edits to the SwiftUI widget views will re-render in the preview.
+4. For a real widget run:
+  - Select the `FlunksWidget` scheme/target in Xcode and Run.
+  - Or run the main `App` scheme, then add the widget on the iOS Simulator Home Screen (long-press → Edit → “+” → search “Flunks”).
+
+**Data loop while previewing:**
+- The widget reads from App Group `UserDefaults` (`group.net.flunks.app`).
+- The app writes values via the Capacitor plugin `FlunksWidgetBridge.updateWidgetData(...)`.
+- During layout/design work, you can tweak `FlunksWidgetData.placeholder` to test numbers and states instantly.
+
 ### Test in Simulator
 
 1. Build and run the app in Simulator

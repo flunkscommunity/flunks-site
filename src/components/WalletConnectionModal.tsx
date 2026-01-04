@@ -50,15 +50,8 @@ const WalletConnectionModal: React.FC<WalletConnectionModalProps> = ({ onClose }
     try {
       console.log('🌊 Connecting directly to Flow Wallet...');
       
-      // In the Capacitor app, Dynamic's Flow connectors tend to deep-link out to the wallet app
-      // more reliably than running the full FCL discovery flow inside a WebView.
-      if (isMobileApp()) {
-        console.log('📱 Mobile detected - routing Flow Wallet through Dynamic WalletConnect');
-        openDynamicForWallet('flowwallet');
-        return;
-      }
-
-      // Web/desktop: use the existing FCL flow
+      // Native (Capacitor): use FCL WalletConnect (configured in `src/config/fcl.ts`)
+      // so we actually deep-link to the Flow Wallet app instead of Dynamic's embedded UI.
       await connectFCL();
       onClose();
     } catch (err) {

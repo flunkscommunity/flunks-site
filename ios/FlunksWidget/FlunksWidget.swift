@@ -111,6 +111,107 @@ struct FlunksColors {
     static let backgroundMid = Color(hex: "#1a1a2e")
     static let textPrimary = Color.white
     static let textSecondary = Color.gray
+
+    // Arcade chrome
+    static let cabinetTop = Color(hex: "#111827")
+    static let cabinetBottom = Color(hex: "#030712")
+    static let metalLight = Color(hex: "#D1D5DB")
+    static let metalMid = Color(hex: "#9CA3AF")
+    static let metalDark = Color(hex: "#4B5563")
+    static let slotVoid = Color(hex: "#0B0F1A")
+}
+
+// MARK: - Widget Deep Links
+
+func widgetDestinationURL(for data: FlunksWidgetData) -> URL {
+    // If daily isn't claimed, route into the app to claim (amount is informational; server controls reward).
+    if !data.dailyClaimed {
+        return URL(string: "flunks://gum/claim?source=widget&amount=15")!
+    }
+    return URL(string: "flunks://gum")!
+}
+
+// MARK: - Arcade UI Primitives
+
+struct ArcadeCabinetBackground: View {
+    var body: some View {
+        ZStack {
+            LinearGradient(
+                colors: [FlunksColors.cabinetTop, FlunksColors.cabinetBottom],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+
+            // Subtle scanlines
+            VStack(spacing: 3) {
+                ForEach(0..<28, id: \.self) { _ in
+                    Rectangle()
+                        .fill(Color.white.opacity(0.03))
+                        .frame(height: 1)
+                }
+            }
+            .opacity(0.6)
+        }
+    }
+}
+
+struct CoinSlotPanel: View {
+    let isReady: Bool
+
+    var body: some View {
+        VStack(spacing: 8) {
+            Text(isReady ? "INSERT COIN" : "CREDIT USED")
+                .font(.system(size: 11, weight: .black, design: .monospaced))
+                .foregroundColor(isReady ? FlunksColors.primary : FlunksColors.textSecondary)
+                .tracking(1.2)
+
+            ZStack {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [FlunksColors.metalLight, FlunksColors.metalMid, FlunksColors.metalDark],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .fill(FlunksColors.slotVoid)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 14)
+                    .overlay(
+                        Rectangle()
+                            .fill(Color.white.opacity(0.10))
+                            .frame(height: 1)
+                            .padding(.horizontal, 14)
+                            .offset(y: -6)
+                    )
+
+                // Screw dots
+                HStack {
+                    Circle().fill(Color.black.opacity(0.25)).frame(width: 5, height: 5)
+                    Spacer()
+                    Circle().fill(Color.black.opacity(0.25)).frame(width: 5, height: 5)
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
+                .frame(maxHeight: .infinity, alignment: .top)
+            }
+            .frame(height: 54)
+
+            Text(isReady ? "CLAIM +15" : "COME BACK LATER")
+                .font(.system(size: 12, weight: .black, design: .rounded))
+                .foregroundColor(isReady ? FlunksColors.warning : FlunksColors.textSecondary)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(FlunksColors.backgroundDark.opacity(0.55))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke((isReady ? FlunksColors.warning : FlunksColors.textSecondary).opacity(0.4), lineWidth: 1)
+                )
+                .cornerRadius(10)
+        }
+    }
 }
 
 // MARK: - Widget Views
@@ -124,41 +225,27 @@ struct SmallWidgetView: View {
     
     var body: some View {
         ZStack {
-            // Background gradient
-            LinearGradient(
-                colors: [FlunksColors.backgroundMid, FlunksColors.backgroundDark],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            ArcadeCabinetBackground()
             
-            VStack(spacing: 6) {
-                // GUM Icon
-                Text("🍬")
-                    .font(.system(size: 28))
-                
-                // Balance
-                Text(formatBalance(data.gumBalance))
-                    .font(.system(size: 28, weight: .bold, design: .rounded))
-                    .foregroundColor(FlunksColors.textPrimary)
-                    .minimumScaleFactor(0.6)
-                    .lineLimit(1)
-                
-                Text("GUM")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundColor(FlunksColors.primary)
-                
-                // Daily status indicator
-                HStack(spacing: 4) {
-                    Circle()
-                        .fill(data.dailyClaimed ? FlunksColors.accent : FlunksColors.warning)
-                        .frame(width: 6, height: 6)
-                    Text(data.dailyClaimed ? "Claimed" : "Claim!")
-                        .font(.system(size: 10, weight: .medium))
-                        .foregroundColor(data.dailyClaimed ? FlunksColors.accent : FlunksColors.warning)
+            VStack(spacing: 10) {
+                CoinSlotPanel(isReady: !data.dailyClaimed)
+
+                VStack(spacing: 4) {
+                    Text("TOTAL GUM")
+                        .font(.system(size: 10, weight: .black, design: .monospaced))
+                        .foregroundColor(FlunksColors.textSecondary)
+                        .tracking(1.0)
+
+                    Text(formatBalance(data.gumBalance))
+                        .font(.system(size: 28, weight: .black, design: .rounded))
+                        .foregroundColor(FlunksColors.textPrimary)
+                        .minimumScaleFactor(0.65)
+                        .lineLimit(1)
                 }
             }
-            .padding()
+            .padding(12)
         }
+        .widgetURL(widgetDestinationURL(for: data))
     }
 }
 
@@ -171,83 +258,45 @@ struct MediumWidgetView: View {
     
     var body: some View {
         ZStack {
-            // Background
-            LinearGradient(
-                colors: [FlunksColors.backgroundMid, FlunksColors.backgroundDark],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            ArcadeCabinetBackground()
             
-            HStack(spacing: 16) {
-                // Left side - GUM Balance
-                VStack(spacing: 4) {
-                    Text("🍬")
-                        .font(.system(size: 32))
-                    
-                    Text(formatBalance(data.gumBalance))
-                        .font(.system(size: 32, weight: .bold, design: .rounded))
-                        .foregroundColor(FlunksColors.textPrimary)
-                        .minimumScaleFactor(0.5)
-                        .lineLimit(1)
-                    
-                    Text("GUM")
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(FlunksColors.primary)
+            HStack(spacing: 14) {
+                VStack(spacing: 10) {
+                    CoinSlotPanel(isReady: !data.dailyClaimed)
                 }
-                .frame(maxWidth: .infinity)
-                
-                // Divider
-                Rectangle()
-                    .fill(FlunksColors.primary.opacity(0.3))
-                    .frame(width: 1)
-                    .padding(.vertical, 12)
-                
-                // Right side - Status
-                VStack(alignment: .leading, spacing: 8) {
-                    // Locker
-                    HStack(spacing: 6) {
-                        Image(systemName: "lock.fill")
-                            .font(.system(size: 12))
-                            .foregroundColor(FlunksColors.secondary)
-                        Text("Locker #\(data.lockerNumber)")
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundColor(FlunksColors.textPrimary)
-                    }
-                    
-                    // Username
-                    HStack(spacing: 6) {
-                        Image(systemName: "person.fill")
-                            .font(.system(size: 12))
-                            .foregroundColor(FlunksColors.secondary)
+                .frame(width: 150)
+
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("TOTAL GUM")
+                        .font(.system(size: 11, weight: .black, design: .monospaced))
+                        .foregroundColor(FlunksColors.textSecondary)
+                        .tracking(1.2)
+
+                    Text(formatBalance(data.gumBalance))
+                        .font(.system(size: 40, weight: .black, design: .rounded))
+                        .foregroundColor(FlunksColors.textPrimary)
+                        .minimumScaleFactor(0.55)
+                        .lineLimit(1)
+
+                    HStack(spacing: 10) {
                         Text(data.username)
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundColor(FlunksColors.textSecondary)
+                            .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                            .foregroundColor(FlunksColors.secondary)
                             .lineLimit(1)
-                    }
-                    
-                    Spacer()
-                    
-                    // Daily Status
-                    HStack(spacing: 6) {
-                        Image(systemName: data.dailyClaimed ? "checkmark.circle.fill" : "gift.fill")
-                            .font(.system(size: 12))
-                            .foregroundColor(data.dailyClaimed ? FlunksColors.accent : FlunksColors.warning)
-                        
-                        if data.dailyClaimed {
-                            Text(formatTimeRemaining(data.nextClaimMinutes))
-                                .font(.system(size: 12, weight: .medium))
-                                .foregroundColor(FlunksColors.textSecondary)
-                        } else {
-                            Text("Daily Ready!")
-                                .font(.system(size: 12, weight: .bold))
-                                .foregroundColor(FlunksColors.warning)
-                        }
+
+                        Spacer()
+
+                        Text(data.dailyClaimed ? "NEXT: \(formatTimeRemaining(data.nextClaimMinutes))" : "READY")
+                            .font(.system(size: 11, weight: .black, design: .monospaced))
+                            .foregroundColor(data.dailyClaimed ? FlunksColors.textSecondary : FlunksColors.warning)
+                            .lineLimit(1)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding()
+            .padding(12)
         }
+        .widgetURL(widgetDestinationURL(for: data))
     }
 }
 
@@ -260,61 +309,54 @@ struct LargeWidgetView: View {
     
     var body: some View {
         ZStack {
-            // Background
-            LinearGradient(
-                colors: [FlunksColors.backgroundMid, FlunksColors.backgroundDark],
-                startPoint: .top,
-                endPoint: .bottom
-            )
+            ArcadeCabinetBackground()
             
             VStack(spacing: 12) {
-                // Header
                 HStack {
-                    Text("🍬")
-                        .font(.system(size: 24))
-                    Text("FLUNKS")
-                        .font(.system(size: 18, weight: .black, design: .rounded))
+                    Text("FLUNKS ARCADE")
+                        .font(.system(size: 16, weight: .black, design: .monospaced))
                         .foregroundColor(FlunksColors.primary)
+                        .tracking(1.4)
                     Spacer()
-                    Text("Locker #\(data.lockerNumber)")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(FlunksColors.textSecondary)
+                    Text(data.username)
+                        .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                        .foregroundColor(FlunksColors.secondary)
+                        .lineLimit(1)
                 }
                 
                 Divider()
                     .background(FlunksColors.primary.opacity(0.3))
                 
-                // Main Balance
-                VStack(spacing: 4) {
-                    Text("GUM BALANCE")
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundColor(FlunksColors.textSecondary)
-                        .tracking(2)
-                    
-                    Text(formatBalance(data.gumBalance))
-                        .font(.system(size: 48, weight: .bold, design: .rounded))
-                        .foregroundColor(FlunksColors.textPrimary)
-                        .minimumScaleFactor(0.5)
-                        .lineLimit(1)
-                }
-                
-                // Status Cards
-                HStack(spacing: 12) {
-                    // Daily Check-in Card
-                    StatusCard(
-                        icon: data.dailyClaimed ? "checkmark.circle.fill" : "gift.fill",
-                        title: "Daily",
-                        value: data.dailyClaimed ? "Claimed ✓" : "Ready!",
-                        color: data.dailyClaimed ? FlunksColors.accent : FlunksColors.warning
-                    )
-                    
-                    // Next Claim Card
-                    StatusCard(
-                        icon: "clock.fill",
-                        title: "Next Claim",
-                        value: data.dailyClaimed ? formatTimeRemaining(data.nextClaimMinutes) : "Now!",
-                        color: FlunksColors.secondary
-                    )
+                HStack(spacing: 14) {
+                    CoinSlotPanel(isReady: !data.dailyClaimed)
+                        .frame(width: 190)
+
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("TOTAL GUM")
+                            .font(.system(size: 11, weight: .black, design: .monospaced))
+                            .foregroundColor(FlunksColors.textSecondary)
+                            .tracking(1.4)
+
+                        Text(formatBalance(data.gumBalance))
+                            .font(.system(size: 54, weight: .black, design: .rounded))
+                            .foregroundColor(FlunksColors.textPrimary)
+                            .minimumScaleFactor(0.5)
+                            .lineLimit(1)
+
+                        HStack(spacing: 10) {
+                            Text(data.dailyClaimed ? "CREDIT: 0" : "CREDIT: 1")
+                                .font(.system(size: 12, weight: .black, design: .monospaced))
+                                .foregroundColor(data.dailyClaimed ? FlunksColors.textSecondary : FlunksColors.warning)
+
+                            Spacer()
+
+                            Text(data.dailyClaimed ? "NEXT: \(formatTimeRemaining(data.nextClaimMinutes))" : "TAP TO CLAIM")
+                                .font(.system(size: 12, weight: .black, design: .monospaced))
+                                .foregroundColor(data.dailyClaimed ? FlunksColors.textSecondary : FlunksColors.warning)
+                                .lineLimit(1)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 
                 Spacer()
@@ -330,8 +372,9 @@ struct LargeWidgetView: View {
                         .foregroundColor(FlunksColors.primary.opacity(0.6))
                 }
             }
-            .padding()
+            .padding(12)
         }
+        .widgetURL(widgetDestinationURL(for: data))
     }
 }
 

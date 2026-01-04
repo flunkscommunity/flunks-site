@@ -53,6 +53,7 @@ import { useUserProfile } from "contexts/UserProfileContext";
 import WalletStatusBar from "components/WalletStatusBar";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import LoadingScreenPreview from "windows/LoadingScreenPreview";
+import TestFlowWalletWindow from "windows/TestFlowWalletWindow";
 
 import { GumAdminPanel } from "components/GumAdminPanel";
 import { TimeConfigAdmin } from "components/DayNightHouse";
@@ -409,6 +410,19 @@ const windowsMemod = useMemo(() => (
               </DraggableResizeableWindow>
             )
           })}
+        />
+
+        {/* Test Flow Wallet */}
+        <ConditionalAppIcon
+          appId="test-flow-wallet"
+          title="Test Flow Wallet"
+          icon="/images/icons/flowty.png"
+          onDoubleClick={() =>
+            openWindow({
+              key: WINDOW_IDS.TEST_FLOW_WALLET,
+              window: <TestFlowWalletWindow />,
+            })
+          }
         />
 
         {/* 4.5 Level Up - NFT Evolution */}

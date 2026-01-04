@@ -70,6 +70,7 @@
 	<!-- Allow opening external URLs -->
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>frw</string>
 		<string>flowwallet</string>
 		<string>flow-wallet</string>
 		<string>flow-wallet-pro</string>
