@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useAuth } from './AuthContext';
 import { useUserProfile } from './UserProfileContext';
@@ -15,6 +15,7 @@ import {
 import { autoClaimDailyLogin } from '../services/dailyLoginService';
 import { checkForSpecialEvents } from '../services/specialEventsService';
 import { useWidgetSync } from '../hooks/useWidgetSync';
+import { cancelDailyGumReminder, scheduleDailyGumReminder } from '../utils/dailyGumNotifications';
 
 export interface GumContextType {
   balance: number;
@@ -65,6 +66,7 @@ export const GumProvider: React.FC<GumProviderProps> = ({
   const [dailyClaimed, setDailyClaimed] = useState<boolean>(false);
   const [nextClaimMinutes, setNextClaimMinutes] = useState<number>(0);
   const [lastDailyStatusRefresh, setLastDailyStatusRefresh] = useState<number>(0);
+  const lastScheduledDailyReminderAtRef = useRef<number | null>(null);
 
   // Use auth context for wallet address - more reliable
   const walletAddress = auth.walletAddress || primaryWallet?.address;
@@ -190,6 +192,29 @@ export const GumProvider: React.FC<GumProviderProps> = ({
     if (walletAddress && auth.isAuthenticated) return;
     void clearWidget();
   }, [isWidgetAvailable, walletAddress, auth.isAuthenticated, clearWidget]);
+
+  // Schedule a local notification for when the next daily claim becomes available.
+  useEffect(() => {
+    if (!walletAddress || !auth.isAuthenticated) {
+      lastScheduledDailyReminderAtRef.current = null;
+      void cancelDailyGumReminder();
+      return;
+    }
+
+    // If claim is available now (or we don't know the cooldown), don't schedule.
+    if (!dailyClaimed || nextClaimMinutes <= 0) {
+      lastScheduledDailyReminderAtRef.current = null;
+      void cancelDailyGumReminder();
+      return;
+    }
+
+    const fireAtMs = Date.now() + nextClaimMinutes * 60_000;
+    const roundedMs = Math.floor(fireAtMs / 60_000) * 60_000;
+
+    if (lastScheduledDailyReminderAtRef.current === roundedMs) return;
+    lastScheduledDailyReminderAtRef.current = roundedMs;
+    void scheduleDailyGumReminder(new Date(roundedMs));
+  }, [walletAddress, auth.isAuthenticated, dailyClaimed, nextClaimMinutes]);
 
   // Earn gum from a source
   const earnGum = useCallback(async (source: string, metadata?: any): Promise<GumAwardResult> => {

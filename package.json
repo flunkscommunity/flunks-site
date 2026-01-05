@@ -29,6 +29,7 @@
     "@capacitor/cli": "^8.0.0",
     "@capacitor/core": "^8.0.0",
     "@capacitor/ios": "^8.0.0",
+    "@capacitor/local-notifications": "^8.0.0",
     "@dynamic-labs/flow": "^4.52.1",
     "@dynamic-labs/sdk-api": "^0.0.847",
     "@dynamic-labs/sdk-react-core": "^4.52.1",

@@ -9,12 +9,10 @@ import WalletConnectionModal from "../components/WalletConnectionModal";
 import { useAuth } from "contexts/AuthContext";
 import { useState, useEffect } from "react";
 import ItemsGrid from "components/YourItems/ItemsGrid";
-import BootScreen from "components/BootScreen";
 
 const Onlyflunks: React.FC = () => {
   const { closeWindow } = useWindowsContext();
   const auth = useAuth();
-  const [bootComplete, setBootComplete] = useState(false);
   const [showWalletModal, setShowWalletModal] = useState(false);
   
   // Destructure auth context for easier use
@@ -35,17 +33,12 @@ const Onlyflunks: React.FC = () => {
 
   // Show wallet modal when not authenticated and not loading
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && bootComplete) {
+    if (!isLoading && !isAuthenticated) {
       setShowWalletModal(true);
     } else {
       setShowWalletModal(false);
     }
-  }, [isLoading, isAuthenticated, bootComplete]);
-
-  // Show boot screen first if not completed
-  if (!bootComplete) {
-    return <BootScreen onComplete={() => setBootComplete(true)} />;
-  }
+  }, [isLoading, isAuthenticated]);
 
   // If not authenticated and not loading, only show the modal (no window)
   if (!isLoading && !isAuthenticated) {

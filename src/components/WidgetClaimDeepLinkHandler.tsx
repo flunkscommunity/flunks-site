@@ -2,6 +2,9 @@ import React, { useEffect, useRef } from 'react';
 
 import { useAuth } from 'contexts/AuthContext';
 import { useGum } from 'contexts/GumContext';
+import { useWindowsContext } from 'contexts/WindowsContext';
+import { WINDOW_IDS } from 'fixed';
+import UserProfile from 'windows/UserProfile';
 
 const isMobileApp = (): boolean => {
   if (typeof window === 'undefined') return false;
@@ -19,6 +22,7 @@ function tryParseUrl(rawUrl: string): URL | null {
 export default function WidgetClaimDeepLinkHandler() {
   const { walletAddress, isAuthenticated } = useAuth();
   const { refreshBalance } = useGum();
+  const { openWindow } = useWindowsContext();
 
   const inflightRef = useRef(false);
 
@@ -34,33 +38,51 @@ export default function WidgetClaimDeepLinkHandler() {
       if (url.protocol !== 'flunks:' && url.protocol !== 'net.flunks.app:') return;
 
       const pathname = url.pathname || '';
-      if (pathname !== '/gum/claim') return;
+      
+      // Handle gum/claim deep link
+      if (pathname === '/gum/claim' || pathname === 'gum/claim') {
+        // Always open My Locker first
+        openWindow({
+          key: WINDOW_IDS.USER_PROFILE,
+          window: <UserProfile />,
+        });
 
-      if (!walletAddress || !isAuthenticated) {
-        console.warn('[WidgetClaim] Opened claim link but no wallet connected');
+        if (!walletAddress || !isAuthenticated) {
+          console.warn('[WidgetClaim] Opened claim link but no wallet connected - opened My Locker anyway');
+          return;
+        }
+
+        if (inflightRef.current) return;
+        inflightRef.current = true;
+
+        try {
+          const resp = await fetch('/api/daily-checkin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ wallet: walletAddress }),
+          });
+
+          // Even if already claimed, refresh balance so widget state stays accurate.
+          if (!resp.ok) {
+            console.warn('[WidgetClaim] daily-checkin failed:', resp.status);
+          }
+
+          await refreshBalance();
+        } catch (err) {
+          console.warn('[WidgetClaim] Error claiming daily check-in from widget:', err);
+        } finally {
+          inflightRef.current = false;
+        }
         return;
       }
 
-      if (inflightRef.current) return;
-      inflightRef.current = true;
-
-      try {
-        const resp = await fetch('/api/daily-checkin', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ wallet: walletAddress }),
+      // Handle generic gum deep link - just open My Locker
+      if (pathname === '/gum' || pathname === 'gum') {
+        openWindow({
+          key: WINDOW_IDS.USER_PROFILE,
+          window: <UserProfile />,
         });
-
-        // Even if already claimed, refresh balance so widget state stays accurate.
-        if (!resp.ok) {
-          console.warn('[WidgetClaim] daily-checkin failed:', resp.status);
-        }
-
-        await refreshBalance();
-      } catch (err) {
-        console.warn('[WidgetClaim] Error claiming daily check-in from widget:', err);
-      } finally {
-        inflightRef.current = false;
+        return;
       }
     };
 

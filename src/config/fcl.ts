@@ -1,5 +1,5 @@
 import { config } from "@onflow/fcl";
-import "@onflow/fcl-wc";
+import * as fclWc from "@onflow/fcl-wc";
 
 /**
  * Check if running inside Capacitor mobile app
@@ -51,19 +51,52 @@ console.log('📱 Mobile App Mode:', IS_MOBILE_APP ? 'YES' : 'NO');
 const DISCOVERY_METHOD = IS_MOBILE_APP ? 'WC/RPC' : 'IFRAME/RPC';
 console.log('🔗 Discovery Method:', DISCOVERY_METHOD);
 
-// Flow Wallet's WalletConnect service endpoint (direct connection)
+// Flow Wallet's universal link for WalletConnect
+const FLOW_WALLET_UNIVERSAL_LINK = "https://frw-link.lilico.app/wc";
+
+// Flow Wallet's WalletConnect service - uid MUST be a valid universal link URL
 const FLOW_WALLET_SERVICE = {
   "f_type": "Service",
   "f_vsn": "1.0.0", 
   "type": "authn",
-  "uid": "flow-wallet",
-  "endpoint": "flow-wallet://",
+  "uid": FLOW_WALLET_UNIVERSAL_LINK, // Critical: must be universal link for deep linking
+  "endpoint": "flow_authn",
   "method": "WC/RPC",
   "provider": {
     "name": "Flow Wallet",
     "icon": "https://lilico.app/logo.png"
   }
 };
+
+// WalletConnect request hook to intercept URI and open wallet on mobile
+const wcRequestHook = (data: any) => {
+  console.log('🔗 WC Request Hook:', data);
+  if (data.type === 'SESSION_REQUEST' && data.uri && IS_MOBILE_APP) {
+    console.log('📱 WC URI received:', data.uri);
+    // Construct the Flow Wallet universal link with WC URI
+    const flowWalletUrl = `${FLOW_WALLET_UNIVERSAL_LINK}?uri=${encodeURIComponent(data.uri)}`;
+    console.log('📱 Opening Flow Wallet:', flowWalletUrl);
+    // Use window.location.href to trigger native navigation
+    window.location.href = flowWalletUrl;
+  }
+};
+
+// For mobile apps, configure WalletConnect to open Flow Wallet directly
+if (IS_MOBILE_APP) {
+  // Add Flow Wallet as a direct service (skips discovery UI)
+  config({
+    // Enable WalletConnect modal behavior
+    "discovery.wallet.method": "WC/RPC",
+    
+    // Force WalletConnect to show QR/deep-link modal
+    "fcl.walletconnect.method": "qr", // or "mobile"
+    
+    // Add our request hook to intercept WC URIs
+    "walletconnect.wcRequestHook": wcRequestHook,
+  });
+  
+  console.log('📱 Mobile: Configured for WalletConnect with Flow Wallet');
+}
 
 // Simplified FCL configuration - use standard mainnet endpoints
 config({

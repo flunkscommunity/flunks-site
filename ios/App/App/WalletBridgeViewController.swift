@@ -44,37 +44,53 @@ class WalletBridgeViewController: CAPBridgeViewController, WKNavigationDelegate,
     }
 
     private func shouldOpenExternally(_ url: URL) -> Bool {
-        guard let schemeRaw = url.scheme?.lowercased() else { return false }
+        let urlString = url.absoluteString
+        print("🔗 WalletBridge checking URL: \(urlString)")
+        
+        guard let schemeRaw = url.scheme?.lowercased() else { 
+            print("🔗 WalletBridge: No scheme found")
+            return false 
+        }
 
         // Any non-web scheme should be opened by iOS.
         if schemeRaw != "http" && schemeRaw != "https" {
-            return externalSchemes.contains(schemeRaw)
+            let shouldOpen = externalSchemes.contains(schemeRaw)
+            print("🔗 WalletBridge: Custom scheme '\(schemeRaw)', shouldOpen=\(shouldOpen)")
+            return shouldOpen
         }
 
         // For wallet universal links, open externally so iOS can trigger the associated app.
         let host = (url.host ?? "").lowercased()
         if host.isEmpty || !hostMatches(host) {
+            print("🔗 WalletBridge: Host '\(host)' not in external hosts list")
             return false
         }
 
         let path = url.path.lowercased()
         let query = (url.query ?? "").lowercased()
+        print("🔗 WalletBridge: External host matched! host=\(host), path=\(path)")
 
         // Keep this narrow to wallet-connect style links.
         if path.contains("connect") || path.contains("wc") {
+            print("🔗 WalletBridge: ✅ Opening externally - path contains connect/wc")
             return true
         }
 
         if query.contains("uri=") || query.contains("callback=") || query.contains("wc") {
+            print("🔗 WalletBridge: ✅ Opening externally - query contains uri/callback/wc")
             return true
         }
 
+        print("🔗 WalletBridge: ❌ Not opening externally - no match")
         return false
     }
 
     private func openExternally(_ url: URL) {
+        print("🚀 WalletBridge: Opening externally: \(url.absoluteString)")
         DispatchQueue.main.async {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            UIApplication.shared.open(url, options: [:]) { success in
+                print("🚀 WalletBridge: Open result: \(success)")
+            }
         }
     }
 
@@ -87,16 +103,100 @@ class WalletBridgeViewController: CAPBridgeViewController, WKNavigationDelegate,
             forwardedUIDelegate = webView.uiDelegate
             webView.navigationDelegate = self
             webView.uiDelegate = self
+            
+            // Inject JavaScript to intercept wallet-related window.open and anchor clicks
+            injectWalletInterceptor(into: webView)
         }
+    }
+    
+    /// Injects JavaScript that captures wallet deep links and dispatches them to native code
+    private func injectWalletInterceptor(into webView: WKWebView) {
+        let walletHosts = externalHosts.map { "\"\($0)\"" }.joined(separator: ", ")
+        let walletSchemes = externalSchemes.map { "\"\($0)\"" }.joined(separator: ", ")
+        
+        let js = """
+        (function() {
+            if (window.__walletBridgeInstalled) return;
+            window.__walletBridgeInstalled = true;
+            
+            const walletHosts = [\(walletHosts)];
+            const walletSchemes = [\(walletSchemes)];
+            
+            function isWalletUrl(url) {
+                try {
+                    const parsed = new URL(url, window.location.href);
+                    const scheme = parsed.protocol.replace(':', '').toLowerCase();
+                    
+                    // Check custom schemes
+                    if (walletSchemes.includes(scheme)) {
+                        console.log('🔗 JS WalletBridge: Custom scheme detected:', scheme);
+                        return true;
+                    }
+                    
+                    // Check wallet hosts
+                    const host = parsed.hostname.toLowerCase();
+                    const isWalletHost = walletHosts.some(wh => host === wh || host.endsWith('.' + wh));
+                    if (isWalletHost) {
+                        const path = parsed.pathname.toLowerCase();
+                        const search = parsed.search.toLowerCase();
+                        if (path.includes('wc') || path.includes('connect') ||
+                            search.includes('uri=') || search.includes('wc')) {
+                            console.log('🔗 JS WalletBridge: Wallet URL detected:', url);
+                            return true;
+                        }
+                    }
+                } catch (e) {
+                    console.log('🔗 JS WalletBridge: URL parse error:', e);
+                }
+                return false;
+            }
+            
+            // Override window.open for wallet URLs
+            const originalWindowOpen = window.open;
+            window.open = function(url, target, features) {
+                console.log('🪟 JS WalletBridge: window.open called:', url);
+                if (url && isWalletUrl(url)) {
+                    console.log('🪟 JS WalletBridge: Redirecting wallet URL');
+                    window.location.href = url;
+                    return null;
+                }
+                return originalWindowOpen.call(window, url, target, features);
+            };
+            
+            // Intercept anchor clicks
+            document.addEventListener('click', function(e) {
+                let target = e.target;
+                while (target && target.tagName !== 'A') {
+                    target = target.parentElement;
+                }
+                if (target && target.href && isWalletUrl(target.href)) {
+                    console.log('🔗 JS WalletBridge: Anchor click intercepted:', target.href);
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.location.href = target.href;
+                }
+            }, true);
+            
+            console.log('✅ JS WalletBridge interceptor installed');
+        })();
+        """
+        
+        let script = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false)
+        webView.configuration.userContentController.addUserScript(script)
+        print("✅ WalletBridge: JavaScript interceptor added")
     }
 
     func webView(_ webView: WKWebView,
                 decidePolicyFor navigationAction: WKNavigationAction,
                 decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        if let url = navigationAction.request.url, shouldOpenExternally(url) {
-            openExternally(url)
-            decisionHandler(.cancel)
-            return
+        if let url = navigationAction.request.url {
+            print("🌐 WalletBridge navigationAction: \(url.absoluteString)")
+            if shouldOpenExternally(url) {
+                print("🌐 WalletBridge: Intercepting navigation, opening externally")
+                openExternally(url)
+                decisionHandler(.cancel)
+                return
+            }
         }
 
         // Forward to the existing delegate if present; otherwise allow.
@@ -114,14 +214,18 @@ class WalletBridgeViewController: CAPBridgeViewController, WKNavigationDelegate,
                 for navigationAction: WKNavigationAction,
                 windowFeatures: WKWindowFeatures) -> WKWebView? {
         // Handle `target=_blank` / `window.open`.
+        print("🪟 WalletBridge createWebViewWith called")
         if let url = navigationAction.request.url {
+            print("🪟 WalletBridge createWebView URL: \(url.absoluteString)")
             if shouldOpenExternally(url) {
+                print("🪟 WalletBridge: Opening new window URL externally")
                 openExternally(url)
                 return nil
             }
 
             // If it's a normal web link opened in a new window, keep it in the same webview.
             if navigationAction.targetFrame == nil {
+                print("🪟 WalletBridge: Loading in same webview (targetFrame nil)")
                 webView.load(URLRequest(url: url))
                 return nil
             }

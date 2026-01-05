@@ -385,10 +385,33 @@ const GridedView: React.FC<{
         const fallbackUrl = nft.collection === "Backpack" 
           ? '/images/icons/backpack.png' 
           : '/flunks-logo.png';
-        const thumbnailUrl = nft.MetadataViewsDisplay?.thumbnail?.url && nft.MetadataViewsDisplay.thumbnail.url.trim() !== '' 
-          ? nft.MetadataViewsDisplay.thumbnail.url 
+        
+        // Get raw thumbnail URL
+        let rawThumbnailUrl = nft.MetadataViewsDisplay?.thumbnail?.url;
+        
+        // Convert IPFS URLs to HTTP gateway URLs
+        let thumbnailUrl = rawThumbnailUrl && rawThumbnailUrl.trim() !== '' 
+          ? rawThumbnailUrl 
           : fallbackUrl;
+        
+        // Handle IPFS protocol URLs
+        if (thumbnailUrl.startsWith('ipfs://')) {
+          thumbnailUrl = `https://ipfs.io/ipfs/${thumbnailUrl.slice(7)}`;
+        }
+        
         const displayUrl = pixelMode ? (nft.pixelUrl || thumbnailUrl) : thumbnailUrl;
+        
+        // Debug logging for first few items
+        if (items.indexOf(nft) < 3) {
+          console.log(`🖼️ NFT ${nft.collection} #${nft.serialNumber}:`, {
+            rawThumbnailUrl,
+            thumbnailUrl,
+            displayUrl,
+            pixelMode,
+            pixelUrl: nft.pixelUrl,
+            MetadataViewsDisplay: nft.MetadataViewsDisplay
+          });
+        }
         
         return (
           <RetroItemFrame key={nft.tokenID} variant="window" className="p-2">

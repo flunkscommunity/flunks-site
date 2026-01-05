@@ -78,7 +78,7 @@ const SplashContainer = styled.div<{ $fading: boolean }>`
 `;
 
 const Screen = styled.div`
-  padding: 60px 20px 40px;
+  padding: 40px 20px;
   font-family: 'Courier New', monospace;
   font-size: 16px;
   color: #33ff33;
@@ -87,7 +87,23 @@ const Screen = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   animation: ${flicker} 0.15s infinite;
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+`;
+
+const BootText = styled.div`
+  width: 100%;
+  max-width: 400px;
+  text-align: left;
+  padding-left: 20px;
 `;
 
 const Line = styled.div<{ $visible: boolean }>`
@@ -119,7 +135,7 @@ const LogoContainer = styled.div<{ $visible: boolean }>`
 `;
 
 const Logo = styled.img<{ $pulsing: boolean }>`
-  width: min(220px, 55vw);
+  width: min(180px, 45vw);
   height: auto;
   filter: brightness(1.2) drop-shadow(0 0 20px #33ff33);
   animation: ${props => props.$pulsing ? pulse : 'none'} 1.5s ease-in-out infinite;
@@ -164,6 +180,8 @@ const BOOT_LINES = [
   '',
   'Welcome to FLUNKS!',
 ];
+
+
 
 const ASCII_LOGO = `
  ██████╗██╗     ██╗   ██╗███╗   ██╗██╗  ██╗███████╗
@@ -288,6 +306,12 @@ const MobileSplashScreen: React.FC<MobileSplashScreenProps> = ({ onComplete }) =
       }
       
       const currentLine = BOOT_LINES[lineIndex];
+      if (currentLine === undefined) {
+        lineIndex++;
+        charIndex = 0;
+        setTimeout(typeNextChar, lineDelay);
+        return;
+      }
       
       if (charIndex === 0) {
         // Start showing this line
@@ -343,26 +367,30 @@ const MobileSplashScreen: React.FC<MobileSplashScreenProps> = ({ onComplete }) =
   return (
     <SplashContainer $fading={fading} onClick={handleTap}>
       <Screen>
-        {BOOT_LINES.map((line, index) => (
-          <Line key={index} $visible={visibleLines[index]}>
-            {typedLines[index]}
-            {index === BOOT_LINES.length - 1 && visibleLines[index] && <Cursor />}
-          </Line>
-        ))}
-        
-        <LogoContainer $visible={showLogo}>
-          <Logo 
-            src="/flunks-logo.png" 
-            alt="Flunks" 
-            $pulsing={showLogo}
-          />
-          <AsciiArt className={showAscii ? 'visible' : ''}>
-            {ASCII_LOGO}
-          </AsciiArt>
-          <ReadyText $visible={showReady}>
-            TAP TO ENTER
-          </ReadyText>
-        </LogoContainer>
+        <ContentWrapper>
+          <BootText>
+            {BOOT_LINES.map((line, index) => (
+              <Line key={index} $visible={visibleLines[index] ?? false}>
+                {typedLines[index]}
+                {index === BOOT_LINES.length - 1 && visibleLines[index] && <Cursor />}
+              </Line>
+            ))}
+          </BootText>
+          
+          <LogoContainer $visible={showLogo}>
+            <Logo 
+              src="/flunks-logo.png" 
+              alt="Flunks" 
+              $pulsing={showLogo}
+            />
+            <AsciiArt className={showAscii ? 'visible' : ''}>
+              {ASCII_LOGO}
+            </AsciiArt>
+            <ReadyText $visible={showReady}>
+              TAP TO ENTER
+            </ReadyText>
+          </LogoContainer>
+        </ContentWrapper>
       </Screen>
     </SplashContainer>
   );

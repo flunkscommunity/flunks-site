@@ -138,12 +138,39 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
       // if the deep-link handoff is blocked. Trigger it and let the callback drive state.
       if (isMobile) {
         console.log('📱 Using WalletConnect for mobile authentication...');
-        void fcl.authenticate().catch((error) => {
+        
+        // Flow Wallet service with proper universal link for WC deep linking
+        const flowWalletService = {
+          "f_type": "Service",
+          "f_vsn": "1.0.0",
+          "type": "authn",
+          "uid": "https://frw-link.lilico.app/wc", // Universal link that handles wc: URIs
+          "endpoint": "flow_authn",
+          "method": "WC/RPC",
+          "provider": {
+            "name": "Flow Wallet",
+            "icon": "https://lilico.app/logo.png"
+          }
+        };
+        
+        console.log('📱 Authenticating with Flow Wallet service:', flowWalletService);
+        
+        // Use FCL's authenticate with explicit service
+        void fcl.authenticate({ service: flowWalletService }).catch((error) => {
           const message = error instanceof Error ? error.message : String(error);
           console.error('Error connecting to Flow wallet (mobile):', error);
           setLastError(message);
           setIsConnecting(false);
         });
+        
+        // Fallback: if after 5 seconds we're still connecting and wallet hasn't opened,
+        // try opening Flow Wallet directly
+        setTimeout(() => {
+          if (isConnecting) {
+            console.log('📱 Fallback: Wallet may not have opened, trying direct link...');
+            window.location.href = 'https://frw-link.lilico.app/wc';
+          }
+        }, 5000);
       } else {
         await fcl.authenticate();
       }
