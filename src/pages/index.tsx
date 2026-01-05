@@ -107,13 +107,20 @@ const FullScreenLoader = () => {
   );
 };
 
+// Check mobile status synchronously for initial state
+const getInitialMobileState = () => {
+  if (typeof window === 'undefined') return false;
+  return !!(window as any).Capacitor?.isNativePlatform?.();
+};
+
 const Desktop = () => {
   const router = useRouter();
   const { windows, openWindow, closeWindow, windowApps } = useWindowsContext();
   const [showGumAdmin, setShowGumAdmin] = useState(false);
   const [showTimeAdmin, setShowTimeAdmin] = useState(false);
-  const [showSplash, setShowSplash] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  // Initialize splash to true if mobile, prevents flash
+  const [showSplash, setShowSplash] = useState(() => getInitialMobileState());
+  const [isMobile, setIsMobile] = useState(() => getInitialMobileState());
   const [initComplete, setInitComplete] = useState(false);
   const splashDismissedRef = useRef(false);
   const mobileInitRanRef = useRef(false);

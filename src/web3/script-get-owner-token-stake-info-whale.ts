@@ -161,11 +161,35 @@ export const getOwnerTokenStakeInfoWhale = async (
   tokenIDs: number[]
 ) => {
   if (!address || !tokenIDs.length) return [];
+  
+  // Normalize address format - ensure it starts with 0x and is lowercase
+  let normalizedAddress = address.trim().toLowerCase();
+  
+  // Handle CAIP-10 format (e.g., "flow:mainnet:0x123...")
+  if (normalizedAddress.includes(':')) {
+    const parts = normalizedAddress.split(':');
+    normalizedAddress = parts[parts.length - 1]; // Get the last part (the actual address)
+  }
+  
+  // Ensure 0x prefix
+  if (!normalizedAddress.startsWith('0x')) {
+    normalizedAddress = '0x' + normalizedAddress;
+  }
+  
+  // Validate address format (should be 0x followed by 16 hex characters)
+  const addressRegex = /^0x[a-f0-9]{16}$/;
+  if (!addressRegex.test(normalizedAddress)) {
+    console.error('❌ Invalid Flow address format in stake info:', address, '-> normalized:', normalizedAddress);
+    return [];
+  }
+  
+  console.log('🔍 Getting stake info for', normalizedAddress, collection, tokenIDs.length, 'tokens');
+  
   return await fcl
     .send([
       fcl.script(CODE),
       fcl.args([
-        fcl.arg(address, t.Address),
+        fcl.arg(normalizedAddress, t.Address),
         fcl.arg(collection, t.String),
         fcl.arg(tokenIDs, t.Array(t.UInt64)),
       ]),

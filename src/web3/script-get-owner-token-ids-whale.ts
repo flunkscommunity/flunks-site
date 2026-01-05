@@ -21,11 +21,32 @@ access(all) fun main(address: Address): {String: [UInt64]} {
 export const getOwnerTokenIdsWhale = async (address: string) => {
   if (!address) return Promise.resolve(null);
 
+  // Normalize address format - ensure it starts with 0x and is lowercase
+  let normalizedAddress = address.trim().toLowerCase();
+  
+  // Handle CAIP-10 format (e.g., "flow:mainnet:0x123...")
+  if (normalizedAddress.includes(':')) {
+    const parts = normalizedAddress.split(':');
+    normalizedAddress = parts[parts.length - 1]; // Get the last part (the actual address)
+  }
+  
+  // Ensure 0x prefix
+  if (!normalizedAddress.startsWith('0x')) {
+    normalizedAddress = '0x' + normalizedAddress;
+  }
+  
+  // Validate address format (should be 0x followed by 16 hex characters)
+  const addressRegex = /^0x[a-f0-9]{16}$/;
+  if (!addressRegex.test(normalizedAddress)) {
+    console.error('❌ Invalid Flow address format:', address, '-> normalized:', normalizedAddress);
+    return Promise.resolve({ flunks: [], backpack: [] });
+  }
+
   console.log('🌊 FCL Configuration check - Access Node:', fcl.config.get('accessNode.api'));
-  console.log('🔍 Getting Flunks for address:', address);
+  console.log('🔍 Getting Flunks for address:', normalizedAddress, '(original:', address, ')');
 
   return await fcl
-    .send([fcl.script(CODE), fcl.args([fcl.arg(address, t.Address)])])
+    .send([fcl.script(CODE), fcl.args([fcl.arg(normalizedAddress, t.Address)])])
     .then(fcl.decode)
     .then(result => {
       console.log('🎯 Raw FCL result:', result);

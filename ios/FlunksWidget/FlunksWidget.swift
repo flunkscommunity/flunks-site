@@ -539,21 +539,31 @@ struct FlunksWidgetEntryView: View {
     let entry: FlunksWidgetEntry
     
     var body: some View {
-        switch family {
-        case .systemSmall:
-            SmallWidgetView(data: entry.data)
-        case .systemMedium:
-            MediumWidgetView(data: entry.data)
-        case .systemLarge:
-            LargeWidgetView(data: entry.data)
-        case .accessoryCircular:
-            LockScreenCircularView(data: entry.data)
-        case .accessoryRectangular:
-            LockScreenRectangularView(data: entry.data)
-        case .accessoryInline:
-            LockScreenInlineView(data: entry.data)
-        default:
-            SmallWidgetView(data: entry.data)
+        Group {
+            switch family {
+            case .systemSmall:
+                SmallWidgetView(data: entry.data)
+            case .systemMedium:
+                MediumWidgetView(data: entry.data)
+            case .systemLarge:
+                LargeWidgetView(data: entry.data)
+            case .accessoryCircular:
+                LockScreenCircularView(data: entry.data)
+            case .accessoryRectangular:
+                LockScreenRectangularView(data: entry.data)
+            case .accessoryInline:
+                LockScreenInlineView(data: entry.data)
+            default:
+                SmallWidgetView(data: entry.data)
+            }
+        }
+        .containerBackground(for: .widget) {
+            // iOS 17+ requires explicit container background
+            LinearGradient(
+                colors: [FlunksColors.cabinetTop, FlunksColors.cabinetBottom],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
         }
     }
 }

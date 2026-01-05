@@ -7,6 +7,7 @@
 
 import Foundation
 import Capacitor
+import WidgetKit
 
 @objc(FlunksWidgetBridge)
 public class FlunksWidgetBridge: CAPPlugin {

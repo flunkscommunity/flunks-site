@@ -177,7 +177,19 @@ class WalletBridgeViewController: CAPBridgeViewController, WKNavigationDelegate,
                 }
             }, true);
             
-            console.log('✅ JS WalletBridge interceptor installed');
+            // CRITICAL: Override HTMLAnchorElement.click to catch dynamically created anchors
+            // fcl-wc creates detached <a> elements and calls click() on them for deep linking
+            const originalAnchorClick = HTMLAnchorElement.prototype.click;
+            HTMLAnchorElement.prototype.click = function() {
+                if (this.href && isWalletUrl(this.href)) {
+                    console.log('🔗 JS WalletBridge: Anchor.click() intercepted:', this.href);
+                    window.location.href = this.href;
+                    return;
+                }
+                return originalAnchorClick.call(this);
+            };
+            
+            console.log('✅ JS WalletBridge interceptor installed (with anchor.click override)');
         })();
         """
         

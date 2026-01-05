@@ -4,7 +4,7 @@ import { useAuth } from 'contexts/AuthContext';
 import { useGum } from 'contexts/GumContext';
 import { useWindowsContext } from 'contexts/WindowsContext';
 import { WINDOW_IDS } from 'fixed';
-import UserProfile from 'windows/UserProfile';
+import LockerSystemNew from 'windows/LockerSystemNew';
 
 const isMobileApp = (): boolean => {
   if (typeof window === 'undefined') return false;
@@ -44,7 +44,7 @@ export default function WidgetClaimDeepLinkHandler() {
         // Always open My Locker first
         openWindow({
           key: WINDOW_IDS.USER_PROFILE,
-          window: <UserProfile />,
+          window: <LockerSystemNew />,
         });
 
         if (!walletAddress || !isAuthenticated) {
@@ -80,7 +80,7 @@ export default function WidgetClaimDeepLinkHandler() {
       if (pathname === '/gum' || pathname === 'gum') {
         openWindow({
           key: WINDOW_IDS.USER_PROFILE,
-          window: <UserProfile />,
+          window: <LockerSystemNew />,
         });
         return;
       }

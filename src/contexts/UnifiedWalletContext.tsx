@@ -8,6 +8,33 @@ const isMobileApp = (): boolean => {
   return !!(window as any).Capacitor?.isNativePlatform?.();
 };
 
+// Normalize Flow address format
+const normalizeFlowAddress = (address: string | null | undefined): string | null => {
+  if (!address) return null;
+  
+  let normalized = address.trim().toLowerCase();
+  
+  // Handle CAIP-10 format (e.g., "flow:mainnet:0x123...")
+  if (normalized.includes(':')) {
+    const parts = normalized.split(':');
+    normalized = parts[parts.length - 1];
+  }
+  
+  // Ensure 0x prefix
+  if (!normalized.startsWith('0x')) {
+    normalized = '0x' + normalized;
+  }
+  
+  // Validate format (0x followed by 16 hex characters)
+  const addressRegex = /^0x[a-f0-9]{16}$/;
+  if (!addressRegex.test(normalized)) {
+    console.warn('⚠️ Invalid Flow address format:', address, '-> normalized:', normalized);
+    return null;
+  }
+  
+  return normalized;
+};
+
 interface UnifiedWalletContextType {
   // Connection state
   isConnected: boolean;
@@ -92,11 +119,24 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
     
     // Subscribe to FCL auth changes ONLY (won't trigger automatically)
     const unsubscribe = fcl.currentUser.subscribe((user: any) => {
-      console.log('FCL user state changed:', user);
+      console.log('FCL user state changed:', JSON.stringify(user, null, 2));
       
       if (user?.loggedIn && user?.addr) {
         setFclUser(user);
-        setFclAddress(user.addr);
+        // Normalize the address to ensure consistent format
+        const originalAddr = user.addr;
+        const normalizedAddr = normalizeFlowAddress(user.addr);
+        console.log('📱 FCL address:', {
+          original: originalAddr,
+          normalized: normalizedAddr,
+          rawUserObject: user
+        });
+        
+        if (!normalizedAddr) {
+          console.error('❌ Failed to normalize FCL address:', originalAddr);
+        }
+        
+        setFclAddress(normalizedAddr);
         setIsConnecting(false); // Reset connecting state when user logs in
       } else {
         setFclUser(null);
@@ -139,12 +179,15 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
       if (isMobile) {
         console.log('📱 Using WalletConnect for mobile authentication...');
         
+        // Flow Wallet universal link base
+        const FLOW_WALLET_WC_LINK = 'https://frw-link.lilico.app/wc';
+        
         // Flow Wallet service with proper universal link for WC deep linking
         const flowWalletService = {
           "f_type": "Service",
           "f_vsn": "1.0.0",
           "type": "authn",
-          "uid": "https://frw-link.lilico.app/wc", // Universal link that handles wc: URIs
+          "uid": FLOW_WALLET_WC_LINK,
           "endpoint": "flow_authn",
           "method": "WC/RPC",
           "provider": {
@@ -156,21 +199,15 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
         console.log('📱 Authenticating with Flow Wallet service:', flowWalletService);
         
         // Use FCL's authenticate with explicit service
+        // The fcl-wc plugin's wcRequestHook (configured in fcl.ts) will intercept
+        // the WC URI and open the Flow Wallet via window.location.href
+        // The native WalletBridgeViewController will then open the app externally
         void fcl.authenticate({ service: flowWalletService }).catch((error) => {
           const message = error instanceof Error ? error.message : String(error);
           console.error('Error connecting to Flow wallet (mobile):', error);
           setLastError(message);
           setIsConnecting(false);
         });
-        
-        // Fallback: if after 5 seconds we're still connecting and wallet hasn't opened,
-        // try opening Flow Wallet directly
-        setTimeout(() => {
-          if (isConnecting) {
-            console.log('📱 Fallback: Wallet may not have opened, trying direct link...');
-            window.location.href = 'https://frw-link.lilico.app/wc';
-          }
-        }, 5000);
       } else {
         await fcl.authenticate();
       }

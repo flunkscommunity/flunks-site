@@ -170,7 +170,7 @@ const ReadyText = styled.div<{ $visible: boolean }>`
 
 const BOOT_LINES = [
   'FLUNKS OS v2.0',
-  'Copyright (C) 2026 Flunks Community',
+  '(C) 2026 Flunks',
   '',
   'Booting system...',
   '[OK] Flow Network: MAINNET',

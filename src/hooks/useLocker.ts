@@ -30,11 +30,21 @@ export const useLockerInfo = () => {
       return;
     }
 
+    // Normalize address format
+    let normalizedAddress = unifiedAddress.trim().toLowerCase();
+    if (normalizedAddress.includes(':')) {
+      const parts = normalizedAddress.split(':');
+      normalizedAddress = parts[parts.length - 1];
+    }
+    if (!normalizedAddress.startsWith('0x')) {
+      normalizedAddress = '0x' + normalizedAddress;
+    }
+
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch(`/api/locker-info?wallet_address=${unifiedAddress}`);
+      const response = await fetch(`/api/locker-info?wallet_address=${normalizedAddress}`);
       
       if (response.status === 404) {
         // User doesn't exist yet - they'll get a locker when they sign up
@@ -73,6 +83,16 @@ export const useLockerAssignment = () => {
       throw new Error('No wallet connected');
     }
 
+    // Normalize address format
+    let normalizedAddress = unifiedAddress.trim().toLowerCase();
+    if (normalizedAddress.includes(':')) {
+      const parts = normalizedAddress.split(':');
+      normalizedAddress = parts[parts.length - 1];
+    }
+    if (!normalizedAddress.startsWith('0x')) {
+      normalizedAddress = '0x' + normalizedAddress;
+    }
+
     setAssigning(true);
     setError(null);
 
@@ -83,7 +103,7 @@ export const useLockerAssignment = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          wallet_address: unifiedAddress
+          wallet_address: normalizedAddress
         })
       });
 

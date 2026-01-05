@@ -1,5 +1,6 @@
 import { config } from "@onflow/fcl";
-import * as fclWc from "@onflow/fcl-wc";
+import { init as initFclWc } from "@onflow/fcl-wc";
+import * as fcl from "@onflow/fcl";
 
 /**
  * Check if running inside Capacitor mobile app
@@ -70,13 +71,14 @@ const FLOW_WALLET_SERVICE = {
 
 // WalletConnect request hook to intercept URI and open wallet on mobile
 const wcRequestHook = (data: any) => {
-  console.log('🔗 WC Request Hook:', data);
+  console.log('🔗 WC Request Hook:', JSON.stringify(data, null, 2));
   if (data.type === 'SESSION_REQUEST' && data.uri && IS_MOBILE_APP) {
-    console.log('📱 WC URI received:', data.uri);
+    console.log('📱 WC URI received in hook:', data.uri);
     // Construct the Flow Wallet universal link with WC URI
     const flowWalletUrl = `${FLOW_WALLET_UNIVERSAL_LINK}?uri=${encodeURIComponent(data.uri)}`;
-    console.log('📱 Opening Flow Wallet:', flowWalletUrl);
-    // Use window.location.href to trigger native navigation
+    console.log('📱 Opening Flow Wallet via wcRequestHook:', flowWalletUrl);
+    // Use window.location.href to trigger native navigation  
+    // The WalletBridgeViewController will intercept this and open externally
     window.location.href = flowWalletUrl;
   }
 };
@@ -90,9 +92,6 @@ if (IS_MOBILE_APP) {
     
     // Force WalletConnect to show QR/deep-link modal
     "fcl.walletconnect.method": "qr", // or "mobile"
-    
-    // Add our request hook to intercept WC URIs
-    "walletconnect.wcRequestHook": wcRequestHook,
   });
   
   console.log('📱 Mobile: Configured for WalletConnect with Flow Wallet');
@@ -158,4 +157,42 @@ if (typeof window !== 'undefined') {
       window.location.reload();
     }
   }, 100);
+}
+
+// Initialize FCL WalletConnect plugin with proper configuration
+// This MUST be called after FCL config is set up
+if (typeof window !== 'undefined') {
+  const initializeWalletConnect = async () => {
+    try {
+      console.log('🔌 Initializing FCL WalletConnect plugin...');
+      
+      const { FclWcServicePlugin, client } = await initFclWc({
+        projectId: WALLETCONNECT_PROJECT_ID,
+        metadata: {
+          name: 'Flunks',
+          description: 'Flunks - Your Flow NFT Collection',
+          url: APP_URL,
+          icons: ['https://flunks.net/flunks-logo.png']
+        },
+        // Critical: Pass the wcRequestHook for mobile deep linking
+        wcRequestHook: IS_MOBILE_APP ? wcRequestHook : undefined,
+        // Include base WC wallet listing
+        includeBaseWC: true,
+      });
+      
+      // Register the plugin with FCL
+      fcl.pluginRegistry.add(FclWcServicePlugin);
+      
+      console.log('✅ FCL WalletConnect plugin initialized', {
+        isMobile: IS_MOBILE_APP,
+        hasClient: !!client,
+        hasWcRequestHook: IS_MOBILE_APP
+      });
+    } catch (error) {
+      console.error('❌ Failed to initialize FCL WalletConnect plugin:', error);
+    }
+  };
+  
+  // Initialize after a short delay to ensure FCL config is ready
+  setTimeout(initializeWalletConnect, 200);
 }
