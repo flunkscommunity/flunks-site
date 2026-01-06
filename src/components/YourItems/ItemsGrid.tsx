@@ -588,6 +588,17 @@ const ItemsGrid: React.FC = () => {
 
   const memodCombinedItems = displayedItems;
 
+  // Debug logging for ItemsGrid
+  console.log('🎨 ItemsGrid render:', {
+    displayedItemsCount: displayedItems?.length || 0,
+    flunksCount,
+    backpacksCount,
+    isLoadingMetadata,
+    filter,
+    currentPage,
+    viewType
+  });
+
   React.useEffect(() => {
     // Scroll to top when active item changes
     scrollViewRef.current?.scrollTo(0, 0);
@@ -598,6 +609,8 @@ const ItemsGrid: React.FC = () => {
   
   // Check if we're in a loading state - have counts but no metadata yet
   const hasItemsButLoading = (filter === 'flunks' ? flunksCount > 0 : backpacksCount > 0) && noItems;
+  
+  console.log('🎨 ItemsGrid state:', { noItems, hasItemsButLoading, activeItem: !!activeItem });
 
   const handleOpenOnlyflunksItem = useCallback((nft: ObjectDetails) => {
     console.log(nft);

@@ -18,6 +18,10 @@
 		95BF0AD72F0AF8D400555DE8 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95BF0AD62F0AF8D400555DE8 /* WidgetKit.framework */; };
 		95BF0AD92F0AF8D400555DE8 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95BF0AD82F0AF8D400555DE8 /* SwiftUI.framework */; };
 		95BF0AE62F0AF8D500555DE8 /* FlunksWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 95BF0AD42F0AF8D400555DE8 /* FlunksWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		95BF0B072F0CD03200555DE8 /* FlunksWidgetBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 95BF0B052F0CD03200555DE8 /* FlunksWidgetBridge.m */; };
+		95BF0B082F0CD03200555DE8 /* FlunksWidgetBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95BF0B062F0CD03200555DE8 /* FlunksWidgetBridge.swift */; };
+		95BF0B092F0CD03200555DE8 /* FlunksWidgetBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 95BF0B052F0CD03200555DE8 /* FlunksWidgetBridge.m */; };
+		95BF0B0A2F0CD03200555DE8 /* FlunksWidgetBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95BF0B062F0CD03200555DE8 /* FlunksWidgetBridge.swift */; };
 		E6C7C9B62B6F5A3D00B1D9C1 /* WalletBridgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C7C9B52B6F5A3D00B1D9C1 /* WalletBridgeViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +65,10 @@
 		95BF0AD82F0AF8D400555DE8 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		95BF0AEC2F0AFB2100555DE8 /* FlunksWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FlunksWidgetExtension.entitlements; sourceTree = "<group>"; };
 		95BF0AED2F0AFCEF00555DE8 /* App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
+		95BF0B052F0CD03200555DE8 /* FlunksWidgetBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlunksWidgetBridge.m; sourceTree = "<group>"; };
+		95BF0B062F0CD03200555DE8 /* FlunksWidgetBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlunksWidgetBridge.swift; sourceTree = "<group>"; };
+		95BF0B0B2F0CD07400555DE8 /* App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "App-Bridging-Header.h"; sourceTree = "<group>"; };
+		95BF0B0C2F0CD07400555DE8 /* FlunksWidgetExtension-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FlunksWidgetExtension-Bridging-Header.h"; sourceTree = "<group>"; };
 		E6C7C9B52B6F5A3D00B1D9C1 /* WalletBridgeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBridgeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -102,12 +110,16 @@
 		504EC2FB1FED79650016851F = {
 			isa = PBXGroup;
 			children = (
+				95BF0B052F0CD03200555DE8 /* FlunksWidgetBridge.m */,
+				95BF0B062F0CD03200555DE8 /* FlunksWidgetBridge.swift */,
 				95BF0AEC2F0AFB2100555DE8 /* FlunksWidgetExtension.entitlements */,
 				958DCC722DB07C7200EA8C5F /* debug.xcconfig */,
 				504EC3061FED79650016851F /* App */,
 				95BF0ADA2F0AF8D400555DE8 /* FlunksWidget */,
 				95BF0AD52F0AF8D400555DE8 /* Frameworks */,
 				504EC3051FED79650016851F /* Products */,
+				95BF0B0B2F0CD07400555DE8 /* App-Bridging-Header.h */,
+				95BF0B0C2F0CD07400555DE8 /* FlunksWidgetExtension-Bridging-Header.h */,
 			);
 			sourceTree = "<group>";
 		};
@@ -204,11 +216,12 @@
 				TargetAttributes = {
 					504EC3031FED79650016851F = {
 						CreatedOnToolsVersion = 9.2;
-						LastSwiftMigration = 1100;
+						LastSwiftMigration = 2620;
 						ProvisioningStyle = Automatic;
 					};
 					95BF0AD32F0AF8D400555DE8 = {
 						CreatedOnToolsVersion = 26.2;
+						LastSwiftMigration = 2620;
 					};
 				};
 			};
@@ -264,6 +277,8 @@
 			files = (
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
 				E6C7C9B62B6F5A3D00B1D9C1 /* WalletBridgeViewController.swift in Sources */,
+				95BF0B072F0CD03200555DE8 /* FlunksWidgetBridge.m in Sources */,
+				95BF0B082F0CD03200555DE8 /* FlunksWidgetBridge.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,6 +286,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95BF0B092F0CD03200555DE8 /* FlunksWidgetBridge.m in Sources */,
+				95BF0B0A2F0CD03200555DE8 /* FlunksWidgetBridge.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,6 +435,7 @@
 			baseConfigurationReference = 958DCC722DB07C7200EA8C5F /* debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -433,6 +451,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.flunks.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "App-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -442,6 +462,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -456,6 +477,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.flunks.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "App-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -468,6 +490,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
@@ -499,6 +522,8 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "FlunksWidgetExtension-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -512,6 +537,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
@@ -541,6 +567,7 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "FlunksWidgetExtension-Bridging-Header.h";
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
