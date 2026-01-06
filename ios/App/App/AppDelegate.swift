@@ -17,12 +17,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // Extend content edges under status bar and home indicator
                 rootVC.additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 
+                // Set window background to dark color to prevent white flash
+                window.backgroundColor = UIColor(red: 0.059, green: 0.059, blue: 0.102, alpha: 1.0) // #0f0f1a
+                
                 // Access the web view and make it extend to edges
                 if let webView = rootVC.webView {
                     webView.scrollView.contentInsetAdjustmentBehavior = .never
                     webView.isOpaque = false
-                    webView.backgroundColor = .clear
-                    webView.scrollView.backgroundColor = .clear
+                    // Set dark background to match app theme and prevent flash
+                    let darkColor = UIColor(red: 0.059, green: 0.059, blue: 0.102, alpha: 1.0) // #0f0f1a
+                    webView.backgroundColor = darkColor
+                    webView.scrollView.backgroundColor = darkColor
                 }
             }
         }

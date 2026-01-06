@@ -5,6 +5,7 @@ import { useGum } from 'contexts/GumContext';
 import { useWindowsContext } from 'contexts/WindowsContext';
 import { WINDOW_IDS } from 'fixed';
 import LockerSystemNew from 'windows/LockerSystemNew';
+import { getApiUrl } from '../utils/apiBaseUrl';
 
 const isMobileApp = (): boolean => {
   if (typeof window === 'undefined') return false;
@@ -56,7 +57,7 @@ export default function WidgetClaimDeepLinkHandler() {
         inflightRef.current = true;
 
         try {
-          const resp = await fetch('/api/daily-checkin', {
+          const resp = await fetch(getApiUrl('/api/daily-checkin'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ wallet: walletAddress }),

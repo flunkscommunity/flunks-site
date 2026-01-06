@@ -1134,11 +1134,11 @@ const Home: NextPage = () => {
       <MonitorScreenWrapper>
         <AccessLevelStatus />
         
-        {/* Wallet Status Bar - Top Right */}
+        {/* Wallet Status Bar - Bottom Right (moved from top to avoid iPhone notch) */}
         <div style={{
           position: 'fixed',
-          top: '15px',
-          right: '15px',
+          bottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)',
+          right: '10px',
           zIndex: 9998
         }}>
           <WalletStatusBar compact={true} />

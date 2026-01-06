@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import { getApiUrl } from '../utils/apiBaseUrl';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -56,7 +57,7 @@ const useChatMessages = (roomName: string, currentUsername: string) => {
     setError(null);
 
     try {
-      const response = await fetch(`/api/chat-messages?room=${encodeURIComponent(roomName)}`);
+      const response = await fetch(getApiUrl(`/api/chat-messages?room=${encodeURIComponent(roomName)}`));
       const data = await response.json();
 
       if (!response.ok) {
@@ -89,7 +90,7 @@ const useChatMessages = (roomName: string, currentUsername: string) => {
     if (!displayUsername) return false;
 
     try {
-      const response = await fetch('/api/chat-messages', {
+      const response = await fetch(getApiUrl('/api/chat-messages'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

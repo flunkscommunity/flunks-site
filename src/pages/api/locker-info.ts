@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 import { normalizeWalletAddress } from 'utils/walletAddress';
+import { handleCors } from '../../utils/corsHeaders';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -16,6 +17,9 @@ export interface LockerInfo {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Handle CORS for mobile app
+  if (handleCors(req, res)) return;
+
   if (req.method !== 'GET') {
     res.setHeader('Allow', ['GET']);
     return res.status(405).json({ error: 'Method Not Allowed' });

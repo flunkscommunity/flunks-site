@@ -42,8 +42,8 @@ const config: CapacitorConfig = {
     allowsLinkPreview: false,
     // Scroll behavior
     scrollEnabled: true,
-    // Background color - transparent to let app content show through
-    backgroundColor: '#00000000',
+    // Background color - dark to match app theme and prevent white flash
+    backgroundColor: '#0f0f1a',
     // Status bar style
     preferredContentMode: 'mobile'
   },
@@ -56,9 +56,9 @@ const config: CapacitorConfig = {
   
   // Plugins configuration
   plugins: {
-    // Splash screen configuration
+    // Splash screen configuration - use minimal native splash, React handles the animation
     SplashScreen: {
-      launchShowDuration: 2000,
+      launchShowDuration: 0,
       launchAutoHide: true,
       backgroundColor: '#0f0f1a',
       androidScaleType: 'CENTER_CROP',

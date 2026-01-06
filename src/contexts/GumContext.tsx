@@ -17,6 +17,9 @@ import { checkForSpecialEvents } from '../services/specialEventsService';
 import { useWidgetSync } from '../hooks/useWidgetSync';
 import { cancelDailyGumReminder, scheduleDailyGumReminder } from '../utils/dailyGumNotifications';
 
+// Enable debug logging for widget sync
+const WIDGET_DEBUG = true;
+
 export interface GumContextType {
   balance: number;
   stats: GumStats | null;
@@ -57,7 +60,7 @@ export const GumProvider: React.FC<GumProviderProps> = ({
   const { primaryWallet } = useDynamicContext();
   const auth = useAuth();
   const { profile } = useUserProfile();
-  const { syncWidget, clearWidget, isWidgetAvailable } = useWidgetSync();
+  const { syncWidget, clearWidget, isWidgetAvailable } = useWidgetSync({ debug: WIDGET_DEBUG });
   const [balance, setBalance] = useState<number>(0);
   const [stats, setStats] = useState<GumStats | null>(null);
   const [loading, setLoading] = useState(false);
@@ -165,8 +168,32 @@ export const GumProvider: React.FC<GumProviderProps> = ({
 
   // Sync iOS widget when balance/status changes
   useEffect(() => {
-    if (!isWidgetAvailable) return;
-    if (!walletAddress || !auth.isAuthenticated) return;
+    console.log('📱 Widget sync effect triggered:', {
+      isWidgetAvailable,
+      walletAddress,
+      isAuthenticated: auth.isAuthenticated,
+      balance,
+      username: profile?.username,
+      dailyClaimed,
+      nextClaimMinutes
+    });
+    
+    if (!isWidgetAvailable) {
+      console.log('📱 Widget not available, skipping sync');
+      return;
+    }
+    if (!walletAddress || !auth.isAuthenticated) {
+      console.log('📱 No wallet or not authenticated, skipping sync');
+      return;
+    }
+
+    console.log('📱 Syncing widget with data:', {
+      gumBalance: balance,
+      lockerNumber: 0,
+      username: profile?.username || 'Anon',
+      dailyClaimed,
+      nextClaimMinutes,
+    });
 
     void syncWidget({
       gumBalance: balance,

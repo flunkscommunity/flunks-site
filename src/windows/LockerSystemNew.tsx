@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import DraggableResizeableWindow from '../components/DraggableResizeableWindow';
 import MobileWalletHelper from '../components/MobileWalletHelper';
 import { GumCooldownTimer } from '../components/GumCooldownTimer';
@@ -10,11 +10,34 @@ import { useUnifiedWallet } from '../contexts/UnifiedWalletContext';
 import UnifiedConnectButton from '../components/UnifiedConnectButton';
 import * as fcl from '@onflow/fcl';
 import { getUserGumBalance, getUserGumTransactions } from '../utils/gumAPI';
+import { getApiUrl } from '../utils/apiBaseUrl';
 import { useUserProfile } from '../contexts/UserProfileContext';
 import { useGum } from '../contexts/GumContext';
 import WeeklyObjectives from '../components/WeeklyObjectives';
 // WINDOW_IDS lives in src/fixed.ts (baseUrl set to src)
 import { WINDOW_IDS } from 'fixed';
+
+/**
+ * Normalize a Flow address to standard format (0x + 16 hex chars lowercase)
+ */
+function normalizeFlowAddress(address: string | null | undefined): string {
+  if (!address) return '';
+  
+  let normalized = address.trim().toLowerCase();
+  
+  // Handle CAIP-10 format (e.g., "flow:mainnet:0x123...")
+  if (normalized.includes(':')) {
+    const parts = normalized.split(':');
+    normalized = parts[parts.length - 1];
+  }
+  
+  // Ensure 0x prefix
+  if (!normalized.startsWith('0x')) {
+    normalized = '0x' + normalized;
+  }
+  
+  return normalized;
+}
 
 const LockerSystemNew: React.FC = () => {
   const { closeWindow } = useWindowsContext();
@@ -24,6 +47,10 @@ const LockerSystemNew: React.FC = () => {
   const { isConnected, address: unifiedAddress, walletType, disconnect } = useUnifiedWallet();
   const { hasProfile, profile } = useUserProfile();
   const { balance, stats } = useGum();
+  
+  // Normalize the wallet address for all API calls
+  const normalizedAddress = useMemo(() => normalizeFlowAddress(unifiedAddress), [unifiedAddress]);
+  
   const [currentSection, setCurrentSection] = useState<1 | 2 | 3>(1);
   const [gumBalance, setGumBalance] = useState<number>(0);
   const [selectedJacket, setSelectedJacket] = useState<number>(0); // 0 or 1 for jacket options
@@ -67,14 +94,14 @@ const LockerSystemNew: React.FC = () => {
 
   // Load gum balance and tracking data when wallet connects
   useEffect(() => {
-    if (unifiedAddress) {
+    if (normalizedAddress) {
       loadGumBalance();
       loadGumTrackingData();
       checkRoom7Key();
       checkFourThievesUnderground();
       checkHalloweenDrop(); // Check Halloween GumDrop status
     }
-  }, [unifiedAddress]);
+  }, [normalizedAddress]);
 
   // Use GumContext balance if available
   useEffect(() => {
@@ -179,9 +206,9 @@ const LockerSystemNew: React.FC = () => {
   }, [currentSection]);
 
   const loadGumBalance = async () => {
-    if (!unifiedAddress) return;
+    if (!normalizedAddress) return;
     try {
-      const balance = await getUserGumBalance(unifiedAddress);
+      const balance = await getUserGumBalance(normalizedAddress);
       setGumBalance(balance || 0);
     } catch (error) {
       console.error('Error loading gum balance:', error);
@@ -190,9 +217,9 @@ const LockerSystemNew: React.FC = () => {
 
   // Check if user has Room 7 key
   const checkRoom7Key = async () => {
-    if (!unifiedAddress) return;
+    if (!normalizedAddress) return;
     try {
-      const response = await fetch(`/api/check-room7-key?walletAddress=${unifiedAddress}`);
+      const response = await fetch(getApiUrl(`/api/check-room7-key?walletAddress=${normalizedAddress}`));
       const data = await response.json();
       if (data.success && data.hasKey) {
         setHasRoom7Key(true);
@@ -204,9 +231,9 @@ const LockerSystemNew: React.FC = () => {
 
   // Check if user has Four Thieves Underground access
   const checkFourThievesUnderground = async () => {
-    if (!unifiedAddress) return;
+    if (!normalizedAddress) return;
     try {
-      const response = await fetch(`/api/check-four-thieves-underground?walletAddress=${unifiedAddress}`);
+      const response = await fetch(getApiUrl(`/api/check-four-thieves-underground?walletAddress=${normalizedAddress}`));
       const data = await response.json();
       if (data.success && data.hasAccess) {
         setHasFourThievesAccess(true);
@@ -218,9 +245,9 @@ const LockerSystemNew: React.FC = () => {
 
   // Check Halloween GumDrop status
   const checkHalloweenDrop = async () => {
-    console.log('🎃 checkHalloweenDrop called, unifiedAddress:', unifiedAddress);
-    if (!unifiedAddress) {
-      console.log('❌ No unifiedAddress, exiting early');
+    console.log('🎃 checkHalloweenDrop called, normalizedAddress:', normalizedAddress);
+    if (!normalizedAddress) {
+      console.log('❌ No normalizedAddress, exiting early');
       return;
     }
     
@@ -283,7 +310,7 @@ const LockerSystemNew: React.FC = () => {
         setHalloweenClaimed(false); // Never mark as claimed based on blockchain
         
         // Get Flunk count (mock for now)
-        const flunkResponse = await fetch(`/api/get-flunk-count?address=${unifiedAddress}`);
+        const flunkResponse = await fetch(getApiUrl(`/api/get-flunk-count?address=${normalizedAddress}`));
         const flunkData = await flunkResponse.json();
         console.log('🎨 Flunk count:', flunkData);
         setFlunkCount(flunkData.flunkCount || 0);
@@ -304,16 +331,16 @@ const LockerSystemNew: React.FC = () => {
 
   // Load real gum tracking data
   const loadGumTrackingData = async () => {
-    if (!unifiedAddress) {
+    if (!normalizedAddress) {
       console.log('🔍 LockerSystem: No wallet address, skipping tracking data load');
       return;
     }
     
-    console.log('🔍 LockerSystem: Loading GUM tracking data for:', unifiedAddress.slice(0, 8) + '...');
+    console.log('🔍 LockerSystem: Loading GUM tracking data for:', normalizedAddress.slice(0, 8) + '...');
     
     try {
       // Get recent transactions to calculate today's earnings
-      const transactions = await getUserGumTransactions(unifiedAddress, 50, 0);
+      const transactions = await getUserGumTransactions(normalizedAddress, 50, 0);
       console.log('📊 LockerSystem: Retrieved', transactions.length, 'transactions');
       
       // Calculate today's earnings
@@ -398,7 +425,7 @@ const LockerSystemNew: React.FC = () => {
   const handleCreateProfile = async () => {
     console.log('🚀 NEW SYSTEM: handleCreateProfile called - Checking for existing profile first!');
     
-    if (!unifiedAddress) {
+    if (!normalizedAddress) {
       alert('Please connect your wallet first!');
       return;
     }
@@ -606,7 +633,7 @@ const LockerSystemNew: React.FC = () => {
       tabIndex={0}
       onKeyDown={handleKeyDown}
       >
-        {/* Wallet Status Bar - Shows connected wallet and disconnect button */}
+        {/* Wallet Status Bar - Pixel style, positioned at top */}
         {isConnected && (
           <div style={{
             position: 'absolute',
@@ -614,44 +641,51 @@ const LockerSystemNew: React.FC = () => {
             right: '10px',
             display: 'flex',
             alignItems: 'center',
-            gap: '10px',
-            background: 'rgba(0, 0, 0, 0.7)',
-            padding: '8px 12px',
-            borderRadius: '6px',
+            gap: '4px',
+            background: '#1a1a2e',
+            padding: '4px 8px',
+            border: '2px solid #333',
+            borderRadius: '0px',
             zIndex: 1001,
-            fontSize: '12px',
-            color: 'white',
-            fontFamily: 'w95fa, "Courier New", monospace'
+            fontSize: '10px',
+            color: '#00ff00',
+            fontFamily: '"Press Start 2P", w95fa, "Courier New", monospace',
+            boxShadow: '2px 2px 0px #000, inset 1px 1px 0px #444'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '16px' }}>{walletType === 'dynamic' ? '💎' : '🌊'}</span>
-              <span style={{ fontSize: '11px', opacity: 0.9 }}>
-                {unifiedAddress?.slice(0, 6)}...{unifiedAddress?.slice(-4)}
-              </span>
-            </div>
+            {/* Green status pixel */}
+            <div style={{
+              width: '8px',
+              height: '8px',
+              background: '#00ff00',
+              border: '1px solid #00aa00',
+              boxShadow: '0 0 4px #00ff00',
+            }} />
+            <span style={{ fontSize: '8px', textShadow: '0 0 2px #00ff00' }}>
+              {normalizedAddress?.slice(0, 6)}...{normalizedAddress?.slice(-4)}
+            </span>
             <button
               onClick={async () => {
-                if (confirm('Disconnect wallet? You will need to reconnect to access your locker.')) {
+                if (confirm('Disconnect wallet?')) {
                   await disconnect();
                   closeWindow(WINDOW_IDS.USER_PROFILE);
                 }
               }}
               style={{
-                background: '#dc3545',
+                background: '#aa0000',
                 color: 'white',
-                border: 'none',
-                padding: '4px 10px',
-                borderRadius: '4px',
-                fontSize: '11px',
+                border: '2px solid #660000',
+                padding: '2px 6px',
+                fontSize: '8px',
                 cursor: 'pointer',
-                fontWeight: 'bold',
-                fontFamily: 'w95fa, "Courier New", monospace',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                fontFamily: '"Press Start 2P", w95fa, "Courier New", monospace',
+                boxShadow: '1px 1px 0px #000',
+                lineHeight: 1
               }}
-              onMouseEnter={(e) => e.currentTarget.style.background = '#c82333'}
-              onMouseLeave={(e) => e.currentTarget.style.background = '#dc3545'}
+              onMouseEnter={(e) => e.currentTarget.style.background = '#ff4444'}
+              onMouseLeave={(e) => e.currentTarget.style.background = '#aa0000'}
+              title="Disconnect wallet"
             >
-              🚪 Disconnect
+              ✕
             </button>
           </div>
         )}
@@ -1679,7 +1713,7 @@ const LockerSystemNew: React.FC = () => {
                                   if (claimingHalloween) return;
                                   
                                   // Check if user is authenticated with FCL
-                                  if (!unifiedAddress) {
+                                  if (!normalizedAddress) {
                                     alert('⚠️ Please connect your wallet first!\n\nUse Lilico or Dapper from the wallet connection menu.');
                                     return;
                                   }
@@ -1720,7 +1754,7 @@ const LockerSystemNew: React.FC = () => {
                                     
                                     // Call backend API to add GUM to Supabase
                                     const gumAmount = 100; // Halloween GumDrop: 100 GUM flat reward
-                                    const response = await fetch('/api/claim-halloween-gum', {
+                                    const response = await fetch(getApiUrl('/api/claim-halloween-gum'), {
                                       method: 'POST',
                                       headers: { 'Content-Type': 'application/json' },
                                       body: JSON.stringify({
@@ -1905,7 +1939,7 @@ const LockerSystemNew: React.FC = () => {
 
                               // Implement daily check-in logic
                               try {
-                                const result = await fetch('/api/daily-checkin', {
+                                const result = await fetch(getApiUrl('/api/daily-checkin'), {
                                   method: 'POST',
                                   headers: { 'Content-Type': 'application/json' },
                                   body: JSON.stringify({ wallet: unifiedAddress })

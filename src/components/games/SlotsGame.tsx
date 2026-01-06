@@ -6,6 +6,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { getTotalWin, PAYLINES, FLUNKS_SYMBOLS } from '../../lib/slots/flunksPaytable';
+import { getApiUrl } from '../../utils/apiBaseUrl';
 
 // Types
 interface SlotsGameProps {
@@ -67,7 +68,7 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
     if (!walletAddress) return { success: false, error: 'No wallet connected' };
     
     try {
-      const response = await fetch('/api/slots/transaction', {
+      const response = await fetch(getApiUrl('/api/slots/transaction'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ wallet_address: walletAddress, type, amount, metadata })
@@ -129,7 +130,7 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
     
     try {
       // Call serverless slot API
-      const response = await fetch('/api/slots/spin-serverless', {
+      const response = await fetch(getApiUrl('/api/slots/spin-serverless'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ bet, walletAddress }),

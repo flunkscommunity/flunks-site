@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { handleCors } from '../../utils/corsHeaders';
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -17,6 +18,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<UndergroundAccessCheckResponse>
 ) {
+  // Handle CORS for mobile app
+  if (handleCors(req, res)) return;
+
   if (req.method !== 'GET') {
     return res.status(405).json({
       success: false,

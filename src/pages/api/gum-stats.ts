@@ -1,7 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { supabase } from '../../lib/supabase';
+import { handleCors } from '../../utils/corsHeaders';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Handle CORS for mobile app
+  if (handleCors(req, res)) return;
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }

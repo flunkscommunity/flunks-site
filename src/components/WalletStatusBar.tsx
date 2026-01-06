@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useUnifiedWallet } from '../contexts/UnifiedWalletContext';
-import { Button } from 'react95';
 
 interface WalletStatusBarProps {
   onDisconnect?: () => void;
@@ -9,13 +8,14 @@ interface WalletStatusBarProps {
 
 const WalletStatusBar: React.FC<WalletStatusBarProps> = ({ onDisconnect, compact = false }) => {
   const { isConnected, address, walletType, disconnect } = useUnifiedWallet();
+  const [isHovered, setIsHovered] = useState(false);
 
   if (!isConnected || !address) {
     return null;
   }
 
   const handleDisconnect = async () => {
-    if (confirm('Disconnect wallet? You will need to reconnect to access your locker and other features.')) {
+    if (confirm('Disconnect wallet?')) {
       await disconnect();
       if (onDisconnect) {
         onDisconnect();
@@ -23,59 +23,70 @@ const WalletStatusBar: React.FC<WalletStatusBarProps> = ({ onDisconnect, compact
     }
   };
 
+  // Normalize address for display (handle CAIP-10 format)
+  let displayAddress = address;
+  if (address.includes(':')) {
+    const parts = address.split(':');
+    displayAddress = parts[parts.length - 1];
+  }
+
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: compact ? '8px' : '10px',
-      background: 'rgba(0, 0, 0, 0.7)',
-      padding: compact ? '6px 10px' : '8px 12px',
-      borderRadius: '6px',
-      fontSize: compact ? '11px' : '12px',
-      color: 'white',
-      fontFamily: 'w95fa, "Courier New", monospace'
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-        <span style={{ fontSize: compact ? '14px' : '16px' }}>
-          {walletType === 'dynamic' ? '💎' : '🌊'}
-        </span>
-        <span style={{ opacity: 0.9, fontSize: compact ? '10px' : '11px' }}>
-          {address.slice(0, 6)}...{address.slice(-4)}
-        </span>
-      </div>
+    <div 
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px',
+        background: '#1a1a2e',
+        padding: '4px 8px',
+        border: '2px solid #333',
+        borderRadius: '0px',
+        fontSize: '10px',
+        color: '#00ff00',
+        fontFamily: '"Press Start 2P", w95fa, "Courier New", monospace',
+        boxShadow: '2px 2px 0px #000, inset 1px 1px 0px #444',
+        imageRendering: 'pixelated',
+        letterSpacing: '0px'
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Status indicator - pixel style */}
+      <div style={{
+        width: '8px',
+        height: '8px',
+        background: '#00ff00',
+        border: '1px solid #00aa00',
+        boxShadow: '0 0 4px #00ff00',
+      }} />
       
-      {compact ? (
-        <button
-          onClick={handleDisconnect}
-          style={{
-            background: '#dc3545',
-            color: 'white',
-            border: 'none',
-            padding: '3px 8px',
-            borderRadius: '3px',
-            fontSize: '10px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            fontFamily: 'w95fa, "Courier New", monospace'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.background = '#c82333'}
-          onMouseLeave={(e) => e.currentTarget.style.background = '#dc3545'}
-        >
-          🚪
-        </button>
-      ) : (
-        <Button
-          onClick={handleDisconnect}
-          size="sm"
-          style={{
-            fontSize: '10px',
-            padding: '2px 8px',
-            fontFamily: 'w95fa, "Courier New", monospace'
-          }}
-        >
-          🚪 Disconnect
-        </Button>
-      )}
+      {/* Address - truncated */}
+      <span style={{ 
+        opacity: 0.9, 
+        fontSize: '8px',
+        textShadow: '0 0 2px #00ff00'
+      }}>
+        {displayAddress.slice(0, 6)}...{displayAddress.slice(-4)}
+      </span>
+      
+      {/* Disconnect button - pixel X */}
+      <button
+        onClick={handleDisconnect}
+        style={{
+          background: isHovered ? '#ff4444' : '#aa0000',
+          color: 'white',
+          border: '2px solid #660000',
+          padding: '2px 6px',
+          fontSize: '8px',
+          cursor: 'pointer',
+          fontFamily: '"Press Start 2P", w95fa, "Courier New", monospace',
+          boxShadow: '1px 1px 0px #000',
+          transition: 'background 0.1s',
+          lineHeight: 1
+        }}
+        title="Disconnect wallet"
+      >
+        ✕
+      </button>
     </div>
   );
 };

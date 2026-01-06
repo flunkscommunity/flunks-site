@@ -64,10 +64,17 @@ const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
 const MyApp: AppType = ({ Component, pageProps }) => {
   const memodGlobalStyles = React.useMemo(() => <GlobalStyles />, []);
   const [isClient, setIsClient] = React.useState(false);
+  const [initError, setInitError] = React.useState<string | null>(null);
 
   // Ensure client-side rendering for Dynamic Labs
   React.useEffect(() => {
-    setIsClient(true);
+    console.log('🚀 _app.tsx: useEffect running, setting isClient to true');
+    try {
+      setIsClient(true);
+    } catch (error) {
+      console.error('❌ Error setting isClient:', error);
+      setInitError(String(error));
+    }
   }, []);
 
   // Start wallet branding fix and enhance detection on component mount
@@ -110,20 +117,31 @@ const MyApp: AppType = ({ Component, pageProps }) => {
             justifyContent: 'center',
             alignItems: 'center',
             minHeight: '100vh',
-            backgroundColor: '#f0f0f0',
-            fontFamily: 'Arial, sans-serif'
+            backgroundColor: '#0f0f1a',
+            fontFamily: 'Arial, sans-serif',
+            color: 'white'
           }}>
             <div style={{ textAlign: 'center' }}>
-              <div style={{
-                width: '40px',
-                height: '40px',
-                border: '4px solid #e0e0e0',
-                borderTop: '4px solid #007bff',
-                borderRadius: '50%',
-                animation: 'spin 1s linear infinite',
-                margin: '0 auto 20px'
-              }}></div>
-              <p>Loading Flunks...</p>
+              {initError ? (
+                <>
+                  <p style={{ color: '#ff6666' }}>Error: {initError}</p>
+                  <button onClick={() => window.location.reload()}>Reload</button>
+                </>
+              ) : (
+                <>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    border: '4px solid #333',
+                    borderTop: '4px solid #00ff00',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite',
+                    margin: '0 auto 20px'
+                  }}></div>
+                  <p>Loading Flunks...</p>
+                  <p style={{ fontSize: '10px', opacity: 0.5, marginTop: '10px' }}>Initializing app...</p>
+                </>
+              )}
               <style jsx>{`
                 @keyframes spin {
                   0% { transform: rotate(0deg); }

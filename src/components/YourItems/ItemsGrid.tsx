@@ -583,7 +583,7 @@ const ItemsGrid: React.FC = () => {
     useState<any | null>(null);
   const [pixelMode, setPixelMode] = useState<boolean>(false);
 
-  const { displayedItems, currentPage, setPage, viewType, currentDataPages } =
+  const { displayedItems, currentPage, setPage, viewType, currentDataPages, flunksCount, backpacksCount, isLoadingMetadata, filter } =
     usePaginatedItems();
 
   const memodCombinedItems = displayedItems;
@@ -593,7 +593,11 @@ const ItemsGrid: React.FC = () => {
     scrollViewRef.current?.scrollTo(0, 0);
   }, [activeItem]);
 
+  // Check if we have items to display
   const noItems = !memodCombinedItems?.length;
+  
+  // Check if we're in a loading state - have counts but no metadata yet
+  const hasItemsButLoading = (filter === 'flunks' ? flunksCount > 0 : backpacksCount > 0) && noItems;
 
   const handleOpenOnlyflunksItem = useCallback((nft: ObjectDetails) => {
     console.log(nft);
@@ -643,7 +647,25 @@ const ItemsGrid: React.FC = () => {
         <YourItemsGridHeader pixelMode={pixelMode} setPixelMode={setPixelMode} />
       </div>
 
-      {noItems && <NoItemsMessage />}
+      {/* Show loading state when we have counts but metadata is still loading */}
+      {hasItemsButLoading && (
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column',
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          height: '200px',
+          color: '#00ffff',
+          fontFamily: 'monospace',
+          gap: '10px'
+        }}>
+          <div style={{ fontSize: '24px' }}>⏳</div>
+          <div>Loading {filter === 'flunks' ? flunksCount : backpacksCount} {filter}...</div>
+        </div>
+      )}
+      
+      {/* Show no items message only when counts are also 0 */}
+      {noItems && !hasItemsButLoading && <NoItemsMessage />}
       {!activeItem && !noItems && (
         <CustomStyledScrollView
           ref={scrollViewRef}

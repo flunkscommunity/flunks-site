@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useUnifiedWallet } from '../contexts/UnifiedWalletContext';
+import { getApiUrl } from '../utils/apiBaseUrl';
 
 export interface LockerInfo {
   locker_number: number | null;
@@ -44,7 +45,7 @@ export const useLockerInfo = () => {
     setError(null);
 
     try {
-      const response = await fetch(`/api/locker-info?wallet_address=${normalizedAddress}`);
+      const response = await fetch(getApiUrl(`/api/locker-info?wallet_address=${normalizedAddress}`));
       
       if (response.status === 404) {
         // User doesn't exist yet - they'll get a locker when they sign up
@@ -97,7 +98,7 @@ export const useLockerAssignment = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/assign-locker', {
+      const response = await fetch(getApiUrl('/api/assign-locker'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -144,7 +145,7 @@ export const useLockerStats = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/locker-stats');
+      const response = await fetch(getApiUrl('/api/locker-stats'));
       
       if (!response.ok) {
         throw new Error('Failed to fetch locker stats');

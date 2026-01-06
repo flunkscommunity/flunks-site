@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useUnifiedWallet } from './UnifiedWalletContext';
+import { getApiUrl } from '../utils/apiBaseUrl';
+import { supabase } from '../lib/supabase';
 
 export interface UserProfile {
   id: number;
@@ -70,34 +72,41 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
     setError(null);
 
     try {
-      // Check if Supabase is configured
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-      
-      if (!supabaseUrl || !supabaseKey || supabaseUrl === 'placeholder_url' || supabaseKey === 'placeholder_key') {
-        // If Supabase isn't configured, check localStorage
-        console.warn('Supabase not configured, checking localStorage for profile');
-        
-        const storedProfile = localStorage.getItem(`flunks_profile_${walletAddress}`);
-        if (storedProfile) {
-          const profileData = JSON.parse(storedProfile);
-          console.log('👤 UserProfile: Found stored profile:', profileData);
-          setProfile(profileData);
-        } else {
-          console.log('👤 UserProfile: No stored profile found');
-          setProfile(null);
-        }
-        return;
-      }
+      // Try direct Supabase query first (works on mobile without CORS issues)
+      if (supabase) {
+        console.log('👤 UserProfile: Using direct Supabase query');
+        const { data, error: supaError } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .eq('wallet_address', walletAddress)
+          .single();
 
-      // Use API when Supabase is properly configured
-      console.log('👤 UserProfile: Calling API /api/get-user-profile?wallet=' + walletAddress);
-      const response = await fetch(`/api/get-user-profile?wallet=${walletAddress}`);
+        if (supaError) {
+          if (supaError.code === 'PGRST116') {
+            // No profile found - this is normal for new users
+            console.log('👤 UserProfile: No profile found in database - user needs to create profile');
+            setProfile(null);
+            setLoading(false);
+            return;
+          }
+          console.error('👤 UserProfile: Supabase query error:', supaError);
+          // Fall through to try API or localStorage
+        } else if (data) {
+          console.log('👤 UserProfile: Profile fetched from Supabase:', data);
+          setProfile(data);
+          setLoading(false);
+          return;
+        }
+      }
+      
+      // Fallback to API (may have CORS issues on mobile)
+      console.log('👤 UserProfile: Trying API fallback /api/get-user-profile?wallet=' + walletAddress);
+      const response = await fetch(getApiUrl(`/api/get-user-profile?wallet=${walletAddress}`));
       
       if (response.status === 404) {
-        // No profile found - this is normal for new users
-        console.log('👤 UserProfile: No profile found in database (404) - user needs to create profile');
+        console.log('👤 UserProfile: No profile found in database (404)');
         setProfile(null);
+        setLoading(false);
         return;
       }
 
@@ -106,7 +115,7 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
       }
 
       const profileData = await response.json();
-      console.log('👤 UserProfile: Profile fetched successfully:', profileData);
+      console.log('👤 UserProfile: Profile fetched via API:', profileData);
       setProfile(profileData);
 
     } catch (err) {
@@ -117,6 +126,7 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
         const storedProfile = localStorage.getItem(`flunks_profile_${walletAddress}`);
         if (storedProfile) {
           const profileData = JSON.parse(storedProfile);
+          console.log('👤 UserProfile: Using localStorage fallback:', profileData);
           setProfile(profileData);
         } else {
           setProfile(null);
@@ -242,7 +252,7 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
       }
 
       // Use API when Supabase is properly configured
-      const response = await fetch('/api/user-profile', {
+      const response = await fetch(getApiUrl('/api/user-profile'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -320,7 +330,7 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
       }
 
       // Use API when Supabase is properly configured
-      const response = await fetch(`/api/check-username?username=${encodeURIComponent(username)}`);
+      const response = await fetch(getApiUrl(`/api/check-username?username=${encodeURIComponent(username)}`));
       
       if (!response.ok) {
         throw new Error('Failed to check username');

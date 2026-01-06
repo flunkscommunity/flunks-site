@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { getApiUrl } from '../utils/apiBaseUrl';
 
 interface Message {
   id: string;
@@ -31,7 +32,7 @@ const useAIChat = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/ai-chat', {
+      const response = await fetch(getApiUrl('/api/ai-chat'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

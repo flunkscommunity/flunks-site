@@ -184,15 +184,24 @@ export const getOwnerTokenStakeInfoWhale = async (
   }
   
   console.log('🔍 Getting stake info for', normalizedAddress, collection, tokenIDs.length, 'tokens');
+  console.log('🔍 Token IDs sample:', tokenIDs.slice(0, 5));
   
-  return await fcl
-    .send([
-      fcl.script(CODE),
-      fcl.args([
-        fcl.arg(normalizedAddress, t.Address),
-        fcl.arg(collection, t.String),
-        fcl.arg(tokenIDs, t.Array(t.UInt64)),
-      ]),
-    ])
-    .then(fcl.decode);
+  try {
+    const result = await fcl
+      .send([
+        fcl.script(CODE),
+        fcl.args([
+          fcl.arg(normalizedAddress, t.Address),
+          fcl.arg(collection, t.String),
+          fcl.arg(tokenIDs, t.Array(t.UInt64)),
+        ]),
+      ])
+      .then(fcl.decode);
+    
+    console.log('✅ Stake info result for', collection, ':', result?.length, 'items');
+    return result;
+  } catch (error) {
+    console.error('❌ Error getting stake info for', collection, ':', error);
+    throw error;
+  }
 };

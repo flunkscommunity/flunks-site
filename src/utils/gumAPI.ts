@@ -1,4 +1,27 @@
 import { supabase } from '../lib/supabase';
+import { getApiUrl } from './apiBaseUrl';
+
+/**
+ * Normalize a Flow address to standard format (0x + 16 hex chars lowercase)
+ */
+function normalizeFlowAddress(address: string): string {
+  if (!address) return '';
+  
+  let normalized = address.trim().toLowerCase();
+  
+  // Handle CAIP-10 format (e.g., "flow:mainnet:0x123...")
+  if (normalized.includes(':')) {
+    const parts = normalized.split(':');
+    normalized = parts[parts.length - 1];
+  }
+  
+  // Ensure 0x prefix
+  if (!normalized.startsWith('0x')) {
+    normalized = '0x' + normalized;
+  }
+  
+  return normalized;
+}
 
 export interface GumStats {
   current_balance: number;
@@ -48,8 +71,9 @@ export async function awardGum(
   metadata?: any
 ): Promise<GumAwardResult> {
   try {
+    const normalizedAddress = normalizeFlowAddress(walletAddress);
     const { data, error } = await supabase.rpc('award_gum', {
-      p_wallet_address: walletAddress,
+      p_wallet_address: normalizedAddress,
       p_source: source,
       p_metadata: metadata || null
     });
@@ -79,14 +103,18 @@ export async function awardGum(
  */
 export async function getUserGumStats(walletAddress: string): Promise<GumStats | null> {
   try {
-    const response = await fetch('/api/gum-stats', {
+    const normalizedAddress = normalizeFlowAddress(walletAddress);
+    const url = getApiUrl('/api/gum-stats');
+    console.log('🔍 getUserGumStats: Fetching', url);
+    
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ wallet: walletAddress })
+      body: JSON.stringify({ wallet: normalizedAddress })
     });
 
     if (!response.ok) {
-      console.error('Error getting gum stats:', response.status);
+      console.error('Error getting gum stats:', response.status, response.statusText);
       return null;
     }
 
@@ -99,7 +127,7 @@ export async function getUserGumStats(walletAddress: string): Promise<GumStats |
       return null;
     }
   } catch (error) {
-    console.error('Error in getUserGumStats:', error);
+    console.error('Error in getUserGumStats:', error instanceof Error ? error.message : error);
     return null;
   }
 }
@@ -113,14 +141,18 @@ export async function getUserGumTransactions(
   offset: number = 0
 ): Promise<GumTransaction[]> {
   try {
-    const response = await fetch('/api/gum-transactions', {
+    const normalizedAddress = normalizeFlowAddress(walletAddress);
+    const url = getApiUrl('/api/gum-transactions');
+    console.log('🔍 getUserGumTransactions: Fetching', url);
+    
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ wallet: walletAddress, limit, offset })
+      body: JSON.stringify({ wallet: normalizedAddress, limit, offset })
     });
 
     if (!response.ok) {
-      console.error('Error getting gum transactions:', response.status);
+      console.error('Error getting gum transactions:', response.status, response.statusText);
       return [];
     }
 
@@ -133,7 +165,7 @@ export async function getUserGumTransactions(
       return [];
     }
   } catch (error) {
-    console.error('Error in getUserGumTransactions:', error);
+    console.error('Error in getUserGumTransactions:', error instanceof Error ? error.message : error);
     return [];
   }
 }
@@ -143,7 +175,7 @@ export async function getUserGumTransactions(
  */
 export async function getGumSources(): Promise<GumSource[]> {
   try {
-    const response = await fetch('/api/gum-sources', {
+    const response = await fetch(getApiUrl('/api/gum-sources'), {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     });
@@ -169,14 +201,17 @@ export async function checkGumCooldown(
   source: string
 ): Promise<{ canEarn: boolean; cooldownMinutes?: number; reason?: string }> {
   try {
-    const response = await fetch('/api/check-gum-cooldown', {
+    const url = getApiUrl('/api/check-gum-cooldown');
+    console.log('🔍 checkGumCooldown: Fetching', url);
+    
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ wallet: walletAddress, source })
     });
 
     if (!response.ok) {
-      console.error('Error checking gum cooldown:', response.status);
+      console.error('Error checking gum cooldown:', response.status, response.statusText);
       // On API error, allow earning (graceful fallback)
       return { canEarn: true, reason: 'API error, allowing earn' };
     }
@@ -195,7 +230,7 @@ export async function checkGumCooldown(
       return { canEarn: true, reason: 'API error, allowing earn' };
     }
   } catch (error) {
-    console.error('Error in checkGumCooldown:', error);
+    console.error('Error in checkGumCooldown:', error instanceof Error ? error.message : error);
     // On any error, allow earning (graceful fallback for development)
     return { canEarn: true, reason: 'Exception occurred, allowing earn' };
   }
@@ -205,22 +240,36 @@ export async function checkGumCooldown(
  * Get user's current gum balance only - Direct database query
  */
 export async function getUserGumBalance(walletAddress: string): Promise<number> {
+  console.log('🍬 getUserGumBalance called with:', walletAddress);
   try {
+    const normalizedAddress = normalizeFlowAddress(walletAddress);
+    console.log('🍬 getUserGumBalance normalized address:', normalizedAddress);
+    
+    // Check if supabase client is available
+    if (!supabase) {
+      console.error('🍬 Supabase client is not initialized!');
+      return 0;
+    }
+    
     const { data, error } = await supabase
       .from('user_gum_balances')
       .select('total_gum')
-      .eq('wallet_address', walletAddress)
+      .eq('wallet_address', normalizedAddress)
       .single();
+
+    console.log('🍬 getUserGumBalance result:', { data, error });
 
     if (error) {
       if (error.code === 'PGRST116') {
         // No record found, return 0
+        console.log('🍬 No GUM record found for wallet, returning 0');
         return 0;
       }
       console.error('Error getting gum balance from database:', error);
       return 0;
     }
 
+    console.log('🍬 getUserGumBalance returning:', data?.total_gum || 0);
     return data?.total_gum || 0;
   } catch (error) {
     console.error('Error in getUserGumBalance:', error);
@@ -233,10 +282,11 @@ export async function getUserGumBalance(walletAddress: string): Promise<number> 
  */
 export async function getUserGumBalanceAPI(walletAddress: string): Promise<number> {
   try {
-    const response = await fetch('/api/gum-balance', {
+    const normalizedAddress = normalizeFlowAddress(walletAddress);
+    const response = await fetch(getApiUrl('/api/gum-balance'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ wallet: walletAddress })
+      body: JSON.stringify({ wallet: normalizedAddress })
     });
 
     if (!response.ok) {
@@ -277,7 +327,7 @@ export async function spendGum(
   metadata?: any
 ): Promise<GumSpendResult> {
   try {
-    const response = await fetch('/api/spend-gum', {
+    const response = await fetch(getApiUrl('/api/spend-gum'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

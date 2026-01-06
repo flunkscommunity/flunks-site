@@ -4,6 +4,7 @@ import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { WINDOW_IDS } from "fixed";
 import TiltedGridLoader from "components/TiltedGridLoader";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { useUnifiedWallet } from "contexts/UnifiedWalletContext";
 import { useCliqueAccess, CliqueType } from "hooks/useCliqueAccess";
 import MySpaceProfile from "../components/MySpaceProfile";
 import { useMusicContext } from "../contexts/MusicContext";
@@ -502,7 +503,11 @@ const characterSlots = [
 const MyPlace = () => {
   const { closeWindow, openWindow, windowApps, windows } = useWindowsContext();
   const { user, primaryWallet } = useDynamicContext();
+  const { isConnected, address: unifiedAddress } = useUnifiedWallet();
   const { hasAccess, loading: cliqueLoading, error: cliqueError } = useCliqueAccess();
+  
+  // Use unified wallet for mobile compatibility
+  const walletAddress = unifiedAddress || primaryWallet?.address;
   const { stopAllMusic } = useMusicContext();
 
   // Generate retro sound effects
@@ -671,7 +676,7 @@ const MyPlace = () => {
           <ScanLine />
           
           <WalletStatus>
-            Wallet: {primaryWallet?.address ? `${primaryWallet.address.slice(0, 8)}...` : "Not connected"}
+            Wallet: {walletAddress ? `${walletAddress.slice(0, 8)}...` : "Not connected"}
           </WalletStatus>
           
           {/* Show error message if there's an error */}
