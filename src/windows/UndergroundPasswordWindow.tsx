@@ -5,6 +5,8 @@ import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useUnifiedWallet } from 'contexts/UnifiedWalletContext';
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import UndergroundCasino from "components/UndergroundCasino";
+import { getApiUrl } from '../utils/apiBaseUrl';
+import { supabase, hasValidSupabaseConfig } from '../lib/supabase';
 
 interface UndergroundPasswordWindowProps {
   onClose?: () => void;
@@ -28,8 +30,28 @@ const UndergroundPasswordWindow: React.FC<UndergroundPasswordWindowProps> = ({ o
     const checkExistingAccess = async () => {
       if (!walletAddress) return;
       
+      // Try Supabase view first (bypasses RLS)
+      if (hasValidSupabaseConfig && supabase) {
+        try {
+          const { data, error } = await supabase
+            .from('wallet_underground_access')
+            .select('wallet_address')
+            .eq('wallet_address', walletAddress)
+            .limit(1);
+          
+          if (!error && data && data.length > 0) {
+            setHasAccess(true);
+            openTheUnderground();
+            return;
+          }
+        } catch (err) {
+          console.log('⚠️ Underground access Supabase check failed, trying API');
+        }
+      }
+      
+      // Fallback to API
       try {
-        const response = await fetch(`/api/check-four-thieves-underground?walletAddress=${walletAddress}`);
+        const response = await fetch(getApiUrl(`/api/check-four-thieves-underground?walletAddress=${walletAddress}`));
         const data = await response.json();
         
         if (data.success && data.hasAccess) {
@@ -86,7 +108,7 @@ const UndergroundPasswordWindow: React.FC<UndergroundPasswordWindowProps> = ({ o
       // Record Chapter 6 Slacker completion
       if (walletAddress) {
         try {
-          const response = await fetch('/api/four-thieves-underground-access', {
+          const response = await fetch(getApiUrl('/api/four-thieves-underground-access'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

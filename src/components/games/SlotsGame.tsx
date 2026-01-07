@@ -6,7 +6,46 @@
 import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { getTotalWin, PAYLINES, FLUNKS_SYMBOLS } from '../../lib/slots/flunksPaytable';
-import { getApiUrl } from '../../utils/apiBaseUrl';
+import { processCasinoTransaction } from '../../utils/casinoTransactions';
+
+// Vegas-style weighted symbol distribution for client-side spins
+const SYMBOL_WEIGHTS: { [key: string]: number } = {
+  pencil: 8,        // Common - 21%
+  eraser: 7,        // Common - 18%
+  notebook: 6,      // Common - 16%
+  backpack: 5,      // Uncommon - 13%
+  calculator: 4,    // Uncommon - 11%
+  trophy: 3,        // Rare - 8%
+  diploma: 2,       // Rare - 5%
+  gum_pile: 2,      // Epic - 5%
+  flunks_logo: 1    // Jackpot - 2.6%
+};
+
+// Create weighted array for random selection
+const WEIGHTED_SYMBOLS: string[] = [];
+Object.entries(SYMBOL_WEIGHTS).forEach(([symbol, weight]) => {
+  for (let i = 0; i < weight; i++) {
+    WEIGHTED_SYMBOLS.push(symbol);
+  }
+});
+
+// Generate random symbol from weighted distribution
+function getRandomWeightedSymbol(): string {
+  return WEIGHTED_SYMBOLS[Math.floor(Math.random() * WEIGHTED_SYMBOLS.length)];
+}
+
+// Generate a 3x3 grid of symbols (3 rows, 3 cols)
+function generateSpinGrid(): string[][] {
+  const grid: string[][] = [];
+  for (let row = 0; row < 3; row++) {
+    const rowSymbols: string[] = [];
+    for (let col = 0; col < 3; col++) {
+      rowSymbols.push(getRandomWeightedSymbol());
+    }
+    grid.push(rowSymbols);
+  }
+  return grid;
+}
 
 // Types
 interface SlotsGameProps {
@@ -67,26 +106,15 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
   const slotTransaction = async (type: 'bet' | 'win' | 'refund', amount: number, metadata?: any) => {
     if (!walletAddress) return { success: false, error: 'No wallet connected' };
     
-    try {
-      const response = await fetch(getApiUrl('/api/slots/transaction'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wallet_address: walletAddress, type, amount, metadata })
-      });
-      
-      const result = await response.json();
-      
-      if (result.success && result.new_balance !== undefined) {
-        setGumBalance(result.new_balance);
-        onBalanceUpdate?.(result.new_balance);
-        console.log(`🎰 ${type}: Updated balance to ${result.new_balance}`);
-      }
-      
-      return result;
-    } catch (error) {
-      console.error('Slot transaction error:', error);
-      return { success: false, error: 'Transaction failed' };
+    const result = await processCasinoTransaction(walletAddress, type, amount, 'slots', metadata);
+    
+    if (result.success && result.new_balance !== undefined) {
+      setGumBalance(result.new_balance);
+      onBalanceUpdate?.(result.new_balance);
+      console.log(`🎰 ${type}: Updated balance to ${result.new_balance}`);
     }
+    
+    return result;
   };
 
   const spinReels = async () => {
@@ -129,14 +157,14 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
     }, 100);
     
     try {
-      // Call serverless slot API
-      const response = await fetch(getApiUrl('/api/slots/spin-serverless'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bet, walletAddress }),
-      });
-      
-      const result = await response.json();
+      // Client-side spin calculation (no API needed)
+      const grid = generateSpinGrid();
+      const winCalc = getTotalWin(grid, bet);
+      const result = {
+        screen: grid,
+        gain: winCalc.totalWin,
+        lines: winCalc.paylineWins
+      };
       console.log('🎰 Spin result:', result);
       
       setTimeout(() => {
@@ -241,30 +269,33 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
 
   return (
     <SlotContent>
-      {/* Win/Message display - at the very top of the container */}
+      {/* Win/Message display - positioned in the open area above GUM */}
       {message && (
         <div style={{
           position: 'absolute',
-          top: '0',
-          left: '0',
-          right: '0',
+          top: '13%',
+          left: '50%',
+          transform: 'translateX(-50%)',
           zIndex: 100,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: '8px 16px',
+          padding: '10px 24px',
+          borderRadius: '12px',
           background: showWin 
-            ? 'linear-gradient(180deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 165, 0, 0.2) 100%)'
-            : 'linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, transparent 100%)',
-          color: showWin ? '#ffd700' : '#fbbf24',
+            ? 'linear-gradient(180deg, rgba(255, 215, 0, 0.95) 0%, rgba(255, 165, 0, 0.9) 100%)'
+            : 'linear-gradient(180deg, rgba(0, 0, 0, 0.85) 0%, rgba(30, 30, 30, 0.85) 100%)',
+          border: showWin ? '3px solid #ffd700' : '2px solid #fbbf24',
+          color: showWin ? '#1a1a1a' : '#fbbf24',
           fontFamily: "'Lilita One', cursive",
           fontSize: showWin ? '1.6em' : '1.3em',
           fontWeight: 'bold',
           textShadow: showWin 
-            ? '0 0 20px rgba(255, 215, 0, 0.8), 2px 2px 0 #b45309'
+            ? '0 0 10px rgba(255, 255, 255, 0.5)'
             : '0 0 10px rgba(251, 191, 36, 0.5), 1px 1px 0 #b45309',
           textAlign: 'center',
-          animation: showWin ? 'pulse 0.5s ease-in-out infinite' : 'none'
+          animation: showWin ? 'pulse 0.5s ease-in-out infinite' : 'none',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)'
         }}>
           {message}
         </div>
@@ -379,51 +410,57 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
         {/* Control buttons - positioned over the frame */}
         {/* -5 Button (left) */}
         <button
-          onClick={() => adjustBet(-5)}
+          onClick={() => { console.log('🔽 SlotsGame -5 clicked'); adjustBet(-5); }}
           style={{
             position: 'absolute',
-            bottom: typeof window !== 'undefined' && window.innerWidth < 768 ? '25%' : '15%',
+            bottom: '3%',
             left: '5%',
-            width: '20%',
-            height: '10%',
-            background: 'transparent',
+            width: '22%',
+            height: '14%',
+            background: 'rgba(255,0,0,0.0)', // Debug: change to 0.3 to see touch area
             border: 'none',
             cursor: 'pointer',
-            zIndex: 10,
+            zIndex: 20,
+            WebkitTapHighlightColor: 'transparent',
+            touchAction: 'manipulation',
           }}
         />
         
         {/* SPIN WHEEL Button (center) */}
         <button
-          onClick={spinReels}
+          onClick={() => { console.log('🎰 SlotsGame SPIN clicked'); spinReels(); }}
           disabled={spinning || gumBalance < bet}
           style={{
             position: 'absolute',
-            bottom: typeof window !== 'undefined' && window.innerWidth < 768 ? '25%' : '15%',
+            bottom: '3%',
             left: '27%',
             width: '46%',
-            height: '10%',
-            background: 'transparent',
+            height: '14%',
+            background: 'rgba(0,255,0,0.0)', // Debug: change to 0.3 to see touch area
             border: 'none',
             cursor: spinning || gumBalance < bet ? 'not-allowed' : 'pointer',
             opacity: spinning || gumBalance < bet ? 0.7 : 1,
-            zIndex: 10,
+            zIndex: 20,
+            WebkitTapHighlightColor: 'transparent',
+            touchAction: 'manipulation',
           }}
         />
         
         {/* +5 Button (right) */}
         <button
-          onClick={() => adjustBet(5)}
+          onClick={() => { console.log('🔼 SlotsGame +5 clicked'); adjustBet(5); }}
           style={{
             position: 'absolute',
-            bottom: typeof window !== 'undefined' && window.innerWidth < 768 ? '25%' : '15%',
+            bottom: '3%',
             right: '5%',
-            width: '20%',
-            height: '10%',
-            background: 'transparent',
+            width: '22%',
+            height: '14%',
+            background: 'rgba(0,0,255,0.0)', // Debug: change to 0.3 to see touch area
             border: 'none',
             cursor: 'pointer',
-            zIndex: 10,
+            zIndex: 20,
+            WebkitTapHighlightColor: 'transparent',
+            touchAction: 'manipulation',
           }}
         />
       </div>

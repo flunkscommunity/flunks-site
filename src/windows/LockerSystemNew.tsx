@@ -14,6 +14,7 @@ import { getApiUrl } from '../utils/apiBaseUrl';
 import { useUserProfile } from '../contexts/UserProfileContext';
 import { useGum } from '../contexts/GumContext';
 import WeeklyObjectives from '../components/WeeklyObjectives';
+import { supabase, hasValidSupabaseConfig } from '../lib/supabase';
 // WINDOW_IDS lives in src/fixed.ts (baseUrl set to src)
 import { WINDOW_IDS } from 'fixed';
 
@@ -218,6 +219,26 @@ const LockerSystemNew: React.FC = () => {
   // Check if user has Room 7 key
   const checkRoom7Key = async () => {
     if (!normalizedAddress) return;
+    
+    // Try Supabase view first (bypasses RLS)
+    if (hasValidSupabaseConfig && supabase) {
+      try {
+        const { data, error } = await supabase
+          .from('wallet_room7_keys')
+          .select('wallet_address')
+          .eq('wallet_address', normalizedAddress)
+          .limit(1);
+        
+        if (!error && data && data.length > 0) {
+          setHasRoom7Key(true);
+          return;
+        }
+      } catch (err) {
+        console.log('⚠️ Room7 key Supabase check failed, trying API');
+      }
+    }
+    
+    // Fallback to API
     try {
       const response = await fetch(getApiUrl(`/api/check-room7-key?walletAddress=${normalizedAddress}`));
       const data = await response.json();
@@ -232,6 +253,26 @@ const LockerSystemNew: React.FC = () => {
   // Check if user has Four Thieves Underground access
   const checkFourThievesUnderground = async () => {
     if (!normalizedAddress) return;
+    
+    // Try Supabase view first (bypasses RLS)
+    if (hasValidSupabaseConfig && supabase) {
+      try {
+        const { data, error } = await supabase
+          .from('wallet_underground_access')
+          .select('wallet_address')
+          .eq('wallet_address', normalizedAddress)
+          .limit(1);
+        
+        if (!error && data && data.length > 0) {
+          setHasFourThievesAccess(true);
+          return;
+        }
+      } catch (err) {
+        console.log('⚠️ Underground access Supabase check failed, trying API');
+      }
+    }
+    
+    // Fallback to API
     try {
       const response = await fetch(getApiUrl(`/api/check-four-thieves-underground?walletAddress=${normalizedAddress}`));
       const data = await response.json();
@@ -1435,65 +1476,9 @@ const LockerSystemNew: React.FC = () => {
                                 </div>
                               </div>
                             )}
-
-                            {/* Four Thieves Underground Access */}
-                            {hasFourThievesAccess && (
-                              <div style={{
-                                background: 'linear-gradient(180deg, #cc3366 0%, #990033 100%)',
-                                border: '3px solid #ff6699',
-                                borderRadius: 0,
-                                padding: '8px',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s',
-                                boxShadow: `
-                                  0 4px 0 #660022,
-                                  0 0 10px rgba(255, 102, 153, 0.5)
-                                `,
-                                position: 'relative'
-                              }}
-                              onMouseOver={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = `
-                                  0 6px 0 #660022,
-                                  0 0 20px rgba(255, 102, 153, 0.8)
-                                `;
-                              }}
-                              onMouseOut={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = `
-                                  0 4px 0 #660022,
-                                  0 0 10px rgba(255, 102, 153, 0.5)
-                                `;
-                              }}
-                              title="Underground Access - Secret casino beneath Four Thieves Bar"
-                              onClick={() => setSelectedItem('fourThievesUnderground')}
-                              >
-                                <div style={{
-                                  fontSize: '32px',
-                                  filter: 'drop-shadow(0 0 8px rgba(255, 102, 153, 0.8))'
-                                }}>
-                                  🎰
-                                </div>
-                                <div style={{
-                                  fontFamily: '"Press Start 2P", "Courier New", monospace',
-                                  fontSize: '6px',
-                                  color: '#fff',
-                                  textShadow: '1px 1px 0 #000',
-                                  marginTop: '4px',
-                                  textAlign: 'center',
-                                  lineHeight: '1.4'
-                                }}>
-                                  Secret<br/>Casino
-                                </div>
-                              </div>
-                            )}
                             
                             {/* Mystery box when no items - shows there's something to find! */}
-                            {!hasRoom7Key && !hasFourThievesAccess && (
+                            {!hasRoom7Key && (
                               <div style={{
                                 background: 'linear-gradient(180deg, #666 0%, #333 100%)',
                                 border: '3px solid #999',

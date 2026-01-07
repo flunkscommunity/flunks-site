@@ -69,8 +69,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   // Ensure client-side rendering for Dynamic Labs
   React.useEffect(() => {
     console.log('🚀 _app.tsx: useEffect running, setting isClient to true');
+    console.log('🚀 _app.tsx: window exists:', typeof window !== 'undefined');
+    console.log('🚀 _app.tsx: document exists:', typeof document !== 'undefined');
     try {
       setIsClient(true);
+      console.log('✅ _app.tsx: isClient set to true successfully');
     } catch (error) {
       console.error('❌ Error setting isClient:', error);
       setInitError(String(error));

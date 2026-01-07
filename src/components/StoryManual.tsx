@@ -558,7 +558,8 @@ const StoryManual: React.FC<StoryManualProps> = ({ onClose, autoPlayChapterId })
     <div style={{
       background: 'linear-gradient(135deg, #2a1810 0%, #1a1008 100%)',
       height: '100%',
-      overflow: 'hidden',
+      overflow: 'auto',
+      WebkitOverflowScrolling: 'touch',
       fontFamily: 'Courier New, monospace',
       padding: '20px'
     }}>

@@ -1,19 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-let supabase: any = null;
-let hasValidSupabaseConfig = false;
-
-if (supabaseUrl && supabaseKey) {
-  supabase = createClient(supabaseUrl, supabaseKey);
-  hasValidSupabaseConfig = true;
-  console.log('✅ Flunko click tracking: Supabase initialized');
-} else {
-  console.warn('⚠️ Flunko click tracking: Supabase environment variables not found');
-}
+import { supabase, hasValidSupabaseConfig } from '../lib/supabase';
 
 export const trackFlunkoClick = async (walletAddress: string, cliqueFrom: string): Promise<boolean> => {
   if (!hasValidSupabaseConfig || !supabase) {

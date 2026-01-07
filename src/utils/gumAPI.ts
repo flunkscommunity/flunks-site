@@ -142,6 +142,27 @@ export async function getUserGumTransactions(
 ): Promise<GumTransaction[]> {
   try {
     const normalizedAddress = normalizeFlowAddress(walletAddress);
+    
+    // Try direct Supabase query first (works on mobile without CORS issues)
+    if (supabase) {
+      console.log('🔍 getUserGumTransactions: Using direct Supabase query');
+      const { data, error } = await supabase
+        .from('gum_transactions')
+        .select('*')
+        .eq('wallet_address', normalizedAddress)
+        .order('created_at', { ascending: false })
+        .range(offset, offset + limit - 1);
+
+      if (error) {
+        console.error('🔍 getUserGumTransactions: Supabase error:', error);
+        // Fall through to API
+      } else {
+        console.log('🔍 getUserGumTransactions: Got', data?.length || 0, 'transactions from Supabase');
+        return data || [];
+      }
+    }
+    
+    // Fallback to API (may have CORS issues on mobile)
     const url = getApiUrl('/api/gum-transactions');
     console.log('🔍 getUserGumTransactions: Fetching', url);
     
@@ -195,11 +216,100 @@ export async function getGumSources(): Promise<GumSource[]> {
 
 /**
  * Check if user can earn from a specific source (without awarding)
+ * Uses direct Supabase query for mobile compatibility
  */
 export async function checkGumCooldown(
   walletAddress: string,
   source: string
 ): Promise<{ canEarn: boolean; cooldownMinutes?: number; reason?: string }> {
+  const normalizedAddress = normalizeFlowAddress(walletAddress);
+  
+  // First try direct Supabase query
+  if (supabase) {
+    try {
+      console.log('🔍 checkGumCooldown: Using Supabase for', source);
+      
+      // Get source configuration
+      const { data: sourceConfig, error: sourceError } = await supabase
+        .from('gum_sources')
+        .select('*')
+        .eq('source_name', source)
+        .eq('is_active', true)
+        .single();
+      
+      if (sourceError || !sourceConfig) {
+        console.log('🔍 checkGumCooldown: Invalid or inactive source');
+        return { canEarn: false, reason: 'Invalid or inactive source' };
+      }
+      
+      // Get user's cooldown record
+      const { data: cooldownRecord, error: cooldownError } = await supabase
+        .from('user_gum_cooldowns')
+        .select('*')
+        .eq('wallet_address', normalizedAddress)
+        .eq('source_name', source)
+        .single();
+      
+      // If no record exists, user can claim
+      if (cooldownError?.code === 'PGRST116' || !cooldownRecord) {
+        console.log('🔍 checkGumCooldown: No record, can claim');
+        return { canEarn: true, reason: 'Ready to claim!' };
+      }
+      
+      const now = new Date();
+      const today = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+      const lastResetDate = cooldownRecord.daily_reset_date;
+      
+      // For daily_checkin and daily_login, use calendar day logic
+      if (source === 'daily_checkin' || source === 'daily_login') {
+        // If it's a new calendar day, user can claim
+        if (lastResetDate !== today) {
+          console.log('🔍 checkGumCooldown: New day, can claim');
+          return { canEarn: true, reason: 'New day - ready to claim!' };
+        }
+        
+        // Same day - check if already claimed today
+        if (cooldownRecord.daily_earned_amount > 0) {
+          // Calculate time until midnight UTC
+          const midnight = new Date(now);
+          midnight.setUTCHours(24, 0, 0, 0);
+          const minutesUntilMidnight = Math.ceil((midnight.getTime() - now.getTime()) / (1000 * 60));
+          
+          console.log('🔍 checkGumCooldown: Already claimed today');
+          return {
+            canEarn: false,
+            cooldownMinutes: minutesUntilMidnight,
+            reason: 'Already claimed today - resets at midnight UTC'
+          };
+        }
+        
+        // Same day but haven't claimed yet
+        console.log('🔍 checkGumCooldown: Same day, can still claim');
+        return { canEarn: true, reason: 'Ready to claim!' };
+      }
+      
+      // For other sources, use rolling cooldown logic
+      const lastEarned = new Date(cooldownRecord.last_earned_at);
+      const minutesSinceLastEarn = (now.getTime() - lastEarned.getTime()) / (1000 * 60);
+      const cooldownMinutes = sourceConfig.cooldown_minutes || 0;
+      
+      if (minutesSinceLastEarn >= cooldownMinutes) {
+        // Check daily limit
+        if (sourceConfig.daily_limit && cooldownRecord.daily_earned_amount >= sourceConfig.daily_limit) {
+          return { canEarn: false, reason: 'Daily limit reached' };
+        }
+        return { canEarn: true, reason: 'Ready to claim!' };
+      }
+      
+      const remainingMinutes = Math.ceil(cooldownMinutes - minutesSinceLastEarn);
+      return { canEarn: false, cooldownMinutes: remainingMinutes, reason: 'In cooldown period' };
+      
+    } catch (supabaseError) {
+      console.log('🔍 checkGumCooldown: Supabase error, trying API fallback');
+    }
+  }
+  
+  // Fallback to API
   try {
     const url = getApiUrl('/api/check-gum-cooldown');
     console.log('🔍 checkGumCooldown: Fetching', url);
@@ -207,12 +317,11 @@ export async function checkGumCooldown(
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ wallet: walletAddress, source })
+      body: JSON.stringify({ wallet: normalizedAddress, source })
     });
 
     if (!response.ok) {
       console.error('Error checking gum cooldown:', response.status, response.statusText);
-      // On API error, allow earning (graceful fallback)
       return { canEarn: true, reason: 'API error, allowing earn' };
     }
 
@@ -226,12 +335,10 @@ export async function checkGumCooldown(
       };
     } else {
       console.error('Error checking gum cooldown:', result.error);
-      // On API error, allow earning (graceful fallback)
       return { canEarn: true, reason: 'API error, allowing earn' };
     }
   } catch (error) {
     console.error('Error in checkGumCooldown:', error instanceof Error ? error.message : error);
-    // On any error, allow earning (graceful fallback for development)
     return { canEarn: true, reason: 'Exception occurred, allowing earn' };
   }
 }

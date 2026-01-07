@@ -20,16 +20,21 @@ export const isMobileDevice = (): boolean => {
   
   const isMobile = mobileIndicators.some(indicator => indicator);
   
-  console.log('🔍 Mobile Detection Details:', {
-    userAgent,
-    isMobileUA,
-    isTouchDevice,
-    isSmallScreen,
-    screenWidth: window.screen?.width,
-    innerWidth: window.innerWidth,
-    orientation: window.orientation,
-    result: isMobile
-  });
+  // Only log once per session to avoid spam
+  const logKey = '__mobileDetectionLogged';
+  if (!(window as any)[logKey]) {
+    console.log('🔍 Mobile Detection Details:', {
+      userAgent,
+      isMobileUA,
+      isTouchDevice,
+      isSmallScreen,
+      screenWidth: window.screen?.width,
+      innerWidth: window.innerWidth,
+      orientation: window.orientation,
+      result: isMobile
+    });
+    (window as any)[logKey] = true;
+  }
   
   return isMobile;
 };

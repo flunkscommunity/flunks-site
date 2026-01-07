@@ -9,6 +9,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        // Register the FlunksWidgetBridge plugin
+        let bridge = (window?.rootViewController as? CAPBridgeViewController)?.bridge
+        bridge?.registerPluginInstance(FlunksWidgetBridge())
+        
         // Make the web view extend into safe areas (status bar and home indicator)
         // This allows the app's background to show behind the status bar
         DispatchQueue.main.async {
@@ -19,6 +23,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
                 // Set window background to dark color to prevent white flash
                 window.backgroundColor = UIColor(red: 0.059, green: 0.059, blue: 0.102, alpha: 1.0) // #0f0f1a
+                
+                // Also register the plugin here after bridge is ready
+                if let pluginBridge = rootVC.bridge {
+                    pluginBridge.registerPluginInstance(FlunksWidgetBridge())
+                }
                 
                 // Access the web view and make it extend to edges
                 if let webView = rootVC.webView {

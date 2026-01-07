@@ -9,6 +9,7 @@
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { processCasinoTransaction } from '../../utils/casinoTransactions';
 import { 
   CARD_LIST, 
   PAY_TABLE_DATA, 
@@ -86,27 +87,16 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
       return { success: false, error: 'No wallet connected' };
     }
 
-    try {
-      const response = await fetch('/api/videopoker/transaction', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wallet_address: walletAddress, type, amount, metadata })
-      });
+    const result = await processCasinoTransaction(walletAddress, type, amount, 'videopoker', metadata);
 
-      const result = await response.json();
-
-      if (result.success && result.new_balance !== undefined) {
-        // Instant UI update with new balance from API
-        setGumBalance(result.new_balance);
-        onBalanceUpdate?.(result.new_balance);
-        console.log(`🃏 Video Poker ${type}: Updated balance to ${result.new_balance}`);
-      }
-
-      return result;
-    } catch (error) {
-      console.error('Video poker transaction error:', error);
-      return { success: false, error: 'Transaction failed' };
+    if (result.success && result.new_balance !== undefined) {
+      // Instant UI update with new balance from API
+      setGumBalance(result.new_balance);
+      onBalanceUpdate?.(result.new_balance);
+      console.log(`🃏 Video Poker ${type}: Updated balance to ${result.new_balance}`);
     }
+
+    return result;
   };
 
   // Audio refs

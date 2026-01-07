@@ -10,7 +10,16 @@ import Capacitor
 import WidgetKit
 
 @objc(FlunksWidgetBridge)
-public class FlunksWidgetBridge: CAPPlugin {
+public class FlunksWidgetBridge: CAPPlugin, CAPBridgedPlugin {
+    
+    public let identifier = "FlunksWidgetBridge"
+    public let jsName = "FlunksWidgetBridge"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "updateWidgetData", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "refreshWidgets", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getWidgetData", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "clearWidgetData", returnType: CAPPluginReturnPromise)
+    ]
     
     // ⚠️ IMPORTANT: Must match App Group ID in your provisioning profile
     private let appGroupID = "group.net.flunks.app"
@@ -99,6 +108,3 @@ public class FlunksWidgetBridge: CAPPlugin {
         call.resolve(["success": true])
     }
 }
-
-// Import for WidgetCenter
-import WidgetKit

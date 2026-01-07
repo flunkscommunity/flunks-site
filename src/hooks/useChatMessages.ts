@@ -1,11 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createClient } from '@supabase/supabase-js';
 import { getApiUrl } from '../utils/apiBaseUrl';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { supabase } from '../lib/supabase';
 
 interface ChatMessage {
   id: number;
@@ -57,14 +52,44 @@ const useChatMessages = (roomName: string, currentUsername: string) => {
     setError(null);
 
     try {
-      const response = await fetch(getApiUrl(`/api/chat-messages?room=${encodeURIComponent(roomName)}`));
-      const data = await response.json();
+      // Use direct Supabase query (works on mobile without CORS issues)
+      if (!supabase) {
+        console.error('💬 Supabase client not available');
+        setError('Chat service not available');
+        setIsLoading(false);
+        return;
+      }
+      
+      console.log('💬 Fetching messages from public_chat_messages view for room:', roomName);
+      
+      // Try the public view first (bypasses RLS for mobile)
+      let { data, error: supaError } = await supabase
+        .from('public_chat_messages')
+        .select('*')
+        .eq('room_name', roomName)
+        .order('created_at', { ascending: true })
+        .limit(100);
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to fetch messages');
+      // Fallback to direct table if view doesn't exist
+      if (supaError && supaError.code === '42P01') {
+        console.log('💬 View not found, falling back to chat_messages table');
+        const fallbackResult = await supabase
+          .from('chat_messages')
+          .select('*')
+          .eq('room_name', roomName)
+          .order('created_at', { ascending: true })
+          .limit(100);
+        data = fallbackResult.data;
+        supaError = fallbackResult.error;
       }
 
-      const formattedMessages = data.messages.map(convertMessage);
+      if (supaError) {
+        console.error('💬 Supabase fetch error:', supaError);
+        throw new Error(supaError.message);
+      }
+
+      console.log('💬 Fetched', data?.length || 0, 'messages from Supabase');
+      const formattedMessages = (data || []).map(convertMessage);
       setMessages(formattedMessages);
 
     } catch (error) {
@@ -81,38 +106,46 @@ const useChatMessages = (roomName: string, currentUsername: string) => {
     walletAddress?: string,
     isAI: boolean = false,
     aiAgentId?: string,
-    customUsername?: string
+    customUsername?: string,
+    profileIcon?: string
   ) => {
     if (!messageText.trim() || !roomName) return false;
+    if (!supabase) {
+      console.error('💬 Supabase client not available for posting');
+      return false;
+    }
 
     // Use custom username for AI agents, otherwise use current username
     const displayUsername = customUsername || currentUsername;
     if (!displayUsername) return false;
 
     try {
-      const response = await fetch(getApiUrl('/api/chat-messages'), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          room_name: roomName,
-          username: displayUsername,
-          wallet_address: walletAddress,
-          message_text: messageText.trim(),
-          is_ai: isAI,
-          ai_agent_id: aiAgentId
-        }),
-      });
+      // Use direct Supabase insert (works on mobile without CORS issues)
+      console.log('💬 Posting message directly to Supabase for room:', roomName);
+      const insertData: any = {
+        room_name: roomName,
+        username: displayUsername,
+        wallet_address: walletAddress,
+        message_text: messageText.trim(),
+        is_ai: isAI,
+        ai_agent_id: aiAgentId
+      };
+      
+      const { data, error: supaError } = await supabase
+        .from('chat_messages')
+        .insert(insertData)
+        .select()
+        .single();
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to post message');
+      if (supaError) {
+        console.error('💬 Supabase post error:', supaError);
+        throw new Error(supaError.message);
       }
 
+      console.log('💬 Message posted successfully:', data?.id);
+      
       // Add the new message to local state immediately for better UX
-      const newMessage = convertMessage(data.message);
+      const newMessage = convertMessage(data);
       setMessages(prev => [...prev, newMessage]);
 
       return true;
@@ -126,7 +159,7 @@ const useChatMessages = (roomName: string, currentUsername: string) => {
 
   // Set up real-time subscription
   useEffect(() => {
-    if (!roomName) return;
+    if (!roomName || !supabase) return;
 
     const channel = supabase
       .channel(`chat_${roomName}`)
@@ -152,7 +185,7 @@ const useChatMessages = (roomName: string, currentUsername: string) => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      supabase?.removeChannel(channel);
     };
   }, [roomName, convertMessage]);
 

@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { supabase, hasValidSupabaseConfig } from '../lib/supabase';
 import { checkFridayNightLightsClicked } from './fridayNightLightsTracking';
 import { checkCafeteriaButtonClicked } from './cafeteriaButtonTracking';
 import { checkFlunkoClicked } from './flunkoClickTracking';
@@ -6,21 +6,6 @@ import { checkParadiseMotelEntered } from './paradiseMotelTracking';
 import { checkParadiseMotelRoom7NightVisit } from './paradiseMotelRoom7Tracking';
 import { checkHiddenRiffCompletion } from './hiddenRiffTracking';
 import { checkFourThievesUndergroundAccess } from './fourThievesUndergroundTracking';
-
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-let supabase: any = null;
-let hasValidSupabaseConfig = false;
-
-if (supabaseUrl && supabaseKey) {
-  supabase = createClient(supabaseUrl, supabaseKey);
-  hasValidSupabaseConfig = true;
-  console.log('✅ Weekly Objectives: Supabase initialized');
-} else {
-  console.warn('⚠️ Weekly Objectives: Supabase environment variables not found');
-}
 
 export interface ChapterObjective {
   id: string;
@@ -273,27 +258,67 @@ export const calculateObjectiveProgress = (objectives: ChapterObjective[]): numb
 
 // Check if user attended homecoming dance (Saturday 24-hour window)
 export const checkHomecomingDanceAttendance = async (walletAddress: string): Promise<boolean> => {
+  // First try direct Supabase query
+  if (hasValidSupabaseConfig && supabase) {
+    try {
+      console.log('🕺 [HOMECOMING] Checking via Supabase view for wallet:', walletAddress?.slice(0, 10) + '...');
+      
+      // Try the public view first (bypasses RLS)
+      const { data: viewData, error: viewError } = await supabase
+        .from('wallet_homecoming_attendance')
+        .select('wallet_address, attendance_timestamp')
+        .eq('wallet_address', walletAddress)
+        .limit(1);
+
+      if (!viewError && viewData) {
+        const hasAttended = viewData.length > 0;
+        console.log('✅ [HOMECOMING] View result:', hasAttended);
+        return hasAttended;
+      }
+      
+      if (viewError) {
+        console.log('⚠️ [HOMECOMING] View query error:', viewError.message, '- trying table');
+      }
+      
+      // Fallback to direct table query
+      const { data, error } = await supabase
+        .from('homecoming_dance_attendance')
+        .select('id, attendance_timestamp')
+        .eq('wallet_address', walletAddress)
+        .limit(1);
+
+      if (!error && data) {
+        const hasAttended = data.length > 0;
+        console.log('✅ [HOMECOMING] Table result:', hasAttended);
+        return hasAttended;
+      }
+      
+      if (error) {
+        console.log('⚠️ [HOMECOMING] Table query error (RLS?):', error.message);
+      }
+    } catch (err) {
+      console.log('⚠️ [HOMECOMING] Supabase error:', err);
+    }
+  }
+
+  // Fallback to API
   try {
-    console.log('🕺 [SUPER SIMPLE] Checking homecoming dance via API for wallet:', walletAddress);
-    
-    // Use the EXACT SAME API that the button uses to check attendance
-    const response = await fetch(`/api/check-homecoming-dance-attendance?walletAddress=${walletAddress}`);
+    console.log('🕺 [HOMECOMING] Checking via API for wallet:', walletAddress?.slice(0, 10) + '...');
+    // Import dynamically to avoid circular dependencies
+    const { getApiUrl } = await import('./apiBaseUrl');
+    const response = await fetch(getApiUrl(`/api/check-homecoming-dance-attendance?walletAddress=${walletAddress}`));
     
     if (!response.ok) {
-      console.error('❌ [SUPER SIMPLE] API response not ok:', response.status);
+      console.error('❌ [HOMECOMING] API response not ok:', response.status);
       return false;
     }
     
     const data = await response.json();
-    console.log('📋 [SUPER SIMPLE] API response:', data);
-    
     const hasAttended = data.success && data.hasAttended;
-    console.log('✅ [SUPER SIMPLE] Final result:', hasAttended);
-    
+    console.log('✅ [HOMECOMING] API result:', hasAttended);
     return hasAttended;
-
   } catch (err) {
-    console.error('💥 [SUPER SIMPLE] API call failed:', err);
+    console.error('💥 [HOMECOMING] Both methods failed:', err);
     return false;
   }
 };

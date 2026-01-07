@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { checkGumCooldown } from '../utils/gumAPI';
 
 interface GumCooldownTimerProps {
@@ -16,15 +16,32 @@ export const GumCooldownTimer: React.FC<GumCooldownTimerProps> = ({
   const [canClaim, setCanClaim] = useState(false);
   const [loading, setLoading] = useState(true);
   const [reason, setReason] = useState<string>('');
+  const lastCheckRef = useRef<number>(0);
+  const checkingRef = useRef<boolean>(false);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
+    let mounted = true;
 
     const checkCooldown = async () => {
-      if (!walletAddress) return;
+      if (!walletAddress || !mounted) return;
+      
+      // Prevent concurrent checks
+      if (checkingRef.current) return;
+      
+      // Rate limit: minimum 30 seconds between checks
+      const now = Date.now();
+      if (now - lastCheckRef.current < 30000 && lastCheckRef.current > 0) {
+        return;
+      }
+      
+      checkingRef.current = true;
+      lastCheckRef.current = now;
 
       try {
         const cooldownCheck = await checkGumCooldown(walletAddress, source);
+        
+        if (!mounted) return;
         
         console.log(`Cooldown check for ${source}:`, cooldownCheck);
         
@@ -47,36 +64,41 @@ export const GumCooldownTimer: React.FC<GumCooldownTimerProps> = ({
         }
       } catch (error) {
         console.error('Error checking cooldown:', error);
-        setCanClaim(false);
-        setTimeRemaining(null);
-        setReason('Error checking status');
-        onCanClaim(false);
+        if (mounted) {
+          setCanClaim(false);
+          setTimeRemaining(null);
+          setReason('Error checking status');
+          onCanClaim(false);
+        }
+      } finally {
+        checkingRef.current = false;
+        if (mounted) setLoading(false);
       }
-      
-      setLoading(false);
     };
 
     // Initial check
     checkCooldown();
 
-    // Set up countdown timer and periodic rechecks
+    // Set up countdown timer (only for displaying remaining time)
     interval = setInterval(() => {
-      if (timeRemaining && timeRemaining > 0) {
-        setTimeRemaining(prev => {
-          if (!prev || prev <= 1) {
-            // Cooldown expired, check server
-            setTimeout(checkCooldown, 100);
-            return null;
-          }
-          return prev - 1;
-        });
-      } else if (!canClaim && !loading) {
-        // Periodically recheck if we're not in an active countdown (every 30 seconds)
-        setTimeout(checkCooldown, 100);
-      }
+      if (!mounted) return;
+      
+      setTimeRemaining(prev => {
+        if (!prev || prev <= 0) {
+          return null;
+        }
+        
+        // When countdown reaches 0, schedule a recheck (but not immediately)
+        if (prev === 1) {
+          setTimeout(checkCooldown, 1000);
+        }
+        
+        return prev - 1;
+      });
     }, 1000);
 
     return () => {
+      mounted = false;
       if (interval) clearInterval(interval);
     };
   }, [walletAddress, source, onCanClaim]);

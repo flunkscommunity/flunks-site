@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useUnifiedWallet } from '../contexts/UnifiedWalletContext';
 import { getApiUrl } from '../utils/apiBaseUrl';
+import { supabase } from '../lib/supabase';
 
 export interface LockerInfo {
   locker_number: number | null;
@@ -45,6 +46,40 @@ export const useLockerInfo = () => {
     setError(null);
 
     try {
+      // Try direct Supabase query first (works on mobile without CORS issues)
+      if (supabase) {
+        console.log('🔑 useLocker: Using direct Supabase query for wallet:', normalizedAddress);
+        const { data, error: supaError } = await supabase
+          .from('user_profiles')
+          .select('locker_number, username, created_at')
+          .eq('wallet_address', normalizedAddress)
+          .single();
+
+        if (supaError) {
+          if (supaError.code === 'PGRST116') {
+            // No profile found
+            console.log('🔑 useLocker: No locker found for wallet');
+            setLockerInfo(null);
+            setLoading(false);
+            return;
+          }
+          console.error('🔑 useLocker: Supabase error:', supaError);
+          // Fall through to API
+        } else if (data) {
+          console.log('🔑 useLocker: Locker info from Supabase:', data);
+          setLockerInfo({
+            locker_number: data.locker_number,
+            username: data.username,
+            signup_date: data.created_at,
+            locker_status: 'Active'
+          });
+          setLoading(false);
+          return;
+        }
+      }
+
+      // Fallback to API (may have CORS issues on mobile)
+      console.log('🔑 useLocker: Falling back to API');
       const response = await fetch(getApiUrl(`/api/locker-info?wallet_address=${normalizedAddress}`));
       
       if (response.status === 404) {
@@ -60,6 +95,7 @@ export const useLockerInfo = () => {
       const data = await response.json();
       setLockerInfo(data);
     } catch (err) {
+      console.error('🔑 useLocker: Error fetching locker info:', err);
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);

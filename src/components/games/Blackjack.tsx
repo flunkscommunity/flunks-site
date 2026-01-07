@@ -7,6 +7,7 @@
  */
 
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { processCasinoTransaction } from '../../utils/casinoTransactions';
 
 // ============================================================================
 // TYPES
@@ -159,26 +160,15 @@ const Blackjack: React.FC<BlackjackProps> = ({
       return { success: false, error: 'No wallet connected' };
     }
 
-    try {
-      const response = await fetch('/api/blackjack/transaction', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wallet_address: walletAddress, type, amount, metadata })
-      });
+    const result = await processCasinoTransaction(walletAddress, type, amount, 'blackjack', metadata);
 
-      const result = await response.json();
-
-      if (result.success && result.new_balance !== undefined) {
-        setGumBalance(result.new_balance);
-        onBalanceUpdate?.(result.new_balance);
-        console.log(`🃏 Blackjack ${type}: Updated balance to ${result.new_balance}`);
-      }
-
-      return result;
-    } catch (error) {
-      console.error('Blackjack transaction error:', error);
-      return { success: false, error: 'Transaction failed' };
+    if (result.success && result.new_balance !== undefined) {
+      setGumBalance(result.new_balance);
+      onBalanceUpdate?.(result.new_balance);
+      console.log(`🃏 Blackjack ${type}: Updated balance to ${result.new_balance}`);
     }
+
+    return result;
   };
 
   // ============================================================================

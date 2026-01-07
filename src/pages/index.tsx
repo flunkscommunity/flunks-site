@@ -53,7 +53,7 @@ import { useUserProfile } from "contexts/UserProfileContext";
 import WalletStatusBar from "components/WalletStatusBar";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import LoadingScreenPreview from "windows/LoadingScreenPreview";
-import TestFlowWalletWindow from "windows/TestFlowWalletWindow";
+// TestFlowWalletWindow removed - no longer on desktop
 
 import { GumAdminPanel } from "components/GumAdminPanel";
 import { TimeConfigAdmin } from "components/DayNightHouse";
@@ -417,19 +417,6 @@ const windowsMemod = useMemo(() => (
               </DraggableResizeableWindow>
             )
           })}
-        />
-
-        {/* Test Flow Wallet */}
-        <ConditionalAppIcon
-          appId="test-flow-wallet"
-          title="Test Flow Wallet"
-          icon="/images/icons/flowty.png"
-          onDoubleClick={() =>
-            openWindow({
-              key: WINDOW_IDS.TEST_FLOW_WALLET,
-              window: <TestFlowWalletWindow />,
-            })
-          }
         />
 
         {/* 4.5 Level Up - NFT Evolution */}
@@ -884,21 +871,6 @@ const windowsMemod = useMemo(() => (
             })}
           />
         )}
-
-        {/* 23. Fantasy Football */}
-        <a
-          href="https://sports.yahoo.com/dailyfantasy/league/147616/overview"
-          target="_blank"
-          rel="noreferrer noopener"
-          style={{ textDecoration: "none" }}
-        >
-          <ConditionalAppIcon
-            appId="fantasy-football"
-            title="Fantasy Football"
-            icon="/images/icons/football-field-icon.png"
-            onDoubleClick={() => null}
-          />
-        </a>
 
         {/* 24. Slot Machine - build mode only */}
         {isFeatureEnabled('showSlotMachine') && (

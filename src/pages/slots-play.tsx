@@ -7,6 +7,7 @@ import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 import { isFeatureEnabled } from 'utils/buildMode';
 import { useGum } from 'contexts/GumContext';
 import { useUnifiedWallet } from 'contexts/UnifiedWalletContext';
+import { processCasinoTransaction } from '../utils/casinoTransactions';
 
 const Container = styled.div`
   min-height: 100vh;
@@ -775,26 +776,15 @@ export default function SlotsPlay() {
     
     if (!effectiveWallet) return { success: false, error: 'No wallet connected' };
     
-    try {
-      const response = await fetch('/api/slots/transaction', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wallet_address: effectiveWallet, type, amount, metadata })
-      });
-      
-      const result = await response.json();
-      
-      if (result.success && result.new_balance !== undefined) {
-        // Use the new_balance from API response for instant UI update
-        updateBalance(result.new_balance);
-        console.log(`🎰 ${type}: Updated balance to ${result.new_balance}`);
-      }
-      
-      return result;
-    } catch (error) {
-      console.error('Slot transaction error:', error);
-      return { success: false, error: 'Transaction failed' };
+    const result = await processCasinoTransaction(effectiveWallet, type, amount, 'slots', metadata);
+    
+    if (result.success && result.new_balance !== undefined) {
+      // Use the new_balance from API response for instant UI update
+      updateBalance(result.new_balance);
+      console.log(`🎰 ${type}: Updated balance to ${result.new_balance}`);
     }
+    
+    return result;
   };
   
   const [gameInfo, setGameInfo] = useState<any>(null);
