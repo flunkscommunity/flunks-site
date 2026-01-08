@@ -6,12 +6,13 @@ import SetupCollectionButton from './SetupCollectionButton';
 import * as fcl from '@onflow/fcl';
 import '../config/fcl';
 
-// Helper to proxy GCS images to avoid CORS issues
+// Helper to handle GCS images
+// On mobile (static export), we can't use the API proxy, so use direct URL
+// GCS images should work directly as they're public
 const proxyImageUrl = (url: string): string => {
-  if (url && url.includes('storage.googleapis.com')) {
-    return `/api/image-proxy?url=${encodeURIComponent(url)}`;
-  }
-  return url;
+  // Just return the URL directly - GCS images are publicly accessible
+  // The API proxy was causing issues on mobile static export
+  return url || '';
 };
 
 // Arcade animations
@@ -497,21 +498,34 @@ const SemesterZeroVarsityDisplay: React.FC<SemesterZeroVarsityDisplayProps> = ({
         });
 
         console.log('📦 Found NFTs:', result);
+        console.log('📦 Result type:', typeof result, Array.isArray(result));
 
-        const fetchedPins: Pin[] = result.map((pin: any) => ({
-          id: pin.id.toString(),
-          name: pin.name,
-          image: pin.image,
-          type: pin.type,
-          placed: false,
-        }));
+        if (!result || !Array.isArray(result)) {
+          console.warn('⚠️ Invalid result from FCL query:', result);
+          setPins([]);
+          return;
+        }
+
+        const fetchedPins: Pin[] = result.map((pin: any) => {
+          console.log('🔍 Processing pin:', pin);
+          return {
+            id: pin.id?.toString() || 'unknown',
+            name: pin.name || 'Unknown Pin',
+            image: pin.image || '',
+            type: pin.type || 'Token',
+            placed: false,
+          };
+        });
 
         console.log('✅ Processed pins:', fetchedPins);
         setPins(fetchedPins);
         // Load saved layout after pins are fetched
         setTimeout(() => loadPinLayout(), 100);
-      } catch (error) {
+      } catch (error: any) {
         console.error('❌ Error fetching pins:', error);
+        console.error('❌ Error details:', error?.message, error?.stack);
+        // Show error in UI for debugging
+        alert(`Error fetching pins: ${error?.message || 'Unknown error'}`);
       } finally {
         setLoading(false);
       }

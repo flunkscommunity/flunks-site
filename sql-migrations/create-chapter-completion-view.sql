@@ -66,6 +66,7 @@ GRANT SELECT ON wallet_crack_the_code TO anon;
 GRANT SELECT ON wallet_crack_the_code TO authenticated;
 
 -- Chat messages view (for mobile app to bypass RLS)
+-- NOTE: This view doesn't limit results - the client query should handle limiting
 DROP VIEW IF EXISTS public_chat_messages;
 CREATE VIEW public_chat_messages AS
 SELECT 
@@ -77,8 +78,7 @@ SELECT
     is_ai,
     ai_agent_id,
     created_at
-FROM chat_messages
-ORDER BY created_at ASC;
+FROM chat_messages;
 
 GRANT SELECT ON public_chat_messages TO anon;
 GRANT SELECT ON public_chat_messages TO authenticated;

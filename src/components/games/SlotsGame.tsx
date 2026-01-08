@@ -64,6 +64,7 @@ const SlotContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
   padding: 5px;
   padding-bottom: 10%;
   background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 50%, #1a1a2e 100%);
@@ -275,7 +276,7 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
           position: 'absolute',
           top: '13%',
           left: '50%',
-          transform: 'translateX(-50%)',
+          transform: showWin ? 'translateX(-50%) scale(1)' : 'translateX(-50%)',
           zIndex: 100,
           display: 'flex',
           alignItems: 'center',
@@ -294,7 +295,8 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
             ? '0 0 10px rgba(255, 255, 255, 0.5)'
             : '0 0 10px rgba(251, 191, 36, 0.5), 1px 1px 0 #b45309',
           textAlign: 'center',
-          animation: showWin ? 'pulse 0.5s ease-in-out infinite' : 'none',
+          transformOrigin: 'center',
+          animation: showWin ? 'winPulse 0.5s ease-in-out infinite' : 'none',
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)'
         }}>
           {message}
@@ -362,7 +364,8 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
             height: 'auto',
             position: 'relative',
             zIndex: 2,
-            pointerEvents: 'none'
+            pointerEvents: 'none',
+            marginBottom: '-8%', // Push image up so buttons align with visual buttons
           }}
           draggable={false}
         />
@@ -413,7 +416,7 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
           onClick={() => { console.log('🔽 SlotsGame -5 clicked'); adjustBet(-5); }}
           style={{
             position: 'absolute',
-            bottom: '3%',
+            bottom: '11%',
             left: '5%',
             width: '22%',
             height: '14%',
@@ -432,7 +435,7 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
           disabled={spinning || gumBalance < bet}
           style={{
             position: 'absolute',
-            bottom: '3%',
+            bottom: '11%',
             left: '27%',
             width: '46%',
             height: '14%',
@@ -451,7 +454,7 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
           onClick={() => { console.log('🔼 SlotsGame +5 clicked'); adjustBet(5); }}
           style={{
             position: 'absolute',
-            bottom: '3%',
+            bottom: '11%',
             right: '5%',
             width: '22%',
             height: '14%',
@@ -479,12 +482,12 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
         
-        @keyframes pulse {
+        @keyframes winPulse {
           0%, 100% {
-            transform: scale(1);
+            transform: translateX(-50%) scale(1);
           }
           50% {
-            transform: scale(1.05);
+            transform: translateX(-50%) scale(1.05);
           }
         }
       `}</style>

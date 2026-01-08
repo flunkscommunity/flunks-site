@@ -63,22 +63,32 @@ const useChatMessages = (roomName: string, currentUsername: string) => {
       console.log('💬 Fetching messages from public_chat_messages view for room:', roomName);
       
       // Try the public view first (bypasses RLS for mobile)
+      // Get the most recent 100 messages by ordering DESC, then reverse for display
       let { data, error: supaError } = await supabase
         .from('public_chat_messages')
         .select('*')
         .eq('room_name', roomName)
-        .order('created_at', { ascending: true })
+        .order('created_at', { ascending: false })
         .limit(100);
+      
+      // Reverse to show oldest first in chat display
+      if (data) {
+        data = data.reverse();
+      }
 
       // Fallback to direct table if view doesn't exist
       if (supaError && supaError.code === '42P01') {
         console.log('💬 View not found, falling back to chat_messages table');
-        const fallbackResult = await supabase
+        let fallbackResult = await supabase
           .from('chat_messages')
           .select('*')
           .eq('room_name', roomName)
-          .order('created_at', { ascending: true })
+          .order('created_at', { ascending: false })
           .limit(100);
+        
+        if (fallbackResult.data) {
+          fallbackResult.data = fallbackResult.data.reverse();
+        }
         data = fallbackResult.data;
         supaError = fallbackResult.error;
       }
@@ -89,6 +99,10 @@ const useChatMessages = (roomName: string, currentUsername: string) => {
       }
 
       console.log('💬 Fetched', data?.length || 0, 'messages from Supabase');
+      if (data && data.length > 0) {
+        console.log('💬 First message:', data[0]);
+        console.log('💬 Last message:', data[data.length - 1]);
+      }
       const formattedMessages = (data || []).map(convertMessage);
       setMessages(formattedMessages);
 
@@ -139,10 +153,16 @@ const useChatMessages = (roomName: string, currentUsername: string) => {
 
       if (supaError) {
         console.error('💬 Supabase post error:', supaError);
+        console.error('💬 Error code:', supaError.code);
+        console.error('💬 Error details:', supaError.details);
+        console.error('💬 Error hint:', supaError.hint);
+        // Show alert for debugging on mobile
+        alert(`Chat error: ${supaError.message}\nCode: ${supaError.code}`);
         throw new Error(supaError.message);
       }
 
       console.log('💬 Message posted successfully:', data?.id);
+      console.log('💬 Message data:', JSON.stringify(data));
       
       // Add the new message to local state immediately for better UX
       const newMessage = convertMessage(data);
