@@ -355,7 +355,15 @@ const MobileSplashScreen: React.FC<MobileSplashScreenProps> = ({ onComplete }) =
     
     // Initialize audio on tap (iOS requires user interaction)
     initAudio();
-    playBeep();
+    
+    // Play the Windows 95 boot sound
+    const win95Sound = new Audio('/sounds/win95-boot.mp3');
+    win95Sound.volume = 0.7;
+    win95Sound.play().catch(err => {
+      console.log('Win95 boot sound failed:', err);
+      // Fallback to beep if sound fails
+      playBeep();
+    });
     
     // Fade out and complete
     setFading(true);
