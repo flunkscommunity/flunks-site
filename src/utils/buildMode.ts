@@ -206,8 +206,15 @@ const BUILD_MODE_CONFIGS: Record<BuildMode, BuildModeConfig> = {
 
 /**
  * Get current build mode from environment
+ * Mobile apps always use 'public' mode to match flunks.net behavior
  */
 export const getCurrentBuildMode = (): BuildMode => {
+  // Mobile apps should always behave like the public site (flunks.net)
+  // regardless of the build mode setting
+  if (isMobileApp()) {
+    return 'public';
+  }
+  
   const mode = process.env.NEXT_PUBLIC_BUILD_MODE;
   return (mode === 'build' || mode === 'public') ? mode : 'public';
 };

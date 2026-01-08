@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { checkGumCooldown } from '../utils/gumAPI';
 
 interface GumCooldownTimerProps {
@@ -18,20 +18,36 @@ export const GumCooldownTimer: React.FC<GumCooldownTimerProps> = ({
   const [reason, setReason] = useState<string>('');
   const lastCheckRef = useRef<number>(0);
   const checkingRef = useRef<boolean>(false);
+  // Store the callback in a ref to avoid re-running the effect when it changes
+  const onCanClaimRef = useRef(onCanClaim);
+  
+  // Keep the ref up to date
+  useEffect(() => {
+    onCanClaimRef.current = onCanClaim;
+  }, [onCanClaim]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
     let mounted = true;
 
     const checkCooldown = async () => {
-      if (!walletAddress || !mounted) return;
+      console.log(`🕐 [GumCooldownTimer] checkCooldown START - source: ${source}, wallet: ${walletAddress?.slice(0,10)}...`);
+      
+      if (!walletAddress || !mounted) {
+        console.log(`🕐 [GumCooldownTimer] EARLY RETURN - walletAddress: ${!!walletAddress}, mounted: ${mounted}`);
+        return;
+      }
       
       // Prevent concurrent checks
-      if (checkingRef.current) return;
+      if (checkingRef.current) {
+        console.log(`🕐 [GumCooldownTimer] EARLY RETURN - already checking`);
+        return;
+      }
       
       // Rate limit: minimum 30 seconds between checks
       const now = Date.now();
       if (now - lastCheckRef.current < 30000 && lastCheckRef.current > 0) {
+        console.log(`🕐 [GumCooldownTimer] EARLY RETURN - rate limited`);
         return;
       }
       
@@ -39,45 +55,74 @@ export const GumCooldownTimer: React.FC<GumCooldownTimerProps> = ({
       lastCheckRef.current = now;
 
       try {
+        console.log(`🕐 [GumCooldownTimer] calling checkGumCooldown...`);
         const cooldownCheck = await checkGumCooldown(walletAddress, source);
+        
+        console.log(`🕐 [GumCooldownTimer] checkGumCooldown RETURNED:`, cooldownCheck, `mounted: ${mounted}`);
         
         if (!mounted) return;
         
-        console.log(`Cooldown check for ${source}:`, cooldownCheck);
+        console.log(`🕐 [GumCooldownTimer] Cooldown check for ${source}:`, cooldownCheck);
         
         if (cooldownCheck.canEarn) {
+          console.log(`🕐 [GumCooldownTimer] ✅ CAN EARN - calling setCanClaim(true) and onCanClaimRef.current(true)`);
           setCanClaim(true);
           setTimeRemaining(null);
           setReason('Ready to claim!');
-          onCanClaim(true);
+          onCanClaimRef.current(true);
         } else if (cooldownCheck.cooldownMinutes && cooldownCheck.cooldownMinutes > 0) {
+          console.log(`🕐 [GumCooldownTimer] ⏰ IN COOLDOWN - ${cooldownCheck.cooldownMinutes} minutes remaining`);
           setCanClaim(false);
           setTimeRemaining(cooldownCheck.cooldownMinutes * 60); // Convert to seconds
           setReason(cooldownCheck.reason || 'In cooldown');
-          onCanClaim(false);
+          onCanClaimRef.current(false);
         } else {
           // Daily limit reached or other reason
+          console.log(`🕐 [GumCooldownTimer] ❌ CANNOT CLAIM - reason: ${cooldownCheck.reason}`);
           setCanClaim(false);
           setTimeRemaining(null);
           setReason(cooldownCheck.reason || 'Cannot claim');
-          onCanClaim(false);
+          onCanClaimRef.current(false);
         }
       } catch (error) {
-        console.error('Error checking cooldown:', error);
+        console.error('🕐 [GumCooldownTimer] ERROR checking cooldown:', error);
         if (mounted) {
           setCanClaim(false);
           setTimeRemaining(null);
           setReason('Error checking status');
-          onCanClaim(false);
+          onCanClaimRef.current(false);
         }
       } finally {
         checkingRef.current = false;
-        if (mounted) setLoading(false);
+        if (mounted) {
+          console.log(`🕐 [GumCooldownTimer] ✅ Setting loading = false`);
+          setLoading(false);
+        }
       }
     };
 
     // Initial check
     checkCooldown();
+
+    // Re-check when app/tab becomes visible again (critical for mobile apps)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        console.log(`🔄 App became visible, re-checking ${source} cooldown...`);
+        // Reset the rate limit so we can check immediately
+        lastCheckRef.current = 0;
+        checkCooldown();
+      }
+    };
+
+    const handleFocus = () => {
+      console.log(`🔄 Window focused, re-checking ${source} cooldown...`);
+      lastCheckRef.current = 0;
+      checkCooldown();
+    };
+
+    // Listen for visibility and focus changes
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleFocus);
 
     // Set up countdown timer (only for displaying remaining time)
     interval = setInterval(() => {
@@ -97,11 +142,21 @@ export const GumCooldownTimer: React.FC<GumCooldownTimerProps> = ({
       });
     }, 1000);
 
+    // Also periodically re-check every 60 seconds in case of timezone rollover
+    const periodicCheck = setInterval(() => {
+      if (!mounted) return;
+      lastCheckRef.current = 0;
+      checkCooldown();
+    }, 60000);
+
     return () => {
       mounted = false;
       if (interval) clearInterval(interval);
+      clearInterval(periodicCheck);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', handleFocus);
     };
-  }, [walletAddress, source, onCanClaim]);
+  }, [walletAddress, source]); // Note: onCanClaim is stored in a ref to avoid infinite loops
 
   if (loading) {
     return <span style={{ color: '#666', fontSize: '12px' }}>Checking status...</span>;

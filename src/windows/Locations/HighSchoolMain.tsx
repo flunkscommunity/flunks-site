@@ -207,13 +207,13 @@ const HighSchoolMain = () => {
   };
 
   return (
-    <div className="relative w-full h-full flex flex-col">
+    <div className="relative w-full h-full flex flex-col overflow-hidden bg-black">
       {/* Image Section */}
-      <div className="relative flex-1">
+      <div className="relative flex-1 flex items-center justify-center min-h-0">
         <img
           src={getCurrentBackground()}
           alt={`High School Background - ${timeBasedInfo.isDay ? 'Day' : 'Night'}`}
-          className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-500"
+          className="max-w-full max-h-full object-contain z-0 transition-opacity duration-500"
           onError={handleImageError}
         />
 

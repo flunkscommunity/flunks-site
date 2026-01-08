@@ -9,7 +9,7 @@ import { useDynamicContext, DynamicConnectButton } from '@dynamic-labs/sdk-react
 import { useUnifiedWallet } from '../contexts/UnifiedWalletContext';
 import UnifiedConnectButton from '../components/UnifiedConnectButton';
 import * as fcl from '@onflow/fcl';
-import { getUserGumBalance, getUserGumTransactions } from '../utils/gumAPI';
+import { getUserGumBalance, getUserGumTransactions, awardGum } from '../utils/gumAPI';
 import { getApiUrl } from '../utils/apiBaseUrl';
 import { useUserProfile } from '../contexts/UserProfileContext';
 import { useGum } from '../contexts/GumContext';
@@ -1857,6 +1857,7 @@ const LockerSystemNew: React.FC = () => {
                                 source="daily_checkin"
                                 onCanClaim={(canClaim) => {
                                   // Update button state based on cooldown
+                                  console.log(`🎯 [LockerSystemNew] onCanClaim callback received: ${canClaim}, current canClaimDaily: ${canClaimDaily}`);
                                   setCanClaimDaily(canClaim);
                                 }}
                               />
@@ -1922,39 +1923,44 @@ const LockerSystemNew: React.FC = () => {
                                 // Non-fatal; ignore audio errors
                               }
 
-                              // Implement daily check-in logic
+                              // Implement daily check-in logic using direct Supabase RPC (bypasses API route issues on mobile)
                               try {
-                                const result = await fetch(getApiUrl('/api/daily-checkin'), {
-                                  method: 'POST',
-                                  headers: { 'Content-Type': 'application/json' },
-                                  body: JSON.stringify({ wallet: unifiedAddress })
+                                console.log('🎁 Daily check-in: Using direct Supabase RPC');
+                                console.log('🎁 Daily check-in: wallet =', unifiedAddress);
+                                
+                                const result = await awardGum(unifiedAddress || '', 'daily_checkin', {
+                                  source: 'locker_checkin_button',
+                                  timestamp: new Date().toISOString()
                                 });
                                 
-                                if (!result.ok) {
-                                  console.error('Daily check-in API error:', result.status, result.statusText);
-                                  alert('❌ Unable to claim daily bonus. Please try again later.');
-                                  return;
-                                }
+                                console.log('🎁 Daily check-in result:', result);
                                 
-                                const data = await result.json();
-                                console.log('Daily check-in response:', data);
-                                
-                                if (data.success) {
-                                  alert(`🎉 You just got +${data.earned} GUM!\n\nCome back tomorrow for more GUM! 🍬`);
+                                if (result.success && result.earned > 0) {
+                                  alert(`🎉 You just got +${result.earned} GUM!\n\nCome back tomorrow for more GUM! 🍬`);
                                   // Refresh gum balance and tracking data
                                   refetch();
                                   loadGumBalance();
                                   loadGumTrackingData();
                                   // Reset button state
                                   setCanClaimDaily(false);
+                                } else if (result.cooldown_remaining_minutes && result.cooldown_remaining_minutes > 0) {
+                                  const hours = Math.floor(result.cooldown_remaining_minutes / 60);
+                                  const minutes = Math.floor(result.cooldown_remaining_minutes % 60);
+                                  alert(`ℹ️ Daily bonus already claimed! Come back in ${hours}h ${minutes}m\n\n🍬`);
+                                  setCanClaimDaily(false);
                                 } else {
-                                  // Show the specific message from the API
-                                  const message = data.message || 'Daily bonus already claimed!';
+                                  // Show the specific error from the RPC
+                                  const message = result.error || 'Unable to claim daily bonus right now';
                                   alert(`ℹ️ ${message}\n\nCome back tomorrow for more GUM! 🍬`);
                                   setCanClaimDaily(false);
                                 }
                               } catch (err) {
                                 console.error('Daily check-in error:', err);
+                                console.error('Daily check-in error details:', {
+                                  name: (err as Error)?.name,
+                                  message: (err as Error)?.message,
+                                  stack: (err as Error)?.stack
+                                });
                                 alert('❌ Unable to claim daily bonus. Please try again later.');
                               }
                             }}

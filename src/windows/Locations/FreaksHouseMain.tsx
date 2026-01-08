@@ -230,13 +230,13 @@ const FreaksHouseMain = () => {
   };
 
   return (
-    <div className="relative w-full h-full flex flex-col overflow-hidden">
+    <div className="relative w-full h-full flex flex-col overflow-hidden bg-black">
       {/* Image Container */}
       <div className="relative flex-1 flex items-center justify-center min-h-0">
         <img
           src={getCurrentBackground()}
           alt={`Freak's House Background - ${timeBasedInfo.isDay ? 'Day' : 'Night'}`}
-          className="w-full h-full object-cover"
+          className="max-w-full max-h-full object-contain"
           onError={(e) => {
             e.currentTarget.src = "/images/backdrops/BLANK.png";
           }}

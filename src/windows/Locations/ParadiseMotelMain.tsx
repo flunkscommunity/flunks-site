@@ -563,55 +563,6 @@ const ParadiseMotelMain = () => {
             />
           ),
         });
-        return;
-      }
-
-      // User has the key! Award GUM for completing the objective
-      if (!room7SlackerCompleted) {
-        try {
-          const response = await fetch('/api/paradise-motel-room7', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              walletAddress: primaryWallet.address,
-              username: 'Anonymous'
-            })
-          });
-          
-          const data = await response.json();
-          
-          if (data.success) {
-            setRoom7SlackerCompleted(true);
-            console.log('✅ Room 7 Slacker objective completed! +' + (data.gumAwarded || 50) + ' GUM');
-            window.dispatchEvent(new CustomEvent('gum-balance-updated'));
-          } else if (data.alreadyCompleted) {
-            console.log('ℹ️ Room 7 already visited');
-            setRoom7SlackerCompleted(true);
-          }
-        } catch (error) {
-          console.error('❌ Failed to award Room 7 Slacker GUM:', error);
-        }
-      }
-      
-      // Open the Paradise Motel cutscene from Story Manual
-      openWindow({
-        key: WINDOW_IDS.STORY_MANUAL,
-        window: (
-          <DraggableResizeableWindow
-            windowsId={WINDOW_IDS.STORY_MANUAL}
-            onClose={() => closeWindow(WINDOW_IDS.STORY_MANUAL)}
-            initialWidth="100vw"
-            initialHeight="100vh"
-            resizable={false}
-            headerTitle="Story Mode"
-          >
-            <StoryManual 
-              onClose={() => closeWindow(WINDOW_IDS.STORY_MANUAL)} 
-              autoPlayChapterId="paradise-motel"
-            />
-          </DraggableResizeableWindow>
-        ),
-      });
     }
   };
 

@@ -257,14 +257,29 @@ export async function checkGumCooldown(
       }
       
       const now = new Date();
-      const today = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+      const today = now.toISOString().split('T')[0]; // YYYY-MM-DD format (UTC)
       const lastResetDate = cooldownRecord.daily_reset_date;
+      
+      // Debug logging for date comparison
+      console.log('🔍 checkGumCooldown DATE DEBUG:', {
+        source,
+        todayUTC: today,
+        lastResetDate,
+        dailyEarnedAmount: cooldownRecord.daily_earned_amount,
+        lastEarnedAt: cooldownRecord.last_earned_at,
+        nowISO: now.toISOString(),
+        localDate: now.toLocaleDateString(),
+        localTime: now.toLocaleTimeString()
+      });
       
       // For daily_checkin and daily_login, use calendar day logic
       if (source === 'daily_checkin' || source === 'daily_login') {
-        // If it's a new calendar day, user can claim
-        if (lastResetDate !== today) {
-          console.log('🔍 checkGumCooldown: New day, can claim');
+        // If it's a new calendar day (comparing UTC dates), user can claim
+        // Handle case where lastResetDate might be in different format
+        const normalizedLastReset = lastResetDate ? String(lastResetDate).split('T')[0] : null;
+        
+        if (!normalizedLastReset || normalizedLastReset !== today) {
+          console.log('🔍 checkGumCooldown: New day detected!', { normalizedLastReset, today });
           return { canEarn: true, reason: 'New day - ready to claim!' };
         }
         

@@ -139,13 +139,13 @@ const GeeksHouseMain = () => {
   };
 
   return (
-    <div className="relative w-full h-full flex flex-col overflow-hidden">
+    <div className="relative w-full h-full flex flex-col overflow-hidden bg-black">
       {/* Image Section */}
       <div className="relative flex-1 flex items-center justify-center min-h-0">
         <img
           src={timeBasedInfo.currentImage}
           alt={`Geek's House Background - ${timeBasedInfo.isDay ? 'Day' : 'Night'}`}
-          className="w-full h-full object-cover transition-opacity duration-500"
+          className="max-w-full max-h-full object-contain transition-opacity duration-500"
           onError={(e) => {
             e.currentTarget.src = "/images/backdrops/BLANK.png";
           }}

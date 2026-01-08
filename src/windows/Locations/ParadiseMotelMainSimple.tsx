@@ -604,7 +604,7 @@ transaction() {
             : "/images/locations/snow locations/paradise-motel-night-snow.png"
           }
           alt="Paradise Motel"
-          className="w-full h-full object-cover"
+          className="max-w-full max-h-full object-contain"
           onError={(e) => {
             e.currentTarget.src = "/images/backdrops/BLANK.png";
           }}
