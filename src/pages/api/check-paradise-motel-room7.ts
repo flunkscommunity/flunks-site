@@ -38,11 +38,11 @@ export default async function handler(
 
     console.log('🔍 Checking Room 7 key for:', walletAddress.slice(0, 8) + '...');
 
-    // Check if user has a Room 7 key (use maybeSingle() to avoid errors when no row exists)
+    // Check if user has a Room 7 key (use ilike for case-insensitive matching)
     const { data: existingKey, error: checkError } = await supabase
       .from('paradise_motel_room7_keys')
       .select('id, obtained_at')
-      .eq('wallet_address', walletAddress)
+      .ilike('wallet_address', walletAddress)
       .maybeSingle();
 
     if (checkError) {
