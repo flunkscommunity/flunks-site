@@ -42,23 +42,9 @@ const UserProfile: React.FC = () => {
   const lockerNumber = devBypass ? 999 : (lockerInfo?.locker_number || null);
   const isLoading = devBypass ? false : (loading || profileLoading);
 
-  // Debug logging for profile state
-  console.log('🏠 UserProfile Component State:', {
-    isConnected,
-    hasProfile,
-    profile: profile?.username || 'none',
-    walletAddress: primaryWallet?.address,
-    profileLoading,
-    lockerNumber,
-    showProfileCreation,
-    loading,
-    devBypass,
-    // Key render conditions:
-    renderCondition: isLoading ? 'loading' : 
-                    !isConnected ? 'not-connected' :
-                    !lockerNumber && primaryWallet?.address && !devBypass ? 'need-profile-or-locker' :
-                    'locker-interior'
-  });
+  // Debug logging for profile state - disabled by default
+  // Uncomment below to debug profile rendering issues:
+  // console.log('🏠 UserProfile Component State:', { isConnected, hasProfile, profile: profile?.username });
 
   const loadChapter2Objectives = async () => {
     if (!primaryWallet?.address) return;
@@ -144,7 +130,7 @@ const UserProfile: React.FC = () => {
       loadChapter3Objectives();
       loadChapter4Objectives();
       loadChapter5Objectives();
-    }, 30000); // Check every 30 seconds
+    }, 300000); // Check every 5 minutes (reduced from 30 seconds to minimize console noise)
     
     return () => clearInterval(interval);
   }, [primaryWallet?.address]);

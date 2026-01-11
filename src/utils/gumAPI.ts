@@ -1,6 +1,9 @@
 import { supabase } from '../lib/supabase';
 import { getApiUrl } from './apiBaseUrl';
 
+// Set to true only when debugging GUM API issues
+const GUM_API_DEBUG = false;
+
 /**
  * Normalize a Flow address to standard format (0x + 16 hex chars lowercase)
  */
@@ -105,7 +108,7 @@ export async function getUserGumStats(walletAddress: string): Promise<GumStats |
   try {
     const normalizedAddress = normalizeFlowAddress(walletAddress);
     const url = getApiUrl('/api/gum-stats');
-    console.log('🔍 getUserGumStats: Fetching', url);
+    if (GUM_API_DEBUG) console.log('🔍 getUserGumStats: Fetching', url);
     
     const response = await fetch(url, {
       method: 'POST',
@@ -145,7 +148,7 @@ export async function getUserGumTransactions(
     
     // Try direct Supabase query first (works on mobile without CORS issues)
     if (supabase) {
-      console.log('🔍 getUserGumTransactions: Using direct Supabase query');
+      if (GUM_API_DEBUG) console.log('🔍 getUserGumTransactions: Using direct Supabase query');
       const { data, error } = await supabase
         .from('gum_transactions')
         .select('*')
@@ -157,14 +160,14 @@ export async function getUserGumTransactions(
         console.error('🔍 getUserGumTransactions: Supabase error:', error);
         // Fall through to API
       } else {
-        console.log('🔍 getUserGumTransactions: Got', data?.length || 0, 'transactions from Supabase');
+        if (GUM_API_DEBUG) console.log('🔍 getUserGumTransactions: Got', data?.length || 0, 'transactions from Supabase');
         return data || [];
       }
     }
     
     // Fallback to API (may have CORS issues on mobile)
     const url = getApiUrl('/api/gum-transactions');
-    console.log('🔍 getUserGumTransactions: Fetching', url);
+    if (GUM_API_DEBUG) console.log('🔍 getUserGumTransactions: Fetching', url);
     
     const response = await fetch(url, {
       method: 'POST',
@@ -227,7 +230,7 @@ export async function checkGumCooldown(
   // First try direct Supabase query
   if (supabase) {
     try {
-      console.log('🔍 checkGumCooldown: Using Supabase for', source);
+      if (GUM_API_DEBUG) console.log('🔍 checkGumCooldown: Using Supabase for', source);
       
       // Get source configuration
       const { data: sourceConfig, error: sourceError } = await supabase
@@ -238,7 +241,7 @@ export async function checkGumCooldown(
         .single();
       
       if (sourceError || !sourceConfig) {
-        console.log('🔍 checkGumCooldown: Invalid or inactive source');
+        if (GUM_API_DEBUG) console.log('🔍 checkGumCooldown: Invalid or inactive source');
         return { canEarn: false, reason: 'Invalid or inactive source' };
       }
       
@@ -252,7 +255,7 @@ export async function checkGumCooldown(
       
       // If no record exists, user can claim
       if (cooldownError?.code === 'PGRST116' || !cooldownRecord) {
-        console.log('🔍 checkGumCooldown: No record, can claim');
+        if (GUM_API_DEBUG) console.log('🔍 checkGumCooldown: No record, can claim');
         return { canEarn: true, reason: 'Ready to claim!' };
       }
       
@@ -260,17 +263,16 @@ export async function checkGumCooldown(
       const today = now.toISOString().split('T')[0]; // YYYY-MM-DD format (UTC)
       const lastResetDate = cooldownRecord.daily_reset_date;
       
-      // Debug logging for date comparison
-      console.log('🔍 checkGumCooldown DATE DEBUG:', {
-        source,
-        todayUTC: today,
-        lastResetDate,
-        dailyEarnedAmount: cooldownRecord.daily_earned_amount,
-        lastEarnedAt: cooldownRecord.last_earned_at,
-        nowISO: now.toISOString(),
-        localDate: now.toLocaleDateString(),
-        localTime: now.toLocaleTimeString()
-      });
+      // Debug logging for date comparison (only when debugging)
+      if (GUM_API_DEBUG) {
+        console.log('🔍 checkGumCooldown DATE DEBUG:', {
+          source,
+          todayUTC: today,
+          lastResetDate,
+          dailyEarnedAmount: cooldownRecord.daily_earned_amount,
+          lastEarnedAt: cooldownRecord.last_earned_at
+        });
+      }
       
       // For daily_checkin and daily_login, use calendar day logic
       if (source === 'daily_checkin' || source === 'daily_login') {
@@ -279,7 +281,7 @@ export async function checkGumCooldown(
         const normalizedLastReset = lastResetDate ? String(lastResetDate).split('T')[0] : null;
         
         if (!normalizedLastReset || normalizedLastReset !== today) {
-          console.log('🔍 checkGumCooldown: New day detected!', { normalizedLastReset, today });
+          if (GUM_API_DEBUG) console.log('🔍 checkGumCooldown: New day detected!', { normalizedLastReset, today });
           return { canEarn: true, reason: 'New day - ready to claim!' };
         }
         
@@ -290,7 +292,7 @@ export async function checkGumCooldown(
           midnight.setUTCHours(24, 0, 0, 0);
           const minutesUntilMidnight = Math.ceil((midnight.getTime() - now.getTime()) / (1000 * 60));
           
-          console.log('🔍 checkGumCooldown: Already claimed today');
+          if (GUM_API_DEBUG) console.log('🔍 checkGumCooldown: Already claimed today');
           return {
             canEarn: false,
             cooldownMinutes: minutesUntilMidnight,
@@ -299,7 +301,7 @@ export async function checkGumCooldown(
         }
         
         // Same day but haven't claimed yet
-        console.log('🔍 checkGumCooldown: Same day, can still claim');
+        if (GUM_API_DEBUG) console.log('🔍 checkGumCooldown: Same day, can still claim');
         return { canEarn: true, reason: 'Ready to claim!' };
       }
       
@@ -320,14 +322,14 @@ export async function checkGumCooldown(
       return { canEarn: false, cooldownMinutes: remainingMinutes, reason: 'In cooldown period' };
       
     } catch (supabaseError) {
-      console.log('🔍 checkGumCooldown: Supabase error, trying API fallback');
+      if (GUM_API_DEBUG) console.log('🔍 checkGumCooldown: Supabase error, trying API fallback');
     }
   }
   
   // Fallback to API
   try {
     const url = getApiUrl('/api/check-gum-cooldown');
-    console.log('🔍 checkGumCooldown: Fetching', url);
+    if (GUM_API_DEBUG) console.log('🔍 checkGumCooldown: Fetching', url);
     
     const response = await fetch(url, {
       method: 'POST',
@@ -362,10 +364,10 @@ export async function checkGumCooldown(
  * Get user's current gum balance only - Direct database query
  */
 export async function getUserGumBalance(walletAddress: string): Promise<number> {
-  console.log('🍬 getUserGumBalance called with:', walletAddress);
+  if (GUM_API_DEBUG) console.log('🍬 getUserGumBalance called with:', walletAddress);
   try {
     const normalizedAddress = normalizeFlowAddress(walletAddress);
-    console.log('🍬 getUserGumBalance normalized address:', normalizedAddress);
+    if (GUM_API_DEBUG) console.log('🍬 getUserGumBalance normalized address:', normalizedAddress);
     
     // Check if supabase client is available
     if (!supabase) {
@@ -379,19 +381,19 @@ export async function getUserGumBalance(walletAddress: string): Promise<number> 
       .eq('wallet_address', normalizedAddress)
       .single();
 
-    console.log('🍬 getUserGumBalance result:', { data, error });
+    if (GUM_API_DEBUG) console.log('🍬 getUserGumBalance result:', { data, error });
 
     if (error) {
       if (error.code === 'PGRST116') {
         // No record found, return 0
-        console.log('🍬 No GUM record found for wallet, returning 0');
+        if (GUM_API_DEBUG) console.log('🍬 No GUM record found for wallet, returning 0');
         return 0;
       }
       console.error('Error getting gum balance from database:', error);
       return 0;
     }
 
-    console.log('🍬 getUserGumBalance returning:', data?.total_gum || 0);
+    if (GUM_API_DEBUG) console.log('🍬 getUserGumBalance returning:', data?.total_gum || 0);
     return data?.total_gum || 0;
   } catch (error) {
     console.error('Error in getUserGumBalance:', error);

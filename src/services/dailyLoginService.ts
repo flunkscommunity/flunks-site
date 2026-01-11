@@ -1,5 +1,8 @@
 import { awardGum, checkGumCooldown } from '../utils/gumAPI';
 
+// Set to true only when debugging daily login issues
+const DAILY_LOGIN_DEBUG = false;
+
 export interface DailyLoginResult {
   success: boolean;
   earned: number;
@@ -75,11 +78,11 @@ export async function autoClaimDailyLogin(walletAddress: string): Promise<void> 
     const today = new Date().toDateString();
     
     if (lastAttempt === today) {
-      console.log('🎁 Daily login already attempted today for', walletAddress.slice(0, 8) + '...');
+      if (DAILY_LOGIN_DEBUG) console.log('🎁 Daily login already attempted today for', walletAddress.slice(0, 8) + '...');
       return;
     }
 
-    console.log('🎁 Attempting automatic daily login for', walletAddress.slice(0, 8) + '...');
+    if (DAILY_LOGIN_DEBUG) console.log('🎁 Attempting automatic daily login for', walletAddress.slice(0, 8) + '...');
     
     const result = await claimDailyLogin(walletAddress);
     
@@ -87,7 +90,7 @@ export async function autoClaimDailyLogin(walletAddress: string): Promise<void> 
     localStorage.setItem(`daily_login_attempt_${walletAddress}`, today);
     
     if (result.success && result.earned > 0) {
-      console.log(`🎉 Daily login bonus claimed: ${result.earned} GUM!`);
+      if (DAILY_LOGIN_DEBUG) console.log(`🎉 Daily login bonus claimed: ${result.earned} GUM!`);
       
       // Dispatch events to update UI
       window.dispatchEvent(new CustomEvent('dailyLoginClaimed', {
@@ -116,9 +119,9 @@ export async function autoClaimDailyLogin(walletAddress: string): Promise<void> 
         }
       }
     } else if (result.alreadyClaimed) {
-      console.log('🎁 Daily login bonus already claimed today');
+      if (DAILY_LOGIN_DEBUG) console.log('🎁 Daily login bonus already claimed today');
     } else {
-      console.log('❌ Failed to claim daily login bonus:', result.error);
+      if (DAILY_LOGIN_DEBUG) console.log('❌ Failed to claim daily login bonus:', result.error);
     }
   } catch (error) {
     console.error('Error in autoClaimDailyLogin:', error);

@@ -17,8 +17,10 @@ import { checkForSpecialEvents } from '../services/specialEventsService';
 import { useWidgetSync } from '../hooks/useWidgetSync';
 import { cancelDailyGumReminder, scheduleDailyGumReminder } from '../utils/dailyGumNotifications';
 
+// Set to true only when debugging GUM issues
+const GUM_DEBUG = false;
 // Enable debug logging for widget sync
-const WIDGET_DEBUG = true;
+const WIDGET_DEBUG = false;
 
 export interface GumContextType {
   balance: number;
@@ -55,7 +57,7 @@ interface GumProviderProps {
 
 export const GumProvider: React.FC<GumProviderProps> = ({ 
   children, 
-  autoRefreshInterval = 120000  // 2 minutes - reduced from 30s to minimize invocations
+  autoRefreshInterval = 300000  // 5 minutes - reduced from 2 min to minimize console noise
 }) => {
   const { primaryWallet } = useDynamicContext();
   const auth = useAuth();
@@ -73,6 +75,10 @@ export const GumProvider: React.FC<GumProviderProps> = ({
 
   // Use auth context for wallet address - more reliable
   const walletAddress = auth.walletAddress || primaryWallet?.address;
+  
+  // Track if we've done the initial load to prevent duplicate fetches
+  const hasInitializedRef = useRef<string | null>(null);
+  const isRefreshingRef = useRef(false);
 
   const refreshDailyCheckinStatus = useCallback(async () => {
     if (!walletAddress || !auth.isAuthenticated) {
@@ -93,30 +99,37 @@ export const GumProvider: React.FC<GumProviderProps> = ({
       setDailyClaimed(!canEarn);
       setNextClaimMinutes(canEarn ? 0 : (cooldown.cooldownMinutes ?? 0));
     } catch (err) {
-      console.warn('🍬 GumProvider: Failed to refresh daily_checkin status:', err);
+      if (GUM_DEBUG) console.warn('🍬 GumProvider: Failed to refresh daily_checkin status:', err);
     }
   }, [walletAddress, auth.isAuthenticated, lastDailyStatusRefresh]);
 
   // Refresh balance only
   const refreshBalance = useCallback(async () => {
     if (!walletAddress || !auth.isAuthenticated) {
-      console.log('🍬 GumProvider: No wallet address or not authenticated, setting balance to 0');
+      if (GUM_DEBUG) console.log('🍬 GumProvider: No wallet or not authenticated');
       setBalance(0);
       return;
     }
 
-    // Throttle balance refreshes to max once every 10 seconds
+    // Prevent concurrent refreshes
+    if (isRefreshingRef.current) {
+      if (GUM_DEBUG) console.log('🍬 GumProvider: Refresh already in progress');
+      return;
+    }
+
+    // Throttle balance refreshes to max once every 30 seconds
     const now = Date.now();
-    if (now - lastBalanceRefresh < 10000) {
-      console.log('🍬 GumProvider: Balance refresh throttled, last refresh was', (now - lastBalanceRefresh) / 1000, 'seconds ago');
+    if (now - lastBalanceRefresh < 30000) {
+      if (GUM_DEBUG) console.log('🍬 GumProvider: Balance refresh throttled');
       return;
     }
 
     try {
+      isRefreshingRef.current = true;
       setError(null);
-      console.log('🍬 GumProvider: Fetching balance for wallet:', walletAddress);
+      if (GUM_DEBUG) console.log('🍬 GumProvider: Fetching balance for wallet:', walletAddress);
       const newBalance = await getUserGumBalance(walletAddress);
-      console.log('🍬 GumProvider: Got balance:', newBalance);
+      if (GUM_DEBUG) console.log('🍬 GumProvider: Got balance:', newBalance);
       setBalance(newBalance);
       setLastBalanceRefresh(now);
 
@@ -130,11 +143,15 @@ export const GumProvider: React.FC<GumProviderProps> = ({
     } catch (err) {
       console.error('🍬 GumProvider: Error refreshing gum balance:', err);
       setError('Failed to refresh balance');
+    } finally {
+      isRefreshingRef.current = false;
     }
-  }, [walletAddress, auth.isAuthenticated, lastBalanceRefresh, refreshDailyCheckinStatus]);  // Refresh full stats
+  }, [walletAddress, auth.isAuthenticated, lastBalanceRefresh, refreshDailyCheckinStatus]);
+  
+  // Refresh full stats
   const refreshStats = useCallback(async () => {
     if (!walletAddress || !auth.isAuthenticated) {
-      console.log('🍬 GumProvider: No wallet address or not authenticated, clearing stats');
+      if (GUM_DEBUG) console.log('🍬 GumProvider: No wallet or not authenticated, clearing stats');
       setStats(null);
       setBalance(0);
       return;
@@ -144,10 +161,10 @@ export const GumProvider: React.FC<GumProviderProps> = ({
     setError(null);
 
     try {
-      console.log('🍬 GumProvider: Fetching stats for wallet:', walletAddress);
+      if (GUM_DEBUG) console.log('🍬 GumProvider: Fetching stats for wallet:', walletAddress);
       const newStats = await getUserGumStats(walletAddress);
       if (newStats) {
-        console.log('🍬 GumProvider: Got stats:', newStats);
+        if (GUM_DEBUG) console.log('🍬 GumProvider: Got stats:', newStats);
         setStats(newStats);
         setBalance(newStats.current_balance);
 
@@ -168,32 +185,36 @@ export const GumProvider: React.FC<GumProviderProps> = ({
 
   // Sync iOS widget when balance/status changes
   useEffect(() => {
-    console.log('📱 Widget sync effect triggered:', {
-      isWidgetAvailable,
-      walletAddress,
-      isAuthenticated: auth.isAuthenticated,
-      balance,
-      username: profile?.username,
-      dailyClaimed,
-      nextClaimMinutes
-    });
+    if (WIDGET_DEBUG) {
+      console.log('📱 Widget sync effect triggered:', {
+        isWidgetAvailable,
+        walletAddress,
+        isAuthenticated: auth.isAuthenticated,
+        balance,
+        username: profile?.username,
+        dailyClaimed,
+        nextClaimMinutes
+      });
+    }
     
     if (!isWidgetAvailable) {
-      console.log('📱 Widget not available, skipping sync');
+      if (WIDGET_DEBUG) console.log('📱 Widget not available, skipping sync');
       return;
     }
     if (!walletAddress || !auth.isAuthenticated) {
-      console.log('📱 No wallet or not authenticated, skipping sync');
+      if (WIDGET_DEBUG) console.log('📱 No wallet or not authenticated, skipping sync');
       return;
     }
 
-    console.log('📱 Syncing widget with data:', {
-      gumBalance: balance,
-      lockerNumber: 0,
-      username: profile?.username || 'Anon',
-      dailyClaimed,
-      nextClaimMinutes,
-    });
+    if (WIDGET_DEBUG) {
+      console.log('📱 Syncing widget with data:', {
+        gumBalance: balance,
+        lockerNumber: 0,
+        username: profile?.username || 'Anon',
+        dailyClaimed,
+        nextClaimMinutes,
+      });
+    }
 
     void syncWidget({
       gumBalance: balance,
@@ -366,32 +387,45 @@ export const GumProvider: React.FC<GumProviderProps> = ({
   }, [balance]);
 
   // Initial load when wallet connects - use auth context
+  // Only run once per wallet address to prevent infinite loops
   useEffect(() => {
+    // Skip if we've already initialized for this wallet
+    if (hasInitializedRef.current === walletAddress) {
+      return;
+    }
+    
     if (walletAddress && auth.isAuthenticated) {
-      console.log('🍬 GumProvider: Wallet connected, loading GUM data for:', walletAddress);
-      refreshStats();
+      hasInitializedRef.current = walletAddress;
+      if (GUM_DEBUG) console.log('🍬 GumProvider: Initial load for wallet:', walletAddress);
+      
+      // Fetch stats once on connection
+      getUserGumStats(walletAddress).then(newStats => {
+        if (newStats) {
+          setStats(newStats);
+          setBalance(newStats.current_balance);
+          setLastBalanceRefresh(Date.now());
+        }
+      }).catch(err => {
+        console.error('🍬 GumProvider: Error loading initial stats:', err);
+      });
       
       // Auto-claim daily login bonus when wallet connects
-      autoClaimDailyLogin(walletAddress).then(() => {
-        // Refresh balance after potential daily login claim (with delay to allow for processing)
-        setTimeout(() => {
-          refreshBalance(); // This will be throttled if called too recently
-        }, 2000); // Increased delay to 2 seconds
-      }).catch(err => {
-        console.warn('🍬 Daily login auto-claim failed (this is normal on first connection):', err);
+      autoClaimDailyLogin(walletAddress).catch(err => {
+        if (GUM_DEBUG) console.warn('🍬 Daily login auto-claim failed:', err);
       });
       
       // Check for special events
       checkForSpecialEvents(walletAddress);
-    } else {
+    } else if (!walletAddress || !auth.isAuthenticated) {
       // Reset state when wallet disconnects
-      console.log('🍬 GumProvider: Wallet disconnected, resetting GUM state');
+      hasInitializedRef.current = null;
+      if (GUM_DEBUG) console.log('🍬 GumProvider: Wallet disconnected, resetting state');
       setBalance(0);
       setStats(null);
       setError(null);
       setLoading(false);
     }
-  }, [walletAddress, auth.isAuthenticated, refreshStats, refreshBalance]);
+  }, [walletAddress, auth.isAuthenticated]); // Removed refreshStats, refreshBalance to prevent loops
 
   // Auto refresh - only when app is visible/active
   useEffect(() => {
