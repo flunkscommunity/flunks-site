@@ -21,8 +21,14 @@ fcl.config({
 });
 
 const ADMIN_ADDRESS = '0xce9dd43888d99574';
-// This is the correct private key that matches the account's public key
-const ADMIN_PRIVATE_KEY = '84b16ebda82e663e88f823557dd7788c829c0f8ff506b543e56e286c1c3527f3';
+// Private key loaded from environment variable for security
+const ADMIN_PRIVATE_KEY = process.env.FLOW_ADMIN_PRIVATE_KEY;
+
+if (!ADMIN_PRIVATE_KEY) {
+  console.error('❌ FLOW_ADMIN_PRIVATE_KEY environment variable not set');
+  console.error('   Set it with: export FLOW_ADMIN_PRIVATE_KEY=your_private_key');
+  process.exit(1);
+}
 
 const recipientAddress = process.argv[2] || '0xbfffec679fff3a94';
 const mintCount = parseInt(process.argv[3]) || 1;

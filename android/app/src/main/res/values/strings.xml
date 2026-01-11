@@ -4,4 +4,6 @@
     <string name="title_activity_main">Flunks</string>
     <string name="package_name">net.flunks.app</string>
     <string name="custom_url_scheme">net.flunks.app</string>
+    <string name="widget_description">Check your GUM balance and claim daily rewards</string>
+    <string name="widget_name">Flunks GUM</string>
 </resources>
