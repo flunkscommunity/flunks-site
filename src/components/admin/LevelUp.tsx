@@ -78,6 +78,37 @@ const playSound = (soundName: string) => {
   }
 };
 
+// Mario-style power-up sound (NES mushroom sound) using Web Audio API
+const playMarioPowerUp = () => {
+  try {
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    
+    // The classic NES Mario power-up is a rapid ascending arpeggio
+    // Notes: E5, G5, C6, E6, G6, E6, G6 played very quickly
+    const notes = [659, 784, 1047, 1319, 1568, 1319, 1568]; // Frequencies
+    const noteDuration = 0.06; // Each note is very short
+    
+    notes.forEach((freq, i) => {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.type = 'square'; // NES used square waves
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      const startTime = audioContext.currentTime + (i * noteDuration);
+      oscillator.frequency.setValueAtTime(freq, startTime);
+      gainNode.gain.setValueAtTime(0.15, startTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + noteDuration);
+      
+      oscillator.start(startTime);
+      oscillator.stop(startTime + noteDuration);
+    });
+  } catch (e) {
+    // Ignore audio errors
+  }
+};
+
 // Retro synth sound effects using Web Audio API (same as MyPlace)
 const playRetroSound = (type: 'hover' | 'select' | 'error') => {
   try {
@@ -846,8 +877,8 @@ const LevelUp: React.FC = () => {
     setMessage({ text: 'Evolving your NFT... Please wait...', type: 'info' });
     setEvolvedResult(null);
     
-    // Play evolution start sound
-    playSound('bubble');
+    // Play Mario power-up sound when evolution starts
+    playSound('powerup');
 
     try {
       const response = await fetch('/api/level-up', {
@@ -1032,7 +1063,7 @@ const LevelUp: React.FC = () => {
               
               {unrevealedNFTs.length === 0 ? (
                 <Message type="info">
-                  No unrevealed Paradise Motel pins found. 
+                  No unrevealed pins to evolve.
                   {nfts.length > 0 ? ' All your pins have been evolved!' : ' Complete Chapter 5 to earn one!'}
                 </Message>
               ) : (
