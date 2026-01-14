@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useUnifiedWallet } from '../../contexts/UnifiedWalletContext';
 import { useGum } from '../../contexts/GumContext';
+import { getApiUrl } from '../../utils/apiBaseUrl';
 import * as fcl from '@onflow/fcl';
 
 // Pin configurations by location
@@ -731,8 +732,12 @@ const ConnectPrompt = styled.div`
 
 // Main Component
 const LevelUp: React.FC = () => {
+  console.log('🎮 LevelUp: Component mounting...');
+  
   const { address } = useUnifiedWallet();
   const { balance, refreshBalance } = useGum();
+  
+  console.log('🎮 LevelUp: Got address from context:', address);
   
   const [activeTab, setActiveTab] = useState<'evolve' | 'collection'>('evolve');
   const [nfts, setNfts] = useState<any[]>([]);
@@ -751,6 +756,8 @@ const LevelUp: React.FC = () => {
         setLoading(false);
         return;
       }
+
+      console.log('🎮 LevelUp: Fetching NFTs for address:', address);
 
       try {
         setLoading(true);
@@ -837,9 +844,12 @@ const LevelUp: React.FC = () => {
           args: (arg: any, t: any) => [arg(address, t.Address)]
         });
 
+        console.log('🎮 LevelUp: Fetched NFTs:', result?.length || 0);
         setNfts(result || []);
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error fetching NFTs:', error);
+        console.error('Error fetching NFTs - address was:', address);
+        console.error('Error details:', JSON.stringify(error, null, 2));
         setNfts([]);
       } finally {
         setLoading(false);
@@ -880,18 +890,37 @@ const LevelUp: React.FC = () => {
     // Play Mario power-up sound when evolution starts
     playSound('powerup');
 
+    console.log('🎮 Starting evolution with:', { walletAddress: address, nftId: selectedNFT.id, tier: selectedTier });
+
     try {
-      const response = await fetch('/api/level-up', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          walletAddress: address,
-          nftId: selectedNFT.id,
-          tier: selectedTier,
-        }),
-      });
+      const apiUrl = getApiUrl('/api/level-up');
+      console.log('🎮 Calling API:', apiUrl);
+      
+      let response;
+      try {
+        response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            walletAddress: address,
+            nftId: selectedNFT.id,
+            tier: selectedTier,
+          }),
+        });
+        console.log('🎮 Response status:', response.status, response.statusText);
+      } catch (fetchError: any) {
+        console.error('🎮 Fetch error (CORS/Network):', fetchError?.message || 'Network error');
+        throw new Error(`Network error: ${fetchError?.message || 'Unable to reach server. Check network connection.'}`);
+      }
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('🎮 API error response:', response.status, errorText);
+        throw new Error(`Server error ${response.status}: ${errorText || response.statusText}`);
+      }
 
       const result = await response.json();
+      console.log('🎮 Evolution API response:', result);
 
       if (result.success) {
         setMessage({ text: `🎉 Successfully evolved to ${selectedTier}!`, type: 'success' });
@@ -1000,7 +1029,10 @@ const LevelUp: React.FC = () => {
     } catch (error: any) {
       playSound('error');
       console.error('Evolution error:', error);
-      setMessage({ text: error.message || 'Evolution failed', type: 'error' });
+      // Show more detailed error message
+      const errorMessage = error?.message || error?.toString() || 'Evolution failed';
+      console.error('Evolution error details:', JSON.stringify(error, null, 2));
+      setMessage({ text: errorMessage, type: 'error' });
     } finally {
       setEvolving(false);
     }
@@ -1075,9 +1107,11 @@ const LevelUp: React.FC = () => {
                       evolving={evolving && selectedNFT?.id === nft.id}
                       onMouseEnter={() => playRetroSound('hover')}
                       onClick={() => {
+                        console.log('🎮 NFTCard clicked:', nft.id, nft.name, 'evolving:', evolving);
                         if (!evolving) {
                           playRetroSound('select');
                           setSelectedNFT(nft);
+                          console.log('🎮 Selected NFT:', nft.id);
                         }
                       }}
                     >
@@ -1112,11 +1146,14 @@ const LevelUp: React.FC = () => {
                       selected={selectedTier === tierName}
                       onMouseEnter={() => playRetroSound('hover')}
                       onClick={() => {
+                        console.log('🎮 TierCard clicked:', tierName, 'balance:', balance, 'cost:', tierConfig.cost, 'evolving:', evolving);
                         if (balance >= tierConfig.cost && !evolving) {
                           playRetroSound('select');
                           setSelectedTier(tierName);
+                          console.log('🎮 Selected tier:', tierName);
                         } else if (balance < tierConfig.cost) {
                           playRetroSound('error');
+                          console.log('🎮 Insufficient GUM for tier:', tierName);
                         }
                       }}
                     >

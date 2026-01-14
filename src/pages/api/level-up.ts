@@ -16,6 +16,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import * as fcl from '@onflow/fcl';
 import { supabase } from '../../lib/supabase';
 import { executeAdminTransaction, queryFlow, isAdminConfigured } from '../../lib/flowServerAuth';
+import { handleCors } from '../../utils/corsHeaders';
 
 // Pin configuration by location
 const PIN_CONFIGS: Record<string, {
@@ -97,6 +98,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // Handle CORS for mobile app
+  if (handleCors(req, res)) return;
+
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }

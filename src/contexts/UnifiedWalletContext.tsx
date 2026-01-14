@@ -72,6 +72,14 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
   const [lastError, setLastError] = useState<string | null>(null);
   const [lastAuthStartedAt, setLastAuthStartedAt] = useState<number | null>(null);
 
+  // Debug log when Dynamic wallet changes
+  useEffect(() => {
+    if (primaryWallet?.address) {
+      console.log('🔐 Dynamic wallet address (raw):', primaryWallet.address);
+      console.log('🔐 Dynamic wallet address (normalized):', normalizeFlowAddress(primaryWallet.address));
+    }
+  }, [primaryWallet?.address]);
+
   // Detect mobile app on mount
   useEffect(() => {
     const mobile = isMobileApp();
@@ -248,7 +256,8 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Determine which wallet is connected and the unified address
   const walletType = primaryWallet ? 'dynamic' : (fclAddress ? 'fcl' : null);
-  const address = primaryWallet?.address || fclAddress;
+  // Normalize the address from Dynamic wallet as well (may be in CAIP-10 format)
+  const address = normalizeFlowAddress(primaryWallet?.address) || fclAddress;
   const isConnected = !!(primaryWallet || fclAddress);
 
   const value: UnifiedWalletContextType = {

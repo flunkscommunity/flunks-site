@@ -18,8 +18,8 @@ const config = {
   images: { unoptimized: true },
   reactStrictMode: false,
   swcMinify: true,
-  // Mobile builds only need static output; disable tracing to avoid missing `.nft.json` artifacts.
-  ...(isMobileBuild && { outputFileTracing: false }),
+  // Disable output file tracing - fixes build issues with Next.js 14.2+ on Node 20+
+  outputFileTracing: false,
   compiler: {
     // Enables the styled-components SWC transform
     styledComponents: true
