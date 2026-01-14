@@ -6,7 +6,8 @@
  */
 
 // Live server URL for API calls
-const LIVE_API_URL = 'https://flunks.net';
+// IMPORTANT: Use www subdomain to avoid 307 redirect that breaks CORS
+const LIVE_API_URL = 'https://www.flunks.net';
 
 /**
  * Check if running in Capacitor mobile app
