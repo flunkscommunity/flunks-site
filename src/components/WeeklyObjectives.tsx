@@ -18,7 +18,6 @@ const WeeklyObjectives: React.FC<WeeklyObjectivesProps> = ({ onObjectiveComplete
   const [chapter5ObjectivesStatus, setChapter5ObjectivesStatus] = useState<ObjectiveStatus | null>(null);
   const [chapter6ObjectivesStatus, setChapter6ObjectivesStatus] = useState<ObjectiveStatus | null>(null);
   const [loading, setLoading] = useState(false);
-  const [lastWallet, setLastWallet] = useState<string | null>(null);
   const [currentWeek, setCurrentWeek] = useState<1 | 2 | 3 | 4 | 5 | 6>(6); // Default to Chapter 6 - Four Thieves
 
   // Get current objectives data based on selected week
@@ -65,34 +64,31 @@ const WeeklyObjectives: React.FC<WeeklyObjectivesProps> = ({ onObjectiveComplete
       setChapter3ObjectivesStatus(null);
       setChapter4ObjectivesStatus(null);
       setChapter5ObjectivesStatus(null);
+      setChapter6ObjectivesStatus(null);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    // Reset state when wallet changes
-    if (unifiedAddress !== lastWallet) {
-      setObjectivesStatus(null);
-      setChapter2ObjectivesStatus(null);
-      setChapter3ObjectivesStatus(null);
-      setChapter4ObjectivesStatus(null);
-      setChapter5ObjectivesStatus(null);
-      setLastWallet(unifiedAddress || null);
-    }
-    
-    // Clear previous state when wallet changes
+    // Reset state and reload when wallet changes
     setObjectivesStatus(null);
     setChapter2ObjectivesStatus(null);
     setChapter3ObjectivesStatus(null);
     setChapter4ObjectivesStatus(null);
     setChapter5ObjectivesStatus(null);
+    setChapter6ObjectivesStatus(null);
+    
+    // Only set up loading if we have an address
+    if (!unifiedAddress) return;
+    
+    // Load objectives once for this wallet
     loadObjectives();
     
-    // Much longer refresh interval to reduce server load and UI disruption
-    const interval = setInterval(() => loadObjectives(), 120000); // Changed from 30s to 2 minutes
+    // Much longer refresh interval to reduce server load (5 minutes)
+    const interval = setInterval(() => loadObjectives(), 300000);
     
-    // Even more conservative debounced update handler
+    // Debounced update handler for custom events
     let refreshTimeout: NodeJS.Timeout | null = null;
     const handleObjectiveUpdate = () => {
       if (refreshTimeout) {
@@ -101,12 +97,12 @@ const WeeklyObjectives: React.FC<WeeklyObjectivesProps> = ({ onObjectiveComplete
       refreshTimeout = setTimeout(() => {
         loadObjectives(true); // Force refresh on events
         refreshTimeout = null;
-      }, 5000); // Increased from 2s to 5s delay
+      }, 5000); // 5s delay to debounce multiple events
     };
 
     window.addEventListener('cafeteriaButtonClicked', handleObjectiveUpdate);
     window.addEventListener('codeAccessed', handleObjectiveUpdate);
-    window.addEventListener('pictureVoteComplete', handleObjectiveUpdate); // Add Picture Day voting event
+    window.addEventListener('pictureVoteComplete', handleObjectiveUpdate);
     
     return () => {
       clearInterval(interval);
@@ -117,7 +113,7 @@ const WeeklyObjectives: React.FC<WeeklyObjectivesProps> = ({ onObjectiveComplete
       window.removeEventListener('codeAccessed', handleObjectiveUpdate);
       window.removeEventListener('pictureVoteComplete', handleObjectiveUpdate);
     };
-  }, [unifiedAddress, lastWallet]);
+  }, [unifiedAddress]); // Only depend on unifiedAddress - removed lastWallet to prevent double-trigger
 
   if (!unifiedAddress) {
     return null;

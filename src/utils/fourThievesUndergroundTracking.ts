@@ -1,6 +1,9 @@
 import { supabase, hasValidSupabaseConfig } from '../lib/supabase';
 import { getApiUrl } from './apiBaseUrl';
 
+// Set to true to enable verbose logging for debugging
+const DEBUG_TRACKING = false;
+
 /**
  * Four Thieves Underground Access Tracking
  * Check if user has discovered the snicklefritz password
@@ -9,7 +12,7 @@ export async function checkFourThievesUndergroundAccess(walletAddress: string): 
   // First try direct Supabase query
   if (hasValidSupabaseConfig && supabase) {
     try {
-      console.log('🎰 [UNDERGROUND] Checking via Supabase view for wallet:', walletAddress?.slice(0, 10) + '...');
+      if (DEBUG_TRACKING) console.log('🎰 [UNDERGROUND] Checking via Supabase view for wallet:', walletAddress?.slice(0, 10) + '...');
       
       // Try the wallet_chapter_completions view first (has public read access)
       const { data: viewData, error: viewError } = await supabase
@@ -20,12 +23,12 @@ export async function checkFourThievesUndergroundAccess(walletAddress: string): 
 
       if (!viewError && viewData) {
         const hasAccess = viewData.has_four_thieves_underground === true;
-        console.log('✅ [UNDERGROUND] View result:', hasAccess);
+        if (DEBUG_TRACKING) console.log('✅ [UNDERGROUND] View result:', hasAccess);
         return hasAccess;
       }
       
       if (viewError) {
-        console.log('⚠️ [UNDERGROUND] View query error:', viewError.message, '- trying table');
+        if (DEBUG_TRACKING) console.log('⚠️ [UNDERGROUND] View query error:', viewError.message, '- trying table');
       }
       
       // Fallback to direct table query (may fail due to RLS)
@@ -37,21 +40,21 @@ export async function checkFourThievesUndergroundAccess(walletAddress: string): 
 
       if (!error && data) {
         const hasAccess = data.length > 0;
-        console.log('✅ [UNDERGROUND] Table result:', hasAccess);
+        if (DEBUG_TRACKING) console.log('✅ [UNDERGROUND] Table result:', hasAccess);
         return hasAccess;
       }
       
       if (error) {
-        console.log('⚠️ [UNDERGROUND] Table query error (RLS?):', error.message);
+        if (DEBUG_TRACKING) console.log('⚠️ [UNDERGROUND] Table query error (RLS?):', error.message);
       }
     } catch (err) {
-      console.log('⚠️ [UNDERGROUND] Supabase error:', err);
+      if (DEBUG_TRACKING) console.log('⚠️ [UNDERGROUND] Supabase error:', err);
     }
   }
 
   // Fallback to API
   try {
-    console.log('🎰 [UNDERGROUND] Checking via API for wallet:', walletAddress?.slice(0, 10) + '...');
+    if (DEBUG_TRACKING) console.log('🎰 [UNDERGROUND] Checking via API for wallet:', walletAddress?.slice(0, 10) + '...');
     const response = await fetch(getApiUrl(`/api/check-four-thieves-underground?walletAddress=${walletAddress}`));
     
     if (!response.ok) {
@@ -61,7 +64,7 @@ export async function checkFourThievesUndergroundAccess(walletAddress: string): 
     
     const data = await response.json();
     const hasAccess = data.success && data.hasAccess;
-    console.log('✅ [UNDERGROUND] API result:', hasAccess);
+    if (DEBUG_TRACKING) console.log('✅ [UNDERGROUND] API result:', hasAccess);
     return hasAccess;
   } catch (err) {
     console.error('💥 [UNDERGROUND] Both methods failed:', err);

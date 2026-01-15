@@ -7,6 +7,9 @@ import { checkParadiseMotelRoom7NightVisit } from './paradiseMotelRoom7Tracking'
 import { checkHiddenRiffCompletion } from './hiddenRiffTracking';
 import { checkFourThievesUndergroundAccess } from './fourThievesUndergroundTracking';
 
+// Set to true to enable verbose logging for debugging objectives
+const DEBUG_OBJECTIVES = false;
+
 export interface ChapterObjective {
   id: string;
   title: string;
@@ -68,7 +71,7 @@ export const checkCrackCodeObjectiveChapter2 = async (walletAddress: string): Pr
   }
 
   try {
-    console.log('🔍 Checking Chapter 2 crack code objective for wallet:', walletAddress);
+    if (DEBUG_OBJECTIVES) console.log('🔍 Checking Chapter 2 crack code objective for wallet:', walletAddress);
     
     const { data, error } = await supabase
       .from('digital_lock_attempts')
@@ -85,7 +88,7 @@ export const checkCrackCodeObjectiveChapter2 = async (walletAddress: string): Pr
     }
 
     const hasCracked = data && data.length > 0;
-    console.log('✅ Chapter 2 crack code objective completed:', hasCracked);
+    if (DEBUG_OBJECTIVES) console.log('✅ Chapter 2 crack code objective completed:', hasCracked);
     return hasCracked;
   } catch (err) {
     console.error('Failed to check Chapter 2 crack code objective:', err);
@@ -165,14 +168,14 @@ export const getObjectivesStatus = async (walletAddress: string): Promise<Object
 
 // Get Chapter 2 objectives status for a user
 export const getChapter2ObjectivesStatus = async (walletAddress: string): Promise<ObjectiveStatus> => {
-  console.log('🎯 getChapter2ObjectivesStatus called for wallet:', walletAddress?.slice(0,10) + '...');
+  if (DEBUG_OBJECTIVES) console.log('🎯 getChapter2ObjectivesStatus called for wallet:', walletAddress?.slice(0,10) + '...');
   
   const [fridayNightLightsClicked, crackedCodeChapter2] = await Promise.all([
     checkFridayNightLightsClicked(walletAddress),
     checkCrackCodeObjectiveChapter2(walletAddress)
   ]);
 
-  console.log('📊 Chapter 2 Objectives status:', { fridayNightLightsClicked, crackedCodeChapter2 });
+  if (DEBUG_OBJECTIVES) console.log('📊 Chapter 2 Objectives status:', { fridayNightLightsClicked, crackedCodeChapter2 });
 
   const completedObjectives: ChapterObjective[] = [
     {
@@ -194,7 +197,7 @@ export const getChapter2ObjectivesStatus = async (walletAddress: string): Promis
   ];
 
   const progress = calculateObjectiveProgress(completedObjectives);
-  console.log('🎯 Chapter 2 Final progress calculated:', progress + '%');
+  if (DEBUG_OBJECTIVES) console.log('🎯 Chapter 2 Final progress calculated:', progress + '%');
   
   return {
     fridayNightLightsClicked,
@@ -212,12 +215,12 @@ export async function checkChapter3Overachiever(walletAddress: string): Promise<
 
 // Get Chapter 3 objectives status for a user
 export const getChapter3ObjectivesStatus = async (walletAddress: string): Promise<ObjectiveStatus> => {
-  console.log('🎯 getChapter3ObjectivesStatus called for wallet:', walletAddress?.slice(0,10) + '...');
+  if (DEBUG_OBJECTIVES) console.log('🎯 getChapter3ObjectivesStatus called for wallet:', walletAddress?.slice(0,10) + '...');
   
   const votedInPictureDay = await checkPictureDayVoting(walletAddress);
   const completedOverachiever = await checkChapter3Overachiever(walletAddress);
 
-  console.log('📊 Chapter 3 Objectives status:', { votedInPictureDay, completedOverachiever });
+  if (DEBUG_OBJECTIVES) console.log('📊 Chapter 3 Objectives status:', { votedInPictureDay, completedOverachiever });
 
   const completedObjectives: ChapterObjective[] = [
     {
@@ -239,7 +242,7 @@ export const getChapter3ObjectivesStatus = async (walletAddress: string): Promis
   ];
 
   const progress = calculateObjectiveProgress(completedObjectives);
-  console.log('🎯 Chapter 3 Final progress calculated:', progress + '%');
+  if (DEBUG_OBJECTIVES) console.log('🎯 Chapter 3 Final progress calculated:', progress + '%');
   
   return {
     fridayNightLightsClicked: false, // Not relevant for Chapter 3
@@ -331,12 +334,12 @@ export async function checkParadiseMotelCode(walletAddress: string): Promise<boo
 
 // Get Chapter 4 objectives status for a user
 export const getChapter4ObjectivesStatus = async (walletAddress: string): Promise<ObjectiveStatus> => {
-  console.log('🎯 [CHAPTER4] getChapter4ObjectivesStatus called for wallet:', walletAddress?.slice(0,10) + '...');
+  if (DEBUG_OBJECTIVES) console.log('🎯 [CHAPTER4] getChapter4ObjectivesStatus called for wallet:', walletAddress?.slice(0,10) + '...');
   
   const attendedHomecoming = await checkHomecomingDanceAttendance(walletAddress);
   const enteredParadiseCode = await checkParadiseMotelCode(walletAddress);
 
-  console.log('📊 [CHAPTER4] Objectives status:', { 
+  if (DEBUG_OBJECTIVES) console.log('📊 [CHAPTER4] Objectives status:', { 
     attendedHomecoming, 
     enteredParadiseCode,
     walletSlice: walletAddress?.slice(0,10) + '...'
@@ -362,7 +365,7 @@ export const getChapter4ObjectivesStatus = async (walletAddress: string): Promis
   ];
 
   const progress = calculateObjectiveProgress(completedObjectives);
-  console.log('🎯 Chapter 4 Final progress calculated:', progress + '%');
+  if (DEBUG_OBJECTIVES) console.log('🎯 Chapter 4 Final progress calculated:', progress + '%');
   
   return {
     fridayNightLightsClicked: false, // Not relevant for Chapter 4
@@ -374,7 +377,7 @@ export const getChapter4ObjectivesStatus = async (walletAddress: string): Promis
 
 // Get Chapter 5 objectives status for a user
 export const getChapter5ObjectivesStatus = async (walletAddress: string): Promise<ObjectiveStatus> => {
-  console.log('🎯 [CHAPTER5] getChapter5ObjectivesStatus called for wallet:', walletAddress?.slice(0,10) + '...');
+  if (DEBUG_OBJECTIVES) console.log('🎯 [CHAPTER5] getChapter5ObjectivesStatus called for wallet:', walletAddress?.slice(0,10) + '...');
   
   // Check if user visited Room 7 at night (Slacker objective)
   const slackerObjectiveCompleted = await checkParadiseMotelRoom7NightVisit(walletAddress);
@@ -382,7 +385,7 @@ export const getChapter5ObjectivesStatus = async (walletAddress: string): Promis
   // Check if user completed Hidden Riff guitar sequence (Overachiever objective)
   const overachieverObjectiveCompleted = await checkHiddenRiffCompletion(walletAddress);
 
-  console.log('📊 [CHAPTER5] Objectives status:', { 
+  if (DEBUG_OBJECTIVES) console.log('📊 [CHAPTER5] Objectives status:', { 
     slackerObjectiveCompleted, 
     overachieverObjectiveCompleted,
     walletSlice: walletAddress?.slice(0,10) + '...'
@@ -408,7 +411,7 @@ export const getChapter5ObjectivesStatus = async (walletAddress: string): Promis
   ];
 
   const progress = calculateObjectiveProgress(completedObjectives);
-  console.log('🎯 Chapter 5 Final progress calculated:', progress + '%');
+  if (DEBUG_OBJECTIVES) console.log('🎯 Chapter 5 Final progress calculated:', progress + '%');
   
   return {
     fridayNightLightsClicked: false, // Not relevant for Chapter 5
@@ -420,7 +423,7 @@ export const getChapter5ObjectivesStatus = async (walletAddress: string): Promis
 
 // Get Chapter 6 objectives status for a user
 export const getChapter6ObjectivesStatus = async (walletAddress: string): Promise<ObjectiveStatus> => {
-  console.log('🎯 [CHAPTER6] getChapter6ObjectivesStatus called for wallet:', walletAddress?.slice(0,10) + '...');
+  if (DEBUG_OBJECTIVES) console.log('🎯 [CHAPTER6] getChapter6ObjectivesStatus called for wallet:', walletAddress?.slice(0,10) + '...');
   
   // Check if user entered snicklefritz password (Slacker objective)
   const slackerObjectiveCompleted = await checkFourThievesUndergroundAccess(walletAddress);
@@ -428,7 +431,7 @@ export const getChapter6ObjectivesStatus = async (walletAddress: string): Promis
   // Overachiever objective - placeholder for now
   const overachieverObjectiveCompleted = false;
 
-  console.log('📊 [CHAPTER6] Objectives status:', { 
+  if (DEBUG_OBJECTIVES) console.log('📊 [CHAPTER6] Objectives status:', { 
     slackerObjectiveCompleted, 
     overachieverObjectiveCompleted,
     walletSlice: walletAddress?.slice(0,10) + '...'
@@ -454,7 +457,7 @@ export const getChapter6ObjectivesStatus = async (walletAddress: string): Promis
   ];
 
   const progress = calculateObjectiveProgress(completedObjectives);
-  console.log('🎯 Chapter 6 Final progress calculated:', progress + '%');
+  if (DEBUG_OBJECTIVES) console.log('🎯 Chapter 6 Final progress calculated:', progress + '%');
   
   return {
     fridayNightLightsClicked: false, // Not relevant for Chapter 6
