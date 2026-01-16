@@ -2,10 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Button, Frame } from 'react95';
 import { useUserProfile } from 'contexts/UserProfileContext';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
+import { useUnifiedWallet } from 'contexts/UnifiedWalletContext';
 import styled from 'styled-components';
 import { trackProfileActivation, generateSessionId, PROFILE_STEPS } from 'utils/activityTracking';
 import UserDisplay from '../UserDisplay';
 import ProfileIconSelector from './ProfileIconSelector';
+
+// Check if running in Capacitor mobile app
+const isMobileApp = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return !!(window as any).Capacitor?.isNativePlatform?.();
+};
 
 // Background pattern definitions
 const backgroundPatterns = {
@@ -324,6 +331,7 @@ type FormStep = 'username' | 'discord' | 'email' | 'confirm' | 'success';
 
 const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel }) => {
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
+  const { connectFCL, isMobile } = useUnifiedWallet();
   const { createProfile, updateProfile, checkUsername, profile, refreshProfile } = useUserProfile();
   
   const [currentStep, setCurrentStep] = useState<FormStep>('username');
@@ -865,6 +873,21 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
 
   const config = stepConfig[currentStep];
 
+  // Handle wallet connection - use FCL for mobile native apps, Dynamic for web
+  const handleConnectWallet = async () => {
+    if (isMobileApp() || isMobile) {
+      console.log('📱 RPGProfileForm: Using FCL for mobile wallet connection');
+      try {
+        await connectFCL();
+      } catch (error) {
+        console.error('Mobile wallet connection error:', error);
+      }
+    } else {
+      console.log('🌐 RPGProfileForm: Using Dynamic for web wallet connection');
+      setShowAuthFlow(true);
+    }
+  };
+
   const WalletConnectionPrompt = () => (
     <ConnectWalletPrompt>
       <div style={{ fontSize: '20px', marginBottom: '20px' }}>
@@ -875,7 +898,7 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
       </div>
       <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
         <Button
-          onClick={() => setShowAuthFlow(true)}
+          onClick={handleConnectWallet}
           style={{
             background: '#a855f7',
             border: '2px solid #c084fc',

@@ -52,6 +52,7 @@ import DevBypass from "components/DevBypass";
 import { useUserProfile } from "contexts/UserProfileContext";
 import WalletStatusBar from "components/WalletStatusBar";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { useUnifiedWallet } from "contexts/UnifiedWalletContext";
 import LoadingScreenPreview from "windows/LoadingScreenPreview";
 // TestFlowWalletWindow removed - no longer on desktop
 
@@ -125,6 +126,7 @@ const Desktop = () => {
   const splashDismissedRef = useRef(false);
   const mobileInitRanRef = useRef(false);
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
+  const { connectFCL, isMobile: isMobileWallet } = useUnifiedWallet();
   const { hasProfile, profile } = useUserProfile();
 
   const handleSplashComplete = useCallback(() => {
@@ -322,9 +324,20 @@ const windowsMemod = useMemo(() => (
                             Connect your wallet to create your Semester Zero character profile and get your locker assigned!
                           </p>
                           <button
-                            onClick={() => {
+                            onClick={async () => {
                               closeWindow('PROFILE_SIGNIN_PROMPT');
-                              setShowAuthFlow(true);
+                              // Use FCL for mobile native apps, Dynamic for web
+                              if (isMobile || isMobileWallet) {
+                                console.log('📱 Profile prompt: Using FCL for mobile wallet connection');
+                                try {
+                                  await connectFCL();
+                                } catch (error) {
+                                  console.error('Mobile wallet connection error:', error);
+                                }
+                              } else {
+                                console.log('🌐 Profile prompt: Using Dynamic for web wallet connection');
+                                setShowAuthFlow(true);
+                              }
                             }}
                             style={{
                               background: '#ffffff',

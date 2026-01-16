@@ -4,7 +4,14 @@ import { WINDOW_IDS } from 'fixed';
 import { useWindowsContext } from '../contexts/WindowsContext';
 import { useLockerInfo, useLockerAssignment } from '../hooks/useLocker';
 import { useDynamicContext, DynamicConnectButton } from '@dynamic-labs/sdk-react-core';
+import { useUnifiedWallet } from '../contexts/UnifiedWalletContext';
 import UnifiedConnectButton from '../components/UnifiedConnectButton';
+
+// Check if running in Capacitor mobile app
+const isMobileApp = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return !!(window as any).Capacitor?.isNativePlatform?.();
+};
 import { useUserProfile } from '../contexts/UserProfileContext';
 import RPGProfileForm from '../components/UserProfile/RPGProfileForm';
 import { GumDisplay } from '../components/GumDisplay';
@@ -18,6 +25,7 @@ const UserProfile: React.FC = () => {
   const { lockerInfo, loading, error, refetch } = useLockerInfo();
   const { assignLocker, assigning } = useLockerAssignment();
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
+  const { connectFCL, isMobile } = useUnifiedWallet();
   const { profile, hasProfile, loading: profileLoading } = useUserProfile();
   const { balance, refreshBalance, refreshStats } = useGum();
   const [devBypass, setDevBypass] = useState(false);
@@ -183,9 +191,20 @@ const UserProfile: React.FC = () => {
     }
   };
 
-  const handleConnectWallet = () => {
-    console.log('🔄 Triggering setShowAuthFlow...');
-    if (!devBypass) {
+  const handleConnectWallet = async () => {
+    console.log('🔄 Triggering wallet connection...');
+    if (devBypass) return;
+    
+    // Use FCL for mobile native apps, Dynamic for web
+    if (isMobileApp() || isMobile) {
+      console.log('📱 UserProfile: Using FCL for mobile wallet connection');
+      try {
+        await connectFCL();
+      } catch (error) {
+        console.error('Mobile wallet connection error:', error);
+      }
+    } else {
+      console.log('🌐 UserProfile: Using Dynamic for web wallet connection');
       setShowAuthFlow(true);
     }
   };
