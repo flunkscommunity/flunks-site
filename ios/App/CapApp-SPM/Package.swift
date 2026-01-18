@@ -1,7 +1,7 @@
 // swift-tools-version: 5.9
 import PackageDescription
 
-// DO NOT MODIFY THIS FILE - managed by Capacitor CLI commands
+// Modified for Xcode Cloud compatibility - uses remote packages instead of local node_modules
 let package = Package(
     name: "CapApp-SPM",
     platforms: [.iOS(.v15)],
@@ -12,8 +12,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", exact: "8.0.1"),
-        .package(name: "CapacitorApp", path: "../../../node_modules/@capacitor/app"),
-        .package(name: "CapacitorLocalNotifications", path: "../../../node_modules/@capacitor/local-notifications")
+        .package(url: "https://github.com/ionic-team/capacitor-plugins.git", exact: "8.0.0")
     ],
     targets: [
         .target(
@@ -21,8 +20,8 @@ let package = Package(
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
-                .product(name: "CapacitorApp", package: "CapacitorApp"),
-                .product(name: "CapacitorLocalNotifications", package: "CapacitorLocalNotifications")
+                .product(name: "CapacitorApp", package: "capacitor-plugins"),
+                .product(name: "CapacitorLocalNotifications", package: "capacitor-plugins")
             ]
         )
     ]
