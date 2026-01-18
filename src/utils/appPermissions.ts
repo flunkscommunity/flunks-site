@@ -19,6 +19,12 @@ export interface AppPermission {
 export const APP_PERMISSIONS: AppPermission[] = [
   // Core apps - available to everyone
   {
+    id: 'account',
+    title: 'Account',
+    requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],
+    description: 'Wallet settings and sign out'
+  },
+  {
     id: 'onlyflunks',
     title: 'OnlyFlunks',
     requiredLevel: ['ADMIN', 'BETA', 'COMMUNITY'],

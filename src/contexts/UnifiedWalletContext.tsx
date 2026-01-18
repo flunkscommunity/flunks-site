@@ -284,7 +284,21 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useUnifiedWallet = () => {
   const context = useContext(UnifiedWalletContext);
   if (context === undefined) {
-    throw new Error('useUnifiedWallet must be used within a UnifiedWalletProvider');
+    // Return a safe default instead of throwing - component may render before provider is ready
+    console.warn('useUnifiedWallet called outside of UnifiedWalletProvider, returning defaults');
+    return {
+      isConnected: false,
+      address: null,
+      walletType: null,
+      connectFCL: async () => { console.warn('connectFCL called outside provider'); },
+      disconnect: async () => { console.warn('disconnect called outside provider'); },
+      fclUser: null,
+      isMobile: false,
+      isConnecting: false,
+      lastCallbackUrl: null,
+      lastError: null,
+      lastAuthStartedAt: null,
+    } as UnifiedWalletContextType;
   }
   return context;
 };

@@ -63,6 +63,33 @@ const backgroundPositions = {
   circuit: 'auto'
 };
 
+// Styled logout button for mobile
+const LogoutButton = styled.button`
+  background: #dc2626;
+  color: white;
+  border: 2px solid #991b1b;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(220, 38, 38, 0.3);
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background 0.2s ease;
+  
+  &:active {
+    background: #b91c1c;
+  }
+`;
+
 const RPGContainer = styled.div<{ $backgroundPattern: string }>`
   background: ${props => backgroundPatterns[props.$backgroundPattern as keyof typeof backgroundPatterns]};
   background-size: ${props => backgroundSizes[props.$backgroundPattern as keyof typeof backgroundSizes]};
@@ -197,14 +224,19 @@ const WalletDisplay = styled.div`
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.9);
   border: 2px solid #666;
-  border-radius: 4px;
-  padding: 8px 12px;
+  border-radius: 8px;
+  padding: 12px 16px;
   font-size: 12px;
   color: #ccc;
   font-family: 'Courier New', monospace;
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 200px;
 `;
 
 const ConnectWalletPrompt = styled.div`
@@ -875,7 +907,11 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
 
   // Handle wallet connection - use FCL for mobile native apps, Dynamic for web
   const handleConnectWallet = async () => {
-    if (isMobileApp() || isMobile) {
+    // Debug: log mobile detection values
+    const isCapacitorMobile = isMobileApp();
+    console.log('🔍 RPGProfileForm Connect Wallet - isMobileApp:', isCapacitorMobile, 'isMobile from context:', isMobile, 'Capacitor:', !!(window as any).Capacitor?.isNativePlatform?.());
+    
+    if (isCapacitorMobile || isMobile) {
       console.log('📱 RPGProfileForm: Using FCL for mobile wallet connection');
       try {
         await connectFCL();
@@ -1195,10 +1231,41 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
       {/* Show wallet address at bottom when connected */}
       {activeWallet && (
         <WalletDisplay>
-          💰 Wallet: {activeWallet.address ? 
-            `${activeWallet.address.slice(0, 6)}...${activeWallet.address.slice(-4)}` : 
-            'Connected'
-          }
+          <div style={{ marginBottom: '8px' }}>
+            💰 Wallet: {activeWallet.address ? 
+              `${activeWallet.address.slice(0, 6)}...${activeWallet.address.slice(-4)}` : 
+              'Connected'
+            }
+          </div>
+          <LogoutButton
+            onClick={async () => {
+              console.log('🚪 RPGProfileForm: Logout button clicked');
+              if (confirm('Sign out of your wallet?')) {
+                console.log('🚪 RPGProfileForm: Disconnecting wallet...');
+                await disconnect();
+                console.log('🚪 RPGProfileForm: Disconnected');
+                if (onCancel) {
+                  onCancel();
+                }
+              }
+            }}
+            onTouchEnd={async (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              console.log('🚪 RPGProfileForm: Logout touch detected');
+              // For mobile, show our own confirm since native confirm may not work
+              if (isMobileApp()) {
+                // Direct disconnect on mobile
+                console.log('🚪 RPGProfileForm: Mobile - disconnecting directly');
+                await disconnect();
+                if (onCancel) {
+                  onCancel();
+                }
+              }
+            }}
+          >
+            🚪 Sign Out
+          </LogoutButton>
         </WalletDisplay>
       )}
 

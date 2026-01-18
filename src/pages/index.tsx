@@ -126,7 +126,7 @@ const Desktop = () => {
   const splashDismissedRef = useRef(false);
   const mobileInitRanRef = useRef(false);
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
-  const { connectFCL, isMobile: isMobileWallet } = useUnifiedWallet();
+  const { connectFCL, disconnect, isConnected, address: unifiedAddress, isMobile: isMobileWallet } = useUnifiedWallet();
   const { hasProfile, profile } = useUserProfile();
 
   const handleSplashComplete = useCallback(() => {
@@ -288,79 +288,45 @@ const windowsMemod = useMemo(() => (
               title={hasProfile ? `Edit ${profile?.username || 'Profile'}` : "Create Profile"}
               icon="/images/icons/astro-mascot.png"
               onDoubleClick={() => {
-                // If no wallet connected, show sign-in prompt
-                if (!primaryWallet?.address) {
+                // Check unified wallet connection (works for both FCL and Dynamic)
+                const walletConnected = isConnected && unifiedAddress;
+                console.log('🔍 Create Profile clicked - isConnected:', isConnected, 'unifiedAddress:', unifiedAddress, 'walletConnected:', walletConnected);
+                
+                // If wallet connected, show profile form directly
+                if (walletConnected) {
+                  console.log('✅ Wallet connected, showing profile form');
                   openWindow({
-                    key: 'PROFILE_SIGNIN_PROMPT',
+                    key: 'PROFILE_CREATOR',
                     window: (
                       <DraggableResizeableWindow
-                        windowsId="PROFILE_SIGNIN_PROMPT"
-                        onClose={() => closeWindow('PROFILE_SIGNIN_PROMPT')}
-                        headerTitle="Sign In Required"
+                        windowsId="PROFILE_CREATOR"
+                        onClose={() => closeWindow('PROFILE_CREATOR')}
+                        headerTitle={hasProfile ? "Edit Your Flunks Profile" : "Create Your Flunks Profile"}
                         headerIcon="/images/icons/astro-mascot.png"
-                        initialWidth="400px"
-                        initialHeight="300px"
+                        initialWidth="auto"
+                        initialHeight="auto"
                         resizable={false}
                         style={{ zIndex: 1000 }}
                       >
                         <div style={{ 
                           background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)',
-                          height: '100%',
+                          minHeight: '400px',
+                          maxHeight: '95vh',
                           display: 'flex',
-                          flexDirection: 'column',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          padding: '30px',
-                          textAlign: 'center',
-                          color: 'white'
+                          overflow: 'hidden'
                         }}>
-                          <img 
-                            src="/images/icons/astro-mascot.png" 
-                            alt="Flunks Astronaut" 
-                            style={{ width: '64px', height: '80px', marginBottom: '20px' }}
+                          <RPGProfileForm 
+                            onComplete={() => {
+                              closeWindow('PROFILE_CREATOR');
+                              alert(hasProfile ? 
+                                '✅ Profile updated successfully!' : 
+                                '🎉 Profile created successfully! Welcome to the Flunks community!'
+                              );
+                            }}
+                            onCancel={() => closeWindow('PROFILE_CREATOR')}
                           />
-                          <h2 style={{ margin: '0 0 15px 0', fontSize: '20px' }}>Create Your Profile</h2>
-                          <p style={{ margin: '0 0 20px 0', fontSize: '14px', lineHeight: '1.4' }}>
-                            Connect your wallet to create your Semester Zero character profile and get your locker assigned!
-                          </p>
-                          <button
-                            onClick={async () => {
-                              closeWindow('PROFILE_SIGNIN_PROMPT');
-                              // Use FCL for mobile native apps, Dynamic for web
-                              if (isMobile || isMobileWallet) {
-                                console.log('📱 Profile prompt: Using FCL for mobile wallet connection');
-                                try {
-                                  await connectFCL();
-                                } catch (error) {
-                                  console.error('Mobile wallet connection error:', error);
-                                }
-                              } else {
-                                console.log('🌐 Profile prompt: Using Dynamic for web wallet connection');
-                                setShowAuthFlow(true);
-                              }
-                            }}
-                            style={{
-                              background: '#ffffff',
-                              color: '#8b5cf6',
-                              border: '2px solid #8b5cf6',
-                              borderRadius: '8px',
-                              padding: '12px 24px',
-                              fontSize: '16px',
-                              fontWeight: 'bold',
-                              cursor: 'pointer',
-                              transition: 'all 0.2s ease'
-                            }}
-                            onMouseOver={(e) => {
-                              e.currentTarget.style.background = '#8b5cf6';
-                              e.currentTarget.style.color = '#ffffff';
-                            }}
-                            onMouseOut={(e) => {
-                              e.currentTarget.style.background = '#ffffff';
-                              e.currentTarget.style.color = '#8b5cf6';
-                            }}
-                          >
-                            🔗 Connect Wallet
-                          </button>
                         </div>
                       </DraggableResizeableWindow>
                     )
@@ -368,39 +334,101 @@ const windowsMemod = useMemo(() => (
                   return;
                 }
                 
-                // If wallet connected, show profile form
+                // If no wallet connected, show sign-in prompt with logout option
+                console.log('❌ No wallet connected, showing sign-in prompt');
                 openWindow({
-                  key: 'PROFILE_CREATOR',
+                  key: 'PROFILE_SIGNIN_PROMPT',
                   window: (
                     <DraggableResizeableWindow
-                      windowsId="PROFILE_CREATOR"
-                      onClose={() => closeWindow('PROFILE_CREATOR')}
-                      headerTitle={hasProfile ? "Edit Your Flunks Profile" : "Create Your Flunks Profile"}
+                      windowsId="PROFILE_SIGNIN_PROMPT"
+                      onClose={() => closeWindow('PROFILE_SIGNIN_PROMPT')}
+                      headerTitle="Sign In Required"
                       headerIcon="/images/icons/astro-mascot.png"
-                      initialWidth="auto"
+                      initialWidth="400px"
                       initialHeight="auto"
                       resizable={false}
                       style={{ zIndex: 1000 }}
                     >
                       <div style={{ 
                         background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)',
-                        minHeight: '400px',
-                        maxHeight: '95vh',
+                        minHeight: '300px',
                         display: 'flex',
+                        flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        overflow: 'hidden'
+                        padding: '30px',
+                        textAlign: 'center',
+                        color: 'white'
                       }}>
-                        <RPGProfileForm 
-                          onComplete={() => {
-                            closeWindow('PROFILE_CREATOR');
-                            alert(hasProfile ? 
-                              '✅ Profile updated successfully!' : 
-                              '🎉 Profile created successfully! Welcome to the Flunks community!'
-                            );
-                          }}
-                          onCancel={() => closeWindow('PROFILE_CREATOR')}
+                        <img 
+                          src="/images/icons/astro-mascot.png" 
+                          alt="Flunks Astronaut" 
+                          style={{ width: '64px', height: '80px', marginBottom: '20px' }}
                         />
+                        <h2 style={{ margin: '0 0 15px 0', fontSize: '20px' }}>Create Your Profile</h2>
+                        <p style={{ margin: '0 0 20px 0', fontSize: '14px', lineHeight: '1.4' }}>
+                          Connect your wallet to create your Semester Zero character profile and get your locker assigned!
+                        </p>
+                        <button
+                          onClick={async () => {
+                            closeWindow('PROFILE_SIGNIN_PROMPT');
+                            // Debug: log mobile detection values
+                            console.log('🔍 Connect Wallet clicked - isMobile:', isMobile, 'isMobileWallet:', isMobileWallet, 'Capacitor:', !!(window as any).Capacitor?.isNativePlatform?.());
+                            
+                            // Use FCL for mobile native apps, Dynamic for web
+                            // Check Capacitor directly as a fallback
+                            const isCapacitorMobile = !!(window as any).Capacitor?.isNativePlatform?.();
+                            if (isMobile || isMobileWallet || isCapacitorMobile) {
+                              console.log('📱 Profile prompt: Using FCL for mobile wallet connection');
+                              try {
+                                await connectFCL();
+                              } catch (error) {
+                                console.error('Mobile wallet connection error:', error);
+                              }
+                            } else {
+                              console.log('🌐 Profile prompt: Using Dynamic for web wallet connection');
+                              setShowAuthFlow(true);
+                            }
+                          }}
+                          style={{
+                            background: '#ffffff',
+                            color: '#8b5cf6',
+                            border: '2px solid #8b5cf6',
+                            borderRadius: '8px',
+                            padding: '12px 24px',
+                            fontSize: '16px',
+                            fontWeight: 'bold',
+                            cursor: 'pointer',
+                            minHeight: '48px',
+                            touchAction: 'manipulation',
+                            marginBottom: '15px'
+                          }}
+                        >
+                          🔗 Connect Wallet
+                        </button>
+                        
+                        {/* Sign Out button for testing */}
+                        <button
+                          onClick={async () => {
+                            console.log('🚪 Sign Out clicked from profile prompt');
+                            closeWindow('PROFILE_SIGNIN_PROMPT');
+                            await disconnect();
+                            console.log('🚪 Disconnected');
+                          }}
+                          style={{
+                            background: 'transparent',
+                            color: 'rgba(255,255,255,0.7)',
+                            border: '1px solid rgba(255,255,255,0.3)',
+                            borderRadius: '8px',
+                            padding: '8px 16px',
+                            fontSize: '12px',
+                            cursor: 'pointer',
+                            minHeight: '36px',
+                            touchAction: 'manipulation'
+                          }}
+                        >
+                          🚪 Sign Out
+                        </button>
                       </div>
                     </DraggableResizeableWindow>
                   )
@@ -427,6 +455,187 @@ const windowsMemod = useMemo(() => (
                 initialHeight="400px"
               >
                 <FlunksTerminal onClose={() => closeWindow(WINDOW_IDS.TERMINAL)} />
+              </DraggableResizeableWindow>
+            )
+          })}
+        />
+
+        {/* 4.1 Account / Sign Out - Always visible */}
+        <ConditionalAppIcon
+          appId="account"
+          title="Account"
+          icon="/images/icons/settings.png"
+          onDoubleClick={() => openWindow({
+            key: 'ACCOUNT_WINDOW',
+            window: (
+              <DraggableResizeableWindow
+                windowsId="ACCOUNT_WINDOW"
+                onClose={() => closeWindow('ACCOUNT_WINDOW')}
+                headerTitle="Account"
+                headerIcon="/images/icons/settings.png"
+                initialWidth="350px"
+                initialHeight="auto"
+                resizable={false}
+                style={{ zIndex: 1000 }}
+              >
+                <div style={{ 
+                  background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+                  minHeight: '300px',
+                  padding: '30px',
+                  color: 'white',
+                  fontFamily: '"Press Start 2P", monospace',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '20px'
+                }}>
+                  {/* Wallet Status */}
+                  <div style={{
+                    background: 'rgba(0,0,0,0.5)',
+                    border: '2px solid #00ff00',
+                    borderRadius: '8px',
+                    padding: '15px',
+                    width: '100%',
+                    textAlign: 'center'
+                  }}>
+                    <div style={{ fontSize: '10px', marginBottom: '10px', color: '#00ff00' }}>
+                      WALLET STATUS
+                    </div>
+                    {isConnected && unifiedAddress ? (
+                      <>
+                        <div style={{ 
+                          fontSize: '8px', 
+                          color: '#00ff00',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '8px',
+                          marginBottom: '10px'
+                        }}>
+                          <span style={{
+                            width: '10px',
+                            height: '10px',
+                            background: '#00ff00',
+                            borderRadius: '50%',
+                            boxShadow: '0 0 10px #00ff00'
+                          }} />
+                          CONNECTED
+                        </div>
+                        <div style={{ 
+                          fontSize: '8px', 
+                          color: '#aaa',
+                          wordBreak: 'break-all'
+                        }}>
+                          {unifiedAddress.slice(0, 10)}...{unifiedAddress.slice(-8)}
+                        </div>
+                        {profile?.username && (
+                          <div style={{ 
+                            fontSize: '10px', 
+                            color: '#fff',
+                            marginTop: '10px'
+                          }}>
+                            {profile.profile_icon} {profile.username}
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div style={{ 
+                        fontSize: '8px', 
+                        color: '#ff6666',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px'
+                      }}>
+                        <span style={{
+                          width: '10px',
+                          height: '10px',
+                          background: '#ff6666',
+                          borderRadius: '50%'
+                        }} />
+                        NOT CONNECTED
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Action Buttons */}
+                  {isConnected && unifiedAddress ? (
+                    <button
+                      onClick={async () => {
+                        console.log('🚪 Account: Sign Out clicked');
+                        await disconnect();
+                        console.log('🚪 Account: Disconnected');
+                        closeWindow('ACCOUNT_WINDOW');
+                      }}
+                      style={{
+                        background: '#dc2626',
+                        color: 'white',
+                        border: '3px solid #991b1b',
+                        borderRadius: '8px',
+                        padding: '15px 30px',
+                        fontSize: '12px',
+                        fontWeight: 'bold',
+                        fontFamily: '"Press Start 2P", monospace',
+                        cursor: 'pointer',
+                        width: '100%',
+                        minHeight: '50px',
+                        touchAction: 'manipulation',
+                        boxShadow: '0 4px 0 #7f1d1d',
+                        transition: 'all 0.1s ease'
+                      }}
+                    >
+                      🚪 SIGN OUT
+                    </button>
+                  ) : (
+                    <button
+                      onClick={async () => {
+                        console.log('🔗 Account: Connect Wallet clicked');
+                        closeWindow('ACCOUNT_WINDOW');
+                        const isCapacitorMobile = !!(window as any).Capacitor?.isNativePlatform?.();
+                        if (isMobile || isMobileWallet || isCapacitorMobile) {
+                          try {
+                            await connectFCL();
+                          } catch (error) {
+                            console.error('Mobile wallet connection error:', error);
+                          }
+                        } else {
+                          setShowAuthFlow(true);
+                        }
+                      }}
+                      style={{
+                        background: '#059669',
+                        color: 'white',
+                        border: '3px solid #047857',
+                        borderRadius: '8px',
+                        padding: '15px 30px',
+                        fontSize: '12px',
+                        fontWeight: 'bold',
+                        fontFamily: '"Press Start 2P", monospace',
+                        cursor: 'pointer',
+                        width: '100%',
+                        minHeight: '50px',
+                        touchAction: 'manipulation',
+                        boxShadow: '0 4px 0 #065f46',
+                        transition: 'all 0.1s ease'
+                      }}
+                    >
+                      🔗 CONNECT WALLET
+                    </button>
+                  )}
+
+                  {/* Info Text */}
+                  <div style={{
+                    fontSize: '8px',
+                    color: '#888',
+                    textAlign: 'center',
+                    lineHeight: '1.6'
+                  }}>
+                    {isConnected ? 
+                      'Sign out to disconnect your wallet from this device.' :
+                      'Connect your Flow Wallet to access all features.'
+                    }
+                  </div>
+                </div>
               </DraggableResizeableWindow>
             )
           })}
@@ -1124,7 +1333,8 @@ const Home: NextPage = () => {
           position: 'fixed',
           bottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)',
           right: '10px',
-          zIndex: 9998
+          zIndex: 99999,
+          pointerEvents: 'auto'
         }}>
           <WalletStatusBar compact={true} />
         </div>

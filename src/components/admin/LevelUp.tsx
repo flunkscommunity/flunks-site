@@ -71,11 +71,14 @@ type TierName = keyof typeof TIERS;
 // MP3-based sound effects for special events
 const playSound = (soundName: string) => {
   try {
+    console.log(`🔊 Playing sound: ${soundName}`);
     const audio = new Audio(`/sounds/${soundName}.mp3`);
     audio.volume = 0.5;
-    audio.play().catch(() => {});
+    audio.play()
+      .then(() => console.log(`🔊 Sound ${soundName} started playing`))
+      .catch((e) => console.warn(`🔊 Sound ${soundName} failed to play:`, e.message));
   } catch (e) {
-    // Ignore audio errors
+    console.warn(`🔊 Sound ${soundName} error:`, e);
   }
 };
 

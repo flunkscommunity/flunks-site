@@ -44,8 +44,9 @@ const config: CapacitorConfig = {
     scrollEnabled: true,
     // Background color - dark to match app theme and prevent white flash
     backgroundColor: '#0f0f1a',
-    // Status bar style
-    preferredContentMode: 'mobile'
+    // Content mode - 'recommended' allows native iPad display (not iPhone compatibility mode)
+    // This enables proper iPad screenshots and native iPad experience
+    preferredContentMode: 'recommended'
   },
   
   // Android-specific configuration  
