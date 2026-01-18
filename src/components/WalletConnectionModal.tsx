@@ -190,58 +190,7 @@ const WalletConnectionModal: React.FC<WalletConnectionModalProps> = ({ onClose }
             )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-              {/* Dapper Wallet Button */}
-              <button
-                onClick={handleDynamicConnect}
-                disabled={isConnecting}
-                style={{
-                  background: isConnecting 
-                    ? 'linear-gradient(180deg, #808080 0%, #606060 100%)'
-                    : 'linear-gradient(180deg, #0088ff 0%, #0066cc 100%)',
-                  border: '3px outset #0088ff',
-                  padding: '0',
-                  cursor: isConnecting ? 'not-allowed' : 'pointer',
-                  fontFamily: "'Press Start 2P', 'w95fa', monospace",
-                  position: 'relative',
-                  boxShadow: '0 4px 0 #004488, 0 6px 12px rgba(0,0,0,0.3)',
-                  transition: 'transform 0.1s',
-                  opacity: isConnecting ? 0.6 : 1
-                }}
-                onMouseDown={(e) => !isConnecting && (e.currentTarget.style.transform = 'translateY(2px)')}
-                onMouseUp={(e) => !isConnecting && (e.currentTarget.style.transform = 'translateY(0)')}
-                onMouseLeave={(e) => !isConnecting && (e.currentTarget.style.transform = 'translateY(0)')}
-              >
-                <div style={{
-                  background: 'rgba(255,255,255,0.1)',
-                  borderBottom: '2px solid rgba(0,0,0,0.2)',
-                  padding: '8px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '12px'
-                }}>
-                  <span style={{ fontSize: '32px', filter: 'drop-shadow(2px 2px 0px rgba(0,0,0,0.3))' }}>💎</span>
-                  <span style={{ 
-                    fontSize: '10px',
-                    color: '#ffffff',
-                    textShadow: '2px 2px 0px rgba(0,0,0,0.5)',
-                    letterSpacing: '1px'
-                  }}>
-                    DAPPER
-                  </span>
-                </div>
-                <div style={{
-                  padding: '12px',
-                  fontSize: '8px',
-                  color: '#e0f7ff',
-                  textShadow: '1px 1px 0px rgba(0,0,0,0.5)',
-                  letterSpacing: '0.5px'
-                }}>
-                  CUSTODIAL WALLET • EASY SETUP
-                </div>
-              </button>
-
-              {/* Flow Wallet Button */}
+              {/* Flow Wallet Button - Primary login method */}
               <button
                 onClick={handleFlowWalletConnect}
                 disabled={isConnecting}
@@ -337,8 +286,8 @@ const WalletConnectionModal: React.FC<WalletConnectionModalProps> = ({ onClose }
                   textShadow: '0 0 3px rgba(0,255,255,0.3)',
                   paddingLeft: '15px'
                 }}>
-                  • <span style={{color: '#0088ff'}}>Dapper</span> - Easy email login (custodial)<br/>
-                  • <span style={{color: '#00d4aa'}}>Flow Wallet</span> - Self-custody wallet app
+                  • <span style={{color: '#00d4aa'}}>Flow Wallet</span> - Self-custody wallet app<br/>
+                  • Download from App Store or Google Play
                 </div>
               </div>
             </div>
