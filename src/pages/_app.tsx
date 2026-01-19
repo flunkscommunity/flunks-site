@@ -63,21 +63,13 @@ const ThemeWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const memodGlobalStyles = React.useMemo(() => <GlobalStyles />, []);
+  // Must start as false for SSR/static export, then set to true on client
   const [isClient, setIsClient] = React.useState(false);
   const [initError, setInitError] = React.useState<string | null>(null);
 
-  // Ensure client-side rendering for Dynamic Labs
+  // Set isClient to true only after mounting on the client
   React.useEffect(() => {
-    console.log('🚀 _app.tsx: useEffect running, setting isClient to true');
-    console.log('🚀 _app.tsx: window exists:', typeof window !== 'undefined');
-    console.log('🚀 _app.tsx: document exists:', typeof document !== 'undefined');
-    try {
-      setIsClient(true);
-      console.log('✅ _app.tsx: isClient set to true successfully');
-    } catch (error) {
-      console.error('❌ Error setting isClient:', error);
-      setInitError(String(error));
-    }
+    setIsClient(true);
   }, []);
 
   // Start wallet branding fix and enhance detection on component mount
