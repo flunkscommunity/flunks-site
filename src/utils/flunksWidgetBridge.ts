@@ -1,7 +1,7 @@
 /**
  * FlunksWidgetBridge - TypeScript Interface
  * 
- * Capacitor plugin to sync data with iOS Home Screen widgets
+ * Capacitor plugin to sync data with iOS and Android Home Screen widgets
  * 
  * Usage:
  *   import { FlunksWidgetBridge } from '@/utils/flunksWidgetBridge';
@@ -37,15 +37,21 @@ export interface WidgetBridgePlugin {
 // Register the native plugin
 const FlunksWidgetBridgeNative = registerPlugin<WidgetBridgePlugin>('FlunksWidgetBridge');
 
+// Check if we're on a supported native platform (iOS or Android)
+const isNativePlatform = (): boolean => {
+  const platform = Capacitor.getPlatform();
+  return platform === 'ios' || platform === 'android';
+};
+
 // Wrapper with platform check and fallbacks
 export const FlunksWidgetBridge = {
   /**
    * Update widget data - call this whenever GUM balance or daily status changes
    */
   async updateWidgetData(data: WidgetData): Promise<{ success: boolean; message?: string }> {
-    if (Capacitor.getPlatform() !== 'ios') {
-      console.log('[FlunksWidget] Not on iOS, skipping widget update');
-      return { success: false, message: 'Widgets only supported on iOS' };
+    if (!isNativePlatform()) {
+      console.log('[FlunksWidget] Not on native platform, skipping widget update');
+      return { success: false, message: 'Widgets only supported on iOS and Android' };
     }
     
     try {
@@ -62,7 +68,7 @@ export const FlunksWidgetBridge = {
    * Force refresh all widgets
    */
   async refreshWidgets(): Promise<{ success: boolean }> {
-    if (Capacitor.getPlatform() !== 'ios') {
+    if (!isNativePlatform()) {
       return { success: false };
     }
     
@@ -78,7 +84,7 @@ export const FlunksWidgetBridge = {
    * Get current widget data (for debugging)
    */
   async getWidgetData(): Promise<WidgetData | null> {
-    if (Capacitor.getPlatform() !== 'ios') {
+    if (!isNativePlatform()) {
       return null;
     }
     
@@ -94,7 +100,7 @@ export const FlunksWidgetBridge = {
    * Clear widget data on logout
    */
   async clearWidgetData(): Promise<{ success: boolean }> {
-    if (Capacitor.getPlatform() !== 'ios') {
+    if (!isNativePlatform()) {
       return { success: false };
     }
     
@@ -110,7 +116,7 @@ export const FlunksWidgetBridge = {
    * Check if widgets are available on this platform
    */
   isAvailable(): boolean {
-    return Capacitor.getPlatform() === 'ios';
+    return isNativePlatform();
   }
 };
 
