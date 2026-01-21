@@ -7,6 +7,7 @@ import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import UndergroundCasino from "components/UndergroundCasino";
 import { getApiUrl } from '../utils/apiBaseUrl';
 import { supabase, hasValidSupabaseConfig } from '../lib/supabase';
+import { Capacitor } from '@capacitor/core';
 
 interface UndergroundPasswordWindowProps {
   onClose?: () => void;
@@ -24,10 +25,20 @@ const UndergroundPasswordWindow: React.FC<UndergroundPasswordWindowProps> = ({ o
   
   // The secret word
   const SECRET_WORDS = ['snicklefritz'];
+  
+  // Check if running on mobile app (skip password on mobile)
+  const isMobileApp = Capacitor.isNativePlatform();
 
   // Check if user already has Underground access
   useEffect(() => {
     const checkExistingAccess = async () => {
+      // On mobile app, skip password and go directly to Underground
+      if (isMobileApp) {
+        setHasAccess(true);
+        openTheUnderground();
+        return;
+      }
+      
       if (!walletAddress) return;
       
       // Try Supabase view first (bypasses RLS)

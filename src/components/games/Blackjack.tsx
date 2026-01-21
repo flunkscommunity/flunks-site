@@ -8,6 +8,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { processCasinoTransaction } from '../../utils/casinoTransactions';
+import { useDemoModeOptional, isIOSPlatform } from '../../contexts/DemoModeContext';
 
 // ============================================================================
 // TYPES
@@ -110,6 +111,10 @@ const Blackjack: React.FC<BlackjackProps> = ({
   onBalanceUpdate,
   onClose,
 }) => {
+  // Demo mode for iOS App Store reviewers only
+  const demoMode = useDemoModeOptional();
+  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode ?? false);
+  
   // Game state
   const [deck, setDeck] = useState<Card[]>([]);
   const [playerHand, setPlayerHand] = useState<Card[]>([]);
@@ -121,6 +126,10 @@ const Blackjack: React.FC<BlackjackProps> = ({
   const [gumBalance, setGumBalance] = useState(initialBalance);
   const [showDealerCard, setShowDealerCard] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  
+  // Effective balance (demo mode or real)
+  const effectiveBalance = isDemoMode ? (demoMode?.demoBalance ?? 1000) : gumBalance;
+  const effectiveWallet = walletAddress || (isDemoMode ? '0xdemo000000000001' : null);
 
   // Audio refs
   const dealSoundRef = useRef<HTMLAudioElement | null>(null);
@@ -156,6 +165,16 @@ const Blackjack: React.FC<BlackjackProps> = ({
     amount: number,
     metadata?: any
   ): Promise<{ success: boolean; new_balance?: number; error?: string }> => {
+    // Demo mode: handle locally without API
+    if (isDemoMode && demoMode) {
+      if (type === 'bet') {
+        demoMode.spendDemoGum(amount);
+      } else if (type === 'win' || type === 'refund') {
+        demoMode.earnDemoGum(amount);
+      }
+      return { success: true, new_balance: demoMode.demoBalance };
+    }
+    
     if (!walletAddress) {
       return { success: false, error: 'No wallet connected' };
     }
@@ -176,12 +195,12 @@ const Blackjack: React.FC<BlackjackProps> = ({
   // ============================================================================
 
   const startNewHand = useCallback(async () => {
-    if (gumBalance < bet) {
+    if (effectiveBalance < bet) {
       setMessage('NOT ENOUGH GUM!');
       return;
     }
 
-    if (!walletAddress) {
+    if (!effectiveWallet) {
       setMessage('CONNECT WALLET!');
       return;
     }
@@ -225,7 +244,7 @@ const Blackjack: React.FC<BlackjackProps> = ({
     }
 
     setIsAnimating(false);
-  }, [gumBalance, bet, walletAddress]);
+  }, [effectiveBalance, bet, effectiveWallet]);
 
   const handleBlackjacks = async (playerBJ: boolean, dealerBJ: boolean) => {
     if (playerBJ && dealerBJ) {
@@ -505,18 +524,18 @@ const Blackjack: React.FC<BlackjackProps> = ({
           {gamePhase === 'betting' && (
             <button
               onClick={startNewHand}
-              disabled={isAnimating || gumBalance < bet}
+              disabled={isAnimating || effectiveBalance < bet}
               className="transition-all duration-100"
               style={{
                 padding: window.innerWidth < 768 ? '8px 16px' : '12px 32px',
                 borderRadius: '4px',
                 border: '3px solid #000',
                 borderStyle: 'outset',
-                background: gumBalance < bet ? '#666' : '#e0c725',
+                background: effectiveBalance < bet ? '#666' : '#e0c725',
                 color: '#000',
                 fontFamily: '"Press Start 2P", monospace',
                 fontSize: window.innerWidth < 768 ? '10px' : '14px',
-                cursor: gumBalance < bet ? 'not-allowed' : 'pointer',
+                cursor: effectiveBalance < bet ? 'not-allowed' : 'pointer',
                 boxShadow: '0 0 0 1px #9e9f27, 0 0 0 3px black',
               }}
             >
@@ -603,7 +622,7 @@ const Blackjack: React.FC<BlackjackProps> = ({
           </div>
           <div>
             <div>CREDIT</div>
-            <div className="text-lg">{gumBalance}</div>
+            <div className="text-lg">{effectiveBalance}{isDemoMode && ' 🎮'}</div>
           </div>
         </div>
       </div>

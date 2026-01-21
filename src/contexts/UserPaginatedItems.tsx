@@ -12,6 +12,7 @@ import { getOwnerTokenIdsWhale } from "web3/script-get-owner-token-ids-whale";
 import { getOwnerTokenStakeInfoWhale } from "web3/script-get-owner-token-stake-info-whale";
 import useSWR from "swr";
 import { ObjectDetails } from "./StakingContext";
+import { useDemoModeOptional, DEMO_FLUNK, isIOSPlatform } from "./DemoModeContext";
 
 // Context Props
 interface PaginatedContextProps {
@@ -45,11 +46,15 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
   const { primaryWallet } = useDynamicContext();
   const { address: unifiedAddress } = useUnifiedWallet();
   
-  // Use unified wallet address
-  const walletAddress = unifiedAddress || null;
+  // Demo mode support for iOS App Store review (iOS only)
+  const demoMode = useDemoModeOptional();
+  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  
+  // Use unified wallet address (or demo wallet in demo mode on iOS)
+  const walletAddress = isDemoMode ? demoMode?.demoWalletAddress : (unifiedAddress || null);
   
   // Debug logging for wallet address
-  console.log('🔍 UserPaginatedItems: walletAddress =', walletAddress, 'unifiedAddress =', unifiedAddress);
+  console.log('🔍 UserPaginatedItems: walletAddress =', walletAddress, 'unifiedAddress =', unifiedAddress, 'isDemoMode =', isDemoMode);
 
   // Force refresh when wallet address changes
   useEffect(() => {
@@ -282,6 +287,12 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
   }, []);
 
   const displayedItems = useMemo(() => {
+    // In demo mode, return the demo Flunk
+    if (isDemoMode) {
+      console.log('📊 Demo mode: returning demo Flunk');
+      return [DEMO_FLUNK as unknown as ObjectDetails];
+    }
+    
     console.log('📊 displayedItems computation:', {
       filter,
       currentPage,
@@ -301,7 +312,7 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
       console.log('📊 Returning backpacks items:', items.length);
       return items;
     }
-  }, [flunksMetadata, backpacksMetadata, currentPage, filter]);
+  }, [flunksMetadata, backpacksMetadata, currentPage, filter, isDemoMode]);
 
   const allItems = useMemo(() => {
     const flunksMetadataFlat = flunksMetadata.flat();
@@ -312,8 +323,8 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
 
   const value = {
     displayedItems,
-    flunksCount: mobileDataOverride?.active ? mobileDataOverride.flunksCount : (tokenData?.flunks?.length || 0),
-    backpacksCount: mobileDataOverride?.active ? mobileDataOverride.backpacksCount : (tokenData?.backpack?.length || 0),
+    flunksCount: isDemoMode ? 1 : (mobileDataOverride?.active ? mobileDataOverride.flunksCount : (tokenData?.flunks?.length || 0)),
+    backpacksCount: isDemoMode ? 0 : (mobileDataOverride?.active ? mobileDataOverride.backpacksCount : (tokenData?.backpack?.length || 0)),
     currentPage,
     setPage: setCurrentPage,
     hasMore:
@@ -328,8 +339,8 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
     refresh: () => setResetCacheKey((prev) => prev + 1),
     allItems,
     error: tokenDataError,
-    isLoading: isValidating,
-    isLoadingMetadata
+    isLoading: isDemoMode ? false : isValidating,
+    isLoadingMetadata: isDemoMode ? false : isLoadingMetadata
   };
 
   return (

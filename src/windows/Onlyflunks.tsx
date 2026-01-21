@@ -9,11 +9,16 @@ import WalletConnectionModal from "../components/WalletConnectionModal";
 import { useAuth } from "contexts/AuthContext";
 import { useState, useEffect } from "react";
 import ItemsGrid from "components/YourItems/ItemsGrid";
+import { useDemoModeOptional, isIOSPlatform } from "contexts/DemoModeContext";
 
 const Onlyflunks: React.FC = () => {
   const { closeWindow } = useWindowsContext();
   const auth = useAuth();
   const [showWalletModal, setShowWalletModal] = useState(false);
+  
+  // Demo mode support for iOS App Store review (iOS only)
+  const demoMode = useDemoModeOptional();
+  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
   
   // Destructure auth context for easier use
   const {
@@ -29,19 +34,22 @@ const Onlyflunks: React.FC = () => {
   } = auth;
 
   // Check if Dynamic Context is still initializing - use auth context loading state
-  const showLoadingState = isLoading;
+  const showLoadingState = isLoading && !isDemoMode;
+  
+  // In demo mode, treat as authenticated
+  const effectivelyAuthenticated = isDemoMode || isAuthenticated;
 
-  // Show wallet modal when not authenticated and not loading
+  // Show wallet modal when not authenticated and not loading (but not in demo mode)
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    if (!isLoading && !effectivelyAuthenticated) {
       setShowWalletModal(true);
     } else {
       setShowWalletModal(false);
     }
-  }, [isLoading, isAuthenticated]);
+  }, [isLoading, effectivelyAuthenticated]);
 
-  // If not authenticated and not loading, only show the modal (no window)
-  if (!isLoading && !isAuthenticated) {
+  // If not authenticated and not loading (and not demo mode), only show the modal (no window)
+  if (!isLoading && !effectivelyAuthenticated) {
     return (
       <>
         <AndroidOptimizations />

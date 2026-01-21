@@ -7,6 +7,7 @@ import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 import { isFeatureEnabled } from 'utils/buildMode';
 import { useGum } from 'contexts/GumContext';
 import { useUnifiedWallet } from 'contexts/UnifiedWalletContext';
+import { useDemoModeOptional, isIOSPlatform } from 'contexts/DemoModeContext';
 import { processCasinoTransaction } from '../utils/casinoTransactions';
 
 const Container = styled.div`
@@ -745,15 +746,20 @@ export default function SlotsPlay() {
   // GUM integration
   const { balance: gumBalance, refreshBalance, canAfford, updateBalance } = useGum();
   const { address: walletAddress } = useUnifiedWallet();
+  const demoMode = useDemoModeOptional();
+  
+  // Use demo mode if enabled (for iOS App Store reviewers only)
+  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode ?? false);
+  const DEMO_WALLET = '0xdemo000000000001';
   
   // Use real wallet and GUM balance (DEV_MODE disabled to use real GUM on localhost)
   const DEV_MODE = false; // Set to true only for testing without wallet
   const DEV_WALLET = '0xDEV_TEST_WALLET';
-  const effectiveWallet = walletAddress || (DEV_MODE ? DEV_WALLET : null);
+  const effectiveWallet = walletAddress || (isDemoMode ? DEMO_WALLET : (DEV_MODE ? DEV_WALLET : null));
   
   // Dev mode GUM balance (only used when DEV_MODE is true)
   const [devGumBalance, setDevGumBalance] = useState(500);
-  const effectiveGumBalance = DEV_MODE ? devGumBalance : gumBalance;
+  const effectiveGumBalance = isDemoMode ? (demoMode?.demoBalance ?? 1000) : (DEV_MODE ? devGumBalance : gumBalance);
   
   // Redirect to home if slot machine is disabled (live site)
   useEffect(() => {
@@ -764,6 +770,16 @@ export default function SlotsPlay() {
   
   // Slot transaction helper
   const slotTransaction = async (type: 'bet' | 'win' | 'refund', amount: number, metadata?: any) => {
+    // Demo mode: handle locally without API (for App Store reviewers)
+    if (isDemoMode && demoMode) {
+      if (type === 'bet') {
+        demoMode.spendDemoGum(amount);
+      } else if (type === 'win' || type === 'refund') {
+        demoMode.earnDemoGum(amount);
+      }
+      return { success: true, balance: demoMode.demoBalance };
+    }
+    
     // Dev mode: handle locally without API (always use local balance in dev mode)
     if (DEV_MODE) {
       if (type === 'bet') {
@@ -815,8 +831,10 @@ export default function SlotsPlay() {
   const spinReels = async () => {
     if (spinning) return;
     
-    // Check if user can afford the bet (dev mode or real wallet)
-    const canAffordBet = DEV_MODE && !walletAddress ? devGumBalance >= bet : canAfford(bet);
+    // Check if user can afford the bet (demo mode, dev mode, or real wallet)
+    const canAffordBet = isDemoMode 
+      ? (demoMode?.demoBalance ?? 0) >= bet 
+      : (DEV_MODE && !walletAddress ? devGumBalance >= bet : canAfford(bet));
     if (!canAffordBet) {
       setMessage('Not enough GUM! 💔');
       setTimeout(() => setMessage(''), 2000);
@@ -1174,7 +1192,7 @@ export default function SlotsPlay() {
               {/* SPIN Button - positioned over the frame's SPIN WHEEL button */}
               <button
                 onClick={() => { console.log('🎰 SPIN clicked'); spinReels(); }}
-                disabled={spinning || (DEV_MODE && !walletAddress ? devGumBalance < bet : !canAfford(bet))}
+                disabled={spinning || (isDemoMode ? (demoMode?.demoBalance ?? 0) < bet : (DEV_MODE && !walletAddress ? devGumBalance < bet : !canAfford(bet)))}
                 style={{
                   position: 'absolute',
                   top: '83%',
@@ -1247,13 +1265,19 @@ export default function SlotsPlay() {
               </div>
             )}
             
-            {!effectiveWallet && (
+            {!effectiveWallet && !isDemoMode && (
               <div style={{ textAlign: 'center', color: '#ff6b6b', marginTop: '10px', fontSize: '0.85em' }}>
                 Connect your wallet to play!
               </div>
             )}
             
-            {DEV_MODE && !walletAddress && (
+            {isDemoMode && (
+              <div style={{ textAlign: 'center', color: '#ffaa00', marginTop: '5px', fontSize: '0.75em' }}>
+                🎮 DEMO MODE: Playing with {demoMode?.demoBalance ?? 0} GUM
+              </div>
+            )}
+            
+            {DEV_MODE && !walletAddress && !isDemoMode && (
               <div style={{ textAlign: 'center', color: '#00ff00', marginTop: '5px', fontSize: '0.75em' }}>
                 🛠️ DEV MODE: Using test wallet with {devGumBalance} GUM
               </div>

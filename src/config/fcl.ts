@@ -72,15 +72,33 @@ const FLOW_WALLET_SERVICE = {
 // WalletConnect request hook to intercept URI and open wallet on mobile
 const wcRequestHook = (data: any) => {
   console.log('🔗 WC Request Hook:', JSON.stringify(data, null, 2));
-  if (data.type === 'SESSION_REQUEST' && data.uri && IS_MOBILE_APP) {
+  
+  // Intercept session request and open Flow Wallet directly
+  if (IS_MOBILE_APP && data.uri) {
     console.log('📱 WC URI received in hook:', data.uri);
+    
     // Construct the Flow Wallet universal link with WC URI
     const flowWalletUrl = `${FLOW_WALLET_UNIVERSAL_LINK}?uri=${encodeURIComponent(data.uri)}`;
     console.log('📱 Opening Flow Wallet via wcRequestHook:', flowWalletUrl);
-    // Use window.location.href to trigger native navigation  
-    // The WalletBridgeViewController will intercept this and open externally
-    window.location.href = flowWalletUrl;
+    
+    // Use setTimeout to ensure this happens after the current call stack
+    setTimeout(() => {
+      // Try to open externally using Capacitor Browser plugin if available
+      if ((window as any).Capacitor?.Plugins?.Browser) {
+        console.log('📱 Using Capacitor Browser to open Flow Wallet');
+        (window as any).Capacitor.Plugins.Browser.open({ url: flowWalletUrl });
+      } else {
+        // Fallback to window.location.href 
+        console.log('📱 Using window.location.href to open Flow Wallet');
+        window.location.href = flowWalletUrl;
+      }
+    }, 100);
+    
+    // Return true to indicate we handled this
+    return true;
   }
+  
+  return false;
 };
 
 // For mobile apps, configure WalletConnect to open Flow Wallet directly
@@ -182,9 +200,9 @@ if (typeof window !== 'undefined') {
         wcRequestHook: IS_MOBILE_APP ? wcRequestHook : undefined,
         // Include base WC wallet listing
         includeBaseWC: true,
-        // Storage options for session persistence
+        // DISABLE the modal on mobile - we want to go directly to Flow Wallet
         pairingModalConfig: {
-          enabled: true,
+          enabled: !IS_MOBILE_APP, // Only show modal on web, not mobile
         },
       });
       

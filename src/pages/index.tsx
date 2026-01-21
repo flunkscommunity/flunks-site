@@ -794,30 +794,32 @@ const windowsMemod = useMemo(() => (
           })}
         />
 
-        {/* 6. Radio */}
-        <ConditionalAppIcon
-          appId="radio"
-          title="Radio"
-          icon="/images/icons/boom-box.png"
-          onDoubleClick={() =>
-            openWindow({
-              key: WINDOW_IDS.RADIO_PLAYER,
-              window: (
-                <DraggableResizeableWindow
-                  windowsId={WINDOW_IDS.RADIO_PLAYER}
-                  onClose={() => closeWindow(WINDOW_IDS.RADIO_PLAYER)}
-                  headerTitle="Radio"
-                  initialWidth="720px"
-                  initialHeight="540px"
-                  headerIcon="/images/icons/boom-box.png"
-                  resizable={false}
-                >
-                  <RadioPlayer />
-                </DraggableResizeableWindow>
-              ),
-            })
-          }
-        />
+        {/* 6. Radio - Hidden on mobile (no audio files) */}
+        {!isMobile && (
+          <ConditionalAppIcon
+            appId="radio"
+            title="Radio"
+            icon="/images/icons/boom-box.png"
+            onDoubleClick={() =>
+              openWindow({
+                key: WINDOW_IDS.RADIO_PLAYER,
+                window: (
+                  <DraggableResizeableWindow
+                    windowsId={WINDOW_IDS.RADIO_PLAYER}
+                    onClose={() => closeWindow(WINDOW_IDS.RADIO_PLAYER)}
+                    headerTitle="Radio"
+                    initialWidth="720px"
+                    initialHeight="540px"
+                    headerIcon="/images/icons/boom-box.png"
+                    resizable={false}
+                  >
+                    <RadioPlayer />
+                  </DraggableResizeableWindow>
+                ),
+              })
+            }
+          />
+        )}
 
         {/* 7. Meme Manager */}
         <ConditionalAppIcon

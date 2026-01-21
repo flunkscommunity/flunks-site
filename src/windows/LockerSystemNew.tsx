@@ -17,6 +17,7 @@ import WeeklyObjectives from '../components/WeeklyObjectives';
 import { supabase, hasValidSupabaseConfig } from '../lib/supabase';
 // WINDOW_IDS lives in src/fixed.ts (baseUrl set to src)
 import { WINDOW_IDS } from 'fixed';
+import { useDemoModeOptional, DEMO_PROFILE, DEMO_CHAPTERS, isIOSPlatform } from '../contexts/DemoModeContext';
 
 /**
  * Normalize a Flow address to standard format (0x + 16 hex chars lowercase)
@@ -49,8 +50,16 @@ const LockerSystemNew: React.FC = () => {
   const { hasProfile, profile } = useUserProfile();
   const { balance, stats } = useGum();
   
+  // Demo mode support for iOS App Store review (iOS only)
+  const demoMode = useDemoModeOptional();
+  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  
+  // In demo mode on iOS, treat as connected
+  const effectivelyConnected = isDemoMode || isConnected;
+  const effectiveAddress = isDemoMode ? demoMode?.demoWalletAddress : unifiedAddress;
+  
   // Normalize the wallet address for all API calls
-  const normalizedAddress = useMemo(() => normalizeFlowAddress(unifiedAddress), [unifiedAddress]);
+  const normalizedAddress = useMemo(() => normalizeFlowAddress(effectiveAddress), [effectiveAddress]);
   
   const [currentSection, setCurrentSection] = useState<1 | 2 | 3>(1);
   const [gumBalance, setGumBalance] = useState<number>(0);
@@ -95,6 +104,17 @@ const LockerSystemNew: React.FC = () => {
 
   // Load gum balance and tracking data when wallet connects
   useEffect(() => {
+    // In demo mode, set demo balance
+    if (isDemoMode && demoMode) {
+      setGumBalance(demoMode.demoBalance);
+      setStreak(3);
+      setTodayGum(50);
+      setCanClaimDaily(false);
+      setHasRoom7Key(true); // Demo user has some progress
+      setHasFourThievesAccess(true);
+      return;
+    }
+    
     if (normalizedAddress) {
       loadGumBalance();
       loadGumTrackingData();
@@ -102,14 +122,16 @@ const LockerSystemNew: React.FC = () => {
       checkFourThievesUnderground();
       checkHalloweenDrop(); // Check Halloween GumDrop status
     }
-  }, [normalizedAddress]);
+  }, [normalizedAddress, isDemoMode, demoMode]);
 
-  // Use GumContext balance if available
+  // Use GumContext balance if available (or demo balance in demo mode)
   useEffect(() => {
-    if (balance !== undefined) {
+    if (isDemoMode && demoMode) {
+      setGumBalance(demoMode.demoBalance);
+    } else if (balance !== undefined) {
       setGumBalance(balance);
     }
-  }, [balance]);
+  }, [balance, isDemoMode, demoMode]);
 
   // Listen for gum balance updates from floating button
   useEffect(() => {
@@ -675,7 +697,7 @@ const LockerSystemNew: React.FC = () => {
       onKeyDown={handleKeyDown}
       >
         {/* Wallet Status Bar - Pixel style, positioned at top */}
-        {isConnected && (
+        {effectivelyConnected && (
           <div style={{
             position: 'absolute',
             top: '10px',
@@ -773,7 +795,7 @@ const LockerSystemNew: React.FC = () => {
         {!loading && !error && (
           <>
             {/* No Wallet Connected */}
-            {!isConnected && (
+            {!effectivelyConnected && (
               <div style={{
                 textAlign: 'center',
                 maxWidth: '400px'
@@ -875,7 +897,7 @@ const LockerSystemNew: React.FC = () => {
             )}
 
             {/* Wallet Connected - Show Locker System */}
-            {isConnected && (
+            {effectivelyConnected && (
               <>
                 {/* Already Has Locker */}
                 {lockerInfo?.locker_number && (

@@ -5,6 +5,15 @@
 
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { useDemoModeOptional } from '../contexts/DemoModeContext';
+
+// Check if running on iOS (for demo mode - only needed for App Store review)
+const isIOSDevice = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  const userAgent = window.navigator.userAgent.toLowerCase();
+  return /iphone|ipad|ipod/.test(userAgent) || 
+    (userAgent.includes('mac') && 'ontouchend' in document);
+};
 
 const pulse = keyframes`
   0%, 100% {
@@ -168,6 +177,32 @@ const ReadyText = styled.div<{ $visible: boolean }>`
   animation: ${props => props.$visible ? blink : 'none'} 1s infinite;
 `;
 
+const DemoButton = styled.button<{ $visible: boolean }>`
+  margin-top: 24px;
+  padding: 12px 24px;
+  background: transparent;
+  border: 2px solid #ffaa00;
+  color: #ffaa00;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  text-shadow: 0 0 10px #ffaa00;
+  cursor: pointer;
+  opacity: ${props => props.$visible ? 1 : 0};
+  transition: all 0.3s ease;
+  
+  &:hover, &:active {
+    background: rgba(255, 170, 0, 0.2);
+    box-shadow: 0 0 20px rgba(255, 170, 0, 0.5);
+  }
+`;
+
+const DemoModeLabel = styled.div`
+  font-size: 11px;
+  color: #888;
+  margin-top: 8px;
+  text-shadow: none;
+`;
+
 const BOOT_LINES = [
   'FLUNKS OS v2.0',
   '(C) 2026 Flunks',
@@ -194,9 +229,11 @@ const ASCII_LOGO = `
 
 interface MobileSplashScreenProps {
   onComplete: () => void;
+  onDemoMode?: () => void;
 }
 
-const MobileSplashScreen: React.FC<MobileSplashScreenProps> = ({ onComplete }) => {
+const MobileSplashScreen: React.FC<MobileSplashScreenProps> = ({ onComplete, onDemoMode }) => {
+  const demoMode = useDemoModeOptional();
   const [visibleLines, setVisibleLines] = useState<boolean[]>(BOOT_LINES.map(() => false));
   const [typedLines, setTypedLines] = useState<string[]>(BOOT_LINES.map(() => ''));
   const [showLogo, setShowLogo] = useState(false);
@@ -372,6 +409,32 @@ const MobileSplashScreen: React.FC<MobileSplashScreenProps> = ({ onComplete }) =
     }, 500);
   }, [canProceed, initAudio, playBeep, onComplete]);
 
+  const handleDemoMode = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent the tap handler from firing
+    if (!canProceed) return;
+    
+    // Initialize audio
+    initAudio();
+    
+    // Play a different sound for demo mode
+    playBeep();
+    
+    // Enable demo mode
+    if (demoMode) {
+      demoMode.enableDemoMode();
+    }
+    
+    // Fade out and complete
+    setFading(true);
+    setTimeout(() => {
+      if (onDemoMode) {
+        onDemoMode();
+      } else {
+        onComplete();
+      }
+    }, 500);
+  }, [canProceed, initAudio, playBeep, demoMode, onDemoMode, onComplete]);
+
   return (
     <SplashContainer $fading={fading} onClick={handleTap}>
       <Screen>
@@ -397,6 +460,21 @@ const MobileSplashScreen: React.FC<MobileSplashScreenProps> = ({ onComplete }) =
             <ReadyText $visible={showReady}>
               TAP TO ENTER
             </ReadyText>
+            
+            {/* Demo Mode Button - Only for iOS App Store reviewers */}
+            {isIOSDevice() && (
+              <>
+                <DemoButton 
+                  $visible={showReady} 
+                  onClick={handleDemoMode}
+                >
+                  🎮 TRY DEMO MODE
+                </DemoButton>
+                <DemoModeLabel style={{ opacity: showReady ? 1 : 0 }}>
+                  No wallet needed • 1000 GUM included
+                </DemoModeLabel>
+              </>
+            )}
           </LogoContainer>
         </ContentWrapper>
       </Screen>

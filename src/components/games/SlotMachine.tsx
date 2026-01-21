@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useDemoModeOptional, isIOSPlatform } from '../../contexts/DemoModeContext';
 
 // Slot machine symbols - classic bar theme
 const SYMBOLS = ['🍒', '🍋', '🍊', '🍇', '💎', '7️⃣', '🎰', '⭐'];
@@ -42,6 +43,12 @@ const SlotMachine: React.FC<SlotMachineProps> = ({
   gumBalance = 0,
   onGumChange 
 }) => {
+  // Demo mode for iOS App Store reviewers only
+  const demoMode = useDemoModeOptional();
+  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode ?? false);
+  const effectiveBalance = isDemoMode ? (demoMode?.demoBalance ?? 1000) : gumBalance;
+  const effectiveWallet = walletAddress || (isDemoMode ? '0xdemo000000000001' : null);
+  
   const [reels, setReels] = useState<string[]>(['🎰', '🎰', '🎰']);
   const [spinning, setSpinning] = useState<boolean[]>([false, false, false]);
   const [isSpinning, setIsSpinning] = useState(false);
@@ -117,7 +124,7 @@ const SlotMachine: React.FC<SlotMachineProps> = ({
     if (isSpinning) return;
     
     // Check if player has enough GUM
-    if (gumBalance < bet) {
+    if (effectiveBalance < bet) {
       setMessage('❌ Not enough GUM! Get more at other locations.');
       return;
     }
@@ -126,8 +133,12 @@ const SlotMachine: React.FC<SlotMachineProps> = ({
     setLastWin(0);
     setSpinCount(prev => prev + 1);
     
-    // Deduct bet
-    onGumChange?.(-bet);
+    // Deduct bet (demo mode or real)
+    if (isDemoMode && demoMode) {
+      demoMode.spendDemoGum(bet);
+    } else {
+      onGumChange?.(-bet);
+    }
     
     // Play lever sound
     leverSoundRef.current?.play().catch(() => {});
@@ -174,7 +185,12 @@ const SlotMachine: React.FC<SlotMachineProps> = ({
     setMessage(result.message);
     
     if (result.win > 0) {
-      onGumChange?.(result.win);
+      // Award winnings (demo mode or real)
+      if (isDemoMode && demoMode) {
+        demoMode.earnDemoGum(result.win);
+      } else {
+        onGumChange?.(result.win);
+      }
       if (result.win >= bet * 50) {
         jackpotSoundRef.current?.play().catch(() => {});
       } else {
@@ -183,7 +199,7 @@ const SlotMachine: React.FC<SlotMachineProps> = ({
     }
     
     setIsSpinning(false);
-  }, [isSpinning, bet, gumBalance, onGumChange, getRandomSymbol, calculateWin]);
+  }, [isSpinning, bet, effectiveBalance, isDemoMode, demoMode, onGumChange, getRandomSymbol, calculateWin]);
 
   // Reel animation styles
   const getReelStyle = (index: number, isSpinningReel: boolean) => ({
@@ -330,13 +346,13 @@ const SlotMachine: React.FC<SlotMachineProps> = ({
             fontFamily: 'monospace',
           }}
         >
-          💰 Balance: {gumBalance} GUM
+          💰 Balance: {effectiveBalance} GUM{isDemoMode && ' 🎮'}
         </div>
 
         {/* Spin Button / Lever */}
         <button
           onClick={spin}
-          disabled={isSpinning || gumBalance < bet}
+          disabled={isSpinning || effectiveBalance < bet}
           className="w-full py-4 rounded-xl font-black text-xl transition-all duration-300"
           style={{
             background: isSpinning 
@@ -349,8 +365,8 @@ const SlotMachine: React.FC<SlotMachineProps> = ({
               ? 'none' 
               : '0 0 20px rgba(255, 107, 53, 0.5), 0 5px 0 #cc5500',
             transform: isSpinning ? 'translateY(5px)' : 'none',
-            cursor: isSpinning || gumBalance < bet ? 'not-allowed' : 'pointer',
-            opacity: gumBalance < bet ? 0.5 : 1,
+            cursor: isSpinning || effectiveBalance < bet ? 'not-allowed' : 'pointer',
+            opacity: effectiveBalance < bet ? 0.5 : 1,
           }}
         >
           {isSpinning ? '🎰 SPINNING...' : '🎰 PULL LEVER 🎰'}

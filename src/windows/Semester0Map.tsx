@@ -35,6 +35,7 @@ import { DynamicHouseIcon } from '../components/DynamicHouseIcon';
 import { useAuth } from 'contexts/AuthContext';
 import { isFeatureEnabled, getCurrentBuildMode, isDevLocalhost, isMobileApp } from '../utils/buildMode';
 import { useTimeBasedAccess } from '../hooks/useTimeBasedAccess';
+import { useDemoModeOptional, isIOSPlatform } from 'contexts/DemoModeContext';
 
 interface Props {
   onClose: () => void;
@@ -70,6 +71,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   // Time-based access hook for location restrictions
   const { isLocationOpen, getTimeUntilOpen } = useTimeBasedAccess();
   
+  // Demo mode support for iOS App Store review (iOS only)
+  const demoMode = useDemoModeOptional();
+  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  
   // Get authentication and NFT data from auth context
   const { isAuthenticated, flunksCount, hasFlunks } = auth;
 
@@ -79,9 +84,10 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   const isBuildSite = typeof window !== 'undefined' && window.location.hostname.includes('vercel.app');
   const buildMode = getCurrentBuildMode();
   // ⚠️ SIMPLIFIED: Bypass all auth on localhost in build mode for testing (NOT mobile apps)
-  const walletBypassEnabled = !isMobileApp() && ((isLocalhost && buildMode === 'build') || (isFeatureEnabled('enableWalletBypass') && isDevelopment && isLocalhost));
+  // Also bypass for demo mode (iOS App Store review) and mobile apps
+  const walletBypassEnabled = isDemoMode || isMobileApp() || (!isMobileApp() && ((isLocalhost && buildMode === 'build') || (isFeatureEnabled('enableWalletBypass') && isDevelopment && isLocalhost)));
   const houseAccessBypassEnabled = true; // ⚠️ CHANGED: Always allow access to clique houses (no clique requirement)
-  const flunkBypassEnabled = isLocalhost || isBuildSite; // Skip Flunk NFT requirement on localhost and build site
+  const flunkBypassEnabled = isDemoMode || isMobileApp() || isLocalhost || isBuildSite; // Skip Flunk NFT requirement on mobile/demo
   
   // Override authentication for development - on localhost with build mode, always bypass
   const effectiveAuth = walletBypassEnabled ? {

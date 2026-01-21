@@ -136,8 +136,8 @@ ${colors.bright}╔════════════════════�
   
   const ASSETS_TO_REMOVE = [
     'images/jnr-traits',      // 570MB - NFT traits, not needed in app
-    'slots',                   // 156MB - Slot animations (use compressed versions)
-    'music',                   // 52MB - Background music (not needed)
+    'slots/animations',        // 117MB - Slot animations (not needed)
+    'slots/sounds',            // 2MB - Slot sounds (we have sounds/ folder)
     'audio',                   // 48MB - Radio stations (not needed)
     '3d',                      // 11MB - 3D models not used in mobile
     'images/cutscenes',        // 86MB - Large cutscene images
@@ -146,7 +146,23 @@ ${colors.bright}╔════════════════════�
     'images/jackets',          // 16MB - Jacket images
     'images/about-us',         // 7.6MB - About us images
     // 'sounds',               // KEEP - Sound effects needed for games!
+    // 'cards',                // KEEP - Card SVGs for Jacks or Better (8MB)
+    // 'slots/images',         // KEEP - slot-machine.png needed for games
+    // 'music',                // KEEP SOME - see MUSIC_TO_KEEP below
     'Games',                   // 8.8MB - Standalone game assets
+  ];
+  
+  // Music files to keep for mobile (underground, story mode, locations)
+  const MUSIC_TO_KEEP = [
+    'underground.mp3',        // Underground casino music
+    'homecomingstory.mp3',    // Story mode - Chapter 3/4/5
+    'child.mp3',              // Story mode - Chapter 1/2
+    'homecoming.mp3',         // Football field
+    'arcade.mp3',             // Arcade
+    'enter.mp3',              // Arcade entrance
+    'paradisemotel.mp3',      // Paradise Motel (day)
+    'night.mp3',              // Paradise Motel (night)
+    'tvaudio.mp3',            // Freaks TV
   ];
   
   let totalRemoved = 0;
@@ -208,7 +224,74 @@ ${colors.bright}╔════════════════════�
       }
     }
   }
+
+  // Compress large individual images in images/ root (maps, backgrounds, etc.)
+  log(`  📦 Compressing large root images (max 1536px)...`, colors.blue);
+  const LARGE_IMAGES_TO_COMPRESS = [
+    'images/season-zero-map.png',      // 40MB -> compress to 1536px
+    'images/flunks-map.png',           // 23MB -> compress to 1536px
+    'images/my-locker-front.png',      // 8MB
+    'images/bulletin-august.png',      // 8MB
+    'images/my-background.png',        // 6MB
+    'images/zoltar-background.png',    // 3MB
+    'images/pause-screen.png',         // 3MB
+    'images/game-manual-cover.png',    // 3MB
+    'images/radio-dashboard.png',      // 2MB
+    'images/coming-soon.png',          // 2MB
+  ];
   
+  for (const imgPath of LARGE_IMAGES_TO_COMPRESS) {
+    const fullPath = path.join(OUT_DIR, imgPath);
+    if (fs.existsSync(fullPath)) {
+      try {
+        const beforeSize = fs.statSync(fullPath).size;
+        execSync(`sips -Z 1536 "${fullPath}" >/dev/null 2>&1`, { stdio: 'pipe', cwd: ROOT_DIR });
+        const afterSize = fs.statSync(fullPath).size;
+        const savedMB = Math.round((beforeSize - afterSize) / 1024 / 1024);
+        if (savedMB > 0) {
+          totalRemoved += savedMB;
+          log(`  ✓ Compressed ${imgPath} (saved ~${savedMB}MB)`, colors.green);
+        }
+      } catch (e) {
+        // Silently continue
+      }
+    }
+  }
+
+  // Remove old slot theme images but keep slot-machine.png
+  const slotsImagesDir = path.join(OUT_DIR, 'slots/images');
+  if (fs.existsSync(slotsImagesDir)) {
+    const oldThemeImages = ['bat.png', 'beetle.png', 'freespins.png', 'ghost.png', 'goblin.png', 
+      'haunted_background.png', 'haunted_house.png', 'mummy.png', 'skeleton.png', 
+      'spider.png', 'vampire.png', 'werewolf.png', 'witch.png'];
+    for (const img of oldThemeImages) {
+      const imgPath = path.join(slotsImagesDir, img);
+      if (fs.existsSync(imgPath)) {
+        const sizeMB = Math.round(fs.statSync(imgPath).size / 1024 / 1024);
+        fs.rmSync(imgPath);
+        totalRemoved += sizeMB;
+      }
+    }
+    log(`  ✓ Removed old slot theme images (~30MB), kept slot-machine.png`, colors.green);
+  }
+
+  // Clean up music folder - remove unused tracks but keep essential ones
+  const musicDir = path.join(OUT_DIR, 'music');
+  if (fs.existsSync(musicDir)) {
+    const musicFiles = fs.readdirSync(musicDir);
+    let musicRemoved = 0;
+    for (const file of musicFiles) {
+      if (file.endsWith('.mp3') && !MUSIC_TO_KEEP.includes(file)) {
+        const filePath = path.join(musicDir, file);
+        const sizeMB = Math.round(fs.statSync(filePath).size / 1024 / 1024);
+        fs.rmSync(filePath);
+        musicRemoved += sizeMB;
+        totalRemoved += sizeMB;
+      }
+    }
+    log(`  ✓ Cleaned music folder: removed ~${musicRemoved}MB, kept ${MUSIC_TO_KEEP.length} essential tracks`, colors.green);
+  }
+
   log(`  📊 Total space saved: ~${totalRemoved}MB`, colors.cyan);
 
   // Step 5: Sync to native platforms

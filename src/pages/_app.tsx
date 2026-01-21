@@ -47,6 +47,7 @@ import { GumProvider } from "contexts/GumContext";
 import { AuthProvider } from "contexts/AuthContext";
 import { MusicProvider } from "contexts/MusicContext";
 import { UnifiedWalletProvider } from "contexts/UnifiedWalletContext";
+import { DemoModeProvider } from "contexts/DemoModeContext";
 import { GumDisplay } from "components/GumDisplay";
 import WidgetClaimDeepLinkHandler from "components/WidgetClaimDeepLinkHandler";
 import Chapter5NFTNotification from "components/Chapter5NFTNotification";
@@ -223,6 +224,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                     }}
                   >
                   <UnifiedWalletProvider>
+                    <DemoModeProvider>
                     <UserProfileProvider>
                       <PaginatedItemsProvider>
                         <AuthProvider>
@@ -247,6 +249,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         </AuthProvider>
                       </PaginatedItemsProvider>
                     </UserProfileProvider>
+                    </DemoModeProvider>
                   </UnifiedWalletProvider>
                 </DynamicContextProvider>
                 </ErrorBoundary>
