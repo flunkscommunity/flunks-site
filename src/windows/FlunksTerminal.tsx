@@ -7,6 +7,83 @@ const errorSound = typeof Audio !== "undefined" ? new Audio('/sounds/incorrect.m
 const successSound = typeof Audio !== "undefined" ? new Audio('/sounds/correct.mp3') : null;
 const paradiseMotelSound = typeof Audio !== "undefined" ? new Audio('/sounds/paradise-motel.mp3') : null;
 
+// Client-side command fallback for mobile/static builds where API routes don't work
+const CLIENT_TERMINAL_COMMANDS: Record<string, { response: string; type: string }> = {
+  'help': {
+    response: `📟 FLUNKS TERMINAL COMMANDS 📟
+
+Available commands:
+• help      - Show this help message
+• whoami    - Display your identity
+• flunks    - Learn about Flunks High
+• clear     - Clear the terminal screen
+• wtf       - What's this feature?
+• flow      - Tap into the Flow blockchain
+• yourmom   - Classic jokes never die
+• fetty wap - 1738! 🎤
+• magic carpet - Take flight! 🧞‍♂️
+
+Type any command and press Enter to execute.`,
+    type: 'SYSTEM'
+  },
+  'whoami': {
+    response: 'You are a misfit of Flunks High. 🎓 A digital rebel navigating the halls of this chaotic high school simulation.',
+    type: 'SYSTEM'
+  },
+  'flunks': {
+    response: '🏫 Flunks is a 90s-inspired digital universe full of secrets, Easter eggs, and nostalgic vibes. Welcome to the chaos!',
+    type: 'SYSTEM'
+  },
+  'wtf': {
+    response: "🎰 surprise, we just stole all your NFT's! jk, you're entered into a drawing for FLOW. 💎",
+    type: 'CODE'
+  },
+  'fetty wap': {
+    response: "🎵 Yeah baby! 1738! You just unlocked the Fetty Wap easter egg! 🎤 The trap music echoes through the digital halls of Flunks High... Remy Boyz unite! 💎",
+    type: 'CODE'
+  },
+  'magic carpet': {
+    response: "🧞‍♂️ Whoosh! You've summoned the magic carpet! ✨ You're now floating above Flunks High School, getting a bird's eye view of all the chaos below. The carpet whispers ancient secrets of the digital realm... 🪐",
+    type: 'CODE'
+  },
+  'flow': {
+    response: "🌊 The Flow blockchain awakens! ⚡ Digital currents surge through the network, and your wallet resonates with the power of decentralized possibilities. You've tapped into the flow state... 💫",
+    type: 'CODE'
+  },
+  'yourmom': {
+    response: "🤣 Oh snap! You went there! 💀 Your mom jokes are eternal - they transcend time, space, and blockchain networks. Even in the metaverse, your mom's cooking is still better than the cafeteria! 👩‍🍳✨",
+    type: 'CODE'
+  },
+  'clear': {
+    response: '__CLEAR__',
+    type: 'SYSTEM'
+  },
+  'paradise motel': {
+    response: "🏨 Paradise Motel... Yes, that's where our search begins! The neon sign flickers in the digital night, casting pink and blue shadows. This is indeed the first place we'll look for Flunko. You've unlocked a clue! 🔍✨",
+    type: 'CODE'
+  }
+};
+
+// Process command locally (fallback for mobile builds)
+const processCommandLocally = (command: string): { response: string; type: string; validCommand: boolean } => {
+  const lowerCommand = command.toLowerCase().trim();
+  const commandData = CLIENT_TERMINAL_COMMANDS[lowerCommand];
+  
+  if (commandData) {
+    return {
+      response: commandData.response,
+      type: commandData.type,
+      validCommand: true
+    };
+  }
+  
+  return {
+    response: 'Command not recognized. Type "help" to see available commands.',
+    type: 'UNKNOWN',
+    validCommand: false
+  };
+};
+
 const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
   const { user } = useDynamicContext();
   const { profile } = useUserProfile();
@@ -26,7 +103,7 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
     let commandType = 'unknown';
 
     try {
-      // Get command response from secure backend API
+      // Try API first (works on web, not on mobile static builds)
       const apiResponse = await fetch('/api/terminal-commands', {
         method: 'POST',
         headers: {
@@ -34,6 +111,12 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
         },
         body: JSON.stringify({ command: input.toLowerCase() }),
       });
+
+      // Check if response is valid JSON (API routes don't exist in static builds)
+      const contentType = apiResponse.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('API not available - using local fallback');
+      }
 
       const result = await apiResponse.json();
 
@@ -46,15 +129,15 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
         if (result.response === '__CLEAR__') {
           setHistory([]);
           setInput('');
-          // Track clear command
-          await trackTerminalActivity(
+          // Track clear command (non-blocking)
+          trackTerminalActivity(
             user?.verifiedCredentials?.[0]?.address || null,
             input,
             commandType,
             'Terminal cleared',
             true,
             sessionId
-          );
+          ).catch(() => {});
           return;
         }
       } else {
@@ -63,10 +146,19 @@ const FlunksTerminal = ({ onClose }: { onClose: () => void }) => {
         commandType = 'UNKNOWN';
       }
     } catch (error) {
-      console.error('Terminal command error:', error);
-      response = 'System error. Please try again.';
-      validCommand = false;
-      commandType = 'ERROR';
+      // API failed - use local command processing (mobile/static builds)
+      console.log('Using local terminal commands (API unavailable)');
+      const localResult = processCommandLocally(input);
+      response = localResult.response;
+      commandType = localResult.type;
+      validCommand = localResult.validCommand;
+
+      // Special handling for clear command (local)
+      if (response === '__CLEAR__') {
+        setHistory([]);
+        setInput('');
+        return;
+      }
     }
 
     // Play error sound for invalid commands

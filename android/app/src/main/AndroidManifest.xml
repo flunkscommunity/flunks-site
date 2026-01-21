@@ -32,6 +32,22 @@
                 <data android:scheme="flunks" />
             </intent-filter>
 
+            <!-- Also support package name scheme (used by Capacitor) -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="net.flunks.app" />
+            </intent-filter>
+
+            <!-- WalletConnect deep link handler -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wc" />
+            </intent-filter>
+
             <!-- HTTPS deep links for verified app links -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />

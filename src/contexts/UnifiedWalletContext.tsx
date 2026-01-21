@@ -105,6 +105,37 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
           // FCL handles the callback automatically via the WalletConnect integration
         });
         
+        // Listen for app state changes (resume from background)
+        // This is critical for wallet auth - when user returns from Flow Wallet
+        await App.addListener('appStateChange', async (state) => {
+          console.log('📱 App state changed:', state.isActive ? 'ACTIVE' : 'BACKGROUND');
+          
+          if (state.isActive && isConnecting) {
+            // App came back to foreground while we were waiting for wallet auth
+            console.log('📱 App resumed while waiting for wallet auth, checking FCL session...');
+            
+            // Give WalletConnect a moment to process the session
+            setTimeout(async () => {
+              try {
+                // Force FCL to check its current session state
+                const currentUser = await fcl.currentUser.snapshot();
+                console.log('📱 FCL session check on resume:', currentUser);
+                
+                if (currentUser?.loggedIn && currentUser?.addr) {
+                  console.log('✅ FCL session found on resume:', currentUser.addr);
+                  setFclUser(currentUser);
+                  setFclAddress(normalizeFlowAddress(currentUser.addr));
+                  setIsConnecting(false);
+                } else {
+                  console.log('⏳ No FCL session yet, waiting for WalletConnect callback...');
+                }
+              } catch (error) {
+                console.warn('⚠️ Error checking FCL session on resume:', error);
+              }
+            }, 500);
+          }
+        });
+        
         // Check if app was opened with a URL (cold start)
         const launchUrl = await App.getLaunchUrl();
         if (launchUrl?.url) {
@@ -119,7 +150,7 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
     };
     
     setupMobileDeepLinks();
-  }, [isMobile]);
+  }, [isMobile, isConnecting]);
 
   // Subscribe to FCL auth changes (config is already set in src/config/fcl.ts)
   useEffect(() => {

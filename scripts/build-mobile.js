@@ -130,6 +130,87 @@ ${colors.bright}╔════════════════════�
     log('  ✓ Public assets copied', colors.green);
   }
 
+  // Step 4.5: Remove large assets not needed for mobile
+  // This keeps the build under 200MB for Play Store/App Store
+  logStep('4.5/6', 'Optimizing for mobile (removing large unused assets)...');
+  
+  const ASSETS_TO_REMOVE = [
+    'images/jnr-traits',      // 570MB - NFT traits, not needed in app
+    'slots',                   // 156MB - Slot animations (use compressed versions)
+    'music',                   // 52MB - Background music (not needed)
+    'audio',                   // 48MB - Radio stations (not needed)
+    '3d',                      // 11MB - 3D models not used in mobile
+    'images/cutscenes',        // 86MB - Large cutscene images
+    'images/myplace',          // 43MB - MyPlace room images (not used in mobile)
+    'images/profiles',         // 29MB - Profile images (loaded from web)
+    'images/jackets',          // 16MB - Jacket images
+    'images/about-us',         // 7.6MB - About us images
+    // 'sounds',               // KEEP - Sound effects needed for games!
+    'Games',                   // 8.8MB - Standalone game assets
+  ];
+  
+  let totalRemoved = 0;
+  for (const assetPath of ASSETS_TO_REMOVE) {
+    const fullPath = path.join(OUT_DIR, assetPath);
+    if (fs.existsSync(fullPath)) {
+      // Get size before removing
+      const getSize = (dir) => {
+        let size = 0;
+        try {
+          const files = fs.readdirSync(dir, { withFileTypes: true });
+          for (const file of files) {
+            const filePath = path.join(dir, file.name);
+            if (file.isDirectory()) {
+              size += getSize(filePath);
+            } else {
+              size += fs.statSync(filePath).size;
+            }
+          }
+        } catch (e) {}
+        return size;
+      };
+      const sizeMB = Math.round(getSize(fullPath) / 1024 / 1024);
+      totalRemoved += sizeMB;
+      
+      fs.rmSync(fullPath, { recursive: true, force: true });
+      log(`  ✓ Removed ${assetPath} (~${sizeMB}MB)`, colors.green);
+    }
+  }
+  
+  // Compress large images in specific folders
+  const FOLDERS_TO_COMPRESS = [
+    'images/icons/slot-icons',
+    'images/icons',
+    'images/locations',
+    'images/backgrounds',
+    'images/backdrops',
+    'images/pins',
+    'images/jerseys',
+    'images/arcade',
+    'cards',
+  ];
+  
+  log(`  📦 Compressing large images (max 768px)...`, colors.blue);
+  for (const folder of FOLDERS_TO_COMPRESS) {
+    const folderPath = path.join(OUT_DIR, folder);
+    if (fs.existsSync(folderPath)) {
+      try {
+        // Use sips to resize images larger than 768px (macOS only) - more aggressive for mobile
+        execSync(`find "${folderPath}" -type f \\( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" \\) | while read f; do
+          width=$(sips -g pixelWidth "$f" 2>/dev/null | tail -1 | awk '{print $2}')
+          if [ -n "$width" ] && [ "$width" -gt 768 ] 2>/dev/null; then
+            sips -Z 768 "$f" >/dev/null 2>&1
+          fi
+        done`, { stdio: 'pipe', cwd: ROOT_DIR });
+        log(`  ✓ Compressed images in ${folder}`, colors.green);
+      } catch (e) {
+        // Silently continue if sips fails (non-macOS or no large images)
+      }
+    }
+  }
+  
+  log(`  📊 Total space saved: ~${totalRemoved}MB`, colors.cyan);
+
   // Step 5: Sync to native platforms
   logStep('5/6', 'Syncing to native platforms...');
   

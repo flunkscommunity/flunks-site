@@ -166,6 +166,10 @@ if (typeof window !== 'undefined') {
     try {
       console.log('🔌 Initializing FCL WalletConnect plugin...');
       
+      // For mobile apps, we need to ensure the session can be restored
+      // Store session info in localStorage for persistence
+      const storagePrefix = 'fcl-wc-';
+      
       const { FclWcServicePlugin, client } = await initFclWc({
         projectId: WALLETCONNECT_PROJECT_ID,
         metadata: {
@@ -178,10 +182,31 @@ if (typeof window !== 'undefined') {
         wcRequestHook: IS_MOBILE_APP ? wcRequestHook : undefined,
         // Include base WC wallet listing
         includeBaseWC: true,
+        // Storage options for session persistence
+        pairingModalConfig: {
+          enabled: true,
+        },
       });
       
       // Register the plugin with FCL
       fcl.pluginRegistry.add(FclWcServicePlugin);
+      
+      // On mobile, set up session event listeners
+      if (IS_MOBILE_APP && client) {
+        console.log('📱 Setting up WalletConnect session listeners for mobile...');
+        
+        client.on('session_update', (data: any) => {
+          console.log('📱 WC session_update:', data);
+        });
+        
+        client.on('session_delete', () => {
+          console.log('📱 WC session_delete - user disconnected from wallet');
+        });
+        
+        client.on('session_event', (data: any) => {
+          console.log('📱 WC session_event:', data);
+        });
+      }
       
       console.log('✅ FCL WalletConnect plugin initialized', {
         isMobile: IS_MOBILE_APP,
