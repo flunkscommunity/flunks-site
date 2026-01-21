@@ -5,6 +5,7 @@ import { useUnifiedWallet } from '../contexts/UnifiedWalletContext';
 import SetupCollectionButton from './SetupCollectionButton';
 import * as fcl from '@onflow/fcl';
 import '../config/fcl';
+import { useDemoModeOptional, isIOSPlatform, DEMO_PINS } from '../contexts/DemoModeContext';
 
 // Helper to handle GCS images
 // On mobile (static export), we can't use the API proxy, so use direct URL
@@ -406,7 +407,12 @@ const JACKETS = [
 const SemesterZeroVarsityDisplay: React.FC<SemesterZeroVarsityDisplayProps> = ({ onClose }) => {
   const { primaryWallet } = useDynamicContext();
   const { address: unifiedAddress } = useUnifiedWallet();
-  const walletAddress = unifiedAddress || primaryWallet?.address;
+  
+  // Demo mode support for iOS App Store review
+  const demoMode = useDemoModeOptional();
+  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  
+  const walletAddress = isDemoMode ? demoMode?.demoWalletAddress : (unifiedAddress || primaryWallet?.address);
 
   const [currentJacketIndex, setCurrentJacketIndex] = useState(0);
   const [pins, setPins] = useState<Pin[]>([]);
@@ -417,9 +423,17 @@ const SemesterZeroVarsityDisplay: React.FC<SemesterZeroVarsityDisplayProps> = ({
   const [draggedPlacedPin, setDraggedPlacedPin] = useState<Pin | null>(null);
   const jacketRef = useRef<HTMLDivElement>(null);
 
-  // Fetch pins from wallet
+  // Fetch pins from wallet (or use demo pins in demo mode)
   useEffect(() => {
     const fetchPins = async () => {
+      // In demo mode on iOS, use demo pins
+      if (isDemoMode) {
+        console.log('🎮 Demo mode: Using demo pins for Varsity Letter');
+        setPins(DEMO_PINS.map(p => ({ ...p, placed: false })));
+        setLoading(false);
+        return;
+      }
+      
       if (!walletAddress) {
         setLoading(false);
         return;
@@ -532,7 +546,7 @@ const SemesterZeroVarsityDisplay: React.FC<SemesterZeroVarsityDisplayProps> = ({
     };
 
     fetchPins();
-  }, [walletAddress]);
+  }, [walletAddress, isDemoMode]);
 
   // Load saved layout when jacket changes
   useEffect(() => {

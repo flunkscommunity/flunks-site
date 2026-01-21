@@ -65,6 +65,7 @@ import LevelUp from "components/admin/LevelUp";
 import BurnNFT from "components/admin/BurnNFT";
 import AlexandriaLibrary from "components/AlexandriaLibrary";
 import UndergroundPasswordWindow from "windows/UndergroundPasswordWindow";
+import { useDemoModeOptional, isIOSPlatform, DEMO_PROFILE } from "contexts/DemoModeContext";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -128,6 +129,10 @@ const Desktop = () => {
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
   const { connectFCL, disconnect, isConnected, address: unifiedAddress, isMobile: isMobileWallet } = useUnifiedWallet();
   const { hasProfile, profile } = useUserProfile();
+  
+  // Demo mode support for iOS App Store review
+  const demoMode = useDemoModeOptional();
+  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
 
   const handleSplashComplete = useCallback(() => {
     splashDismissedRef.current = true;
@@ -285,9 +290,71 @@ const windowsMemod = useMemo(() => (
           return (
             <ConditionalAppIcon
               appId="create-profile"
-              title={hasProfile ? `Edit ${profile?.username || 'Profile'}` : "Create Profile"}
+              title={isDemoMode ? `Demo: ${DEMO_PROFILE.username}` : (hasProfile ? `Edit ${profile?.username || 'Profile'}` : "Create Profile")}
               icon="/images/icons/astro-mascot.png"
               onDoubleClick={() => {
+                // In demo mode on iOS, show demo profile info
+                if (isDemoMode) {
+                  console.log('🎮 Demo mode: Showing demo profile');
+                  openWindow({
+                    key: 'PROFILE_CREATOR',
+                    window: (
+                      <DraggableResizeableWindow
+                        windowsId="PROFILE_CREATOR"
+                        onClose={() => closeWindow('PROFILE_CREATOR')}
+                        headerTitle="Demo Profile"
+                        headerIcon="/images/icons/astro-mascot.png"
+                        initialWidth="400px"
+                        initialHeight="auto"
+                        resizable={false}
+                        style={{ zIndex: 1000 }}
+                      >
+                        <div style={{ 
+                          background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)',
+                          minHeight: '400px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          padding: '30px',
+                          textAlign: 'center',
+                          color: 'white'
+                        }}>
+                          <img 
+                            src="https://storage.googleapis.com/flunks-assets/flunks/1337.png" 
+                            alt="Demo Flunk" 
+                            style={{ width: '120px', height: '120px', marginBottom: '20px', borderRadius: '12px', border: '3px solid white' }}
+                          />
+                          <h2 style={{ margin: '0 0 10px 0', fontSize: '24px' }}>{DEMO_PROFILE.username}</h2>
+                          <div style={{ 
+                            background: 'rgba(255,255,255,0.2)', 
+                            padding: '8px 16px', 
+                            borderRadius: '20px', 
+                            marginBottom: '15px',
+                            fontSize: '14px' 
+                          }}>
+                            {DEMO_PROFILE.profile_icon} Level {DEMO_PROFILE.level} • {DEMO_PROFILE.xp} XP
+                          </div>
+                          <p style={{ margin: '0 0 20px 0', fontSize: '14px', opacity: 0.9 }}>
+                            {DEMO_PROFILE.bio}
+                          </p>
+                          <div style={{
+                            background: 'rgba(0,0,0,0.2)',
+                            padding: '15px',
+                            borderRadius: '8px',
+                            fontSize: '12px',
+                            width: '100%'
+                          }}>
+                            <strong>Demo Mode Active</strong><br/>
+                            This is a preview profile for app testing.
+                          </div>
+                        </div>
+                      </DraggableResizeableWindow>
+                    )
+                  });
+                  return;
+                }
+                
                 // Check unified wallet connection (works for both FCL and Dynamic)
                 const walletConnected = isConnected && unifiedAddress;
                 console.log('🔍 Create Profile clicked - isConnected:', isConnected, 'unifiedAddress:', unifiedAddress, 'walletConnected:', walletConnected);

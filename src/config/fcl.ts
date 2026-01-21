@@ -70,7 +70,7 @@ const FLOW_WALLET_SERVICE = {
 };
 
 // WalletConnect request hook to intercept URI and open wallet on mobile
-const wcRequestHook = (data: any) => {
+const wcRequestHook = async (data: any) => {
   console.log('🔗 WC Request Hook:', JSON.stringify(data, null, 2));
   
   // Intercept session request and open Flow Wallet directly
@@ -81,18 +81,34 @@ const wcRequestHook = (data: any) => {
     const flowWalletUrl = `${FLOW_WALLET_UNIVERSAL_LINK}?uri=${encodeURIComponent(data.uri)}`;
     console.log('📱 Opening Flow Wallet via wcRequestHook:', flowWalletUrl);
     
-    // Use setTimeout to ensure this happens after the current call stack
-    setTimeout(() => {
-      // Try to open externally using Capacitor Browser plugin if available
-      if ((window as any).Capacitor?.Plugins?.Browser) {
-        console.log('📱 Using Capacitor Browser to open Flow Wallet');
-        (window as any).Capacitor.Plugins.Browser.open({ url: flowWalletUrl });
-      } else {
-        // Fallback to window.location.href 
-        console.log('📱 Using window.location.href to open Flow Wallet');
-        window.location.href = flowWalletUrl;
+    // Use Capacitor Browser plugin to open in external browser/app
+    // This keeps our app in the background and allows proper deep linking back
+    try {
+      const { Browser } = await import('@capacitor/browser');
+      console.log('📱 Using Capacitor Browser plugin to open Flow Wallet');
+      await Browser.open({ 
+        url: flowWalletUrl,
+        windowName: '_system', // Open in system browser/app handler
+        presentationStyle: 'fullscreen'
+      });
+    } catch (error) {
+      console.error('⚠️ Browser plugin failed, trying App plugin:', error);
+      // Fallback to App plugin for opening URLs
+      try {
+        const { App } = await import('@capacitor/app');
+        // Use Android intent to open the URL
+        if ((window as any).Capacitor?.getPlatform?.() === 'android') {
+          const { AppLauncher } = await import('@capacitor/app-launcher');
+          await AppLauncher.openUrl({ url: flowWalletUrl });
+        } else {
+          // iOS - just open the URL which should trigger universal links
+          window.open(flowWalletUrl, '_system');
+        }
+      } catch (fallbackError) {
+        console.error('⚠️ All methods failed, using window.open:', fallbackError);
+        window.open(flowWalletUrl, '_system');
       }
-    }, 100);
+    }
     
     // Return true to indicate we handled this
     return true;

@@ -17,7 +17,7 @@ import WeeklyObjectives from '../components/WeeklyObjectives';
 import { supabase, hasValidSupabaseConfig } from '../lib/supabase';
 // WINDOW_IDS lives in src/fixed.ts (baseUrl set to src)
 import { WINDOW_IDS } from 'fixed';
-import { useDemoModeOptional, DEMO_PROFILE, DEMO_CHAPTERS, isIOSPlatform } from '../contexts/DemoModeContext';
+import { useDemoModeOptional, DEMO_PROFILE, DEMO_CHAPTERS, DEMO_LOCKER, isIOSPlatform } from '../contexts/DemoModeContext';
 
 /**
  * Normalize a Flow address to standard format (0x + 16 hex chars lowercase)
@@ -57,6 +57,11 @@ const LockerSystemNew: React.FC = () => {
   // In demo mode on iOS, treat as connected
   const effectivelyConnected = isDemoMode || isConnected;
   const effectiveAddress = isDemoMode ? demoMode?.demoWalletAddress : unifiedAddress;
+  
+  // In demo mode, use demo locker info
+  const effectiveLockerInfo = isDemoMode ? DEMO_LOCKER : lockerInfo;
+  const effectiveProfile = isDemoMode ? { username: DEMO_PROFILE.username, profile_icon: DEMO_PROFILE.profile_icon } : profile;
+  const effectiveHasProfile = isDemoMode || hasProfile;
   
   // Normalize the wallet address for all API calls
   const normalizedAddress = useMemo(() => normalizeFlowAddress(effectiveAddress), [effectiveAddress]);
@@ -900,7 +905,7 @@ const LockerSystemNew: React.FC = () => {
             {effectivelyConnected && (
               <>
                 {/* Already Has Locker */}
-                {lockerInfo?.locker_number && (
+                {effectiveLockerInfo?.locker_number && (
                   <div 
                     ref={scrollContainerRef}
                     style={{
@@ -1024,21 +1029,21 @@ const LockerSystemNew: React.FC = () => {
                         overflow: 'hidden'
                       }}>
                         <div style={{
-                          fontSize: (lockerInfo.username?.length || 0) > 10 
+                          fontSize: (effectiveLockerInfo.username?.length || 0) > 10 
                             ? 'clamp(9px, 1.2vw, 12px)' 
-                            : (lockerInfo.username?.length || 0) > 7 
+                            : (effectiveLockerInfo.username?.length || 0) > 7 
                               ? 'clamp(10px, 1.4vw, 14px)' 
                               : 'clamp(12px, 1.6vw, 16px)',
                           fontWeight: 'bold',
                           marginBottom: '3px',
                           textTransform: 'uppercase',
-                          letterSpacing: (lockerInfo.username?.length || 0) > 10 ? '0.3px' : '0.8px',
+                          letterSpacing: (effectiveLockerInfo.username?.length || 0) > 10 ? '0.3px' : '0.8px',
                           color: '#000000',
                           whiteSpace: 'nowrap',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis'
                         }}>
-                          {lockerInfo.username || 'STUDENT'}
+                          {effectiveLockerInfo.username || 'STUDENT'}
                         </div>
                         <div style={{
                           fontSize: 'clamp(8px, 1vw, 10px)', // Smaller locker number
@@ -1046,7 +1051,7 @@ const LockerSystemNew: React.FC = () => {
                           color: '#1a1a1a',
                           letterSpacing: '0.5px'
                         }}>
-                          LOCKER #{lockerInfo.locker_number}
+                          LOCKER #{effectiveLockerInfo.locker_number}
                         </div>
                       </div>
                     </div>
@@ -1747,8 +1752,8 @@ const LockerSystemNew: React.FC = () => {
                                     const offsetMinutes = new Date().getTimezoneOffset();
                                     const timezoneOffset = Math.round(offsetMinutes / -60);
                                     
-                                    // Get username from lockerInfo or use truncated address
-                                    const username = lockerInfo?.username || unifiedAddress?.slice(0, 10) || 'Flunk';
+                                    // Get username from effectiveLockerInfo or use truncated address
+                                    const username = effectiveLockerInfo?.username || unifiedAddress?.slice(0, 10) || 'Flunk';
                                     
                                     console.log('🎃 Claiming Halloween GumDrop...');
                                     console.log('� User timezone offset:', timezoneOffset, 'hours from UTC');
@@ -2044,7 +2049,7 @@ const LockerSystemNew: React.FC = () => {
                 )}
 
                 {/* No Locker Yet - Show Assignment Button */}
-                {!lockerInfo?.locker_number && (
+                {!effectiveLockerInfo?.locker_number && (
                   <div style={{
                     textAlign: 'center',
                     maxWidth: '400px'

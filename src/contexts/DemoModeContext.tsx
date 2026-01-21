@@ -62,6 +62,7 @@ export const DEMO_PROFILE = {
   level: 5,
   xp: 2500,
   joinedAt: new Date().toISOString(),
+  profile_icon: '🎮',
 };
 
 // Demo chapter/objectives completion
@@ -76,6 +77,51 @@ export const DEMO_CHAPTERS = {
   totalObjectives: 42,
 };
 
+// Demo locker data for My Locker
+export const DEMO_LOCKER = {
+  locker_number: 1337,
+  wallet_address: DEMO_WALLET_ADDRESS,
+  username: 'DemoFlunk',
+  created_at: new Date().toISOString(),
+};
+
+// Demo pins/patches for Varsity Letter display
+export const DEMO_PINS = [
+  {
+    id: '1',
+    name: 'Paradise Motel Pin',
+    image: 'https://storage.googleapis.com/flunks-assets/pins/paradise-motel.png',
+    type: 'pin',
+    tier: 'common',
+    placed: false,
+  },
+  {
+    id: '2', 
+    name: 'Flunks Logo Pin',
+    image: 'https://storage.googleapis.com/flunks-assets/pins/flunks-logo.png',
+    type: 'pin',
+    tier: 'rare',
+    placed: false,
+  },
+  {
+    id: '3',
+    name: 'GUM Token',
+    image: 'https://storage.googleapis.com/flunks-assets/pins/gum-token.png',
+    type: 'token',
+    tier: 'common',
+    placed: false,
+  },
+];
+
+// Demo chat messages for ChatRoom
+export const DEMO_CHAT_MESSAGES = [
+  { username: 'FlunkMaster', message: 'Welcome to the Flunks community! 🎉', timestamp: new Date(Date.now() - 300000).toISOString(), profileIcon: '🎮' },
+  { username: 'CoolCat99', message: 'Hey everyone! Just got my first Flunk!', timestamp: new Date(Date.now() - 240000).toISOString(), profileIcon: '😎' },
+  { username: 'PixelPunk', message: 'Anyone want to trade pins?', timestamp: new Date(Date.now() - 180000).toISOString(), profileIcon: '🎨' },
+  { username: 'FlunkMaster', message: 'The underground games are so fun!', timestamp: new Date(Date.now() - 120000).toISOString(), profileIcon: '🎮' },
+  { username: 'GumCollector', message: 'Just hit 500 GUM! 🍬', timestamp: new Date(Date.now() - 60000).toISOString(), profileIcon: '🍬' },
+];
+
 export interface DemoModeContextType {
   // Demo mode state
   isDemoMode: boolean;
@@ -84,6 +130,9 @@ export interface DemoModeContextType {
   demoFlunk: typeof DEMO_FLUNK;
   demoProfile: typeof DEMO_PROFILE;
   demoChapters: typeof DEMO_CHAPTERS;
+  demoLocker: typeof DEMO_LOCKER;
+  demoPins: typeof DEMO_PINS;
+  demoChatMessages: typeof DEMO_CHAT_MESSAGES;
   
   // Actions
   enableDemoMode: () => void;
@@ -159,6 +208,9 @@ export const DemoModeProvider: React.FC<DemoModeProviderProps> = ({ children }) 
     demoFlunk: DEMO_FLUNK,
     demoProfile: DEMO_PROFILE,
     demoChapters: DEMO_CHAPTERS,
+    demoLocker: DEMO_LOCKER,
+    demoPins: DEMO_PINS,
+    demoChatMessages: DEMO_CHAT_MESSAGES,
     enableDemoMode,
     disableDemoMode,
     updateDemoBalance,

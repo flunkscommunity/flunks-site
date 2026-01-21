@@ -26,6 +26,8 @@
   "dependencies": {
     "@capacitor/android": "^8.0.0",
     "@capacitor/app": "^8.0.0",
+    "@capacitor/app-launcher": "^8.0.0",
+    "@capacitor/browser": "^8.0.0",
     "@capacitor/cli": "^8.0.0",
     "@capacitor/core": "^8.0.0",
     "@capacitor/ios": "^8.0.0",
@@ -62,6 +64,7 @@
     "react-draggable": "^4.4.5",
     "react-fast-marquee": "^1.6.4",
     "react-intersection-observer": "^9.4.1",
+    "react-is": "^19.2.3",
     "react95": "4.0.0",
     "sha3": "^2.1.4",
     "styled-components": "^5.3.11",

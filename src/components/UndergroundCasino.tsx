@@ -9,6 +9,7 @@ import VideoPokerBattleTested from "components/games/VideoPokerBattleTested";
 import Blackjack from "components/games/Blackjack";
 import ScratchCard from "components/games/ScratchCard";
 import SlotsGame from "components/games/SlotsGame";
+import { useDemoModeOptional, isIOSPlatform } from 'contexts/DemoModeContext';
 
 interface UndergroundCasinoProps {
   onClose?: () => void;
@@ -22,8 +23,15 @@ const UndergroundCasino: React.FC<UndergroundCasinoProps> = ({ onClose }) => {
   const { openWindow, closeWindow } = useWindowsContext();
   const { primaryWallet } = useDynamicContext();
   const { address: unifiedAddress } = useUnifiedWallet();
-  const walletAddress = unifiedAddress || primaryWallet?.address;
   const { balance: gumBalance, updateBalance } = useGum();
+  
+  // Demo mode support for iOS App Store review
+  const demoMode = useDemoModeOptional();
+  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  
+  // Use demo values in demo mode
+  const walletAddress = isDemoMode ? demoMode?.demoWalletAddress : (unifiedAddress || primaryWallet?.address);
+  const effectiveBalance = isDemoMode ? (demoMode?.demoBalance || 1000) : gumBalance;
 
   const [isUndergroundMuted, setIsUndergroundMuted] = useState(false);
   const undergroundAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -60,8 +68,14 @@ const UndergroundCasino: React.FC<UndergroundCasinoProps> = ({ onClose }) => {
 
   // Callback when games update balance
   const handleBalanceUpdate = (newBalance: number) => {
-    updateBalance(newBalance);
-    console.log(`🎰 Underground game balance update: ${newBalance}`);
+    if (isDemoMode && demoMode) {
+      // In demo mode, update demo balance
+      demoMode.updateDemoBalance(newBalance);
+      console.log(`🎮 Demo Underground game balance update: ${newBalance}`);
+    } else {
+      updateBalance(newBalance);
+      console.log(`🎰 Underground game balance update: ${newBalance}`);
+    }
   };
 
   // Open Slot Machine
@@ -80,7 +94,7 @@ const UndergroundCasino: React.FC<UndergroundCasinoProps> = ({ onClose }) => {
         >
           <SlotsGame 
             walletAddress={walletAddress}
-            initialBalance={gumBalance}
+            initialBalance={effectiveBalance}
             onBalanceUpdate={handleBalanceUpdate}
             onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_SLOT_MACHINE)}
           />
@@ -105,7 +119,7 @@ const UndergroundCasino: React.FC<UndergroundCasinoProps> = ({ onClose }) => {
         >
           <VideoPokerBattleTested 
             walletAddress={walletAddress}
-            initialBalance={gumBalance}
+            initialBalance={effectiveBalance}
             onBalanceUpdate={handleBalanceUpdate}
             onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_VIDEO_POKER)}
           />
@@ -130,7 +144,7 @@ const UndergroundCasino: React.FC<UndergroundCasinoProps> = ({ onClose }) => {
         >
           <Blackjack 
             walletAddress={walletAddress}
-            initialBalance={gumBalance}
+            initialBalance={effectiveBalance}
             onBalanceUpdate={handleBalanceUpdate}
             onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_BLACKJACK)}
           />
@@ -240,7 +254,7 @@ const UndergroundCasino: React.FC<UndergroundCasinoProps> = ({ onClose }) => {
               border: '2px solid #9333ea',
             }}
           >
-            💰 GUM: {gumBalance}
+            💰 GUM: {effectiveBalance}{isDemoMode && ' (Demo)'}
           </span>
         </div>
       </div>

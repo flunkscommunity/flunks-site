@@ -9,6 +9,7 @@ import useMessengerSounds from 'hooks/useMessengerSounds';
 import useChatMessages from 'hooks/useChatMessages';
 import useLocalChatMessages from 'hooks/useLocalChatMessages';
 import UserDisplay from 'components/UserDisplay';
+import { useDemoModeOptional, isIOSPlatform, DEMO_CHAT_MESSAGES, DEMO_PROFILE } from 'contexts/DemoModeContext';
 import { 
   Button, 
   Frame, 
@@ -357,12 +358,18 @@ const FlunksMessenger: React.FC = () => {
   const { user, primaryWallet } = dynamicContext;
   const { isConnected, address: walletAddress } = useUnifiedWallet();
   
+  // Demo mode support for iOS App Store review
+  const demoMode = useDemoModeOptional();
+  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  
   // Check if user is actually authenticated - use unified wallet which is more reliable
-  const isUserAuthenticated = isConnected || !!(user || primaryWallet);
+  // In demo mode, treat as authenticated
+  const isUserAuthenticated = isDemoMode || isConnected || !!(user || primaryWallet);
   
   // Add debugging for user state
   useEffect(() => {
     console.log('🔍 FlunksMessenger - Auth state:', { 
+      isDemoMode,
       unifiedWallet: { isConnected, address: walletAddress },
       dynamic: {
         user: user ? { id: user.userId, email: user.email } : null,
@@ -371,7 +378,7 @@ const FlunksMessenger: React.FC = () => {
       isUserAuthenticated,
       timestamp: new Date().toISOString()
     });
-  }, [user, primaryWallet, isConnected, walletAddress, isUserAuthenticated]);
+  }, [user, primaryWallet, isConnected, walletAddress, isUserAuthenticated, isDemoMode]);
 
   const { closeWindow } = useWindowsContext();
   const { profile, hasProfile } = useUserProfile();
@@ -390,8 +397,18 @@ const FlunksMessenger: React.FC = () => {
       walletAddress,
       user: !!user, 
       primaryWallet: !!primaryWallet,
-      hasCheckedAuth 
+      hasCheckedAuth,
+      isDemoMode 
     });
+    
+    // In demo mode, skip auth check and use demo profile
+    if (isDemoMode) {
+      console.log('🎮 Demo mode: Skipping auth, using demo profile');
+      setIsCheckingAuth(false);
+      setHasCheckedAuth(true);
+      setUsername(DEMO_PROFILE.username);
+      return;
+    }
     
     // If unified wallet is connected OR we have Dynamic auth, we're authenticated
     if (isConnected || user || primaryWallet) {
@@ -415,7 +432,7 @@ const FlunksMessenger: React.FC = () => {
       
       return () => clearTimeout(timer);
     }
-  }, [user, primaryWallet, isConnected, walletAddress, hasCheckedAuth]);
+  }, [user, primaryWallet, isConnected, walletAddress, hasCheckedAuth, isDemoMode]);
 
   const [currentMessage, setCurrentMessage] = useState('');
   const [selectedContact, setSelectedContact] = useState<string>('💬 General Chat');
@@ -503,8 +520,21 @@ const FlunksMessenger: React.FC = () => {
   );
 
   // Get the appropriate chat data based on room type
-  const { messages, isLoading: messagesLoading, error: messagesError } = 
-    isRoomPersistent ? persistentChat : { messages: localChat.messages, isLoading: false, error: null };
+  // In demo mode, use demo messages instead
+  const demoMessages = isDemoMode ? DEMO_CHAT_MESSAGES.map((msg, idx) => ({
+    id: `demo-${idx}`,
+    username: msg.username,
+    message: msg.message,
+    timestamp: msg.timestamp,
+    profileIcon: msg.profileIcon,
+    isOwn: msg.username === DEMO_PROFILE.username,
+    isSystem: false,
+    isAI: false,
+  })) : [];
+  
+  const { messages, isLoading: messagesLoading, error: messagesError } = isDemoMode 
+    ? { messages: demoMessages, isLoading: false, error: null }
+    : (isRoomPersistent ? persistentChat : { messages: localChat.messages, isLoading: false, error: null });
 
   // Unified post message function
   const postChatMessage = useCallback(async (
