@@ -10,6 +10,7 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { processCasinoTransaction } from '../../utils/casinoTransactions';
+import { useDemoModeOptional, isIOSPlatform } from '../../contexts/DemoModeContext';
 import { 
   CARD_LIST, 
   PAY_TABLE_DATA, 
@@ -54,7 +55,21 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
   initialBalance = 0,
   onBalanceUpdate 
 }) => {
-  // Game state
+  const demoMode = useDemoModeOptional();
+  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  
+  // Debug: Log demo mode status on mount
+  useEffect(() => {
+    console.log('🃏 [VideoPoker] Demo mode check:', {
+      isIOSPlatform: isIOSPlatform(),
+      contextIsDemoMode: demoMode?.isDemoMode,
+      finalIsDemoMode: isDemoMode,
+      demoBalance: demoMode?.demoBalance
+    });
+  }, [isDemoMode, demoMode?.isDemoMode, demoMode?.demoBalance]);
+
+  // Game state - use demo balance if in demo mode
+  const effectiveInitialBalance = isDemoMode ? (demoMode?.demoBalance ?? 1000) : initialBalance;
   const [deck, setDeck] = useState<string[]>([]);
   const [hand, setHand] = useState<CardState[]>([]);
   const [holdState, setHoldState] = useState<boolean[]>([false, false, false, false, false]);
@@ -65,14 +80,18 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
   const [winningHand, setWinningHand] = useState('');
   const [message, setMessage] = useState('Place your bet and DEAL!');
   const [isAnimating, setIsAnimating] = useState(false);
-  const [gumBalance, setGumBalance] = useState(initialBalance);
+  const [gumBalance, setGumBalance] = useState(effectiveInitialBalance);
 
   const bet = BET_LEVELS[betLevel] * GUM_PER_COIN;
 
-  // Update local balance when initialBalance prop changes
+  // Update local balance when initialBalance prop changes or demo balance changes
   useEffect(() => {
-    setGumBalance(initialBalance);
-  }, [initialBalance]);
+    if (isDemoMode && demoMode?.demoBalance !== undefined) {
+      setGumBalance(demoMode.demoBalance);
+    } else {
+      setGumBalance(initialBalance);
+    }
+  }, [initialBalance, isDemoMode, demoMode?.demoBalance]);
 
   // ============================================================================
   // GUM API TRANSACTION (same pattern as slots)
@@ -83,6 +102,26 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
     amount: number, 
     metadata?: any
   ): Promise<{ success: boolean; new_balance?: number; error?: string }> => {
+    if (isDemoMode && demoMode) {
+      const currentBalance = demoMode.demoBalance ?? 0;
+      if (type === 'bet') {
+        if (currentBalance < amount) {
+          return { success: false, error: 'Not enough GUM' };
+        }
+        const newBalance = currentBalance - amount;
+        demoMode.updateDemoBalance(newBalance);
+        setGumBalance(newBalance);
+        onBalanceUpdate?.(newBalance);
+        return { success: true, new_balance: newBalance };
+      }
+
+      const newBalance = currentBalance + amount;
+      demoMode.updateDemoBalance(newBalance);
+      setGumBalance(newBalance);
+      onBalanceUpdate?.(newBalance);
+      return { success: true, new_balance: newBalance };
+    }
+
     if (!walletAddress) {
       return { success: false, error: 'No wallet connected' };
     }
@@ -132,7 +171,7 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
       return;
     }
 
-    if (!walletAddress) {
+    if (!walletAddress && !isDemoMode) {
       setMessage('CONNECT WALLET!');
       return;
     }
@@ -184,7 +223,7 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
     setRoundEnded(false);
     setGamePhase('holding');
     setIsAnimating(false);
-  }, [gumBalance, bet, roundEnded, walletAddress, betLevel]);
+  }, [gumBalance, bet, roundEnded, walletAddress, betLevel, isDemoMode]);
 
   const holdCard = useCallback((index: number) => {
     if (gamePhase !== 'holding' || isAnimating) return;

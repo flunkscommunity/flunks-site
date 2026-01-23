@@ -19,7 +19,7 @@ export const isIOSPlatform = (): boolean => {
 };
 
 // Demo wallet address (not a real wallet)
-const DEMO_WALLET_ADDRESS = '0xdemo000000000001';
+export const DEMO_WALLET_ADDRESS = '0xdemo000000000001';
 const DEMO_INITIAL_BALANCE = 1000;
 
 // Demo Flunk NFT data - Use a real Flunk image from the cloud bucket
@@ -69,11 +69,11 @@ export const DEMO_PROFILE = {
 export const DEMO_CHAPTERS = {
   chapter1Complete: true,
   chapter2Complete: true, 
-  chapter3Complete: false,
-  chapter4Complete: false,
-  chapter5Complete: false,
-  chapter6Complete: false,
-  objectivesCompleted: 12,
+  chapter3Complete: true,
+  chapter4Complete: true,
+  chapter5Complete: true,
+  chapter6Complete: true,
+  objectivesCompleted: 42,
   totalObjectives: 42,
 };
 
@@ -90,7 +90,7 @@ export const DEMO_PINS = [
   {
     id: '1',
     name: 'Paradise Motel Pin',
-    image: 'https://storage.googleapis.com/flunks-assets/pins/paradise-motel.png',
+    image: '/images/icons/paradise-motel-icon.png',
     type: 'pin',
     tier: 'common',
     placed: false,
@@ -98,7 +98,7 @@ export const DEMO_PINS = [
   {
     id: '2', 
     name: 'Flunks Logo Pin',
-    image: 'https://storage.googleapis.com/flunks-assets/pins/flunks-logo.png',
+    image: '/images/pins/flunky-uppy-pin-silver.png',
     type: 'pin',
     tier: 'rare',
     placed: false,
@@ -106,7 +106,7 @@ export const DEMO_PINS = [
   {
     id: '3',
     name: 'GUM Token',
-    image: 'https://storage.googleapis.com/flunks-assets/pins/gum-token.png',
+    image: '/images/icons/semester-zero-nft.png',
     type: 'token',
     tier: 'common',
     placed: false,
@@ -161,25 +161,75 @@ interface DemoModeProviderProps {
   children: React.ReactNode;
 }
 
+const DEMO_MODE_STORAGE_KEY = 'flunks_demo_mode';
+const DEMO_BALANCE_STORAGE_KEY = 'flunks_demo_balance';
+
 export const DemoModeProvider: React.FC<DemoModeProviderProps> = ({ children }) => {
-  const [isDemoMode, setIsDemoMode] = useState(false);
-  const [demoBalance, setDemoBalance] = useState(DEMO_INITIAL_BALANCE);
+  // Initialize from localStorage to persist across navigation
+  const [isDemoMode, setIsDemoMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem(DEMO_MODE_STORAGE_KEY);
+      const isDemo = stored === 'true' && isIOSPlatform();
+      if (isDemo) {
+        console.log('🎮 Demo Mode restored from storage');
+      }
+      return isDemo;
+    }
+    return false;
+  });
+  
+  const [demoBalance, setDemoBalance] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem(DEMO_BALANCE_STORAGE_KEY);
+      if (stored) {
+        const balance = parseInt(stored, 10);
+        if (!isNaN(balance)) {
+          console.log('🎮 Demo balance restored:', balance);
+          return balance;
+        }
+      }
+    }
+    return DEMO_INITIAL_BALANCE;
+  });
+
+  // Persist demo mode state changes to localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(DEMO_MODE_STORAGE_KEY, isDemoMode.toString());
+      console.log('🎮 Demo mode state saved:', isDemoMode);
+    }
+  }, [isDemoMode]);
+
+  // Persist balance changes to localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined' && isDemoMode) {
+      localStorage.setItem(DEMO_BALANCE_STORAGE_KEY, demoBalance.toString());
+    }
+  }, [demoBalance, isDemoMode]);
 
   const enableDemoMode = useCallback(() => {
-    // Demo mode is iOS-only for Apple App Store review
-    if (!isIOSPlatform()) {
-      console.log('🎮 Demo Mode not available on this platform (iOS only)');
-      return;
-    }
-    console.log('🎮 Demo Mode enabled (iOS) - Starting with', DEMO_INITIAL_BALANCE, 'GUM');
+    // Demo mode works on iOS natively, or any platform for testing
+    // For production iOS App Store review, this is triggered via the splash screen
+    // For desktop testing, can be enabled via console: window.__enableDemoMode?.()
+    console.log('🎮 Demo Mode enabled - Starting with', DEMO_INITIAL_BALANCE, 'GUM');
     setIsDemoMode(true);
     setDemoBalance(DEMO_INITIAL_BALANCE);
+    // Also save immediately to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(DEMO_MODE_STORAGE_KEY, 'true');
+      localStorage.setItem(DEMO_BALANCE_STORAGE_KEY, DEMO_INITIAL_BALANCE.toString());
+    }
   }, []);
 
   const disableDemoMode = useCallback(() => {
     console.log('🎮 Demo Mode disabled');
     setIsDemoMode(false);
     setDemoBalance(DEMO_INITIAL_BALANCE);
+    // Clear from localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(DEMO_MODE_STORAGE_KEY);
+      localStorage.removeItem(DEMO_BALANCE_STORAGE_KEY);
+    }
   }, []);
 
   const updateDemoBalance = useCallback((newBalance: number) => {
@@ -200,6 +250,15 @@ export const DemoModeProvider: React.FC<DemoModeProviderProps> = ({ children }) 
     setDemoBalance(prev => prev + amount);
     console.log('🎮 Demo: Earned', amount, 'GUM. New balance:', demoBalance + amount);
   }, [demoBalance]);
+
+  // Expose enableDemoMode to window for desktop testing via browser console
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as any).__enableDemoMode = enableDemoMode;
+      (window as any).__disableDemoMode = disableDemoMode;
+      console.log('🎮 Demo mode controls available: window.__enableDemoMode() / window.__disableDemoMode()');
+    }
+  }, [enableDemoMode, disableDemoMode]);
 
   const value: DemoModeContextType = {
     isDemoMode,

@@ -54,7 +54,7 @@ import WalletStatusBar from "components/WalletStatusBar";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { useUnifiedWallet } from "contexts/UnifiedWalletContext";
 import LoadingScreenPreview from "windows/LoadingScreenPreview";
-// TestFlowWalletWindow removed - no longer on desktop
+import TestFlowWalletWindow from "windows/TestFlowWalletWindow";
 
 import { GumAdminPanel } from "components/GumAdminPanel";
 import { TimeConfigAdmin } from "components/DayNightHouse";
@@ -133,6 +133,7 @@ const Desktop = () => {
   // Demo mode support for iOS App Store review
   const demoMode = useDemoModeOptional();
   const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  const [showWalletDebug, setShowWalletDebug] = useState(false);
 
   const handleSplashComplete = useCallback(() => {
     splashDismissedRef.current = true;
@@ -198,6 +199,19 @@ const Desktop = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const walletDebugQuery = router.query.walletDebug;
+    const queryFlag = Array.isArray(walletDebugQuery)
+      ? walletDebugQuery.includes('1')
+      : walletDebugQuery === '1';
+    if (queryFlag) {
+      localStorage.setItem('wallet-debug', '1');
+    }
+    const enabled = localStorage.getItem('wallet-debug') === '1';
+    setShowWalletDebug(enabled);
+  }, [router.query.walletDebug]);
 
 const windowsMemod = useMemo(() => (
   <>
@@ -526,6 +540,18 @@ const windowsMemod = useMemo(() => (
             )
           })}
         />
+
+        {showWalletDebug && (
+          <ConditionalAppIcon
+            appId="test-flow-wallet"
+            title="Flow Wallet Debug"
+            icon="/images/icons/flowty.png"
+            onDoubleClick={() => openWindow({
+              key: WINDOW_IDS.TEST_FLOW_WALLET,
+              window: <TestFlowWalletWindow />
+            })}
+          />
+        )}
 
         {/* 4.1 Account / Sign Out - Always visible */}
         <ConditionalAppIcon
@@ -899,28 +925,30 @@ const windowsMemod = useMemo(() => (
           })}
         />
 
-        {/* 8. ChatRoom */}
-        <ConditionalAppIcon
-          appId="chat-room"
-          title="ChatRoom"
-          icon="/images/icons/chat-rooms.png"
-          onDoubleClick={() => openWindow({
-            key: WINDOW_IDS.FLUNKS_MESSENGER,
-            window: (
-              <DraggableResizeableWindow
-                windowsId={WINDOW_IDS.FLUNKS_MESSENGER}
-                onClose={() => closeWindow(WINDOW_IDS.FLUNKS_MESSENGER)}
-                initialWidth="95vw"
-                initialHeight="90vh"
-                headerTitle="ChatRoom"
-                headerIcon="/images/icons/chat-rooms.png"
-                resizable={true}
-              >
-                <FlunksMessenger />
-              </DraggableResizeableWindow>
-            )
-          })}
-        />
+        {/* 8. ChatRoom - Hidden in demo mode to prevent re-render issues */}
+        {!isDemoMode && (
+          <ConditionalAppIcon
+            appId="chat-room"
+            title="ChatRoom"
+            icon="/images/icons/chat-rooms.png"
+            onDoubleClick={() => openWindow({
+              key: WINDOW_IDS.FLUNKS_MESSENGER,
+              window: (
+                <DraggableResizeableWindow
+                  windowsId={WINDOW_IDS.FLUNKS_MESSENGER}
+                  onClose={() => closeWindow(WINDOW_IDS.FLUNKS_MESSENGER)}
+                  initialWidth="95vw"
+                  initialHeight="90vh"
+                  headerTitle="ChatRoom"
+                  headerIcon="/images/icons/chat-rooms.png"
+                  resizable={true}
+                >
+                  <FlunksMessenger />
+                </DraggableResizeableWindow>
+              )
+            })}
+          />
+        )}
 
         {/* 8. X */}
         <a

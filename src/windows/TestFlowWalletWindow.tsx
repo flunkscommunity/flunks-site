@@ -22,6 +22,7 @@ const TestFlowWalletWindow: React.FC = () => {
   } = useUnifiedWallet();
   const [actionError, setActionError] = useState<string | null>(null);
   const [lastAction, setLastAction] = useState<string>("idle");
+  const [wcDebug, setWcDebug] = useState<{ method?: string; url?: string; timestamp?: string } | null>(null);
   const [fclConfig, setFclConfig] = useState<{
     network?: string;
     accessNode?: string;
@@ -70,6 +71,16 @@ const TestFlowWalletWindow: React.FC = () => {
     if (isConnecting) return "connecting… (waiting for wallet callback)";
     return lastAction;
   }, [isConnected, walletType, isConnecting, lastAction]);
+
+  const refreshWcDebug = () => {
+    if (typeof window === "undefined") return;
+    const value = (window as any).__wcLastOpen ?? null;
+    setWcDebug(value);
+  };
+
+  useEffect(() => {
+    refreshWcDebug();
+  }, []);
 
   const handleConnect = async () => {
     setActionError(null);
@@ -164,7 +175,17 @@ const TestFlowWalletWindow: React.FC = () => {
           <Button onClick={handleDisconnect} disabled={!isConnected && !isConnecting}>
             Disconnect
           </Button>
+          <Button onClick={refreshWcDebug}>
+            Refresh Debug
+          </Button>
         </div>
+
+        <Frame variant="field" className="p-3">
+          <div className="text-sm font-semibold">WalletConnect debug</div>
+          <div className="text-sm">method: {wcDebug?.method ?? "(none)"}</div>
+          <div className="text-sm">url: {wcDebug?.url ?? "(none)"}</div>
+          <div className="text-sm">time: {wcDebug?.timestamp ?? "(none)"}</div>
+        </Frame>
 
         {effectiveError && (
           <Frame variant="field" className="p-3">

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as fcl from '@onflow/fcl';
 import styled from 'styled-components';
+import { useDemoModeOptional } from '../contexts/DemoModeContext';
 
 /**
  * SemesterZero Collection Setup Button
@@ -48,18 +49,31 @@ export const SetupCollectionButton: React.FC<SetupCollectionButtonProps> = ({
   const [settingUp, setSettingUp] = useState(false);
   const [message, setMessage] = useState('');
   
+  // Demo mode - skip all FCL calls
+  const demoMode = useDemoModeOptional();
+  const isDemoMode = demoMode?.isDemoMode || false;
+  
   // Detect if user is using Dapper Wallet (starts with 0x and length is specific to Dapper)
   const isDapperWallet = wallet?.startsWith('0x') && wallet.length === 18;
 
-  // Check if user already has collection
+  // Check if user already has collection (skip in demo mode)
   useEffect(() => {
+    console.log('🔧 SetupCollectionButton useEffect:', { wallet, isDemoMode, demoModeContext: demoMode?.isDemoMode });
+    
     if (!wallet) {
       setHasCollection(null);
       return;
     }
     
+    // In demo mode, pretend collection is set up - check wallet address pattern too
+    if (isDemoMode || wallet?.includes('demo')) {
+      console.log('🎮 Demo mode: Skipping collection check for wallet:', wallet);
+      setHasCollection(true);
+      return;
+    }
+    
     checkCollection(wallet);
-  }, [wallet]);
+  }, [wallet, isDemoMode]);
 
   const checkCollection = async (address: string) => {
     try {

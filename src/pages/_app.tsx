@@ -223,8 +223,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                       }
                     }}
                   >
-                  <UnifiedWalletProvider>
-                    <DemoModeProvider>
+                  <DemoModeProvider>
+                    <UnifiedWalletProvider>
                     <UserProfileProvider>
                       <PaginatedItemsProvider>
                         <AuthProvider>
@@ -249,8 +249,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
                         </AuthProvider>
                       </PaginatedItemsProvider>
                     </UserProfileProvider>
+                    </UnifiedWalletProvider>
                     </DemoModeProvider>
-                  </UnifiedWalletProvider>
                 </DynamicContextProvider>
                 </ErrorBoundary>
               </ClaimBackpackProvider>

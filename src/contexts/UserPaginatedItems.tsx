@@ -56,13 +56,20 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
   // Debug logging for wallet address
   console.log('🔍 UserPaginatedItems: walletAddress =', walletAddress, 'unifiedAddress =', unifiedAddress, 'isDemoMode =', isDemoMode);
 
-  // Force refresh when wallet address changes
+  // Track previous wallet address to prevent unnecessary refreshes
+  const [prevWalletAddress, setPrevWalletAddress] = useState<string | null>(null);
+
+  // Force refresh only when wallet address actually changes (not just object reference)
   useEffect(() => {
-    if (walletAddress) {
-      console.log('🔄 UserPaginatedItems: Wallet address changed to', walletAddress, '- triggering refresh');
+    if (walletAddress && walletAddress !== prevWalletAddress) {
+      console.log('🔄 UserPaginatedItems: Wallet address changed from', prevWalletAddress, 'to', walletAddress, '- triggering refresh');
       setResetCacheKey(prev => prev + 1);
+      setPrevWalletAddress(walletAddress);
+    } else if (walletAddress === prevWalletAddress) {
+      // Wallet address is the same, skip refresh
+      console.log('✅ UserPaginatedItems: Wallet address unchanged, skipping refresh');
     }
-  }, [walletAddress]);
+  }, [walletAddress, prevWalletAddress]);
   
   // Mobile data override states
   const [mobileDataOverride, setMobileDataOverride] = useState<{

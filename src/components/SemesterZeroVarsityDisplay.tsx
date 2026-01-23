@@ -410,7 +410,17 @@ const SemesterZeroVarsityDisplay: React.FC<SemesterZeroVarsityDisplayProps> = ({
   
   // Demo mode support for iOS App Store review
   const demoMode = useDemoModeOptional();
-  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  // Allow demo mode on all platforms for testing (not just iOS)
+  const isDemoMode = demoMode?.isDemoMode || false;
+  
+  // Debug: Log demo mode status
+  useEffect(() => {
+    console.log('🎽 [VarsityDisplay] Demo mode check:', {
+      isIOSPlatform: isIOSPlatform(),
+      contextIsDemoMode: demoMode?.isDemoMode,
+      finalIsDemoMode: isDemoMode
+    });
+  }, [isDemoMode, demoMode?.isDemoMode]);
   
   const walletAddress = isDemoMode ? demoMode?.demoWalletAddress : (unifiedAddress || primaryWallet?.address);
 
@@ -429,7 +439,15 @@ const SemesterZeroVarsityDisplay: React.FC<SemesterZeroVarsityDisplayProps> = ({
       // In demo mode on iOS, use demo pins
       if (isDemoMode) {
         console.log('🎮 Demo mode: Using demo pins for Varsity Letter');
-        setPins(DEMO_PINS.map(p => ({ ...p, placed: false })));
+        const demoPins = DEMO_PINS.map(p => ({ ...p, placed: false }));
+        const demoPlaced = demoPins.map((pin, index) => {
+          const isParadiseMotel = pin.name.toLowerCase().includes('paradise motel');
+          if (isParadiseMotel || index === 0) {
+            return { ...pin, placed: true, x: 58, y: 32 };
+          }
+          return pin;
+        });
+        setPins(demoPlaced);
         setLoading(false);
         return;
       }
@@ -627,6 +645,7 @@ const SemesterZeroVarsityDisplay: React.FC<SemesterZeroVarsityDisplayProps> = ({
 
   // Load pin layout from localStorage
   const loadPinLayout = () => {
+    if (isDemoMode) return;
     if (!walletAddress) return;
     const saved = localStorage.getItem(`pin-layout-${walletAddress}-${currentJacketIndex}`);
     if (saved) {
@@ -816,8 +835,11 @@ const SemesterZeroVarsityDisplay: React.FC<SemesterZeroVarsityDisplayProps> = ({
         )}
       </MainContent>
 
-      {/* Bottom Claim Window */}
-      {walletAddress && (
+      {/* Debug log for demo mode check */}
+      {console.log('🎽 VarsityDisplay render check:', { walletAddress, isDemoMode, shouldShowCollectionStatus: walletAddress && !isDemoMode })}
+      
+      {/* Bottom Claim Window - hide in demo mode since it's not relevant */}
+      {walletAddress && !isDemoMode && (
         <BottomClaimWindow>
           <ClaimTitle>🎫 COLLECTION STATUS 🎫</ClaimTitle>
           <SetupCollectionButton wallet={walletAddress} compact={false} />

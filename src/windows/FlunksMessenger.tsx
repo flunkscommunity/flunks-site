@@ -362,6 +362,23 @@ const FlunksMessenger: React.FC = () => {
   const demoMode = useDemoModeOptional();
   const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
   
+  // Track component lifecycle
+  useEffect(() => {
+    console.log('💬 [FlunksMessenger] MOUNTED');
+    return () => {
+      console.log('💬 [FlunksMessenger] UNMOUNTED - Window is being closed/recreated');
+    };
+  }, []);
+  
+  // Debug: Log demo mode status immediately on mount
+  useEffect(() => {
+    console.log('💬 [FlunksMessenger] Demo mode check:', {
+      isIOSPlatform: isIOSPlatform(),
+      contextIsDemoMode: demoMode?.isDemoMode,
+      finalIsDemoMode: isDemoMode
+    });
+  }, [isDemoMode, demoMode?.isDemoMode]);
+  
   // Check if user is actually authenticated - use unified wallet which is more reliable
   // In demo mode, treat as authenticated
   const isUserAuthenticated = isDemoMode || isConnected || !!(user || primaryWallet);
@@ -392,6 +409,11 @@ const FlunksMessenger: React.FC = () => {
   
   // Handle initial auth check - use unified wallet for reliable detection
   useEffect(() => {
+    // Only run once - prevent infinite loops
+    if (hasCheckedAuth) {
+      return;
+    }
+    
     console.log('🔍 Auth check running:', { 
       isConnected,
       walletAddress,
@@ -418,20 +440,18 @@ const FlunksMessenger: React.FC = () => {
       return;
     }
     
-    // If we haven't checked yet, give contexts a brief moment to initialize (300ms)
-    if (!hasCheckedAuth) {
-      const timer = setTimeout(() => {
-        if (isConnected || user || primaryWallet) {
-          console.log('✅ User authenticated after wait');
-        } else {
-          console.log('❌ No authentication detected - showing login');
-        }
-        setIsCheckingAuth(false);
-        setHasCheckedAuth(true);
-      }, 300);
-      
-      return () => clearTimeout(timer);
-    }
+    // Give contexts a brief moment to initialize (300ms)
+    const timer = setTimeout(() => {
+      if (isConnected || user || primaryWallet) {
+        console.log('✅ User authenticated after wait');
+      } else {
+        console.log('❌ No authentication detected - showing login');
+      }
+      setIsCheckingAuth(false);
+      setHasCheckedAuth(true);
+    }, 300);
+    
+    return () => clearTimeout(timer);
   }, [user, primaryWallet, isConnected, walletAddress, hasCheckedAuth, isDemoMode]);
 
   const [currentMessage, setCurrentMessage] = useState('');

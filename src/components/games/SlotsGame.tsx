@@ -7,6 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { getTotalWin, PAYLINES, FLUNKS_SYMBOLS } from '../../lib/slots/flunksPaytable';
 import { processCasinoTransaction } from '../../utils/casinoTransactions';
+import { useDemoModeOptional, isIOSPlatform } from '../../contexts/DemoModeContext';
 
 // Vegas-style weighted symbol distribution for client-side spins
 const SYMBOL_WEIGHTS: { [key: string]: number } = {
@@ -84,8 +85,22 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
   onBalanceUpdate,
   onClose
 }) => {
-  // State
-  const [gumBalance, setGumBalance] = useState(initialBalance);
+  const demoMode = useDemoModeOptional();
+  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  
+  // Debug: Log demo mode status on mount
+  useEffect(() => {
+    console.log('🎰 [SlotsGame] Demo mode check:', {
+      isIOSPlatform: isIOSPlatform(),
+      contextIsDemoMode: demoMode?.isDemoMode,
+      finalIsDemoMode: isDemoMode,
+      demoBalance: demoMode?.demoBalance
+    });
+  }, [isDemoMode, demoMode?.isDemoMode, demoMode?.demoBalance]);
+
+  // State - use demo balance if in demo mode
+  const effectiveInitialBalance = isDemoMode ? (demoMode?.demoBalance ?? 1000) : initialBalance;
+  const [gumBalance, setGumBalance] = useState(effectiveInitialBalance);
   const [reels, setReels] = useState<string[][]>([
     [getSymbolKey(0), getSymbolKey(1), getSymbolKey(2)],
     [getSymbolKey(3), getSymbolKey(4), getSymbolKey(5)],
@@ -98,13 +113,37 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
   const [message, setMessage] = useState('');
   const [stoppedReels, setStoppedReels] = useState<boolean[]>([false, false, false]);
 
-  // Update balance from prop
+  // Update balance from prop or demo mode
   useEffect(() => {
-    setGumBalance(initialBalance);
-  }, [initialBalance]);
+    if (isDemoMode && demoMode?.demoBalance !== undefined) {
+      setGumBalance(demoMode.demoBalance);
+    } else {
+      setGumBalance(initialBalance);
+    }
+  }, [initialBalance, isDemoMode, demoMode?.demoBalance]);
 
   // Slot transaction helper
   const slotTransaction = async (type: 'bet' | 'win' | 'refund', amount: number, metadata?: any) => {
+    if (isDemoMode && demoMode) {
+      const currentBalance = demoMode.demoBalance ?? 0;
+      if (type === 'bet') {
+        if (currentBalance < amount) {
+          return { success: false, error: 'Not enough GUM' };
+        }
+        const newBalance = currentBalance - amount;
+        demoMode.updateDemoBalance(newBalance);
+        setGumBalance(newBalance);
+        onBalanceUpdate?.(newBalance);
+        return { success: true, new_balance: newBalance };
+      }
+
+      const newBalance = currentBalance + amount;
+      demoMode.updateDemoBalance(newBalance);
+      setGumBalance(newBalance);
+      onBalanceUpdate?.(newBalance);
+      return { success: true, new_balance: newBalance };
+    }
+
     if (!walletAddress) return { success: false, error: 'No wallet connected' };
     
     const result = await processCasinoTransaction(walletAddress, type, amount, 'slots', metadata);
@@ -127,7 +166,7 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
       return;
     }
     
-    if (!walletAddress) {
+    if (!walletAddress && !isDemoMode) {
       setMessage('Connect wallet to play! 🔗');
       setTimeout(() => setMessage(''), 2000);
       return;

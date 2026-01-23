@@ -6,6 +6,7 @@ import { useTimeBasedImage } from "utils/timeBasedImages";
 import { useState, useEffect, useRef } from "react";
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useUnifiedWallet } from 'contexts/UnifiedWalletContext';
+import { useDemoModeOptional, isIOSPlatform } from 'contexts/DemoModeContext';
 import { useGum } from 'contexts/GumContext';
 import VideoPoker from "components/games/VideoPoker";
 import VideoPokerBattleTested from "components/games/VideoPokerBattleTested";
@@ -19,11 +20,26 @@ const FourThievesBarMain = () => {
   const { openWindow, closeWindow } = useWindowsContext();
   const { primaryWallet } = useDynamicContext();
   const { address: unifiedAddress } = useUnifiedWallet();
-  const effectiveWallet = primaryWallet;
-  const walletAddress = unifiedAddress || primaryWallet?.address;
 
-  // GUM integration (real balance from API)
+  // Demo mode support for iOS App Store review
+  const demoMode = useDemoModeOptional();
+  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+
+  // Debug: Log demo mode status
+  useEffect(() => {
+    console.log('🍺 [FourThievesBar] Demo mode check:', {
+      isIOSPlatform: isIOSPlatform(),
+      contextIsDemoMode: demoMode?.isDemoMode,
+      finalIsDemoMode: isDemoMode,
+      demoBalance: demoMode?.demoBalance
+    });
+  }, [isDemoMode, demoMode?.isDemoMode, demoMode?.demoBalance]);
+
+  const walletAddress = isDemoMode ? demoMode?.demoWalletAddress : (unifiedAddress || primaryWallet?.address);
+
+  // GUM integration (real balance from API, or demo balance)
   const { balance: gumBalance, updateBalance } = useGum();
+  const effectiveBalance = isDemoMode ? (demoMode?.demoBalance ?? 1000) : gumBalance;
 
   // Day/night images
   const dayImage = "/images/locations/snow locations/4-thieves-snow-day.png";
@@ -127,7 +143,11 @@ const FourThievesBarMain = () => {
 
   // Callback when VideoPoker updates balance (for external sync)
   const handleBalanceUpdate = (newBalance: number) => {
-    updateBalance(newBalance);
+    if (isDemoMode && demoMode) {
+      demoMode.updateDemoBalance(newBalance);
+    } else {
+      updateBalance(newBalance);
+    }
     console.log(`🃏 Video Poker balance update: ${newBalance}`);
   };
 
@@ -151,7 +171,7 @@ const FourThievesBarMain = () => {
       setPasswordInput('');
       
       // Record Chapter 6 Slacker completion
-      if (walletAddress) {
+      if (walletAddress && !isDemoMode) {
         try {
           const response = await fetch('/api/four-thieves-underground-access', {
             method: 'POST',
@@ -246,7 +266,7 @@ const FourThievesBarMain = () => {
         >
           <SlotsGame 
             walletAddress={walletAddress}
-            initialBalance={gumBalance}
+            initialBalance={effectiveBalance}
             onBalanceUpdate={handleBalanceUpdate}
             onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_SLOT_MACHINE)}
           />
@@ -271,7 +291,7 @@ const FourThievesBarMain = () => {
         >
           <VideoPokerBattleTested 
             walletAddress={walletAddress}
-            initialBalance={gumBalance}
+            initialBalance={effectiveBalance}
             onBalanceUpdate={handleBalanceUpdate}
             onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_VIDEO_POKER)}
           />
@@ -296,7 +316,7 @@ const FourThievesBarMain = () => {
         >
           <Blackjack 
             walletAddress={walletAddress}
-            initialBalance={gumBalance}
+            initialBalance={effectiveBalance}
             onBalanceUpdate={handleBalanceUpdate}
             onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_BLACKJACK)}
           />
@@ -319,11 +339,15 @@ const FourThievesBarMain = () => {
           resizable={false}
         >
           <ScratchCard 
-            gumBalance={gumBalance}
+            gumBalance={effectiveBalance}
             onGumChange={(amount) => {
               // Update via context when scratch card gives GUM
-              const newBalance = Math.max(0, gumBalance + amount);
-              updateBalance(newBalance);
+              const newBalance = Math.max(0, effectiveBalance + amount);
+              if (isDemoMode && demoMode) {
+                demoMode.updateDemoBalance(newBalance);
+              } else {
+                updateBalance(newBalance);
+              }
             }}
           />
         </DraggableResizeableWindow>

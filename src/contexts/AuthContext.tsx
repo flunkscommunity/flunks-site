@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, useMemo, ReactNode } from 'react';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useUnifiedWallet } from './UnifiedWalletContext';
 import { usePaginatedItems } from './UserPaginatedItems';
+import { useDemoModeOptional } from './DemoModeContext';
 
 interface AuthContextType {
   // Authentication state
@@ -44,6 +45,36 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  // 🎮 DEMO MODE OVERRIDE: If demo mode is active, bypass ALL normal auth logic
+  const demoMode = useDemoModeOptional();
+  
+  if (demoMode?.isDemoMode) {
+    // Return stable demo mode auth context - no dynamic updates, no re-renders
+    const demoContextValue: AuthContextType = {
+      isAuthenticated: true,
+      isWalletConnected: false,
+      isUserConnected: false,
+      walletAddress: demoMode.demoWalletAddress,
+      flunksCount: 1,
+      backpacksCount: 0,
+      hasFlunks: true,
+      isLoading: false,
+      isDynamicLoading: false,
+      user: null,
+      primaryWallet: null,
+      requiresAuth: () => false,
+      requiresFlunks: () => false,
+      getAuthStatus: () => 'authenticated_with_nfts'
+    };
+    
+    return (
+      <AuthContext.Provider value={demoContextValue}>
+        {children}
+      </AuthContext.Provider>
+    );
+  }
+  
+  // Normal auth logic only runs if NOT in demo mode
   const { user, primaryWallet } = useDynamicContext();
   const { isConnected, address } = useUnifiedWallet();
   const [isLoading, setIsLoading] = useState(true);
@@ -108,7 +139,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return 'authenticated_with_nfts';
   };
   
-  const contextValue: AuthContextType = {
+  // Memoize context value to prevent unnecessary re-renders when loading states flicker
+  const contextValue: AuthContextType = useMemo(() => ({
     // Authentication state
     isAuthenticated,
     isWalletConnected,
@@ -132,7 +164,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     requiresAuth,
     requiresFlunks,
     getAuthStatus
-  };
+  }), [
+    isAuthenticated,
+    isWalletConnected,
+    isUserConnected,
+    walletAddress,
+    flunksCount,
+    backpacksCount,
+    hasFlunks,
+    combinedLoading,
+    isDynamicLoading,
+    user,
+    primaryWallet
+  ]);
   
   return (
     <AuthContext.Provider value={contextValue}>

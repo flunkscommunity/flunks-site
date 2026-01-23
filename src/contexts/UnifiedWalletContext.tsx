@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import * as fcl from '@onflow/fcl';
+import { useDemoModeOptional, DEMO_WALLET_ADDRESS } from './DemoModeContext';
 
 // Check if running in Capacitor mobile app
 const isMobileApp = (): boolean => {
@@ -63,6 +64,42 @@ interface UnifiedWalletContextType {
 const UnifiedWalletContext = createContext<UnifiedWalletContextType | undefined>(undefined);
 
 export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // 🎮 DEMO MODE OVERRIDE: Check if demo mode is active
+  const demoMode = useDemoModeOptional();
+  
+  // VERSION STAMP TO FORCE CACHE BUST
+  console.log('🚀 UnifiedWalletContext VERSION 2.0 - PROVIDER ORDER FIXED');
+  console.log('🎮 UnifiedWalletContext: Demo mode check:', { 
+    hasDemoContext: !!demoMode, 
+    isDemoMode: demoMode?.isDemoMode 
+  });
+  
+  // If demo mode is active, return static demo wallet context
+  if (demoMode?.isDemoMode) {
+    console.log('✅ UnifiedWalletContext: DEMO MODE ACTIVE - Returning static context, bypassing FCL');
+
+    const demoContextValue: UnifiedWalletContextType = {
+      isConnected: false,  // Not actually connected to any wallet
+      address: DEMO_WALLET_ADDRESS,
+      walletType: null,
+      connectFCL: async () => { console.log('🎮 Demo mode: connectFCL blocked'); },
+      disconnect: async () => { console.log('🎮 Demo mode: disconnect blocked'); },
+      fclUser: null,
+      isMobile: true,  // Demo mode is iOS-only
+      isConnecting: false,
+      lastCallbackUrl: null,
+      lastError: null,
+      lastAuthStartedAt: null,
+    };
+    
+    return (
+      <UnifiedWalletContext.Provider value={demoContextValue}>
+        {children}
+      </UnifiedWalletContext.Provider>
+    );
+  }
+  
+  // Normal wallet logic only runs if NOT in demo mode
   const { primaryWallet, handleLogOut } = useDynamicContext();
   const [fclUser, setFclUser] = useState<any>(null);
   const [fclAddress, setFclAddress] = useState<string | null>(null);
