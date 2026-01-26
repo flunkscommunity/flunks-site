@@ -174,7 +174,7 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
       }
 
       // Use API when Supabase is properly configured
-      const response = await fetch('/api/user-profile', {
+      const response = await fetch(getApiUrl('/api/user-profile'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -9,6 +9,41 @@ const isMobileApp = (): boolean => {
   return !!(window as any).Capacitor?.isNativePlatform?.();
 };
 
+// LocalStorage keys for persisting auth state across app restarts
+const STORAGE_KEY_PENDING_AUTH = 'flunks_pending_auth';
+const STORAGE_KEY_AUTH_TIMESTAMP = 'flunks_auth_timestamp';
+const AUTH_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
+
+// Persist auth state to localStorage
+const setPendingAuth = (pending: boolean) => {
+  if (typeof window === 'undefined') return;
+  if (pending) {
+    localStorage.setItem(STORAGE_KEY_PENDING_AUTH, 'true');
+    localStorage.setItem(STORAGE_KEY_AUTH_TIMESTAMP, Date.now().toString());
+  } else {
+    localStorage.removeItem(STORAGE_KEY_PENDING_AUTH);
+    localStorage.removeItem(STORAGE_KEY_AUTH_TIMESTAMP);
+  }
+};
+
+// Check if there's a pending auth (within timeout)
+const hasPendingAuth = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  const pending = localStorage.getItem(STORAGE_KEY_PENDING_AUTH);
+  const timestamp = localStorage.getItem(STORAGE_KEY_AUTH_TIMESTAMP);
+  
+  if (!pending || !timestamp) return false;
+  
+  const elapsed = Date.now() - parseInt(timestamp, 10);
+  if (elapsed > AUTH_TIMEOUT_MS) {
+    // Timeout expired, clear stale auth
+    setPendingAuth(false);
+    return false;
+  }
+  
+  return true;
+};
+
 // Normalize Flow address format
 const normalizeFlowAddress = (address: string | null | undefined): string | null => {
   if (!address) return null;
@@ -117,12 +152,52 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [primaryWallet?.address]);
 
-  // Detect mobile app on mount
+  // Detect mobile app on mount and check for pending auth
   useEffect(() => {
     const mobile = isMobileApp();
     setIsMobile(mobile);
+    console.log('🔍 [MOUNT] UnifiedWalletContext initialized', {
+      isMobile: mobile,
+      hasPendingAuth: mobile ? hasPendingAuth() : false,
+      timestamp: new Date().toISOString()
+    });
+    
     if (mobile) {
       console.log('📱 UnifiedWalletContext: Mobile app detected, using TAB/RPC discovery');
+      
+      // Check if we have a pending auth (user might be returning from wallet)
+      if (hasPendingAuth()) {
+        console.log('📱 🔑 PENDING AUTH DETECTED ON APP START!');
+        console.log('📱 localStorage check:', {
+          pendingAuth: localStorage.getItem(STORAGE_KEY_PENDING_AUTH),
+          timestamp: localStorage.getItem(STORAGE_KEY_AUTH_TIMESTAMP),
+          elapsed: Date.now() - parseInt(localStorage.getItem(STORAGE_KEY_AUTH_TIMESTAMP) || '0', 10)
+        });
+        setIsConnecting(true);
+        
+        // Give FCL/WalletConnect time to restore session
+        setTimeout(async () => {
+          try {
+            const currentUser = await fcl.currentUser.snapshot();
+            console.log('📱 Session check result:', currentUser);
+            
+            if (currentUser?.loggedIn && currentUser?.addr) {
+              console.log('✅ Session restored successfully:', currentUser.addr);
+              setFclUser(currentUser);
+              setFclAddress(normalizeFlowAddress(currentUser.addr));
+              setPendingAuth(false);
+              setIsConnecting(false);
+            } else {
+              console.log('⏳ No session yet, will wait for FCL subscription update');
+              // Keep isConnecting true, will be cleared by FCL subscription
+            }
+          } catch (error) {
+            console.error('❌ Error checking session on mount:', error);
+            setPendingAuth(false);
+            setIsConnecting(false);
+          }
+        }, 1000); // Wait 1 second for WalletConnect to initialize
+      }
     }
   }, []);
 
@@ -145,31 +220,61 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
         // Listen for app state changes (resume from background)
         // This is critical for wallet auth - when user returns from Flow Wallet
         await App.addListener('appStateChange', async (state) => {
-          console.log('📱 App state changed:', state.isActive ? 'ACTIVE' : 'BACKGROUND');
+          console.log('📱 🔄 APP STATE CHANGED:', state.isActive ? '✅ ACTIVE (FOREGROUND)' : '⏸️  BACKGROUND');
+          console.log('📱 State details:', {
+            isActive: state.isActive,
+            currentlyConnecting: isConnecting,
+            hasPendingInStorage: hasPendingAuth(),
+            timestamp: new Date().toISOString()
+          });
           
-          if (state.isActive && isConnecting) {
-            // App came back to foreground while we were waiting for wallet auth
-            console.log('📱 App resumed while waiting for wallet auth, checking FCL session...');
+          if (state.isActive) {
+            // Check if we have pending auth (from localStorage or state)
+            const hasPending = hasPendingAuth() || isConnecting;
             
-            // Give WalletConnect a moment to process the session
-            setTimeout(async () => {
-              try {
-                // Force FCL to check its current session state
-                const currentUser = await fcl.currentUser.snapshot();
-                console.log('📱 FCL session check on resume:', currentUser);
-                
-                if (currentUser?.loggedIn && currentUser?.addr) {
-                  console.log('✅ FCL session found on resume:', currentUser.addr);
-                  setFclUser(currentUser);
-                  setFclAddress(normalizeFlowAddress(currentUser.addr));
+            console.log('📱 Resume check:', {
+              hasPendingAuth: hasPendingAuth(),
+              isConnecting: isConnecting,
+              willCheckSession: hasPending
+            });
+            
+            if (hasPending) {
+              // App came back to foreground while we were waiting for wallet auth
+              console.log('📱 🔑 APP RESUMED WITH PENDING AUTH - CHECKING FCL SESSION...');
+              setIsConnecting(true);
+              
+              // Give WalletConnect a moment to process the session
+              setTimeout(async () => {
+                try {
+                  // Force FCL to check its current session state
+                  const currentUser = await fcl.currentUser.snapshot();
+                  console.log('📱 FCL session check on resume:', currentUser);
+                  
+                  if (currentUser?.loggedIn && currentUser?.addr) {
+                    console.log('✅ FCL session found on resume:', currentUser.addr);
+                    setFclUser(currentUser);
+                    setFclAddress(normalizeFlowAddress(currentUser.addr));
+                    setIsConnecting(false);
+                    setPendingAuth(false);
+                  } else {
+                    console.log('⏳ No FCL session yet, waiting for WalletConnect callback...');
+                    // Keep waiting, but set a timeout
+                    setTimeout(() => {
+                      const stillConnecting = localStorage.getItem(STORAGE_KEY_PENDING_AUTH);
+                      if (stillConnecting) {
+                        console.log('⏱️ Auth timeout reached, clearing pending state');
+                        setIsConnecting(false);
+                        setPendingAuth(false);
+                      }
+                    }, 10000); // 10 second timeout
+                  }
+                } catch (error) {
+                  console.warn('⚠️ Error checking FCL session on resume:', error);
                   setIsConnecting(false);
-                } else {
-                  console.log('⏳ No FCL session yet, waiting for WalletConnect callback...');
+                  setPendingAuth(false);
                 }
-              } catch (error) {
-                console.warn('⚠️ Error checking FCL session on resume:', error);
-              }
-            }, 500);
+              }, 1000); // Increased to 1 second for better reliability
+            }
           }
         });
         
@@ -214,16 +319,16 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
         
         setFclAddress(normalizedAddr);
         setIsConnecting(false); // Reset connecting state when user logs in
+        setPendingAuth(false); // Clear pending auth on successful login
       } else {
         setFclUser(null);
         setFclAddress(null);
         setIsConnecting(false); // Also reset on logout
+        setPendingAuth(false); // Clear pending auth on logout
       }
     });
 
-    return () => {
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, []);
 
   // Connect to Flow wallet via FCL (explicit user action only)
@@ -231,6 +336,13 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsConnecting(true);
     setLastError(null);
     setLastAuthStartedAt(Date.now());
+    
+    // Persist pending auth to localStorage for mobile
+    if (isMobile) {
+      setPendingAuth(true);
+      console.log('📱 Persisted pending auth to localStorage');
+    }
+    
     try {
       console.log(isMobile ? '📱 Connecting to Flow wallet (mobile)...' : '🌊 Connecting to Flow wallet (web)...');
       
@@ -292,11 +404,13 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
     } catch (error) {
       console.error('Error connecting to Flow wallet:', error);
       setLastError(error instanceof Error ? error.message : String(error));
+      setPendingAuth(false); // Clear pending auth on error
       throw error;
     } finally {
       // For mobile, keep connecting state until user returns (handled by FCL subscription)
       if (!isMobile) {
         setIsConnecting(false);
+        setPendingAuth(false);
       }
     }
   }, [isMobile]);

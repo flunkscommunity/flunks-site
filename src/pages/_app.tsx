@@ -39,6 +39,7 @@ import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { startWalletBrandingFix } from "utils/walletBrandingFix";
 import { enhanceFlowWalletDetection } from '../utils/flowWalletDetection';
+import { setupMobileFetchInterceptor } from '../utils/mobileFetchInterceptor';
 import { PaginatedItemsProvider } from "contexts/UserPaginatedItems";
 import { UserProfileProvider } from "contexts/UserProfileContext";
 import { AudioProvider } from "contexts/AudioContext";
@@ -78,6 +79,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     if (!isClient) return;
     
     try {
+      // Setup mobile fetch interceptor FIRST (before any API calls)
+      setupMobileFetchInterceptor();
+      
       startWalletBrandingFix();
       
       // Enhance Flow Wallet detection for Dynamic Labs

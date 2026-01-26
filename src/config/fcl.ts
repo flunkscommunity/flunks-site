@@ -276,9 +276,39 @@ if (typeof window !== 'undefined') {
       // Register the plugin with FCL
       fcl.pluginRegistry.add(FclWcServicePlugin);
       
-      // On mobile, set up session event listeners
+      // On mobile, set up session event listeners and check for existing sessions
       if (IS_MOBILE_APP && client) {
         console.log('📱 Setting up WalletConnect session listeners for mobile...');
+        
+        // Check if there's an existing session on startup
+        const checkExistingSession = async () => {
+          try {
+            const sessions = client.session.getAll();
+            if (sessions && sessions.length > 0) {
+              console.log('📱 Found existing WalletConnect session(s):', sessions.length);
+              console.log('📱 Session details:', sessions);
+              
+              // Try to restore FCL session
+              setTimeout(async () => {
+                try {
+                  const currentUser = await fcl.currentUser.snapshot();
+                  if (!currentUser?.loggedIn) {
+                    console.log('📱 WC session exists but FCL not logged in, triggering session restore...');
+                    // The FCL WC plugin should handle this automatically
+                  }
+                } catch (err) {
+                  console.warn('⚠️ Error checking FCL session:', err);
+                }
+              }, 500);
+            } else {
+              console.log('📱 No existing WalletConnect sessions found');
+            }
+          } catch (error) {
+            console.warn('⚠️ Error checking WalletConnect sessions:', error);
+          }
+        };
+        
+        checkExistingSession();
         
         client.on('session_update', (data: any) => {
           console.log('📱 WC session_update:', data);
@@ -286,10 +316,20 @@ if (typeof window !== 'undefined') {
         
         client.on('session_delete', () => {
           console.log('📱 WC session_delete - user disconnected from wallet');
+          // Clear any pending auth state
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('flunks_pending_auth');
+            localStorage.removeItem('flunks_auth_timestamp');
+          }
         });
         
         client.on('session_event', (data: any) => {
           console.log('📱 WC session_event:', data);
+        });
+        
+        // Listen for successful session approval
+        client.on('session_approve', (data: any) => {
+          console.log('✅ WC session_approve:', data);
         });
       }
       
