@@ -234,12 +234,17 @@ const LockerSystemNew: React.FC = () => {
   }, [currentSection]);
 
   const loadGumBalance = async () => {
-    if (!normalizedAddress) return;
+    if (!normalizedAddress) {
+      console.log('🔐 Locker: No normalized address, skipping balance load');
+      return;
+    }
+    console.log('🔐 Locker: Loading GUM balance for:', normalizedAddress);
     try {
       const balance = await getUserGumBalance(normalizedAddress);
+      console.log('✅ Locker: GUM balance loaded:', balance);
       setGumBalance(balance || 0);
     } catch (error) {
-      console.error('Error loading gum balance:', error);
+      console.error('❌ Locker: Error loading gum balance:', error);
     }
   };
 
@@ -516,10 +521,16 @@ const LockerSystemNew: React.FC = () => {
         }, 1000);
       }
     } catch (error) {
-      console.error('Failed to assign locker:', error);
+      console.error('❌ Failed to assign locker:', error);
+      console.error('❌ Error type:', error instanceof Error ? error.constructor.name : typeof error);
+      console.error('❌ Error message:', error instanceof Error ? error.message : String(error));
       
+      // Check if this is a network/fetch error
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        alert(`🌐 NETWORK ERROR\n\nCouldn't connect to the server. This might be a CORS or network issue.\n\n📱 On mobile: Make sure you have internet connection\n🌐 On web: Try refreshing the page\n\nError: ${error.message}`);
+      }
       // Check if this is the "no profile" error
-      if (error instanceof Error && error.message.includes('create your profile first')) {
+      else if (error instanceof Error && error.message.includes('create your profile first')) {
         alert(`🎯 CREATE YOUR CHARACTER FIRST!\n\n${error.message}\n\n➡️ Please go through the character creation process in the main app to set up your username, then return here to get your locker assigned.`);
       } else if (error instanceof Error && error.message.includes('character profile first')) {
         alert(`🎯 COMPLETE YOUR PROFILE!\n\n${error.message}\n\n➡️ Your profile needs a proper username to get a locker assigned.`);

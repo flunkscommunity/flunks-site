@@ -175,28 +175,47 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
         });
         setIsConnecting(true);
         
-        // Give FCL/WalletConnect time to restore session
-        setTimeout(async () => {
+        // Android/iOS: Give WalletConnect and FCL time to restore session with retries
+        const checkSessionOnMount = async (attempt = 1, maxAttempts = 4) => {
           try {
+            console.log(`📱 Mount session check attempt ${attempt}/${maxAttempts}`);
             const currentUser = await fcl.currentUser.snapshot();
-            console.log('📱 Session check result:', currentUser);
+            console.log('📱 Mount session result:', {
+              attempt,
+              loggedIn: currentUser?.loggedIn,
+              hasAddress: !!currentUser?.addr,
+              address: currentUser?.addr
+            });
             
             if (currentUser?.loggedIn && currentUser?.addr) {
-              console.log('✅ Session restored successfully:', currentUser.addr);
+              console.log('✅ Session restored on mount attempt', attempt, ':', currentUser.addr);
               setFclUser(currentUser);
               setFclAddress(normalizeFlowAddress(currentUser.addr));
               setPendingAuth(false);
               setIsConnecting(false);
+              return true;
+            } else if (attempt < maxAttempts) {
+              // Try again with increasing delay
+              const nextDelay = 1000 * attempt; // 1s, 2s, 3s
+              console.log(`⏳ No session on mount yet, retrying in ${nextDelay}ms...`);
+              setTimeout(() => checkSessionOnMount(attempt + 1, maxAttempts), nextDelay);
             } else {
-              console.log('⏳ No session yet, will wait for FCL subscription update');
-              // Keep isConnecting true, will be cleared by FCL subscription
+              console.log('⏳ No session on mount after ${maxAttempts} attempts, will wait for FCL subscription');
+              // Keep isConnecting true, will be cleared by FCL subscription or app resume handler
             }
           } catch (error) {
-            console.error('❌ Error checking session on mount:', error);
-            setPendingAuth(false);
-            setIsConnecting(false);
+            console.error('❌ Error checking session on mount (attempt ${attempt}):', error);
+            if (attempt >= maxAttempts) {
+              setPendingAuth(false);
+              setIsConnecting(false);
+            } else {
+              setTimeout(() => checkSessionOnMount(attempt + 1, maxAttempts), 1000 * attempt);
+            }
           }
-        }, 1000); // Wait 1 second for WalletConnect to initialize
+        };
+        
+        // Start checking after 1 second
+        setTimeout(() => checkSessionOnMount(1, 4), 1000);
       }
     }
   }, []);
@@ -243,37 +262,55 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
               console.log('📱 🔑 APP RESUMED WITH PENDING AUTH - CHECKING FCL SESSION...');
               setIsConnecting(true);
               
-              // Give WalletConnect a moment to process the session
-              setTimeout(async () => {
+              // Android/iOS: Give WalletConnect and FCL more time to process the deep link and restore session
+              // Multiple attempts with increasing delays to handle slower device/network conditions
+              const checkSessionWithRetries = async (attempt = 1, maxAttempts = 5) => {
                 try {
+                  console.log(`📱 Session check attempt ${attempt}/${maxAttempts}`);
+                  
                   // Force FCL to check its current session state
                   const currentUser = await fcl.currentUser.snapshot();
-                  console.log('📱 FCL session check on resume:', currentUser);
+                  console.log('📱 FCL session check result:', {
+                    attempt,
+                    loggedIn: currentUser?.loggedIn,
+                    hasAddress: !!currentUser?.addr,
+                    address: currentUser?.addr
+                  });
                   
                   if (currentUser?.loggedIn && currentUser?.addr) {
-                    console.log('✅ FCL session found on resume:', currentUser.addr);
+                    console.log('✅ FCL session restored successfully on attempt', attempt, ':', currentUser.addr);
                     setFclUser(currentUser);
                     setFclAddress(normalizeFlowAddress(currentUser.addr));
                     setIsConnecting(false);
                     setPendingAuth(false);
+                    return true;
+                  } else if (attempt < maxAttempts) {
+                    // Not ready yet, try again with exponential backoff
+                    const nextDelay = Math.min(1000 * Math.pow(1.5, attempt), 4000); // Max 4 seconds
+                    console.log(`⏳ No session yet, retrying in ${nextDelay}ms...`);
+                    setTimeout(() => checkSessionWithRetries(attempt + 1, maxAttempts), nextDelay);
                   } else {
-                    console.log('⏳ No FCL session yet, waiting for WalletConnect callback...');
-                    // Keep waiting, but set a timeout
-                    setTimeout(() => {
-                      const stillConnecting = localStorage.getItem(STORAGE_KEY_PENDING_AUTH);
-                      if (stillConnecting) {
-                        console.log('⏱️ Auth timeout reached, clearing pending state');
-                        setIsConnecting(false);
-                        setPendingAuth(false);
-                      }
-                    }, 10000); // 10 second timeout
+                    // Max attempts reached
+                    console.log('⏱️ Max session check attempts reached, clearing pending state');
+                    console.log('💡 User may need to click "Connect Wallet" again');
+                    setIsConnecting(false);
+                    setPendingAuth(false);
+                    return false;
                   }
                 } catch (error) {
-                  console.warn('⚠️ Error checking FCL session on resume:', error);
-                  setIsConnecting(false);
-                  setPendingAuth(false);
+                  console.warn(`⚠️ Error checking FCL session (attempt ${attempt}):`, error);
+                  if (attempt < maxAttempts) {
+                    const nextDelay = Math.min(1000 * Math.pow(1.5, attempt), 4000);
+                    setTimeout(() => checkSessionWithRetries(attempt + 1, maxAttempts), nextDelay);
+                  } else {
+                    setIsConnecting(false);
+                    setPendingAuth(false);
+                  }
                 }
-              }, 1000); // Increased to 1 second for better reliability
+              };
+              
+              // Start checking with a 1.5 second initial delay
+              setTimeout(() => checkSessionWithRetries(1, 5), 1500);
             }
           }
         });
@@ -333,6 +370,12 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Connect to Flow wallet via FCL (explicit user action only)
   const connectFCL = useCallback(async () => {
+    // If already connecting, don't start another connection attempt
+    if (isConnecting) {
+      console.log('⏸️ Already connecting, ignoring duplicate connect request');
+      return;
+    }
+    
     setIsConnecting(true);
     setLastError(null);
     setLastAuthStartedAt(Date.now());
@@ -341,6 +384,18 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
     if (isMobile) {
       setPendingAuth(true);
       console.log('📱 Persisted pending auth to localStorage');
+      
+      // Set a timeout to clear connecting state if user doesn't return
+      // This handles the case where user cancels or backs out of Flow Wallet
+      setTimeout(() => {
+        const stillPending = localStorage.getItem(STORAGE_KEY_PENDING_AUTH);
+        if (stillPending && isConnecting) {
+          console.log('⏱️ Connection timeout - user may have cancelled authentication');
+          console.log('💡 Clearing connecting state so user can try again');
+          setIsConnecting(false);
+          setPendingAuth(false);
+        }
+      }, 60000); // 60 second timeout for initial connection attempt
     }
     
     try {
@@ -413,7 +468,7 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
         setPendingAuth(false);
       }
     }
-  }, [isMobile]);
+  }, [isMobile, isConnecting]);
 
   // Unified disconnect
   const disconnect = useCallback(async () => {

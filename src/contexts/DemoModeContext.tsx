@@ -208,17 +208,18 @@ export const DemoModeProvider: React.FC<DemoModeProviderProps> = ({ children }) 
   }, [demoBalance, isDemoMode]);
 
   const enableDemoMode = useCallback(() => {
-    // Demo mode works on iOS natively, or any platform for testing
-    // For production iOS App Store review, this is triggered via the splash screen
-    // For desktop testing, can be enabled via console: window.__enableDemoMode?.()
-    console.log('🎮 Demo Mode enabled - Starting with', DEMO_INITIAL_BALANCE, 'GUM');
-    setIsDemoMode(true);
-    setDemoBalance(DEMO_INITIAL_BALANCE);
-    // Also save immediately to localStorage
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(DEMO_MODE_STORAGE_KEY, 'true');
-      localStorage.setItem(DEMO_BALANCE_STORAGE_KEY, DEMO_INITIAL_BALANCE.toString());
-    }
+    // Demo mode DISABLED for production release
+    // Previously used for iOS App Store review and testing
+    console.log('🎮 Demo Mode is disabled in this release');
+    return; // Do not enable demo mode
+    
+    // Original code commented out:
+    // setIsDemoMode(true);
+    // setDemoBalance(DEMO_INITIAL_BALANCE);
+    // if (typeof window !== 'undefined') {
+    //   localStorage.setItem(DEMO_MODE_STORAGE_KEY, 'true');
+    //   localStorage.setItem(DEMO_BALANCE_STORAGE_KEY, DEMO_INITIAL_BALANCE.toString());
+    // }
   }, []);
 
   const disableDemoMode = useCallback(() => {

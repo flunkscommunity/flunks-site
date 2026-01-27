@@ -363,7 +363,7 @@ type FormStep = 'username' | 'discord' | 'email' | 'confirm' | 'success';
 
 const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel }) => {
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
-  const { connectFCL, isMobile } = useUnifiedWallet();
+  const { connectFCL, isMobile, isConnected, address: unifiedAddress, disconnect } = useUnifiedWallet();
   const { createProfile, updateProfile, checkUsername, profile, refreshProfile } = useUserProfile();
   
   const [currentStep, setCurrentStep] = useState<FormStep>('username');
@@ -380,9 +380,21 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
   const [validationMessage, setValidationMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Get the active wallet
+  // Get the active wallet - check both Dynamic (web) and FCL (mobile) wallets
   const activeWallet = primaryWallet;
-  const hasWallet = !!activeWallet;
+  // Check: unified wallet is connected OR has address OR Dynamic wallet exists
+  const hasWallet = isConnected || !!unifiedAddress || !!activeWallet;
+  
+  // Debug logging for wallet detection
+  useEffect(() => {
+    console.log('🔍 RPGProfileForm wallet detection:', {
+      isConnected,
+      unifiedAddress,
+      primaryWallet: primaryWallet?.address,
+      hasWallet,
+      isMobile
+    });
+  }, [isConnected, unifiedAddress, primaryWallet, hasWallet, isMobile]);
 
   const isEditMode = !!profile;
 
@@ -625,7 +637,10 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
     
     setIsSubmitting(true);
     const sessionId = generateSessionId();
-    const walletAddress = primaryWallet?.address;
+    // Use unified wallet address (works for both Dynamic and FCL wallets)
+    const walletAddress = unifiedAddress || primaryWallet?.address;
+    
+    console.log('🔍 Wallet address for profile submission:', walletAddress, '(unified:', unifiedAddress, 'primary:', primaryWallet?.address, ')');
     
     try {
       // Show confirmation screen for 2 seconds

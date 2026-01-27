@@ -127,7 +127,7 @@ const Desktop = () => {
   const splashDismissedRef = useRef(false);
   const mobileInitRanRef = useRef(false);
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
-  const { connectFCL, disconnect, isConnected, address: unifiedAddress, isMobile: isMobileWallet } = useUnifiedWallet();
+  const { connectFCL, disconnect, isConnected, address: unifiedAddress, isMobile: isMobileWallet, isConnecting } = useUnifiedWallet();
   const { hasProfile, profile } = useUserProfile();
   
   // Demo mode support for iOS App Store review
@@ -594,7 +594,36 @@ const windowsMemod = useMemo(() => (
                     <div style={{ fontSize: '10px', marginBottom: '10px', color: '#00ff00' }}>
                       WALLET STATUS
                     </div>
-                    {isConnected && unifiedAddress ? (
+                    {isConnecting ? (
+                      <>
+                        <div style={{ 
+                          fontSize: '8px', 
+                          color: '#ffa500',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '8px',
+                          marginBottom: '10px'
+                        }}>
+                          <span style={{
+                            width: '10px',
+                            height: '10px',
+                            background: '#ffa500',
+                            borderRadius: '50%',
+                            animation: 'pulse 1.5s ease-in-out infinite',
+                            boxShadow: '0 0 10px #ffa500'
+                          }} />
+                          CONNECTING...
+                        </div>
+                        <div style={{ 
+                          fontSize: '7px', 
+                          color: '#aaa',
+                          lineHeight: '1.4'
+                        }}>
+                          Restoring wallet session...
+                        </div>
+                      </>
+                    ) : isConnected && unifiedAddress ? (
                       <>
                         <div style={{ 
                           fontSize: '8px', 
@@ -695,24 +724,26 @@ const windowsMemod = useMemo(() => (
                           setShowAuthFlow(true);
                         }
                       }}
+                      disabled={isConnecting}
                       style={{
-                        background: '#059669',
+                        background: isConnecting ? '#666' : '#059669',
                         color: 'white',
-                        border: '3px solid #047857',
+                        border: isConnecting ? '3px solid #444' : '3px solid #047857',
                         borderRadius: '8px',
                         padding: '15px 30px',
                         fontSize: '12px',
                         fontWeight: 'bold',
                         fontFamily: '"Press Start 2P", monospace',
-                        cursor: 'pointer',
+                        cursor: isConnecting ? 'not-allowed' : 'pointer',
                         width: '100%',
                         minHeight: '50px',
                         touchAction: 'manipulation',
-                        boxShadow: '0 4px 0 #065f46',
-                        transition: 'all 0.1s ease'
+                        boxShadow: isConnecting ? '0 4px 0 #333' : '0 4px 0 #065f46',
+                        transition: 'all 0.1s ease',
+                        opacity: isConnecting ? 0.6 : 1
                       }}
                     >
-                      🔗 CONNECT WALLET
+                      {isConnecting ? '⏳ CONNECTING...' : '🔗 CONNECT WALLET'}
                     </button>
                   )}
 

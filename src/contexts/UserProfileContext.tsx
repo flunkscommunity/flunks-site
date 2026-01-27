@@ -174,6 +174,10 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
       }
 
       // Use API when Supabase is properly configured
+      console.log('👤 Creating profile via API for wallet:', walletAddress);
+      console.log('👤 API URL:', getApiUrl('/api/user-profile'));
+      console.log('👤 Profile data:', data);
+      
       const response = await fetch(getApiUrl('/api/user-profile'), {
         method: 'POST',
         headers: {
@@ -185,17 +189,32 @@ export const UserProfileProvider: React.FC<UserProfileProviderProps> = ({ childr
         }),
       });
 
+      console.log('👤 Profile API response status:', response.status);
+      
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorText = await response.text();
+        console.error('👤 Profile API error response:', errorText);
+        let errorData;
+        try {
+          errorData = JSON.parse(errorText);
+        } catch {
+          errorData = { error: `API returned ${response.status}: ${errorText}` };
+        }
         throw new Error(errorData.error || 'Failed to create profile');
       }
 
       const result = await response.json();
+      console.log('👤 Profile created successfully:', result);
       setProfile(result.profile);
       return true;
 
     } catch (err) {
-      console.error('Error creating profile:', err);
+      console.error('❌ Error creating profile:', err);
+      console.error('❌ Error details:', {
+        message: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+        walletAddress
+      });
       
       // Fallback to localStorage if API fails
       try {

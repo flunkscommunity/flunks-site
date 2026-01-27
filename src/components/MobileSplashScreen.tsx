@@ -461,8 +461,8 @@ const MobileSplashScreen: React.FC<MobileSplashScreenProps> = ({ onComplete, onD
               TAP TO ENTER
             </ReadyText>
             
-            {/* Demo Mode Button - Only for iOS App Store reviewers */}
-            {isIOSDevice() && (
+            {/* Demo Mode Button - DISABLED for production release */}
+            {false && isIOSDevice() && (
               <>
                 <DemoButton 
                   $visible={showReady} 

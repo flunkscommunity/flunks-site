@@ -134,7 +134,11 @@ export const useLockerAssignment = () => {
     setError(null);
 
     try {
-      const response = await fetch(getApiUrl('/api/assign-locker'), {
+      const apiUrl = getApiUrl('/api/assign-locker');
+      console.log('🔐 Assigning locker via API:', apiUrl);
+      console.log('🔐 Wallet address:', normalizedAddress);
+      
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -144,23 +148,34 @@ export const useLockerAssignment = () => {
         })
       });
 
+      console.log('🔐 Locker API response status:', response.status);
+      
       // Handle empty or non-JSON responses
       const text = await response.text();
+      console.log('🔐 Locker API response text:', text);
+      
       let data;
       try {
         data = text ? JSON.parse(text) : { error: 'Empty response from server' };
       } catch (parseError) {
-        console.error('Failed to parse response:', text);
+        console.error('❌ Failed to parse locker API response:', text);
+        console.error('❌ Parse error:', parseError);
         throw new Error('Server returned invalid response. Please try again.');
       }
 
+      console.log('🔐 Parsed locker API data:', data);
+
       if (!response.ok) {
+        console.error('❌ Locker API error:', data);
         throw new Error(data.error || 'Failed to assign locker');
       }
 
+      console.log('✅ Locker assigned successfully:', data);
       return data;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      console.error('❌ Locker assignment error:', errorMessage);
+      console.error('❌ Full error:', err);
       setError(errorMessage);
       throw new Error(errorMessage);
     } finally {

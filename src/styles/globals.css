@@ -360,6 +360,17 @@ input[type="text"], input[type="email"], input[type="password"], textarea, .curs
   51%, 100% { opacity: 0; }
 }
 
+@keyframes pulse {
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+}
+
 @font-face {
   font-family: "ms_sans_serif";
   src: url("/fonts/w95fa.woff2") format("woff2");

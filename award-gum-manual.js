@@ -11,10 +11,11 @@ const supabase = createClient(
 );
 
 async function awardGum() {
-  const wallet = '0x6b1ed51f96358d4e';
-  const amount = 500;
+  // Get wallet and amount from command line arguments
+  const wallet = process.argv[2] || '0x6b1ed51f96358d4e';
+  const amount = parseInt(process.argv[3]) || 500;
   
-  console.log('💰 Awarding 500 GUM to:', wallet);
+  console.log(`💰 Awarding ${amount} GUM to:`, wallet);
   console.log('');
   
   try {
