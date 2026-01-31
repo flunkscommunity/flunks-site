@@ -423,6 +423,17 @@ const FourThievesBarMain = () => {
                 }}
               />
             </div>
+
+            {/* Pool Game Button */}
+            <div className="w-full bg-gradient-to-r from-amber-800 via-red-900 to-amber-800 p-3 border-t-2 border-yellow-600 shadow-xl">
+              <button
+                onClick={openPoolGame}
+                className="w-full bg-gradient-to-br from-emerald-600 to-emerald-800 hover:from-emerald-500 hover:to-emerald-700 text-white px-6 py-4 rounded-lg border-2 border-emerald-400 hover:border-emerald-300 transition-all duration-300 hover:scale-105 text-center text-lg font-bold shadow-lg hover:shadow-xl"
+                style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
+              >
+                🎱 Pool Table
+              </button>
+            </div>
           </div>
         </DraggableResizeableWindow>
       ),
