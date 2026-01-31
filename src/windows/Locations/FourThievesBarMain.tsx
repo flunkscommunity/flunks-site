@@ -13,6 +13,7 @@ import VideoPokerBattleTested from "components/games/VideoPokerBattleTested";
 import Blackjack from "components/games/Blackjack";
 import ScratchCard from "components/games/ScratchCard";
 import SlotsGame from "components/games/SlotsGame";
+import PoolGame from "components/games/pool/PoolGame";
 import { useRouter } from 'next/router';
 
 const FourThievesBarMain = () => {
@@ -355,6 +356,37 @@ const FourThievesBarMain = () => {
     });
   };
 
+  // Open Pool Game
+  const openPoolGame = () => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    openWindow({
+      key: WINDOW_IDS.FOUR_THIEVES_BAR_POOL_ROOM,
+      window: (
+        <DraggableResizeableWindow
+          windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_POOL_ROOM}
+          headerTitle="🎱 8-Ball Pool - Four Thieves"
+          onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_POOL_ROOM)}
+          initialWidth={isMobile ? "95vw" : "850px"}
+          initialHeight={isMobile ? "90vh" : "700px"}
+          resizable={true}
+        >
+          <PoolGame 
+            walletAddress={walletAddress}
+            gumBalance={effectiveBalance}
+            onGumChange={(amount) => {
+              const newBalance = Math.max(0, effectiveBalance + amount);
+              if (isDemoMode && demoMode) {
+                demoMode.updateDemoBalance(newBalance);
+              } else {
+                updateBalance(newBalance);
+              }
+            }}
+          />
+        </DraggableResizeableWindow>
+      ),
+    });
+  };
+
   // Open the main interior view
   const openInterior = () => {
     // Turn up the music when entering the bar
@@ -425,7 +457,16 @@ const FourThievesBarMain = () => {
             
             {/* Back Room Buttons */}
             <div className="w-full bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 p-4 border-t-4 border-gray-600 shadow-2xl flex-shrink-0">
-              <div className="grid grid-cols-2 gap-3 max-w-2xl mx-auto">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-3xl mx-auto">
+                {/* Pool Room - NEW! */}
+                <button
+                  onClick={openPoolGame}
+                  className="bg-gradient-to-br from-emerald-600 to-emerald-800 hover:from-emerald-500 hover:to-emerald-700 text-white px-4 py-3 rounded-lg border-3 border-emerald-400 hover:border-emerald-300 transition-all duration-300 hover:scale-105 text-center text-sm font-black shadow-lg"
+                  style={{ fontFamily: 'Cooper Black, Georgia, serif' }}
+                >
+                  🎱 Pool Room
+                </button>
+
                 {/* Private Booths */}
                 <button
                   onClick={() => openRoom(
