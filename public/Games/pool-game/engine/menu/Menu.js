@@ -18,15 +18,16 @@ Menu.prototype.init = function
 }
 
 Menu.prototype.load = function(){
-    this.sound.currentTime = 0;
-    this.active = true;
-
-    requestAnimationFrame(this.menuLoop.bind(this));
-    if(SOUND_ON){
-        this.sound.volume = 0.8;
+    if (this.sound) {
+        this.sound.currentTime = 0;
+        if(SOUND_ON){
+            this.sound.volume = 0.8;
+        }
+        this.sound.play();
     }
-
-    this.sound.play();
+    
+    this.active = true;
+    requestAnimationFrame(this.menuLoop.bind(this));
 }
 
 Menu.prototype.draw = function(){
