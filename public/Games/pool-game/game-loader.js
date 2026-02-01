@@ -82,8 +82,33 @@ window.PoolGameLoader = {
         return;
       }
 
+      // Override initMenus to skip menu initialization
+      window.Game.initMenus = function() {
+        console.log('Skipping menu initialization - using React UI');
+      };
+
       // Initialize the game
       window.Game.start(containerId, canvasId, 800, 600);
+      
+      // Skip the menu and start game directly
+      setTimeout(() => {
+        if (window.Game.startNewGame) {
+          window.GAME_STOPPED = false;
+          window.Game.startNewGame();
+          
+          // Set AI difficulty
+          const iterations = {
+            easy: 30,
+            medium: 50,
+            hard: 100
+          };
+          
+          if (window.AI && window.AI.trainer && iterations[difficulty]) {
+            window.AI.trainer.iterations = iterations[difficulty];
+            console.log(`AI difficulty set to ${difficulty} (${iterations[difficulty]} iterations)`);
+          }
+        }
+      }, 500);
       
       this.game = window.Game;
       
