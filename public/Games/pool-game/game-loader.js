@@ -20,7 +20,6 @@ window.PoolGameLoader = {
       '/Games/pool-game/engine/input/Mouse.js',
       '/Games/pool-game/engine/Canvas2D.js',
       '/Games/pool-game/engine/Global.js',
-      '/Games/pool-game/engine/Assets.js',
       '/Games/pool-game/engine/game_objects/Ball.js',
       '/Games/pool-game/engine/game_objects/Stick.js',
       '/Games/pool-game/engine/game_objects/Player.js',
@@ -34,6 +33,7 @@ window.PoolGameLoader = {
       '/Games/pool-game/engine/menu/Button.js',
       '/Games/pool-game/engine/menu/Menu.js',
       '/Games/pool-game/engine/Game.js',
+      '/Games/pool-game/engine/Assets.js',  // Load Assets AFTER Game
     ];
 
     let loadedScripts = 0;
@@ -82,31 +82,9 @@ window.PoolGameLoader = {
         return;
       }
 
-      // Start the game with proper container and canvas IDs
+      // Initialize the game
       window.Game.start(containerId, canvasId, 800, 600);
       
-      // Skip main menu and go straight to game
-      window.GAME_STOPPED = false;
-      
-      // Set AI difficulty
-      const iterations = {
-        easy: 30,
-        medium: 50,
-        hard: 100
-      };
-      
-      if (window.AI && window.AI.trainer && iterations[difficulty]) {
-        window.AI.trainer.iterations = iterations[difficulty];
-        console.log(`AI difficulty set to ${difficulty} (${iterations[difficulty]} iterations)`);
-      }
-
-      // Start new game directly
-      if (window.Game.startNewGame) {
-        setTimeout(() => {
-          window.Game.startNewGame();
-        }, 500);
-      }
-
       this.game = window.Game;
       
       console.log('Pool game started successfully');

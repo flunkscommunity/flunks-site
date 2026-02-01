@@ -3,13 +3,19 @@
 var sprites = {};
 var sounds = {};
 
-Game.loadAssets = function () {
+// Define loadAssets as a standalone function first
+var loadPoolAssets = function() {
+    if (!Game || !Game.loadSprite) {
+        console.error('Game.loadSprite not available');
+        return;
+    }
+    
     var loadSprite = function (sprite) {
-        return Game.loadSprite("assets/sprites/" + sprite);
+        return Game.loadSprite("/Games/pool-game/sprites/" + sprite);
     };
 
      var loadSound = function (sound) {
-        return new Audio("assets/sounds/" + sound);
+        return new Audio("/Games/pool-game/sounds/" + sound);
     };
 
     sprites.mainMenuBackground = loadSprite("main_menu_background.png");
@@ -52,6 +58,11 @@ Game.loadAssets = function () {
     // Licensed under Creative Commons: By Attribution 3.0 License
     // http://creativecommons.org/licenses/by/3.0/
     sounds.jazzTune = loadSound("Bossa Antigua.mp3");
+};
+
+// Attach to Game after it's defined
+if (typeof Game !== 'undefined') {
+    Game.loadAssets = loadPoolAssets;
 }
 
 sounds.fadeOut = function(sound) {
