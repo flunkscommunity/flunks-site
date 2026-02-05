@@ -6,8 +6,10 @@ function GamePolicy(){
     let player1TotalScore = new Score(new Vector2(Game.size.x/2 - 75,Game.size.y/2 - 45));
     let player2TotalScore = new Score(new Vector2(Game.size.x/2 + 75,Game.size.y/2 - 45));
 
-    let player1MatchScore = new Score(new Vector2(Game.size.x/2 - 280,108));
-    let player2MatchScore = new Score(new Vector2(Game.size.x/2 + 230,108));
+    let player1MatchScore = new Score(new Vector2(Game.size.x/2 - 300,70));
+    let player2MatchScore = new Score(new Vector2(Game.size.x/2 + 210,70));
+    player1MatchScore.origin = new Vector2(0,0);
+    player2MatchScore.origin = new Vector2(0,0);
 
     this.players = [new Player(player1MatchScore,player1TotalScore), new Player(player2MatchScore,player2TotalScore)];
     this.foul = false;
@@ -169,21 +171,34 @@ GamePolicy.prototype.updateTurnOutcome = function(){
     }
 
     if(this.won){
+        // Determine winner: player is 0, AI is 1
+        // If current player (this.turn) won without foul, they win
+        // If foul, the other player wins
+        const winningPlayer = !this.foul ? this.turn : (this.turn + 1) % 2;
+        const isPlayerWin = winningPlayer === 0; // Player 0 is the human
         
         if(!this.foul){
             this.players[this.turn].totalScore.increment();
-            if(AI.finishedSession){
-                this.reset()
-                setTimeout(function(){Game.gameWorld.reset();
-                }, 1000);
-            }
         }
         else{
             this.players[(this.turn+1)%2].totalScore.increment();
+        }
+        
+        // Notify React that game is over instead of auto-resetting
+        if(AI.finishedSession && window.PoolGameLoader && window.PoolGameLoader.onGameOverCallback){
+            // Stop the game
+            GAME_STOPPED = true;
+            window.GAME_STOPPED = true;
+            
+            // Call the React callback after a short delay to show the final shot
+            setTimeout(() => {
+                window.PoolGameLoader.onGameOverCallback(isPlayerWin ? 'player' : 'ai');
+            }, 1500);
+        } else {
+            // Fallback: auto-reset if no callback (shouldn't happen)
             if(AI.finishedSession){
                 this.reset();
-                setTimeout(function(){Game.gameWorld.reset();
-                }, 1000);
+                setTimeout(function(){Game.gameWorld.reset();}, 1000);
             }
         }
         return;
@@ -199,8 +214,16 @@ GamePolicy.prototype.updateTurnOutcome = function(){
 
     setTimeout(function(){Game.gameWorld.whiteBall.visible=true;}, 200);
 
-    if(AI_ON && this.turn === AI_PLAYER_NUM && AI.finishedSession){
-        AI.startSession();
+    // Only start AI session if not already playing and no session starting
+    console.log('[GamePolicy] Checking AI turn - AI_ON:', AI_ON, 'turn:', this.turn, 'AI_PLAYER_NUM:', AI_PLAYER_NUM, 'finishedSession:', AI.finishedSession, 'sessionStarting:', AI.sessionStarting, 'isPlayingTurn:', AI.isPlayingTurn);
+    
+    if(AI_ON && this.turn === AI_PLAYER_NUM && AI.finishedSession && !AI.sessionStarting && !AI.isPlayingTurn){
+        console.log('[GamePolicy] Starting AI session');
+        AI.sessionStarting = true; // Prevent double-trigger
+        setTimeout(function(){
+            AI.sessionStarting = false;
+            AI.startSession();
+        }, 500); // Small delay to ensure balls are fully stopped
     }
 }
 

@@ -122,6 +122,21 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
     }
   }, [initialBalance, isDemoMode, demoMode?.demoBalance]);
 
+  // Listen for external gum balance updates (e.g., from MyLocker claiming GUM)
+  useEffect(() => {
+    const handleGumUpdate = (event: CustomEvent) => {
+      if (!isDemoMode && event.detail?.balance !== undefined) {
+        console.log('🎰 [SlotsGame] External balance update:', event.detail.balance);
+        setGumBalance(event.detail.balance);
+      }
+    };
+
+    window.addEventListener('gumBalanceUpdated', handleGumUpdate as EventListener);
+    return () => {
+      window.removeEventListener('gumBalanceUpdated', handleGumUpdate as EventListener);
+    };
+  }, [isDemoMode]);
+
   // Slot transaction helper
   const slotTransaction = async (type: 'bet' | 'win' | 'refund', amount: number, metadata?: any) => {
     if (isDemoMode && demoMode) {

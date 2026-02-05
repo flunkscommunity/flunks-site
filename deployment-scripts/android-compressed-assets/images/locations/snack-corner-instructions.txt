@@ -1,0 +1,29 @@
+🍿 ARCADE SNACK CORNER BACKGROUND IMAGE NEEDED 🍿
+
+📁 Location: /Users/jeremy/Desktop/flunks-site/public/images/locations/snack-corner.png
+
+🎨 Image Requirements:
+- Dimensions: 1200x800px or larger (will auto-scale)
+- Format: PNG (preferred) or JPG
+- Style: Retro arcade snack area
+
+🎯 Suggested Elements:
+- Colorful vending machines with neon glow
+- Arcade-style lighting (pink, blue, purple neons)
+- Retro booth seating or stools
+- Scattered candy wrappers and soda cans
+- "SNACKS" neon sign
+- Checkered floor pattern (classic arcade style)
+- Dim atmospheric lighting with neon highlights
+
+💡 Style References:
+- 1980s arcade aesthetic
+- Synthwave/retrowave color palette
+- Similar to the cafeteria.png but with arcade vending machines
+
+🔧 Technical Notes:
+- If image fails to load, system falls back to blank background
+- Image covers full window with object-fit: cover
+- Dark overlay will be applied for text readability
+
+Upload your snack corner image to the location above and the background will automatically appear!

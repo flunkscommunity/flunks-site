@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import * as fcl from '@onflow/fcl';
 import { useDemoModeOptional, DEMO_WALLET_ADDRESS } from './DemoModeContext';
+import { forceWcSessionRestore, forceWcReconnect, getWcClient, waitForWcReady, isWcReady } from '../config/fcl';
 
 // Check if running in Capacitor mobile app
 const isMobileApp = (): boolean => {
@@ -176,9 +177,22 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsConnecting(true);
         
         // Android/iOS: Give WalletConnect and FCL time to restore session with retries
-        const checkSessionOnMount = async (attempt = 1, maxAttempts = 4) => {
+        const checkSessionOnMount = async (attempt = 1, maxAttempts = 5) => {
           try {
             console.log(`📱 Mount session check attempt ${attempt}/${maxAttempts}`);
+            
+            // On first attempt, try WC session restore
+            if (attempt === 1) {
+              console.log('📱 Attempting WC session restore on mount...');
+              try {
+                await forceWcReconnect();
+                await new Promise(resolve => setTimeout(resolve, 300));
+                await forceWcSessionRestore();
+              } catch (wcError) {
+                console.warn('⚠️ WC restore on mount failed (continuing):', wcError);
+              }
+            }
+            
             const currentUser = await fcl.currentUser.snapshot();
             console.log('📱 Mount session result:', {
               attempt,
@@ -200,11 +214,11 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
               console.log(`⏳ No session on mount yet, retrying in ${nextDelay}ms...`);
               setTimeout(() => checkSessionOnMount(attempt + 1, maxAttempts), nextDelay);
             } else {
-              console.log('⏳ No session on mount after ${maxAttempts} attempts, will wait for FCL subscription');
+              console.log(`⏳ No session on mount after ${maxAttempts} attempts, will wait for FCL subscription`);
               // Keep isConnecting true, will be cleared by FCL subscription or app resume handler
             }
           } catch (error) {
-            console.error('❌ Error checking session on mount (attempt ${attempt}):', error);
+            console.error(`❌ Error checking session on mount (attempt ${attempt}):`, error);
             if (attempt >= maxAttempts) {
               setPendingAuth(false);
               setIsConnecting(false);
@@ -214,15 +228,44 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
           }
         };
         
-        // Start checking after 1 second
-        setTimeout(() => checkSessionOnMount(1, 4), 1000);
+        // Start checking after 1 second (give WC time to initialize)
+        setTimeout(() => checkSessionOnMount(1, 5), 1000);
       }
+      
+      // Listen for custom event from WalletConnect session handlers in fcl.ts
+      const handleFclSessionRestored = async (event: CustomEvent) => {
+        console.log('📱 Received fcl-session-restored event:', event.detail);
+        const { address, source } = event.detail;
+        if (address) {
+          const normalizedAddr = normalizeFlowAddress(address);
+          console.log(`✅ [${source}] Session restored with address:`, normalizedAddr);
+          
+          // Get full user snapshot
+          const currentUser = await fcl.currentUser.snapshot();
+          if (currentUser?.loggedIn) {
+            setFclUser(currentUser);
+            setFclAddress(normalizedAddr);
+            setIsConnecting(false);
+            setPendingAuth(false);
+          }
+        }
+      };
+      
+      window.addEventListener('fcl-session-restored', handleFclSessionRestored as EventListener);
+      return () => {
+        window.removeEventListener('fcl-session-restored', handleFclSessionRestored as EventListener);
+      };
     }
   }, []);
 
   // Set up deep link handler for mobile wallet callbacks
+  // CRITICAL: Use isMobileApp() directly, not isMobile state, to ensure listeners are registered immediately
   useEffect(() => {
-    if (!isMobile) return;
+    // Check mobile status directly to avoid race condition with state
+    const mobile = isMobileApp();
+    if (!mobile) return;
+    
+    console.log('📱 Setting up mobile deep link handlers EARLY');
     
     const setupMobileDeepLinks = async () => {
       try {
@@ -230,43 +273,92 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
         const { App } = await import('@capacitor/app');
         
         // Listen for app URL open events (wallet callbacks)
-        await App.addListener('appUrlOpen', (event) => {
+        // This fires when the app is opened via deep link (e.g., from Flow Wallet return)
+        await App.addListener('appUrlOpen', async (event) => {
           console.log('📲 Wallet callback received:', event.url);
           setLastCallbackUrl(event.url);
-          // FCL handles the callback automatically via the WalletConnect integration
+          
+          // When we receive a deep link callback, proactively try to restore the session
+          // This is critical for mobile because the WC WebSocket may have been disconnected
+          // Always check localStorage directly to avoid stale closure issues
+          if (hasPendingAuth()) {
+            console.log('📱 Deep link received with pending auth - attempting immediate session restore');
+            
+            // First reconnect WC WebSocket
+            try {
+              await forceWcReconnect();
+              await new Promise(resolve => setTimeout(resolve, 300));
+            } catch (e) {
+              console.warn('⚠️ WC reconnect on deep link failed:', e);
+            }
+            
+            // Then check/restore session
+            setTimeout(async () => {
+              const restored = await forceWcSessionRestore();
+              console.log('📱 Deep link session restore result:', restored);
+              
+              if (restored) {
+                const currentUser = await fcl.currentUser.snapshot();
+                if (currentUser?.loggedIn && currentUser?.addr) {
+                  setFclUser(currentUser);
+                  setFclAddress(normalizeFlowAddress(currentUser.addr));
+                  setIsConnecting(false);
+                  setPendingAuth(false);
+                }
+              }
+            }, 500);
+          }
         });
         
         // Listen for app state changes (resume from background)
         // This is critical for wallet auth - when user returns from Flow Wallet
         await App.addListener('appStateChange', async (state) => {
           console.log('📱 🔄 APP STATE CHANGED:', state.isActive ? '✅ ACTIVE (FOREGROUND)' : '⏸️  BACKGROUND');
+          
+          // Always check localStorage directly to avoid stale closure issues
+          const hasPending = hasPendingAuth();
+          
           console.log('📱 State details:', {
             isActive: state.isActive,
-            currentlyConnecting: isConnecting,
-            hasPendingInStorage: hasPendingAuth(),
+            hasPendingInStorage: hasPending,
             timestamp: new Date().toISOString()
           });
           
-          if (state.isActive) {
-            // Check if we have pending auth (from localStorage or state)
-            const hasPending = hasPendingAuth() || isConnecting;
+          if (state.isActive && hasPending) {
+            // App came back to foreground while we were waiting for wallet auth
+            console.log('📱 🔑 APP RESUMED WITH PENDING AUTH - CHECKING FCL SESSION...');
+            setIsConnecting(true);
             
             console.log('📱 Resume check:', {
-              hasPendingAuth: hasPendingAuth(),
-              isConnecting: isConnecting,
-              willCheckSession: hasPending
+              hasPendingAuth: hasPending,
+              hasWcClient: !!getWcClient()
             });
-            
-            if (hasPending) {
-              // App came back to foreground while we were waiting for wallet auth
-              console.log('📱 🔑 APP RESUMED WITH PENDING AUTH - CHECKING FCL SESSION...');
-              setIsConnecting(true);
+              
+              // CRITICAL: First, try to reconnect the WalletConnect WebSocket
+              // Android may have killed the connection while in background
+              try {
+                console.log('📱 Forcing WC reconnect after resume...');
+                await forceWcReconnect();
+                // Give the relayer a moment to reconnect
+                await new Promise(resolve => setTimeout(resolve, 500));
+              } catch (reconnectError) {
+                console.warn('⚠️ WC reconnect error (continuing anyway):', reconnectError);
+              }
               
               // Android/iOS: Give WalletConnect and FCL more time to process the deep link and restore session
               // Multiple attempts with increasing delays to handle slower device/network conditions
-              const checkSessionWithRetries = async (attempt = 1, maxAttempts = 5) => {
+              const checkSessionWithRetries = async (attempt = 1, maxAttempts = 6) => {
                 try {
                   console.log(`📱 Session check attempt ${attempt}/${maxAttempts}`);
+                  
+                  // First, try the new WC session restore function
+                  if (attempt === 1 || attempt === 3) {
+                    console.log('📱 Attempting WC session restore...');
+                    const wcRestored = await forceWcSessionRestore();
+                    if (wcRestored) {
+                      console.log('✅ WC session restore succeeded, checking FCL...');
+                    }
+                  }
                   
                   // Force FCL to check its current session state
                   const currentUser = await fcl.currentUser.snapshot();
@@ -309,9 +401,8 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
                 }
               };
               
-              // Start checking with a 1.5 second initial delay
-              setTimeout(() => checkSessionWithRetries(1, 5), 1500);
-            }
+              // Start checking with a 1.5 second initial delay (after reconnect)
+              setTimeout(() => checkSessionWithRetries(1, 6), 1000);
           }
         });
         
@@ -329,7 +420,15 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
     };
     
     setupMobileDeepLinks();
-  }, [isMobile, isConnecting]);
+    
+    // Cleanup function - remove listeners when component unmounts
+    return () => {
+      import('@capacitor/app').then(({ App }) => {
+        App.removeAllListeners();
+        console.log('📱 Mobile deep link listeners removed');
+      }).catch(() => {});
+    };
+  }, []); // Empty deps - only run once on mount
 
   // Subscribe to FCL auth changes (config is already set in src/config/fcl.ts)
   useEffect(() => {
@@ -420,32 +519,23 @@ export const UnifiedWalletProvider: React.FC<{ children: React.ReactNode }> = ({
       // IMPORTANT: On mobile WebViews, awaiting `fcl.authenticate()` can hang forever
       // if the deep-link handoff is blocked. Trigger it and let the callback drive state.
       if (isMobile) {
-        console.log('📱 Using WalletConnect for mobile authentication...');
+        console.log('📱 Starting mobile authentication via FCL...');
         
-        // Flow Wallet universal link base
-        const FLOW_WALLET_WC_LINK = 'https://frw-link.lilico.app/wc';
+        // Wait for WalletConnect to be fully initialized before authenticating
+        // This is CRITICAL - the wcRequestHook won't work if WC isn't ready
+        if (!isWcReady()) {
+          console.log('📱 Waiting for WalletConnect to initialize...');
+          const wcReady = await waitForWcReady(3000);
+          console.log('📱 WalletConnect ready:', wcReady);
+        }
         
-        // Flow Wallet service with proper universal link for WC deep linking
-        const flowWalletService = {
-          "f_type": "Service",
-          "f_vsn": "1.0.0",
-          "type": "authn",
-          "uid": FLOW_WALLET_WC_LINK,
-          "endpoint": "flow_authn",
-          "method": "WC/RPC",
-          "provider": {
-            "name": "Flow Wallet",
-            "icon": "https://lilico.app/logo.png"
-          }
-        };
+        console.log('📱 FCL is configured with WalletConnect - the wcRequestHook in fcl.ts will handle deep linking');
         
-        console.log('📱 Authenticating with Flow Wallet service:', flowWalletService);
-        
-        // Use FCL's authenticate with explicit service
-        // The fcl-wc plugin's wcRequestHook (configured in fcl.ts) will intercept
-        // the WC URI and open the Flow Wallet via window.location.href
-        // The native WalletBridgeViewController will then open the app externally
-        void fcl.authenticate({ service: flowWalletService }).catch((error) => {
+        // Just call fcl.authenticate() - the FCL config in fcl.ts already sets up:
+        // 1. WalletConnect with proper configuration
+        // 2. wcRequestHook that intercepts the WC URI and opens Flow Wallet via deep link
+        // Don't pass a custom service - let FCL use its configured discovery
+        void fcl.authenticate().catch((error) => {
           const message = error instanceof Error ? error.message : String(error);
           console.error('Error connecting to Flow wallet (mobile):', error);
           setLastError(message);

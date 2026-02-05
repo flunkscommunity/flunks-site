@@ -2,8 +2,12 @@
 window.PoolGameLoader = {
   game: null,
   scriptsLoaded: false,
+  onGameOverCallback: null,
   
   init: function(containerId, canvasId, difficulty, onGameOver) {
+    // Store the callback
+    this.onGameOverCallback = onGameOver;
+    
     // If scripts already loaded, just start the game
     if (this.scriptsLoaded && window.Game) {
       this.startGame(containerId, canvasId, difficulty, onGameOver);
@@ -82,37 +86,61 @@ window.PoolGameLoader = {
         return;
       }
 
-      // Override initMenus to skip menu initialization
+      // Completely override the menu system
       window.Game.initMenus = function() {
-        console.log('Skipping menu initialization - using React UI');
+        console.log('Menu init bypassed');
+      };
+      
+      window.Game.mainMenu = {
+        init: function() {},
+        load: function() {}
       };
 
-      // Initialize the game
-      window.Game.start(containerId, canvasId, 800, 600);
+      // Initialize the game engine
+      console.log('Initializing game with container:', containerId, 'canvas:', canvasId);
+      window.Game.start(containerId, canvasId, 1500, 825);
       
-      // Skip the menu and start game directly
-      setTimeout(() => {
-        if (window.Game.startNewGame) {
+      // Wait for assets to load, then start
+      const checkAssetsLoaded = setInterval(() => {
+        if (window.Game.spritesStillLoading === 0 && window.sprites && window.sprites.background) {
+          clearInterval(checkAssetsLoaded);
+          console.log('Assets loaded, starting game...');
+          
+          // Start a new game directly
+          if (typeof GAME_STOPPED !== 'undefined') {
+            GAME_STOPPED = false;
+          }
           window.GAME_STOPPED = false;
-          window.Game.startNewGame();
           
-          // Set AI difficulty
-          const iterations = {
-            easy: 30,
-            medium: 50,
-            hard: 100
-          };
-          
-          if (window.AI && window.AI.trainer && iterations[difficulty]) {
-            window.AI.trainer.iterations = iterations[difficulty];
-            console.log(`AI difficulty set to ${difficulty} (${iterations[difficulty]} iterations)`);
+          if (window.Game.startNewGame) {
+            window.Game.startNewGame();
+            
+            // Set AI difficulty
+            const iterations = {
+              easy: 5,
+              medium: 35,
+              hard: 75
+            };
+            
+            if (window.AI && window.AI.trainer && iterations[difficulty]) {
+              window.AI.trainer.iterations = iterations[difficulty];
+              console.log(`AI difficulty set to ${difficulty}`);
+            }
           }
         }
-      }, 500);
+      }, 100);
+      
+      // Timeout after 10 seconds
+      setTimeout(() => {
+        clearInterval(checkAssetsLoaded);
+        if (!window.Game.gameWorld) {
+          console.error('Game failed to start within 10 seconds');
+        }
+      }, 10000);
       
       this.game = window.Game;
+      console.log('Pool game initialization complete');
       
-      console.log('Pool game started successfully');
     } catch (error) {
       console.error('Failed to start pool game:', error);
     }
@@ -120,6 +148,9 @@ window.PoolGameLoader = {
 
   cleanup: function() {
     if (this.game) {
+      if (typeof GAME_STOPPED !== 'undefined') {
+        GAME_STOPPED = true;
+      }
       window.GAME_STOPPED = true;
       this.game = null;
     }

@@ -132,6 +132,495 @@ body,
   }
 }
 
+/* Pool game window tweaks */
+.pool-game-window .react95-window-content {
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Pool game start screen - Cinematic reveal */
+.pool-start-screen {
+  position: relative;
+  background: #000;
+  overflow: hidden;
+}
+
+/* Background image layer - pool tables */
+.pool-start-bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.pool-start-bg.revealed {
+  opacity: 1;
+}
+
+.pool-start-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Neon sign overlay - the sign from the background, always visible */
+.pool-start-neon-sign {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 55%;
+  z-index: 5;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  /* Mask to only show the top portion where the neon sign is */
+  -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.pool-start-neon-sign::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('/Games/pool-game/sprites/start-bg.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: top center;
+}
+
+/* Neon glow effect */
+.pool-start-glow {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 60%;
+  background: radial-gradient(ellipse at center, 
+    rgba(34, 197, 94, 0.4) 0%, 
+    rgba(251, 191, 36, 0.25) 30%, 
+    rgba(239, 68, 68, 0.15) 50%,
+    transparent 70%
+  );
+  filter: blur(40px);
+  animation: neonPulse 2s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes logoFadeIn {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes neonPulse {
+  0%, 100% { 
+    opacity: 0.6; 
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% { 
+    opacity: 1; 
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+}
+
+/* Start button - lower center, no box */
+.pool-start-btn {
+  position: absolute !important;
+  top: 65% !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  padding: 12px 24px;
+  font-family: "Press Start 2P", monospace;
+  font-size: 24px;
+  color: #fbbf24;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease-in-out, transform 0.2s;
+  text-shadow: 0 0 10px #fbbf24, 0 0 20px #fbbf24, 0 0 30px #f59e0b;
+}
+
+.pool-start-btn.visible {
+  opacity: 1;
+  visibility: visible;
+  animation: btnFlash 1s steps(2, start) infinite;
+}
+
+.pool-start-btn:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  text-shadow: 0 0 15px #fbbf24, 0 0 30px #fbbf24, 0 0 45px #f59e0b;
+}
+
+@keyframes btnFlash {
+  0%, 70% { opacity: 1; }
+  71%, 100% { opacity: 0.4; }
+}
+
+/* Footer - removed, using the one baked into the background image */
+
+/* Scanline overlay */
+.pool-start-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.02) 0px,
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 30;
+}
+
+/* Pool select & character screens */
+.pool-select-screen,
+.pool-char-screen {
+  font-family: "Press Start 2P", "Courier New", monospace;
+  image-rendering: pixelated;
+}
+
+.pool-select-header,
+.pool-char-header {
+  border-bottom: 2px solid #1f2937;
+}
+
+.pool-select-footer {
+  border-top: 2px solid #1f2937;
+}
+
+/* Mobile/touch optimizations for pool game */
+@media (max-width: 768px) {
+  .pool-start-btn {
+    font-size: 14px;
+    padding: 12px 32px;
+  }
+  .pool-start-neon-sign {
+    height: 50%;
+  }
+  .pool-select-screen,
+  .pool-char-screen {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+}
+
+/* Pool game rotate screen */
+.pool-rotate-screen {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a0a1a 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Press Start 2P', monospace;
+  color: #fbbf24;
+  gap: 24px;
+  text-align: center;
+  padding: 20px;
+}
+
+.pool-rotate-screen .rotate-phone {
+  animation: wobble 1.5s ease-in-out infinite;
+}
+
+.pool-rotate-screen .phone-body {
+  fill: #1a1a3a;
+  stroke: #fbbf24;
+}
+
+.pool-rotate-screen .arrow,
+.pool-rotate-screen .rotate-arc {
+  stroke: #fbbf24;
+}
+
+.pool-rotate-screen .rotate-text {
+  font-size: 20px;
+  text-shadow: 0 0 10px #fbbf24, 0 0 20px #f59e0b;
+  animation: pulse-text 2s ease-in-out infinite;
+}
+
+.pool-rotate-screen .rotate-subtext {
+  font-size: 10px;
+  color: #9ca3af;
+}
+
+@keyframes wobble {
+  0%, 100% { transform: rotate(-15deg); }
+  50% { transform: rotate(15deg); }
+}
+
+@keyframes pulse-text {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Pool game tutorial screen */
+.pool-tutorial-screen {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a0a1a 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Press Start 2P', monospace;
+  color: #fff;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.pool-tutorial-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 600px;
+  width: 100%;
+}
+
+.pool-tutorial-title {
+  font-size: 24px;
+  color: #fbbf24;
+  text-shadow: 0 0 10px #fbbf24, 0 0 20px #f59e0b;
+  letter-spacing: 4px;
+  margin: 0;
+}
+
+.pool-tutorial-sections {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+}
+
+.pool-tutorial-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pool-tutorial-section .section-title {
+  font-size: 10px;
+  color: #9ca3af;
+  text-align: center;
+  border-bottom: 1px solid #333;
+  padding-bottom: 8px;
+}
+
+.pool-tutorial-section .section-title.pixel-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  color: #fbbf24;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+  letter-spacing: 2px;
+}
+
+.pool-tutorial-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.pool-tutorial-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid #fbbf24;
+  border-radius: 8px;
+  padding: 10px 12px;
+  animation: slideIn 0.5s ease-out backwards;
+}
+
+.pool-tutorial-step:nth-child(1) { animation-delay: 0.1s; }
+.pool-tutorial-step:nth-child(2) { animation-delay: 0.3s; }
+.pool-tutorial-step:nth-child(3) { animation-delay: 0.5s; }
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.pool-tutorial-step .step-number {
+  width: 32px;
+  height: 32px;
+  background: #fbbf24;
+  color: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.pool-tutorial-step .step-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.pool-tutorial-step .step-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pool-tutorial-step .step-action {
+  font-size: 12px;
+  color: #fbbf24;
+}
+
+.pool-tutorial-step .step-desc {
+  font-size: 8px;
+  color: #9ca3af;
+  line-height: 1.4;
+}
+
+/* Keyboard controls section */
+.pool-tutorial-keys {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.pool-tutorial-keys .key-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.pool-tutorial-keys .key-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.pool-tutorial-keys .key-cap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  background: linear-gradient(180deg, #333 0%, #222 100%);
+  border: 2px solid #555;
+  border-bottom: 4px solid #111;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.pool-tutorial-keys .key-label {
+  font-size: 8px;
+  color: #9ca3af;
+}
+
+.pool-tutorial-visual {
+  width: 100%;
+  max-width: 300px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.pool-tutorial-visual .tutorial-diagram {
+  width: 100%;
+  height: auto;
+}
+
+.pool-tutorial-visual .cue-animate {
+  animation: cuePull 2s ease-in-out infinite;
+}
+
+.pool-tutorial-visual .arrow-pulse {
+  animation: arrowPulse 2s ease-in-out infinite;
+}
+
+.pool-tutorial-visual .power-fill {
+  animation: powerFill 2s ease-in-out infinite;
+}
+
+@keyframes cuePull {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(30px); }
+}
+
+@keyframes arrowPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+@keyframes powerFill {
+  0%, 100% { height: 8px; y: 50px; }
+  50% { height: 35px; y: 23px; }
+}
+
+.pool-tutorial-start {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 16px;
+  padding: 16px 32px;
+  background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
+  color: #000;
+  border: 4px solid #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  animation: buttonPulse 1.5s ease-in-out infinite;
+  margin-top: 8px;
+}
+
+.pool-tutorial-start:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #fbbf24;
+}
+
+@keyframes buttonPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(251, 191, 36, 0); }
+}
+
+/* Mobile adjustments for tutorial */
+@media (max-width: 600px) {
+  .pool-tutorial-sections {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .pool-tutorial-title { font-size: 18px; }
+  .pool-tutorial-section .section-title { font-size: 9px; }
+  .pool-tutorial-step { padding: 8px 10px; gap: 8px; }
+  .pool-tutorial-step .step-number { width: 24px; height: 24px; font-size: 10px; }
+  .pool-tutorial-step .step-icon { font-size: 18px; }
+  .pool-tutorial-step .step-action { font-size: 9px; }
+  .pool-tutorial-step .step-desc { font-size: 7px; }
+  .pool-tutorial-keys .key-cap { min-width: 36px; height: 36px; font-size: 10px; }
+  .pool-tutorial-keys .key-label { font-size: 7px; }
+  .pool-tutorial-start { font-size: 12px; padding: 10px 20px; }
+}
+
 /* 90s-Style Custom Cursors */
 a, button, [role="button"] {
   cursor: url('/images/cursors/pointer.png'), pointer;

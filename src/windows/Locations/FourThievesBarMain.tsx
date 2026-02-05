@@ -73,12 +73,15 @@ const FourThievesBarMain = () => {
 
   // Track if user is inside the bar
   const [isInsideBar, setIsInsideBar] = useState(false);
+  
+  // Track if pool game is open (music only plays during pool game)
+  const [isPoolGameOpen, setIsPoolGameOpen] = useState(false);
 
   useEffect(() => {
-    // Initialize 4 Thieves music
+    // Initialize 4 Thieves music (but don't play yet - wait for pool game)
     audioRef.current = new Audio('/music/4thieves.mp3');
     audioRef.current.loop = false; // We'll manually loop at 1 minute
-    audioRef.current.volume = 0.25; // 25% on landing page
+    audioRef.current.volume = 1.0; // 100% volume for pool game
 
     // Loop at 1 minute (60 seconds)
     const handleTimeUpdate = () => {
@@ -99,17 +102,7 @@ const FourThievesBarMain = () => {
     audioRef.current.addEventListener('timeupdate', handleTimeUpdate);
     audioRef.current.addEventListener('ended', handleEnded);
 
-    const playMusic = async () => {
-      try {
-        if (audioRef.current && !isMuted) {
-          await audioRef.current.play();
-        }
-      } catch (error) {
-        console.log('Music autoplay blocked');
-      }
-    };
-
-    playMusic();
+    // Don't auto-play on load - wait for pool game to open
 
     return () => {
       if (audioRef.current) {
@@ -123,24 +116,29 @@ const FourThievesBarMain = () => {
 
   // Handle mute toggle
   useEffect(() => {
-    if (audioRef.current) {
+    if (audioRef.current && isPoolGameOpen) {
       if (isMuted) {
         audioRef.current.pause();
       } else {
         audioRef.current.play().catch(console.log);
       }
     }
-  }, [isMuted]);
+  }, [isMuted, isPoolGameOpen]);
 
-  // Adjust volume based on whether user is inside the bar
+  // Start/stop music when pool game opens/closes
   useEffect(() => {
-    if (audioRef.current && !isMuted) {
-      // Smooth volume transition
-      const targetVolume = isInsideBar ? 0.75 : 0.25;
-      audioRef.current.volume = targetVolume;
-      console.log(`🎵 4 Thieves volume: ${targetVolume * 100}%`);
+    if (audioRef.current) {
+      if (isPoolGameOpen && !isMuted) {
+        audioRef.current.currentTime = 2; // Skip first 2 seconds to avoid lag/silence
+        audioRef.current.play().catch(console.log);
+        console.log('🎵 4 Thieves music started (pool game opened)');
+      } else {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        console.log('🎵 4 Thieves music stopped');
+      }
     }
-  }, [isInsideBar, isMuted]);
+  }, [isPoolGameOpen, isMuted]);
 
   // Callback when VideoPoker updates balance (for external sync)
   const handleBalanceUpdate = (newBalance: number) => {
@@ -358,17 +356,23 @@ const FourThievesBarMain = () => {
 
   // Open Pool Game
   const openPoolGame = () => {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    // Start the music when pool game opens
+    setIsPoolGameOpen(true);
+    
     openWindow({
       key: WINDOW_IDS.FOUR_THIEVES_BAR_POOL_ROOM,
       window: (
         <DraggableResizeableWindow
           windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_POOL_ROOM}
           headerTitle="🎱 8-Ball Pool - Four Thieves"
-          onClose={() => closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_POOL_ROOM)}
-          initialWidth={isMobile ? "95vw" : "850px"}
-          initialHeight={isMobile ? "90vh" : "700px"}
-          resizable={true}
+          onClose={() => {
+            setIsPoolGameOpen(false); // Stop music when pool game closes
+            closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_POOL_ROOM);
+          }}
+          initialWidth="calc(100vw - 12px)"
+          initialHeight="calc(100vh - 56px)"
+          resizable={false}
+          windowClassName="pool-game-window"
         >
           <PoolGame 
             walletAddress={walletAddress}
@@ -424,7 +428,8 @@ const FourThievesBarMain = () => {
               />
             </div>
 
-            {/* Pool Game Button */}
+            {/* Pool Game Button - DEV ONLY for now */}
+            {process.env.NODE_ENV === 'development' && (
             <div className="w-full bg-gradient-to-r from-amber-800 via-red-900 to-amber-800 p-3 border-t-2 border-yellow-600 shadow-xl">
               <button
                 onClick={openPoolGame}
@@ -434,6 +439,7 @@ const FourThievesBarMain = () => {
                 🎱 Pool Table
               </button>
             </div>
+            )}
           </div>
         </DraggableResizeableWindow>
       ),

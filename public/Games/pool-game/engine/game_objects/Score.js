@@ -28,16 +28,16 @@ Score.prototype.drawLines = function (color) {
     
     for(let i=0; i<this.value; i++){
 
-        let pos = this.position.add(new Vector2(i*15,0));
+        let pos = this.position.add(new Vector2(i*26,0));
 
         Canvas2D.drawText(
-            "I", 
+            "!", 
             pos, 
             this.origin, 
             color, 
             "top", 
-            "Arial", 
-            "20px"
+            "'Press Start 2P', 'Courier New', monospace", 
+            "32px"
         );
 
     }

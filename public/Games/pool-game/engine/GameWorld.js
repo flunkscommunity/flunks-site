@@ -226,6 +226,9 @@ GameWorld.prototype.initiateState = function(balls){
         this.balls[i].position.y = balls[i].position.y;
         this.balls[i].visible = balls[i].visible;
         this.balls[i].inHole = balls[i].inHole;
+        // Reset movement state to prevent double-hit bug
+        this.balls[i].moving = false;
+        this.balls[i].velocity = Vector2.zero;
     }
 
     this.stick.position = this.whiteBall.position;

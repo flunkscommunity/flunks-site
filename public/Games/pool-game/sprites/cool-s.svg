@@ -1,0 +1,26 @@
+<svg width="48" height="80" viewBox="0 0 48 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Classic "Cool S" / Stussy S / Super S emblem -->
+  <defs>
+    <linearGradient id="sGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <filter id="sGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#a855f7" flood-opacity="0.8"/>
+    </filter>
+  </defs>
+  <path
+    d="
+      M12 0 L24 0 L24 8 L36 8 L36 0 L48 0
+      L48 32 L36 40 L48 48 L48 80
+      L36 80 L36 72 L24 72 L24 80 L12 80
+      L0 80 L0 48 L12 40 L0 32 L0 0 Z
+      M12 8 L12 32 L24 40 L12 48 L12 72
+      M36 8 L36 32 L24 40 L36 48 L36 72
+    "
+    fill="url(#sGrad)"
+    stroke="#1e1b4b"
+    stroke-width="2"
+    filter="url(#sGlow)"
+  />
+</svg>

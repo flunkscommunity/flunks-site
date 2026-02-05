@@ -385,9 +385,19 @@ const RPGProfileForm: React.FC<RPGProfileFormProps> = ({ onComplete, onCancel })
   // Check: unified wallet is connected OR has address OR Dynamic wallet exists
   const hasWallet = isConnected || !!unifiedAddress || !!activeWallet;
   
+  // Debug logging for wallet detection - log on every render
+  console.log('🔍 RPGProfileForm RENDER - wallet state:', {
+    isConnected,
+    unifiedAddress,
+    primaryWallet: primaryWallet?.address,
+    activeWallet: activeWallet?.address,
+    hasWallet,
+    isMobile
+  });
+  
   // Debug logging for wallet detection
   useEffect(() => {
-    console.log('🔍 RPGProfileForm wallet detection:', {
+    console.log('🔍 RPGProfileForm wallet detection useEffect:', {
       isConnected,
       unifiedAddress,
       primaryWallet: primaryWallet?.address,

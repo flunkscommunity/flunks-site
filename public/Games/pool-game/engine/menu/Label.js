@@ -4,7 +4,7 @@ function Label(text, position, origin, color, textAlign, fontname, fontsize){
     this.position = typeof position !== 'undefined' ? position : Vector2.zero;
     this.origin = typeof origin !== 'undefined' ? origin : Vector2.zero;
     this.color = typeof color !== 'undefined' ? color : Color.black;
-    this.textAlign = typeof textAlign !== 'undefined' ? textAlign : "top";
+    this.textAlign = typeof textAlign !== 'undefined' ? textAlign : "left";
     this.fontname = typeof fontname !== 'undefined' ? fontname : "Courier New";
     this.fontsize = typeof fontsize !== 'undefined' ? fontsize : "20px";
 }

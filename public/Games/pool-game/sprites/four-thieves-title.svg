@@ -1,0 +1,37 @@
+<svg width="900" height="600" viewBox="0 0 900 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="title" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fcd34d"/>
+      <stop offset="1" stop-color="#22c55e"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#22c55e" flood-opacity="0.7"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="#16a34a" flood-opacity="0.5"/>
+    </filter>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.8"/>
+    </filter>
+  </defs>
+
+  <rect width="900" height="600" fill="#050505"/>
+
+  <text x="450" y="80" text-anchor="middle" font-family="'Press Start 2P','Courier New',monospace" font-size="36" fill="#f8fafc">
+    FLUNKS
+  </text>
+
+  <text x="450" y="200" text-anchor="middle" font-family="'Press Start 2P','Courier New',monospace" font-size="28" fill="#fde68a" filter="url(#shadow)">
+    THE FOUR THIEVES
+  </text>
+
+  <text x="450" y="270" text-anchor="middle" font-family="'Press Start 2P','Courier New',monospace" font-size="26" fill="url(#title)" filter="url(#glow)">
+    NEON BREAKS
+  </text>
+
+  <text x="450" y="330" text-anchor="middle" font-family="'Press Start 2P','Courier New',monospace" font-size="18" fill="#e5e7eb">
+    PRESS START
+  </text>
+
+  <text x="450" y="540" text-anchor="middle" font-family="'Press Start 2P','Courier New',monospace" font-size="14" fill="#94a3b8">
+    Semester Zero  © 2026  —  a Skeremy joint
+  </text>
+</svg>

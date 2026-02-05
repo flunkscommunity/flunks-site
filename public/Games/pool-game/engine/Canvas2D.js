@@ -42,23 +42,15 @@ Canvas2D_Singleton.prototype.clear = function () {
 Canvas2D_Singleton.prototype.resize = function () {
     var gameCanvas = Canvas2D._canvas;
     var gameArea = Canvas2D._div;
-    var widthToHeight = Game.size.x / Game.size.y;
-    var newWidth = window.innerWidth;
-    var newHeight = window.innerHeight;
-    var newWidthToHeight = newWidth / newHeight;
-
-    if (newWidthToHeight > widthToHeight) {
-        newWidth = newHeight * widthToHeight;
-    } else {
-        newHeight = newWidth / widthToHeight;
-    }
+    var parent = gameArea.parentElement || document.body;
+    var newWidth = parent.clientWidth || window.innerWidth;
+    var newHeight = parent.clientHeight || window.innerHeight;
     gameArea.style.width = newWidth + 'px';
     gameArea.style.height = newHeight + 'px';
-
-    gameArea.style.marginTop = (window.innerHeight - newHeight) / 2 + 'px';
-    gameArea.style.marginLeft = (window.innerWidth - newWidth) / 2 + 'px';
-    gameArea.style.marginBottom = (window.innerHeight - newHeight) / 2 + 'px';
-    gameArea.style.marginRight = (window.innerWidth - newWidth) / 2 + 'px';
+    gameArea.style.marginTop = '0px';
+    gameArea.style.marginLeft = '0px';
+    gameArea.style.marginBottom = '0px';
+    gameArea.style.marginRight = '0px';
 
     gameCanvas.width = newWidth;
     gameCanvas.height = newHeight;
@@ -98,7 +90,7 @@ Canvas2D_Singleton.prototype.drawText = function (text, position, origin, color,
     position = typeof position !== 'undefined' ? position : Vector2.zero;
     origin = typeof origin !== 'undefined' ? origin : Vector2.zero;
     color = typeof color !== 'undefined' ? color : Color.black;
-    textAlign = typeof textAlign !== 'undefined' ? textAlign : "top";
+    textAlign = typeof textAlign !== 'undefined' ? textAlign : "left";
     fontname = typeof fontname !== 'undefined' ? fontname : "sans-serif";
     fontsize = typeof fontsize !== 'undefined' ? fontsize : "20px";
 
@@ -108,7 +100,7 @@ Canvas2D_Singleton.prototype.drawText = function (text, position, origin, color,
     this._canvasContext.textBaseline = 'top';
     this._canvasContext.font = fontsize + " " + fontname;
     this._canvasContext.fillStyle = color.toString();
-    this._canvasContext.textAlign = textAlign;
+    this._canvasContext.textAlign = textAlign === "top" ? "left" : textAlign;
     this._canvasContext.fillText(text, 0, 0);
     this._canvasContext.restore();
 };

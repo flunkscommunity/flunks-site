@@ -93,6 +93,21 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
     }
   }, [initialBalance, isDemoMode, demoMode?.demoBalance]);
 
+  // Listen for external gum balance updates (e.g., from MyLocker claiming GUM)
+  useEffect(() => {
+    const handleGumUpdate = (event: CustomEvent) => {
+      if (!isDemoMode && event.detail?.balance !== undefined) {
+        console.log('🃏 [VideoPoker] External balance update:', event.detail.balance);
+        setGumBalance(event.detail.balance);
+      }
+    };
+
+    window.addEventListener('gumBalanceUpdated', handleGumUpdate as EventListener);
+    return () => {
+      window.removeEventListener('gumBalanceUpdated', handleGumUpdate as EventListener);
+    };
+  }, [isDemoMode]);
+
   // ============================================================================
   // GUM API TRANSACTION (same pattern as slots)
   // ============================================================================

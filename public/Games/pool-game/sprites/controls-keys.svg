@@ -1,0 +1,30 @@
+<svg width="360" height="100" viewBox="0 0 360 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#111827" />
+      <stop offset="1" stop-color="#0b1220" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.6" />
+    </filter>
+  </defs>
+  <rect x="0" y="0" width="360" height="100" rx="12" fill="url(#bg)" stroke="#facc15" stroke-width="3" filter="url(#shadow)" />
+  
+  <g font-family="Arial, sans-serif" font-size="12" fill="#e5e7eb">
+    <!-- Step 1: Aim -->
+    <text x="18" y="28" font-size="11" fill="#facc15">1.</text>
+    <text x="34" y="28" font-size="11" fill="#f8fafc">Move mouse to aim</text>
+    
+    <!-- Step 2: Click & Drag -->
+    <text x="18" y="52" font-size="11" fill="#facc15">2.</text>
+    <circle cx="44" cy="48" r="8" fill="#1f2937" stroke="#9ca3af" />
+    <circle cx="44" cy="48" r="3" fill="#f8fafc" />
+    <text x="58" y="52" font-size="11" fill="#f8fafc">Click + drag back for power</text>
+    
+    <!-- Step 3: Click to Shoot -->
+    <text x="18" y="78" font-size="11" fill="#facc15">3.</text>
+    <circle cx="44" cy="74" r="8" fill="#1f2937" stroke="#9ca3af" />
+    <circle cx="44" cy="74" r="3" fill="#f8fafc" />
+    <text x="58" y="78" font-size="11" fill="#f8fafc">Click again to shoot!</text>
+  </g>
+</svg>

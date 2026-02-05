@@ -23,14 +23,9 @@ const config: CapacitorConfig = {
       '*.walletconnect.com',
       '*.walletconnect.org',
       'relay.walletconnect.com',
-      'relay.walletconnect.org',
-      'blocto.app',
-      '*.blocto.app',
-      'meetdapper.com',
-      '*.meetdapper.com',
-      'lilico.app',
-      '*.lilico.app',
-      'frw-link.lilico.app'
+      'relay.walletconnect.org'
+      // Note: Wallet app links (lilico, blocto, dapper) are intentionally NOT here
+      // so they open in external apps/browsers instead of loading in WebView
     ]
   },
   

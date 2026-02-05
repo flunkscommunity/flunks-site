@@ -1,6 +1,8 @@
 function AITrainer(){
 
     this.AIPolicy = new AIPolicy();
+    this.sessionStarting = false; // Flag to prevent double-triggering
+    this.isPlayingTurn = false; // Flag to track when AI is executing its shot
 
 }
 
@@ -10,6 +12,8 @@ AITrainer.prototype.init = function(state, gamePolicy){
     AI.currentOpponent = new Opponent();
     AI.finishedSession = true;
     AI.iteration = 0;
+    AI.isPlayingTurn = false; // Reset when initializing
+    AI.sessionStarting = false;
 
     AI.bestOpponentIndex = 0;
     AI.bestOpponentEval = 0;
@@ -31,7 +35,11 @@ AITrainer.prototype.init = function(state, gamePolicy){
 
 AITrainer.prototype.train = function(){
 
+    // Only log start and end to avoid performance issues
+    if(AI.iteration === 0) console.log('[AI] Training started, iterations:', TRAIN_ITER);
+
     if(AI.iteration === TRAIN_ITER){
+        console.log('[AI] Training complete after', TRAIN_ITER, 'iterations');
         AI.finishedSession = true;
         AI.playTurn();
         return;
@@ -104,11 +112,22 @@ AITrainer.prototype.simulate = function(){
 
 AITrainer.prototype.playTurn = function(){
 
+    console.log('[AI] playTurn() called, isPlayingTurn:', AI.isPlayingTurn);
+
+    // Prevent re-entry while playing
+    if(AI.isPlayingTurn) {
+        console.log('[AI] playTurn() blocked - already playing');
+        return;
+    }
+    AI.isPlayingTurn = true;
+
     bestOpponent = AI.opponents[AI.bestOpponentIndex];
+    console.log('[AI] Best opponent power:', bestOpponent.power, 'rotation:', bestOpponent.rotation);
     Game.gameWorld.stick.rotation = bestOpponent.rotation;
     Game.gameWorld.stick.trackMouse = false;
 
     setTimeout(() => {
+        console.log('[AI] First timeout - resetting state and showing stick');
 
         Game.gameWorld.stick.visible = true;
         Canvas2D.clear();
@@ -122,12 +141,22 @@ AITrainer.prototype.playTurn = function(){
         
         requestAnimationFrame(Game.mainLoop);
 
-        Game.gameWorld.stick
-        .shoot(
-            bestOpponent.power, 
-            bestOpponent.rotation
-        );
-        Game.gameWorld.stick.trackMouse = true;
+        setTimeout(() => {
+            console.log('[AI] Second timeout - executing shot');
+            Game.gameWorld.stick
+            .shoot(
+                bestOpponent.power, 
+                bestOpponent.rotation,
+                1200
+            );
+            Game.gameWorld.stick.trackMouse = true;
+            
+            // Allow next turn after shot is executed
+            setTimeout(() => {
+                console.log('[AI] Third timeout - resetting isPlayingTurn');
+                AI.isPlayingTurn = false;
+            }, 500);
+        }, 700);
 
     }, 1000);
 }
@@ -160,8 +189,10 @@ AITrainer.prototype.opponentTrainingLoop = function(){
 }
 
 AITrainer.prototype.startSession = function(){
+        console.log('[AI] startSession() called');
         setTimeout(
             ()=>{
+                console.log('[AI] startSession timeout - beginning training');
                 Game.gameWorld.stick.visible = false;
                 Canvas2D.clear();
                 Game.gameWorld.draw();

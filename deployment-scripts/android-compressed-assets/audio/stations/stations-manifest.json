@@ -1,0 +1,121 @@
+{
+  "generated": "2025-09-01T20:15:24.940Z",
+  "stations": [
+    {
+      "src": "/audio/stations/87.9-FREN/radio_static.mp3",
+      "title": "87.9 FREN",
+      "frequency": "87.9",
+      "station": "FREN",
+      "genre": "Alternative/Indie",
+      "description": "The Fren Zone - Alternative, Indie & Underground Music",
+      "trackCount": 1,
+      "tracks": [
+        {
+          "src": "/audio/stations/87.9-FREN/radio_static.mp3",
+          "title": "Static",
+          "artist": "Radio",
+          "filename": "radio_static.mp3"
+        }
+      ]
+    },
+    {
+      "src": "/audio/stations/97.5-WZRD/2.mp3",
+      "title": "97.5 WZRD",
+      "frequency": "97.5",
+      "station": "WZRD",
+      "genre": "Electronic/Synthwave",
+      "description": "The Wizard - Electronic, Synthwave & Digital Magic",
+      "trackCount": 4,
+      "tracks": [
+        {
+          "src": "/audio/stations/97.5-WZRD/2.mp3",
+          "title": "2",
+          "artist": "Unknown Artist",
+          "filename": "2.mp3"
+        },
+        {
+          "src": "/music/80s_Arcade_[Retrowave_Synthwave_Gaming_...]kaizo[cc].mp3",
+          "title": "80s Arcade Retrowave",
+          "artist": "Kaizo",
+          "filename": "80s_Arcade_[Retrowave_Synthwave_Gaming_...]kaizo[cc].mp3"
+        },
+        {
+          "src": "/audio/stations/97.5-WZRD/chill.mp3",
+          "title": "chill",
+          "artist": "Unknown Artist",
+          "filename": "chill.mp3"
+        },
+        {
+          "src": "/audio/stations/97.5-WZRD/starter.mp3",
+          "title": "starter",
+          "artist": "Unknown Artist",
+          "filename": "starter.mp3"
+        }
+      ]
+    },
+    {
+      "src": "/audio/stations/101.9-TEDY/roofroof.mp3",
+      "title": "101.9 TEDY",
+      "frequency": "101.9",
+      "station": "TEDY",
+      "genre": "Classical/Study",
+      "description": "The Study Station - Classical, Jazz & Focus Music",
+      "trackCount": 3,
+      "tracks": [
+        {
+          "src": "/audio/stations/101.9-TEDY/roofroof.mp3",
+          "title": "roofroof",
+          "artist": "Unknown Artist",
+          "filename": "roofroof.mp3"
+        },
+        {
+          "src": "/audio/stations/101.9-TEDY/shortnoodles.mp3",
+          "title": "shortnoodles",
+          "artist": "Unknown Artist",
+          "filename": "shortnoodles.mp3"
+        },
+        {
+          "src": "/audio/stations/101.9-TEDY/virginiawest.mp3",
+          "title": "virginiawest",
+          "artist": "Unknown Artist",
+          "filename": "virginiawest.mp3"
+        }
+      ]
+    },
+    {
+      "src": "/audio/stations/104.1-FLNK/boywonder.mp3",
+      "title": "104.1 FLNK",
+      "frequency": "104.1",
+      "station": "FLNK",
+      "genre": "Pop/Rock/Hits",
+      "description": "Flunk Hits - Pop, Rock & Chart-Topping Hits",
+      "trackCount": 4,
+      "tracks": [
+        {
+          "src": "/audio/stations/104.1-FLNK/boywonder.mp3",
+          "title": "boywonder",
+          "artist": "Unknown Artist",
+          "filename": "boywonder.mp3"
+        },
+        {
+          "src": "/audio/stations/104.1-FLNK/immortal.mp3",
+          "title": "immortal",
+          "artist": "Unknown Artist",
+          "filename": "immortal.mp3"
+        },
+        {
+          "src": "/audio/stations/104.1-FLNK/skeremy-semesterzero.mp3",
+          "title": "skeremy-semesterzero",
+          "artist": "Unknown Artist",
+          "filename": "skeremy-semesterzero.mp3"
+        },
+        {
+          "src": "/audio/stations/104.1-FLNK/wttj.mp3",
+          "title": "wttj",
+          "artist": "Unknown Artist",
+          "filename": "wttj.mp3"
+        }
+      ]
+    }
+  ]
+}

@@ -59,16 +59,21 @@ Game_Singleton.prototype.loadSprite = function (imageName) {
     image.onload = function () {
         Game.spritesStillLoading -= 1;
     };
+    image.onerror = function () {
+        Game.spritesStillLoading -= 1;
+        console.error("Failed to load sprite:", imageName);
+    };
     return image;
 };
 
 Game_Singleton.prototype.assetLoadingLoop = function () {
-    if (!this.spritesStillLoading > 0)
-        requestAnimationFrame(Game.assetLoadingLoop);
-    else {
-        Game.initialize();
-        requestAnimationFrame(this.mainMenu.load.bind(this.mainMenu));
+    if (Game.spritesStillLoading > 0) {
+        requestAnimationFrame(Game.assetLoadingLoop.bind(Game));
+        return;
     }
+
+    Game.initialize();
+    requestAnimationFrame(this.mainMenu.load.bind(this.mainMenu));
 };
 
 Game_Singleton.prototype.handleInput = function(){
@@ -86,23 +91,13 @@ Game_Singleton.prototype.startNewGame = function(){
     Game.gameWorld = new GameWorld();
     Game.policy = new GamePolicy();
 
-    Canvas2D.clear();
-    Canvas2D.drawImage(
-        sprites.controls, 
-        new Vector2(Game.size.x/2,Game.size.y/2), 
-        0, 
-        1, 
-        new Vector2(sprites.controls.width/2,sprites.controls.height/2)
-    );
+    // Skip the controls screen entirely - start immediately
+    AI.init(Game.gameWorld, Game.policy);
 
-    setTimeout(()=>{
-        AI.init(Game.gameWorld, Game.policy);
-
-        if(AI_ON && AI_PLAYER_NUM == 0){
-            AI.startSession();
-        }
-        Game.mainLoop();
-    },5000);
+    if(AI_ON && AI_PLAYER_NUM == 0){
+        AI.startSession();
+    }
+    Game.mainLoop();
 }
 
 Game_Singleton.prototype.continueGame = function(){

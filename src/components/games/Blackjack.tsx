@@ -149,6 +149,21 @@ const Blackjack: React.FC<BlackjackProps> = ({
     setGumBalance(initialBalance);
   }, [initialBalance]);
 
+  // Listen for external gum balance updates (e.g., from MyLocker claiming GUM)
+  useEffect(() => {
+    const handleGumUpdate = (event: CustomEvent) => {
+      if (!isDemoMode && event.detail?.balance !== undefined) {
+        console.log('🂡 [Blackjack] External balance update:', event.detail.balance);
+        setGumBalance(event.detail.balance);
+      }
+    };
+
+    window.addEventListener('gumBalanceUpdated', handleGumUpdate as EventListener);
+    return () => {
+      window.removeEventListener('gumBalanceUpdated', handleGumUpdate as EventListener);
+    };
+  }, [isDemoMode]);
+
   useEffect(() => {
     // Preload sounds - using original keyeh/videopoker casino sounds
     dealSoundRef.current = new Audio('/sounds/cardReveal.mp3');

@@ -1,0 +1,10 @@
+<!-- Placeholder for Flunks Game Manual Cover Image -->
+<!-- The actual cover image should be saved as: /public/images/game-manual-cover.png -->
+<!-- This image shows a retro Nintendo-style game manual cover with:
+     - "FLUNKS" title in large golden text
+     - Character in school uniform with backpack
+     - School and arcade buildings in background
+     - "SUPER NINTENDO ENTERTAINMENT SYSTEM" branding
+     - "KIDS TO KA AGES 6+" rating badge
+     - Vintage worn paper texture and edges
+-->

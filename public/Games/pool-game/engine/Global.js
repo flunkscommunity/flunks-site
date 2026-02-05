@@ -12,7 +12,7 @@ let GAME_STOPPED = true;
 
 let KEYBOARD_INPUT_ON = true;
 
-let TRAIN_ITER = 100;
+let TRAIN_ITER = 30; // Lower default for mobile performance (was 100)
 let AI_ON = true;
 let AI_PLAYER_NUM = 1;
 let DISPLAY_TRAINING = false;

@@ -1,0 +1,14 @@
+// BULLETIN BOARD IMAGE PLACEMENT
+// 
+// The bulletin board image should be saved as:
+// /Users/jeremy/Desktop/flunks-site/public/images/bulletin-board.png
+//
+// This image shows a colorful bulletin board with three main sections:
+// - Left: Pink "HACK-A-THON APRIL 27 1PM" announcement 
+// - Center: Blue "WANTED HOLDER OF ASTRO NFT" poster with astronaut
+// - Right: Yellow "NFT WORKSHOP MAY 3 3PM" announcement
+//
+// The background is beige/cork-like texture with geometric decorations
+// 
+// Please save the provided bulletin board image to the path above
+// to complete the implementation.

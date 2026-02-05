@@ -987,23 +987,6 @@ const LockerSystemNew: React.FC = () => {
                       ))}
                       */}
                     </div>
-                    {/* Keyboard Shortcuts Hint - UPDATED */}
-                    <div style={{
-                      position: 'fixed',
-                      top: '20px',
-                      left: '20px',
-                      background: 'rgba(0,0,0,0.7)',
-                      color: 'white',
-                      padding: '8px 12px',
-                      borderRadius: '6px',
-                      fontSize: '10px',
-                      opacity: 0.6,
-                      zIndex: 1000,
-                      backdropFilter: 'blur(10px)'
-                    }}>
-                      {isMobileDevice() ? '↑↓: Switch jackets in section 2' : '←→: Switch jackets in section 2'}
-                    </div>
-
                     {/* Section 1: Top - My Locker Front Image */}
                     <div className="locker-section" style={{
                       height: '80vh',

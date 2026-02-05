@@ -11,6 +11,158 @@ const isMobileApp = (): boolean => {
   return !!(window as any).Capacitor?.isNativePlatform?.();
 };
 
+// Global reference to WalletConnect client for session management
+let wcClientInstance: any = null;
+
+// Flag to track if WalletConnect is initialized and ready
+let wcInitialized = false;
+let wcInitPromise: Promise<void> | null = null;
+
+/**
+ * Check if WalletConnect is initialized
+ */
+export const isWcReady = () => wcInitialized;
+
+/**
+ * Wait for WalletConnect to be ready (useful before calling authenticate)
+ */
+export const waitForWcReady = async (timeoutMs: number = 5000): Promise<boolean> => {
+  if (wcInitialized) return true;
+  if (wcInitPromise) {
+    try {
+      await Promise.race([
+        wcInitPromise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error('WC init timeout')), timeoutMs))
+      ]);
+      return wcInitialized;
+    } catch {
+      console.warn('⚠️ WalletConnect init timeout');
+      return false;
+    }
+  }
+  return false;
+};
+
+/**
+ * Get the WalletConnect client instance (for checking/restoring sessions)
+ */
+export const getWcClient = () => wcClientInstance;
+
+/**
+ * Force WalletConnect to check for existing sessions and restore FCL auth
+ * Call this when the app resumes from background after wallet auth
+ * Returns true if a session was found and restored
+ */
+export const forceWcSessionRestore = async (): Promise<boolean> => {
+  console.log('🔄 Force WC session restore called');
+  
+  if (!wcClientInstance) {
+    console.log('⚠️ No WC client instance available');
+    return false;
+  }
+  
+  try {
+    // Check if there are any active sessions - handle different WC client APIs
+    let sessions: any[] = [];
+    if (typeof wcClientInstance.session?.getAll === 'function') {
+      sessions = wcClientInstance.session.getAll();
+    } else if (wcClientInstance.session?.values) {
+      sessions = Array.from(wcClientInstance.session.values());
+    } else if (wcClientInstance.getActiveSessions) {
+      sessions = Object.values(wcClientInstance.getActiveSessions() || {});
+    }
+    console.log('📱 WC sessions found:', sessions.length);
+    
+    if (sessions.length > 0) {
+      console.log('📱 Active WC session details:', sessions.map((s: any) => ({
+        topic: s.topic,
+        namespaces: Object.keys(s.namespaces || {}),
+        expiry: s.expiry,
+        acknowledged: s.acknowledged
+      })));
+      
+      // Force FCL to re-check its session state
+      // First, check if FCL is already aware of the session
+      const currentUser = await fcl.currentUser.snapshot();
+      
+      if (currentUser?.loggedIn && currentUser?.addr) {
+        console.log('✅ FCL already has user:', currentUser.addr);
+        return true;
+      }
+      
+      // FCL doesn't know about the session - try to trigger re-authentication
+      // The fcl-wc plugin should pick up existing sessions
+      console.log('📱 FCL not logged in but WC session exists - attempting reauthenticate...');
+      
+      try {
+        // Try reauthenticate first (preserves existing session)
+        await fcl.reauthenticate();
+        const afterReauth = await fcl.currentUser.snapshot();
+        if (afterReauth?.loggedIn && afterReauth?.addr) {
+          console.log('✅ FCL session restored via reauthenticate:', afterReauth.addr);
+          return true;
+        }
+      } catch (reauthError) {
+        console.log('⚠️ Reauthenticate failed, this is expected if session is new:', reauthError);
+      }
+      
+      // If reauthenticate didn't work, the fcl-wc plugin may need the session to be explicitly processed
+      // Try emitting an event or checking if there's a pending proposal
+      console.log('📱 Checking WC pairing state...');
+      
+      try {
+        const pairings = wcClientInstance.core?.pairing?.getPairings?.() || [];
+        console.log('📱 WC pairings:', pairings.length);
+        
+        if (pairings.length > 0) {
+          const activePairing = pairings.find((p: any) => p.active);
+          if (activePairing) {
+            console.log('📱 Active pairing found:', activePairing.topic);
+          }
+        }
+      } catch (pairingError) {
+        console.log('⚠️ Error checking pairings:', pairingError);
+      }
+      
+      return false;
+    }
+    
+    console.log('📱 No WC sessions found');
+    return false;
+  } catch (error) {
+    console.error('❌ Error in forceWcSessionRestore:', error);
+    return false;
+  }
+};
+
+/**
+ * Force the WalletConnect relayer to reconnect
+ * Useful after app resumes from background when WebSocket may have disconnected
+ */
+export const forceWcReconnect = async (): Promise<void> => {
+  console.log('🔄 Force WC reconnect called');
+  
+  if (!wcClientInstance?.core?.relayer) {
+    console.log('⚠️ No WC relayer available');
+    return;
+  }
+  
+  try {
+    // Try to restart the transport (reconnect WebSocket)
+    if (typeof wcClientInstance.core.relayer.restartTransport === 'function') {
+      console.log('📱 Restarting WC relayer transport...');
+      await wcClientInstance.core.relayer.restartTransport();
+      console.log('✅ WC relayer transport restarted');
+    } else if (typeof wcClientInstance.core.relayer.transportOpen === 'function') {
+      console.log('📱 Opening WC relayer transport...');
+      await wcClientInstance.core.relayer.transportOpen();
+      console.log('✅ WC relayer transport opened');
+    }
+  } catch (error) {
+    console.error('⚠️ Error reconnecting WC relayer:', error);
+  }
+};
+
 // CRITICAL: Clear any cached testnet configuration from localStorage
 // FCL caches config in localStorage, and old testnet settings can persist
 if (typeof window !== 'undefined') {
@@ -33,10 +185,11 @@ const FLOW_ACCESS_NODE = process.env.NEXT_PUBLIC_FLOW_ACCESS_NODE || "https://re
 const WALLETCONNECT_PROJECT_ID = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "9b70cfa398b2355a5eb9b1cf99f4a981";
 
 // WalletConnect metadata URL
-// On mobile (Capacitor), prefer the app's URL scheme so wallets can return to the app.
-// On web, use the current origin.
+// On mobile (Capacitor), use https URL that matches the WalletConnect metadata
+// Using flunks.net for consistency - wallets use this for display, not for deep linking
+// The actual deep link return is handled by the wallet via WalletConnect protocol
 const APP_URL = typeof window !== 'undefined'
-  ? (isMobileApp() ? "flunks://" : window.location.origin)
+  ? (isMobileApp() ? "https://flunks.net" : window.location.origin)
   : "https://flunks.net";
 
 console.log('🌊 Configuring FCL with access node:', FLOW_ACCESS_NODE);
@@ -47,8 +200,9 @@ console.log('🌐 App URL:', APP_URL);
 const IS_MOBILE_APP = isMobileApp();
 console.log('📱 Mobile App Mode:', IS_MOBILE_APP ? 'YES' : 'NO');
 
-// For mobile apps, go directly to Flow Wallet via WalletConnect
-// Skip the discovery UI which doesn't work well in mobile WebViews
+// For mobile apps, use WC/RPC (WalletConnect) which works with deep linking
+// The wcRequestHook will intercept the WC URI and open Flow Wallet directly
+// For web, use IFRAME/RPC for the standard discovery UI
 const DISCOVERY_METHOD = IS_MOBILE_APP ? 'WC/RPC' : 'IFRAME/RPC';
 console.log('🔗 Discovery Method:', DISCOVERY_METHOD);
 
@@ -75,7 +229,10 @@ const FLOW_WALLET_SERVICE = {
 
 // WalletConnect request hook to intercept URI and open wallet on mobile
 const wcRequestHook = async (data: any) => {
-  console.log('🔗 WC Request Hook:', JSON.stringify(data, null, 2));
+  console.log('🔗 WC Request Hook CALLED!');
+  console.log('🔗 WC Request Hook data:', JSON.stringify(data, null, 2));
+  console.log('🔗 IS_MOBILE_APP:', IS_MOBILE_APP);
+  console.log('🔗 data.uri:', data?.uri);
 
   const setWcDebug = (method: string, url?: string) => {
     if (typeof window === 'undefined') return;
@@ -84,6 +241,7 @@ const wcRequestHook = async (data: any) => {
       url,
       timestamp: new Date().toISOString(),
     };
+    console.log(`📱 WC Debug: ${method}`, url);
   };
   
   // Intercept session request and open Flow Wallet directly
@@ -168,29 +326,22 @@ const wcRequestHook = async (data: any) => {
   return false;
 };
 
-// For mobile apps, configure WalletConnect to open Flow Wallet directly
+// For mobile apps, log that we're using WalletConnect
 if (IS_MOBILE_APP) {
-  // Add Flow Wallet as a direct service (skips discovery UI)
-  config({
-    // Enable WalletConnect modal behavior
-    "discovery.wallet.method": "WC/RPC",
-    
-    // Force WalletConnect to show QR/deep-link modal
-    "fcl.walletconnect.method": "qr", // or "mobile"
-  });
-  
-  console.log('📱 Mobile: Configured for WalletConnect with Flow Wallet');
+  console.log('📱 Mobile: Using WC/RPC discovery method for WalletConnect with Flow Wallet');
 }
 
 // Simplified FCL configuration - use standard mainnet endpoints
+// Using /mainnet/ path in discovery URLs for better reliability (Flow best practice)
 config({
   "flow.network": "mainnet",
   "accessNode.api": "https://rest-mainnet.onflow.org",
   
-  // Always use the discovery endpoint - WalletConnect will handle mobile
-  "discovery.wallet": "https://fcl-discovery.onflow.org/authn",
+  // Discovery endpoints - BOTH are required for FCL to work properly
+  "discovery.wallet": "https://fcl-discovery.onflow.org/mainnet/authn",
+  "discovery.authn.endpoint": "https://fcl-discovery.onflow.org/api/mainnet/authn",
   
-  // Discovery method - WC/RPC for mobile enables WalletConnect
+  // Discovery method - WC/RPC for mobile (WalletConnect), IFRAME/RPC for web
   "discovery.wallet.method": DISCOVERY_METHOD,
   
   // App details
@@ -276,6 +427,10 @@ if (typeof window !== 'undefined') {
       // Register the plugin with FCL
       fcl.pluginRegistry.add(FclWcServicePlugin);
       
+      // Store the client globally for session management (critical for mobile app resume)
+      wcClientInstance = client;
+      console.log('📱 WC client stored globally for session management');
+      
       // On mobile, set up session event listeners and check for existing sessions
       if (IS_MOBILE_APP && client) {
         console.log('📱 Setting up WalletConnect session listeners for mobile...');
@@ -283,7 +438,16 @@ if (typeof window !== 'undefined') {
         // Check if there's an existing session on startup
         const checkExistingSession = async () => {
           try {
-            const sessions = client.session.getAll();
+            // WalletConnect v2 client may have different API - try multiple approaches
+            let sessions: any[] = [];
+            if (typeof client.session?.getAll === 'function') {
+              sessions = client.session.getAll();
+            } else if (client.session?.values) {
+              sessions = Array.from(client.session.values());
+            } else if (client.getActiveSessions) {
+              sessions = Object.values(client.getActiveSessions() || {});
+            }
+            
             if (sessions && sessions.length > 0) {
               console.log('📱 Found existing WalletConnect session(s):', sessions.length);
               console.log('📱 Session details:', sessions);
@@ -294,7 +458,9 @@ if (typeof window !== 'undefined') {
                   const currentUser = await fcl.currentUser.snapshot();
                   if (!currentUser?.loggedIn) {
                     console.log('📱 WC session exists but FCL not logged in, triggering session restore...');
-                    // The FCL WC plugin should handle this automatically
+                    // Try to use forceWcSessionRestore
+                    const restored = await forceWcSessionRestore();
+                    console.log('📱 Session restore result:', restored);
                   }
                 } catch (err) {
                   console.warn('⚠️ Error checking FCL session:', err);
@@ -327,22 +493,107 @@ if (typeof window !== 'undefined') {
           console.log('📱 WC session_event:', data);
         });
         
-        // Listen for successful session approval
-        client.on('session_approve', (data: any) => {
-          console.log('✅ WC session_approve:', data);
+        // Helper function to restore FCL session after WC events
+        const handleWcSessionRestoration = async (eventName: string, data: any) => {
+          console.log(`✅ WC ${eventName} received:`, data);
+          
+          // Retry session restoration with multiple attempts
+          const attemptRestore = async (attempt: number = 1, maxAttempts: number = 5): Promise<boolean> => {
+            console.log(`📱 [${eventName}] FCL restore attempt ${attempt}/${maxAttempts}`);
+            
+            try {
+              const currentUser = await fcl.currentUser.snapshot();
+              if (currentUser?.loggedIn && currentUser?.addr) {
+                console.log(`✅ [${eventName}] FCL user authenticated: ${currentUser.addr}`);
+                // Dispatch custom event so UnifiedWalletContext can react immediately
+                window.dispatchEvent(new CustomEvent('fcl-session-restored', { 
+                  detail: { address: currentUser.addr, source: eventName } 
+                }));
+                return true;
+              }
+              
+              if (attempt < maxAttempts) {
+                // Try reauthenticate to pick up the session
+                console.log(`📱 [${eventName}] FCL not logged in, trying reauthenticate...`);
+                try {
+                  await fcl.reauthenticate();
+                  const afterReauth = await fcl.currentUser.snapshot();
+                  if (afterReauth?.loggedIn && afterReauth?.addr) {
+                    console.log(`✅ [${eventName}] FCL restored via reauthenticate: ${afterReauth.addr}`);
+                    window.dispatchEvent(new CustomEvent('fcl-session-restored', { 
+                      detail: { address: afterReauth.addr, source: eventName } 
+                    }));
+                    return true;
+                  }
+                } catch (reauthErr) {
+                  console.log(`⚠️ [${eventName}] Reauthenticate failed (attempt ${attempt}):`, reauthErr);
+                }
+                
+                // Wait and retry
+                const delay = 500 * attempt;
+                console.log(`⏳ [${eventName}] Retrying in ${delay}ms...`);
+                await new Promise(resolve => setTimeout(resolve, delay));
+                return attemptRestore(attempt + 1, maxAttempts);
+              }
+              
+              console.log(`⚠️ [${eventName}] Failed to restore FCL session after ${maxAttempts} attempts`);
+              return false;
+            } catch (err) {
+              console.warn(`⚠️ [${eventName}] Error during restore attempt ${attempt}:`, err);
+              if (attempt < maxAttempts) {
+                await new Promise(resolve => setTimeout(resolve, 500 * attempt));
+                return attemptRestore(attempt + 1, maxAttempts);
+              }
+              return false;
+            }
+          };
+          
+          // Start restoration after a small delay to let WC finish processing
+          setTimeout(() => attemptRestore(1, 5), 300);
+        };
+        
+        // Listen for successful session approval - THIS IS KEY FOR MOBILE
+        client.on('session_approve', async (data: any) => {
+          await handleWcSessionRestoration('session_approve', data);
         });
+        
+        // session_settle fires when session is fully established
+        client.on('session_settle', async (data: any) => {
+          await handleWcSessionRestoration('session_settle', data);
+        });
+        
+        // Also listen for 'connect' which some WC versions use
+        if (typeof client.on === 'function') {
+          try {
+            client.on('connect', async (data: any) => {
+              await handleWcSessionRestoration('connect', data);
+            });
+          } catch (e) {
+            // 'connect' event may not be available in all WC versions
+          }
+        }
       }
       
+      // Mark WalletConnect as initialized
+      wcInitialized = true;
       console.log('✅ FCL WalletConnect plugin initialized', {
         isMobile: IS_MOBILE_APP,
         hasClient: !!client,
-        hasWcRequestHook: IS_MOBILE_APP
+        hasWcRequestHook: IS_MOBILE_APP,
+        wcInitialized: true
       });
     } catch (error) {
       console.error('❌ Failed to initialize FCL WalletConnect plugin:', error);
+      wcInitialized = false;
     }
   };
   
-  // Initialize after a short delay to ensure FCL config is ready
-  setTimeout(initializeWalletConnect, 200);
+  // Initialize WalletConnect and store the promise so we can await it
+  // Use a shorter delay since we'll wait for it before auth anyway
+  wcInitPromise = new Promise((resolve) => {
+    setTimeout(async () => {
+      await initializeWalletConnect();
+      resolve();
+    }, 100);
+  });
 }

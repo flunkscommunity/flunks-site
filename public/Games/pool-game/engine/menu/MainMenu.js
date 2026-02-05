@@ -131,7 +131,7 @@ function generateMainMenuButtons(inGame){
                         function(){
                             AI_PLAYER_NUM = 1;
                             AI_ON = true;
-                            TRAIN_ITER = 30;
+                            TRAIN_ITER = 15; // Mobile optimized (was 30)
                             Game.mainMenu.active = false;
                             GAME_STOPPED = false;
                             setTimeout(Game.startNewGame,200);
@@ -147,7 +147,7 @@ function generateMainMenuButtons(inGame){
                         function(){
                             AI_PLAYER_NUM = 1;
                             AI_ON = true;
-                            TRAIN_ITER = 50;
+                            TRAIN_ITER = 25; // Mobile optimized (was 50)
                             Game.mainMenu.active = false;
                             GAME_STOPPED = false;
                             setTimeout(Game.startNewGame,200);
@@ -163,7 +163,7 @@ function generateMainMenuButtons(inGame){
                         function(){
                             AI_PLAYER_NUM = 1;
                             AI_ON = true;
-                            TRAIN_ITER = 100;
+                            TRAIN_ITER = 40; // Mobile optimized (was 100)
                             Game.mainMenu.active = false;
                             GAME_STOPPED = false;
                             setTimeout(Game.startNewGame,200);
@@ -179,7 +179,7 @@ function generateMainMenuButtons(inGame){
                         function(){
                             AI_PLAYER_NUM = 0;
                             AI_ON = true;
-                            TRAIN_ITER = 700;
+                            TRAIN_ITER = 100; // Mobile optimized (was 700)
                             Game.mainMenu.active = false;
                             GAME_STOPPED = false;
                             setTimeout(Game.startNewGame,200);

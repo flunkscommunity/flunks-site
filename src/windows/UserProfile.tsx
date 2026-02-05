@@ -25,7 +25,7 @@ const UserProfile: React.FC = () => {
   const { lockerInfo, loading, error, refetch } = useLockerInfo();
   const { assignLocker, assigning } = useLockerAssignment();
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
-  const { connectFCL, isMobile } = useUnifiedWallet();
+  const { connectFCL, isMobile, isConnected: unifiedIsConnected, address: unifiedAddress } = useUnifiedWallet();
   const { profile, hasProfile, loading: profileLoading } = useUserProfile();
   const { balance, refreshBalance, refreshStats } = useGum();
   const [devBypass, setDevBypass] = useState(false);
@@ -46,7 +46,8 @@ const UserProfile: React.FC = () => {
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const isConnected = !!primaryWallet?.address || devBypass;
+  // Use unified wallet state - works for both Dynamic (web) and FCL (mobile) connections
+  const isConnected = unifiedIsConnected || !!primaryWallet?.address || devBypass;
   const lockerNumber = devBypass ? 999 : (lockerInfo?.locker_number || null);
   const isLoading = devBypass ? false : (loading || profileLoading);
 
@@ -55,10 +56,11 @@ const UserProfile: React.FC = () => {
   // console.log('🏠 UserProfile Component State:', { isConnected, hasProfile, profile: profile?.username });
 
   const loadChapter2Objectives = async () => {
-    if (!primaryWallet?.address) return;
+    const walletAddr = unifiedAddress || primaryWallet?.address;
+    if (!walletAddr) return;
     setChapter2Loading(true);
     try {
-      const objectiveStatus = await getChapter2ObjectivesStatus(primaryWallet!.address);
+      const objectiveStatus = await getChapter2ObjectivesStatus(walletAddr);
       setChapter2Objectives(objectiveStatus.completedObjectives);
       console.log('📋 Chapter 2 objectives loaded:', objectiveStatus.completedObjectives);
     } catch (error) {
@@ -69,10 +71,11 @@ const UserProfile: React.FC = () => {
   };
 
   const loadChapter3Objectives = async () => {
-    if (!primaryWallet?.address) return;
+    const walletAddr = unifiedAddress || primaryWallet?.address;
+    if (!walletAddr) return;
     setChapter3Loading(true);
     try {
-      const objectiveStatus = await getChapter3ObjectivesStatus(primaryWallet!.address);
+      const objectiveStatus = await getChapter3ObjectivesStatus(walletAddr);
       setChapter3Objectives(objectiveStatus.completedObjectives);
       console.log('📋 Chapter 3 objectives loaded:', objectiveStatus.completedObjectives);
     } catch (error) {
@@ -83,10 +86,11 @@ const UserProfile: React.FC = () => {
   };
 
   const loadChapter4Objectives = async () => {
-    if (!primaryWallet?.address) return;
+    const walletAddr = unifiedAddress || primaryWallet?.address;
+    if (!walletAddr) return;
     setChapter4Loading(true);
     try {
-      const objectiveStatus = await getChapter4ObjectivesStatus(primaryWallet!.address);
+      const objectiveStatus = await getChapter4ObjectivesStatus(walletAddr);
       setChapter4Objectives(objectiveStatus.completedObjectives);
       console.log('📋 Chapter 4 objectives loaded:', objectiveStatus.completedObjectives);
     } catch (error) {
@@ -97,10 +101,11 @@ const UserProfile: React.FC = () => {
   };
 
   const loadChapter5Objectives = async () => {
-    if (!primaryWallet?.address) return;
+    const walletAddr = unifiedAddress || primaryWallet?.address;
+    if (!walletAddr) return;
     setChapter5Loading(true);
     try {
-      const objectiveStatus = await getChapter5ObjectivesStatus(primaryWallet!.address);
+      const objectiveStatus = await getChapter5ObjectivesStatus(walletAddr);
       setChapter5Objectives(objectiveStatus.completedObjectives);
       console.log('📋 Chapter 5 objectives loaded:', objectiveStatus.completedObjectives);
     } catch (error) {
@@ -112,10 +117,11 @@ const UserProfile: React.FC = () => {
 
   // Check daily login status and load special events
   useEffect(() => {
-    if (!primaryWallet?.address) return;
+    const walletAddr = unifiedAddress || primaryWallet?.address;
+    if (!walletAddr) return;
     
     const checkDailyStatus = async () => {
-      const canClaim = await canClaimDailyLogin(primaryWallet!.address);
+      const canClaim = await canClaimDailyLogin(walletAddr);
       setCanClaimDaily(canClaim);
     };
     
@@ -141,14 +147,15 @@ const UserProfile: React.FC = () => {
     }, 300000); // Check every 5 minutes (reduced from 30 seconds to minimize console noise)
     
     return () => clearInterval(interval);
-  }, [primaryWallet?.address]);
+  }, [unifiedAddress, primaryWallet?.address]);
 
   const handleFeedbackSubmit = async (feedback: string) => {
     // Handle feedback submission here
     console.log('Feedback submitted:', feedback);
     setFeedbackSubmitted(true);
     
-    if (primaryWallet) {
+    const walletAddr = unifiedAddress || primaryWallet?.address;
+    if (walletAddr) {
       loadChapter2Objectives(); // Also refresh objectives
       loadChapter3Objectives(); // Also refresh Chapter 3 objectives
       loadChapter4Objectives(); // Also refresh Chapter 4 objectives
@@ -156,11 +163,12 @@ const UserProfile: React.FC = () => {
   };
 
   const handleClaimDailyLogin = async () => {
-    if (claimingDaily || !canClaimDaily || !primaryWallet?.address) return;
+    const walletAddr = unifiedAddress || primaryWallet?.address;
+    if (claimingDaily || !canClaimDaily || !walletAddr) return;
     
     setClaimingDaily(true);
     try {
-      await claimDailyLogin(primaryWallet.address);
+      await claimDailyLogin(walletAddr);
       setCanClaimDaily(false);
       await refreshBalance();
       await refreshStats();
@@ -173,11 +181,12 @@ const UserProfile: React.FC = () => {
   };
 
   const handleClaimSpecialEvent = async (eventId: string) => {
-    if (claimingEvent || !primaryWallet?.address) return;
+    const walletAddr = unifiedAddress || primaryWallet?.address;
+    if (claimingEvent || !walletAddr) return;
     
     setClaimingEvent(eventId);
     try {
-      await claimSpecialEvent(eventId, primaryWallet.address);
+      await claimSpecialEvent(eventId, walletAddr);
       // Refresh events to remove claimed event
       const updatedEvents = await getActiveSpecialEvents();
       setSpecialEvents(updatedEvents);
@@ -216,11 +225,15 @@ const UserProfile: React.FC = () => {
   };
 
   const handleCreateProfile = async () => {
+    // Get the active wallet address - unified address works for both Dynamic (web) and FCL (mobile)
+    const activeWalletAddress = unifiedAddress || primaryWallet?.address;
+    
     console.log('🔧 DEBUG: handleCreateProfile called');
     console.log('🔧 DEBUG: hasProfile:', hasProfile, 'devBypass:', devBypass);
-    console.log('🔧 DEBUG: primaryWallet address:', primaryWallet?.address);
+    console.log('🔧 DEBUG: unifiedAddress:', unifiedAddress, 'primaryWallet address:', primaryWallet?.address);
+    console.log('🔧 DEBUG: activeWalletAddress:', activeWalletAddress);
     
-    if (!primaryWallet?.address) {
+    if (!activeWalletAddress && !devBypass) {
       alert('Please connect your wallet first!');
       return;
     }
@@ -495,7 +508,7 @@ const UserProfile: React.FC = () => {
           </div>
         
         /* No locker but wallet connected - Need profile or locker assignment */
-        ) : !lockerNumber && primaryWallet?.address && !devBypass ? (
+        ) : !lockerNumber && (unifiedAddress || primaryWallet?.address) && !devBypass ? (
           <div style={{
             width: '100%',
             height: '100%',
@@ -520,7 +533,7 @@ const UserProfile: React.FC = () => {
               🎉 Welcome to Flunks High School!
               <br />
               <span style={{ fontSize: '14px', fontStyle: 'italic', marginTop: '10px', display: 'block' }}>
-                Wallet: {primaryWallet.address.slice(0, 12)}...
+                Wallet: {(unifiedAddress || primaryWallet?.address || '').slice(0, 12)}...
               </span>
               <br />
               <span style={{ fontSize: '14px', color: '#f39c12' }}>

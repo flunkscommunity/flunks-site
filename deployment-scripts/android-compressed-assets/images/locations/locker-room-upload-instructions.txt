@@ -1,0 +1,32 @@
+LOCKER ROOM IMAGE UPLOAD INSTRUCTIONS
+====================================
+
+To complete the enhanced locker room for the Footballer Flunks GUM claim feature:
+
+1. Upload your locker room image as: locker-room.png
+2. Place it in this exact location: /public/images/locations/locker-room.png
+3. Recommended image dimensions: 1920x1080 or similar wide aspect ratio
+4. Image should show an interior view of a high school locker room with metal lockers
+
+FEATURES IMPLEMENTED:
+- Large window similar to cafeteria (70vw x 70vh)
+- Special GUM claim button for Footballer Flunk NFT holders
+- One-time claim of 100 GUM per wallet
+- Automatic detection of "FOOTBALLER-FLUNK-HOME" and "FOOTBALLER-FLUNK-AWAY" traits
+- Database tracking to prevent duplicate claims
+- Works across all cliques (FREAK, GEEK, JOCK, PREP)
+
+FILE PATH EXPECTED BY CODE:
+/public/images/locations/locker-room.png
+
+FALLBACK BEHAVIOR:
+If the image fails to load, it will automatically fallback to a blank background.
+
+DATABASE TABLE CREATED:
+Run the SQL in create-footballer-claims-table.sql to set up the claims tracking.
+
+API ENDPOINTS CREATED:
+- /api/check-footballer-claim - Check if wallet already claimed
+- /api/claim-footballer-gum - Process the 100 GUM reward
+
+The system is now ready! Users with Footballer Flunks can visit the locker room and claim their one-time 100 GUM reward.

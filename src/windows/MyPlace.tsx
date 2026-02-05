@@ -26,8 +26,7 @@ const Container = styled.div`
   background-size: 400px 400px, 300px 300px, 200px 200px, 100% 100%;
   background-position: 0% 0%, 100% 100%, 50% 50%, 0% 0%;
   position: relative;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
   animation: backgroundPulse 4s ease-in-out infinite alternate;
   
   @media (max-width: 768px) {

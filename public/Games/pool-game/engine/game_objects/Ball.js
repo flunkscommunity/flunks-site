@@ -44,6 +44,7 @@ Object.defineProperty(Ball.prototype, "color",
     });
 
 Ball.prototype.shoot = function(power, angle){
+    console.log('[Ball] shoot() called - power:', power, 'angle:', angle, 'already moving:', this.moving);
     if(power <= 0)
         return;
 
@@ -63,7 +64,7 @@ Ball.prototype.update = function(delta){
 
     this.velocity.multiplyWith(0.98);
 
-	if(this.moving && Math.abs(this.velocity.x) < 1 && Math.abs(this.velocity.y) < 1){
+	if(this.moving && Math.abs(this.velocity.x) < 3 && Math.abs(this.velocity.y) < 3){
         this.stop();
     }
 }

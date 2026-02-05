@@ -53,7 +53,10 @@ Menu.prototype.draw = function(){
 }
 
 Menu.prototype.handleInput = function(){
-
+    if (!this.buttons || !Array.isArray(this.buttons)) {
+        return;
+    }
+    
     for(let i = 0 ; i < this.buttons.length ; i++){
         this.buttons[i].handleInput();
     }

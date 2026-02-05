@@ -106,50 +106,16 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     }
   }, [isClient]);
 
-  // Show loading screen during SSR/hydration
+  // Show blank screen during SSR/hydration (no loading spinner)
   if (!isClient) {
     return (
       <>
         {memodGlobalStyles}
         <ThemeWrapper>
           <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
             minHeight: '100vh',
-            backgroundColor: '#0f0f1a',
-            fontFamily: 'Arial, sans-serif',
-            color: 'white'
-          }}>
-            <div style={{ textAlign: 'center' }}>
-              {initError ? (
-                <>
-                  <p style={{ color: '#ff6666' }}>Error: {initError}</p>
-                  <button onClick={() => window.location.reload()}>Reload</button>
-                </>
-              ) : (
-                <>
-                  <div style={{
-                    width: '40px',
-                    height: '40px',
-                    border: '4px solid #333',
-                    borderTop: '4px solid #00ff00',
-                    borderRadius: '50%',
-                    animation: 'spin 1s linear infinite',
-                    margin: '0 auto 20px'
-                  }}></div>
-                  <p>Loading Flunks...</p>
-                  <p style={{ fontSize: '10px', opacity: 0.5, marginTop: '10px' }}>Initializing app...</p>
-                </>
-              )}
-              <style jsx>{`
-                @keyframes spin {
-                  0% { transform: rotate(0deg); }
-                  100% { transform: rotate(360deg); }
-                }
-              `}</style>
-            </div>
-          </div>
+            backgroundColor: '#0f0f1a'
+          }} />
         </ThemeWrapper>
       </>
     );
