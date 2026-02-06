@@ -436,7 +436,7 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                   <div className="flex flex-col md:flex-row items-start gap-3 md:gap-6">
                     <div className="w-24 h-24 md:w-40 md:h-40 border-2 md:border-4 border-blue-600 rounded-lg flex-shrink-0 overflow-hidden shadow-lg mx-auto md:mx-0">
                       <img 
-                        src="/images/about-us/skeremy.png" 
+                        src="/images/about-us/skeremy.webp" 
                         alt="Skeremy"
                         className="w-full h-full object-cover"
                       />
@@ -462,7 +462,7 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                   <div className="flex flex-col md:flex-row items-start gap-3 md:gap-6">
                     <div className="w-24 h-24 md:w-40 md:h-40 border-2 md:border-4 border-pink-600 rounded-lg flex-shrink-0 overflow-hidden shadow-lg mx-auto md:mx-0">
                       <img 
-                        src="/images/about-us/Nantucket.png" 
+                        src="/images/about-us/Nantucket.webp" 
                         alt="Nantucket"
                         className="w-full h-full object-cover"
                       />
@@ -488,7 +488,7 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                   <div className="flex flex-col md:flex-row items-start gap-3 md:gap-6">
                     <div className="w-24 h-24 md:w-40 md:h-40 border-2 md:border-4 border-green-600 rounded-lg flex-shrink-0 overflow-hidden shadow-lg mx-auto md:mx-0">
                       <img 
-                        src="/images/about-us/dolo.png" 
+                        src="/images/about-us/dolo.webp" 
                         alt="DOLO"
                         className="w-full h-full object-cover"
                       />
@@ -514,7 +514,7 @@ const FHSSchool: React.FC<Props> = ({ onClose }) => {
                   <div className="flex flex-col md:flex-row items-start gap-3 md:gap-6">
                     <div className="w-24 h-24 md:w-40 md:h-40 border-2 md:border-4 border-yellow-600 rounded-lg flex-shrink-0 overflow-hidden shadow-lg mx-auto md:mx-0">
                       <img 
-                        src="/images/about-us/Handy.png" 
+                        src="/images/about-us/Handy.webp" 
                         alt="Handy"
                         className="w-full h-full object-cover"
                       />
