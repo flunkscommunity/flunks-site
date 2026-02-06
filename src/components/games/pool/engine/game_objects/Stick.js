@@ -1,7 +1,15 @@
 "use strict";
 
-// Detect if we're on a touch device
-var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+// Detect if we're running in a Capacitor mobile app (NOT just touch-capable browser)
+// This ensures desktop browsers with touch screens still use keyboard controls
+var isCapacitorApp = typeof window !== 'undefined' && 
+    window.Capacitor && 
+    typeof window.Capacitor.isNativePlatform === 'function' && 
+    window.Capacitor.isNativePlatform();
+
+// Use mobile controls ONLY for actual native mobile apps (iOS/Android via Capacitor)
+// Desktop browsers (even with touch) should use W/S keys + click
+var isTouchDevice = isCapacitorApp;
 
 function Stick(position){
     this.position = position;
@@ -157,5 +165,7 @@ Stick.prototype.reset = function(){
 Stick.prototype.draw = function () {
   if(!this.visible)
     return;
-  Canvas2D.drawImage(sprites.stick, this.position,this.rotation,1, this.origin);
+  // Use opponent cue stick when it's AI's turn
+  var currentStick = (AI_ON && Game.policy.turn === AI_PLAYER_NUM) ? (sprites.stickEasy || sprites.stick) : sprites.stick;
+  Canvas2D.drawImage(currentStick, this.position,this.rotation,1, this.origin);
 };

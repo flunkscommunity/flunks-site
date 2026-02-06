@@ -19,6 +19,7 @@ Game.loadAssets = function () {
     sprites.yellowBall = loadSprite("spr_yellowBall2.png");
     sprites.blackBall = loadSprite("spr_blackBall2.png");
     sprites.stick = loadSprite("spr_stick.png");
+    sprites.stickEasy = loadSprite("spr_stick_easy.png");
     sprites.twoPlayersButton = loadSprite("2_players_button.png");
     sprites.twoPlayersButtonHover = loadSprite("2_players_button_hover.png");
     sprites.onePlayersButton = loadSprite("1_player_button.png");
