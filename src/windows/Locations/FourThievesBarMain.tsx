@@ -428,8 +428,8 @@ const FourThievesBarMain = () => {
               />
             </div>
 
-            {/* Pool Game Button - DEV ONLY for now */}
-            {process.env.NODE_ENV === 'development' && (
+            {/* Pool Game Button - DEV or MOBILE builds only (hidden on live web) */}
+            {(process.env.NODE_ENV === 'development' || process.env.NEXT_PUBLIC_MOBILE_BUILD === 'true') && (
             <div className="w-full bg-gradient-to-r from-amber-800 via-red-900 to-amber-800 p-3 border-t-2 border-yellow-600 shadow-xl">
               <button
                 onClick={openPoolGame}

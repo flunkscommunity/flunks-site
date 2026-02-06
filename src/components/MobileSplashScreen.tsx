@@ -388,7 +388,7 @@ const MobileSplashScreen: React.FC<MobileSplashScreenProps> = ({ onComplete, onD
   }, [initAudio, playTypeSound, playBeep, playBootSound]);
   
   const handleTap = useCallback(() => {
-    if (!canProceed) return;
+    // Allow tap to skip at any time (bypass loading)
     
     // Initialize audio on tap (iOS requires user interaction)
     initAudio();
@@ -407,7 +407,7 @@ const MobileSplashScreen: React.FC<MobileSplashScreenProps> = ({ onComplete, onD
     setTimeout(() => {
       onComplete();
     }, 500);
-  }, [canProceed, initAudio, playBeep, onComplete]);
+  }, [initAudio, playBeep, onComplete]);
 
   const handleDemoMode = useCallback((e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent the tap handler from firing
@@ -476,6 +476,13 @@ const MobileSplashScreen: React.FC<MobileSplashScreenProps> = ({ onComplete, onD
               </>
             )}
           </LogoContainer>
+          
+          {/* Tap to skip hint - always visible */}
+          {!showReady && (
+            <ReadyText $visible={true} style={{ opacity: 0.5, fontSize: '0.8rem' }}>
+              TAP TO SKIP
+            </ReadyText>
+          )}
         </ContentWrapper>
       </Screen>
     </SplashContainer>

@@ -132,6 +132,10 @@ function generateMainMenuButtons(inGame){
                             AI_PLAYER_NUM = 1;
                             AI_ON = true;
                             TRAIN_ITER = 15; // Mobile optimized (was 30)
+                            // Use easy mode cue
+                            if (sprites.stickEasy) {
+                                Game.gameWorld.stick.sprite = sprites.stickEasy;
+                            }
                             Game.mainMenu.active = false;
                             GAME_STOPPED = false;
                             setTimeout(Game.startNewGame,200);
@@ -148,6 +152,8 @@ function generateMainMenuButtons(inGame){
                             AI_PLAYER_NUM = 1;
                             AI_ON = true;
                             TRAIN_ITER = 25; // Mobile optimized (was 50)
+                            // Use default cue
+                            Game.gameWorld.stick.sprite = sprites.stick;
                             Game.mainMenu.active = false;
                             GAME_STOPPED = false;
                             setTimeout(Game.startNewGame,200);
@@ -164,6 +170,8 @@ function generateMainMenuButtons(inGame){
                             AI_PLAYER_NUM = 1;
                             AI_ON = true;
                             TRAIN_ITER = 40; // Mobile optimized (was 100)
+                            // Use default cue
+                            Game.gameWorld.stick.sprite = sprites.stick;
                             Game.mainMenu.active = false;
                             GAME_STOPPED = false;
                             setTimeout(Game.startNewGame,200);
@@ -180,6 +188,8 @@ function generateMainMenuButtons(inGame){
                             AI_PLAYER_NUM = 0;
                             AI_ON = true;
                             TRAIN_ITER = 100; // Mobile optimized (was 700)
+                            // Use default cue
+                            Game.gameWorld.stick.sprite = sprites.stick;
                             Game.mainMenu.active = false;
                             GAME_STOPPED = false;
                             setTimeout(Game.startNewGame,200);

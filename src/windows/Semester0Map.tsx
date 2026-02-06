@@ -521,7 +521,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           </div>
         )}
 
-        {/* Wallet Status Indicator */}
+        {/* Wallet Status Indicator - only show dev bypass messages in development */}
         {!loading && (
           <div style={{
             position: 'absolute',
@@ -537,7 +537,7 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
             boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
             fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif'
           }}>
-            {walletBypassEnabled ? (
+            {(walletBypassEnabled && process.env.NODE_ENV === 'development') ? (
               `🔧 DEV BYPASS - Full Access`
             ) : effectiveAuth.isAuthenticated ? (
               effectiveAuth.hasFlunks ? `✅ ${effectiveAuth.flunksCount} Flunks - Full Access` : `⚠️ Connected - Need Flunks for Access`
@@ -545,8 +545,8 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
           </div>
         )}
         
-        {/* Development Bypass Button (Build Mode Only) */}
-        {walletBypassEnabled && (
+        {/* Development Bypass Button (Build Mode Only - dev environment only) */}
+        {walletBypassEnabled && process.env.NODE_ENV === 'development' && (
           <div style={{
             position: 'absolute',
             top: '60px',
