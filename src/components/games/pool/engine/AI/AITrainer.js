@@ -109,14 +109,14 @@ AITrainer.prototype.playTurn = function(){
     Game.gameWorld.stick.trackMouse = false;
 
     setTimeout(() => {
-
-        Game.gameWorld.stick.visible = true;
-        Canvas2D.clear();
-        Game.gameWorld.draw();
-
         Game.sound = true;
         Game.gameWorld.initiateState(AI.initialState.balls);
         Game.policy.initiateState(AI.initialGamePolicyState);
+
+        Game.gameWorld.stick.visible = true;
+
+        Canvas2D.clear();
+        Game.gameWorld.draw();
 
         DISPLAY = true;
         

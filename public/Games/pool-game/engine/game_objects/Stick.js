@@ -1,7 +1,15 @@
 "use strict";
 
-// Detect if we're on a touch device
-var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+// Detect if we're running in a Capacitor mobile app (NOT just touch-capable browser)
+// This ensures desktop browsers with touch screens still use keyboard controls
+var isCapacitorApp = typeof window !== 'undefined' && 
+    window.Capacitor && 
+    typeof window.Capacitor.isNativePlatform === 'function' && 
+    window.Capacitor.isNativePlatform();
+
+// Use mobile controls ONLY for actual native mobile apps (iOS/Android via Capacitor)
+// Desktop browsers (even with touch) should use W/S keys + click
+var isTouchDevice = isCapacitorApp;
 
 function Stick(position){
     this.position = position;
@@ -16,7 +24,7 @@ function Stick(position){
     this.isDragging = false;
     this.dragStart = null;
     this.isAiming = true;
-    this.aimLocked = false;  // New: for React UI control
+    this.aimLocked = false;  // For React UI control (mobile only)
     
     // Expose stick instance globally for React controls
     window.PoolStick = this;
@@ -30,26 +38,47 @@ Stick.prototype.handleInput = function (delta) {
     if(Game.policy.turnPlayed)
       return;
 
-    // Check if React UI has locked the aim
-    if (this.aimLocked) {
-      // Aim is locked, only respond to power/shoot commands from React
-      return;
-    }
-
-    // Always track mouse/touch for aiming
+    // Always track mouse for aiming (both desktop and mobile)
     if (this.trackMouse && this.isAiming) {
       var opposite = Mouse.position.y - this.position.y;
       var adjacent = Mouse.position.x - this.position.x;
       this.rotation = Math.atan2(opposite, adjacent);
     }
 
-    // Don't process keyboard/mouse shooting - React UI handles it
-    // Desktop users can still aim with mouse, but shoot via React buttons
+    if (isTouchDevice) {
+      // === MOBILE CONTROLS: React UI buttons (lockAim, +/-, shoot) ===
+      // Check if React UI has locked the aim
+      if (this.aimLocked) {
+        return; // Power/shoot handled by React UI
+      }
+    } else {
+      // === DESKTOP CONTROLS: W/S for power, click or SPACE to shoot ===
+      this.handleDesktopInput();
+    }
 };
 
 Stick.prototype.handleDesktopInput = function() {
-    // Desktop input now handled by React UI buttons
-    // This is kept for backwards compatibility but not actively used
+    // Keyboard controls for power
+    if(Keyboard.down(Keys.W) && KEYBOARD_INPUT_ON){
+      if(this.power < 75){
+        this.origin.x += 2;
+        this.power += 1.2;
+      }
+    }
+
+    if(Keyboard.down(Keys.S) && KEYBOARD_INPUT_ON){
+      if(this.power > 0){
+        this.origin.x -= 2;
+        this.power -= 1.2;
+      }
+    }
+
+    // Shoot with mouse click or SPACE when power is set
+    if (this.power > 0) {
+      if (Mouse.left.pressed || Keyboard.pressed(Keys.space)) {
+        this.executeShot();
+      }
+    }
 };
 
 // New methods for React UI control
@@ -97,8 +126,41 @@ Stick.prototype.canShoot = function() {
 };
 
 Stick.prototype.handleMobileInput = function() {
-    // Mobile input now handled by React UI buttons
-    // This is kept for backwards compatibility but not actively used
+    if (this.isAiming) {
+      // Click to lock aim and start dragging for power
+      if (Mouse.left.pressed) {
+        this.isAiming = false;
+        this.isDragging = true;
+        this.dragStart = Mouse.position.copy();
+      }
+    } else {
+      // Dragging to set power
+      if (this.isDragging && Mouse.left.down) {
+        var dx = this.dragStart.x - Mouse.position.x;
+        var dy = this.dragStart.y - Mouse.position.y;
+        var dragDist = -(dx * Math.cos(this.rotation) + dy * Math.sin(this.rotation));
+        this.power = Math.max(0, Math.min(75, dragDist * 0.5));
+        this.origin.x = 970 + (this.power / 75) * 50;
+      } else if (this.isDragging && !Mouse.left.down) {
+        // Released - shoot if we have power
+        this.isDragging = false;
+        if (this.power > 0) {
+          this.executeShot();
+        } else {
+          // No power, go back to aiming
+          this.isAiming = true;
+        }
+      }
+      
+      // Tap to shoot if not dragging and power is set
+      if (!this.isDragging && Mouse.left.pressed) {
+        if (this.power > 0) {
+          this.executeShot();
+        } else {
+          this.isAiming = true;
+        }
+      }
+    }
 };
 
 Stick.prototype.executeShot = function() {
@@ -151,12 +213,13 @@ Stick.prototype.reset = function(){
   this.isAiming = true;
   this.isDragging = false;
   this.dragStart = null;
-  this.aimLocked = false;  // Reset aim lock on turn reset
+  this.aimLocked = false;
 };
 
 Stick.prototype.draw = function () {
   if(!this.visible)
     return;
+  var sprite = (AI_ON && Game.policy.turn === AI_PLAYER_NUM) ? sprites.stickEasy : sprites.stick;
   var ctx = Canvas2D._canvasContext;
   var canvasScale = Canvas2D.scale;
   var lineLength = 520;
@@ -196,5 +259,5 @@ Stick.prototype.draw = function () {
   ctx.lineWidth = 2;
   ctx.stroke();
   ctx.restore();
-  Canvas2D.drawImage(sprites.stick, this.position,this.rotation,1, this.origin);
+  Canvas2D.drawImage(sprite, this.position,this.rotation,1, this.origin);
 };

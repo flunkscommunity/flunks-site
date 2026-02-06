@@ -129,14 +129,13 @@ AITrainer.prototype.playTurn = function(){
     setTimeout(() => {
         console.log('[AI] First timeout - resetting state');
 
-        // Don't show stick yet - wait until actual shot
-        // Game.gameWorld.stick.visible = true;
-        Canvas2D.clear();
-        Game.gameWorld.draw();
-
         Game.sound = true;
         Game.gameWorld.initiateState(AI.initialState.balls);
         Game.policy.initiateState(AI.initialGamePolicyState);
+
+        Game.gameWorld.stick.visible = true;
+        Canvas2D.clear();
+        Game.gameWorld.draw();
 
         DISPLAY = true;
         
@@ -144,7 +143,6 @@ AITrainer.prototype.playTurn = function(){
 
         setTimeout(() => {
             console.log('[AI] Second timeout - executing shot');
-            // Show stick right before shooting
             Game.gameWorld.stick.visible = true;
             Game.gameWorld.stick
             .shoot(

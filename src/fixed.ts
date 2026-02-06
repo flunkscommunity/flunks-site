@@ -210,6 +210,7 @@ export const WINDOW_IDS = {
 
   // WalletConnect test (mobile app)
   TEST_FLOW_WALLET: "test-flow-wallet",
+  FLOW_WALLET_APP: "flow-wallet-app",
 };
 
 export const WINDOW_APP_INFO_TO_WINDOW_ID = {
@@ -383,6 +384,11 @@ export const WINDOW_APP_INFO_TO_WINDOW_ID = {
     appName: "Test Flow Wallet",
     appIcon: "/images/icons/flowty.png",
     key: WINDOW_IDS.TEST_FLOW_WALLET,
+  },
+  [WINDOW_IDS.FLOW_WALLET_APP]: {
+    appName: "Flow Wallet",
+    appIcon: "/images/icons/flowty.png",
+    key: WINDOW_IDS.FLOW_WALLET_APP,
   },
   [WINDOW_IDS.USER_PROFILE]: {
     appName: "My Locker",

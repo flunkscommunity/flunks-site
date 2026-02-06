@@ -54,7 +54,7 @@ import WalletStatusBar from "components/WalletStatusBar";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { useUnifiedWallet } from "contexts/UnifiedWalletContext";
 import LoadingScreenPreview from "windows/LoadingScreenPreview";
-import TestFlowWalletWindow from "windows/TestFlowWalletWindow";
+import FlowWalletApp from "windows/FlowWalletApp";
 
 import { GumAdminPanel } from "components/GumAdminPanel";
 import { TimeConfigAdmin } from "components/DayNightHouse";
@@ -126,14 +126,13 @@ const Desktop = () => {
   const [initComplete, setInitComplete] = useState(false);
   const splashDismissedRef = useRef(false);
   const mobileInitRanRef = useRef(false);
-  const { primaryWallet, setShowAuthFlow } = useDynamicContext();
-  const { connectFCL, disconnect, isConnected, address: unifiedAddress, isMobile: isMobileWallet, isConnecting } = useUnifiedWallet();
+  const { primaryWallet } = useDynamicContext();
+  const { disconnect, isConnected, address: unifiedAddress, isConnecting } = useUnifiedWallet();
   const { hasProfile, profile } = useUserProfile();
   
   // Demo mode support for iOS App Store review
   const demoMode = useDemoModeOptional();
   const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
-  const [showWalletDebug, setShowWalletDebug] = useState(false);
 
   const handleSplashComplete = useCallback(() => {
     splashDismissedRef.current = true;
@@ -200,18 +199,6 @@ const Desktop = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const walletDebugQuery = router.query.walletDebug;
-    const queryFlag = Array.isArray(walletDebugQuery)
-      ? walletDebugQuery.includes('1')
-      : walletDebugQuery === '1';
-    if (queryFlag) {
-      localStorage.setItem('wallet-debug', '1');
-    }
-    const enabled = localStorage.getItem('wallet-debug') === '1';
-    setShowWalletDebug(enabled);
-  }, [router.query.walletDebug]);
 
 const windowsMemod = useMemo(() => (
   <>
@@ -451,25 +438,12 @@ const windowsMemod = useMemo(() => (
                           Connect your wallet to create your Semester Zero character profile and get your locker assigned!
                         </p>
                         <button
-                          onClick={async () => {
+                          onClick={() => {
                             closeWindow('PROFILE_SIGNIN_PROMPT');
-                            // Debug: log mobile detection values
-                            console.log('🔍 Connect Wallet clicked - isMobile:', isMobile, 'isMobileWallet:', isMobileWallet, 'Capacitor:', !!(window as any).Capacitor?.isNativePlatform?.());
-                            
-                            // Use FCL for mobile native apps, Dynamic for web
-                            // Check Capacitor directly as a fallback
-                            const isCapacitorMobile = !!(window as any).Capacitor?.isNativePlatform?.();
-                            if (isMobile || isMobileWallet || isCapacitorMobile) {
-                              console.log('📱 Profile prompt: Using FCL for mobile wallet connection');
-                              try {
-                                await connectFCL();
-                              } catch (error) {
-                                console.error('Mobile wallet connection error:', error);
-                              }
-                            } else {
-                              console.log('🌐 Profile prompt: Using Dynamic for web wallet connection');
-                              setShowAuthFlow(true);
-                            }
+                            openWindow({
+                              key: WINDOW_IDS.FLOW_WALLET_APP,
+                              window: <FlowWalletApp />
+                            });
                           }}
                           style={{
                             background: '#ffffff',
@@ -541,17 +515,15 @@ const windowsMemod = useMemo(() => (
           })}
         />
 
-        {showWalletDebug && (
-          <ConditionalAppIcon
-            appId="test-flow-wallet"
-            title="Flow Wallet Debug"
-            icon="/images/icons/flowty.png"
-            onDoubleClick={() => openWindow({
-              key: WINDOW_IDS.TEST_FLOW_WALLET,
-              window: <TestFlowWalletWindow />
-            })}
-          />
-        )}
+        <ConditionalAppIcon
+          appId="flow-wallet"
+          title="Flow Wallet"
+          icon="/images/icons/flowty.png"
+          onDoubleClick={() => openWindow({
+            key: WINDOW_IDS.FLOW_WALLET_APP,
+            window: <FlowWalletApp />
+          })}
+        />
 
         {/* 4.1 Account / Sign Out - Always visible */}
         <ConditionalAppIcon
@@ -710,19 +682,13 @@ const windowsMemod = useMemo(() => (
                     </button>
                   ) : (
                     <button
-                      onClick={async () => {
+                      onClick={() => {
                         console.log('🔗 Account: Connect Wallet clicked');
                         closeWindow('ACCOUNT_WINDOW');
-                        const isCapacitorMobile = !!(window as any).Capacitor?.isNativePlatform?.();
-                        if (isMobile || isMobileWallet || isCapacitorMobile) {
-                          try {
-                            await connectFCL();
-                          } catch (error) {
-                            console.error('Mobile wallet connection error:', error);
-                          }
-                        } else {
-                          setShowAuthFlow(true);
-                        }
+                        openWindow({
+                          key: WINDOW_IDS.FLOW_WALLET_APP,
+                          window: <FlowWalletApp />
+                        });
                       }}
                       disabled={isConnecting}
                       style={{

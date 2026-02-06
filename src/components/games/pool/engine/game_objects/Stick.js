@@ -165,7 +165,6 @@ Stick.prototype.reset = function(){
 Stick.prototype.draw = function () {
   if(!this.visible)
     return;
-  // Use opponent cue stick when it's AI's turn
-  var currentStick = (AI_ON && Game.policy.turn === AI_PLAYER_NUM) ? (sprites.stickEasy || sprites.stick) : sprites.stick;
-  Canvas2D.drawImage(currentStick, this.position,this.rotation,1, this.origin);
+  var sprite = (AI_ON && Game.policy.turn === AI_PLAYER_NUM) ? sprites.stickEasy : sprites.stick;
+  Canvas2D.drawImage(sprite, this.position,this.rotation,1, this.origin);
 };

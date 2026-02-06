@@ -51,13 +51,19 @@
                 <data android:scheme="net.flunks.app" />
             </intent-filter>
 
-            <!-- WalletConnect deep link handler -->
+            <!-- WalletConnect deep link handler - REMOVED
+                 This was causing the app to restart when opening WC URIs
+                 because Android routed the wc: scheme back to our own app.
+                 The WC callback comes via https://flunks.net deep link instead.
+            -->
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="wc" />
             </intent-filter>
+            -->
 
             <!-- HTTPS deep links for verified app links -->
             <intent-filter android:autoVerify="true">

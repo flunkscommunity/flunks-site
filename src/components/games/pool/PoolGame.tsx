@@ -113,16 +113,16 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
     }
   }, []);
 
-  // Detect mobile vs desktop
+  // Detect mobile vs desktop - only Capacitor native apps count as mobile
   useEffect(() => {
     const checkMobile = () => {
-      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-      const isSmallScreen = window.innerWidth <= 768;
-      setIsMobile(isTouchDevice && isSmallScreen);
+      const isCapacitorApp = typeof window !== 'undefined' && 
+        (window as any).Capacitor && 
+        typeof (window as any).Capacitor.isNativePlatform === 'function' && 
+        (window as any).Capacitor.isNativePlatform();
+      setIsMobile(isCapacitorApp);
     };
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   // Detect portrait orientation
@@ -750,46 +750,80 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
           <h2 className="pool-tutorial-title">HOW TO PLAY</h2>
           
           <div className="pool-tutorial-sections">
-            {/* Universal Controls */}
+            {/* Controls - different for desktop vs mobile */}
             <div className="pool-tutorial-section">
               <div className="section-title pixel-title">🎱 CONTROLS</div>
-              <div className="pool-tutorial-steps">
-                <div className="pool-tutorial-step">
-                  <div className="step-number">1</div>
-                  <div className="step-icon">🎯</div>
-                  <div className="step-text">
-                    <span className="step-action">AIM</span>
-                    <span className="step-desc">Move/touch to aim the cue</span>
+              {isMobile ? (
+                <div className="pool-tutorial-steps">
+                  <div className="pool-tutorial-step">
+                    <div className="step-number">1</div>
+                    <div className="step-icon">🎯</div>
+                    <div className="step-text">
+                      <span className="step-action">AIM</span>
+                      <span className="step-desc">Touch to aim the cue</span>
+                    </div>
+                  </div>
+                  <div className="pool-tutorial-step">
+                    <div className="step-number">2</div>
+                    <div className="step-icon">🔒</div>
+                    <div className="step-text">
+                      <span className="step-action">LOCK AIM</span>
+                      <span className="step-desc">Tap &quot;Lock Aim&quot; when ready</span>
+                    </div>
+                  </div>
+                  <div className="pool-tutorial-step">
+                    <div className="step-number">3</div>
+                    <div className="step-icon">⬆️</div>
+                    <div className="step-text">
+                      <span className="step-action">SET POWER</span>
+                      <span className="step-desc">Use +/- buttons to adjust</span>
+                    </div>
+                  </div>
+                  <div className="pool-tutorial-step">
+                    <div className="step-number">4</div>
+                    <div className="step-icon">💥</div>
+                    <div className="step-text">
+                      <span className="step-action">SHOOT</span>
+                      <span className="step-desc">Tap &quot;Shoot&quot; to strike!</span>
+                    </div>
                   </div>
                 </div>
-                
-                <div className="pool-tutorial-step">
-                  <div className="step-number">2</div>
-                  <div className="step-icon">🔒</div>
-                  <div className="step-text">
-                    <span className="step-action">LOCK AIM</span>
-                    <span className="step-desc">Tap "Lock Aim" when ready</span>
+              ) : (
+                <div className="pool-tutorial-steps">
+                  <div className="pool-tutorial-step">
+                    <div className="step-number">1</div>
+                    <div className="step-icon">🖱️</div>
+                    <div className="step-text">
+                      <span className="step-action">AIM</span>
+                      <span className="step-desc">Move mouse to aim the cue</span>
+                    </div>
+                  </div>
+                  <div className="pool-tutorial-step">
+                    <div className="step-number">2</div>
+                    <div className="step-icon">⬆️</div>
+                    <div className="step-text">
+                      <span className="step-action">POWER UP</span>
+                      <span className="step-desc">Hold W to increase power</span>
+                    </div>
+                  </div>
+                  <div className="pool-tutorial-step">
+                    <div className="step-number">3</div>
+                    <div className="step-icon">⬇️</div>
+                    <div className="step-text">
+                      <span className="step-action">POWER DOWN</span>
+                      <span className="step-desc">Hold S to decrease power</span>
+                    </div>
+                  </div>
+                  <div className="pool-tutorial-step">
+                    <div className="step-number">4</div>
+                    <div className="step-icon">💥</div>
+                    <div className="step-text">
+                      <span className="step-action">SHOOT</span>
+                      <span className="step-desc">Click or press Space to shoot</span>
+                    </div>
                   </div>
                 </div>
-                
-                <div className="pool-tutorial-step">
-                  <div className="step-number">3</div>
-                  <div className="step-icon">⬆️</div>
-                  <div className="step-text">
-                    <span className="step-action">SET POWER</span>
-                    <span className="step-desc">Use +/- buttons to adjust</span>
-                  </div>
-                </div>
-
-                <div className="pool-tutorial-step">
-                  <div className="step-number">4</div>
-                  <div className="step-icon">💥</div>
-                  <div className="step-text">
-                    <span className="step-action">SHOOT</span>
-                    <span className="step-desc">Tap "Shoot" to strike!</span>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
           </div>
 
@@ -834,8 +868,9 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
           />
         )}
 
-        {/* Control Buttons Overlay */}
-        {!isLoading && (
+        {/* Control Buttons Overlay - only show on mobile (Capacitor) */}
+        {/* Desktop uses W/S keys + click directly in the game engine */}
+        {!isLoading && isMobile && (
           <div className="absolute bottom-0 left-0 right-0 flex justify-between items-end p-2 pointer-events-none" style={{ fontFamily: "'Press Start 2P', monospace" }}>
             {/* Left side - Lock/Unlock Aim button */}
             <div className="pointer-events-auto">
@@ -901,6 +936,14 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
                   </button>
                 </>
               )}
+            </div>
+          </div>
+        )}
+        {/* Desktop - show GUM balance only */}
+        {!isLoading && !isMobile && (
+          <div className="absolute bottom-0 left-0 right-0 flex justify-center p-2 pointer-events-none" style={{ fontFamily: "'Press Start 2P', monospace" }}>
+            <div className="text-yellow-400 text-xs bg-black/80 px-3 py-2 rounded border border-yellow-600">
+              💰 {gumBalance} GUM
             </div>
           </div>
         )}

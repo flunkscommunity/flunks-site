@@ -5,11 +5,11 @@ var sounds = {};
 
 Game.loadAssets = function () {
     var loadSprite = function (sprite) {
-        return Game.loadSprite("assets/sprites/" + sprite);
+        return Game.loadSprite("/Games/pool-game/sprites/" + sprite);
     };
 
      var loadSound = function (sound) {
-        return new Audio("assets/sounds/" + sound);
+        return new Audio("/Games/pool-game/sounds/" + sound);
     };
 
     sprites.mainMenuBackground = loadSprite("main_menu_background.png");
@@ -19,7 +19,7 @@ Game.loadAssets = function () {
     sprites.yellowBall = loadSprite("spr_yellowBall2.png");
     sprites.blackBall = loadSprite("spr_blackBall2.png");
     sprites.stick = loadSprite("spr_stick.png");
-    sprites.stickEasy = loadSprite("spr_stick_easy.png");
+    sprites.stickEasy = loadSprite("easy-cue.png");
     sprites.twoPlayersButton = loadSprite("2_players_button.png");
     sprites.twoPlayersButtonHover = loadSprite("2_players_button_hover.png");
     sprites.onePlayersButton = loadSprite("1_player_button.png");

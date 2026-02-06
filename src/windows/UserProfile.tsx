@@ -6,6 +6,7 @@ import { useLockerInfo, useLockerAssignment } from '../hooks/useLocker';
 import { useDynamicContext, DynamicConnectButton } from '@dynamic-labs/sdk-react-core';
 import { useUnifiedWallet } from '../contexts/UnifiedWalletContext';
 import UnifiedConnectButton from '../components/UnifiedConnectButton';
+import FlowWalletApp from './FlowWalletApp';
 
 // Check if running in Capacitor mobile app
 const isMobileApp = (): boolean => {
@@ -21,7 +22,7 @@ import { canClaimDailyLogin, claimDailyLogin } from '../services/dailyLoginServi
 import { getChapter2ObjectivesStatus, getChapter3ObjectivesStatus, getChapter4ObjectivesStatus, getChapter5ObjectivesStatus, ChapterObjective } from '../utils/weeklyObjectives';
 
 const UserProfile: React.FC = () => {
-  const { closeWindow } = useWindowsContext();
+  const { closeWindow, openWindow } = useWindowsContext();
   const { lockerInfo, loading, error, refetch } = useLockerInfo();
   const { assignLocker, assigning } = useLockerAssignment();
   const { primaryWallet, setShowAuthFlow } = useDynamicContext();
@@ -213,8 +214,11 @@ const UserProfile: React.FC = () => {
         console.error('Mobile wallet connection error:', error);
       }
     } else {
-      console.log('🌐 UserProfile: Using Dynamic for web wallet connection');
-      setShowAuthFlow(true);
+      console.log('🌐 UserProfile: Opening Flow Wallet App for web wallet connection');
+      openWindow({
+        key: WINDOW_IDS.FLOW_WALLET_APP,
+        window: <FlowWalletApp />
+      });
     }
   };
 

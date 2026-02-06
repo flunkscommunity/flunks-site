@@ -251,6 +251,19 @@ const wcRequestHook = async (data: any) => {
     // Construct the Flow Wallet universal link with WC URI
     const flowWalletUrl = `${FLOW_WALLET_UNIVERSAL_LINK}?uri=${encodeURIComponent(data.uri)}`;
     console.log('📱 Opening Flow Wallet via wcRequestHook:', flowWalletUrl);
+
+    const openUniversalLink = async (): Promise<boolean> => {
+      try {
+        const { AppLauncher } = await import('@capacitor/app-launcher');
+        console.log('📱 Opening Flow Wallet via universal link:', flowWalletUrl);
+        setWcDebug('android-universal-link', flowWalletUrl);
+        await AppLauncher.openUrl({ url: flowWalletUrl });
+        return true;
+      } catch (error) {
+        console.error('⚠️ Universal link open failed:', error);
+        return false;
+      }
+    };
     
     // Prefer direct app deep links on Android to avoid the intermediary landing screen
     const platform = (window as any).Capacitor?.getPlatform?.();
@@ -276,11 +289,10 @@ const wcRequestHook = async (data: any) => {
           return true;
         }
 
-        const intentUrl = `intent://wc?uri=${encodeURIComponent(data.uri)}#Intent;scheme=frw;S.browser_fallback_url=${encodeURIComponent(flowWalletUrl)};end`;
-        console.log('📱 Opening Flow Wallet via Android intent fallback:', intentUrl);
-        setWcDebug('android-intent-frw', intentUrl);
-        await AppLauncher.openUrl({ url: intentUrl });
-        return true;
+        const openedUniversal = await openUniversalLink();
+        if (openedUniversal) {
+          return true;
+        }
       } catch (error) {
         console.error('⚠️ Android deep link open failed, falling back to universal link:', error);
         setWcDebug('android-deeplink-failed', flowWalletUrl);
