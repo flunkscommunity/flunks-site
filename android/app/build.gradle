@@ -11,10 +11,10 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
+            storeFile file("/Users/skeremy/Documents/flunks-release.jks")
+            storePassword "Flunks2026!"
+            keyAlias "flunks-key"
+            keyPassword "Flunks2026!"
         }
     }
 

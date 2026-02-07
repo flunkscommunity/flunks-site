@@ -259,5 +259,9 @@ Stick.prototype.draw = function () {
   ctx.lineWidth = 2;
   ctx.stroke();
   ctx.restore();
-  Canvas2D.drawImage(sprite, this.position,this.rotation,1, this.origin);
+  var isAI = (AI_ON && Game.policy.turn === AI_PLAYER_NUM);
+  var sprite = isAI ? sprites.stickEasy : sprites.stick;
+  // easy-cue.png is 479px wide vs spr_stick.png at 938px, so scale the origin to match
+  var drawOrigin = isAI ? new Vector2(this.origin.x * (479 / 938), this.origin.y) : this.origin;
+  Canvas2D.drawImage(sprite, this.position,this.rotation,1, drawOrigin);
 };

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useRadio } from '../../../contexts/RadioContext';
 
 // Declare global PoolGameLoader type
 declare global {
@@ -47,11 +48,11 @@ interface Opponent {
 const OPPONENTS: Opponent[] = [
   {
     id: 'easy',
-    name: 'SLICK RICK',
-    title: 'The Rookie',
+    name: 'GLASS JOE',
+    title: 'The Bar Fly',
     avatar: '/Games/pool-game/sprites/opponent-easy.png',
     stats: { accuracy: 25, power: 30, strategy: 20 },
-    bio: 'New to the game. Makes mistakes but learning fast.',
+    bio: "They call me Glass Joe 'cuz I'm fixin' to break my hip if I ain't careful.",
     unlocked: true,
   },
   {
@@ -79,6 +80,11 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const loaderScriptRef = useRef<HTMLScriptElement | null>(null);
   
+  // Radio/music control
+  const { audioRef: radioAudioRef, isPlaying: radioIsPlaying, setIsPlaying: setRadioIsPlaying } = useRadio();
+  const wasRadioPlayingRef = useRef(false);
+  const ambientAudioRef = useRef<HTMLAudioElement | null>(null);
+  
   // Control UI state
   const [aimLocked, setAimLocked] = useState(false);
   const [currentPower, setCurrentPower] = useState(0);
@@ -87,12 +93,64 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
   const [aiDifficulty, setAiDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
   const [playerScore, setPlayerScore] = useState(0);
   const [aiScore, setAiScore] = useState(0);
-  const [gameState, setGameState] = useState<'start' | 'select' | 'character' | 'tutorial' | 'playing' | 'gameover'>('start');
+  const [gameState, setGameState] = useState<'start' | 'select' | 'character' | 'tutorial' | 'intro' | 'playing' | 'gameover'>('start');
   const [winner, setWinner] = useState<'player' | 'ai' | null>(null);
   const [selectedOpponent, setSelectedOpponent] = useState<Opponent | null>(null);
   const [isPortrait, setIsPortrait] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   
+  // Stop radio music when entering intro/playing and restore on unmount
+  useEffect(() => {
+    if (gameState === 'intro' || gameState === 'playing') {
+      // Remember if radio was playing so we can restore it later
+      if (radioIsPlaying) {
+        wasRadioPlayingRef.current = true;
+        setRadioIsPlaying(false);
+        if (radioAudioRef.current) {
+          radioAudioRef.current.pause();
+        }
+      }
+    }
+  }, [gameState]);
+
+  // Start ambient bar audio during playing state
+  useEffect(() => {
+    if (gameState === 'playing' || gameState === 'intro') {
+      // Try to play ambient bar chatter if available
+      if (!ambientAudioRef.current) {
+        const audio = new Audio('/Games/pool-game/sounds/bar-ambience.mp3');
+        audio.loop = true;
+        audio.volume = 0.15;
+        ambientAudioRef.current = audio;
+      }
+      ambientAudioRef.current.play().catch(() => {
+        // Audio play failed (no user interaction yet or file missing), ignore
+      });
+    } else {
+      // Stop ambient when not playing
+      if (ambientAudioRef.current) {
+        ambientAudioRef.current.pause();
+        ambientAudioRef.current.currentTime = 0;
+      }
+    }
+  }, [gameState]);
+
+  // Restore radio music on unmount
+  useEffect(() => {
+    return () => {
+      // Stop ambient audio
+      if (ambientAudioRef.current) {
+        ambientAudioRef.current.pause();
+        ambientAudioRef.current = null;
+      }
+      // Restore radio if it was playing before
+      if (wasRadioPlayingRef.current && radioAudioRef.current) {
+        setRadioIsPlaying(true);
+        radioAudioRef.current.play().catch(() => {});
+      }
+    };
+  }, []);
+
   // Debug logging
   useEffect(() => {
     console.log('🎱 [PoolGame] Component mounted');
@@ -742,95 +800,441 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
     );
   }
 
-  // Tutorial/Loading screen
+  // Tutorial/Loading screen — Mega Man SNES style "HOW TO PLAY"
   if (gameState === 'tutorial') {
-    return (
-      <div className="pool-tutorial-screen">
-        <div className="pool-tutorial-content">
-          <h2 className="pool-tutorial-title">HOW TO PLAY</h2>
-          
-          <div className="pool-tutorial-sections">
-            {/* Controls - different for desktop vs mobile */}
-            <div className="pool-tutorial-section">
-              <div className="section-title pixel-title">🎱 CONTROLS</div>
-              {isMobile ? (
-                <div className="pool-tutorial-steps">
-                  <div className="pool-tutorial-step">
-                    <div className="step-number">1</div>
-                    <div className="step-icon">🎯</div>
-                    <div className="step-text">
-                      <span className="step-action">AIM</span>
-                      <span className="step-desc">Touch to aim the cue</span>
-                    </div>
-                  </div>
-                  <div className="pool-tutorial-step">
-                    <div className="step-number">2</div>
-                    <div className="step-icon">🔒</div>
-                    <div className="step-text">
-                      <span className="step-action">LOCK AIM</span>
-                      <span className="step-desc">Tap &quot;Lock Aim&quot; when ready</span>
-                    </div>
-                  </div>
-                  <div className="pool-tutorial-step">
-                    <div className="step-number">3</div>
-                    <div className="step-icon">⬆️</div>
-                    <div className="step-text">
-                      <span className="step-action">SET POWER</span>
-                      <span className="step-desc">Use +/- buttons to adjust</span>
-                    </div>
-                  </div>
-                  <div className="pool-tutorial-step">
-                    <div className="step-number">4</div>
-                    <div className="step-icon">💥</div>
-                    <div className="step-text">
-                      <span className="step-action">SHOOT</span>
-                      <span className="step-desc">Tap &quot;Shoot&quot; to strike!</span>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="pool-tutorial-steps">
-                  <div className="pool-tutorial-step">
-                    <div className="step-number">1</div>
-                    <div className="step-icon">🖱️</div>
-                    <div className="step-text">
-                      <span className="step-action">AIM</span>
-                      <span className="step-desc">Move mouse to aim the cue</span>
-                    </div>
-                  </div>
-                  <div className="pool-tutorial-step">
-                    <div className="step-number">2</div>
-                    <div className="step-icon">⬆️</div>
-                    <div className="step-text">
-                      <span className="step-action">POWER UP</span>
-                      <span className="step-desc">Hold W to increase power</span>
-                    </div>
-                  </div>
-                  <div className="pool-tutorial-step">
-                    <div className="step-number">3</div>
-                    <div className="step-icon">⬇️</div>
-                    <div className="step-text">
-                      <span className="step-action">POWER DOWN</span>
-                      <span className="step-desc">Hold S to decrease power</span>
-                    </div>
-                  </div>
-                  <div className="pool-tutorial-step">
-                    <div className="step-number">4</div>
-                    <div className="step-icon">💥</div>
-                    <div className="step-text">
-                      <span className="step-action">SHOOT</span>
-                      <span className="step-desc">Click or press Space to shoot</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
+    const mobileSteps = [
+      { key: 'TOUCH', action: 'AIM', desc: 'DRAG TO AIM THE CUE' },
+      { key: 'TAP', action: 'LOCK', desc: 'LOCK YOUR AIM IN PLACE' },
+      { key: '+  −', action: 'POWER', desc: 'ADJUST SHOT STRENGTH' },
+      { key: 'FIRE', action: 'SHOOT', desc: 'STRIKE THE CUE BALL!' },
+    ];
+    const desktopSteps = [
+      { key: 'MOUSE', action: 'AIM', desc: 'MOVE TO AIM THE CUE' },
+      { key: 'W', action: 'POWER ▲', desc: 'HOLD TO CHARGE UP' },
+      { key: 'S', action: 'POWER ▼', desc: 'HOLD TO DECREASE' },
+      { key: 'SPACE', action: 'SHOOT', desc: 'CLICK OR PRESS TO FIRE' },
+    ];
+    const steps = isMobile ? mobileSteps : desktopSteps;
 
-          <button onClick={startPlaying} className="pool-tutorial-start">
-            START MATCH
-          </button>
+    return (
+      <div className="mm-tutorial-screen">
+        {/* Scanline overlay */}
+        <div className="mm-scanlines" />
+
+        {/* Animated grid background */}
+        <div className="mm-grid-bg" />
+
+        {/* Top bar — Mega Man weapon get style */}
+        <div className="mm-top-bar">
+          <div className="mm-top-bar-left">
+            <span className="mm-top-label">FOUR THIEVES</span>
+            <span className="mm-top-sub">POOL HALL</span>
+          </div>
+          <div className="mm-top-bar-center">
+            <span className="mm-ready-text">▸ READY? ◂</span>
+          </div>
+          <div className="mm-top-bar-right">
+            <span className="mm-top-label">VS</span>
+            <span className="mm-top-sub">{selectedOpponent?.name || 'CPU'}</span>
+          </div>
         </div>
+
+        {/* Title */}
+        <div className="mm-title-block">
+          <div className="mm-title-deco mm-title-deco-l">◆ ◆ ◆</div>
+          <h2 className="mm-title">HOW TO PLAY</h2>
+          <div className="mm-title-deco mm-title-deco-r">◆ ◆ ◆</div>
+        </div>
+
+        {/* Steps grid — weapon select style */}
+        <div className="mm-steps-grid">
+          {steps.map((step, i) => (
+            <div
+              key={step.action}
+              className="mm-step-card"
+              style={{ animationDelay: `${i * 0.15}s` }}
+            >
+              <div className="mm-step-num">{String(i + 1).padStart(2, '0')}</div>
+              <div className="mm-step-key-box">
+                <span className="mm-step-key">{step.key}</span>
+              </div>
+              <div className="mm-step-info">
+                <span className="mm-step-action">{step.action}</span>
+                <span className="mm-step-desc">{step.desc}</span>
+              </div>
+              <div className="mm-step-arrow">▸</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom bar with hints */}
+        <div className="mm-bottom-bar">
+          <div className="mm-hint">
+            <span className="mm-hint-icon">ℹ</span>
+            <span className="mm-hint-text">SINK ALL YOUR BALLS + THE 8-BALL TO WIN</span>
+          </div>
+        </div>
+
+        {/* Start button */}
+        <button onClick={() => setGameState('intro')} className="mm-start-btn">
+          <span className="mm-btn-icon">▶</span>
+          <span className="mm-btn-text">START MATCH</span>
+        </button>
+
+        {/* Inline scoped styles for the Mega Man tutorial */}
+        <style>{`
+          .mm-tutorial-screen {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            font-family: 'Press Start 2P', monospace;
+            color: #e0f0ff;
+            overflow: hidden;
+            background: #060818;
+            padding: 16px;
+            box-sizing: border-box;
+          }
+
+          /* Animated neon grid */
+          .mm-grid-bg {
+            position: absolute;
+            inset: 0;
+            background-image:
+              linear-gradient(rgba(0, 255, 170, 0.04) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0, 255, 170, 0.04) 1px, transparent 1px);
+            background-size: 32px 32px;
+            animation: mmGridScroll 8s linear infinite;
+            pointer-events: none;
+          }
+          @keyframes mmGridScroll {
+            to { background-position: 32px 32px; }
+          }
+
+          /* CRT scanlines */
+          .mm-scanlines {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+              0deg,
+              rgba(0,0,0,0.15) 0px,
+              rgba(0,0,0,0.15) 1px,
+              transparent 1px,
+              transparent 3px
+            );
+            pointer-events: none;
+            z-index: 10;
+          }
+
+          /* Top bar */
+          .mm-top-bar {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 560px;
+            padding: 8px 12px;
+            background: linear-gradient(180deg, rgba(0,200,255,0.12) 0%, rgba(0,200,255,0.03) 100%);
+            border: 2px solid #00c8ff;
+            border-radius: 2px;
+            box-shadow: 0 0 12px rgba(0,200,255,0.25), inset 0 0 20px rgba(0,200,255,0.05);
+          }
+          .mm-top-bar-left,
+          .mm-top-bar-right {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+          }
+          .mm-top-bar-right { text-align: right; }
+          .mm-top-bar-center { text-align: center; }
+          .mm-top-label {
+            font-size: 8px;
+            color: #00c8ff;
+            letter-spacing: 2px;
+          }
+          .mm-top-sub {
+            font-size: 6px;
+            color: #5aeaff;
+            letter-spacing: 1px;
+            opacity: 0.7;
+          }
+          .mm-ready-text {
+            font-size: 10px;
+            color: #fbbf24;
+            text-shadow: 0 0 8px #fbbf24;
+            animation: mmBlink 1s step-end infinite;
+          }
+          @keyframes mmBlink {
+            50% { opacity: 0; }
+          }
+
+          /* Title */
+          .mm-title-block {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+          }
+          .mm-title {
+            font-size: 22px;
+            color: #fbbf24;
+            margin: 0;
+            text-shadow:
+              0 0 6px #fbbf24,
+              0 0 18px rgba(251,191,36,0.5),
+              2px 2px 0 #b45309;
+            letter-spacing: 6px;
+            animation: mmTitleGlow 2s ease-in-out infinite alternate;
+          }
+          @keyframes mmTitleGlow {
+            from { text-shadow: 0 0 6px #fbbf24, 0 0 18px rgba(251,191,36,0.5), 2px 2px 0 #b45309; }
+            to   { text-shadow: 0 0 10px #fbbf24, 0 0 30px rgba(251,191,36,0.7), 2px 2px 0 #b45309; }
+          }
+          .mm-title-deco {
+            font-size: 8px;
+            color: #00c8ff;
+            letter-spacing: 4px;
+            opacity: 0.6;
+          }
+
+          /* Steps grid — weapon select cards */
+          .mm-steps-grid {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            max-width: 560px;
+          }
+          @media (max-width: 480px) {
+            .mm-steps-grid { grid-template-columns: 1fr; }
+            .mm-title { font-size: 16px; letter-spacing: 3px; }
+          }
+
+          .mm-step-card {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            background: linear-gradient(135deg, rgba(0,40,80,0.7) 0%, rgba(0,20,50,0.9) 100%);
+            border: 2px solid #0e7490;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+            animation: mmCardSlide 0.4s ease-out backwards;
+            transition: border-color 0.2s, box-shadow 0.2s;
+          }
+          .mm-step-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, #00c8ff, transparent);
+            animation: mmShine 3s linear infinite;
+          }
+          @keyframes mmShine {
+            0%   { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+          }
+          .mm-step-card:hover {
+            border-color: #fbbf24;
+            box-shadow: 0 0 16px rgba(251,191,36,0.3), inset 0 0 12px rgba(251,191,36,0.05);
+          }
+          @keyframes mmCardSlide {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+          }
+
+          .mm-step-num {
+            font-size: 7px;
+            color: #0e7490;
+            position: absolute;
+            top: 4px;
+            right: 6px;
+            letter-spacing: 1px;
+          }
+
+          .mm-step-key-box {
+            flex-shrink: 0;
+            width: 52px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #1a1a3a 0%, #0c0c20 100%);
+            border: 2px solid #00c8ff;
+            border-bottom: 3px solid #005f7f;
+            border-radius: 3px;
+            box-shadow: 0 0 8px rgba(0,200,255,0.2);
+          }
+          .mm-step-key {
+            font-size: 8px;
+            color: #fff;
+            text-shadow: 0 0 4px #00c8ff;
+            letter-spacing: 1px;
+          }
+
+          .mm-step-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            flex: 1;
+            min-width: 0;
+          }
+          .mm-step-action {
+            font-size: 10px;
+            color: #fbbf24;
+            text-shadow: 0 0 6px rgba(251,191,36,0.4);
+            letter-spacing: 2px;
+          }
+          .mm-step-desc {
+            font-size: 6px;
+            color: #7dd3fc;
+            letter-spacing: 1px;
+            line-height: 1.5;
+            opacity: 0.8;
+          }
+
+          .mm-step-arrow {
+            font-size: 14px;
+            color: #0e7490;
+            animation: mmArrowPulse 1.5s ease-in-out infinite;
+          }
+          @keyframes mmArrowPulse {
+            0%, 100% { opacity: 0.3; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(3px); }
+          }
+
+          /* Bottom hint bar */
+          .mm-bottom-bar {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 560px;
+            padding: 6px 12px;
+            background: rgba(0,200,255,0.06);
+            border: 1px solid rgba(0,200,255,0.2);
+            border-radius: 2px;
+          }
+          .mm-hint {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+          .mm-hint-icon {
+            font-size: 10px;
+            color: #00c8ff;
+            flex-shrink: 0;
+          }
+          .mm-hint-text {
+            font-size: 6px;
+            color: #7dd3fc;
+            letter-spacing: 1px;
+            animation: mmTypewriter 4s steps(40) 0.8s backwards;
+            overflow: hidden;
+            white-space: nowrap;
+          }
+          @keyframes mmTypewriter {
+            from { width: 0; }
+            to   { width: 100%; }
+          }
+
+          /* Start button — Mega Man style */
+          .mm-start-btn {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 14px;
+            padding: 14px 32px;
+            background: linear-gradient(180deg, #fbbf24 0%, #d97706 50%, #b45309 100%);
+            color: #000;
+            border: 3px solid #fef3c7;
+            border-bottom: 4px solid #92400e;
+            border-radius: 2px;
+            cursor: pointer;
+            letter-spacing: 3px;
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+            box-shadow:
+              0 0 16px rgba(251,191,36,0.4),
+              inset 0 1px 0 rgba(255,255,255,0.3);
+            transition: all 0.15s;
+            animation: mmBtnPulse 2s ease-in-out infinite;
+            margin-top: 4px;
+          }
+          @keyframes mmBtnPulse {
+            0%, 100% { box-shadow: 0 0 16px rgba(251,191,36,0.4); }
+            50% { box-shadow: 0 0 28px rgba(251,191,36,0.7), 0 0 60px rgba(251,191,36,0.2); }
+          }
+          .mm-start-btn:hover {
+            transform: scale(1.04);
+            background: linear-gradient(180deg, #fcd34d 0%, #fbbf24 50%, #d97706 100%);
+            box-shadow: 0 0 30px rgba(251,191,36,0.8);
+          }
+          .mm-start-btn:active {
+            transform: scale(0.97);
+            border-bottom-width: 2px;
+            margin-top: 6px;
+          }
+          .mm-btn-icon {
+            font-size: 12px;
+          }
+          .mm-btn-text {}
+        `}</style>
+      </div>
+    );
+  }
+
+  // Intro video phase - plays opponent intro then starts the game
+  if (gameState === 'intro') {
+    return (
+      <div style={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        background: '#000',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <video
+          autoPlay
+          playsInline
+          onEnded={startPlaying}
+          style={{
+            maxWidth: '100%',
+            maxHeight: '100%',
+            objectFit: 'contain',
+          }}
+          src={`/Games/pool-game/${selectedOpponent?.id === 'easy' ? 'glass-joe' : selectedOpponent?.id === 'medium' ? 'glass-joe' : 'glass-joe'}.mp4`}
+        />
+        <button
+          onClick={startPlaying}
+          style={{
+            position: 'absolute',
+            bottom: '20px',
+            right: '20px',
+            background: 'rgba(0,0,0,0.7)',
+            color: '#fff',
+            border: '1px solid rgba(255,255,255,0.3)',
+            borderRadius: '8px',
+            padding: '8px 16px',
+            fontSize: '12px',
+            cursor: 'pointer',
+          }}
+        >
+          SKIP ▸
+        </button>
       </div>
     );
   }
@@ -891,10 +1295,7 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
               )}
             </div>
 
-            {/* Center - GUM display */}
-            <div className="text-yellow-400 text-xs bg-black/80 px-3 py-2 rounded border border-yellow-600">
-              💰 {gumBalance} GUM
-            </div>
+
 
             {/* Right side - Power controls and Shoot */}
             <div className="pointer-events-auto flex items-center gap-2">
@@ -939,14 +1340,7 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
             </div>
           </div>
         )}
-        {/* Desktop - show GUM balance only */}
-        {!isLoading && !isMobile && (
-          <div className="absolute bottom-0 left-0 right-0 flex justify-center p-2 pointer-events-none" style={{ fontFamily: "'Press Start 2P', monospace" }}>
-            <div className="text-yellow-400 text-xs bg-black/80 px-3 py-2 rounded border border-yellow-600">
-              💰 {gumBalance} GUM
-            </div>
-          </div>
-        )}
+
       </div>
     </div>
   );
