@@ -195,7 +195,14 @@ GameWorld.prototype.handleCollision = function(ball1, ball2, delta){
 }
 
 GameWorld.prototype.draw = function () {
-    Canvas2D.drawImage(sprites.background);
+    // Use opponent-specific table if available
+    var bg = sprites.background;
+    if (typeof AI_DIFFICULTY !== 'undefined') {
+        if (AI_DIFFICULTY === 'easy' && sprites.backgroundEasy) bg = sprites.backgroundEasy;
+        else if (AI_DIFFICULTY === 'medium' && sprites.backgroundMedium) bg = sprites.backgroundMedium;
+        else if (AI_DIFFICULTY === 'hard' && sprites.backgroundHard) bg = sprites.backgroundHard;
+    }
+    Canvas2D.drawImage(bg);
     Game.policy.drawScores();
 
     for (var i = 0; i < this.balls.length; i++) {

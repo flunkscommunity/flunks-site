@@ -111,21 +111,21 @@ window.PoolGameLoader = {
             GAME_STOPPED = false;
           }
           window.GAME_STOPPED = false;
+          window.AI_DIFFICULTY = difficulty;
+          
+          // Set AI difficulty via the actual global TRAIN_ITER
+          const iterations = {
+            easy: 30,
+            medium: 35,
+            hard: 100
+          };
+          if (iterations[difficulty]) {
+            TRAIN_ITER = iterations[difficulty];
+            console.log(`AI TRAIN_ITER set to ${TRAIN_ITER} for ${difficulty}`);
+          }
           
           if (window.Game.startNewGame) {
             window.Game.startNewGame();
-            
-            // Set AI difficulty
-            const iterations = {
-              easy: 5,
-              medium: 35,
-              hard: 75
-            };
-            
-            if (window.AI && window.AI.trainer && iterations[difficulty]) {
-              window.AI.trainer.iterations = iterations[difficulty];
-              console.log(`AI difficulty set to ${difficulty}`);
-            }
           }
         }
       }, 100);

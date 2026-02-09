@@ -1,6 +1,7 @@
 "use strict";
 
 function handleMouseMove(evt) {
+    if (!Canvas2D._canvas) return;
     var canvasScale = Canvas2D.scale;
     var canvasOffset = Canvas2D.offset;
     var mx = (evt.pageX - canvasOffset.x) / canvasScale.x;

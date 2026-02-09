@@ -35,12 +35,17 @@ interface PoolGameProps {
 }
 
 // Opponent data
+interface OpponentStat {
+  label: string;
+  value: number;
+}
+
 interface Opponent {
   id: 'easy' | 'medium' | 'hard';
   name: string;
   title: string;
   avatar: string;
-  stats: { accuracy: number; power: number; strategy: number };
+  stats: [OpponentStat, OpponentStat, OpponentStat];
   bio: string;
   unlocked: boolean;
 }
@@ -51,17 +56,25 @@ const OPPONENTS: Opponent[] = [
     name: 'GLASS JOE',
     title: 'The Bar Fly',
     avatar: '/Games/pool-game/sprites/opponent-easy.png',
-    stats: { accuracy: 25, power: 30, strategy: 20 },
+    stats: [
+      { label: 'Balance', value: 10 },
+      { label: 'Back Pain', value: 95 },
+      { label: 'Drunk', value: 95 },
+    ],
     bio: "They call me Glass Joe 'cuz I'm fixin' to break my hip if I ain't careful.",
     unlocked: true,
   },
   {
     id: 'medium',
-    name: 'CHALK CHARLIE',
-    title: 'The Hustler',
+    name: 'THE WIZARD',
+    title: 'The Enchanter',
     avatar: '/Games/pool-game/sprites/opponent-medium.png',
-    stats: { accuracy: 55, power: 50, strategy: 60 },
-    bio: 'Knows every angle. Been running tables since \'89.',
+    stats: [
+      { label: 'Magic', value: 5 },
+      { label: 'Virginity', value: 100 },
+      { label: 'Friends', value: 5 },
+    ],
+    bio: "Careful or I'll make your balls disappear.",
     unlocked: false,
   },
   {
@@ -69,7 +82,11 @@ const OPPONENTS: Opponent[] = [
     name: 'EIGHT-BALL EDDIE',
     title: 'The Legend',
     avatar: '/Games/pool-game/sprites/opponent-hard.png',
-    stats: { accuracy: 85, power: 75, strategy: 90 },
+    stats: [
+      { label: 'Accuracy', value: 85 },
+      { label: 'Power', value: 75 },
+      { label: 'Strategy', value: 90 },
+    ],
     bio: 'Undefeated champion. They say he never misses.',
     unlocked: false,
   },
@@ -491,74 +508,140 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
           </div>
           
           {/* Right side - Character display with background */}
-          <div className="flex-1 flex flex-col p-6">
+          <div className="flex-1 flex flex-col p-3">
             {selectedOpponent ? (
               <>
-                {/* Character name at top */}
-                <div className="text-center mb-2">
-                  <div className="text-2xl text-yellow-400 tracking-wider drop-shadow-lg" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
-                    {selectedOpponent.name}
-                  </div>
-                  <div className="text-sm text-gray-300 mt-1" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
-                    {selectedOpponent.title}
+                {/* SNES-style pixel marquee banner */}
+                <div className="text-center mb-1 flex justify-center">
+                  <div className="relative inline-block">
+                    {/* Outer border - dark edge */}
+                    <div style={{
+                      background: '#1a1a2e',
+                      border: '4px solid #0a0a14',
+                      padding: '4px',
+                      imageRendering: 'pixelated' as any,
+                    }}>
+                      {/* Inner border - gold trim */}
+                      <div style={{
+                        border: '3px solid #c8a820',
+                        background: 'linear-gradient(180deg, #2a1a3e 0%, #1a0a2e 40%, #0e0618 100%)',
+                        padding: '8px 32px 6px',
+                        position: 'relative',
+                        overflow: 'hidden',
+                      }}>
+                        {/* Corner diamonds */}
+                        {['top-left','top-right','bottom-left','bottom-right'].map(pos => (
+                          <div key={pos} style={{
+                            position: 'absolute',
+                            width: '8px', height: '8px',
+                            background: '#e8d040',
+                            transform: 'rotate(45deg)',
+                            ...(pos.includes('top') ? { top: '4px' } : { bottom: '4px' }),
+                            ...(pos.includes('left') ? { left: '8px' } : { right: '8px' }),
+                          }} />
+                        ))}
+                        {/* Top decorative pixel line */}
+                        <div style={{
+                          position: 'absolute', top: 0, left: '20px', right: '20px', height: '2px',
+                          background: 'repeating-linear-gradient(90deg, #c8a820 0px, #c8a820 4px, transparent 4px, transparent 8px)',
+                        }} />
+                        {/* Bottom decorative pixel line */}
+                        <div style={{
+                          position: 'absolute', bottom: 0, left: '20px', right: '20px', height: '2px',
+                          background: 'repeating-linear-gradient(90deg, #c8a820 0px, #c8a820 4px, transparent 4px, transparent 8px)',
+                        }} />
+                        {/* Glow effect behind text */}
+                        <div style={{
+                          position: 'absolute', top: '50%', left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                          width: '80%', height: '80%',
+                          background: 'radial-gradient(ellipse, rgba(232,208,64,0.15) 0%, transparent 70%)',
+                        }} />
+                        {/* Name */}
+                        <div style={{
+                          fontSize: '22px',
+                          color: '#f0d848',
+                          letterSpacing: '6px',
+                          textShadow: '2px 2px 0 #805800, -1px -1px 0 #a07010, 0 0 12px rgba(240,216,72,0.4)',
+                          position: 'relative',
+                          lineHeight: '1.2',
+                        }}>
+                          {selectedOpponent.name}
+                        </div>
+                        {/* Separator dots */}
+                        <div style={{
+                          display: 'flex', justifyContent: 'center', gap: '6px',
+                          margin: '6px 0 4px',
+                        }}>
+                          {[...Array(5)].map((_, i) => (
+                            <div key={i} style={{
+                              width: '3px', height: '3px',
+                              background: i === 2 ? '#e8d040' : '#806020',
+                            }} />
+                          ))}
+                        </div>
+                        {/* Title */}
+                        <div style={{
+                          fontSize: '11px',
+                          color: '#a8b8d0',
+                          letterSpacing: '3px',
+                          textShadow: '1px 1px 0 #000, 0 0 8px rgba(168,184,208,0.3)',
+                          position: 'relative',
+                        }}>
+                          {selectedOpponent.title}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 
                 {/* Main area - character GIF display CENTERED */}
-                <div className="flex-1 flex items-center justify-center">
+                <div className="flex-1 flex items-center justify-center min-h-0">
                   <img 
                     src={characterImages[selectedOpponent.id]} 
                     alt={selectedOpponent.name}
                     className="object-contain drop-shadow-2xl"
                     style={{ 
                       imageRendering: 'pixelated',
-                      height: '380px',
+                      maxHeight: '280px',
+                      height: '100%',
                       filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.8))'
                     }}
                   />
                 </div>
                 
                 {/* Stats and Quote at bottom */}
-                <div className="mt-2 flex flex-col items-center">
+                <div className="mt-1 flex flex-col items-center">
                   {/* Stats - retro diagonal stripe bars */}
-                  <div className="bg-[#0a1628]/95 p-4 border-2 border-[#1a3a5c] mb-3">
+                  <div className="bg-[#0a1628]/95 p-3 border-2 border-[#1a3a5c] mb-2">
                     <div className="space-y-2">
-                      {(['accuracy', 'power', 'strategy'] as const).map((stat) => {
-                        const value = selectedOpponent.stats[stat];
-                        const statConfig = {
-                          accuracy: { label: 'Accuracy', color: '#4a9ead' },
-                          power: { label: 'Power', color: '#4a9ead' },
-                          strategy: { label: 'Strategy', color: '#4a9ead' }
-                        };
-                        const config = statConfig[stat];
-                        return (
-                          <div key={stat} className="flex items-center gap-3">
-                            <span className="text-[11px] text-[#8ab4c4] w-20 text-right">{config.label}</span>
-                            {/* Bar container */}
-                            <div className="relative w-32 h-3 bg-[#0a1628] border border-[#1a3a5c] overflow-hidden">
-                              {/* Filled portion with diagonal stripes */}
-                              <div 
-                                className="absolute inset-y-0 left-0 h-full"
-                                style={{ 
-                                  width: `${value}%`,
-                                  background: `repeating-linear-gradient(
-                                    -45deg,
-                                    ${config.color},
-                                    ${config.color} 2px,
-                                    #3a7a8a 2px,
-                                    #3a7a8a 4px
-                                  )`
-                                }}
-                              />
-                            </div>
+                      {selectedOpponent.stats.map((stat, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                          <span className="text-[11px] text-[#8ab4c4] w-24 text-right">{stat.label}</span>
+                          {/* Bar container */}
+                          <div className="relative w-32 h-3 bg-[#0a1628] border border-[#1a3a5c] overflow-hidden">
+                            {/* Filled portion with diagonal stripes */}
+                            <div 
+                              className="absolute inset-y-0 left-0 h-full"
+                              style={{ 
+                                width: `${stat.value}%`,
+                                background: `repeating-linear-gradient(
+                                  -45deg,
+                                  #4a9ead,
+                                  #4a9ead 2px,
+                                  #3a7a8a 2px,
+                                  #3a7a8a 4px
+                                )`
+                              }}
+                            />
                           </div>
-                        );
-                      })}
+                        </div>
+                      ))}
                     </div>
                   </div>
                   
                   {/* Quote */}
-                  <div className="text-[10px] text-gray-300 italic mb-3 bg-black/50 inline-block px-4 py-2 rounded" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
+                  <div className="text-[10px] text-gray-300 italic mb-2 bg-black/50 inline-block px-4 py-2 rounded" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
                     "{selectedOpponent.bio}"
                   </div>
                   
@@ -610,13 +693,78 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
 
           {selectedOpponent ? (
             <div className="flex-1 flex flex-col items-center p-4 overflow-y-auto">
-              {/* Character name */}
-              <div className="text-center mb-4">
-                <div className="text-xl text-yellow-400 tracking-wider drop-shadow-lg" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
-                  {selectedOpponent.name}
-                </div>
-                <div className="text-xs text-gray-300 mt-1" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
-                  {selectedOpponent.title}
+              {/* SNES-style pixel marquee banner - mobile */}
+              <div className="text-center mb-4 flex justify-center w-full">
+                <div className="relative inline-block">
+                  <div style={{
+                    background: '#1a1a2e',
+                    border: '3px solid #0a0a14',
+                    padding: '3px',
+                    imageRendering: 'pixelated' as any,
+                  }}>
+                    <div style={{
+                      border: '2px solid #c8a820',
+                      background: 'linear-gradient(180deg, #2a1a3e 0%, #1a0a2e 40%, #0e0618 100%)',
+                      padding: '10px 28px 8px',
+                      position: 'relative',
+                      overflow: 'hidden',
+                    }}>
+                      {['top-left','top-right','bottom-left','bottom-right'].map(pos => (
+                        <div key={pos} style={{
+                          position: 'absolute',
+                          width: '6px', height: '6px',
+                          background: '#e8d040',
+                          transform: 'rotate(45deg)',
+                          ...(pos.includes('top') ? { top: '3px' } : { bottom: '3px' }),
+                          ...(pos.includes('left') ? { left: '6px' } : { right: '6px' }),
+                        }} />
+                      ))}
+                      <div style={{
+                        position: 'absolute', top: 0, left: '16px', right: '16px', height: '2px',
+                        background: 'repeating-linear-gradient(90deg, #c8a820 0px, #c8a820 4px, transparent 4px, transparent 8px)',
+                      }} />
+                      <div style={{
+                        position: 'absolute', bottom: 0, left: '16px', right: '16px', height: '2px',
+                        background: 'repeating-linear-gradient(90deg, #c8a820 0px, #c8a820 4px, transparent 4px, transparent 8px)',
+                      }} />
+                      <div style={{
+                        position: 'absolute', top: '50%', left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '80%', height: '80%',
+                        background: 'radial-gradient(ellipse, rgba(232,208,64,0.15) 0%, transparent 70%)',
+                      }} />
+                      <div style={{
+                        fontSize: '16px',
+                        color: '#f0d848',
+                        letterSpacing: '4px',
+                        textShadow: '2px 2px 0 #805800, -1px -1px 0 #a07010, 0 0 12px rgba(240,216,72,0.4)',
+                        position: 'relative',
+                        lineHeight: '1.2',
+                      }}>
+                        {selectedOpponent.name}
+                      </div>
+                      <div style={{
+                        display: 'flex', justifyContent: 'center', gap: '4px',
+                        margin: '4px 0 3px',
+                      }}>
+                        {[...Array(5)].map((_, i) => (
+                          <div key={i} style={{
+                            width: '2px', height: '2px',
+                            background: i === 2 ? '#e8d040' : '#806020',
+                          }} />
+                        ))}
+                      </div>
+                      <div style={{
+                        fontSize: '9px',
+                        color: '#a8b8d0',
+                        letterSpacing: '2px',
+                        textShadow: '1px 1px 0 #000, 0 0 8px rgba(168,184,208,0.3)',
+                        position: 'relative',
+                      }}>
+                        {selectedOpponent.title}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -637,37 +785,28 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
               {/* Stats - retro diagonal stripe bars for mobile */}
               <div className="bg-[#0a1628]/95 p-4 border-2 border-[#1a3a5c] mb-4 w-full max-w-xs">
                 <div className="space-y-3">
-                  {(['accuracy', 'power', 'strategy'] as const).map((stat) => {
-                    const value = selectedOpponent.stats[stat];
-                    const statConfig = {
-                      accuracy: { label: 'Accuracy', color: '#4a9ead' },
-                      power: { label: 'Power', color: '#4a9ead' },
-                      strategy: { label: 'Strategy', color: '#4a9ead' }
-                    };
-                    const config = statConfig[stat];
-                    return (
-                      <div key={stat} className="flex items-center gap-3">
-                        <span className="text-[11px] text-[#8ab4c4] w-20">{config.label}</span>
-                        {/* Bar container */}
-                        <div className="relative flex-1 h-3 bg-[#0a1628] border border-[#1a3a5c] overflow-hidden">
-                          {/* Filled portion with diagonal stripes */}
-                          <div 
-                            className="absolute inset-y-0 left-0 h-full"
-                            style={{ 
-                              width: `${value}%`,
-                              background: `repeating-linear-gradient(
-                                -45deg,
-                                ${config.color},
-                                ${config.color} 2px,
-                                #3a7a8a 2px,
-                                #3a7a8a 4px
-                              )`
-                            }}
-                          />
-                        </div>
+                  {selectedOpponent.stats.map((stat, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      <span className="text-[11px] text-[#8ab4c4] w-24">{stat.label}</span>
+                      {/* Bar container */}
+                      <div className="relative flex-1 h-3 bg-[#0a1628] border border-[#1a3a5c] overflow-hidden">
+                        {/* Filled portion with diagonal stripes */}
+                        <div 
+                          className="absolute inset-y-0 left-0 h-full"
+                          style={{ 
+                            width: `${stat.value}%`,
+                            background: `repeating-linear-gradient(
+                              -45deg,
+                              #4a9ead,
+                              #4a9ead 2px,
+                              #3a7a8a 2px,
+                              #3a7a8a 4px
+                            )`
+                          }}
+                        />
                       </div>
-                    );
-                  })}
+                    </div>
+                  ))}
                 </div>
                 <div className="mt-3 pt-2 border-t border-[#1a3a5c] text-center">
                   <span className="text-[9px] text-[#5a8a9a]">DIFFICULTY: </span>
@@ -1216,7 +1355,7 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
             maxHeight: '100%',
             objectFit: 'contain',
           }}
-          src={`/Games/pool-game/${selectedOpponent?.id === 'easy' ? 'glass-joe' : selectedOpponent?.id === 'medium' ? 'glass-joe' : 'glass-joe'}.mp4`}
+          src={`/Games/pool-game/${selectedOpponent?.id === 'easy' ? 'glass-joe' : selectedOpponent?.id === 'medium' ? 'the-wizard-cutscene' : 'glass-joe'}.mp4`}
         />
         <button
           onClick={startPlaying}

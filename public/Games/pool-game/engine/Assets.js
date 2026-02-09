@@ -20,10 +20,38 @@ var loadPoolAssets = function() {
 
     sprites.mainMenuBackground = loadSprite("main_menu_background.png");
     sprites.background = loadSprite("spr_background4.png");
-    sprites.ball = loadSprite("spr_ball2.png");
-    sprites.redBall = loadSprite("spr_redBall2.png");
-    sprites.yellowBall = loadSprite("spr_yellowBall2.png");
-    sprites.blackBall = loadSprite("spr_blackBall2.png");
+    sprites.backgroundEasy = loadSprite("spr_background_easy.png");
+    sprites.backgroundMedium = loadSprite("spr_background_easy.png");
+    // Ball sprites — 4 frames each for rolling animation
+    sprites.ballFrames = [
+        loadSprite("spr_ball_f1.png"),
+        loadSprite("spr_ball_f2.png"),
+        loadSprite("spr_ball_f3.png"),
+        loadSprite("spr_ball_f4.png")
+    ];
+    sprites.redBallFrames = [
+        loadSprite("spr_redBall_f1.png"),
+        loadSprite("spr_redBall_f2.png"),
+        loadSprite("spr_redBall_f3.png"),
+        loadSprite("spr_redBall_f4.png")
+    ];
+    sprites.yellowBallFrames = [
+        loadSprite("spr_yellowBall_f1.png"),
+        loadSprite("spr_yellowBall_f2.png"),
+        loadSprite("spr_yellowBall_f3.png"),
+        loadSprite("spr_yellowBall_f4.png")
+    ];
+    sprites.blackBallFrames = [
+        loadSprite("spr_blackBall_f1.png"),
+        loadSprite("spr_blackBall_f2.png"),
+        loadSprite("spr_blackBall_f3.png"),
+        loadSprite("spr_blackBall_f4.png")
+    ];
+    // Default sprites (frame 1) for color detection
+    sprites.ball = sprites.ballFrames[0];
+    sprites.redBall = sprites.redBallFrames[0];
+    sprites.yellowBall = sprites.yellowBallFrames[0];
+    sprites.blackBall = sprites.blackBallFrames[0];
     sprites.stick = loadSprite("spr_stick.png");
     sprites.stickEasy = loadSprite("easy-cue.png");
     sprites.twoPlayersButton = loadSprite("2_players_button.png");

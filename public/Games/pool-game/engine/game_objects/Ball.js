@@ -9,6 +9,10 @@ function Ball(initPos,color){
     this.moving = false;
     this.visible = true;
     this.inHole = false;
+    // Rolling animation — 4 frame cycle
+    this.rollDist = 0;          // accumulated distance traveled
+    this.rollThreshold = 10;    // pixels per frame advance
+    this.rollFrameIndex = 0;    // 0-3 cycle
 }
 
 Object.defineProperty(Ball.prototype, "color",
@@ -63,6 +67,16 @@ Ball.prototype.update = function(delta){
     this.updatePosition(delta);
 
     this.velocity.multiplyWith(0.98);
+
+    // Rolling frame animation — cycle 0→1→2→3→0 based on distance
+    if(this.moving) {
+        var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
+        this.rollDist += speed * delta;
+        if(this.rollDist >= this.rollThreshold) {
+            this.rollFrameIndex = (this.rollFrameIndex + 1) % 4;
+            this.rollDist = 0;
+        }
+    }
 
 	if(this.moving && Math.abs(this.velocity.x) < 3 && Math.abs(this.velocity.y) < 3){
         this.stop();
@@ -132,6 +146,8 @@ Ball.prototype.stop = function(){
 
     this.moving = false;
     this.velocity = Vector2.zero;
+    this.rollFrameIndex = 0;
+    this.rollDist = 0;
 }
 
 Ball.prototype.reset = function(){
@@ -154,5 +170,16 @@ Ball.prototype.draw = function () {
     if(!this.visible)
         return;
 
-	Canvas2D.drawImage(this.sprite, this.position, 0, 1, new Vector2(25,25));
+    // Pick the correct roll frame sprite
+    var drawSprite = this.sprite;
+    if(this.moving && this.rollFrameIndex > 0) {
+        var frames = null;
+        if(this.sprite === sprites.ball && sprites.ballFrames) frames = sprites.ballFrames;
+        else if(this.sprite === sprites.redBall && sprites.redBallFrames) frames = sprites.redBallFrames;
+        else if(this.sprite === sprites.yellowBall && sprites.yellowBallFrames) frames = sprites.yellowBallFrames;
+        else if(this.sprite === sprites.blackBall && sprites.blackBallFrames) frames = sprites.blackBallFrames;
+        if(frames) drawSprite = frames[this.rollFrameIndex];
+    }
+
+	Canvas2D.drawImage(drawSprite, this.position, 0, 1, new Vector2(25,25));
 };

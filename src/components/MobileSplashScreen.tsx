@@ -393,20 +393,28 @@ const MobileSplashScreen: React.FC<MobileSplashScreenProps> = ({ onComplete, onD
     // Initialize audio on tap (iOS requires user interaction)
     initAudio();
     
-    // Play the Windows 95 boot sound
+    // Play the Windows 95 boot sound — keep playing after splash dismisses
+    // Create audio element on document.body so it survives component unmount
     const win95Sound = new Audio('/sounds/win95-boot.mp3');
     win95Sound.volume = 0.7;
-    win95Sound.play().catch(err => {
+    // Prevent garbage collection by attaching to window temporarily
+    (window as any).__bootSound = win95Sound;
+    win95Sound.play().then(() => {
+      // Clean up reference after sound finishes
+      win95Sound.addEventListener('ended', () => {
+        delete (window as any).__bootSound;
+      });
+    }).catch(err => {
       console.log('Win95 boot sound failed:', err);
       // Fallback to beep if sound fails
       playBeep();
     });
     
-    // Fade out and complete
+    // Skip splash immediately — sound continues playing in background
     setFading(true);
     setTimeout(() => {
       onComplete();
-    }, 500);
+    }, 300);
   }, [initAudio, playBeep, onComplete]);
 
   const handleDemoMode = useCallback((e: React.MouseEvent) => {
