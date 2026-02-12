@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Button, Frame, TextInput } from "react95";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { useWindowsContext } from "contexts/WindowsContext";
@@ -22,6 +22,35 @@ const FlowWalletApp: React.FC = () => {
 
   const [message, setMessage] = useState("Flunks login check");
   const [actionError, setActionError] = useState<string | null>(null);
+  const [debugLog, setDebugLog] = useState<any[]>([]);
+  const [persistedLog, setPersistedLog] = useState<any[]>([]);
+
+  // Load persisted log from localStorage on mount (survives app restarts)
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('__wc_persist_log') || '[]');
+      setPersistedLog(saved);
+    } catch (e) { /* ignore */ }
+  }, []);
+
+  // Poll for both in-memory and persisted log entries
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // In-memory log from wcRequestHook
+      const log = (window as any).__wcDebugLog;
+      if (log && log.length !== debugLog.length) {
+        setDebugLog([...log]);
+      }
+      // Persisted log from localStorage
+      try {
+        const saved = JSON.parse(localStorage.getItem('__wc_persist_log') || '[]');
+        if (saved.length !== persistedLog.length) {
+          setPersistedLog(saved);
+        }
+      } catch (e) { /* ignore */ }
+    }, 500);
+    return () => clearInterval(interval);
+  }, [debugLog.length, persistedLog.length]);
 
   const statusText = useMemo(() => {
     if (isConnecting) return "connecting…";
@@ -154,6 +183,39 @@ const FlowWalletApp: React.FC = () => {
         <div className="text-xs opacity-70">
           Tip: On Android, the Flow Wallet app should open, then return here automatically.
         </div>
+
+        <Frame variant="field" className="p-3">
+          <div className="flex items-center justify-between">
+            <div className="text-sm font-semibold">🔍 Connection Debug Log</div>
+            <Button size="sm" onClick={() => { 
+              (window as any).__wcDebugLog = []; 
+              setDebugLog([]); 
+              localStorage.removeItem('__wc_persist_log');
+              setPersistedLog([]);
+            }}>
+              Clear
+            </Button>
+          </div>
+          <textarea
+            readOnly
+            value={persistedLog.length > 0 
+              ? persistedLog.map((e: any) => `[${e.t}] ${e.step}${e.detail ? ': ' + e.detail : ''}`).join('\n')
+              : '(no activity yet — tap Connect Flow Wallet, logs persist through restart)'}
+            style={{
+              width: "100%",
+              minHeight: "140px",
+              marginTop: "8px",
+              background: "#0f0f1a",
+              color: "#fbbf24",
+              border: "1px solid #2a2a3e",
+              borderRadius: "8px",
+              padding: "8px",
+              fontFamily: "monospace",
+              fontSize: "10px",
+              lineHeight: "1.4",
+            }}
+          />
+        </Frame>
       </div>
     </DraggableResizeableWindow>
   );

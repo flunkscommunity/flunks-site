@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <queries>
+        <!-- Flow Wallet deep link schemes -->
         <intent>
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="frw" />
@@ -10,6 +11,16 @@
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="lilico" />
         </intent>
+        <!-- Flow Wallet universal link domain -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" android:host="frw-link.lilico.app" />
+        </intent>
+        <!-- Flow Wallet package names (needed for canOpenUrl on Android 11+) -->
+        <package android:name="com.flowfoundation.wallet" />
+        <package android:name="io.outblock.lilico" />
+        <!-- Play Store (for "install Flow Wallet" fallback) -->
+        <package android:name="com.android.vending" />
     </queries>
 
     <application

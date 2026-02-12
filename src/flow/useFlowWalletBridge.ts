@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import * as fcl from "@onflow/fcl";
 import { App, URLOpenListenerEvent } from "@capacitor/app";
-import { isWcReady, waitForWcReady } from "../config/fcl";
+import { isWcReady, waitForWcReady, FLOW_WALLET_SERVICE } from "../config/fcl";
 
 const isMobileApp = (): boolean => {
   if (typeof window === "undefined") return false;
@@ -119,25 +119,56 @@ export const useFlowWalletBridge = (): FlowWalletBridgeApi => {
   const connect = useCallback(async () => {
     if (state.isConnecting) return;
 
+    // Persistent debug log that survives app restarts (writes to localStorage)
+    const persistLog = (step: string, detail?: string) => {
+      try {
+        const existing = JSON.parse(localStorage.getItem('__wc_persist_log') || '[]');
+        existing.push({ step, detail: detail?.substring(0, 120), t: new Date().toISOString().substring(11, 19) });
+        // Keep last 20 entries
+        if (existing.length > 20) existing.splice(0, existing.length - 20);
+        localStorage.setItem('__wc_persist_log', JSON.stringify(existing));
+      } catch (e) { /* ignore */ }
+    };
+
     setState((prev) => ({ ...prev, isConnecting: true, lastError: null }));
+    persistLog('connect-start', `mobile=${state.isMobile}`);
 
     try {
       if (state.isMobile && !isWcReady()) {
-        await waitForWcReady(3000);
+        persistLog('wc-not-ready', 'waiting up to 3s...');
+        const ready = await waitForWcReady(3000);
+        persistLog('wc-wait-result', `ready=${ready}`);
+      } else {
+        persistLog('wc-already-ready', `wcReady=${isWcReady()}`);
       }
 
-      const authPromise = fcl.authenticate();
+      if (state.isMobile) {
+        // On mobile (Capacitor), bypass FCL Discovery iframe entirely.
+        // Pass the Flow Wallet WC/RPC service directly to fcl.authenticate().
+        // This makes FCL use the WC/RPC strategy (registered by fcl-wc plugin),
+        // which creates a WalletConnect session proposal and calls wcRequestHook
+        // with the pairing URI, allowing us to deep-link to Flow Wallet.
+        persistLog('calling-fcl-authenticate-direct', `service=${FLOW_WALLET_SERVICE.uid}`);
+        const authPromise = fcl.authenticate({ service: FLOW_WALLET_SERVICE });
+        persistLog('fcl-authenticate-called', 'promise created (direct WC/RPC)');
 
-      if (!state.isMobile) {
-        await authPromise;
-      } else {
         void authPromise.catch((error) => {
           const message = error instanceof Error ? error.message : String(error);
+          persistLog('fcl-authenticate-error', message);
           setState((prev) => ({ ...prev, lastError: message, isConnecting: false }));
         });
+        persistLog('fcl-authenticate-fire-and-forget');
+      } else {
+        // On web, use standard discovery UI (IFRAME/RPC)
+        persistLog('calling-fcl-authenticate-web');
+        const authPromise = fcl.authenticate();
+        persistLog('fcl-authenticate-called', 'promise created (discovery)');
+        await authPromise;
+        persistLog('fcl-authenticate-resolved-web');
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
+      persistLog('connect-catch-error', message);
       setState((prev) => ({ ...prev, lastError: message, isConnecting: false }));
       throw error;
     }

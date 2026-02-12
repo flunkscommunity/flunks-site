@@ -200,32 +200,43 @@ console.log('🌐 App URL:', APP_URL);
 const IS_MOBILE_APP = isMobileApp();
 console.log('📱 Mobile App Mode:', IS_MOBILE_APP ? 'YES' : 'NO');
 
-// For mobile apps, use WC/RPC (WalletConnect) which works with deep linking
-// The wcRequestHook will intercept the WC URI and open Flow Wallet directly
-// For web, use IFRAME/RPC for the standard discovery UI
-const DISCOVERY_METHOD = IS_MOBILE_APP ? 'WC/RPC' : 'IFRAME/RPC';
-console.log('🔗 Discovery Method:', DISCOVERY_METHOD);
+// IMPORTANT: discovery.wallet.method must be IFRAME/RPC, POP/RPC, TAB/RPC, HTTP/POST, or EXT/RPC
+// WC/RPC is NOT a valid discovery method - it's the internal method used by individual wallet
+// services registered by the fcl-wc plugin. Setting it as the discovery method causes FCL to
+// try to run the discovery endpoint through the WalletConnect strategy, which fails silently.
+// On mobile, we bypass discovery entirely by passing the Flow Wallet service directly to
+// fcl.authenticate({ service }) in useFlowWalletBridge.ts
+const DISCOVERY_METHOD = 'IFRAME/RPC';
+console.log('🔗 Discovery Method:', DISCOVERY_METHOD, IS_MOBILE_APP ? '(mobile will bypass via direct service)' : '');
 
 // Flow Wallet's universal link for WalletConnect
 const FLOW_WALLET_UNIVERSAL_LINK = "https://frw-link.lilico.app/wc";
 
+/**
+ * Flow Wallet WC/RPC service object for direct authentication on mobile.
+ * This matches the service definition from fcl-js/packages/fcl-rainbowkit-adapter/src/wallets/flow-wallet.ts
+ * By passing this service directly to fcl.authenticate({ service }), we bypass the discovery
+ * iframe (which doesn't work in Android Capacitor WebView) and go straight to WalletConnect.
+ * The fcl-wc plugin's WC/RPC strategy will then fire wcRequestHook with the pairing URI.
+ */
+export const FLOW_WALLET_SERVICE = {
+  f_type: "Service",
+  f_vsn: "1.0.0",
+  type: "authn",
+  method: "WC/RPC",
+  uid: "https://frw-link.lilico.app/wc",
+  endpoint: "flow_authn",
+  provider: {
+    name: "Flow Wallet",
+    icon: "https://lilico.app/logo_mobile.png",
+    description: "Digital wallet created for everyone.",
+  },
+  params: {},
+};
+
 // Flow Wallet app schemes (Android prefers direct app deep links)
 const FLOW_WALLET_ANDROID_SCHEME = "frw://wc";
 const FLOW_WALLET_ANDROID_ALT_SCHEME = "lilico://wc";
-
-// Flow Wallet's WalletConnect service - uid MUST be a valid universal link URL
-const FLOW_WALLET_SERVICE = {
-  "f_type": "Service",
-  "f_vsn": "1.0.0", 
-  "type": "authn",
-  "uid": FLOW_WALLET_UNIVERSAL_LINK, // Critical: must be universal link for deep linking
-  "endpoint": "flow_authn",
-  "method": "WC/RPC",
-  "provider": {
-    "name": "Flow Wallet",
-    "icon": "https://lilico.app/logo.png"
-  }
-};
 
 // WalletConnect request hook to intercept URI and open wallet on mobile
 const wcRequestHook = async (data: any) => {
@@ -234,13 +245,27 @@ const wcRequestHook = async (data: any) => {
   console.log('🔗 IS_MOBILE_APP:', IS_MOBILE_APP);
   console.log('🔗 data.uri:', data?.uri);
 
+  // Persist to localStorage so it survives app restarts
+  try {
+    const existing = JSON.parse(localStorage.getItem('__wc_persist_log') || '[]');
+    existing.push({ step: 'wcRequestHook-called', detail: `uri=${data?.uri ? 'yes' : 'no'}, mobile=${IS_MOBILE_APP}`, t: new Date().toISOString().substring(11, 19) });
+    if (existing.length > 20) existing.splice(0, existing.length - 20);
+    localStorage.setItem('__wc_persist_log', JSON.stringify(existing));
+  } catch (e) { /* ignore */ }
+
   const setWcDebug = (method: string, url?: string) => {
     if (typeof window === 'undefined') return;
-    (window as any).__wcLastOpen = {
+    // Store debug log as an array so FlowWalletApp can display the full sequence
+    if (!(window as any).__wcDebugLog) {
+      (window as any).__wcDebugLog = [];
+    }
+    const entry = {
       method,
-      url,
-      timestamp: new Date().toISOString(),
+      url: url?.substring(0, 80), // truncate for display
+      timestamp: new Date().toISOString().substring(11, 19),
     };
+    (window as any).__wcDebugLog.push(entry);
+    (window as any).__wcLastOpen = entry;
     console.log(`📱 WC Debug: ${method}`, url);
   };
   
@@ -252,83 +277,95 @@ const wcRequestHook = async (data: any) => {
     const flowWalletUrl = `${FLOW_WALLET_UNIVERSAL_LINK}?uri=${encodeURIComponent(data.uri)}`;
     console.log('📱 Opening Flow Wallet via wcRequestHook:', flowWalletUrl);
 
-    const openUniversalLink = async (): Promise<boolean> => {
-      try {
-        const { AppLauncher } = await import('@capacitor/app-launcher');
-        console.log('📱 Opening Flow Wallet via universal link:', flowWalletUrl);
-        setWcDebug('android-universal-link', flowWalletUrl);
-        await AppLauncher.openUrl({ url: flowWalletUrl });
-        return true;
-      } catch (error) {
-        console.error('⚠️ Universal link open failed:', error);
-        return false;
-      }
-    };
-    
-    // Prefer direct app deep links on Android to avoid the intermediary landing screen
     const platform = (window as any).Capacitor?.getPlatform?.();
+    
     if (platform === 'android') {
+      // Android: Try deep link schemes to open Flow Wallet app directly.
+      // AppLauncher.openUrl uses Intent.ACTION_VIEW which is the correct Android mechanism.
+      // If Flow Wallet isn't installed, the Intent will fail (ActivityNotFoundException)
+      // and we catch it — we do NOT fall back to Browser.open() because that causes
+      // the app to restart when the URL redirects back to flunks.net.
+      const { AppLauncher } = await import('@capacitor/app-launcher');
+      const deepLink = `${FLOW_WALLET_ANDROID_SCHEME}?uri=${encodeURIComponent(data.uri)}`;
+      const altDeepLink = `${FLOW_WALLET_ANDROID_ALT_SCHEME}?uri=${encodeURIComponent(data.uri)}`;
+
+      // Strategy 1: Try frw:// scheme (current Flow Wallet app)
       try {
-        const { AppLauncher } = await import('@capacitor/app-launcher');
-        const deepLink = `${FLOW_WALLET_ANDROID_SCHEME}?uri=${encodeURIComponent(data.uri)}`;
-        const altDeepLink = `${FLOW_WALLET_ANDROID_ALT_SCHEME}?uri=${encodeURIComponent(data.uri)}`;
-
-        const canOpenPrimary = await AppLauncher.canOpenUrl({ url: deepLink });
-        if (canOpenPrimary?.value) {
-          console.log('📱 Opening Flow Wallet via Android deep link:', deepLink);
-          setWcDebug('android-deeplink-frw', deepLink);
-          await AppLauncher.openUrl({ url: deepLink });
-          return true;
-        }
-
-        const canOpenAlt = await AppLauncher.canOpenUrl({ url: altDeepLink });
-        if (canOpenAlt?.value) {
-          console.log('📱 Opening Flow Wallet via Android alt deep link:', altDeepLink);
-          setWcDebug('android-deeplink-lilico', altDeepLink);
-          await AppLauncher.openUrl({ url: altDeepLink });
-          return true;
-        }
-
-        const openedUniversal = await openUniversalLink();
-        if (openedUniversal) {
+        console.log('📱 Android: trying frw:// deep link:', deepLink);
+        setWcDebug('android-deeplink-frw', deepLink);
+        const result = await AppLauncher.openUrl({ url: deepLink });
+        if (result?.completed) {
+          console.log('✅ Android: Flow Wallet opened via frw:// deep link');
           return true;
         }
       } catch (error) {
-        console.error('⚠️ Android deep link open failed, falling back to universal link:', error);
-        setWcDebug('android-deeplink-failed', flowWalletUrl);
+        console.log('⚠️ frw:// scheme not available:', error);
       }
+
+      // Strategy 2: Try lilico:// scheme (legacy name)
+      try {
+        console.log('📱 Android: trying lilico:// deep link:', altDeepLink);
+        setWcDebug('android-deeplink-lilico', altDeepLink);
+        const result = await AppLauncher.openUrl({ url: altDeepLink });
+        if (result?.completed) {
+          console.log('✅ Android: Flow Wallet opened via lilico:// deep link');
+          return true;
+        }
+      } catch (error) {
+        console.log('⚠️ lilico:// scheme not available:', error);
+      }
+
+      // Strategy 3: Try the universal link via AppLauncher (NOT Browser.open)
+      // AppLauncher.openUrl with an https URL will trigger Android's app link resolution,
+      // which can open Flow Wallet if it has verified the frw-link.lilico.app domain
+      try {
+        console.log('📱 Android: trying universal link via AppLauncher:', flowWalletUrl);
+        setWcDebug('android-universal-link', flowWalletUrl);
+        const result = await AppLauncher.openUrl({ url: flowWalletUrl });
+        if (result?.completed) {
+          console.log('✅ Android: Flow Wallet opened via universal link');
+          return true;
+        }
+      } catch (error) {
+        console.log('⚠️ Universal link via AppLauncher failed:', error);
+      }
+
+      // ALL strategies failed — Flow Wallet is likely not installed.
+      // Do NOT open in browser (causes app restart loop).
+      // Instead, show a message to the user and open the Play Store listing.
+      console.error('❌ Android: Could not open Flow Wallet — app may not be installed');
+      setWcDebug('android-all-failed', 'Flow Wallet not found');
+      
+      try {
+        // Open Flow Wallet on Play Store
+        await AppLauncher.openUrl({ url: 'market://details?id=com.flowfoundation.wallet' });
+      } catch (storeError) {
+        // If Play Store intent fails, try the web URL (but in Play Store, not browser)
+        try {
+          await AppLauncher.openUrl({ url: 'https://play.google.com/store/apps/details?id=com.flowfoundation.wallet' });
+        } catch (e) {
+          console.error('Could not open Play Store either:', e);
+        }
+      }
+      
+      return true; // We handled it (even though it failed — don't let other fallbacks fire)
     }
 
-    // Use Capacitor Browser plugin to open in external browser/app
-    // This keeps our app in the background and allows proper deep linking back
+    // iOS: Use Browser plugin to open universal link — iOS handles this correctly
+    // Universal links on iOS will open Flow Wallet if installed, or Safari if not
     try {
       const { Browser } = await import('@capacitor/browser');
-      console.log('📱 Using Capacitor Browser plugin to open Flow Wallet');
-      setWcDebug('browser-open', flowWalletUrl);
+      console.log('📱 iOS: Opening Flow Wallet via universal link');
+      setWcDebug('ios-browser-open', flowWalletUrl);
       await Browser.open({ 
         url: flowWalletUrl,
-        windowName: '_system', // Open in system browser/app handler
+        windowName: '_system',
         presentationStyle: 'fullscreen'
       });
     } catch (error) {
-      console.error('⚠️ Browser plugin failed, trying App plugin:', error);
-      // Fallback to App plugin for opening URLs
-      try {
-        const { App } = await import('@capacitor/app');
-        if ((window as any).Capacitor?.getPlatform?.() === 'android') {
-          const { AppLauncher } = await import('@capacitor/app-launcher');
-          setWcDebug('android-applauncher-universal', flowWalletUrl);
-          await AppLauncher.openUrl({ url: flowWalletUrl });
-        } else {
-          // iOS - just open the URL which should trigger universal links
-          setWcDebug('ios-window-open', flowWalletUrl);
-          window.open(flowWalletUrl, '_system');
-        }
-      } catch (fallbackError) {
-        console.error('⚠️ All methods failed, using window.open:', fallbackError);
-        setWcDebug('window-open-fallback', flowWalletUrl);
-        window.open(flowWalletUrl, '_system');
-      }
+      console.error('⚠️ iOS Browser plugin failed, using window.open:', error);
+      setWcDebug('ios-window-open', flowWalletUrl);
+      window.open(flowWalletUrl, '_system');
     }
     
     // Return true to indicate we handled this
@@ -353,7 +390,8 @@ config({
   "discovery.wallet": "https://fcl-discovery.onflow.org/mainnet/authn",
   "discovery.authn.endpoint": "https://fcl-discovery.onflow.org/api/mainnet/authn",
   
-  // Discovery method - WC/RPC for mobile (WalletConnect), IFRAME/RPC for web
+  // Discovery method - always IFRAME/RPC (the default). On mobile, we bypass discovery
+  // entirely by passing the Flow Wallet service directly to fcl.authenticate({ service })
   "discovery.wallet.method": DISCOVERY_METHOD,
   
   // App details

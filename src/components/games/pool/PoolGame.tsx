@@ -32,6 +32,7 @@ interface PoolGameProps {
   walletAddress?: string;
   gumBalance: number;
   onGumChange: (amount: number) => void;
+  onStopBarMusic?: () => void;
 }
 
 // Opponent data
@@ -92,10 +93,13 @@ const OPPONENTS: Opponent[] = [
   },
 ];
 
-const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumChange }) => {
+const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumChange, onStopBarMusic }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const loaderScriptRef = useRef<HTMLScriptElement | null>(null);
+  
+  // Pool music (plays during actual gameplay)
+  const poolMusicRef = useRef<HTMLAudioElement | null>(null);
   
   // Radio/music control
   const { audioRef: radioAudioRef, isPlaying: radioIsPlaying, setIsPlaying: setRadioIsPlaying } = useRadio();
@@ -130,6 +134,35 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
     }
   }, [gameState]);
 
+  // Stop bar music when cutscene (intro) starts, start pool music when game starts
+  useEffect(() => {
+    if (gameState === 'intro') {
+      // Cut off the 4thieves bar music — the cutscene video has its own audio
+      onStopBarMusic?.();
+      // Make sure pool music isn't playing during cutscene
+      if (poolMusicRef.current) {
+        poolMusicRef.current.pause();
+        poolMusicRef.current.currentTime = 0;
+      }
+    } else if (gameState === 'playing') {
+      // Start pool-music.mp3 on loop at 50% volume
+      if (!poolMusicRef.current) {
+        poolMusicRef.current = new Audio('/music/pool-music.mp3');
+        poolMusicRef.current.loop = true;
+        poolMusicRef.current.volume = 0.5;
+      }
+      poolMusicRef.current.currentTime = 0;
+      poolMusicRef.current.play().catch(console.log);
+      console.log('🎶 Pool music started (50% volume, looping)');
+    } else if (gameState === 'gameover' || gameState === 'select' || gameState === 'start') {
+      // Stop pool music when game ends or returns to menu
+      if (poolMusicRef.current) {
+        poolMusicRef.current.pause();
+        poolMusicRef.current.currentTime = 0;
+      }
+    }
+  }, [gameState, onStopBarMusic]);
+
   // Start ambient bar audio during playing state
   useEffect(() => {
     if (gameState === 'playing' || gameState === 'intro') {
@@ -159,6 +192,11 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
       if (ambientAudioRef.current) {
         ambientAudioRef.current.pause();
         ambientAudioRef.current = null;
+      }
+      // Stop pool music
+      if (poolMusicRef.current) {
+        poolMusicRef.current.pause();
+        poolMusicRef.current = null;
       }
       // Restore radio if it was playing before
       if (wasRadioPlayingRef.current && radioAudioRef.current) {

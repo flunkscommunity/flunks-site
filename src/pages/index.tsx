@@ -127,7 +127,7 @@ const Desktop = () => {
   const splashDismissedRef = useRef(false);
   const mobileInitRanRef = useRef(false);
   const { primaryWallet } = useDynamicContext();
-  const { disconnect, isConnected, address: unifiedAddress, isConnecting } = useUnifiedWallet();
+  const { disconnect, isConnected, address: unifiedAddress, isConnecting, connectFCL } = useUnifiedWallet();
   const { hasProfile, profile } = useUserProfile();
   
   // Demo mode support for iOS App Store review
@@ -438,12 +438,16 @@ const windowsMemod = useMemo(() => (
                           Connect your wallet to create your Semester Zero character profile and get your locker assigned!
                         </p>
                         <button
-                          onClick={() => {
+                          onClick={async () => {
                             closeWindow('PROFILE_SIGNIN_PROMPT');
-                            openWindow({
-                              key: WINDOW_IDS.FLOW_WALLET_APP,
-                              window: <FlowWalletApp />
-                            });
+                            if (isMobile) {
+                              try { await connectFCL(); } catch (e) { console.error('Connect error:', e); }
+                            } else {
+                              openWindow({
+                                key: WINDOW_IDS.FLOW_WALLET_APP,
+                                window: <FlowWalletApp />
+                              });
+                            }
                           }}
                           style={{
                             background: '#ffffff',
@@ -519,10 +523,16 @@ const windowsMemod = useMemo(() => (
           appId="flow-wallet"
           title="Flow Wallet"
           icon="/images/icons/flowty.png"
-          onDoubleClick={() => openWindow({
-            key: WINDOW_IDS.FLOW_WALLET_APP,
-            window: <FlowWalletApp />
-          })}
+          onDoubleClick={async () => {
+            if (isMobile) {
+              try { await connectFCL(); } catch (e) { console.error('Connect error:', e); }
+            } else {
+              openWindow({
+                key: WINDOW_IDS.FLOW_WALLET_APP,
+                window: <FlowWalletApp />
+              });
+            }
+          }}
         />
 
         {/* 4.1 Account / Sign Out - Always visible */}
@@ -682,13 +692,17 @@ const windowsMemod = useMemo(() => (
                     </button>
                   ) : (
                     <button
-                      onClick={() => {
+                      onClick={async () => {
                         console.log('🔗 Account: Connect Wallet clicked');
                         closeWindow('ACCOUNT_WINDOW');
-                        openWindow({
-                          key: WINDOW_IDS.FLOW_WALLET_APP,
-                          window: <FlowWalletApp />
-                        });
+                        if (isMobile) {
+                          try { await connectFCL(); } catch (e) { console.error('Connect error:', e); }
+                        } else {
+                          openWindow({
+                            key: WINDOW_IDS.FLOW_WALLET_APP,
+                            window: <FlowWalletApp />
+                          });
+                        }
                       }}
                       disabled={isConnecting}
                       style={{

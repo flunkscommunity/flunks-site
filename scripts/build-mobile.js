@@ -130,6 +130,26 @@ ${colors.bright}╔════════════════════�
     log('  ✓ Public assets copied', colors.green);
   }
 
+  // Step 4.1: Remove macOS duplicate folders (e.g. "images 2", "_next 3")
+  // macOS sometimes creates these during copy operations and they bloat the build
+  logStep('4.1/8', 'Removing macOS duplicate folders...');
+  const outEntries = fs.readdirSync(OUT_DIR);
+  let dupeCount = 0;
+  for (const entry of outEntries) {
+    // Match folders like "images 2", "_next 3", "admin 3", etc.
+    if (/\s\d+$/.test(entry)) {
+      const fullPath = path.join(OUT_DIR, entry);
+      if (fs.statSync(fullPath).isDirectory()) {
+        fs.rmSync(fullPath, { recursive: true, force: true });
+        log(`  ✓ Removed duplicate folder: ${entry}`, colors.green);
+        dupeCount++;
+      }
+    }
+  }
+  if (dupeCount === 0) {
+    log('  ✓ No duplicate folders found', colors.green);
+  }
+
   // Step 4.5: Remove large assets not needed for mobile
   // This keeps the build under 200MB for Play Store/App Store
   logStep('4.5/6', 'Optimizing for mobile (removing large unused assets)...');
@@ -162,7 +182,8 @@ ${colors.bright}╔════════════════════�
     'enter.mp3',              // Arcade entrance
     'paradisemotel.mp3',      // Paradise Motel (day)
     'night.mp3',              // Paradise Motel (night)
-    'tvaudio.mp3',            // Freaks TV
+    'tvaudio.mp3',              // Freaks TV
+    'pool-music.mp3',           // Pool game music
   ];
   
   let totalRemoved = 0;
@@ -294,8 +315,45 @@ ${colors.bright}╔════════════════════�
 
   log(`  📊 Total space saved: ~${totalRemoved}MB`, colors.cyan);
 
-  // Step 5: Sync to native platforms
-  logStep('5/6', 'Syncing to native platforms...');
+  // Step 5: Size gate — verify out/ is under 200MB before syncing
+  logStep('5/8', 'Checking build size...');
+  const getDirectorySize = (dir) => {
+    let size = 0;
+    try {
+      const entries = fs.readdirSync(dir, { withFileTypes: true });
+      for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+          size += getDirectorySize(fullPath);
+        } else {
+          size += fs.statSync(fullPath).size;
+        }
+      }
+    } catch (e) {}
+    return size;
+  };
+  const outSizeMB = Math.round(getDirectorySize(OUT_DIR) / 1024 / 1024);
+  log(`  📦 Build output size: ${outSizeMB}MB`, outSizeMB <= 200 ? colors.green : colors.red);
+  
+  if (outSizeMB > 200) {
+    log(`\n  ❌ BUILD TOO LARGE: ${outSizeMB}MB exceeds 200MB limit!`, colors.red);
+    log(`  Top folders:`, colors.yellow);
+    const topFolders = fs.readdirSync(OUT_DIR, { withFileTypes: true })
+      .filter(e => e.isDirectory())
+      .map(e => ({ name: e.name, size: Math.round(getDirectorySize(path.join(OUT_DIR, e.name)) / 1024 / 1024) }))
+      .sort((a, b) => b.size - a.size)
+      .slice(0, 10);
+    for (const f of topFolders) {
+      log(`    ${f.name}: ${f.size}MB`, colors.yellow);
+    }
+    log(`\n  Add large folders to ASSETS_TO_REMOVE in scripts/build-mobile.js`, colors.yellow);
+    process.exit(1);
+  }
+  
+  log(`  ✅ Size OK (${outSizeMB}MB ≤ 200MB)`, colors.green);
+
+  // Step 6: Sync to native platforms
+  logStep('6/8', 'Syncing to native platforms...');
   
   if (target === 'ios' || target === 'all') {
     log('\n  📱 Syncing iOS...', colors.blue);
@@ -309,8 +367,38 @@ ${colors.bright}╔════════════════════�
     log('  ✓ Android synced', colors.green);
   }
 
-  // Step 6: Summary
-  logStep('6/6', 'Build complete!');
+  // Step 7: Build signed AAB for Android
+  if (target === 'android' || target === 'all') {
+    logStep('7/8', 'Building signed Android AAB...');
+    const androidDir = path.join(ROOT_DIR, 'android');
+    try {
+      run(`cd "${androidDir}" && ./gradlew bundleRelease`);
+      
+      const aabPath = path.join(androidDir, 'app/build/outputs/bundle/release/app-release.aab');
+      if (fs.existsSync(aabPath)) {
+        const aabSizeMB = Math.round(fs.statSync(aabPath).size / 1024 / 1024);
+        
+        // Read version from build.gradle
+        const buildGradle = fs.readFileSync(path.join(androidDir, 'app/build.gradle'), 'utf8');
+        const versionMatch = buildGradle.match(/versionCode\s+(\d+)/);
+        const versionCode = versionMatch ? versionMatch[1] : 'unknown';
+        
+        // Copy to Desktop with version in filename
+        const desktopPath = path.join(require('os').homedir(), 'Desktop', `flunks-v${versionCode}.aab`);
+        fs.copyFileSync(aabPath, desktopPath);
+        
+        log(`  ✅ AAB built: ${aabSizeMB}MB`, colors.green);
+        log(`  📁 Copied to: ${desktopPath}`, colors.green);
+      } else {
+        log(`  ❌ AAB not found at expected path`, colors.red);
+      }
+    } catch (error) {
+      log(`  ❌ AAB build failed — you can build manually in Android Studio`, colors.red);
+    }
+  }
+
+  // Step 8: Summary
+  logStep('8/8', 'Build complete!');
   
   console.log(`
 ${colors.green}${colors.bright}✅ Mobile build successful!${colors.reset}
@@ -327,14 +415,10 @@ ${colors.cyan}Next steps:${colors.reset}
   
   if (target === 'android' || target === 'all') {
     console.log(`  ${colors.bright}Android:${colors.reset}
-    $ npx cap open android
-    Then click Run in Android Studio
+    Upload the AAB from your Desktop to Google Play Console
+    → Internal Testing track for testing
+    → Production track when ready
 `);
-  }
-
-  logStep('7/7', 'Opening Xcode...');
-  if (target === 'ios' || target === 'all') {
-    run('npx cap open ios');
   }
 }
 

@@ -377,6 +377,14 @@ const FourThievesBarMain = () => {
           <PoolGame 
             walletAddress={walletAddress}
             gumBalance={effectiveBalance}
+            onStopBarMusic={() => {
+              // Stop 4thieves bar music — cutscene/pool music takes over
+              if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.currentTime = 0;
+              }
+              setIsPoolGameOpen(false);
+            }}
             onGumChange={(amount) => {
               const newBalance = Math.max(0, effectiveBalance + amount);
               if (isDemoMode && demoMode) {
