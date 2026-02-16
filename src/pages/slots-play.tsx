@@ -7,7 +7,7 @@ import DraggableResizeableWindow from 'components/DraggableResizeableWindow';
 import { isFeatureEnabled } from 'utils/buildMode';
 import { useGum } from 'contexts/GumContext';
 import { useUnifiedWallet } from 'contexts/UnifiedWalletContext';
-import { useDemoModeOptional, isIOSPlatform } from 'contexts/DemoModeContext';
+import { useDemoModeOptional, isDemoPlatform } from 'contexts/DemoModeContext';
 import { processCasinoTransaction } from '../utils/casinoTransactions';
 
 const Container = styled.div`
@@ -748,8 +748,8 @@ export default function SlotsPlay() {
   const { address: walletAddress } = useUnifiedWallet();
   const demoMode = useDemoModeOptional();
   
-  // Use demo mode if enabled (for iOS App Store reviewers only)
-  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode ?? false);
+  // Use demo mode if enabled (for App Store / Play Store reviewers)
+  const isDemoMode = isDemoPlatform() && (demoMode?.isDemoMode ?? false);
   const DEMO_WALLET = '0xdemo000000000001';
   
   // Use real wallet and GUM balance (DEV_MODE disabled to use real GUM on localhost)

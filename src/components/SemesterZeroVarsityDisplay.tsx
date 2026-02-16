@@ -5,7 +5,7 @@ import { useUnifiedWallet } from '../contexts/UnifiedWalletContext';
 import SetupCollectionButton from './SetupCollectionButton';
 import * as fcl from '@onflow/fcl';
 import '../config/fcl';
-import { useDemoModeOptional, isIOSPlatform, DEMO_PINS } from '../contexts/DemoModeContext';
+import { useDemoModeOptional, isDemoPlatform, DEMO_PINS } from '../contexts/DemoModeContext';
 
 // Helper to handle GCS images
 // On mobile (static export), we can't use the API proxy, so use direct URL
@@ -416,7 +416,7 @@ const SemesterZeroVarsityDisplay: React.FC<SemesterZeroVarsityDisplayProps> = ({
   // Debug: Log demo mode status
   useEffect(() => {
     console.log('🎽 [VarsityDisplay] Demo mode check:', {
-      isIOSPlatform: isIOSPlatform(),
+      isDemoPlatform: isDemoPlatform(),
       contextIsDemoMode: demoMode?.isDemoMode,
       finalIsDemoMode: isDemoMode
     });

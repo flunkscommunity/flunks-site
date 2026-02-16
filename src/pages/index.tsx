@@ -65,7 +65,7 @@ import LevelUp from "components/admin/LevelUp";
 import BurnNFT from "components/admin/BurnNFT";
 import AlexandriaLibrary from "components/AlexandriaLibrary";
 import UndergroundPasswordWindow from "windows/UndergroundPasswordWindow";
-import { useDemoModeOptional, isIOSPlatform, DEMO_PROFILE } from "contexts/DemoModeContext";
+import { useDemoModeOptional, isDemoPlatform, DEMO_PROFILE } from "contexts/DemoModeContext";
 
 const FullScreenLoader = () => {
   const [percent, setPercent] = useState(0);
@@ -130,9 +130,9 @@ const Desktop = () => {
   const { disconnect, isConnected, address: unifiedAddress, isConnecting, connectFCL } = useUnifiedWallet();
   const { hasProfile, profile } = useUserProfile();
   
-  // Demo mode support for iOS App Store review
+  // Demo mode support for App Store / Play Store review
   const demoMode = useDemoModeOptional();
-  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  const isDemoMode = isDemoPlatform() && (demoMode?.isDemoMode || false);
 
   const handleSplashComplete = useCallback(() => {
     splashDismissedRef.current = true;

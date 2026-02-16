@@ -9,7 +9,7 @@ import VideoPokerBattleTested from "components/games/VideoPokerBattleTested";
 import Blackjack from "components/games/Blackjack";
 import ScratchCard from "components/games/ScratchCard";
 import SlotsGame from "components/games/SlotsGame";
-import { useDemoModeOptional, isIOSPlatform } from 'contexts/DemoModeContext';
+import { useDemoModeOptional, isDemoPlatform } from 'contexts/DemoModeContext';
 
 interface UndergroundCasinoProps {
   onClose?: () => void;
@@ -25,9 +25,9 @@ const UndergroundCasino: React.FC<UndergroundCasinoProps> = ({ onClose }) => {
   const { address: unifiedAddress } = useUnifiedWallet();
   const { balance: gumBalance, updateBalance } = useGum();
   
-  // Demo mode support for iOS App Store review
+  // Demo mode support for App Store / Play Store review
   const demoMode = useDemoModeOptional();
-  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  const isDemoMode = isDemoPlatform() && (demoMode?.isDemoMode || false);
   
   // Use demo values in demo mode
   const walletAddress = isDemoMode ? demoMode?.demoWalletAddress : (unifiedAddress || primaryWallet?.address);

@@ -7,7 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { getTotalWin, PAYLINES, FLUNKS_SYMBOLS } from '../../lib/slots/flunksPaytable';
 import { processCasinoTransaction } from '../../utils/casinoTransactions';
-import { useDemoModeOptional, isIOSPlatform } from '../../contexts/DemoModeContext';
+import { useDemoModeOptional, isDemoPlatform } from '../../contexts/DemoModeContext';
 
 // Vegas-style weighted symbol distribution for client-side spins
 const SYMBOL_WEIGHTS: { [key: string]: number } = {
@@ -86,12 +86,12 @@ const SlotsGame: React.FC<SlotsGameProps> = ({
   onClose
 }) => {
   const demoMode = useDemoModeOptional();
-  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  const isDemoMode = isDemoPlatform() && (demoMode?.isDemoMode || false);
   
   // Debug: Log demo mode status on mount
   useEffect(() => {
     console.log('🎰 [SlotsGame] Demo mode check:', {
-      isIOSPlatform: isIOSPlatform(),
+      isDemoPlatform: isDemoPlatform(),
       contextIsDemoMode: demoMode?.isDemoMode,
       finalIsDemoMode: isDemoMode,
       demoBalance: demoMode?.demoBalance

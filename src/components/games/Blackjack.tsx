@@ -8,7 +8,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { processCasinoTransaction } from '../../utils/casinoTransactions';
-import { useDemoModeOptional, isIOSPlatform } from '../../contexts/DemoModeContext';
+import { useDemoModeOptional, isDemoPlatform } from '../../contexts/DemoModeContext';
 
 // ============================================================================
 // TYPES
@@ -111,9 +111,9 @@ const Blackjack: React.FC<BlackjackProps> = ({
   onBalanceUpdate,
   onClose,
 }) => {
-  // Demo mode for iOS App Store reviewers only
+  // Demo mode for App Store / Play Store reviewers
   const demoMode = useDemoModeOptional();
-  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode ?? false);
+  const isDemoMode = isDemoPlatform() && (demoMode?.isDemoMode ?? false);
   
   // Game state
   const [deck, setDeck] = useState<Card[]>([]);

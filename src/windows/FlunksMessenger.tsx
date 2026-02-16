@@ -9,7 +9,7 @@ import useMessengerSounds from 'hooks/useMessengerSounds';
 import useChatMessages from 'hooks/useChatMessages';
 import useLocalChatMessages from 'hooks/useLocalChatMessages';
 import UserDisplay from 'components/UserDisplay';
-import { useDemoModeOptional, isIOSPlatform, DEMO_CHAT_MESSAGES, DEMO_PROFILE } from 'contexts/DemoModeContext';
+import { useDemoModeOptional, isDemoPlatform, DEMO_CHAT_MESSAGES, DEMO_PROFILE } from 'contexts/DemoModeContext';
 import { 
   Button, 
   Frame, 
@@ -360,7 +360,7 @@ const FlunksMessenger: React.FC = () => {
   
   // Demo mode support for iOS App Store review
   const demoMode = useDemoModeOptional();
-  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  const isDemoMode = isDemoPlatform() && (demoMode?.isDemoMode || false);
   
   // Track component lifecycle
   useEffect(() => {
@@ -373,7 +373,7 @@ const FlunksMessenger: React.FC = () => {
   // Debug: Log demo mode status immediately on mount
   useEffect(() => {
     console.log('💬 [FlunksMessenger] Demo mode check:', {
-      isIOSPlatform: isIOSPlatform(),
+      isDemoPlatform: isDemoPlatform(),
       contextIsDemoMode: demoMode?.isDemoMode,
       finalIsDemoMode: isDemoMode
     });

@@ -17,7 +17,7 @@ import WeeklyObjectives from '../components/WeeklyObjectives';
 import { supabase, hasValidSupabaseConfig } from '../lib/supabase';
 // WINDOW_IDS lives in src/fixed.ts (baseUrl set to src)
 import { WINDOW_IDS } from 'fixed';
-import { useDemoModeOptional, DEMO_PROFILE, DEMO_CHAPTERS, DEMO_LOCKER, isIOSPlatform } from '../contexts/DemoModeContext';
+import { useDemoModeOptional, DEMO_PROFILE, DEMO_CHAPTERS, DEMO_LOCKER, isDemoPlatform } from '../contexts/DemoModeContext';
 
 /**
  * Normalize a Flow address to standard format (0x + 16 hex chars lowercase)
@@ -52,7 +52,7 @@ const LockerSystemNew: React.FC = () => {
   
   // Demo mode support for iOS App Store review (iOS only)
   const demoMode = useDemoModeOptional();
-  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  const isDemoMode = isDemoPlatform() && (demoMode?.isDemoMode || false);
   
   // In demo mode on iOS, treat as connected
   const effectivelyConnected = isDemoMode || isConnected;

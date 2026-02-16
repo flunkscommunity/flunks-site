@@ -1,9 +1,9 @@
 /**
  * Demo Mode Context
- * Provides a fake wallet and GUM balance for App Store reviewers
+ * Provides a fake wallet and GUM balance for App Store / Play Store reviewers
  * and users who want to try the app without connecting a wallet
  * 
- * NOTE: Demo mode is iOS-ONLY for Apple App Store review
+ * NOTE: Demo mode works on iOS (App Store) and Android (Play Store)
  */
 
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
@@ -16,6 +16,20 @@ export const isIOSPlatform = (): boolean => {
   } catch {
     return false;
   }
+};
+
+// Check if we're on Android
+export const isAndroidPlatform = (): boolean => {
+  try {
+    return Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android';
+  } catch {
+    return false;
+  }
+};
+
+// Check if we're on a platform that supports demo mode (iOS + Android)
+export const isDemoPlatform = (): boolean => {
+  return isIOSPlatform() || isAndroidPlatform();
 };
 
 // Demo wallet address (not a real wallet)
@@ -169,7 +183,7 @@ export const DemoModeProvider: React.FC<DemoModeProviderProps> = ({ children }) 
   const [isDemoMode, setIsDemoMode] = useState(() => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem(DEMO_MODE_STORAGE_KEY);
-      const isDemo = stored === 'true' && isIOSPlatform();
+      const isDemo = stored === 'true' && isDemoPlatform();
       if (isDemo) {
         console.log('🎮 Demo Mode restored from storage');
       }

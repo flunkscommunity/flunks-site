@@ -10,7 +10,7 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { processCasinoTransaction } from '../../utils/casinoTransactions';
-import { useDemoModeOptional, isIOSPlatform } from '../../contexts/DemoModeContext';
+import { useDemoModeOptional, isDemoPlatform } from '../../contexts/DemoModeContext';
 import { 
   CARD_LIST, 
   PAY_TABLE_DATA, 
@@ -56,12 +56,12 @@ const VideoPokerBattleTested: React.FC<VideoPokerProps> = ({
   onBalanceUpdate 
 }) => {
   const demoMode = useDemoModeOptional();
-  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  const isDemoMode = isDemoPlatform() && (demoMode?.isDemoMode || false);
   
   // Debug: Log demo mode status on mount
   useEffect(() => {
     console.log('🃏 [VideoPoker] Demo mode check:', {
-      isIOSPlatform: isIOSPlatform(),
+      isDemoPlatform: isDemoPlatform(),
       contextIsDemoMode: demoMode?.isDemoMode,
       finalIsDemoMode: isDemoMode,
       demoBalance: demoMode?.demoBalance

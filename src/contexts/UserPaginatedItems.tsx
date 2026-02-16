@@ -12,7 +12,7 @@ import { getOwnerTokenIdsWhale } from "web3/script-get-owner-token-ids-whale";
 import { getOwnerTokenStakeInfoWhale } from "web3/script-get-owner-token-stake-info-whale";
 import useSWR from "swr";
 import { ObjectDetails } from "./StakingContext";
-import { useDemoModeOptional, DEMO_FLUNK, isIOSPlatform } from "./DemoModeContext";
+import { useDemoModeOptional, DEMO_FLUNK, isDemoPlatform } from "./DemoModeContext";
 
 // Context Props
 interface PaginatedContextProps {
@@ -46,9 +46,9 @@ export const PaginatedItemsProvider: React.FC<{ children: ReactNode }> = ({
   const { primaryWallet } = useDynamicContext();
   const { address: unifiedAddress } = useUnifiedWallet();
   
-  // Demo mode support for iOS App Store review (iOS only)
+  // Demo mode support for App Store / Play Store review
   const demoMode = useDemoModeOptional();
-  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  const isDemoMode = isDemoPlatform() && (demoMode?.isDemoMode || false);
   
   // Use unified wallet address (or demo wallet in demo mode on iOS)
   const walletAddress = isDemoMode ? demoMode?.demoWalletAddress : (unifiedAddress || null);

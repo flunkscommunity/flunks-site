@@ -35,7 +35,7 @@ import { DynamicHouseIcon } from '../components/DynamicHouseIcon';
 import { useAuth } from 'contexts/AuthContext';
 import { isFeatureEnabled, getCurrentBuildMode, isDevLocalhost, isMobileApp } from '../utils/buildMode';
 import { useTimeBasedAccess } from '../hooks/useTimeBasedAccess';
-import { useDemoModeOptional, isIOSPlatform } from 'contexts/DemoModeContext';
+import { useDemoModeOptional, isDemoPlatform } from 'contexts/DemoModeContext';
 
 interface Props {
   onClose: () => void;
@@ -71,9 +71,9 @@ const Semester0Map: React.FC<Props> = ({ onClose }) => {
   // Time-based access hook for location restrictions
   const { isLocationOpen, getTimeUntilOpen } = useTimeBasedAccess();
   
-  // Demo mode support for iOS App Store review (iOS only)
+  // Demo mode support for App Store / Play Store review
   const demoMode = useDemoModeOptional();
-  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  const isDemoMode = isDemoPlatform() && (demoMode?.isDemoMode || false);
   
   // Get authentication and NFT data from auth context
   const { isAuthenticated, flunksCount, hasFlunks } = auth;

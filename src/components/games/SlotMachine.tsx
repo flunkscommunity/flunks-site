@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useDemoModeOptional, isIOSPlatform } from '../../contexts/DemoModeContext';
+import { useDemoModeOptional, isDemoPlatform } from '../../contexts/DemoModeContext';
 
 // Slot machine symbols - classic bar theme
 const SYMBOLS = ['🍒', '🍋', '🍊', '🍇', '💎', '7️⃣', '🎰', '⭐'];
@@ -43,9 +43,9 @@ const SlotMachine: React.FC<SlotMachineProps> = ({
   gumBalance = 0,
   onGumChange 
 }) => {
-  // Demo mode for iOS App Store reviewers only
+  // Demo mode for App Store / Play Store reviewers
   const demoMode = useDemoModeOptional();
-  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode ?? false);
+  const isDemoMode = isDemoPlatform() && (demoMode?.isDemoMode ?? false);
   const effectiveBalance = isDemoMode ? (demoMode?.demoBalance ?? 1000) : gumBalance;
   const effectiveWallet = walletAddress || (isDemoMode ? '0xdemo000000000001' : null);
   

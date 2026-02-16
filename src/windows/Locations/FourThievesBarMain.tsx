@@ -6,7 +6,7 @@ import { useTimeBasedImage } from "utils/timeBasedImages";
 import { useState, useEffect, useRef } from "react";
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useUnifiedWallet } from 'contexts/UnifiedWalletContext';
-import { useDemoModeOptional, isIOSPlatform } from 'contexts/DemoModeContext';
+import { useDemoModeOptional, isDemoPlatform } from 'contexts/DemoModeContext';
 import { useGum } from 'contexts/GumContext';
 import VideoPoker from "components/games/VideoPoker";
 import VideoPokerBattleTested from "components/games/VideoPokerBattleTested";
@@ -22,14 +22,14 @@ const FourThievesBarMain = () => {
   const { primaryWallet } = useDynamicContext();
   const { address: unifiedAddress } = useUnifiedWallet();
 
-  // Demo mode support for iOS App Store review
+  // Demo mode support for App Store / Play Store review
   const demoMode = useDemoModeOptional();
-  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  const isDemoMode = isDemoPlatform() && (demoMode?.isDemoMode || false);
 
   // Debug: Log demo mode status
   useEffect(() => {
     console.log('🍺 [FourThievesBar] Demo mode check:', {
-      isIOSPlatform: isIOSPlatform(),
+      isDemoPlatform: isDemoPlatform(),
       contextIsDemoMode: demoMode?.isDemoMode,
       finalIsDemoMode: isDemoMode,
       demoBalance: demoMode?.demoBalance

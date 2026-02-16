@@ -9,7 +9,7 @@ import WalletConnectionModal from "../components/WalletConnectionModal";
 import { useAuth } from "contexts/AuthContext";
 import { useState, useEffect, useRef } from "react";
 import ItemsGrid from "components/YourItems/ItemsGrid";
-import { useDemoModeOptional, isIOSPlatform } from "contexts/DemoModeContext";
+import { useDemoModeOptional, isDemoPlatform } from "contexts/DemoModeContext";
 import { isMobileApp } from "utils/buildMode";
 
 const Onlyflunks: React.FC = () => {
@@ -22,7 +22,7 @@ const Onlyflunks: React.FC = () => {
   
   // Demo mode support for iOS App Store review (iOS only)
   const demoMode = useDemoModeOptional();
-  const isDemoMode = isIOSPlatform() && (demoMode?.isDemoMode || false);
+  const isDemoMode = isDemoPlatform() && (demoMode?.isDemoMode || false);
   
   // Destructure auth context for easier use
   const {
