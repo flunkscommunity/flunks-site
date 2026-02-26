@@ -114,10 +114,11 @@ window.PoolGameLoader = {
           window.AI_DIFFICULTY = difficulty;
           
           // Set AI difficulty via the actual global TRAIN_ITER
+          // More iterations = smarter AI (finds better shots via random simulation)
           const iterations = {
-            easy: 30,
-            medium: 35,
-            hard: 100
+            easy: 10,    // Glass Joe: barely competent
+            medium: 20,  // The Wizard: decent but beatable
+            hard: 80     // Rug Dr: seriously tough
           };
           if (iterations[difficulty]) {
             TRAIN_ITER = iterations[difficulty];

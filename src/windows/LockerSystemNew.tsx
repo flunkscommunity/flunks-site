@@ -74,6 +74,7 @@ const LockerSystemNew: React.FC = () => {
   const [canClaimDaily, setCanClaimDaily] = useState(false);
   const [hasRoom7Key, setHasRoom7Key] = useState(false);
   const [hasFourThievesAccess, setHasFourThievesAccess] = useState(false);
+  const [hasMatchbook, setHasMatchbook] = useState(false);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   
@@ -117,6 +118,7 @@ const LockerSystemNew: React.FC = () => {
       setCanClaimDaily(false);
       setHasRoom7Key(true); // Demo user has some progress
       setHasFourThievesAccess(true);
+      setHasMatchbook(true);
       return;
     }
     
@@ -125,6 +127,7 @@ const LockerSystemNew: React.FC = () => {
       loadGumTrackingData();
       checkRoom7Key();
       checkFourThievesUnderground();
+      checkMatchbook();
       checkHalloweenDrop(); // Check Halloween GumDrop status
     }
   }, [normalizedAddress, isDemoMode, demoMode]);
@@ -313,6 +316,40 @@ const LockerSystemNew: React.FC = () => {
       }
     } catch (error) {
       console.error('Error checking Four Thieves Underground access:', error);
+    }
+  };
+
+  // Check if user has Four Thieves Matchbook (earned by defeating The Wizard in pool)
+  const checkMatchbook = async () => {
+    if (!normalizedAddress) return;
+    
+    // Try Supabase view first (bypasses RLS)
+    if (hasValidSupabaseConfig && supabase) {
+      try {
+        const { data, error } = await supabase
+          .from('wallet_pool_matchbook')
+          .select('wallet_address')
+          .eq('wallet_address', normalizedAddress)
+          .limit(1);
+        
+        if (!error && data && data.length > 0) {
+          setHasMatchbook(true);
+          return;
+        }
+      } catch (err) {
+        console.log('⚠️ Matchbook Supabase check failed, trying API');
+      }
+    }
+    
+    // Fallback to API
+    try {
+      const response = await fetch(getApiUrl(`/api/check-pool-matchbook?walletAddress=${normalizedAddress}`));
+      const data = await response.json();
+      if (data.success && data.hasMatchbook) {
+        setHasMatchbook(true);
+      }
+    } catch (error) {
+      console.error('Error checking matchbook:', error);
     }
   };
 
@@ -1497,9 +1534,77 @@ const LockerSystemNew: React.FC = () => {
                                 </div>
                               </div>
                             )}
+
+                            {/* Four Thieves Matchbook */}
+                            {hasMatchbook && (
+                              <div style={{
+                                background: 'linear-gradient(180deg, #cc4400 0%, #993300 100%)',
+                                border: '3px solid #ff6600',
+                                borderRadius: 0,
+                                padding: '8px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s',
+                                boxShadow: `
+                                  0 4px 0 #662200,
+                                  0 0 10px rgba(255, 102, 0, 0.5)
+                                `,
+                                position: 'relative'
+                              }}
+                              onMouseOver={(e) => {
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                e.currentTarget.style.boxShadow = `
+                                  0 6px 0 #662200,
+                                  0 0 20px rgba(255, 102, 0, 0.8)
+                                `;
+                              }}
+                              onMouseOut={(e) => {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = `
+                                  0 4px 0 #662200,
+                                  0 0 10px rgba(255, 102, 0, 0.5)
+                                `;
+                              }}
+                              title="Four Thieves Matchbook - Won by defeating The Wizard"
+                              onClick={() => setSelectedItem('matchbook')}
+                              >
+                                <img 
+                                  src="/images/items/matchbook.png"
+                                  alt="Matchbook"
+                                  style={{
+                                    width: '48px',
+                                    height: '48px',
+                                    objectFit: 'contain',
+                                    imageRendering: 'pixelated',
+                                    filter: 'drop-shadow(0 0 8px rgba(255, 102, 0, 0.8))'
+                                  }}
+                                  onError={(e) => {
+                                    e.currentTarget.style.display = 'none';
+                                    const fallback = document.createElement('div');
+                                    fallback.textContent = '🔥';
+                                    fallback.style.fontSize = '36px';
+                                    e.currentTarget.parentElement?.insertBefore(fallback, e.currentTarget);
+                                  }}
+                                />
+                                <div style={{
+                                  fontFamily: '"Press Start 2P", "Courier New", monospace',
+                                  fontSize: '7px',
+                                  color: '#fff',
+                                  textShadow: '1px 1px 0 #000',
+                                  marginTop: '4px',
+                                  textAlign: 'center',
+                                  lineHeight: '1.4'
+                                }}>
+                                  Match-<br/>book
+                                </div>
+                              </div>
+                            )}
                             
-                            {/* Mystery box when no items - shows there's something to find! */}
-                            {!hasRoom7Key && (
+                            {/* Mystery box when no items - shows there's something to find! */}}
+                            {!hasRoom7Key && !hasMatchbook && (
                               <div style={{
                                 background: 'linear-gradient(180deg, #666 0%, #333 100%)',
                                 border: '3px solid #999',
@@ -2524,6 +2629,202 @@ const LockerSystemNew: React.FC = () => {
                     lineHeight: '1.6'
                   }}>
                     🎰 Objective Complete!<br/>+75 GUM Awarded
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Four Thieves Matchbook Detail Overlay */}
+        {selectedItem === 'matchbook' && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.95)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10000,
+            padding: '20px',
+            animation: 'fadeIn 0.3s ease-in'
+          }}
+          onClick={() => setSelectedItem(null)}
+          >
+            <div style={{
+              background: 'linear-gradient(180deg, #331100 0%, #110500 100%)',
+              border: '4px solid #ff6600',
+              borderRadius: 0,
+              padding: '24px',
+              maxWidth: '600px',
+              width: '100%',
+              position: 'relative',
+              boxShadow: `
+                0 0 0 2px #662200,
+                0 0 0 6px #ff6600,
+                0 10px 0 6px #000,
+                0 0 40px rgba(255, 102, 0, 0.6),
+                inset 0 0 30px rgba(255, 102, 0, 0.1)
+              `,
+              imageRendering: 'pixelated' as const
+            }}
+            onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button 
+                onClick={() => setSelectedItem(null)}
+                style={{
+                  position: 'absolute',
+                  top: '8px',
+                  right: '8px',
+                  background: 'linear-gradient(180deg, #ff4444 0%, #cc0000 100%)',
+                  border: '2px solid #ff6666',
+                  borderRadius: 0,
+                  color: 'white',
+                  fontFamily: '"Press Start 2P", "Courier New", monospace',
+                  fontSize: '12px',
+                  padding: '8px 12px',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 0 #880000',
+                  transition: 'all 0.1s'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(2px)';
+                  e.currentTarget.style.boxShadow = '0 2px 0 #880000';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 0 #880000';
+                }}
+              >
+                ✕
+              </button>
+
+              {/* Header */}
+              <div style={{
+                fontFamily: '"Press Start 2P", "Courier New", monospace',
+                fontSize: '10px',
+                color: '#ff6600',
+                textTransform: 'uppercase',
+                textShadow: '2px 2px 0 #331100',
+                marginBottom: '16px',
+                textAlign: 'center',
+                letterSpacing: '2px'
+              }}>
+                Four Thieves Bar - Pool Hall
+              </div>
+
+              {/* Main Content Area */}
+              <div style={{
+                display: 'flex',
+                flexDirection: window.innerWidth < 768 ? 'column' : 'row',
+                gap: '24px',
+                alignItems: 'center'
+              }}>
+                {/* Left: Animated Matchbook Image */}
+                <div style={{
+                  flex: '0 0 auto',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: '#331100',
+                  border: '3px solid #cc5500',
+                  borderRadius: 0,
+                  padding: '24px',
+                  boxShadow: 'inset 2px 2px 0 rgba(0, 0, 0, 0.5)',
+                  minWidth: '180px',
+                  minHeight: '180px'
+                }}>
+                  <img 
+                    src="/images/items/matchbook.png"
+                    alt="Four Thieves Matchbook"
+                    style={{
+                      width: '120px',
+                      height: '120px',
+                      objectFit: 'contain',
+                      imageRendering: 'pixelated',
+                      filter: 'drop-shadow(0 0 20px rgba(255, 102, 0, 1))',
+                      animation: 'itemFloat 3s ease-in-out infinite'
+                    }}
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      const fallback = document.createElement('div');
+                      fallback.textContent = '🔥';
+                      fallback.style.fontSize = '80px';
+                      fallback.style.animation = 'itemFloat 3s ease-in-out infinite';
+                      e.currentTarget.parentElement?.appendChild(fallback);
+                    }}
+                  />
+                </div>
+
+                {/* Right: Item Description */}
+                <div style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '16px'
+                }}>
+                  {/* Item Name */}
+                  <div style={{
+                    fontFamily: '"Press Start 2P", "Courier New", monospace',
+                    fontSize: '18px',
+                    color: '#ff6600',
+                    textShadow: '3px 3px 0 #000, 0 0 10px rgba(255, 102, 0, 0.8)',
+                    lineHeight: '1.5'
+                  }}>
+                    Matchbook
+                  </div>
+
+                  {/* Item Category */}
+                  <div style={{
+                    fontFamily: '"Courier New", monospace',
+                    fontSize: '12px',
+                    color: '#ff9933',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px'
+                  }}>
+                    ★ Special Item ★
+                  </div>
+
+                  {/* Description Box */}
+                  <div style={{
+                    background: '#331100',
+                    border: '2px solid #cc5500',
+                    borderRadius: 0,
+                    padding: '12px',
+                    boxShadow: 'inset 2px 2px 0 rgba(0, 0, 0, 0.5)'
+                  }}>
+                    <div style={{
+                      fontFamily: '"Courier New", monospace',
+                      fontSize: '13px',
+                      color: '#ffffff',
+                      lineHeight: '1.6',
+                      whiteSpace: 'pre-wrap'
+                    }}>
+                      A worn matchbook from Four Thieves Bar. You won it from The Wizard after beating him at pool.
+                      
+                      The inside cover has something scrawled on it... could be useful later.
+                    </div>
+                  </div>
+
+                  {/* How obtained */}
+                  <div style={{
+                    background: 'linear-gradient(180deg, #cc4400 0%, #993300 100%)',
+                    border: '2px solid #ff6600',
+                    borderRadius: 0,
+                    padding: '10px',
+                    boxShadow: '0 4px 0 #662200',
+                    fontFamily: '"Press Start 2P", "Courier New", monospace',
+                    fontSize: '9px',
+                    color: '#fff',
+                    textShadow: '1px 1px 0 #000',
+                    textAlign: 'center',
+                    lineHeight: '1.6'
+                  }}>
+                    🎱 Defeated The Wizard at Pool
                   </div>
                 </div>
               </div>

@@ -51,6 +51,9 @@ Stick.prototype.handleInput = function (delta) {
 };
 
 Stick.prototype.handleDesktopInput = function() {
+    // Track if power keys are actively held (charging state)
+    var isCharging = Keyboard.down(Keys.W) || Keyboard.down(Keys.S);
+
     // Keyboard controls for power
     if(Keyboard.down(Keys.W) && KEYBOARD_INPUT_ON){
       if(this.power < 75){
@@ -66,9 +69,10 @@ Stick.prototype.handleDesktopInput = function() {
       }
     }
 
-    // Shoot with mouse click or SPACE when power is set
-    if (this.power > 0) {
-      if (Mouse.left.pressed || Keyboard.pressed(Keys.space)) {
+    // Shoot with SPACE key or click — but ONLY when NOT actively charging (W/S held)
+    // This prevents accidental shots when clicking while powering up
+    if (this.power > 0 && !isCharging) {
+      if (Keyboard.pressed(Keys.space) || Mouse.left.pressed) {
         this.executeShot();
       }
     }

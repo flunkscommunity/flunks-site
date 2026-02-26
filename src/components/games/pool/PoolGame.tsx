@@ -80,15 +80,15 @@ const OPPONENTS: Opponent[] = [
   },
   {
     id: 'hard',
-    name: 'EIGHT-BALL EDDIE',
-    title: 'The Legend',
+    name: 'RUG DR',
+    title: 'The Hustler',
     avatar: '/Games/pool-game/sprites/opponent-hard.png',
     stats: [
-      { label: 'Accuracy', value: 85 },
-      { label: 'Power', value: 75 },
-      { label: 'Strategy', value: 90 },
+      { label: 'Kindness', value: 100 },
+      { label: 'Skill', value: 100 },
+      { label: 'Vibes', value: 100 },
     ],
-    bio: 'Undefeated champion. They say he never misses.',
+    bio: "I'll sweep you right under the rug.",
     unlocked: false,
   },
 ];
@@ -114,11 +114,13 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
   const [aiDifficulty, setAiDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
   const [playerScore, setPlayerScore] = useState(0);
   const [aiScore, setAiScore] = useState(0);
-  const [gameState, setGameState] = useState<'start' | 'select' | 'character' | 'tutorial' | 'intro' | 'playing' | 'gameover'>('start');
+  const [gameState, setGameState] = useState<'start' | 'select' | 'character' | 'tutorial' | 'intro' | 'playing' | 'itemUnlock' | 'gameover'>('start');
   const [winner, setWinner] = useState<'player' | 'ai' | null>(null);
   const [selectedOpponent, setSelectedOpponent] = useState<Opponent | null>(null);
   const [isPortrait, setIsPortrait] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [matchbookAwarded, setMatchbookAwarded] = useState(false);
+  const matchbookRecordedRef = useRef(false);
   
   // Stop radio music when entering intro/playing and restore on unmount
   useEffect(() => {
@@ -154,7 +156,7 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
       poolMusicRef.current.currentTime = 0;
       poolMusicRef.current.play().catch(console.log);
       console.log('🎶 Pool music started (50% volume, looping)');
-    } else if (gameState === 'gameover' || gameState === 'select' || gameState === 'start') {
+    } else if (gameState === 'gameover' || gameState === 'itemUnlock' || gameState === 'select' || gameState === 'start') {
       // Stop pool music when game ends or returns to menu
       if (poolMusicRef.current) {
         poolMusicRef.current.pause();
@@ -369,14 +371,34 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
     setGameState('playing');
   };
 
-  const handleGameOver = (result: 'player' | 'ai') => {
+  const handleGameOver = async (result: 'player' | 'ai') => {
     setWinner(result);
-    setGameState('gameover');
     // Unlock next level on win
     if (result === 'player') {
       if (aiDifficulty === 'easy') unlockLevel('medium');
       if (aiDifficulty === 'medium') unlockLevel('hard');
+
+      // Special item unlock: beating The Wizard awards the matchbook
+      if (aiDifficulty === 'medium' && !matchbookRecordedRef.current) {
+        matchbookRecordedRef.current = true;
+        // Record matchbook in database
+        if (walletAddress) {
+          try {
+            await fetch('/api/record-pool-matchbook', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ walletAddress })
+            });
+          } catch (err) {
+            console.error('Failed to record matchbook:', err);
+          }
+        }
+        setMatchbookAwarded(true);
+        setGameState('itemUnlock');
+        return;
+      }
     }
+    setGameState('gameover');
   };
 
   const returnToMenu = () => {
@@ -884,6 +906,229 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
     return null;
   }
 
+  // Item Unlock screen — special animation when player earns the matchbook
+  if (gameState === 'itemUnlock') {
+    return (
+      <div 
+        className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden"
+        style={{ 
+          fontFamily: "'Press Start 2P', monospace",
+          background: '#000'
+        }}
+      >
+        {/* Animated fire/glow background */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(ellipse at center, rgba(255,102,0,0.25) 0%, rgba(139,69,19,0.1) 40%, transparent 70%)',
+          animation: 'itemPulse 3s ease-in-out infinite',
+        }} />
+        
+        {/* Particle sparks */}
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+          {[...Array(12)].map((_, i) => (
+            <div key={i} style={{
+              position: 'absolute',
+              width: '4px',
+              height: '4px',
+              background: i % 3 === 0 ? '#ff6600' : i % 3 === 1 ? '#ffcc00' : '#ff3300',
+              borderRadius: '50%',
+              left: `${20 + Math.random() * 60}%`,
+              top: `${30 + Math.random() * 40}%`,
+              animation: `spark${i % 4} ${2 + Math.random() * 2}s ease-in-out infinite`,
+              animationDelay: `${Math.random() * 2}s`,
+              boxShadow: `0 0 6px ${i % 2 === 0 ? '#ff6600' : '#ffcc00'}`,
+            }} />
+          ))}
+        </div>
+        
+        {/* Content */}
+        <div className="relative z-10 text-center flex flex-col items-center" style={{ animation: 'itemFadeIn 1s ease-out' }}>
+          {/* "SPECIAL ITEM" header */}
+          <div style={{
+            fontSize: '11px',
+            color: '#ff6600',
+            letterSpacing: '6px',
+            textShadow: '0 0 10px rgba(255,102,0,0.8)',
+            marginBottom: '8px',
+            animation: 'itemFlicker 2s ease-in-out infinite',
+          }}>
+            ★ SPECIAL ITEM ★
+          </div>
+          
+          {/* Separator */}
+          <div style={{
+            display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '24px',
+          }}>
+            {[...Array(7)].map((_, i) => (
+              <div key={i} style={{
+                width: '4px', height: '4px',
+                background: i === 3 ? '#ff6600' : '#663300',
+                boxShadow: i === 3 ? '0 0 8px #ff6600' : 'none',
+              }} />
+            ))}
+          </div>
+          
+          {/* Matchbook image placeholder - large, centered, with fire glow */}
+          <div style={{
+            width: '160px',
+            height: '160px',
+            background: 'linear-gradient(180deg, #ff8833 0%, #cc4400 100%)',
+            border: '4px solid #ffcc00',
+            boxShadow: `
+              0 0 30px rgba(255, 102, 0, 0.8),
+              0 0 60px rgba(255, 102, 0, 0.4),
+              0 8px 0 #993300,
+              inset 0 0 20px rgba(255, 204, 0, 0.3)
+            `,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            animation: 'itemReveal 1.5s ease-out, itemFloat 3s ease-in-out 1.5s infinite',
+            marginBottom: '24px',
+            imageRendering: 'pixelated',
+          }}>
+            <img
+              src="/images/items/matchbook.png"
+              alt="Four Thieves Matchbook"
+              style={{
+                width: '120px',
+                height: '120px',
+                objectFit: 'contain',
+                imageRendering: 'pixelated',
+                filter: 'drop-shadow(0 0 20px rgba(255, 204, 0, 1))',
+              }}
+              onError={(e) => {
+                // Fallback if image doesn't exist yet
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.innerHTML = '<span style="font-size:80px">🔥</span>';
+              }}
+            />
+          </div>
+          
+          {/* Item name */}
+          <div style={{
+            fontSize: '18px',
+            color: '#ffcc00',
+            textShadow: '3px 3px 0 #000, 0 0 20px rgba(255, 204, 0, 0.8)',
+            marginBottom: '8px',
+            lineHeight: '1.5',
+          }}>
+            MATCHBOOK
+          </div>
+          
+          <div style={{
+            fontSize: '9px',
+            color: '#ff9933',
+            letterSpacing: '3px',
+            marginBottom: '16px',
+          }}>
+            FOUR THIEVES BAR
+          </div>
+          
+          {/* Description */}
+          <div style={{
+            background: 'rgba(0, 0, 51, 0.9)',
+            border: '2px solid #334',
+            padding: '12px 20px',
+            maxWidth: '350px',
+            marginBottom: '24px',
+          }}>
+            <p style={{
+              fontFamily: '"Courier New", monospace',
+              fontSize: '12px',
+              color: '#ccc',
+              lineHeight: '1.8',
+              textAlign: 'center',
+            }}>
+              A worn matchbook from Four Thieves Bar. The inside cover has something scrawled on it...
+            </p>
+          </div>
+          
+          {/* Added to locker notification */}
+          <div style={{
+            fontSize: '9px',
+            color: '#00ff88',
+            textShadow: '0 0 8px rgba(0, 255, 136, 0.5)',
+            marginBottom: '24px',
+            animation: 'itemFlicker 3s ease-in-out infinite',
+          }}>
+            📦 ADDED TO YOUR LOCKER
+          </div>
+          
+          {/* Continue button */}
+          <button
+            onClick={() => setGameState('gameover')}
+            style={{
+              fontFamily: "'Press Start 2P', monospace",
+              fontSize: '12px',
+              padding: '14px 40px',
+              background: 'linear-gradient(180deg, #ff8833 0%, #cc4400 100%)',
+              border: '3px solid #ffcc00',
+              color: '#fff',
+              cursor: 'pointer',
+              textShadow: '1px 1px 0 #000',
+              boxShadow: '0 4px 0 #993300, 0 0 20px rgba(255, 102, 0, 0.5)',
+              transition: 'all 0.2s',
+              letterSpacing: '2px',
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 0 #993300, 0 0 30px rgba(255, 102, 0, 0.8)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 0 #993300, 0 0 20px rgba(255, 102, 0, 0.5)';
+            }}
+          >
+            CONTINUE →
+          </button>
+        </div>
+        
+        {/* Animations */}
+        <style>{`
+          @keyframes itemPulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+          }
+          @keyframes itemFadeIn {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+          }
+          @keyframes itemReveal {
+            0% { transform: scale(0.3) rotate(-180deg); opacity: 0; }
+            60% { transform: scale(1.1) rotate(10deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+          }
+          @keyframes itemFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+          }
+          @keyframes itemFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+          }
+          @keyframes spark0 {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.8; }
+            50% { transform: translateY(-30px) scale(1.5); opacity: 0; }
+          }
+          @keyframes spark1 {
+            0%, 100% { transform: translateY(0) translateX(0) scale(1); opacity: 0.6; }
+            50% { transform: translateY(-20px) translateX(10px) scale(0.5); opacity: 0; }
+          }
+          @keyframes spark2 {
+            0%, 100% { transform: translateY(0) scale(0.8); opacity: 0.7; }
+            50% { transform: translateY(-40px) scale(1.2); opacity: 0; }
+          }
+          @keyframes spark3 {
+            0%, 100% { transform: translateY(0) translateX(0) scale(1); opacity: 0.5; }
+            50% { transform: translateY(-25px) translateX(-15px) scale(0.3); opacity: 0; }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
   if (gameState === 'gameover' && winner) {
     return (
       <div 
@@ -934,6 +1179,13 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
           {winner === 'player' && (
             <div className="mb-8 bg-green-900/50 border-2 border-green-500 px-6 py-3 inline-block">
               <span className="text-green-400 text-lg">+50 GUM</span>
+            </div>
+          )}
+
+          {/* Matchbook badge for returning winners */}
+          {winner === 'player' && matchbookAwarded && aiDifficulty !== 'medium' && (
+            <div className="mb-4 text-gray-500 text-xs">
+              🔥 Matchbook already in your locker
             </div>
           )}
           
@@ -1393,7 +1645,8 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
             maxHeight: '100%',
             objectFit: 'contain',
           }}
-          src={`/Games/pool-game/${selectedOpponent?.id === 'easy' ? 'glass-joe' : selectedOpponent?.id === 'medium' ? 'the-wizard-cutscene' : 'glass-joe'}.mp4`}
+          src={`/Games/pool-game/${selectedOpponent?.id === 'easy' ? 'glass-joe' : selectedOpponent?.id === 'medium' ? 'the-wizard-cutscene' : 'rug-dr'}.mp4`}
+          onError={() => startPlaying()}
         />
         <button
           onClick={startPlaying}
@@ -1447,6 +1700,36 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
             ref={canvasRef}
             style={{ width: '100%', height: '100%', maxWidth: '100%', maxHeight: '100%', background: '#000' }}
           />
+        )}
+
+        {/* Desktop Controls Guide - left side overlay */}
+        {!isLoading && !isMobile && (
+          <div
+            className="absolute top-2 left-2 z-10 pointer-events-none"
+            style={{ fontFamily: "'Press Start 2P', monospace" }}
+          >
+            <div className="bg-black/70 border border-cyan-800/60 rounded px-3 py-2 backdrop-blur-sm" style={{ maxWidth: '150px' }}>
+              <div className="text-[7px] text-cyan-400 mb-2 tracking-widest text-center border-b border-cyan-800/40 pb-1">CONTROLS</div>
+              <div className="flex flex-col gap-[6px]">
+                <div className="flex items-center gap-2">
+                  <span className="text-[7px] bg-cyan-900/50 border border-cyan-700/60 text-white px-[5px] py-[2px] rounded-sm text-center" style={{ minWidth: '28px' }}>🖱️</span>
+                  <span className="text-[6px] text-gray-300">AIM</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[7px] bg-cyan-900/50 border border-cyan-700/60 text-white px-[5px] py-[2px] rounded-sm text-center" style={{ minWidth: '28px' }}>W</span>
+                  <span className="text-[6px] text-gray-300">POWER ▲</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[7px] bg-cyan-900/50 border border-cyan-700/60 text-white px-[5px] py-[2px] rounded-sm text-center" style={{ minWidth: '28px' }}>S</span>
+                  <span className="text-[6px] text-gray-300">POWER ▼</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[7px] bg-yellow-700/50 border border-yellow-500/60 text-yellow-300 px-[5px] py-[2px] rounded-sm text-center" style={{ minWidth: '28px' }}>SPC</span>
+                  <span className="text-[6px] text-yellow-300">SHOOT!</span>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
 
         {/* Control Buttons Overlay - only show on mobile (Capacitor) */}

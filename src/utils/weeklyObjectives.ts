@@ -6,6 +6,7 @@ import { checkParadiseMotelEntered } from './paradiseMotelTracking';
 import { checkParadiseMotelRoom7NightVisit } from './paradiseMotelRoom7Tracking';
 import { checkHiddenRiffCompletion } from './hiddenRiffTracking';
 import { checkFourThievesUndergroundAccess } from './fourThievesUndergroundTracking';
+import { checkPoolMatchbookEarned } from './poolMatchbookTracking';
 
 // Set to true to enable verbose logging for debugging objectives
 const DEBUG_OBJECTIVES = false;
@@ -428,8 +429,8 @@ export const getChapter6ObjectivesStatus = async (walletAddress: string): Promis
   // Check if user entered snicklefritz password (Slacker objective)
   const slackerObjectiveCompleted = await checkFourThievesUndergroundAccess(walletAddress);
   
-  // Overachiever objective - placeholder for now
-  const overachieverObjectiveCompleted = false;
+  // Check if user beat The Wizard at pool and earned the matchbook (Overachiever objective)
+  const overachieverObjectiveCompleted = await checkPoolMatchbookEarned(walletAddress);
 
   if (DEBUG_OBJECTIVES) console.log('📊 [CHAPTER6] Objectives status:', { 
     slackerObjectiveCompleted, 
@@ -449,7 +450,7 @@ export const getChapter6ObjectivesStatus = async (walletAddress: string): Promis
     {
       id: 'overachiever_chapter6',
       title: 'The Overachiever',
-      description: '???',
+      description: 'Defeat The Wizard at pool and earn the matchbook',
       type: 'custom',
       completed: overachieverObjectiveCompleted,
       reward: 100

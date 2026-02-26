@@ -58,6 +58,9 @@ Stick.prototype.handleInput = function (delta) {
 };
 
 Stick.prototype.handleDesktopInput = function() {
+    // Track if power keys are actively held (charging state)
+    var isCharging = Keyboard.down(Keys.W) || Keyboard.down(Keys.S);
+
     // Keyboard controls for power
     if(Keyboard.down(Keys.W) && KEYBOARD_INPUT_ON){
       if(this.power < 75){
@@ -73,9 +76,10 @@ Stick.prototype.handleDesktopInput = function() {
       }
     }
 
-    // Shoot with mouse click or SPACE when power is set
-    if (this.power > 0) {
-      if (Mouse.left.pressed || Keyboard.pressed(Keys.space)) {
+    // Shoot with SPACE key or click — but ONLY when NOT actively charging (W/S held)
+    // This prevents accidental shots when clicking while powering up
+    if (this.power > 0 && !isCharging) {
+      if (Keyboard.pressed(Keys.space) || Mouse.left.pressed) {
         this.executeShot();
       }
     }
@@ -219,7 +223,12 @@ Stick.prototype.reset = function(){
 Stick.prototype.draw = function () {
   if(!this.visible)
     return;
-  var sprite = (AI_ON && Game.policy.turn === AI_PLAYER_NUM) ? sprites.stickEasy : sprites.stick;
+  var sprite = sprites.stick;
+  if (AI_ON && Game.policy.turn === AI_PLAYER_NUM) {
+    if (typeof AI_DIFFICULTY !== 'undefined' && AI_DIFFICULTY === 'medium' && sprites.stickMedium) sprite = sprites.stickMedium;
+    else if (typeof AI_DIFFICULTY !== 'undefined' && AI_DIFFICULTY === 'hard' && sprites.stickHard) sprite = sprites.stickHard;
+    else sprite = sprites.stickEasy;
+  }
   var ctx = Canvas2D._canvasContext;
   var canvasScale = Canvas2D.scale;
   var lineLength = 520;
@@ -260,8 +269,24 @@ Stick.prototype.draw = function () {
   ctx.stroke();
   ctx.restore();
   var isAI = (AI_ON && Game.policy.turn === AI_PLAYER_NUM);
-  var sprite = isAI ? sprites.stickEasy : sprites.stick;
-  // easy-cue.png is 479px wide vs spr_stick.png at 938px, so scale the origin to match
-  var drawOrigin = isAI ? new Vector2(this.origin.x * (479 / 938), this.origin.y) : this.origin;
+  var sprite = sprites.stick;
+  var drawOrigin = this.origin;
+  if (isAI) {
+    // Each AI cue has different dimensions vs the default spr_stick.png (938x22)
+    // Scale the origin point so the tip lines up with the cue ball
+    if (typeof AI_DIFFICULTY !== 'undefined' && AI_DIFFICULTY === 'medium' && sprites.stickMedium) {
+      sprite = sprites.stickMedium;
+      // medium-cue.png (wand) is 434x89
+      drawOrigin = new Vector2(this.origin.x * (434 / 938), 44);
+    } else if (typeof AI_DIFFICULTY !== 'undefined' && AI_DIFFICULTY === 'hard' && sprites.stickHard) {
+      sprite = sprites.stickHard;
+      // hard-cue.png (broom) is 434x82
+      drawOrigin = new Vector2(this.origin.x * (434 / 938), 41);
+    } else {
+      sprite = sprites.stickEasy;
+      // easy-cue.png is 479x24
+      drawOrigin = new Vector2(this.origin.x * (479 / 938), this.origin.y);
+    }
+  }
   Canvas2D.drawImage(sprite, this.position,this.rotation,1, drawOrigin);
 };
