@@ -92,11 +92,7 @@ Ball.prototype.updatePosition = function(delta){
 
 
 	if(Game.policy.isInsideHole(newPos)){
-        if(Game.sound && SOUND_ON){
-            var holeSound = sounds.hole.cloneNode(true);
-            holeSound.volume = 0.5;
-            holeSound.play();
-        }
+        sounds.playThrottled(sounds.hole, 0.5);
 		this.position = newPos;
         this.inHole = true;
         setTimeout(function(){ball.visible=false;ball.velocity = Vector2.zero;}, 100);

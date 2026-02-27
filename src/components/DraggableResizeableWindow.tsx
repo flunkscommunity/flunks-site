@@ -77,6 +77,21 @@ const StyledWindow = styled(Window)`
     border-radius: 0 !important;
     margin: 0 !important;
   }
+  
+  /* Native app (Capacitor) — always use full-screen layout regardless of viewport width */
+  &.native-app-window {
+    position: fixed !important;
+    top: max(59px, env(safe-area-inset-top, 59px)) !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+  }
 `;
 
 // Mobile-specific header with centered title and only close button
@@ -166,8 +181,10 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     bringWindowToFront(props.windowsId);
   };
 
+  const isNativeApp = typeof window !== 'undefined' && !!(window as any).Capacitor?.isNativePlatform?.();
+
   useEffect(() => {
-    if (width < 768 && draggableRef.current) {
+    if ((width < 768 || isNativeApp) && draggableRef.current) {
       draggableRef.current.setState({
         x: 0,
         y: 0,
@@ -182,15 +199,15 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
       _bringWindowToFront();
       if (draggableRef.current) {
         draggableRef.current.setState({
-          x: width < 768 ? 0 : numOfChildren * 10,
-          y: width < 768 ? 0 : numOfChildren * 10,
+          x: (width < 768 || isNativeApp) ? 0 : numOfChildren * 10,
+          y: (width < 768 || isNativeApp) ? 0 : numOfChildren * 10,
         });
       }
     }
   }, []);
 
   const onStart = () => _bringWindowToFront();
-  const isMobile = width < 768;
+  const isMobile = width < 768 || isNativeApp;
 
   const getHeight = useCallback(() => {
     if (width < 768) return "100%";
@@ -249,7 +266,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
           bottom: height - 48  // Leave some space at bottom
         }}
         onStart={onStart}
-        disabled={width < 768}
+        disabled={isMobile}
         position={
           props.openCentered && !isMobile
             ? { x: width / 2 - 200, y: Math.max(height / 2 - 200, 10) }  // Ensure centered windows have some top margin
@@ -263,7 +280,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
       >
       <StyledWindow
         ref={windowRef}
-        className={`${windowClassName} !flex !flex-col cursor-win95-default`}
+        className={`${windowClassName} ${isNativeApp ? 'native-app-window' : ''} !flex !flex-col cursor-win95-default`}
         data-window-id={props.windowsId}
         style={{
           position: isMobile ? undefined : "absolute",
@@ -382,18 +399,19 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
         {toolbar}
 
         <WindowContent
-          className="flex flex-col flex-grow w-full h-full !px-2 max-h-none"
+          className={`flex flex-col flex-grow w-full h-full max-h-none ${props.windowsId === 'four_thieves_bar_pool_room' ? '!p-0' : '!px-2'}`}
           style={{
-            paddingTop: !!toolbar ? "0" : "16px",
+            paddingTop: props.windowsId === 'four_thieves_bar_pool_room' ? '0' : (!!toolbar ? "0" : "16px"),
             flexGrow: 1,
             height: "100%",
             minHeight: 0,
-            overflowY: 'auto',
+            overflowY: props.windowsId === 'four_thieves_bar_pool_room' ? 'hidden' : 'auto',
             WebkitOverflowScrolling: 'touch',
-            background: props.windowsId === 'HIGH_SCHOOL_OFFICE_SUCCESS' ? '#2a2a2a' : undefined,
-            padding: props.windowsId === 'HIGH_SCHOOL_OFFICE_SUCCESS' ? '0' : undefined,
+            background: (props.windowsId === 'HIGH_SCHOOL_OFFICE_SUCCESS' || props.windowsId === 'four_thieves_bar_pool_room') ? '#000' : undefined,
+            padding: (props.windowsId === 'HIGH_SCHOOL_OFFICE_SUCCESS' || props.windowsId === 'four_thieves_bar_pool_room') ? '0' : undefined,
             // Add bottom padding on mobile for scroll content to clear the taskbar
-            paddingBottom: isMobile ? '60px' : undefined,
+            // Skip for pool game window which needs full screen
+            paddingBottom: isMobile && props.windowsId !== 'four_thieves_bar_pool_room' ? '60px' : undefined,
           }}
         >
           {children}

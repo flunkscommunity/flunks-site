@@ -86,6 +86,7 @@ GameWorld.prototype.update = function (delta) {
     if(!this.ballsMoving() && AI.finishedSession){
         Game.policy.updateTurnOutcome();
         if(Game.policy.foul){
+            console.log('[GameWorld] Foul detected, calling ballInHand. Turn:', Game.policy.turn);
             this.ballInHand();
         }
     }
@@ -94,6 +95,36 @@ GameWorld.prototype.update = function (delta) {
 
 GameWorld.prototype.ballInHand = function(){
     if(AI_ON && Game.policy.turn === AI_PLAYER_NUM){
+        // AI foul: auto-place white ball at starting position and clear the foul
+        // so the AI can take its turn (AI.startSession handles placement internally too)
+        this.whiteBall.position = new Vector2(413, 413);
+        this.whiteBall.inHole = false;
+        this.whiteBall.visible = true;
+        Game.policy.foul = false;
+        this.stick.position = this.whiteBall.position;
+        this.stick.visible = true;
+        return;
+    }
+
+    // On mobile (Capacitor), auto-place the white ball in a valid position
+    // since touch-to-place doesn't work reliably
+    var isCapacitor = typeof window !== 'undefined' && window.Capacitor && 
+        typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform();
+    
+    if (isCapacitor) {
+        // Auto-place white ball at the starting position (or nearby if blocked)
+        var placementPos = new Vector2(413, 413); // Default starting position
+        this.whiteBall.position = placementPos;
+        this.whiteBall.inHole = false;
+        this.whiteBall.visible = true;
+        Game.policy.foul = false;
+        KEYBOARD_INPUT_ON = true;
+        this.stick.position = this.whiteBall.position;
+        this.stick.visible = true;
+        this.stick.isAiming = true;
+        this.stick.aimLocked = false;
+        this.stick.power = 0;
+        this.stick.origin = new Vector2(970, 11);
         return;
     }
 
@@ -168,11 +199,7 @@ GameWorld.prototype.handleCollision = function(ball1, ball2, delta){
                     (Math.abs(ball2.velocity.x) + Math.abs(ball2.velocity.y));
         power = power * 0.00482;
 
-        if(Game.sound && SOUND_ON){
-            var ballsCollide = sounds.ballsCollide.cloneNode(true);
-            ballsCollide.volume = (power/(20))<1?(power/(20)):1;
-            ballsCollide.play();
-        }
+        sounds.playThrottled(sounds.ballsCollide, power / 20);
 
         var opposite = ball1.position.y - ball2.position.y;
         var adjacent = ball1.position.x - ball2.position.x;

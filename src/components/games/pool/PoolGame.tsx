@@ -60,7 +60,7 @@ const OPPONENTS: Opponent[] = [
     stats: [
       { label: 'Balance', value: 10 },
       { label: 'Back Pain', value: 95 },
-      { label: 'Drunk', value: 95 },
+      { label: 'Stank', value: 95 },
     ],
     bio: "They call me Glass Joe 'cuz I'm fixin' to break my hip if I ain't careful.",
     unlocked: true,
@@ -752,9 +752,9 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
           </div>
 
           {selectedOpponent ? (
-            <div className="flex-1 flex flex-col items-center p-4 overflow-y-auto">
+            <div className="flex-1 flex flex-col items-center px-3 py-2 overflow-y-auto">
               {/* SNES-style pixel marquee banner - mobile */}
-              <div className="text-center mb-4 flex justify-center w-full">
+              <div className="text-center mb-2 flex justify-center w-full">
                 <div className="relative inline-block">
                   <div style={{
                     background: '#1a1a2e',
@@ -828,22 +828,22 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
                 </div>
               </div>
 
-              {/* Character GIF - centered */}
-              <div className="flex-shrink-0 flex items-center justify-center my-4">
+              {/* Character GIF - centered, smaller on mobile to fit everything */}
+              <div className="flex-shrink-0 flex items-center justify-center my-2">
                 <img 
                   src={characterImages[selectedOpponent.id]} 
                   alt={selectedOpponent.name}
                   className="object-contain drop-shadow-2xl"
                   style={{ 
                     imageRendering: 'pixelated',
-                    height: '280px',
+                    height: 'min(180px, 30vh)',
                     filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.8))'
                   }}
                 />
               </div>
 
               {/* Stats - retro diagonal stripe bars for mobile */}
-              <div className="bg-[#0a1628]/95 p-4 border-2 border-[#1a3a5c] mb-4 w-full max-w-xs">
+              <div className="bg-[#0a1628]/95 p-3 border-2 border-[#1a3a5c] mb-2 w-full max-w-xs">
                 <div className="space-y-3">
                   {selectedOpponent.stats.map((stat, i) => (
                     <div key={i} className="flex items-center gap-3">
@@ -878,17 +878,19 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
               </div>
 
               {/* Quote */}
-              <div className="text-[10px] text-gray-300 italic mb-4 bg-black/50 px-4 py-2 rounded text-center" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
+              <div className="text-[10px] text-gray-300 italic mb-2 bg-black/50 px-4 py-2 rounded text-center" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
                 "{selectedOpponent.bio}"
               </div>
 
-              {/* Challenge button */}
-              <button
-                onClick={() => startGame(selectedOpponent.id)}
-                className="px-8 py-3 bg-yellow-500 hover:bg-yellow-400 text-black font-bold transition-all hover:scale-105 text-sm shadow-lg mb-4"
-              >
-                CHALLENGE →
-              </button>
+              {/* Challenge button - sticky bottom so it's always reachable */}
+              <div className="flex-shrink-0 w-full flex justify-center pb-2">
+                <button
+                  onClick={() => startGame(selectedOpponent.id)}
+                  className="px-8 py-3 bg-yellow-500 hover:bg-yellow-400 text-black font-bold transition-all hover:scale-105 text-sm shadow-lg"
+                >
+                  CHALLENGE →
+                </button>
+              </div>
             </div>
           ) : (
             <div className="flex-1 flex items-center justify-center text-gray-400 text-sm">
@@ -1732,33 +1734,35 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
           </div>
         )}
 
-        {/* Control Buttons Overlay - only show on mobile (Capacitor) */}
-        {/* Desktop uses W/S keys + click directly in the game engine */}
+        {/* Lock/Unlock Aim button - middle left of screen (mobile only) */}
         {!isLoading && isMobile && (
-          <div className="absolute bottom-0 left-0 right-0 flex justify-between items-end p-2 pointer-events-none" style={{ fontFamily: "'Press Start 2P', monospace" }}>
-            {/* Left side - Lock/Unlock Aim button */}
-            <div className="pointer-events-auto">
+          <div className="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none z-10" style={{ fontFamily: "'Press Start 2P', monospace" }}>
+            <div className="pointer-events-auto" onTouchStart={(e) => { e.stopPropagation(); e.preventDefault(); }} onTouchMove={(e) => e.stopPropagation()}>
               {!aimLocked ? (
                 <button
+                  onTouchEnd={(e) => { e.preventDefault(); handleLockAim(); }}
                   onClick={handleLockAim}
-                  className="bg-yellow-500 hover:bg-yellow-400 text-black px-4 py-3 rounded-lg text-[10px] font-bold shadow-lg border-2 border-yellow-600 active:scale-95 transition-transform"
+                  className="bg-yellow-500/60 hover:bg-yellow-400/70 text-black px-4 py-3 rounded-lg text-[10px] font-bold shadow-lg border-2 border-yellow-600/60 active:scale-95 transition-transform backdrop-blur-sm"
                 >
                   🎯 LOCK AIM
                 </button>
               ) : (
                 <button
+                  onTouchEnd={(e) => { e.preventDefault(); handleUnlockAim(); }}
                   onClick={handleUnlockAim}
-                  className="bg-gray-600 hover:bg-gray-500 text-white px-4 py-3 rounded-lg text-[10px] font-bold shadow-lg border-2 border-gray-500 active:scale-95 transition-transform"
+                  className="bg-gray-600/60 hover:bg-gray-500/70 text-white px-4 py-3 rounded-lg text-[10px] font-bold shadow-lg border-2 border-gray-500/60 active:scale-95 transition-transform backdrop-blur-sm"
                 >
                   ↩️ RE-AIM
                 </button>
               )}
             </div>
+          </div>
+        )}
 
-
-
-            {/* Right side - Power controls and Shoot */}
-            <div className="pointer-events-auto flex items-center gap-2">
+        {/* Power controls and Shoot - bottom right (mobile only) */}
+        {!isLoading && isMobile && (
+          <div className="absolute bottom-0 right-0 p-2 pointer-events-none" style={{ fontFamily: "'Press Start 2P', monospace" }}>
+            <div className="pointer-events-auto flex items-center gap-2" onTouchStart={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
               {aimLocked && (
                 <>
                   {/* Power display */}

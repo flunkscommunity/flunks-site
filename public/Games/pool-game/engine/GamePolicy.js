@@ -166,6 +166,8 @@ GamePolicy.prototype.updateTurnOutcome = function(){
         return;
     }
 
+    console.log('[GamePolicy] updateTurnOutcome - turn:', this.turn, 'firstCollision:', this.firstCollision, 'foul:', this.foul, 'scored:', this.scored, 'won:', this.won);
+
     if(this.firstCollision == true){
         this.foul = true;
     }

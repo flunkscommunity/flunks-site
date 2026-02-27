@@ -179,12 +179,24 @@ AITrainer.prototype.opponentTrainingLoop = function(){
         }
     }
     else{
-        while(!AI.finishedSession){
-            AI.train();
-            Game.gameWorld.handleInput(DELTA);
-            Game.gameWorld.update(DELTA);
-            Mouse.reset();
-        }
+        // Process in batches to avoid blocking the main thread on mobile.
+        // Each batch runs up to BATCH_SIZE physics steps, then yields to
+        // the browser via setTimeout so iOS doesn't kill the web process
+        // for being unresponsive.
+        var BATCH_SIZE = 50; // physics steps per batch — keep small for mobile
+        var processBatch = function() {
+            if(AI.finishedSession) return;
+            for(var step = 0; step < BATCH_SIZE; step++){
+                AI.train();
+                Game.gameWorld.handleInput(DELTA);
+                Game.gameWorld.update(DELTA);
+                Mouse.reset();
+                if(AI.finishedSession) return;
+            }
+            // Yield to browser, then continue
+            setTimeout(processBatch, 0);
+        };
+        processBatch();
     }
 
 }

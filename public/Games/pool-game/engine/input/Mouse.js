@@ -46,6 +46,31 @@ function Mouse_Singleton() {
     document.onmousemove = handleMouseMove;
     document.onmousedown = handleMouseDown;
     document.onmouseup = handleMouseUp;
+    
+    // Touch events for mobile - update position for aiming
+    // Only track touches directly on the game canvas, not on React overlay buttons
+    function isTouchOnCanvas(touch) {
+        var target = touch.target;
+        // Walk up the DOM tree checking if target is inside the canvas or IS the canvas
+        while (target) {
+            if (target.tagName === 'CANVAS') return true;
+            // Stop if we hit a button or interactive element (React overlay)
+            if (target.tagName === 'BUTTON' || target.tagName === 'A' || 
+                (target.classList && target.classList.contains('pointer-events-auto'))) return false;
+            target = target.parentElement;
+        }
+        return false;
+    }
+    document.addEventListener('touchmove', function(evt) {
+        if (evt.touches.length > 0 && isTouchOnCanvas(evt.touches[0])) {
+            handleMouseMove(evt.touches[0]);
+        }
+    }, { passive: true });
+    document.addEventListener('touchstart', function(evt) {
+        if (evt.touches.length > 0 && isTouchOnCanvas(evt.touches[0])) {
+            handleMouseMove(evt.touches[0]);
+        }
+    }, { passive: true });
 }
 
 Object.defineProperty(Mouse_Singleton.prototype, "left",

@@ -200,6 +200,11 @@ const MonitorScreenContainer = styled.div`
   width: 100%;
   overflow: hidden;
   
+  &.native-app {
+    /* On native Capacitor apps, no Appbar so full height */
+    height: 100%;
+  }
+  
   @media (max-width: 768px) {
     /* On mobile, no Appbar so full height - background extends into safe areas */
     height: 100%;
@@ -228,6 +233,7 @@ const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
     const backgroundRef = useRef<HTMLDivElement>(null);
     const { width } = useWindowSize();
     const isMobile = width < 768;
+    const isNativeApp = typeof window !== 'undefined' && !!(window as any).Capacitor?.isNativePlatform?.();
 
     // Use desktop background for main desktop, fallback to regular background for other screens
     const isMainDesktop = showBottomBar; // Main desktop has the bottom bar/taskbar
@@ -292,10 +298,10 @@ const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
                     tileSize={scrollingTileSize}
                   />
                 )}
-                <MonitorScreenContainer>{children}</MonitorScreenContainer>
+                <MonitorScreenContainer className={isNativeApp ? 'native-app' : ''}>{children}</MonitorScreenContainer>
 
-                {/* Hide Appbar/taskbar on mobile app */}
-                {showBottomBar && !isMobile && <Appbar />}
+                {/* Hide Appbar/taskbar on mobile app (also hide on Capacitor native apps in landscape) */}
+                {showBottomBar && !isMobile && !isNativeApp && <Appbar />}
               </Background>
             </div>
           </MonitorBody>

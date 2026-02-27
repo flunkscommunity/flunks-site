@@ -366,11 +366,11 @@ const FourThievesBarMain = () => {
           windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_POOL_ROOM}
           headerTitle="🎱 8-Ball Pool - Four Thieves"
           onClose={() => {
-            setIsPoolGameOpen(false); // Stop music when pool game closes
+            setIsPoolGameOpen(false); // Stop music when pool game closes + unhides MAIN window
             closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_POOL_ROOM);
           }}
-          initialWidth="calc(100vw - 12px)"
-          initialHeight="calc(100vh - 56px)"
+          initialWidth={typeof window !== 'undefined' && (window as any).Capacitor?.isNativePlatform?.() ? '100vw' : 'calc(100vw - 12px)'}
+          initialHeight={typeof window !== 'undefined' && (window as any).Capacitor?.isNativePlatform?.() ? '100vh' : 'calc(100vh - 56px)'}
           resizable={false}
           windowClassName="pool-game-window"
         >
@@ -436,8 +436,7 @@ const FourThievesBarMain = () => {
               />
             </div>
 
-            {/* Pool Game Button - DEV or MOBILE builds only (hidden on live web) */}
-            {(process.env.NODE_ENV === 'development' || process.env.NEXT_PUBLIC_MOBILE_BUILD === 'true') && (
+            {/* Pool Game Button - Always visible */}
             <div className="w-full bg-gradient-to-r from-amber-800 via-red-900 to-amber-800 p-3 border-t-2 border-yellow-600 shadow-xl">
               <button
                 onClick={openPoolGame}
@@ -447,7 +446,6 @@ const FourThievesBarMain = () => {
                 🎱 Pool Table
               </button>
             </div>
-            )}
           </div>
         </DraggableResizeableWindow>
       ),

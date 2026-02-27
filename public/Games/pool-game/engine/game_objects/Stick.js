@@ -47,10 +47,9 @@ Stick.prototype.handleInput = function (delta) {
 
     if (isTouchDevice) {
       // === MOBILE CONTROLS: React UI buttons (lockAim, +/-, shoot) ===
-      // Check if React UI has locked the aim
-      if (this.aimLocked) {
-        return; // Power/shoot handled by React UI
-      }
+      // All mobile input handled by React overlay buttons (LOCK AIM, +, -, SHOOT)
+      // Do NOT call handleMobileInput() — the old drag-based input conflicts with React buttons
+      return;
     } else {
       // === DESKTOP CONTROLS: W/S for power, click or SPACE to shoot ===
       this.handleDesktopInput();
@@ -87,8 +86,16 @@ Stick.prototype.handleDesktopInput = function() {
 
 // New methods for React UI control
 Stick.prototype.lockAim = function() {
+    // Save the current rotation BEFORE the touch event can change Mouse position
+    var savedRotation = this.rotation;
     this.aimLocked = true;
     this.isAiming = false;
+    // Restore rotation on next frame in case the touchstart on the button
+    // briefly moved Mouse._position (native event fires before React stopPropagation)
+    var stick = this;
+    requestAnimationFrame(function() {
+        stick.rotation = savedRotation;
+    });
 };
 
 Stick.prototype.unlockAim = function() {
@@ -100,14 +107,15 @@ Stick.prototype.unlockAim = function() {
 
 Stick.prototype.increasePower = function() {
     if (this.power < 75) {
-        this.power += 5;
+        this.power += 7.5; // 10% of max power per tap
+        if (this.power > 75) this.power = 75;
         this.origin.x = 970 + (this.power / 75) * 50;
     }
 };
 
 Stick.prototype.decreasePower = function() {
     if (this.power > 0) {
-        this.power -= 5;
+        this.power -= 7.5; // 10% of max power per tap
         if (this.power < 0) this.power = 0;
         this.origin.x = 970 + (this.power / 75) * 50;
     }
@@ -168,11 +176,7 @@ Stick.prototype.handleMobileInput = function() {
 };
 
 Stick.prototype.executeShot = function() {
-    if (Game.sound && SOUND_ON) {
-      var strike = sounds.strike.cloneNode(true);
-      strike.volume = (this.power / 10) < 1 ? (this.power / 10) : 1;
-      strike.play();
-    }
+    sounds.playThrottled(sounds.strike, this.power / 10);
     Game.policy.turnPlayed = true;
     this.shooting = true;
     this.origin = this.shotOrigin.copy();
@@ -188,11 +192,7 @@ Stick.prototype.shoot = function(power, rotation, hideDelay){
   this.rotation = rotation;
   var stickHideDelay = typeof hideDelay === "number" ? hideDelay : 500;
 
-  if(Game.sound && SOUND_ON){
-    var strike = sounds.strike.cloneNode(true);
-    strike.volume = (this.power/(10))<1?(this.power/(10)):1;
-    strike.play();
-  }
+  sounds.playThrottled(sounds.strike, this.power / 10);
   Game.policy.turnPlayed = true;
   this.shooting = true;
   this.origin = this.shotOrigin.copy();
@@ -203,8 +203,10 @@ Stick.prototype.shoot = function(power, rotation, hideDelay){
 }
 
 Stick.prototype.update = function(){
-  if(this.shooting && !Game.gameWorld.whiteBall.moving)
+  if(this.shooting && !Game.gameWorld.whiteBall.moving) {
+    console.log('[Stick] Ball stopped, resetting stick. aimLocked:', this.aimLocked);
     this.reset();
+  }
 };
 
 Stick.prototype.reset = function(){

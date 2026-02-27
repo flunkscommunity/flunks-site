@@ -96,6 +96,30 @@ if (typeof Game !== 'undefined') {
     Game.loadAssets = loadPoolAssets;
 }
 
+// Sound throttle for mobile — prevent rapid cloneNode+play from crashing iOS WebKit
+// On iOS, each cloneNode(true) creates a new <audio> element; too many in quick
+// succession exhausts XPC media resources and kills the web process.
+sounds._lastPlayTime = {};
+sounds._throttleMs = 50; // minimum ms between plays of the same sound
+sounds.playThrottled = function(sound, volume) {
+    if (!Game.sound || !SOUND_ON) return;
+    var now = Date.now();
+    var key = sound.src || 'unknown';
+    if (sounds._lastPlayTime[key] && (now - sounds._lastPlayTime[key]) < sounds._throttleMs) {
+        return; // Skip — too soon since last play of this sound
+    }
+    sounds._lastPlayTime[key] = now;
+    try {
+        var clone = sound.cloneNode(true);
+        clone.volume = volume < 1 ? volume : 1;
+        clone.play().catch(function(){});
+        // Auto-cleanup: remove the cloned element after it finishes
+        clone.onended = function() { clone.remove(); };
+        // Safety: remove after 3 seconds regardless
+        setTimeout(function() { try { clone.pause(); clone.remove(); } catch(e){} }, 3000);
+    } catch(e) { /* ignore audio errors on iOS */ }
+};
+
 sounds.fadeOut = function(sound) {
 
     var fadeAudio = setInterval(function () {
