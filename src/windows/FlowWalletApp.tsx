@@ -1,221 +1,212 @@
-import React, { useMemo, useState, useEffect } from "react";
-import { Button, Frame, TextInput } from "react95";
+import React, { useState } from "react";
 import DraggableResizeableWindow from "components/DraggableResizeableWindow";
 import { useWindowsContext } from "contexts/WindowsContext";
 import { WINDOW_IDS } from "fixed";
-import { useFlowWalletBridge } from "../flow/useFlowWalletBridge";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 const FlowWalletApp: React.FC = () => {
   const { closeWindow } = useWindowsContext();
-  const {
-    isMobile,
-    isConnecting,
-    address,
-    lastCallbackUrl,
-    lastError,
-    lastSignature,
-    lastSignedMessage,
-    connect,
-    disconnect,
-    signMessage,
-  } = useFlowWalletBridge();
+  const { setShowAuthFlow, primaryWallet, user } = useDynamicContext();
+  const [isHovered, setIsHovered] = useState(false);
 
-  const [message, setMessage] = useState("Flunks login check");
-  const [actionError, setActionError] = useState<string | null>(null);
-  const [debugLog, setDebugLog] = useState<any[]>([]);
-  const [persistedLog, setPersistedLog] = useState<any[]>([]);
+  const isConnected = !!primaryWallet;
+  const address = primaryWallet?.address;
 
-  // Load persisted log from localStorage on mount (survives app restarts)
-  useEffect(() => {
-    try {
-      const saved = JSON.parse(localStorage.getItem('__wc_persist_log') || '[]');
-      setPersistedLog(saved);
-    } catch (e) { /* ignore */ }
-  }, []);
-
-  // Poll for both in-memory and persisted log entries
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // In-memory log from wcRequestHook
-      const log = (window as any).__wcDebugLog;
-      if (log && log.length !== debugLog.length) {
-        setDebugLog([...log]);
-      }
-      // Persisted log from localStorage
-      try {
-        const saved = JSON.parse(localStorage.getItem('__wc_persist_log') || '[]');
-        if (saved.length !== persistedLog.length) {
-          setPersistedLog(saved);
-        }
-      } catch (e) { /* ignore */ }
-    }, 500);
-    return () => clearInterval(interval);
-  }, [debugLog.length, persistedLog.length]);
-
-  const statusText = useMemo(() => {
-    if (isConnecting) return "connecting…";
-    if (address) return "connected";
-    return "disconnected";
-  }, [isConnecting, address]);
-
-  const handleConnect = async () => {
-    setActionError(null);
-    try {
-      await connect();
-    } catch (error) {
-      setActionError(error instanceof Error ? error.message : String(error));
-    }
+  const handleConnect = () => {
+    setShowAuthFlow(true);
   };
 
   const handleDisconnect = async () => {
-    setActionError(null);
     try {
-      await disconnect();
-    } catch (error) {
-      setActionError(error instanceof Error ? error.message : String(error));
+      await primaryWallet?.disconnect();
+    } catch (e) {
+      console.error('Disconnect error:', e);
     }
   };
-
-  const handleSign = async () => {
-    setActionError(null);
-    try {
-      await signMessage(message);
-    } catch (error) {
-      setActionError(error instanceof Error ? error.message : String(error));
-    }
-  };
-
-  const effectiveError = actionError ?? lastError;
 
   return (
     <DraggableResizeableWindow
       windowsId={WINDOW_IDS.FLOW_WALLET_APP}
       onClose={() => closeWindow(WINDOW_IDS.FLOW_WALLET_APP)}
-      headerTitle="Flow Wallet"
+      headerTitle="Log In"
       headerIcon="/images/icons/flowty.png"
-      initialWidth="540px"
-      initialHeight="520px"
+      initialWidth="420px"
+      initialHeight="auto"
       resizable={false}
       showMaximizeButton={false}
     >
-      <div className="p-4 flex flex-col gap-3">
-        <Frame variant="field" className="p-3">
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center justify-between gap-3">
-              <div className="text-sm">Platform</div>
-              <div className="text-sm font-semibold">{isMobile ? "Android/iOS (Capacitor)" : "Web"}</div>
-            </div>
-            <div className="flex items-center justify-between gap-3">
-              <div className="text-sm">Status</div>
-              <div className="text-sm font-semibold">{statusText}</div>
-            </div>
-            <div className="flex items-center justify-between gap-3">
-              <div className="text-sm">Address</div>
-              <div className="min-w-0 flex-1">
-                <TextInput readOnly value={address ?? "(not connected)"} fullWidth />
-              </div>
-            </div>
-            <div className="flex items-center justify-between gap-3">
-              <div className="text-sm">Last callback</div>
-              <div className="min-w-0 flex-1">
-                <TextInput readOnly value={lastCallbackUrl ?? "(none)"} fullWidth />
-              </div>
-            </div>
-          </div>
-        </Frame>
+      <div 
+        style={{
+          background: 'linear-gradient(180deg, #0a0a1a 0%, #1a0a2e 40%, #0e0618 100%)',
+          minHeight: '340px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '40px 30px',
+          fontFamily: "'Press Start 2P', monospace",
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Scanline overlay */}
+        <div style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.06,
+          background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 4px)',
+        }} />
 
-        <Frame variant="field" className="p-3">
-          <div className="flex flex-col gap-2">
-            <div className="text-sm font-semibold">Sign a message</div>
-            <TextInput
-              value={message}
-              onChange={(event) => setMessage(event.target.value)}
-              fullWidth
-            />
-            <div className="text-xs opacity-70">
-              This will open Flow Wallet to approve a user signature.
-            </div>
-          </div>
-        </Frame>
-
-        <div className="flex gap-2">
-          <Button onClick={handleConnect} disabled={isConnecting}>
-            Connect Flow Wallet
-          </Button>
-          <Button onClick={handleDisconnect} disabled={!address && !isConnecting}>
-            Disconnect
-          </Button>
-          <Button onClick={handleSign} disabled={!address || isConnecting}>
-            Sign Message
-          </Button>
+        {/* Pixel border frame */}
+        <div style={{
+          position: 'absolute', inset: '12px',
+          border: '3px solid #c8a820',
+          pointerEvents: 'none',
+          opacity: 0.4,
+        }}>
+          {/* Corner diamonds */}
+          {['top-left','top-right','bottom-left','bottom-right'].map(pos => (
+            <div key={pos} style={{
+              position: 'absolute',
+              width: '8px', height: '8px',
+              background: '#e8d040',
+              transform: 'rotate(45deg)',
+              ...(pos.includes('top') ? { top: '-4px' } : { bottom: '-4px' }),
+              ...(pos.includes('left') ? { left: '-4px' } : { right: '-4px' }),
+            }} />
+          ))}
         </div>
 
-        <Frame variant="field" className="p-3">
-          <div className="text-sm font-semibold">Signature result</div>
-          <div className="text-xs opacity-70">Last message: {lastSignedMessage ?? "(none)"}</div>
-          <textarea
-            readOnly
-            value={lastSignature ? JSON.stringify(lastSignature, null, 2) : "(no signature yet)"}
-            style={{
-              width: "100%",
-              minHeight: "120px",
-              marginTop: "8px",
-              background: "#0f0f1a",
-              color: "#e5e7eb",
-              border: "1px solid #2a2a3e",
-              borderRadius: "8px",
-              padding: "8px",
-              fontFamily: "monospace",
-              fontSize: "12px",
-            }}
-          />
-        </Frame>
+        {/* Flow Wallet icon */}
+        <img 
+          src="/images/icons/flowty.png" 
+          alt="Flow Wallet" 
+          style={{ 
+            width: '64px', height: '64px', 
+            marginBottom: '24px',
+            imageRendering: 'pixelated',
+            filter: 'drop-shadow(0 0 12px rgba(0,200,100,0.4))',
+          }} 
+        />
 
-        {effectiveError && (
-          <Frame variant="field" className="p-3">
-            <div className="text-sm font-semibold">Last error</div>
-            <div className="text-sm" style={{ whiteSpace: "pre-wrap" }}>
-              {effectiveError}
-            </div>
-          </Frame>
-        )}
-
-        <div className="text-xs opacity-70">
-          Tip: On Android, the Flow Wallet app should open, then return here automatically.
-        </div>
-
-        <Frame variant="field" className="p-3">
-          <div className="flex items-center justify-between">
-            <div className="text-sm font-semibold">🔍 Connection Debug Log</div>
-            <Button size="sm" onClick={() => { 
-              (window as any).__wcDebugLog = []; 
-              setDebugLog([]); 
-              localStorage.removeItem('__wc_persist_log');
-              setPersistedLog([]);
+        {!isConnected ? (
+          <>
+            {/* Title */}
+            <div style={{
+              fontSize: '18px',
+              color: '#f0d848',
+              letterSpacing: '4px',
+              textShadow: '2px 2px 0 #805800, 0 0 12px rgba(240,216,72,0.4)',
+              marginBottom: '12px',
             }}>
-              Clear
-            </Button>
-          </div>
-          <textarea
-            readOnly
-            value={persistedLog.length > 0 
-              ? persistedLog.map((e: any) => `[${e.t}] ${e.step}${e.detail ? ': ' + e.detail : ''}`).join('\n')
-              : '(no activity yet — tap Connect Flow Wallet, logs persist through restart)'}
-            style={{
-              width: "100%",
-              minHeight: "140px",
-              marginTop: "8px",
-              background: "#0f0f1a",
-              color: "#fbbf24",
-              border: "1px solid #2a2a3e",
-              borderRadius: "8px",
-              padding: "8px",
-              fontFamily: "monospace",
-              fontSize: "10px",
-              lineHeight: "1.4",
-            }}
-          />
-        </Frame>
+              LOG IN
+            </div>
+
+            {/* Subtitle */}
+            <div style={{
+              fontSize: '9px',
+              color: '#8ab4c4',
+              letterSpacing: '2px',
+              marginBottom: '32px',
+              lineHeight: '1.6',
+            }}>
+              CONNECT YOUR FLOW WALLET<br/>TO ENTER SEMESTER ZERO
+            </div>
+
+            {/* Connect button */}
+            <button
+              onClick={handleConnect}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+              style={{
+                fontFamily: "'Press Start 2P', monospace",
+                fontSize: '13px',
+                color: isHovered ? '#0a0a1a' : '#f0d848',
+                background: isHovered 
+                  ? 'linear-gradient(180deg, #f0d848 0%, #c8a820 100%)' 
+                  : 'transparent',
+                border: '3px solid #c8a820',
+                padding: '14px 32px',
+                cursor: 'pointer',
+                letterSpacing: '3px',
+                textShadow: isHovered ? 'none' : '0 0 8px rgba(240,216,72,0.3)',
+                transition: 'all 0.15s ease',
+                imageRendering: 'pixelated' as any,
+              }}
+            >
+              CONNECT WALLET
+            </button>
+
+            {/* Hint text */}
+            <div style={{
+              fontSize: '7px',
+              color: '#555',
+              letterSpacing: '1px',
+              marginTop: '24px',
+              lineHeight: '1.8',
+            }}>
+              SUPPORTS FLOW WALLET &amp; DAPPER
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Connected state */}
+            <div style={{
+              fontSize: '14px',
+              color: '#4ade80',
+              letterSpacing: '4px',
+              textShadow: '0 0 12px rgba(74,222,128,0.4)',
+              marginBottom: '16px',
+            }}>
+              CONNECTED
+            </div>
+
+            {/* Address */}
+            <div style={{
+              fontSize: '8px',
+              color: '#8ab4c4',
+              letterSpacing: '1px',
+              marginBottom: '8px',
+              wordBreak: 'break-all',
+              maxWidth: '300px',
+            }}>
+              {address}
+            </div>
+
+            {/* User info */}
+            {user?.email && (
+              <div style={{
+                fontSize: '8px',
+                color: '#a8b8d0',
+                letterSpacing: '1px',
+                marginBottom: '24px',
+              }}>
+                {user.email}
+              </div>
+            )}
+
+            {/* Disconnect button */}
+            <button
+              onClick={handleDisconnect}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+              style={{
+                fontFamily: "'Press Start 2P', monospace",
+                fontSize: '10px',
+                color: isHovered ? '#0a0a1a' : '#ef4444',
+                background: isHovered 
+                  ? 'linear-gradient(180deg, #ef4444 0%, #b91c1c 100%)' 
+                  : 'transparent',
+                border: '2px solid #ef4444',
+                padding: '10px 24px',
+                cursor: 'pointer',
+                letterSpacing: '2px',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              DISCONNECT
+            </button>
+          </>
+        )}
       </div>
     </DraggableResizeableWindow>
   );

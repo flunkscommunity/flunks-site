@@ -126,7 +126,7 @@ const Desktop = () => {
   const [initComplete, setInitComplete] = useState(false);
   const splashDismissedRef = useRef(false);
   const mobileInitRanRef = useRef(false);
-  const { primaryWallet } = useDynamicContext();
+  const { primaryWallet, setShowAuthFlow } = useDynamicContext();
   const { disconnect, isConnected, address: unifiedAddress, isConnecting, connectFCL } = useUnifiedWallet();
   const { hasProfile, profile } = useUserProfile();
   
@@ -443,10 +443,7 @@ const windowsMemod = useMemo(() => (
                             if (isMobile) {
                               try { await connectFCL(); } catch (e) { console.error('Connect error:', e); }
                             } else {
-                              openWindow({
-                                key: WINDOW_IDS.FLOW_WALLET_APP,
-                                window: <FlowWalletApp />
-                              });
+                              setShowAuthFlow(true);
                             }
                           }}
                           style={{
