@@ -364,7 +364,7 @@ const FourThievesBarMain = () => {
       window: (
         <DraggableResizeableWindow
           windowsId={WINDOW_IDS.FOUR_THIEVES_BAR_POOL_ROOM}
-          headerTitle="🎱 8-Ball Pool - Four Thieves"
+          headerTitle="🎱 Neon Felt"
           onClose={() => {
             setIsPoolGameOpen(false); // Stop music when pool game closes + unhides MAIN window
             closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_POOL_ROOM);
@@ -372,11 +372,16 @@ const FourThievesBarMain = () => {
           initialWidth={typeof window !== 'undefined' && (window as any).Capacitor?.isNativePlatform?.() ? '100vw' : 'calc(100vw - 12px)'}
           initialHeight={typeof window !== 'undefined' && (window as any).Capacitor?.isNativePlatform?.() ? '100vh' : 'calc(100vh - 56px)'}
           resizable={false}
+          showHeader={!(typeof window !== 'undefined' && (window as any).Capacitor?.isNativePlatform?.())}
           windowClassName="pool-game-window"
         >
           <PoolGame 
             walletAddress={walletAddress}
             gumBalance={effectiveBalance}
+            onClose={() => {
+              setIsPoolGameOpen(false);
+              closeWindow(WINDOW_IDS.FOUR_THIEVES_BAR_POOL_ROOM);
+            }}
             onStopBarMusic={() => {
               // Stop 4thieves bar music — cutscene/pool music takes over
               if (audioRef.current) {

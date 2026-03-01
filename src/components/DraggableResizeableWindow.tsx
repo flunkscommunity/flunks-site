@@ -65,7 +65,6 @@ const StyledWindow = styled(Window)`
   /* Mobile-specific styles */
   @media (max-width: 768px) {
     position: fixed !important;
-    /* Position window right below the notch - use max to ensure safe positioning */
     top: max(59px, env(safe-area-inset-top, 59px)) !important;
     left: 0 !important;
     right: 0 !important;
@@ -76,6 +75,10 @@ const StyledWindow = styled(Window)`
     min-height: 0 !important;
     border-radius: 0 !important;
     margin: 0 !important;
+    
+    &.pool-game-window {
+      top: 0 !important;
+    }
   }
   
   /* Native app (Capacitor) — always use full-screen layout regardless of viewport width */
@@ -91,6 +94,11 @@ const StyledWindow = styled(Window)`
     min-height: 0 !important;
     border-radius: 0 !important;
     margin: 0 !important;
+  }
+  
+  /* Pool game window: cover the ENTIRE screen including behind notch */
+  &.pool-game-window.native-app-window {
+    top: 0 !important;
   }
 `;
 
@@ -138,12 +146,21 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
     authGuard = props.authGuard || false,
     onHelp,
     toolbar,
+    showHeader = true,
   } = props;
   const windowRef = useRef<HTMLDivElement>(null);
   const draggableRef = useRef<Draggable>(null);
   const { width, height } = useWindowSize();
   const { closeWindow, bringWindowToFront, minimizeWindow, windowApps } = useWindowsContext();
   const { user } = useDynamicContext();
+
+  // Detect Capacitor native app — use state to avoid SSR hydration mismatch
+  // (window.Capacitor doesn't exist during static build but does at runtime)
+  const [isNativeApp, setIsNativeApp] = useState(false);
+  useEffect(() => {
+    const native = typeof window !== 'undefined' && !!(window as any).Capacitor?.isNativePlatform?.();
+    if (native) setIsNativeApp(true);
+  }, []);
 
   // Check if this window is minimized
   const isMinimized = windowApps.find(app => app.key === props.windowsId)?.isMinimized || false;
@@ -180,8 +197,6 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
 
     bringWindowToFront(props.windowsId);
   };
-
-  const isNativeApp = typeof window !== 'undefined' && !!(window as any).Capacitor?.isNativePlatform?.();
 
   useEffect(() => {
     if ((width < 768 || isNativeApp) && draggableRef.current) {
@@ -254,8 +269,8 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
 
   return (
     <>
-      {/* Gray extension fills the safe area (notch/Dynamic Island) on mobile */}
-      {isMobile && <SafeAreaExtension />}
+      {/* Gray extension fills the safe area (notch/Dynamic Island) on mobile - skip for pool game */}
+      {isMobile && windowClassName !== 'pool-game-window' && <SafeAreaExtension />}
       <Draggable
         ref={draggableRef}
         handle="strong"
@@ -301,6 +316,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
         onClick={_bringWindowToFront}
         id={props.windowsId}
       >
+        {showHeader && (
         <strong>
           {headerRender ? (
             headerRender
@@ -395,6 +411,7 @@ const DraggableResizeableWindow: React.FC<Props> = (props) => {
             </WindowHeader>
           )}
         </strong>
+        )}
 
         {toolbar}
 

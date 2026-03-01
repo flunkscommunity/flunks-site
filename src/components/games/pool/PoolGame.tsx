@@ -33,6 +33,7 @@ interface PoolGameProps {
   gumBalance: number;
   onGumChange: (amount: number) => void;
   onStopBarMusic?: () => void;
+  onClose?: () => void;
 }
 
 // Opponent data
@@ -93,7 +94,7 @@ const OPPONENTS: Opponent[] = [
   },
 ];
 
-const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumChange, onStopBarMusic }) => {
+const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumChange, onStopBarMusic, onClose }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const loaderScriptRef = useRef<HTMLScriptElement | null>(null);
@@ -109,6 +110,9 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
   // Control UI state
   const [aimLocked, setAimLocked] = useState(false);
   const [currentPower, setCurrentPower] = useState(0);
+  const [playerColor, setPlayerColor] = useState<string | null>(null);
+  const [aiColor, setAiColor] = useState<string | null>(null);
+  const [currentTurn, setCurrentTurn] = useState(0);
   
   const [isLoading, setIsLoading] = useState(true);
   const [aiDifficulty, setAiDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
@@ -414,6 +418,22 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
 
   const isUnlocked = (id: string) => unlockedLevels.includes(id);
 
+  // Poll game engine for score/turn/color updates
+  useEffect(() => {
+    if (gameState !== 'playing') return;
+    const interval = setInterval(() => {
+      const g = (window as any).Game;
+      if (g?.policy?.players) {
+        setPlayerScore(g.policy.players[0].matchScore.value);
+        setAiScore(g.policy.players[1].matchScore.value);
+        setPlayerColor(g.policy.players[0].color || null);
+        setAiColor(g.policy.players[1].color || null);
+        setCurrentTurn(g.policy.turn);
+      }
+    }, 200);
+    return () => clearInterval(interval);
+  }, [gameState]);
+
   // Pool controls: update power display periodically when aim is locked
   useEffect(() => {
     if (gameState === 'playing' && aimLocked) {
@@ -533,9 +553,16 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
         
         {/* Desktop Layout */}
         <div className="relative z-10 w-full h-full hidden md:flex">
-          {/* Left side - Small opponent list */}
-          <div className="w-52 flex flex-col bg-black/70 border-r border-yellow-600/50 p-3 pt-4">
-            <div className="text-xs text-yellow-400 mb-3 text-center">SELECT</div>
+          {/* Left side - Opponent list */}
+          <div className="w-64 flex flex-col bg-black/80 border-r-2 border-yellow-600/60 p-4 pt-5">
+            <div 
+              className="text-yellow-400 mb-4 text-center tracking-widest"
+              style={{ 
+                fontSize: '16px',
+                textShadow: '0 0 10px rgba(234,179,8,0.6), 0 0 20px rgba(234,179,8,0.3)',
+                letterSpacing: '6px',
+              }}
+            >SELECT</div>
             <div className="flex flex-col gap-1">
               {OPPONENTS.map((opp) => {
                 const unlocked = isUnlocked(opp.id);
@@ -545,24 +572,39 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
                     key={opp.id}
                     onClick={() => unlocked && setSelectedOpponent(opp)}
                     disabled={!unlocked}
-                    className={`relative flex items-center gap-2 p-2 text-left transition-all ${
+                    className={`relative flex items-center gap-2 p-3 text-left transition-all ${
                       isSelected
-                        ? 'bg-yellow-600/50 text-yellow-400 border-l-4 border-yellow-400'
+                        ? 'bg-yellow-600/40 text-yellow-400 border-l-4 border-yellow-400'
                         : unlocked
                         ? 'hover:bg-yellow-900/30 text-gray-300'
                         : 'opacity-30 cursor-not-allowed text-gray-600'
                     }`}
                   >
-                    {isSelected && <span className="text-yellow-400">▶</span>}
-                    <div className={`${isSelected ? '' : 'ml-4'}`}>
-                      <div className="text-[10px]">{unlocked ? opp.name : '???'}</div>
-                      <div className="text-[8px] text-gray-400">{unlocked ? opp.title : ''}</div>
+                    {isSelected && <span className="text-yellow-400 text-lg">▶</span>}
+                    <div className={`${isSelected ? '' : 'ml-6'}`}>
+                      <div 
+                        className="uppercase tracking-wider"
+                        style={{ 
+                          fontSize: '14px',
+                          textShadow: isSelected 
+                            ? '0 0 8px rgba(234,179,8,0.5), 2px 2px 0 rgba(0,0,0,0.8)' 
+                            : '2px 2px 0 rgba(0,0,0,0.8)',
+                          letterSpacing: '2px',
+                        }}
+                      >{unlocked ? opp.name : '???'}</div>
+                      <div 
+                        className="text-gray-400 mt-1 italic"
+                        style={{ fontSize: '10px', letterSpacing: '1px' }}
+                      >{unlocked ? opp.title : ''}</div>
                     </div>
                   </button>
                 );
               })}
             </div>
-            <div className="mt-auto pt-4 text-center text-gray-500 text-[8px] leading-relaxed">
+            <div 
+              className="mt-auto pt-6 text-center text-gray-500 leading-relaxed"
+              style={{ fontSize: '9px', letterSpacing: '2px' }}
+            >
               BEAT EACH TO<br/>UNLOCK NEXT
             </div>
           </div>
@@ -1702,6 +1744,63 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
             ref={canvasRef}
             style={{ width: '100%', height: '100%', maxWidth: '100%', maxHeight: '100%', background: '#000' }}
           />
+        )}
+
+        {/* Retro Scoreboard Overlay - top center */}
+        {!isLoading && gameState === 'playing' && (
+          <div className="absolute top-1 left-1/2 -translate-x-1/2 z-10 pointer-events-none" style={{ fontFamily: "'Press Start 2P', monospace" }}>
+            <div className="flex items-center gap-1 bg-black/80 border border-gray-600 rounded px-2 py-1 backdrop-blur-sm" style={{ minWidth: '200px' }}>
+              {/* Player side */}
+              <div className="flex items-center gap-1 flex-1">
+                <span className={`text-[7px] ${currentTurn === 0 ? 'text-white' : 'text-gray-500'}`}>YOU</span>
+                <div className="flex gap-[2px]">
+                  {Array.from({ length: 7 }).map((_, i) => (
+                    <div
+                      key={`p${i}`}
+                      className={`w-[6px] h-[6px] rounded-full border ${
+                        i < playerScore
+                          ? playerColor === 'red' ? 'bg-red-500 border-red-400' : playerColor === 'yellow' ? 'bg-yellow-400 border-yellow-300' : 'bg-gray-400 border-gray-300'
+                          : 'bg-gray-800 border-gray-700'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className={`text-[10px] font-bold ${currentTurn === 0 ? 'text-green-400' : 'text-gray-600'}`}>{playerScore}</span>
+              </div>
+              {/* VS divider */}
+              <span className="text-[6px] text-gray-500 mx-1">VS</span>
+              {/* AI side */}
+              <div className="flex items-center gap-1 flex-1 justify-end">
+                <span className={`text-[10px] font-bold ${currentTurn === 1 ? 'text-green-400' : 'text-gray-600'}`}>{aiScore}</span>
+                <div className="flex gap-[2px]">
+                  {Array.from({ length: 7 }).map((_, i) => (
+                    <div
+                      key={`a${i}`}
+                      className={`w-[6px] h-[6px] rounded-full border ${
+                        i < aiScore
+                          ? aiColor === 'red' ? 'bg-red-500 border-red-400' : aiColor === 'yellow' ? 'bg-yellow-400 border-yellow-300' : 'bg-gray-400 border-gray-300'
+                          : 'bg-gray-800 border-gray-700'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className={`text-[7px] ${currentTurn === 1 ? 'text-white' : 'text-gray-500'}`}>{selectedOpponent?.name?.split(' ')[0]?.toUpperCase() || 'CPU'}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Floating close button for native apps (no title bar) */}
+        {!isLoading && isMobile && onClose && (
+          <div className="absolute top-1 right-1 z-20 pointer-events-auto">
+            <button
+              onTouchEnd={(e) => { e.preventDefault(); onClose(); }}
+              onClick={onClose}
+              className="bg-black/60 hover:bg-black/80 text-white w-7 h-7 rounded-full text-sm font-bold flex items-center justify-center border border-gray-600 active:scale-90 transition-transform backdrop-blur-sm"
+            >
+              ✕
+            </button>
+          </div>
         )}
 
         {/* Desktop Controls Guide - left side overlay */}

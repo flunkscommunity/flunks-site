@@ -45,12 +45,8 @@ GamePolicy.prototype.reset = function(){
     this.validBallsInsertedOnTurn = 0;
 }
 GamePolicy.prototype.drawScores = function(){
-    // Removed totalScore number display from table
-    // this.players[0].totalScore.draw();
-    // this.players[1].totalScore.draw();
-
-    this.players[0].matchScore.drawLines(this.players[0].color);
-    this.players[1].matchScore.drawLines(this.players[1].color);
+    // Scores now displayed via React overlay scoreboard
+    // Canvas score marks disabled
 }
 
 GamePolicy.prototype.checkColisionValidity = function(ball1,ball2){

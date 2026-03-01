@@ -1,5 +1,5 @@
 import { useWindowsContext } from "contexts/WindowsContext";
-import React, { forwardRef, useEffect, useRef } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { AppBar, Button, ScrollViewProps, TextInput, Toolbar } from "react95";
 import styled, { keyframes, css } from "styled-components";
 import Appbar from "./Appbar/Appbar";
@@ -233,7 +233,11 @@ const CustomMonitor = forwardRef<HTMLDivElement, MonitorProps>(
     const backgroundRef = useRef<HTMLDivElement>(null);
     const { width } = useWindowSize();
     const isMobile = width < 768;
-    const isNativeApp = typeof window !== 'undefined' && !!(window as any).Capacitor?.isNativePlatform?.();
+    const [isNativeApp, setIsNativeApp] = useState(false);
+    useEffect(() => {
+      const native = typeof window !== 'undefined' && !!(window as any).Capacitor?.isNativePlatform?.();
+      if (native) setIsNativeApp(true);
+    }, []);
 
     // Use desktop background for main desktop, fallback to regular background for other screens
     const isMainDesktop = showBottomBar; // Main desktop has the bottom bar/taskbar
