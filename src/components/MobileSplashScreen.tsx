@@ -99,6 +99,14 @@ const Screen = styled.div`
   justify-content: center;
   align-items: center;
   animation: ${flicker} 0.15s infinite;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  @media (orientation: landscape) and (max-height: 500px) {
+    padding: 12px 20px;
+    font-size: 13px;
+    justify-content: flex-start;
+  }
 `;
 
 const ContentWrapper = styled.div`
@@ -106,6 +114,15 @@ const ContentWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+
+  @media (orientation: landscape) and (max-height: 500px) {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+    max-width: 100%;
+  }
 `;
 
 const BootText = styled.div`
@@ -113,6 +130,13 @@ const BootText = styled.div`
   max-width: 400px;
   text-align: left;
   padding-left: 20px;
+
+  @media (orientation: landscape) and (max-height: 500px) {
+    max-width: 280px;
+    flex-shrink: 0;
+    font-size: 12px;
+    padding-left: 10px;
+  }
 `;
 
 const Line = styled.div<{ $visible: boolean }>`
@@ -121,6 +145,11 @@ const Line = styled.div<{ $visible: boolean }>`
   overflow: hidden;
   margin-bottom: 4px;
   transition: opacity 0.1s;
+
+  @media (orientation: landscape) and (max-height: 500px) {
+    margin-bottom: 2px;
+    font-size: 11px;
+  }
 `;
 
 const Cursor = styled.span`
@@ -141,6 +170,12 @@ const LogoContainer = styled.div<{ $visible: boolean }>`
   align-items: center;
   opacity: ${props => props.$visible ? 1 : 0};
   transition: opacity 0.5s ease-out;
+
+  @media (orientation: landscape) and (max-height: 500px) {
+    margin-top: 0;
+    flex-shrink: 1;
+    min-width: 0;
+  }
 `;
 
 const Logo = styled.img<{ $pulsing: boolean }>`
@@ -148,6 +183,10 @@ const Logo = styled.img<{ $pulsing: boolean }>`
   height: auto;
   filter: brightness(1.2) drop-shadow(0 0 20px #33ff33);
   animation: ${props => props.$pulsing ? pulse : 'none'} 1.5s ease-in-out infinite;
+
+  @media (orientation: landscape) and (max-height: 500px) {
+    width: min(100px, 20vh);
+  }
 `;
 
 const AsciiArt = styled.pre`
@@ -165,6 +204,10 @@ const AsciiArt = styled.pre`
   &.visible {
     opacity: 1;
   }
+
+  @media (orientation: landscape) and (max-height: 500px) {
+    display: none;
+  }
 `;
 
 const ReadyText = styled.div<{ $visible: boolean }>`
@@ -175,6 +218,11 @@ const ReadyText = styled.div<{ $visible: boolean }>`
   opacity: ${props => props.$visible ? 1 : 0};
   transition: opacity 0.5s ease-out;
   animation: ${props => props.$visible ? blink : 'none'} 1s infinite;
+
+  @media (orientation: landscape) and (max-height: 500px) {
+    font-size: 16px;
+    margin-top: 10px;
+  }
 `;
 
 const DemoButton = styled.button<{ $visible: boolean }>`
