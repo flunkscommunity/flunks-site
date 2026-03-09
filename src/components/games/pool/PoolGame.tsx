@@ -102,6 +102,10 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
   // Pool music (plays during actual gameplay)
   const poolMusicRef = useRef<HTMLAudioElement | null>(null);
   
+  // Bar background music (4thieves.mp3) — managed here for iOS compatibility
+  // iOS requires audio.play() to be called from a direct user gesture
+  const barMusicRef = useRef<HTMLAudioElement | null>(null);
+  
   // Radio/music control
   const { audioRef: radioAudioRef, isPlaying: radioIsPlaying, setIsPlaying: setRadioIsPlaying } = useRadio();
   const wasRadioPlayingRef = useRef(false);
@@ -126,6 +130,40 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
   const [matchbookAwarded, setMatchbookAwarded] = useState(false);
   const matchbookRecordedRef = useRef(false);
   
+  // Helper: start bar background music (must be called from a user gesture on iOS)
+  const startBarMusic = () => {
+    if (!barMusicRef.current) {
+      barMusicRef.current = new Audio('/music/4thieves.mp3');
+      barMusicRef.current.loop = false;
+      barMusicRef.current.volume = 1.0;
+      // Loop at 60 seconds like FourThievesBarMain
+      barMusicRef.current.addEventListener('timeupdate', () => {
+        if (barMusicRef.current && barMusicRef.current.currentTime >= 60) {
+          barMusicRef.current.currentTime = 0;
+          barMusicRef.current.play().catch(console.log);
+        }
+      });
+    }
+    barMusicRef.current.currentTime = 2; // Skip initial silence
+    barMusicRef.current.play().catch(err => console.log('Bar music play failed:', err));
+    console.log('🎵 Bar music started from PoolGame (iOS-compatible)');
+  };
+
+  const stopBarMusic = () => {
+    if (barMusicRef.current) {
+      barMusicRef.current.pause();
+      barMusicRef.current.currentTime = 0;
+    }
+  };
+
+  // Stop bar music when game starts playing (pool-music takes over) or component unmounts
+  useEffect(() => {
+    if (gameState === 'intro' || gameState === 'playing') {
+      stopBarMusic();
+    }
+    return () => { stopBarMusic(); };
+  }, [gameState]);
+
   // Stop radio music when entering intro/playing and restore on unmount
   useEffect(() => {
     if (gameState === 'intro' || gameState === 'playing') {
@@ -520,7 +558,7 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
         
         {/* Start button - centered, appears after reveal */}
         <button 
-          onClick={() => setGameState('select')} 
+          onClick={() => { startBarMusic(); setGameState('select'); }} 
           className={`pool-start-btn ${startRevealed ? 'visible' : ''}`}
         >
           START GAME
@@ -749,7 +787,7 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
                   
                   {/* Challenge button */}
                   <button
-                    onClick={() => startGame(selectedOpponent.id)}
+                    onClick={() => { stopBarMusic(); startGame(selectedOpponent.id); }}
                     className="px-8 py-3 bg-yellow-500 hover:bg-yellow-400 text-black font-bold transition-all hover:scale-105 text-sm shadow-lg"
                   >
                     CHALLENGE →
@@ -766,8 +804,8 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
 
         {/* Mobile Layout - Vertical Scroll */}
         <div className="relative z-10 w-full h-full flex flex-col md:hidden overflow-y-auto">
-          {/* Opponent selector - horizontal scroll */}
-          <div className="flex-shrink-0 bg-black/80 p-3 border-b border-yellow-600/50">
+          {/* Opponent selector - horizontal scroll (extra top padding for iPhone safe area) */}
+          <div className="flex-shrink-0 bg-black/80 p-3 pt-10 border-b border-yellow-600/50" style={{ paddingTop: 'max(2.5rem, env(safe-area-inset-top, 0px))' }}>
             <div className="text-xs text-yellow-400 mb-2 text-center">SELECT OPPONENT</div>
             <div className="flex gap-2 justify-center">
               {OPPONENTS.map((opp) => {
@@ -927,7 +965,7 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
               {/* Challenge button - sticky bottom so it's always reachable */}
               <div className="flex-shrink-0 w-full flex justify-center pb-2">
                 <button
-                  onClick={() => startGame(selectedOpponent.id)}
+                  onClick={() => { stopBarMusic(); startGame(selectedOpponent.id); }}
                   className="px-8 py-3 bg-yellow-500 hover:bg-yellow-400 text-black font-bold transition-all hover:scale-105 text-sm shadow-lg"
                 >
                   CHALLENGE →
@@ -1746,12 +1784,12 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
           />
         )}
 
-        {/* Retro Scoreboard Overlay - top center */}
+        {/* Retro Scoreboard Overlay - split left/right, inset to clear corner + center pockets */}
         {!isLoading && gameState === 'playing' && (
-          <div className="absolute top-1 left-1/2 -translate-x-1/2 z-10 pointer-events-none" style={{ fontFamily: "'Press Start 2P', monospace" }}>
-            <div className="flex items-center gap-1 bg-black/80 border border-gray-600 rounded px-2 py-1 backdrop-blur-sm" style={{ minWidth: '200px' }}>
-              {/* Player side */}
-              <div className="flex items-center gap-1 flex-1">
+          <>
+            {/* Player score - top left quarter */}
+            <div className="absolute top-1 z-10 pointer-events-none" style={{ left: '12.5%', transform: 'translateX(-50%)', fontFamily: "'Press Start 2P', monospace" }}>
+              <div className="flex items-center gap-1 bg-black/80 border border-gray-600 rounded px-2 py-1 backdrop-blur-sm">
                 <span className={`text-[7px] ${currentTurn === 0 ? 'text-white' : 'text-gray-500'}`}>YOU</span>
                 <div className="flex gap-[2px]">
                   {Array.from({ length: 7 }).map((_, i) => (
@@ -1767,10 +1805,10 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
                 </div>
                 <span className={`text-[10px] font-bold ${currentTurn === 0 ? 'text-green-400' : 'text-gray-600'}`}>{playerScore}</span>
               </div>
-              {/* VS divider */}
-              <span className="text-[6px] text-gray-500 mx-1">VS</span>
-              {/* AI side */}
-              <div className="flex items-center gap-1 flex-1 justify-end">
+            </div>
+            {/* AI score - top right quarter */}
+            <div className="absolute top-1 z-10 pointer-events-none" style={{ right: '12.5%', transform: 'translateX(50%)', fontFamily: "'Press Start 2P', monospace" }}>
+              <div className="flex items-center gap-1 bg-black/80 border border-gray-600 rounded px-2 py-1 backdrop-blur-sm">
                 <span className={`text-[10px] font-bold ${currentTurn === 1 ? 'text-green-400' : 'text-gray-600'}`}>{aiScore}</span>
                 <div className="flex gap-[2px]">
                   {Array.from({ length: 7 }).map((_, i) => (
@@ -1787,7 +1825,7 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
                 <span className={`text-[7px] ${currentTurn === 1 ? 'text-white' : 'text-gray-500'}`}>{selectedOpponent?.name?.split(' ')[0]?.toUpperCase() || 'CPU'}</span>
               </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* Floating close button for native apps (no title bar) */}

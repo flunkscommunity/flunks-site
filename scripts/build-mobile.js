@@ -169,7 +169,11 @@ ${colors.bright}╔════════════════════�
     // 'cards',                // KEEP - Card SVGs for Jacks or Better (8MB)
     // 'slots/images',         // KEEP - slot-machine.png needed for games
     // 'music',                // KEEP SOME - see MUSIC_TO_KEEP below
-    'Games',                   // 8.8MB - Standalone game assets
+    // 'Games/pool-game',      // KEEP - Pool game engine, sprites, sounds, cutscenes (~36MB)
+    'Games/FlunkBowl',         // Bowling game (not needed on mobile)
+    'Games/Flunky Uppy',       // Flunky Uppy (not needed on mobile)
+    'Games/FlappyFlunk',       // Flappy Flunk (not needed on mobile)
+    'Games/Flunk Jump',        // Flunk Jump (not needed on mobile)
   ];
   
   // Music files to keep for mobile (underground, story mode, locations)
@@ -184,6 +188,7 @@ ${colors.bright}╔════════════════════�
     'night.mp3',              // Paradise Motel (night)
     'tvaudio.mp3',              // Freaks TV
     'pool-music.mp3',           // Pool game music
+    '4thieves.mp3',             // Bar background music (Neon Felt)
   ];
   
   let totalRemoved = 0;
@@ -313,6 +318,26 @@ ${colors.bright}╔════════════════════�
     log(`  ✓ Cleaned music folder: removed ~${musicRemoved}MB, kept ${MUSIC_TO_KEEP.length} essential tracks`, colors.green);
   }
 
+  // Trim + compress 4thieves.mp3 (bar music) — only first 65s used (loops at 60s)
+  // Uses macOS avconvert to trim to 65s and re-encode as AAC (~886KB vs 6.4MB)
+  const fourThievesPath = path.join(OUT_DIR, 'music', '4thieves.mp3');
+  if (fs.existsSync(fourThievesPath)) {
+    const beforeSize = fs.statSync(fourThievesPath).size;
+    const trimmedPath = fourThievesPath + '.trimmed.m4a';
+    try {
+      execSync(`avconvert -s "${fourThievesPath}" -o "${trimmedPath}" -p PresetAppleM4A --start 0 --duration 65 --replace`, { stdio: 'pipe' });
+      if (fs.existsSync(trimmedPath)) {
+        fs.rmSync(fourThievesPath);
+        fs.renameSync(trimmedPath, fourThievesPath);
+        const afterSize = fs.statSync(fourThievesPath).size;
+        const savedMB = Math.round((beforeSize - afterSize) / 1024 / 1024);
+        totalRemoved += savedMB;
+        log(`  ✓ Trimmed 4thieves.mp3 to 65s AAC (saved ~${savedMB}MB)`, colors.green);
+      }
+    } catch (e) {
+      log(`  ⚠ Could not trim 4thieves.mp3 (avconvert not available)`, colors.yellow);
+    }
+  }
   log(`  📊 Total space saved: ~${totalRemoved}MB`, colors.cyan);
 
   // Step 5: Size gate — verify out/ is under 200MB before syncing
