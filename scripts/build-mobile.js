@@ -318,6 +318,71 @@ ${colors.bright}╔════════════════════�
     log(`  ✓ Cleaned music folder: removed ~${musicRemoved}MB, kept ${MUSIC_TO_KEEP.length} essential tracks`, colors.green);
   }
 
+  // Remove unused pool game sprites (duplicates/old versions)
+  const POOL_SPRITES_TO_REMOVE = [
+    'Games/pool-game/sprites/spr_background4_old.png',   // 1.8MB - unused old version
+    'Games/pool-game/sprites/spr_background4 2.png',     // 1.3MB - macOS duplicate
+    'Games/pool-game/sprites/main_menu_background.png',  // 710KB - unused (we use start-bg.png)
+  ];
+  for (const sprite of POOL_SPRITES_TO_REMOVE) {
+    const spritePath = path.join(OUT_DIR, sprite);
+    if (fs.existsSync(spritePath)) {
+      const sizeMB = (fs.statSync(spritePath).size / 1024 / 1024).toFixed(1);
+      fs.rmSync(spritePath);
+      totalRemoved += Math.round(parseFloat(sizeMB));
+      log(`  ✓ Removed unused pool sprite: ${path.basename(sprite)} (~${sizeMB}MB)`, colors.green);
+    }
+  }
+
+  // Compress large pool game sprites (backgrounds are 2MB+ each)
+  const poolSpritesDir = path.join(OUT_DIR, 'Games/pool-game/sprites');
+  if (fs.existsSync(poolSpritesDir)) {
+    try {
+      execSync(`find "${poolSpritesDir}" -type f -name "*.png" | while read f; do
+        width=$(sips -g pixelWidth "$f" 2>/dev/null | tail -1 | awk '{print $2}')
+        if [ -n "$width" ] && [ "$width" -gt 1024 ] 2>/dev/null; then
+          sips -Z 1024 "$f" >/dev/null 2>&1
+        fi
+      done`, { stdio: 'pipe', cwd: ROOT_DIR });
+      log(`  ✓ Compressed large pool game sprites (max 1024px)`, colors.green);
+    } catch (e) {}
+  }
+
+  // Remove unused sound effects not referenced in code
+  const SOUNDS_TO_REMOVE = [
+    'sounds/friday-night-lights.mp3',  // 3.7MB - not referenced anywhere
+  ];
+  for (const snd of SOUNDS_TO_REMOVE) {
+    const sndPath = path.join(OUT_DIR, snd);
+    if (fs.existsSync(sndPath)) {
+      const sizeMB = (fs.statSync(sndPath).size / 1024 / 1024).toFixed(1);
+      fs.rmSync(sndPath);
+      totalRemoved += Math.round(parseFloat(sizeMB));
+      log(`  ✓ Removed unused sound: ${path.basename(snd)} (~${sizeMB}MB)`, colors.green);
+    }
+  }
+
+  // Trim + compress Bossa Antigua.mp3 (pool game music) — loops, only need ~65s
+  const bossaPath = path.join(OUT_DIR, 'Games/pool-game/sounds/Bossa Antigua.mp3');
+  if (fs.existsSync(bossaPath)) {
+    const beforeSize = fs.statSync(bossaPath).size;
+    const trimmedPath = bossaPath + '.trimmed.m4a';
+    try {
+      execSync(`avconvert -s "${bossaPath}" -o "${trimmedPath}" -p PresetAppleM4A --start 0 --duration 65 --replace`, { stdio: 'pipe' });
+      if (fs.existsSync(trimmedPath)) {
+        fs.rmSync(bossaPath);
+        // Keep .mp3 extension so pool engine can find it
+        fs.renameSync(trimmedPath, bossaPath);
+        const afterSize = fs.statSync(bossaPath).size;
+        const savedMB = Math.round((beforeSize - afterSize) / 1024 / 1024);
+        totalRemoved += savedMB;
+        log(`  ✓ Trimmed Bossa Antigua.mp3 to 65s AAC (saved ~${savedMB}MB)`, colors.green);
+      }
+    } catch (e) {
+      log(`  ⚠ Could not trim Bossa Antigua.mp3 (avconvert not available)`, colors.yellow);
+    }
+  }
+
   // Trim + compress 4thieves.mp3 (bar music) — only first 65s used (loops at 60s)
   // Uses macOS avconvert to trim to 65s and re-encode as AAC (~886KB vs 6.4MB)
   const fourThievesPath = path.join(OUT_DIR, 'music', '4thieves.mp3');
@@ -358,10 +423,10 @@ ${colors.bright}╔════════════════════�
     return size;
   };
   const outSizeMB = Math.round(getDirectorySize(OUT_DIR) / 1024 / 1024);
-  log(`  📦 Build output size: ${outSizeMB}MB`, outSizeMB <= 200 ? colors.green : colors.red);
+  log(`  📦 Build output size: ${outSizeMB}MB`, outSizeMB <= 195 ? colors.green : colors.red);
   
-  if (outSizeMB > 200) {
-    log(`\n  ❌ BUILD TOO LARGE: ${outSizeMB}MB exceeds 200MB limit!`, colors.red);
+  if (outSizeMB > 195) {
+    log(`\n  ❌ BUILD TOO LARGE: ${outSizeMB}MB exceeds 195MB limit!`, colors.red);
     log(`  Top folders:`, colors.yellow);
     const topFolders = fs.readdirSync(OUT_DIR, { withFileTypes: true })
       .filter(e => e.isDirectory())
@@ -375,7 +440,7 @@ ${colors.bright}╔════════════════════�
     process.exit(1);
   }
   
-  log(`  ✅ Size OK (${outSizeMB}MB ≤ 200MB)`, colors.green);
+  log(`  ✅ Size OK (${outSizeMB}MB ≤ 195MB)`, colors.green);
 
   // Step 6: Sync to native platforms
   logStep('6/8', 'Syncing to native platforms...');
