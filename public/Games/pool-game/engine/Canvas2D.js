@@ -45,6 +45,14 @@ Canvas2D_Singleton.prototype.resize = function () {
     var parent = gameArea.parentElement || document.body;
     var newWidth = parent.clientWidth || window.innerWidth;
     var newHeight = parent.clientHeight || window.innerHeight;
+    // On Android WebView, parent height can resolve to a small value if CSS height: auto
+    // Fall back to window.innerHeight if parent height is less than half the screen
+    if (newHeight < window.innerHeight * 0.5) {
+        newHeight = window.innerHeight;
+    }
+    if (newWidth < window.innerWidth * 0.5) {
+        newWidth = window.innerWidth;
+    }
     gameArea.style.width = newWidth + 'px';
     gameArea.style.height = newHeight + 'px';
     gameArea.style.marginTop = '0px';

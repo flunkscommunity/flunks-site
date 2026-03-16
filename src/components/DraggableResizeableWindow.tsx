@@ -78,6 +78,8 @@ const StyledWindow = styled(Window)`
     
     &.pool-game-window {
       top: 0 !important;
+      height: 100vh !important;
+      height: 100dvh !important;
     }
   }
   
@@ -99,6 +101,8 @@ const StyledWindow = styled(Window)`
   /* Pool game window: cover the ENTIRE screen including behind notch */
   &.pool-game-window.native-app-window {
     top: 0 !important;
+    height: 100vh !important;
+    height: 100dvh !important;
   }
 `;
 
