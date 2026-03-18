@@ -1772,9 +1772,11 @@ const PoolGame: React.FC<PoolGameProps> = ({ walletAddress, gumBalance, onGumCha
   }
 
   return (
-    <div className="w-full h-full flex flex-col bg-black overflow-hidden">
+    <div className="w-full h-full flex flex-col bg-black overflow-hidden" style={{ position: 'relative', ...(isMobile ? { minHeight: '100vh' } : {}) }}>
       {/* Game Canvas - Full height, no header */}
-      <div ref={containerRef} className="flex-1 min-h-0 flex items-center justify-center relative">
+      <div ref={containerRef} className="flex-1 min-h-0 flex items-center justify-center relative"
+        style={isMobile ? { width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 } : {}}
+      >
         {isLoading ? (
           <div className="text-white text-xl">Loading pool game engine...</div>
         ) : (

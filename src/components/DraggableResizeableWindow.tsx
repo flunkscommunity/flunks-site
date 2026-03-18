@@ -80,6 +80,9 @@ const StyledWindow = styled(Window)`
       top: 0 !important;
       height: 100vh !important;
       height: 100dvh !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
     }
   }
   
@@ -103,6 +106,10 @@ const StyledWindow = styled(Window)`
     top: 0 !important;
     height: 100vh !important;
     height: 100dvh !important;
+    /* Remove react95 Window borders/shadows so canvas fills the entire screen */
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
   }
 `;
 

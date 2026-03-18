@@ -42,17 +42,26 @@ Canvas2D_Singleton.prototype.clear = function () {
 Canvas2D_Singleton.prototype.resize = function () {
     var gameCanvas = Canvas2D._canvas;
     var gameArea = Canvas2D._div;
-    var parent = gameArea.parentElement || document.body;
-    var newWidth = parent.clientWidth || window.innerWidth;
-    var newHeight = parent.clientHeight || window.innerHeight;
-    // On Android WebView, parent height can resolve to a small value if CSS height: auto
-    // Fall back to window.innerHeight if parent height is less than half the screen
-    if (newHeight < window.innerHeight * 0.5) {
+
+    // Detect if running inside Capacitor native app (iOS/Android)
+    var isNative = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+
+    var newWidth, newHeight;
+    if (isNative) {
+        // On native apps the pool game is always fullscreen.
+        // Android WebView's parent clientHeight is unreliable (CSS flex/auto
+        // doesn't resolve before the canvas initialises), so always use the
+        // window dimensions directly.
+        newWidth  = window.innerWidth;
         newHeight = window.innerHeight;
+    } else {
+        // Desktop web — the game lives inside a resizable window, so measure
+        // from the parent element as the original code did.
+        var parent = gameArea.parentElement || document.body;
+        newWidth  = parent.clientWidth  || window.innerWidth;
+        newHeight = parent.clientHeight || window.innerHeight;
     }
-    if (newWidth < window.innerWidth * 0.5) {
-        newWidth = window.innerWidth;
-    }
+
     gameArea.style.width = newWidth + 'px';
     gameArea.style.height = newHeight + 'px';
     gameArea.style.marginTop = '0px';
