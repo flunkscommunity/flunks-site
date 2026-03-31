@@ -334,17 +334,19 @@ ${colors.bright}╔════════════════════�
     }
   }
 
-  // Compress large pool game sprites (backgrounds are 2MB+ each)
+  // Compress large pool game sprites (buttons, UI elements — NOT backgrounds!)
+  // The pool game engine draws sprites at their native pixel size × canvasScale,
+  // so background images MUST stay at 1500×825 to fill the game world.
   const poolSpritesDir = path.join(OUT_DIR, 'Games/pool-game/sprites');
   if (fs.existsSync(poolSpritesDir)) {
     try {
-      execSync(`find "${poolSpritesDir}" -type f -name "*.png" | while read f; do
+      execSync(`find "${poolSpritesDir}" -type f -name "*.png" ! -name "spr_background*" | while read f; do
         width=$(sips -g pixelWidth "$f" 2>/dev/null | tail -1 | awk '{print $2}')
         if [ -n "$width" ] && [ "$width" -gt 1024 ] 2>/dev/null; then
           sips -Z 1024 "$f" >/dev/null 2>&1
         fi
       done`, { stdio: 'pipe', cwd: ROOT_DIR });
-      log(`  ✓ Compressed large pool game sprites (max 1024px)`, colors.green);
+      log(`  ✓ Compressed large pool game sprites (max 1024px, backgrounds excluded)`, colors.green);
     } catch (e) {}
   }
 

@@ -46,7 +46,9 @@ Canvas2D_Singleton.prototype.resize = function () {
     // Detect if running inside Capacitor native app (iOS/Android)
     var isNative = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
 
+    var parent = gameArea.parentElement || document.body;
     var newWidth, newHeight;
+
     if (isNative) {
         // On native apps the pool game is always fullscreen.
         // Android WebView's parent clientHeight is unreliable (CSS flex/auto
@@ -57,7 +59,6 @@ Canvas2D_Singleton.prototype.resize = function () {
     } else {
         // Desktop web — the game lives inside a resizable window, so measure
         // from the parent element as the original code did.
-        var parent = gameArea.parentElement || document.body;
         newWidth  = parent.clientWidth  || window.innerWidth;
         newHeight = parent.clientHeight || window.innerHeight;
     }
