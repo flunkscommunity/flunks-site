@@ -1023,6 +1023,15 @@ const windowsMemod = useMemo(() => (
           })}
         />
 
+        <ConditionalAppIcon
+          appId="orb-arena"
+          title="Orb Arena"
+          icon="/images/icons/experiment-3d.png"
+          onDoubleClick={() => {
+            router.push("/orb-arena");
+          }}
+        />
+
         {/* 14. Flappy Flunk - MOVED TO ARCADE */}
 
         {/* 14b. Hidden Riff - REMOVED FROM DESKTOP - Access via dev tools only */}
