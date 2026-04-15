@@ -208,6 +208,9 @@ export const WINDOW_IDS = {
   // Flunky Bash Game
   FLUNKY_BASH: "flunky-bash",
 
+  // Paper Toss Game
+  PAPER_TOSS: "paper-toss",
+
   // WalletConnect test (mobile app)
   TEST_FLOW_WALLET: "test-flow-wallet",
   FLOW_WALLET_APP: "flow-wallet-app",

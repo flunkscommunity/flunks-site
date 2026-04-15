@@ -21,6 +21,7 @@ import FlappyFlunkWindow from "windows/Games/FlappyFlunkWindow";
 import FlunkyUppyArcadeWindow from "windows/Games/FlunkyUppyArcadeWindow";
 import FlunkJumpWindow from "windows/Games/FlunkJumpWindow";
 import FlunkyBash from "components/games/FlunkyBash";
+import PaperToss from "components/games/PaperToss";
 import HiddenRiffWindow from "windows/Games/HiddenRiffWindow";
 import RadioPlayer from "components/RadioPlayer";
 import FHSSchool from "windows/FHSSchool";
@@ -1023,15 +1024,6 @@ const windowsMemod = useMemo(() => (
           })}
         />
 
-        <ConditionalAppIcon
-          appId="orb-arena"
-          title="Orb Arena"
-          icon="/images/icons/experiment-3d.png"
-          onDoubleClick={() => {
-            router.push("/orb-arena");
-          }}
-        />
-
         {/* 14. Flappy Flunk - MOVED TO ARCADE */}
 
         {/* 14b. Hidden Riff - REMOVED FROM DESKTOP - Access via dev tools only */}
@@ -1245,7 +1237,30 @@ const windowsMemod = useMemo(() => (
           />
         )}
 
-        {/* 26. Alexandria Library - On-Chain Books */}
+        {/* 26. Paper Toss */}
+        <ConditionalAppIcon
+          appId="paper-toss"
+          title="Paper Toss"
+          icon="/images/icons/game-manual-icon.png"
+          onDoubleClick={() => openWindow({
+            key: WINDOW_IDS.PAPER_TOSS,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.PAPER_TOSS}
+                onClose={() => closeWindow(WINDOW_IDS.PAPER_TOSS)}
+                headerTitle="📄 Paper Toss"
+                initialWidth="660px"
+                initialHeight="480px"
+                headerIcon="/images/icons/game-manual-icon.png"
+                resizable={true}
+              >
+                <PaperToss />
+              </DraggableResizeableWindow>
+            )
+          })}
+        />
+
+        {/* 27. Alexandria Library - On-Chain Books */}
         <ConditionalAppIcon
           appId="alexandria-library"
           title="Alexandria Library"
