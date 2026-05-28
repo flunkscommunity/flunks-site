@@ -13,7 +13,7 @@ export const BACKGROUND_CONFIG = {
   enableScrolling: false,
   
   // Enable slow horizontal cloud scrolling effect
-  enableCloudScroll: true,
+  enableCloudScroll: false,
   
   // Cloud scroll speed in seconds (higher = slower)
   // 120 = 2 minutes for full cycle, 180 = 3 minutes, 240 = 4 minutes
