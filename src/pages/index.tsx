@@ -22,6 +22,12 @@ import FlunkyUppyArcadeWindow from "windows/Games/FlunkyUppyArcadeWindow";
 import FlunkJumpWindow from "windows/Games/FlunkJumpWindow";
 import FlunkyBash from "components/games/FlunkyBash";
 import PaperToss from "components/games/PaperToss";
+import dynamic from "next/dynamic";
+// Lazy-load the Phaser game (Phaser touches `window`; also splits ~1MB bundle)
+const TopDownGame = dynamic(
+  () => import("components/games/TopDownGame/TopDownGame"),
+  { ssr: false }
+);
 import HiddenRiffWindow from "windows/Games/HiddenRiffWindow";
 import RadioPlayer from "components/RadioPlayer";
 import FHSSchool from "windows/FHSSchool";
@@ -1255,6 +1261,29 @@ const windowsMemod = useMemo(() => (
                 resizable={true}
               >
                 <PaperToss />
+              </DraggableResizeableWindow>
+            )
+          })}
+        />
+
+        {/* 26b. Top-Down RPG (Phaser) */}
+        <ConditionalAppIcon
+          appId="top-down-game"
+          title="Top-Down RPG"
+          icon="/images/icons/game-manual-icon.png"
+          onDoubleClick={() => openWindow({
+            key: WINDOW_IDS.TOP_DOWN_GAME,
+            window: (
+              <DraggableResizeableWindow
+                windowsId={WINDOW_IDS.TOP_DOWN_GAME}
+                onClose={() => closeWindow(WINDOW_IDS.TOP_DOWN_GAME)}
+                headerTitle="🗺️ Top-Down RPG"
+                initialWidth="720px"
+                initialHeight="560px"
+                headerIcon="/images/icons/game-manual-icon.png"
+                resizable={true}
+              >
+                <TopDownGame />
               </DraggableResizeableWindow>
             )
           })}

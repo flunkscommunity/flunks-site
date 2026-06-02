@@ -211,6 +211,9 @@ export const WINDOW_IDS = {
   // Paper Toss Game
   PAPER_TOSS: "paper-toss",
 
+  // Top-Down RPG (Phaser)
+  TOP_DOWN_GAME: "top-down-game",
+
   // WalletConnect test (mobile app)
   TEST_FLOW_WALLET: "test-flow-wallet",
   FLOW_WALLET_APP: "flow-wallet-app",
